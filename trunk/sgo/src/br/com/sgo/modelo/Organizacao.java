@@ -3,6 +3,7 @@ package br.com.sgo.modelo;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,7 +19,8 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
 public class Organizacao {
 
 	@Id
-	@GeneratedValue
+	@Column(name = "organizacao_id")  
+	@GeneratedValue(strategy = GenerationType.AUTO) 
 	private Long organizacao_id;
 	
 	@Column(name="nome")
