@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
@@ -15,37 +16,46 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
 @Entity
 @Component
 @SessionScoped
-@Table(name="ELEMENTOBD")
-public class ElementoBd {
-	
+@Table(name="COLUNABD")
+public class ColunaBd {
+
 	@Id	
-	@Column(name = "elementobd_id")  
+	@Column(name = "colunabd_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)	
-	private Long elementobd_id;
+	private Long colunabd_id;
+
+	@Column(name="nome")
+	private String nome;
 
 	@ManyToOne
 	@JoinColumn(name="empresa_id") 
 	private Empresa empresa;
-		
+
 	@ManyToOne
 	@JoinColumn(name="organizacao_id") 
-	private Organizacao organizacao;	
-	
-	@Column(name="nome")
-	private String nome;
-	
-	@Column(name="descricao")
-	private String descricao;
-	
-	@Column(name="nomecolunabd")
-	private String nomecolunabd;
-	
-	public Long getElementobd_id() {
-		return elementobd_id;
+	private Organizacao organizacao;
+
+	@ManyToOne
+	@JoinColumn(name="tabelabd_id") 
+	private TabelaBd tabelaBd;
+
+	@OneToOne
+	private TipoDadoBd tipoDadoBd;
+
+	public Long getColunabd_id() {
+		return colunabd_id;
 	}
 
-	public void setElementobd_id(Long elementobd_id) {
-		this.elementobd_id = elementobd_id;
+	public void setColunabd_id(Long colunabd_id) {
+		this.colunabd_id = colunabd_id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public Empresa getEmpresa() {
@@ -64,28 +74,19 @@ public class ElementoBd {
 		this.organizacao = organizacao;
 	}
 
-	public String getNome() {
-		return nome;
+	public TabelaBd getTabelaBd() {
+		return tabelaBd;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setTabelaBd(TabelaBd tabelaBd) {
+		this.tabelaBd = tabelaBd;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public TipoDadoBd getTipoDadoBd() {
+		return tipoDadoBd;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setTipoDadoBd(TipoDadoBd tipoDadoBd) {
+		this.tipoDadoBd = tipoDadoBd;
 	}
-
-	public String getNomecolunabd() {
-		return nomecolunabd;
-	}
-
-	public void setNomecolunabd(String nomecolunabd) {
-		this.nomecolunabd = nomecolunabd;
-	}
-
 }
