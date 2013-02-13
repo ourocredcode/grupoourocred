@@ -29,6 +29,7 @@
 		<!-- Solicitacao Digital -->
 		<mapping class="br.com.sgo.modelo.Empresa" />
 		<mapping class="br.com.sgo.modelo.Organizacao" />
+		<mapping class="br.com.sgo.modelo.ElementoBd" />
 
 	</session-factory>
 </hibernate-configuration>
