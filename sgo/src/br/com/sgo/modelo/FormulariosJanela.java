@@ -27,23 +27,23 @@ public class FormulariosJanela {
 	private String nome;
 	
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id") 
+	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
 	private Organizacao organizacao;
 	
 	@ManyToOne
-	@JoinColumn(name="janela_id") 
+	@JoinColumn(name="janela_id",insertable=false,updatable=false) 
 	private Janela janela;
 	
 	@ManyToOne
-	@JoinColumn(name="tabelabd_id") 
+	@JoinColumn(name="tabelabd_id",insertable=false,updatable=false) 
 	private TabelaBd tabelabd;
 	
 	@ManyToOne
-	@JoinColumn(name="tabelabd_id") 
+	@JoinColumn(name="colunadb_id") 
 	private ColunaBd colunabd;
 
 	public Long getFormulariosjanela_id() {

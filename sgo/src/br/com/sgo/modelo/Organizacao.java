@@ -30,7 +30,7 @@ public class Organizacao {
 	private String descricao;
 	
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
 	private Empresa empresa;
 
 	public Long getOrganizacao_id() {
