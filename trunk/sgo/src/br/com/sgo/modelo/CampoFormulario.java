@@ -19,7 +19,7 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
 public class CampoFormulario {
 
 	@Id	
-	@Column(name = "campo_id")
+	@Column(name = "campo_id", unique = true, nullable = false, updatable = false, insertable=false)
 	@GeneratedValue(strategy = GenerationType.AUTO)	
 	private Long campo_id;
 
@@ -27,19 +27,19 @@ public class CampoFormulario {
 	private String nome;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id") 
+	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
 	private FormulariosJanela formulariosJanela;
 
 	@ManyToOne
-	@JoinColumn(name="colunabd_id") 
+	@JoinColumn(name="colunabd_id",updatable = false, insertable=false) 
 	private ColunaBd colunabd;
 
 	public Long getCampo_id() {

@@ -3,6 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
+
 	<session-factory>
 
 		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
@@ -30,6 +31,18 @@
 		<mapping class="br.com.sgo.modelo.Empresa" />
 		<mapping class="br.com.sgo.modelo.Organizacao" />
 		<mapping class="br.com.sgo.modelo.ElementoBd" />
+		<mapping class="br.com.sgo.modelo.CampoFormulario" />
+		<mapping class="br.com.sgo.modelo.ColunaBd" />
+		<mapping class="br.com.sgo.modelo.FormulariosJanela" />
+		<mapping class="br.com.sgo.modelo.Janela" />
+		<mapping class="br.com.sgo.modelo.Perfil" />
+		<mapping class="br.com.sgo.modelo.PerfilJanelaAcesso" />
+		<mapping class="br.com.sgo.modelo.PerfilOrgAcesso" />
+		<mapping class="br.com.sgo.modelo.TabelaBd" />
+		<mapping class="br.com.sgo.modelo.TipoDadoBd" />
+		<mapping class="br.com.sgo.modelo.Usuario" />
+		<mapping class="br.com.sgo.modelo.UsuarioOrgAcesso" />
+		<mapping class="br.com.sgo.modelo.UsuarioPerfil" />
 
 	</session-factory>
 </hibernate-configuration>

@@ -27,11 +27,11 @@ public class TabelaBd {
 	private String nome;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id") 
+	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
 	private Organizacao organizacao;
 
 	public Long getTabelabd_id() {

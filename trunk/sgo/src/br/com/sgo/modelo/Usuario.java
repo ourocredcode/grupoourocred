@@ -33,15 +33,15 @@ public class Usuario {
 	private String telefone;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id") 
+	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
 	private Organizacao organizacao;
 	
 	@ManyToOne
-	@JoinColumn(name="usuario_id") 
+	@JoinColumn(name="usuario_id",updatable = false, insertable=false) 
 	private Usuario supervisor;
 
 	public Long getUsuario_id() {

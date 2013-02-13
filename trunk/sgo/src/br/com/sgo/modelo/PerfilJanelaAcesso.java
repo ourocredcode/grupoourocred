@@ -1,30 +1,28 @@
 package br.com.sgo.modelo;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
-@Entity
 @Component
-@SessionScoped
+@Embeddable
 @Table(name="PERFILJANELAACESSO")
 public class PerfilJanelaAcesso {
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id") 
+	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
 	private Organizacao organizacao;
 	
 	@ManyToOne
-	@JoinColumn(name = "perfil_id")  
+	@JoinColumn(name = "perfil_id",updatable = false, insertable=false)  
 	private Perfil perfil;  
 
 	@ManyToOne
@@ -56,5 +54,21 @@ public class PerfilJanelaAcesso {
 
 	public void setIsactive(Boolean isactive) {
 		this.isactive = isactive;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public Organizacao getOrganizacao() {
+		return organizacao;
+	}
+
+	public void setOrganizacao(Organizacao organizacao) {
+		this.organizacao = organizacao;
 	}
 }

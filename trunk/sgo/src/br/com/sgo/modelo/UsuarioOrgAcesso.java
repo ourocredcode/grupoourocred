@@ -1,9 +1,16 @@
 package br.com.sgo.modelo;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import br.com.caelum.vraptor.ioc.Component;
+
+@Component
+@Embeddable
+@Table(name="USUARIOORGACESSO")
 public class UsuarioOrgAcesso {
 
 	@ManyToOne
@@ -11,11 +18,11 @@ public class UsuarioOrgAcesso {
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id") 
+	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
 	private Organizacao organizacao;
 	
 	@ManyToOne
-	@JoinColumn(name = "usuario_id")  
+	@JoinColumn(name = "usuario_id",updatable = false, insertable=false)  
 	private Usuario usuario;  
 
 	@Column(name="isactive")

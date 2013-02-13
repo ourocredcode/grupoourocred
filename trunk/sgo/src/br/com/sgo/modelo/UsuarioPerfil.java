@@ -1,17 +1,15 @@
 package br.com.sgo.modelo;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
-@Entity
 @Component
-@SessionScoped
+@Embeddable
 @Table(name="USUARIOPERFIL")
 public class UsuarioPerfil {
 	
@@ -20,15 +18,15 @@ public class UsuarioPerfil {
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id") 
+	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
 	private Organizacao organizacao;
 	
 	@ManyToOne
-	@JoinColumn(name = "usuario_id")  
+	@JoinColumn(name = "usuario_id",updatable = false, insertable=false)  
 	private Usuario usuario;  
 	
 	@ManyToOne
-	@JoinColumn(name = "perfil_id")  
+	@JoinColumn(name = "perfil_id",updatable = false, insertable=false)  
 	private Perfil perfil;  
 	
 	@Column(name="isactive")
