@@ -18,15 +18,15 @@ public class UsuarioPerfil {
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
 	
 	@ManyToOne
-	@JoinColumn(name = "usuario_id",updatable = false, insertable=false)  
+	@JoinColumn(name = "usuario_id",updatable = true, nullable = false)  
 	private Usuario usuario;  
 	
 	@ManyToOne
-	@JoinColumn(name = "perfil_id",updatable = false, insertable=false)  
+	@JoinColumn(name = "perfil_id",updatable = true, nullable = false)  
 	private Perfil perfil;  
 	
 	@Column(name="isactive")

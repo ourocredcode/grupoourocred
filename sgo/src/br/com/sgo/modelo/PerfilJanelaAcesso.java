@@ -14,15 +14,15 @@ import br.com.caelum.vraptor.ioc.Component;
 public class PerfilJanelaAcesso {
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
+	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
 	
 	@ManyToOne
-	@JoinColumn(name = "perfil_id",updatable = false, insertable=false)  
+	@JoinColumn(name = "perfil_id",updatable = true, nullable = false)  
 	private Perfil perfil;  
 
 	@ManyToOne

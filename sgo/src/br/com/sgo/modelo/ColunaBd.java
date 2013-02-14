@@ -28,23 +28,23 @@ public class ColunaBd {
 	private String nome;
 	
 	@ManyToOne
-	@JoinColumn(name="tabelabd_id",updatable = true, insertable=true) 
+	@JoinColumn(name="tabelabd_id",updatable = true, nullable = false) 
 	private TabelaBd tabelaBd;
 	
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, insertable=true) 
+	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, insertable=true) 
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
 	
 	@OneToOne
-	@JoinColumn(name="tipodadobd_id",updatable = true, insertable=true)
+	@JoinColumn(name="tipodadobd_id",updatable = true, nullable = false)
 	private TipoDadoBd tipoDadoBd;
 	
 	@ManyToOne
-	@JoinColumn(name="elementobd_id",updatable = true, insertable=true) 
+	@JoinColumn(name="elementobd_id",updatable = true, nullable = false) 
 	private ElementoBd elementoBd;
 
 	public Long getColunabd_id() {

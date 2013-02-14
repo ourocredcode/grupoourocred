@@ -14,11 +14,11 @@ import br.com.caelum.vraptor.ioc.Component;
 public class PerfilOrgAcesso {
 
 	@ManyToOne
-	@JoinColumn(name = "perfil_id")  
+	@JoinColumn(name = "perfil_id",updatable = true, nullable = false)  
 	private Perfil perfil; 
 
 	@ManyToOne
-	@JoinColumn(name = "organizacao_id")  
+	@JoinColumn(name = "organizacao_id",updatable = true, nullable = false)  
 	private Organizacao organizacao; 
 	
 	@Column(name="isactive")
