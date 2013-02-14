@@ -26,7 +26,11 @@ public class ColunaBd {
 
 	@Column(name="nome")
 	private String nome;
-
+	
+	@ManyToOne
+	@JoinColumn(name="tabelabd_id",updatable = true, insertable=true) 
+	private TabelaBd tabelaBd;
+	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, insertable=true) 
 	private Empresa empresa;
@@ -34,11 +38,7 @@ public class ColunaBd {
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, insertable=true) 
 	private Organizacao organizacao;
-
-	@ManyToOne
-	@JoinColumn(name="tabelabd_id",updatable = true, insertable=true) 
-	private TabelaBd tabelaBd;
-
+	
 	@OneToOne
 	@JoinColumn(name="tipodadobd_id",updatable = true, insertable=true)
 	private TipoDadoBd tipoDadoBd;

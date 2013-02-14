@@ -24,14 +24,18 @@ public class TabelaBd {
 	@GeneratedValue(strategy = GenerationType.AUTO)	
 	private Long tabelabd_id;
 
+	@Column(name = "nome")
 	private String nome;
 
+	@Column(name = "nomeTabelaBd")
+	private String nomeTabelaBd;	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
+	@JoinColumn(name="empresa_id",updatable = true, insertable=true) 
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
+	@JoinColumn(name="organizacao_id",updatable = true, insertable=true) 
 	private Organizacao organizacao;
 
 	public Long getTabelabd_id() {
@@ -64,5 +68,13 @@ public class TabelaBd {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
+	}
+
+	public String getNomeTabelaBd() {
+		return nomeTabelaBd;
+	}
+
+	public void setNomeTabelaBd(String nomeTabelaBd) {
+		this.nomeTabelaBd = nomeTabelaBd;
 	}
 }
