@@ -11,8 +11,9 @@ Cadastro Coluna BD
 
 	<input type="hidden" value="${empresa.empresa_id}" name="colunaBd.empresa.empresa_id" />
 	<input type="hidden" value="${organizacao.organizacao_id}" name="colunaBd.organizacao.organizacao_id" />
-	<input type="hidden" value="${tabela.tabela_id}" name="colunaBd.tabela.organizacao_id" />
-	<input type="hidden" value="${tipoDado.tipoDado_id}" name="colunaBd.tipoDado.tipoDado_id" />
+	<input type="hidden" value="${tabelaBd.tabelabd_id}" name="colunaBd.tabelaBd.tabelabd_id" />
+	<input type="hidden" value="${tipoDadoBd.tipodadobd_id}" name="colunaBd.tipoDadoBd.tipodadobd_id" />
+	<input type="hidden" value="${elementoBd.elementobd_id}" name="colunaBd.elementoBd.elementobd_id" />
 
 	<input type="submit" name="colunaBdButton" />
 
