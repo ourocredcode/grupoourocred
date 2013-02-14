@@ -24,11 +24,11 @@ public class ElementoBd {
 	private Long elementobd_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
+	@JoinColumn(name="empresa_id",updatable = true, insertable=true) 
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
+	@JoinColumn(name="organizacao_id",updatable = true, insertable=true) 
 	private Organizacao organizacao;	
 	
 	@Column(name="nome")
