@@ -28,20 +28,24 @@ public class ColunaBd {
 	private String nome;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
+	@JoinColumn(name="empresa_id",updatable = true, insertable=true) 
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
+	@JoinColumn(name="organizacao_id",updatable = true, insertable=true) 
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="tabelabd_id",updatable = false, insertable=false) 
+	@JoinColumn(name="tabelabd_id",updatable = true, insertable=true) 
 	private TabelaBd tabelaBd;
 
 	@OneToOne
-	@JoinColumn(name="tipodadobd_id",updatable = false, insertable=false)
+	@JoinColumn(name="tipodadobd_id",updatable = true, insertable=true)
 	private TipoDadoBd tipoDadoBd;
+	
+	@ManyToOne
+	@JoinColumn(name="elementobd_id",updatable = true, insertable=true) 
+	private ElementoBd elementoBd;
 
 	public Long getColunabd_id() {
 		return colunabd_id;
@@ -89,5 +93,13 @@ public class ColunaBd {
 
 	public void setTipoDadoBd(TipoDadoBd tipoDadoBd) {
 		this.tipoDadoBd = tipoDadoBd;
+	}
+
+	public ElementoBd getElementoBd() {
+		return elementoBd;
+	}
+
+	public void setElementoBd(ElementoBd elementoBd) {
+		this.elementoBd = elementoBd;
 	}
 }
