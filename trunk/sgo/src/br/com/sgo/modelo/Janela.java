@@ -28,11 +28,11 @@ public class Janela {
 	private String nome;
 	
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
+	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
 
 	public Long getJanela_id() {

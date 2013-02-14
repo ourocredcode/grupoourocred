@@ -1,16 +1,12 @@
 package br.com.sgo.modelo;
 
-import java.util.Collection;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
@@ -31,18 +27,12 @@ public class Perfil {
 	private String nome;
 	
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
+	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
-
-	@OneToMany
-	@JoinTable(name = "PERFILORGACESSO", 
-	joinColumns = { @JoinColumn(name = "perfil_id") }, 
-	inverseJoinColumns = { @JoinColumn(name = "organizacao_id") }) 
-	private Collection<Organizacao> organizacoes;
 
 	public Long getPerfil_id() {
 		return perfil_id;
@@ -58,14 +48,6 @@ public class Perfil {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public Collection<Organizacao> getOrganizacoes() {
-		return organizacoes;
-	}
-
-	public void setOrganizacoes(Collection<Organizacao> organizacoes) {
-		this.organizacoes = organizacoes;
 	}
 
 	public Empresa getEmpresa() {

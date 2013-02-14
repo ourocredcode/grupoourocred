@@ -24,25 +24,25 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.AUTO)	
 	private Long usuario_id;
 
+	@Column(name="nome")
 	private String nome;
 
+	@Column(name="email")
 	private String email;
 
+	@Column(name="senha")
 	private String senha;
 
+	@Column(name="telefone")
 	private String telefone;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = false, insertable=false) 
+	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
 		
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = false, insertable=false) 
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name="usuario_id",updatable = false, insertable=false) 
-	private Usuario supervisor;
 
 	public Long getUsuario_id() {
 		return usuario_id;
@@ -98,13 +98,5 @@ public class Usuario {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public Usuario getSupervisor() {
-		return supervisor;
-	}
-
-	public void setSupervisor(Usuario supervisor) {
-		this.supervisor = supervisor;
 	}
 }
