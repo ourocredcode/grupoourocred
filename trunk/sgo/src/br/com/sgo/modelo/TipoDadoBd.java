@@ -23,7 +23,8 @@ public class TipoDadoBd {
 	@Column(name = "tipodadobd_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)	
 	private Long tipodadobd_id;
-
+	
+	@Column(name="nome")
 	private String nome;
 
 	@ManyToOne

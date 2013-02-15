@@ -58,5 +58,18 @@ public class ElementobdController {
 		this.result.nothing();
 
 	}
+	
+	@Get
+	@Public
+	@Path("/elementobd/teste")
+	public void teste() {
+
+		Empresa empresa = this.empresaDao.load(1L);
+		Organizacao organizacao = this.organizacaoDao.load(1L);
+
+		result.include("empresa",empresa);
+		result.include("organizacao",organizacao);
+
+	}
 
 }

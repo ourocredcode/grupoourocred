@@ -1,25 +1,22 @@
 <%@ include file="/header.jspf" %>
 
-Cadastro Elemento BD
+	<ul class="nav nav-tabs" id="myTab">
+	  <li class="active"><a href="#home">Home</a></li>
+	  <li><a href="#profile">Profile</a></li>
+	  <li><a href="#messages">Messages</a></li>
+	  <li><a href="#settings">Settings</a></li>
+	</ul>
 
-<br/><br/>
+	<div class="tab-content">
+	  <div class="tab-pane active" id="home">TESTE1</div>
+	  <div class="tab-pane" id="profile">TESTE2</div>
+	  <div class="tab-pane" id="messages">TESTE3</div>
+	  <div class="tab-pane" id="settings">TESTE4</div>
+	</div>
 
-<form id="elementoBdForm" name="elementoBdForm" action="<c:url value="/elementobd/salva" />" method="POST">
-
-	<label for="elementoBdNome">Nome do Elemento</label><br/>
-	<input id="elementoBdNome" type="text" name="elementoBd.nome" value="${elementoBd.nome}"/><br/>
-	
-	<label for="elementoBdColunaBd">Nome da Coluna Banco</label><br/>
-	<input id="elementoBdColunaBd" type="text" name="elementoBd.nomeColunaBd" value="${elementoBd.nomecolunabd}"/><br/>
-
-	<label for="elementoBdDescricao">Descrição</label><br/>
-	<input id="elementoBdDescricao" type="text" name="elementoBd.descricao" value="${elementoBd.descricao}"/><br/>
-	
-	<input type="hidden" value="${empresa.empresa_id}" name="elementoBd.empresa.empresa_id" />
-	<input type="hidden" value="${organizacao.organizacao_id}" name="elementoBd.organizacao.organizacao_id" />
-
-	<input type="submit" name="elementoBdButton" />
-
-</form>
-
+	<script>
+  	$(function () {
+	    $('#myTab a:last').tab('show');
+  	});
+	</script>
 <%@ include file="/footer.jspf" %> 
