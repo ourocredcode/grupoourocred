@@ -12,12 +12,18 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<!-- Bootstrap -->
+		<link href="<c:url value="/css/bootstrap/bootstrap.css"/>" rel="stylesheet" type="text/css" media="screen" />
+		<link href="<c:url value="/css/bootstrap/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" media="screen" />
+		<!-- Bootstrap -->
+
 		<link href="<c:url value="/css/jquery.calendario.css"/>" rel="stylesheet" type="text/css" media="screen" />
 		<link href="<c:url value="/css/solicitacao_explorer.css"/>" rel="stylesheet" type="text/css" media="screen" />
-
 		<link href="<c:url value="/css/jquery-ui-1.8.13.custom.css"/>" rel="stylesheet" type="text/css" media="screen" />
 		<link href="<c:url value="/css/ui.dropdownchecklist.themeroller.css"/>" rel="stylesheet" type="text/css" media="screen" />
 
+		
+		
 		<script type="text/javascript" src="<c:url value="/javascripts/jquery-1.6.3.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/javascripts/jquery.validate.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/javascripts/jquery.maskedinput-1.2.2.min.js"/>"></script>
@@ -30,6 +36,10 @@
 		<script type="text/javascript" src="<c:url value="/javascripts/ui.dropdownchecklist.js"/>"></script>
 		
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		
+		<!-- BootStrap -->
+		<script type="text/javascript" src="<c:url value="/javascripts/bootstrap/bootstrap.js"/>"></script>
+		<!-- BootStrap -->
 
 
 		<fmt:setLocale value="pt_br"/>
