@@ -1,38 +1,82 @@
-<%@ include file="/header.jspf" %> 
+<%@ include file="/header.jspf"%>
 
-<form id="loginForm" action="<c:url value="/home/login"/>" method="POST" style="margin-top: 35px;margin-left: 20px;">
-	<table style="width: 250px">
-		<tr>
-			<td>
-				<label for="login" class="label_txt">Login</label>
-			</td>	
-		</tr>
-		<tr>
-			<td>
-				<input id="login" type="text" name="login" class="required" minlength="1"  maxlength="20" />
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<label for="password" class="label_txt">Senha</label>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<input id="password" type="password" name="password" class="required" minlength="1"  maxlength="20"/>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<button type="submit" class="form_button" >Entrar</button>
-				<button type="button" class="form_button" onclick="window.location='../consultor/formularioSenha' ">Alterar Senha</button>
-			</td>
-		</tr>
-	</table>
-</form>
+<div class="span9">
 
-<script type="text/javascript">
-	$('#loginForm').validate();
-</script>
+	<section id="tabs">
+		<div class="bs-docs-example">
 
-<%@ include file="/footer.jspf" %> 
+			<ul id="myTab" class="nav nav-tabs">
+				
+				<li class="active">
+					<a href="#login" data-toggle="tab">Login</a>
+				</li>
+				<li class="">
+					<a href="#perfil" data-toggle="tab">Perfil</a>
+				</li>
+			</ul>
+
+			<div id="myTabContent" class="tab-content">
+
+				<div class="tab-pane fade active in" id="login">
+
+					<p></p>
+
+					<form id="loginForm" action="<c:url value="/home/login"/>" method="POST">					
+						<div class="control-group">
+							<label class="control-label" for="value">Login</label>
+							<div class="controls">
+								<input type="text" id="value" placeholder="Digite seu CPF">
+							</div>
+						</div>
+	
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">Senha</label>
+							<div class="controls">
+								<input type="password" id="inputPassword" placeholder="Senha">
+							</div>
+							<div class="control-group">
+								<div class="controls">
+									<p></p>
+									<button type="submit" class="btn">OK</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="tab-pane fade"  id="perfil">
+					<p></p>
+					<div class="control-group">
+						<label class="control-label" for="inputEmail">Perfil</label>
+						<div class="controls">
+							<input type="text" id="perfil_id"
+								placeholder="Selecione o Perfil">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputEmail">Empresa</label>
+						<div class="controls">
+							<input type="text" id="empresa_id"
+								placeholder="Selecione a Empresa">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputEmail">Organiza&ccedil;&atilde;o</label>
+						<div class="controls">
+							<input type="text" id="organizacao_id"
+								placeholder="Selecione a Organiza&ccedil;&atilde;o">
+						</div>
+						<div class="control-group">
+							<div class="controls">
+								<p></p>
+								<button type="submit" class="btn">OK</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<%@ include file="/footer.jspf"%>
