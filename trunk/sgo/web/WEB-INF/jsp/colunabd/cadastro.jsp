@@ -1,9 +1,5 @@
 <%@ include file="/header.jspf" %>
 
-Cadastro Coluna BD
-
-<br/><br/>
-
 <form id="colunaBdForm" name="colunaBdForm" action="<c:url value="/colunabd/salva" />" method="POST">
 
 	<label for="colunaBdNome">Nome do coluna</label><br/>
@@ -15,8 +11,9 @@ Cadastro Coluna BD
 	<input type="hidden" value="${tipoDadoBd.tipodadobd_id}" name="colunaBd.tipoDadoBd.tipodadobd_id" />
 	<input type="hidden" value="${elementoBd.elementobd_id}" name="colunaBd.elementoBd.elementobd_id" />
 
+	<br/><br/>
 	<input type="submit" name="colunaBdButton" />
 
 </form>
 
-<%@ include file="/footer.jspf" %> 
+<%@ include file="/footer.jspf" %>
