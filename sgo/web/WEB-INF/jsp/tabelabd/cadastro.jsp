@@ -1,8 +1,5 @@
 <%@ include file="/header.jspf" %>
 
-Cadastro Tabela BD
-
-<br/><br/>
 
 <form id="tabelaBdForm" name="tabelaBdForm" action="<c:url value="/tabelabd/salva" />" method="POST">
 
@@ -15,8 +12,9 @@ Cadastro Tabela BD
 	<input type="hidden" value="${empresa.empresa_id}" name="tabelaBd.empresa.empresa_id" />
 	<input type="hidden" value="${organizacao.organizacao_id}" name="tabelaBd.organizacao.organizacao_id" />
 
+	<br/><br/>
 	<input type="submit" name="tabelaBdButton" />
 
 </form>
 
-<%@ include file="/footer.jspf" %> 
+<%@ include file="/footer.jspf" %>
