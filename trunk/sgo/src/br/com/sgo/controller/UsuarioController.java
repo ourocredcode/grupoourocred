@@ -28,7 +28,6 @@ public class UsuarioController {
 		this.usuarioDao = usuarioDao;
 		this.result = result;
 
-
 	}
 	
 	@Get
@@ -53,10 +52,18 @@ public class UsuarioController {
 		usuario.setOrganizacao(this.organizacaoDao.load(usuario.getOrganizacao().getOrganizacao_id()));
 
 		this.usuarioDao.beginTransaction();
-		this.usuarioDao.adiciona(usuario);
+		Long usuarioId = this.usuarioDao.salva(usuario);
 		this.usuarioDao.commit();
 
-		this.result.nothing();
+		this.result.redirectTo(this).usuarioPerfil(usuarioId);
+
+	}
+
+	@Get
+	@Public
+	public void usuarioPerfil(Long usuarioId){
+
+		result.include("usuario",this.usuarioDao.load(usuarioId));
 
 	}
 
