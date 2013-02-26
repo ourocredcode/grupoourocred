@@ -1,12 +1,6 @@
 <%@ include file="/header.jspf" %>
 
-Empresa : ${empresa.nome } <br/>
-Organização : ${organizacao.nome } <br/>
-
-<br/><br/>
-
-Cadastro Usuário
-
+CADASTRO DE USUÁRIO 
 <br/><br/>
 
 <form id="usuarioForm" name="usuarioForm" action="<c:url value="/usuario/salva" />" method="POST">
@@ -26,6 +20,7 @@ Cadastro Usuário
 	<input type="hidden" value="${empresa.empresa_id}" name="usuario.empresa.empresa_id" />
 	<input type="hidden" value="${organizacao.organizacao_id}" name="usuario.organizacao.organizacao_id" />
 
+	<br/><br/>
 	<input type="submit" name="usuarioBdButton" />
 
 </form>
