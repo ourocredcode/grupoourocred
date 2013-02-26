@@ -6,7 +6,6 @@
 		<div class="bs-docs-example">
 
 			<ul id="myTab" class="nav nav-tabs">
-				
 				<li class="active">
 					<a href="#login" data-toggle="tab">Login</a>
 				</li>
@@ -23,25 +22,26 @@
 
 					<form id="loginForm" action="<c:url value="/home/login"/>" method="POST">					
 						<div class="control-group">
-							<label class="control-label" for="value">Login</label>
+							<label class="control-label" for="login">Login</label>
 							<div class="controls">
-								<input type="text" id="value" placeholder="Digite seu CPF">
+								<input type="text" id="login" name="login" placeholder="Digite seu CPF" required>
 							</div>
 						</div>
-	
+
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">Senha</label>
+							<label class="control-label" for="password">Senha</label>
 							<div class="controls">
-								<input type="password" id="inputPassword" placeholder="Senha">
+								<input type="password" id="password" name="password" placeholder="Senha" required>
 							</div>
 							<div class="control-group">
 								<div class="controls">
 									<p></p>
-									<button type="submit" class="btn">OK</button>
+									<button type="submit" class="btn btn-primary">OK</button>
 								</div>
 							</div>
 						</div>
 					</form>
+
 				</div>
 
 				<div class="tab-pane fade"  id="perfil">
@@ -69,7 +69,7 @@
 						<div class="control-group">
 							<div class="controls">
 								<p></p>
-								<button type="submit" class="btn">OK</button>
+								<button type="submit" class="btn btn-primary">OK</button>
 							</div>
 						</div>
 					</div>
