@@ -49,7 +49,7 @@ public class HomeController {
 
 		usuarioInfo.login(currentUsuario);
 
-		result.redirectTo(this).home();
+		result.include("msg","OK").redirectTo(this).msg();
 
 	}
 
@@ -65,5 +65,10 @@ public class HomeController {
 	public void home() {
 
 	}	
+	
+	@Get
+	public void msg(){
+
+	}
 
 }
