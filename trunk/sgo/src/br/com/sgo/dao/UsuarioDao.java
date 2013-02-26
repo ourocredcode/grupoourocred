@@ -24,12 +24,12 @@ public class UsuarioDao extends Dao<Usuario> {
     	return a.getUsuario_id();
     }
 	
-	public Usuario find(String nome, String senha) {
+	public Usuario find(String login, String senha) {
 
-		String hql = "from Usuario u where u.nome = :nome and u.senha = :senha";
+		String hql = "from Usuario u where u.value = :login and u.senha = :senha";
 
 		Query query = session.createQuery(hql)
-			.setParameter("nome", nome)
+			.setParameter("login", login)
 			.setParameter("senha", senha);
 
 		return (Usuario) query.uniqueResult();
