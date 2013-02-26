@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
 
 @Entity
@@ -34,6 +33,9 @@ public class Usuario {
 
 	@Column(name="telefone")
 	private String telefone;
+	
+	@Column(name="value")
+	private String value;
 
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -97,5 +99,13 @@ public class Usuario {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }
