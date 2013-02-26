@@ -14,7 +14,6 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
 
 @Entity
 @Component
-@SessionScoped
 @Table(name="ELEMENTOBD")
 public class ElementoBd {
 	
