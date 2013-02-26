@@ -1,9 +1,5 @@
 <%@ include file="/header.jspf" %>
 
-Cadastro Janela BD
-
-<br/><br/>
-
 <form id="janelaForm" name="janelaForm" action="<c:url value="/janela/salva" />" method="POST">
 
 	<label for="janelaNome">Nome da janela</label><br/>
@@ -12,8 +8,10 @@ Cadastro Janela BD
 	<input type="hidden" value="${empresa.empresa_id}" name="janela.empresa.empresa_id" />
 	<input type="hidden" value="${organizacao.organizacao_id}" name="janela.organizacao.organizacao_id" />
 
+
+	<br/><br/>
 	<input type="submit" name="colunaBdButton" />
 
 </form>
 
-<%@ include file="/footer.jspf" %> 
+<%@ include file="/footer.jspf" %>
