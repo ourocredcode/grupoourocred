@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 jQuery(function($){
-
+	
 	$('#loginForm').submit(function() {
 		$.ajax({
 			data: $(this).serialize()
@@ -101,6 +101,7 @@ jQuery(function($){
 							<div class="controls">
 								<p></p>
 								<button type="submit" class="btn btn-primary">OK</button>
+								<button type="submit" class="btn btn-primary">Sair</button>
 							</div>
 						</div>
 					</div>
@@ -109,7 +110,5 @@ jQuery(function($){
 		</div>
 	</section>
 </div>
-
-
 
 <%@ include file="/footer.jspf"%>
