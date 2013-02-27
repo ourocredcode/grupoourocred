@@ -9,6 +9,7 @@ jQuery(function($){
 			, type: $(this).attr('method')
 			, url: $(this).attr('action')
 			, success: function(response) {
+
 				if(response == 'OK'){
 
 					$("#login-li").removeClass("active");					
@@ -27,6 +28,7 @@ jQuery(function($){
 
 				}
 			}
+
 		});
 		return false;
 	});
@@ -80,8 +82,14 @@ jQuery(function($){
 					<div class="control-group">
 						<label class="control-label" for="inputEmail">Perfil</label>
 						<div class="controls">
-							<input type="text" id="perfil_id"
-								placeholder="Selecione o Perfil">
+							<input type="text" id="perfil_id" placeholder="Selecione o Perfil">
+							
+							<select id="perfil_id">	
+								<option value=""> Selecione o perfil...</option>
+								<c:forEach items="${perfis }" var="perfil">
+									<option value="${perfil.id }">${perfil.nome }</option>
+								</c:forEach>
+							</select>
 						</div>
 					</div>
 					<div class="control-group">
@@ -99,11 +107,10 @@ jQuery(function($){
 						</div>
 						<div class="control-group">
 							<div class="controls">
-
 								<button type="submit" class="btn btn-primary">OK</button>
-
+								<!--button type="submit" class="btn btn-primary" onclick="<c:url value="/home/logout" />" >Sair</button-->
 								<form action="<c:url value="/home/logout" />" >
-									<button type="submit" class="btn btn-primary">Sair</button>
+									<button type="submit" class="btn btn-primary" >Sair</button>
 								</form>
 
 							</div>

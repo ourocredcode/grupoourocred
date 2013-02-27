@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import br.com.caelum.vraptor.ioc.Component;
+
+@Component
 public class ConnJDBC {
 	
 	private Connection conn;
