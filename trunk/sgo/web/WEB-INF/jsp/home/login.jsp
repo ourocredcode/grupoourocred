@@ -10,30 +10,60 @@ jQuery(function($){
 			, url: $(this).attr('action')
 			, success: function(response) {
 
-				if(response == 'OK'){
+				$("#login-li").removeClass("active");					
+				$("#login-li").addClass("disabled");				
+				$("#login-li-a").attr('href',"#");
+	
+				$("#perfil-li").removeClass("disabled");
+				$("#perfil-li").addClass("active");
+				$("#perfil-li-a").attr('href',"#perfil-div");
+	
+				$("#login-div").removeClass("tab-pane fade active in");
+				$("#login-div").addClass("tab-pane fade");
+				
+				$("#perfil-div").removeClass("tab-pane fade");
+				$("#perfil-div").addClass("tab-pane fade active in");
 
-					$("#login-li").removeClass("active");					
-					$("#login-li").addClass("disabled");				
-					$("#login-li-a").attr('href',"#");
+				$("#perfil_id").html(response);
 
-					$("#perfil-li").removeClass("disabled");
-					$("#perfil-li").addClass("active");
-					$("#perfil-li-a").attr('href',"#perfil-div");
-
-					$("#login-div").removeClass("tab-pane fade active in");
-					$("#login-div").addClass("tab-pane fade");
-					
-					$("#perfil-div").removeClass("tab-pane fade");
-					$("#perfil-div").addClass("tab-pane fade active in");
-
-				}
 			}
 
 		});
 		return false;
 	});
+	
+	$('#perfil_id').change(function() {
+
+		var perfil_id = $("#perfil_id").val();
+
+		$("#empresa_id").load('<c:url value="/home/empresas" />',{'perfil_id': perfil_id});
+
+	});
+	
+	$('#empresa_id').change(function() {
+
+		var empresa_id = $("#empresa_id").val();
+		var perfil_id = $("#perfil_id").val();
+
+		$("#organizacao_id").load('<c:url value="/home/organizacoes" />',{'perfil_id': perfil_id, 'empresa_id':empresa_id});
+
+	});
+	
+	$('#empresa_id').change(function() {
+
+		var empresa_id = $("#empresa_id").val();
+		var perfil_id = $("#perfil_id").val();
+
+		$("#organizacao_id").load('<c:url value="/home/organizacoes" />',{'perfil_id': perfil_id, 'empresa_id':empresa_id});
+
+	});
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/home/logout" />';
+	});
 
 }); 
+
 </script>
 
 <div class="span9">
@@ -82,39 +112,36 @@ jQuery(function($){
 					<div class="control-group">
 						<label class="control-label" for="inputEmail">Perfil</label>
 						<div class="controls">
-							<input type="text" id="perfil_id" placeholder="Selecione o Perfil">
-							
 							<select id="perfil_id">	
-								<option value=""> Selecione o perfil...</option>
-								<c:forEach items="${perfis }" var="perfil">
-									<option value="${perfil.id }">${perfil.nome }</option>
-								</c:forEach>
+								<option value="">Selecione o perfil</option>
 							</select>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label" for="inputEmail">Empresa</label>
 						<div class="controls">
-							<input type="text" id="empresa_id"
-								placeholder="Selecione a Empresa">
+							<select id="empresa_id">	
+								<option value="">Selecione a empresa</option>
+							</select>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label" for="inputEmail">Organiza&ccedil;&atilde;o</label>
 						<div class="controls">
-							<input type="text" id="organizacao_id"
-								placeholder="Selecione a Organiza&ccedil;&atilde;o">
+							<select id="organizacao_id">	
+								<option value="">Selecione a organizacao</option>
+							</select>
 						</div>
-						<div class="control-group">
-							<div class="controls">
-								<button type="submit" class="btn btn-primary">OK</button>
-								<!--button type="submit" class="btn btn-primary" onclick="<c:url value="/home/logout" />" >Sair</button-->
-								<form action="<c:url value="/home/logout" />" >
-									<button type="submit" class="btn btn-primary" >Sair</button>
-								</form>
 
+						 <div class="btn-toolbar">
+							<div class="btn-group">
+								<button type="submit" class="btn btn-primary">OK</button>
+							</div>	
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 							</div>
 						</div>
+
 					</div>
 				</div>
 			</div>
