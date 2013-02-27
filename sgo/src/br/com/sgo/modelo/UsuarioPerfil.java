@@ -12,15 +12,15 @@ import br.com.caelum.vraptor.ioc.Component;
 @Embeddable
 @Table(name="USUARIOPERFIL")
 public class UsuarioPerfil {
-	
+
 	@ManyToOne
 	@JoinColumn(name="empresa_id") 
 	private Empresa empresa;
-		
+
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "usuario_id",updatable = true, nullable = false)  
 	private Usuario usuario;  
