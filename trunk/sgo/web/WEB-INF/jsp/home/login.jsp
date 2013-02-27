@@ -99,9 +99,13 @@ jQuery(function($){
 						</div>
 						<div class="control-group">
 							<div class="controls">
-								<p></p>
+
 								<button type="submit" class="btn btn-primary">OK</button>
-								<button type="submit" class="btn btn-primary">Sair</button>
+
+								<form action="<c:url value="/home/logout" />" >
+									<button type="submit" class="btn btn-primary">Sair</button>
+								</form>
+
 							</div>
 						</div>
 					</div>
