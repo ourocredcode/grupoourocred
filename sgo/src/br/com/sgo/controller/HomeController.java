@@ -3,8 +3,7 @@ package br.com.sgo.controller;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -17,8 +16,8 @@ import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.UsuarioPerfilDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Usuario;
-import br.com.sgo.modelo.UsuarioPerfil;
 
 @Resource
 public class HomeController {
@@ -28,8 +27,6 @@ public class HomeController {
 	private final UsuarioPerfilDao usuarioPerfilDao;
 	private final UsuarioInfo usuarioInfo;
 	private final Validator validator;
-
-	private List<UsuarioPerfil> usuarioPerfis = new ArrayList<UsuarioPerfil>();
 
 	public HomeController(Result result, UsuarioDao usuarioDao, UsuarioInfo usuarioInfo, Validator validator, UsuarioPerfilDao usuarioPerfilDao) {
 		this.result = result;
@@ -44,6 +41,12 @@ public class HomeController {
 	public void login() {
 
 	}
+	
+	@Get
+	@Path("/home")
+	public void home() {
+
+	}	
 
 	@Post
 	@Public
@@ -59,14 +62,13 @@ public class HomeController {
 
 		usuarioInfo.login(currentUsuario);
 
-		//this.usuarioPerfilDao.buscaPerfilPorUsuario(usuarioInfo.getUsuario())
-		
-		String perfis = "ADMINISTRADOR";
-		
+		result.redirectTo(this).perfis(this.usuarioPerfilDao.buscaUsuarioPerfilAcesso(usuarioInfo.getUsuario()));
+
+	}
+
+	@Get
+	public void perfis(Collection<Perfil> perfis){
 		result.include("perfis",perfis);
-
-		result.include("msg","OK").redirectTo(this).msg();
-
 	}
 
 	public void logout() {
@@ -75,13 +77,23 @@ public class HomeController {
 	}
 
 	@Get
-	@Path("/home")
-	public void home() {
-
-	}	
-	
-	@Get
 	public void msg(){
+
+	}
+	
+	@Post
+	@Path("/home/empresas")
+	public void empresas(Long perfil_id){
+
+		result.include("empresas",this.usuarioPerfilDao.buscaEmpresaPerfilAcesso(perfil_id,usuarioInfo.getUsuario().getUsuario_id()) );
+
+	}
+	
+	@Post
+	@Path("/home/organizacoes")
+	public void organizacoes(Long perfil_id,Long empresa_id){
+
+		result.include("organizacoes",this.usuarioPerfilDao.buscaOrganizacaoPerfilAcesso(perfil_id, empresa_id, usuarioInfo.getUsuario().getUsuario_id()));
 
 	}
 

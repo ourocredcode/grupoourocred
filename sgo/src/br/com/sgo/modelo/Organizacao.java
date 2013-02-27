@@ -1,5 +1,7 @@
 package br.com.sgo.modelo;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,12 +12,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
 @Entity
 @Component
 @Table(name="ORGANIZACAO")
-public class Organizacao {
+public class Organizacao implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "organizacao_id")  
