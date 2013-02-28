@@ -7,8 +7,25 @@ jQuery(function($){
 		window.location.href = '<c:url value="/tabelabd/configuracao" />';
 	});
 
-}); 
+	$('#TesteEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.nome
+                      };
+                  }));  
+               }
+	        });
+         }
+    });
 
+}); 
 </script>
 
 <div class="span9">
@@ -31,7 +48,7 @@ jQuery(function($){
 						<label class="control-label" for="tabelaBd.empresa">Empresa</label>
 						<div class="input-prepend">
 							<span class="add-on"><i class="icon-plus-sign"></i></span>
-      						<input class="span2" id="tabelaBd.empresa" type="text">
+      						<input class="span2" id="TesteEmpresa" type="text">
     					</div>
 					</div>
 					<div class="control-group">

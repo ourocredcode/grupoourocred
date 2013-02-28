@@ -1,6 +1,8 @@
 <%@ include file="/header.jspf"%>
 
 <script type="text/javascript">
+
+
 jQuery(function($){
 	
 	$('#loginForm').submit(function() {
@@ -61,6 +63,8 @@ jQuery(function($){
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/home/logout" />';
 	});
+	
+	
 
 }); 
 
@@ -108,15 +112,16 @@ jQuery(function($){
 				</div>
 
 				<div class="tab-pane fade"  id="perfil-div">
+
 					<p></p>
+
 					<div class="control-group">
 						<label class="control-label" for="inputEmail">Perfil</label>
-						<div class="controls">
-							<select id="perfil_id">	
-								<option value="">Selecione o perfil</option>
-							</select>
-						</div>
+						<select id="perfil_id">	
+							<option value="">Selecione o perfil</option>
+						</select>
 					</div>
+
 					<div class="control-group">
 						<label class="control-label" for="inputEmail">Empresa</label>
 						<div class="controls">
@@ -125,6 +130,7 @@ jQuery(function($){
 							</select>
 						</div>
 					</div>
+
 					<div class="control-group">
 						<label class="control-label" for="inputEmail">Organiza&ccedil;&atilde;o</label>
 						<div class="controls">
