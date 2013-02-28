@@ -53,5 +53,12 @@ public class TabelabdController {
 
 		this.result.nothing();
 	}
+	
+	@Get
+	@Public
+	@Path("/tabelabd/configuracao")
+	public void configuracao(){
+		
+	}
 
 }
