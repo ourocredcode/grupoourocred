@@ -38,8 +38,8 @@ public class Usuario implements Serializable {
 	@Column(name="telefone")
 	private String telefone;
 	
-	@Column(name="value")
-	private String value;
+	@Column(name="chave")
+	private String chave;
 
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -105,11 +105,11 @@ public class Usuario implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public String getValue() {
-		return value;
+	public String getChave() {
+		return chave;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setChave(String chave) {
+		this.chave = chave;
 	}
 }
