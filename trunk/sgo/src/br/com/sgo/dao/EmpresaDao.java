@@ -1,8 +1,16 @@
 package br.com.sgo.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.hibernate.Session;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Empresa;
 
@@ -10,10 +18,49 @@ import br.com.sgo.modelo.Empresa;
 public class EmpresaDao  extends Dao<Empresa> {
 
 	private Session session;
+	private ConnJDBC conexao;
+	private PreparedStatement stmt;
+	private Connection conn;
+	private ResultSet rsEmpresas;
 
-	public EmpresaDao(Session session) {
+	public EmpresaDao(Session session,ConnJDBC conexao) {
 		super(session, Empresa.class);
 		this.session = session;
+		this.conexao = conexao;
+	}
+
+	public Collection<Empresa> buscaEmpresas(String nome){
+
+		String sql = "select nome from EMPRESA (NOLOCK) WHERE nome like ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Empresa> empresas = new ArrayList<Empresa>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1,"%"+  nome + "%");
+			this.rsEmpresas = this.stmt.executeQuery();		
+
+			while (rsEmpresas.next()) {
+
+				Empresa e = new Empresa();
+
+				e.setNome(rsEmpresas.getString("nome"));
+
+				empresas.add(e);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(conn);
+
+		return empresas;
 	}
 
 }
