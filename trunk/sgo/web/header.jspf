@@ -13,40 +13,16 @@
 
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-		<link href="<c:url value="/css/bootstrap/bootstrap.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/bootstrap/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/bootstrap/docs.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/bootstrap/select2.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/jquery.calendario.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/jquery-ui-1.8.13.custom.css"/>" rel="stylesheet" type="text/css" media="screen" />
+		<link href="<c:url value="/css/redmond/jquery-ui-1.10.1.custom.css"/>" rel="stylesheet" type="text/css" media="screen" />
+		<link href="<c:url value="/css/bootstrap.css"/>" rel="stylesheet" type="text/css" media="screen" />
+		<link href="<c:url value="/css/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" media="screen" />
+		<link href="<c:url value="/css/docs.css"/>" rel="stylesheet" type="text/css" media="screen" />
+		
 
-		<script type="text/javascript" src="<c:url value="/javascripts/new/jquery.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/jquery.validate.js"/>"></script> 
-		<script type="text/javascript" src="<c:url value="/javascripts/jquery.maskedinput-1.2.2.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/jquery.maskMoney.0.2.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/jquery.calendario.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/funcs.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/jquery.history.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/jquery-ui-1.8.13.custom.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-affix.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-alert.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-button.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-carousel.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-collapse.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-dropdown.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-modal.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-popover.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-scrollspy.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-tab.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-tooltip.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-transition.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-typeahead.js"/>"></script>
-	  	<script type="text/javascript" src="<c:url value="/javascripts/new/html5shiv.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/application.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/new/select2.js"/>"></script>
-	    <script type="text/javascript" src="<c:url value="/javascripts/new/holder/holder.js"/>"></script>
-		<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+		<script type="text/javascript" src="<c:url value="/javascripts/jquery-1.9.1.min.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/javascripts/jquery-ui-1.10.1.custom.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/javascripts/bootstrap.js"/>"></script>
+	    
 
 		<fmt:setLocale value="pt_br"/>
 	</head>
