@@ -26,7 +26,7 @@ public class UsuarioDao extends Dao<Usuario> {
 	
 	public Usuario find(String login, String senha) {
 
-		String hql = "from Usuario u where u.value = :login and u.senha = :senha";
+		String hql = "from Usuario u where u.chave = :login and u.senha = :senha";
 
 		Query query = session.createQuery(hql)
 			.setParameter("login", login)
