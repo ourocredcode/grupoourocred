@@ -16,6 +16,7 @@
 		<link href="<c:url value="/css/bootstrap/bootstrap.css"/>" rel="stylesheet" type="text/css" media="screen" />
 		<link href="<c:url value="/css/bootstrap/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" media="screen" />
 		<link href="<c:url value="/css/bootstrap/docs.css"/>" rel="stylesheet" type="text/css" media="screen" />
+		<link href="<c:url value="/css/bootstrap/select2.css"/>" rel="stylesheet" type="text/css" media="screen" />
 		<link href="<c:url value="/css/jquery.calendario.css"/>" rel="stylesheet" type="text/css" media="screen" />
 		<link href="<c:url value="/css/jquery-ui-1.8.13.custom.css"/>" rel="stylesheet" type="text/css" media="screen" />
 
@@ -43,8 +44,9 @@
 	    <script type="text/javascript" src="<c:url value="/javascripts/new/bootstrap-typeahead.js"/>"></script>
 	  	<script type="text/javascript" src="<c:url value="/javascripts/new/html5shiv.js"/>"></script>
 	    <script type="text/javascript" src="<c:url value="/javascripts/new/application.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/javascripts/new/select2.js"/>"></script>
 	    <script type="text/javascript" src="<c:url value="/javascripts/new/holder/holder.js"/>"></script>
-	   <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+		<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 
 		<fmt:setLocale value="pt_br"/>
 	</head>
