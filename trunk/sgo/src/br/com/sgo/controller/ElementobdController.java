@@ -10,8 +10,6 @@ import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.ElementoBd;
-import br.com.sgo.modelo.Empresa;
-import br.com.sgo.modelo.Organizacao;
 
 @Resource
 public class ElementobdController {
@@ -33,14 +31,8 @@ public class ElementobdController {
 	@Get
 	@Public
 	@Path("/elementobd/cadastro")
-	public void cadastro() {
-
-		Empresa empresa = this.empresaDao.load(1L);
-		Organizacao organizacao = this.organizacaoDao.load(1L);
-
-		result.include("empresa",empresa);
-		result.include("organizacao",organizacao);
-
+	public void cadastro(){
+		
 	}
 
 	@Post
@@ -56,19 +48,6 @@ public class ElementobdController {
 		this.elementoBdDao.commit();
 
 		this.result.nothing();
-
-	}
-	
-	@Get
-	@Public
-	@Path("/elementobd/teste")
-	public void teste() {
-
-		Empresa empresa = this.empresaDao.load(1L);
-		Organizacao organizacao = this.organizacaoDao.load(1L);
-
-		result.include("empresa",empresa);
-		result.include("organizacao",organizacao);
 
 	}
 
