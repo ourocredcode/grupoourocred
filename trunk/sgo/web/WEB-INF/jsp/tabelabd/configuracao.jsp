@@ -16,7 +16,34 @@ jQuery(function($){
               success : function(data) {  
             	  response($.map(data, function(empresa) {  
             		  return {
-                          label: empresa.nome
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#tabelaBdEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+             $('#tabelaBdEmpresa').val(ui.item.label);
+             $('#tabelaBdEmpresaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#tabelaBdOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#tabelaBdEmpresaId').val() , org_nome : $('#tabelaBdOrganizacao').val()},
+              success : function(data) {  
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome
                       };
                   }));  
                }
@@ -24,7 +51,10 @@ jQuery(function($){
          }
     });
 
-}); 
+
+});
+
+
 </script>
 
 <div class="span9">
@@ -48,13 +78,14 @@ jQuery(function($){
 						<div class="input-prepend">
 							<span class="add-on"><i class="icon-plus-sign"></i></span>
       						<input class="span2" id="tabelaBdEmpresa" name="tabelaBd.empresa" type="text">
+      						<input class="span2" id="tabelaBdEmpresaId" name="tabelaBd.empresa.empresa_id" type="hidden">
     					</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label" for="tabelaBd.organizacao">Organização</label>
 						<div class="input-prepend">
 							<span class="add-on"><i class="icon-plus-sign"></i></span>
-      						<input class="span2" id="tabelaBd.organizacao" type="text">
+      						<input class="span2" id="tabelaBdOrganizacao" type="text">
     					</div>
 					</div>
 					<div class="control-group">
