@@ -33,17 +33,23 @@ function limpaCampo(campo,campoId){
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="tabelabd-li"><a href="#" data-toggle="tab" id="tabelabd-li-a">Tabela BD</a></li>
-				<li class="active" id="colunabd-li"><a href="#colunabd-div" data-toggle="tab" id="colunabd-li-a">Coluna BD</a></li>	
+				<li class="" id="colunabd-li"><a href="#colunabd-div" data-toggle="tab" id="colunabd-li-a">Coluna BD</a></li>	
 				<li class="" id="elementobd-li"><a href="#elementobd-div" data-toggle="tab" id="elementobd-li-a">Elemento BD</a></li>
-				<li class="" id="tipodadobd-li"><a href="#tipodadobd-div" data-toggle="tab" id="tipodadobd-li-a">TipoDado BD</a></li>
+				<li class="active" id="tipodadobd-li"><a href="#tipodadobd-div" data-toggle="tab" id="tipodadobd-li-a">TipoDado BD</a></li>
 			</ul>
 
-				<div id="myTabContent" class="tab-content">
+			<div id="myTabContent" class="tab-content">
 
 				<div class="tab-pane fade " id="tabelabd-div">
 
 				</div>
-				<div class="tab-pane fade active in" id="colunabd-div">
+				<div class="tab-pane fade " id="colunabd-div">
+
+				</div>
+				<div class="tab-pane fade" id="elementobd-div">
+
+				</div>
+				<div class="tab-pane fade active in" id="tipodadobd-div">
 				
 					<form id="tabelaBdForm" name="tabelaBdForm" action="<c:url value="/tabelabd/salva"/>" method="POST">
 						<div class="control-group">
@@ -63,17 +69,9 @@ function limpaCampo(campo,campoId){
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tabelaBdOrganizacao">Tabela</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaCampo(tabelaBdOrganizacao,tabelaBdOrganizacaoId);">
-	      						<input class="span2" id="tabelaBdOrganizacaoId" name="tabelaBd.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="tabelaBd.nometabelabd">Nome Coluna BD</label>
+							<label class="control-label" for="tabelaBd.nometabelabd">Tipo Dado BD</label>
 							<div class="controls">
-								<input type="text" id="tabelaBd.nometabelabd" name="tabelaBd.nometabelabd" placeholder="Nome da coluna BD" required>
+								<input type="text" id="tabelaBd.nometabelabd" name="tabelaBd.nometabelabd" placeholder="Nome do tipo de dado BD" required>
 							</div>
 						</div>
 						<div class="control-group">
@@ -89,12 +87,6 @@ function limpaCampo(campo,campoId){
 								</div>	
 							</div>
 					</form>
-
-				</div>
-				<div class="tab-pane fade" id="elementobd-div">
-
-				</div>
-				<div class="tab-pane fade" id="tipodadobd-div">
 
 				</div>
 			</div>
