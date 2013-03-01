@@ -31,7 +31,7 @@ public class EmpresaDao  extends Dao<Empresa> {
 
 	public Collection<Empresa> buscaEmpresas(String nome){
 
-		String sql = "select nome from EMPRESA (NOLOCK) WHERE nome like ? ";
+		String sql = "select empresa_id, nome from EMPRESA (NOLOCK) WHERE nome like ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -48,6 +48,7 @@ public class EmpresaDao  extends Dao<Empresa> {
 
 				Empresa e = new Empresa();
 
+				e.setEmpresa_id(rsEmpresas.getLong("empresa_id"));
 				e.setNome(rsEmpresas.getString("nome"));
 
 				empresas.add(e);
