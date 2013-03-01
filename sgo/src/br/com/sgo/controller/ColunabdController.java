@@ -13,11 +13,6 @@ import br.com.sgo.dao.TabelaBdDao;
 import br.com.sgo.dao.TipoDadoBdDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.ColunaBd;
-import br.com.sgo.modelo.ElementoBd;
-import br.com.sgo.modelo.Empresa;
-import br.com.sgo.modelo.Organizacao;
-import br.com.sgo.modelo.TabelaBd;
-import br.com.sgo.modelo.TipoDadoBd;
 
 @Resource
 public class ColunabdController {
@@ -46,20 +41,8 @@ public class ColunabdController {
 	@Get
 	@Public
 	@Path("/colunabd/cadastro")
-	public void cadastro() {
-
-		Empresa empresa = this.empresaDao.load(1L);
-		Organizacao organizacao = this.organizacaoDao.load(1L);
-		TabelaBd tabelaBd = this.tabelaBdDao.load(1L);
-		TipoDadoBd tipoDadoBd = this.tipoDadoBdDao.load(1L);
-		ElementoBd elementoBd = this.elementoBdDao.load(1L);
-
-		result.include("empresa",empresa);
-		result.include("organizacao",organizacao);
-		result.include("tabelaBd",tabelaBd);
-		result.include("tipoDadoBd",tipoDadoBd);
-		result.include("elementoBd",elementoBd);
-
+	public void cadastro(){
+		
 	}
 
 	@Post
@@ -80,5 +63,4 @@ public class ColunabdController {
 		this.result.nothing();
 
 	}
-
 }
