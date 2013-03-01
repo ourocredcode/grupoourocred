@@ -25,10 +25,8 @@ public class OrganizacaoController {
 	@Public
 	public void organizacoes(Long empresa_id, String org_nome){
 
-		System.out.println(empresa_id);
-		System.out.println(org_nome);
-
 		result.use(Results.json()).withoutRoot().from(organizacaoDao.buscaOrganizacoes(empresa_id, org_nome)).serialize();
+
 	}	
 	
 }
