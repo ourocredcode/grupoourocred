@@ -29,45 +29,12 @@
 
 <body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true">
 
-	<div id="page-wrap">
 
-		<div id="top-bar">
-			<c:if test="${not empty consultorInfo.consultor}">
-				<div id="right-side" style="float:right;display:inline;margin-top: -45px;">
-					<a href="#" class="first">${consultorInfo.consultor.nome}</a>&ensp;
-					<a href="<c:url value="/home/logout"/>">Logout</a> 
-				</div>
-			</c:if>
-		</div>
-
-		<c:if test="${not empty consultorInfo.consultor}">
-			<div id="zone-bar">
-
+		<c:if test="${not empty notice}">
+			<div class="alert alert-error">
+	 			 <button type="button" class="close" data-dismiss="alert">&times;</button> <strong>${notice }</strong> 
 			</div>
 		</c:if>
 
-		<div id="erros">
-			<ul>
-			<c:forEach items="${errors}" var="error">
-				<li><span>${error.category } - ${error.message }</span></li>
-			</c:forEach>
-			</ul>
-		</div>
-
-		<c:if test="${not empty notice}">
-			<c:choose>
-				<c:when test="${fn:contains(notice,'Erro:')}">
-					<div id="erros">
-						<p>${notice }</p>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<div id="notice">
-						<p>${notice }</p>
-					</div>
-				</c:otherwise>
-			</c:choose>
-		</c:if>
-		
 		<div id="main-content">
 			<div id="feature-content">
