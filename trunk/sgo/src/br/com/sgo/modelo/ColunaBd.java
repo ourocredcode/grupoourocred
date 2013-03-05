@@ -1,5 +1,7 @@
 package br.com.sgo.modelo;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,24 +13,18 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
 @Entity
 @Component
 @Table(name="COLUNABD")
-public class ColunaBd {
+public class ColunaBd implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id	
 	@Column(name = "colunabd_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)	
 	private Long colunabd_id;
-
-	@Column(name="nome")
-	private String nome;
-	
-	@ManyToOne
-	@JoinColumn(name="tabelabd_id",updatable = true, nullable = false) 
-	private TabelaBd tabelaBd;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -37,6 +33,10 @@ public class ColunaBd {
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
+
+	@ManyToOne
+	@JoinColumn(name="tabelabd_id",updatable = true, nullable = false) 
+	private TabelaBd tabelaBd;
 	
 	@OneToOne
 	@JoinColumn(name="tipodadobd_id",updatable = true, nullable = false)
@@ -45,6 +45,20 @@ public class ColunaBd {
 	@ManyToOne
 	@JoinColumn(name="elementobd_id",updatable = true, nullable = false) 
 	private ElementoBd elementoBd;
+
+	@Column(name="nome")
+	private String nome;
+
+	@Column(name="nomecolunadb")
+	private String nomecolunadb;	
+
+	public String getNomecolunadb() {
+		return nomecolunadb;
+	}
+
+	public void setNomecolunadb(String nomecolunadb) {
+		this.nomecolunadb = nomecolunadb;
+	}
 
 	public Long getColunabd_id() {
 		return colunabd_id;

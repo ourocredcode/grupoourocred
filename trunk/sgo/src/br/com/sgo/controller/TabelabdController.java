@@ -54,21 +54,21 @@ public class TabelabdController {
 			this.tabelaBdDao.adiciona(tabelaBd);
 			this.tabelaBdDao.commit();
 
-			mensagem = "Tabela BD " + tabelaBd.getNome() + " adicionado com sucesso";
-
+			mensagem = "Tabela BD " + tabelaBd.getNome() + " adicionado com sucesso";			
+			
 		} catch(Exception e) {
+
 			if (e.getCause().toString().indexOf("IX_TABELABD_NOMETABELABD") != -1){
 				mensagem = "Erro: Tabela Bd " + tabelaBd.getNome() + " já existente.";
 			} else {
 				mensagem = "Erro ao adicionar Tabela Bd:";
 			}
+
 		}
 
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 
 	}
-	
-	
 
 }
