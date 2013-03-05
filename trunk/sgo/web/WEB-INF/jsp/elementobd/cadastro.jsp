@@ -15,12 +15,83 @@ jQuery(function($){
 	$('#tipodadobd-li-a').click(function() {
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
 	});
+	
+	$('#elementoBdEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
+
+           		  if (!data || data.length == 0) {
+           	            $('#elementoBdEmpresa').val('');
+						$('#elementoBdEmpresaId').val('');
+           	        }
+
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#elementoBdEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+        	 $('#elementoBdEmpresa').val(ui.item.label);
+             $('#elementoBdEmpresaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#elementoBdOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#elementoBdEmpresaId').val() == '' ? '0' :  $('#elementoBdEmpresaId').val(), org_nome : $('#elementoBdOrganizacao').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#elementoBdOrganizacao').val('');
+         	           $('#elementoBdOrganizacaoId').val('');
+         	        }
+
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome,
+            			  value: organizacao.organizacao_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#elementoBdOrganizacao').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#elementoBdOrganizacao').val(ui.item.label);
+             $('#elementoBdOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	
 
 });
 
-function limpaCampo(campo,campoId){
-	campo.value='';
-	campoId.value='';
+function limpaForm(){
+
+	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
+		document.colunaBdForm.reset();
+	}
+
 }
 
 
@@ -48,49 +119,33 @@ function limpaCampo(campo,campoId){
 				</div>
 				<div class="tab-pane fade active in" id="elementobd-div">
 
-					<form id="tabelaBdForm" name="tabelaBdForm" action="<c:url value="/tabelabd/salva"/>" method="POST">
+					<form id="elementoBdForm" name="elementoBdForm" action="<c:url value="/elementobd/salva"/>" method="POST">
 						<div class="control-group">
-							<label class="control-label" for="tabelaBdEmpresa">Empresa</label>
+							<label class="control-label" for="elementoBdEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdEmpresa" name="tabelaBd.empresa.nome" type="text" required onChange="limpaCampo(tabelaBdEmpresa,tabelaBdEmpresaId);">
-	      						<input class="span2" id="tabelaBdEmpresaId" name="tabelaBd.empresa.empresa_id" type="hidden">
+	      						<input class="span2" id="elementoBdEmpresa" name="elementoBd.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="elementoBdEmpresaId" name="elementoBd.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tabelaBdOrganizacao">Organização</label>
+							<label class="control-label" for="elementoBdOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaCampo(tabelaBdOrganizacao,tabelaBdOrganizacaoId);">
-	      						<input class="span2" id="tabelaBdOrganizacaoId" name="tabelaBd.organizacao.organizacao_id" type="hidden">
+	      						<input class="span2" id="elementoBdOrganizacao" name="elementoBd.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="elementoBdOrganizacaoId" name="elementoBd.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tabelaBdOrganizacao">Tabela</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaCampo(tabelaBdOrganizacao,tabelaBdOrganizacaoId);">
-	      						<input class="span2" id="tabelaBdOrganizacaoId" name="tabelaBd.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="tabelaBdOrganizacao">Coluna</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaCampo(tabelaBdOrganizacao,tabelaBdOrganizacaoId);">
-	      						<input class="span2" id="tabelaBdOrganizacaoId" name="tabelaBd.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="tabelaBd.nometabelabd">Nome Elemento BD</label>
+							<label class="control-label" for="elementoBdNomeColunaBd">Nome Coluna BD</label>
 							<div class="controls">
-								<input type="text" id="tabelaBd.nometabelabd" name="tabelaBd.nometabelabd" placeholder="Nome da elemento BD" required>
+								<input type="text" id="elementoBdNomeColunaBd" name="elementoBd.nomeColunaBd" placeholder="Nome da coluna BD" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tabelaBd.nome">Nome</label>
+							<label class="control-label" for="elementoBd.nome">Nome</label>
 							<div class="controls">
-								<input type="text" id="tabelaBd.nome" name="tabelaBd.nome" placeholder="Nome" required>
+								<input type="text" id="elementoBd.nome" name="elementoBd.nome" placeholder="Nome" required>
 							</div>
 						</div>
 						

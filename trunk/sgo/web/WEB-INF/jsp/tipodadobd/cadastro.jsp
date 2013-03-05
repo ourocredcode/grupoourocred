@@ -15,12 +15,86 @@ jQuery(function($){
 	$('#tipodadobd-li-a').click(function() {
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
 	});
+	
+	$('#tipoDadoBdEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
+
+           		  if (!data || data.length == 0) {
+           	            $('#tipoDadoBdEmpresa').val('');
+						$('#tipoDadoBdEmpresaId').val('');
+           	        }
+
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#tipoDadoBdEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+        	 $('#tipoDadoBdEmpresa').val(ui.item.label);
+             $('#tipoDadoBdEmpresaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#tipoDadoBdOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#tipoDadoBdEmpresaId').val() == '' ? '0' :  $('#tipoDadoBdEmpresaId').val(), org_nome : $('#tipoDadoBdOrganizacao').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#tipoDadoBdOrganizacao').val('');
+         	            $('#tipoDadoBdOrganizacaoId').val('');
+         	        }
+
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome,
+            			  value: organizacao.organizacao_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#tipoDadoBdOrganizacao').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#tipoDadoBdOrganizacao').val(ui.item.label);
+             $('#tipoDadoBdOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/colunabd/cadastro" />';
+	});
 
 });
 
-function limpaCampo(campo,campoId){
-	campo.value='';
-	campoId.value='';
+function limpaForm(){
+
+	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
+		document.colunaBdForm.reset();
+	}
+
 }
 
 
@@ -51,33 +125,33 @@ function limpaCampo(campo,campoId){
 				</div>
 				<div class="tab-pane fade active in" id="tipodadobd-div">
 				
-					<form id="tabelaBdForm" name="tabelaBdForm" action="<c:url value="/tabelabd/salva"/>" method="POST">
+					<form id="tipoDadoBdForm" name="tipoDadoBdForm" action="<c:url value="/tipodadobd/salva"/>" method="POST">
 						<div class="control-group">
-							<label class="control-label" for="tabelaBdEmpresa">Empresa</label>
+							<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdEmpresa" name="tabelaBd.empresa.nome" type="text" required onChange="limpaCampo(tabelaBdEmpresa,tabelaBdEmpresaId);">
-	      						<input class="span2" id="tabelaBdEmpresaId" name="tabelaBd.empresa.empresa_id" type="hidden">
+	      						<input class="span2" id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tabelaBdOrganizacao">Organização</label>
+							<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaCampo(tabelaBdOrganizacao,tabelaBdOrganizacaoId);">
-	      						<input class="span2" id="tabelaBdOrganizacaoId" name="tabelaBd.organizacao.organizacao_id" type="hidden">
+	      						<input class="span2" id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tabelaBd.nometabelabd">Tipo Dado BD</label>
+							<label class="control-label" for="tipoDadoBdNome">Nome Tipo Dado BD</label>
 							<div class="controls">
-								<input type="text" id="tabelaBd.nometabelabd" name="tabelaBd.nometabelabd" placeholder="Nome do tipo de dado BD" required>
+								<input type="text" id="tipoDadoBdNome" name="tipoDadoBd.nome" placeholder="Nome do tipo de dado BD" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tabelaBd.nome">Nome</label>
+							<label class="control-label" for="tipoDadoBdChave">Chave Tipo Dado BD</label>
 							<div class="controls">
-								<input type="text" id="tabelaBd.nome" name="tabelaBd.nome" placeholder="Nome" required>
+								<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
 							</div>
 						</div>
 						

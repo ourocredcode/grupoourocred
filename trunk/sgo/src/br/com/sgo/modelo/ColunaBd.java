@@ -49,15 +49,15 @@ public class ColunaBd implements Serializable {
 	@Column(name="nome")
 	private String nome;
 
-	@Column(name="nomecolunadb")
-	private String nomecolunadb;	
+	@Column(name="nomecolunabd")
+	private String nomeColunaBd;	
 
-	public String getNomecolunadb() {
-		return nomecolunadb;
+	public String getNomeColunaBd() {
+		return nomeColunaBd;
 	}
 
-	public void setNomecolunadb(String nomecolunadb) {
-		this.nomecolunadb = nomecolunadb;
+	public void setNomeColunaBd(String nomeColunaBd) {
+		this.nomeColunaBd = nomeColunaBd;
 	}
 
 	public Long getColunabd_id() {

@@ -6,16 +6,15 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.view.Results;
-
-import br.com.sgo.interceptor.Public;
-import br.com.sgo.modelo.ColunaBd;
 import br.com.sgo.dao.ColunaBdDao;
+import br.com.sgo.dao.ElementoBdDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TabelaBdDao;
-import br.com.sgo.dao.ElementoBdDao;
 import br.com.sgo.dao.TipoDadoBdDao;
+import br.com.sgo.interceptor.Public;
+import br.com.sgo.modelo.ColunaBd;
+import br.com.sgo.modelo.TabelaBd;
 
 @Resource
 public class ColunabdController {
@@ -49,6 +48,7 @@ public class ColunabdController {
 
 	}
 
+	
 	@Post
 	@Public
 	@Path("/colunabd/salva")
@@ -61,36 +61,28 @@ public class ColunabdController {
 
 		try {
 
-			colunaBd.setEmpresa(this.empresaDao.load(colunaBd.getEmpresa().getEmpresa_id()));
+			colunaBd.setEmpresa(this.empresaDao.load(colunaBd.getEmpresa().getEmpresa_id()));		
 			colunaBd.setOrganizacao(this.organizacaoDao.load(colunaBd.getOrganizacao().getOrganizacao_id()));
-			colunaBd.setTabelaBd(this.tabelaBdDao.load(colunaBd.getTabelaBd().getTabelabd_id()));
-			colunaBd.setTipoDadoBd(this.tipoDadoBdDao.load(colunaBd.getTipoDadoBd().getTipodadobd_id()));
-			colunaBd.setElementoBd(this.elementoBdDao.load(colunaBd.getElementoBd().getElementobd_id()));
+			colunaBd.setTabelaBd(this.tabelaBdDao.load(colunaBd.getTabelaBd().getTabelaBd_id()));
 
 			this.colunaBdDao.beginTransaction();
 			this.colunaBdDao.adiciona(colunaBd);
-			this.colunaBdDao.commit();			
+			this.colunaBdDao.commit();
+
+			mensagem = "Coluna BD " + colunaBd.getNome() + " adicionado com sucesso";			
 			
-			//this.colunaBdDao.close();
-
-			mensagem = "Coluna BD " + colunaBd.getNomecolunadb() + " adicionado com sucesso";
-
 		} catch(Exception e) {
-			if (e.getCause().toString().indexOf("IX_COLUNABD_NOMECOLUNABD") != -1){
-				mensagem = "Erro: Coluna Bd " + colunaBd.getNomecolunadb() + " já existente.";
+
+			if (e.getCause().toString().indexOf("IX_COLUNABD_ELEMENTOBDID") != -1){
+				mensagem = "Erro: Elemento Bd " + colunaBd.getNome() + " já existente.";
 			} else {
-				mensagem = "Erro ao adicionar Coluna Bd:";
+				mensagem = "Erro ao adicionar Tabela Bd:";
 			}
+
 		}
 
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 
-	}
-	
-	@Get @Path("/colunabd/busca.json")
-	@Public
-	public void tabelas(Long tabelabd_id, String nometabelabd){
-		result.use(Results.json()).withoutRoot().from(tabelaBdDao.buscaTabelas(tabelabd_id, nometabelabd)).serialize();
 	}
 }

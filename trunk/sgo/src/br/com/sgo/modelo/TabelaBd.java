@@ -23,7 +23,7 @@ public class TabelaBd implements Serializable {
 	@Id
 	@Column(name = "tabelabd_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO)	
-	private Long tabelabd_id;
+	private Long tabelaBd_id;
 
 	@Column(name = "nome")
 	private String nome;
@@ -39,12 +39,12 @@ public class TabelaBd implements Serializable {
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
 
-	public Long getTabelabd_id() {
-		return tabelabd_id;
+	public Long getTabelaBd_id() {
+		return tabelaBd_id;
 	}
 
-	public void setTabelabd_id(Long tabelabd_id) {
-		this.tabelabd_id = tabelabd_id;
+	public void setTabelaBd_id(Long tabelaBd_id) {
+		this.tabelaBd_id = tabelaBd_id;
 	}
 
 	public String getNome() {

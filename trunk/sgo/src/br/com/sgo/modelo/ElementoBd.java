@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
 @Entity
 @Component
@@ -20,7 +19,7 @@ public class ElementoBd {
 	@Id	
 	@Column(name = "elementobd_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO)	
-	private Long elementobd_id;
+	private Long elementoBd_id;
 
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -37,14 +36,14 @@ public class ElementoBd {
 	private String descricao;
 	
 	@Column(name="nomecolunabd")
-	private String nomecolunabd;
-	
-	public Long getElementobd_id() {
-		return elementobd_id;
+	private String nomeColunaBd;
+
+	public Long getElementoBd_id() {
+		return elementoBd_id;
 	}
 
-	public void setElementobd_id(Long elementobd_id) {
-		this.elementobd_id = elementobd_id;
+	public void setElementoBd_id(Long elementoBd_id) {
+		this.elementoBd_id = elementoBd_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -79,12 +78,12 @@ public class ElementoBd {
 		this.descricao = descricao;
 	}
 
-	public String getNomecolunabd() {
-		return nomecolunabd;
+	public String getNomeColunaBd() {
+		return nomeColunaBd;
 	}
 
-	public void setNomecolunabd(String nomecolunabd) {
-		this.nomecolunabd = nomecolunabd;
+	public void setNomeColunaBd(String nomeColunaBd) {
+		this.nomeColunaBd = nomeColunaBd;
 	}
 
 }

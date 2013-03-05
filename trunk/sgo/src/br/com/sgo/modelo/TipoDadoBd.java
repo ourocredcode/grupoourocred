@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
 
 @Entity
@@ -21,10 +20,13 @@ public class TipoDadoBd {
 	@Id
 	@Column(name = "tipodadobd_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)	
-	private Long tipodadobd_id;
+	private Long tipoDadoBd_id;
 	
 	@Column(name="nome")
 	private String nome;
+	
+	@Column(name="chave")
+	private String chave;
 
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -33,13 +35,22 @@ public class TipoDadoBd {
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
+	
 
-	public Long getTipodadobd_id() {
-		return tipodadobd_id;
+	public String getChave() {
+		return chave;
 	}
 
-	public void setTipodadobd_id(Long tipodadobd_id) {
-		this.tipodadobd_id = tipodadobd_id;
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public Long getTipoDadoBd_id() {
+		return tipoDadoBd_id;
+	}
+
+	public void setTipoDadoBd_id(Long tipoDadoBd_id) {
+		this.tipoDadoBd_id = tipoDadoBd_id;
 	}
 
 	public String getNome() {

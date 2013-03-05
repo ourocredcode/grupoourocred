@@ -29,24 +29,25 @@ public class TabelaBdDao extends Dao<TabelaBd> {
 		this.conexao = conexao;
 	}
 	
-	public Collection<TabelaBd> buscaTabelas(Long tabelabd_id, String nometabelabd){
-		System.out.println("PASSOU AQ....");
+	public Collection<TabelaBd> buscaTabelas(Long empresa_id, Long organizacao_id, String nometabelabd){
+
 		String sql = "select TABELABD.tabelabd_id, TABELABD.nometabelabd from TABELABD (NOLOCK) " +
-				"	WHERE TABELABD.tabelabd_id = ? AND TABELABD.nometabelabd like ? ";
+				"	WHERE TABELABD.empresa_id = ? AND TABELABD.organizacao_id = ? AND TABELABD.nometabelabd like ? ";
 		this.conn = this.conexao.getConexao();
 
 		Collection<TabelaBd> tabelas = new ArrayList<TabelaBd>();
 		try {
 
 			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, tabelabd_id);			
-			this.stmt.setString(2,"%"+  nometabelabd + "%");			
+			this.stmt.setLong(1, empresa_id);			
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3,"%"+  nometabelabd + "%");			
 			this.rsTabelas = this.stmt.executeQuery();
 
 			while (rsTabelas.next()) {
 				TabelaBd tabela = new TabelaBd();
 
-				tabela.setTabelabd_id(rsTabelas.getLong("tabelabd_id"));				
+				tabela.setTabelaBd_id(rsTabelas.getLong("tabelabd_id"));				
 				tabela.setNomeTabelaBd(rsTabelas.getString("nometabelabd"));
 
 				tabelas.add(tabela);				

@@ -85,9 +85,11 @@ jQuery(function($){
 	$('#colunaBdTabelaBd').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
-	          url: "<c:url value='/colunabd/busca.json' />",
+	          url: "<c:url value='/tabelabd/busca.json' />",
 	          dataType: "json",
-	          data : {tabelabd_id: $('#colunaBdTabelaBdId').val() == '' ? '0' :  $('#colunaBdTabelaBdId').val(), nometabelabd : $('#colunaBdTabelaBd').val()},
+	          data : {empresa_id: $('#colunaBdEmpresaId').val() == '' ? '0' :  $('#colunaBdEmpresaId').val(), 
+	        		  organizacao_id: $('#colunaBdOrganizacaoId').val() == '' ? '0' :  $('#colunaBdOrganizacaoId').val(),
+	        		  nometabelabd : $('#colunaBdTabelaBd').val()},
               success : function(data) {  
 
             	  if (!data || data.length == 0) {
@@ -95,10 +97,10 @@ jQuery(function($){
          	           $('#colunaBdTabelaBdId').val('');
          	        }
 
-            	  response($.map(data, function(organizacao) {  
+            	  response($.map(data, function(tabelabd) {  
             		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
+            			  label: tabelabd.nomeTabelaBd,
+            			  value: tabelabd.tabelaBd_id
                       };
                   }));  
                }
@@ -114,16 +116,92 @@ jQuery(function($){
              return false;
          }
     });
+	
+	$('#colunaBdElementoBd').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/elementobd/busca.json' />",
+	          dataType: "json",
+	          data : {nomecolunabd : $('#colunaBdElementoBd').val()},
+              success : function(data) {  
 
+            	  if (!data || data.length == 0) {
+         	            $('#colunaBdElementoBd').val('');
+         	           $('#colunaBdElementoBdId').val('');
+         	        }
+
+            	  response($.map(data, function(elementobd) {  
+            		  return {
+            			  label: elementobd.nomeColunaBd,
+            			  value: elementobd.elementoBd_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	
+        	 $('#colunaBdElementoBd').val(ui.item.label);
+          	$('#colunaBdNomeColunaBd').val(ui.item.label);
+          	
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#colunaBdElementoBd').val(ui.item.label);
+             $('#colunaBdNomeColunaBd').val(ui.item.label);
+             $('#colunaBdElementoBdId').val(ui.item.value);
+             return false;
+         }
+    });
+
+	$('#colunaBdTipoDadoBd').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/tipodadobd/busca.json' />",
+	          dataType: "json",
+	          data : {nome : $('#colunaBdTipoDadoBd').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#colunaBdTipoDadoBd').val('');
+         	           $('#colunaBdTipoDadoBdId').val('');
+         	        }
+
+            	  response($.map(data, function(tipodadobd) {  
+            		  return {
+            			  label: tipodadobd.nome,
+            			  value: tipodadobd.tipoDadoBd_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+
+        	 $('#colunaBdTipoDadoBd').val(ui.item.label);
+
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#colunaBdTipoDadoBd').val(ui.item.label);
+             $('#colunaBdTipoDadoBdId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/colunabd/cadastro" />';
+	});
 
 });
 
+function limpaForm(){
 
-function limpaCampo(campo,campoId){
-	campo.value='';
-	campoId.value='';
+	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
+		document.colunaBdForm.reset();
+	}
+
 }
-
 
 </script>
 
@@ -151,7 +229,7 @@ function limpaCampo(campo,campoId){
 							<label class="control-label" for="colunaBdEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdEmpresa" name="colunaBd.empresa.nome" type="text" required onChange="limpaCampo(colunaBdEmpresa,colunaBdEmpresaId);">
+	      						<input class="span2" id="colunaBdEmpresa" name="colunaBd.empresa.nome" type="text" required onChange="limpaForm();">
 	      						<input class="span2" id="colunaBdEmpresaId" name="colunaBd.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
@@ -160,7 +238,7 @@ function limpaCampo(campo,campoId){
 							<label class="control-label" for="colunaBdOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdOrganizacao" name="colunaBd.organizacao.nome" type="text" required onChange="limpaCampo(colunaBdOrganizacao,colunaBdOrganizacaoId);">
+	      						<input class="span2" id="colunaBdOrganizacao" name="colunaBd.organizacao.nome" type="text" required onChange="limpaForm();">
 	      						<input class="span2" id="colunaBdOrganizacaoId" name="colunaBd.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
@@ -169,8 +247,8 @@ function limpaCampo(campo,campoId){
 							<label class="control-label" for="colunaBdTabelaBd">Tabela BD</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdTabelaBd" name="colunaBd.tabelabd.nometabelabd" type="text" required onChange="limpaCampo(colunaBdTabelaBd,colunaBdTabelaBdId);">
-	      						<input class="span2" id="colunaBdTabelaBdId" name="colunaBd.tabelabd.tabelabd_id" type="hidden">
+	      						<input class="span2" id="colunaBdTabelaBd" name="colunaBd.tabelaBd.nomeTabelaBd" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="colunaBdTabelaBdId" name="colunaBd.tabelaBd.tabelaBd_id" type="hidden">
 	    					</div>
 						</div>
 
@@ -178,30 +256,30 @@ function limpaCampo(campo,campoId){
 							<label class="control-label" for="colunaBdElementoBd">Elemento BD</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdElementoBd" name="colunaBd.elementobd.nomecolunabd" type="text" required onChange="limpaCampo(colunaBdElementoBd,colunaBdElementoBdId);">
-	      						<input class="span2" id="colunaBdElementoBdId" name="colunaBd.elementobd.elementobd_id" type="hidden">
+	      						<input class="span2" id="colunaBdElementoBd" name="colunaBd.elementoBd.nomecolunabd" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="colunaBdElementoBdId" name="colunaBd.elementoBd.elementoBd_id" type="hidden">
 	    					</div>
 						</div>
 
 						<div class="control-group">
-							<label class="control-label" for="colunaBd_TipoDadoBd">Tipo Dado BD</label>
+							<label class="control-label" for="colunaBdTipoDadoBd">Tipo Dado BD</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBd_TipoDadoBd" name="colunaBd.tipodadobd.nome" type="text" required onChange="limpaCampo(colunaBd_TipoDadoBd,colunaBd_TipoDadoBdId);">
-	      						<input class="span2" id="colunaBd_TipoDadoBdId" name="colunaBd.tipodadobd.tipodadobd_id" type="hidden">
+	      						<input class="span2" id="colunaBdTipoDadoBd" name="colunaBd.tipodadoBd.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="colunaBdTipoDadoBdId" name="colunaBd.tipoDadoBd.tipoDadoBd_id" type="hidden">
 	    					</div>
 						</div>
 
 						<div class="control-group">
-							<label class="control-label" for="colunaBd.nomecolunadb">Nome Coluna BD</label>
+							<label class="control-label" for="colunaBdNomeColunaBd">Nome Coluna BD</label>
 							<div class="controls">
-								<input type="text" id="colunaBd.nomecolunadb" name="colunaBd.nomecolunadb" placeholder="Nome da coluna BD" required>
+								<input type="text" id="colunaBdNomeColunaBd" name="colunaBd.nomeColunaBd" placeholder="Nome da coluna BD" required readonly="readonly">
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="colunaBd.nome">Nome</label>
+							<label class="control-label" for="colunaBdNome">Nome</label>
 							<div class="controls">
-								<input type="text" id="colunaBd.nome" name="colunaBd.nome" placeholder="Nome" required>
+								<input type="text" id="colunaBdNome" name="colunaBd.nome" placeholder="Nome" required>
 							</div>
 						</div>						
 						
