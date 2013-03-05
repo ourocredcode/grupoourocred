@@ -51,9 +51,9 @@ function limpaForm(){
 		<div class="bs-docs-example">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="active" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
+				<li class="" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
 				<li class="" id="formulariosjanela-li"><a href="#formulariosjanela-div" data-toggle="tab" id="formulariosjanela-li-a">Formulários Janela</a></li>
-				<li class="" id="campoformulario-li"><a href="#campoformulario-div" data-toggle="tab" id="campoformulario-li-a">Campo Formulário</a></li>
+				<li class="active" id="campoformulario-li"><a href="#campoformulario-div" data-toggle="tab" id="campoformulario-li-a">Campo Formulário</a></li>
 				<li class="" id="tabelabd-li"><a href="#tabelabd-div" data-toggle="tab" id="tabelabd-li-a">Tabela BD</a></li>
 				<li class="" id="colunabd-li"><a href="#colunabd-div" data-toggle="tab" id="colunabd-li-a">Coluna BD</a></li>	
 				<li class="" id="elementobd-li"><a href="#elementobd-div" data-toggle="tab" id="elementobd-li-a">Elemento BD</a></li>
@@ -62,9 +62,7 @@ function limpaForm(){
 
 			<div id="myTabContent" class="tab-content">
 			
-				<div class="tab-pane fade active in" id="janela-div">
-					
-					CADASTRO JANELA
+				<div class="tab-pane fade" id="janela-div">
 					
 				</div>
 				
@@ -72,7 +70,34 @@ function limpaForm(){
 					
 				</div>
 
-				<div class="tab-pane fade" id="campoformulario-div">
+				<div class="tab-pane fade active in" id="campoformulario-div">
+
+					<form id="campoFormularioForm" name="campoFormularioForm" action="<c:url value="/campoformulario/salva"/>" method="POST">
+
+						<div class="control-group">
+							<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
+	    					</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
+	    					</div>
+						</div>
+
+						 <div class="btn-toolbar">
+								<div class="btn-group">
+									<button type="submit" class="btn btn-primary">Salvar</button>
+								</div>	
+							</div>
+					</form>
+
 
 				</div>
 
