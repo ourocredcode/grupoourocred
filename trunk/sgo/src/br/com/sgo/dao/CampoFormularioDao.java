@@ -18,7 +18,7 @@ public class CampoFormularioDao extends Dao<CampoFormulario> {
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
-	private ResultSet rsTiposDado;
+	private ResultSet rsCamposFormulario;
 
 	public CampoFormularioDao(Session session, ConnJDBC conexao) {
 		super(session, CampoFormulario.class);

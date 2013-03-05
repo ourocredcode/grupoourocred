@@ -31,7 +31,108 @@ jQuery(function($){
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/colunabd/cadastro" />';
 	});
+	
+	$('#campoFormularioEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
 
+           		  if (!data || data.length == 0) {
+           	            $('#campoFormularioEmpresa').val('');
+						$('#campoFormularioEmpresaId').val('');
+           	        }
+
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#campoFormularioEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+        	 $('#campoFormularioEmpresa').val(ui.item.label);
+             $('#campoFormularioEmpresaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#campoFormularioOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#campoFormularioEmpresaId').val() == '' ? '0' :  $('#campoFormularioEmpresaId').val(), org_nome : $('#campoFormularioOrganizacao').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#campoFormularioOrganizacao').val('');
+         	           $('#campoFormularioOrganizacaoId').val('');
+         	        }
+
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome,
+            			  value: organizacao.organizacao_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#campoFormularioOrganizacao').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#campoFormularioOrganizacao').val(ui.item.label);
+             $('#campoFormularioOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#campoFormularioFormulariosJanela').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/formulariosjanela/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#campoFormularioEmpresaId').val() == '' ? '0' :  $('#campoFormularioEmpresaId').val(), 
+	        		  organizacao_id: $('#campoFormularioOrganizacaoId').val() == '' ? '0' :  $('#campoFormularioOrganizacaoId').val(),
+	        		  nome : $('#campoFormularioFormulariosJanela').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#campoFormularioFormulariosJanela').val('');
+         	           $('#campoFormularioFormulariosJanelaId').val('');
+         	        }
+
+            	  response($.map(data, function(formulariosjanela) {  
+            		  return {
+            			  label: formulariosjanela.nome,
+            			  value: formulariosjanela.formulariosjanela_id 
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#campoFormularioFormulariosJanela').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#campoFormularioFormulariosJanela').val(ui.item.label);
+             $('#campoFormularioFormulariosJanelaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
 });
 
 function limpaForm(){
@@ -75,27 +176,82 @@ function limpaForm(){
 					<form id="campoFormularioForm" name="campoFormularioForm" action="<c:url value="/campoformulario/salva"/>" method="POST">
 
 						<div class="control-group">
-							<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
+							<label class="control-label" for="campoFormularioEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
+	      						<input class="span2" id="campoFormularioEmpresa" name="campoFormulario.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="campoFormularioEmpresaId" name="campoFormulario.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>
+							<label class="control-label" for="campoFormularioOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
+	      						<input class="span2" id="campoFormularioOrganizacao" name="campoFormulario.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="campoFormularioOrganizacaoId" name="campoFormulario.organizacao.organizacao_id" type="hidden">
+	    					</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="campoFormularioFormulariosJanela">Fomulário</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="campoFormularioFormulariosJanela" name="campoFormulario.formulariosjanela.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="campoFormularioFormulariosJanelaId" name="campoFormulario.formulariosjanela.formulariosjanela_id" type="hidden">
 	    					</div>
 						</div>
 
-						 <div class="btn-toolbar">
-								<div class="btn-group">
-									<button type="submit" class="btn btn-primary">Salvar</button>
-								</div>	
+						<div class="control-group">
+							<label class="control-label" for="campoFormularioColunaBd">Coluna Bd</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="campoFormularioColunaBd" name="campoFormulario.colunabd.nomecolunadb" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="campoFormularioColunaBdId" name="campoFormulario.colunabd.colunabd_id" type="hidden">
+	    					</div>
+						</div>
+						 
+						 <div class="control-group">
+							<label class="control-label" for="campoFormularioChave">Chave</label>
+							<div class="controls">
+								<input type="text" id="campoFormularioChave" name="campoFormularioChave.chave" placeholder="Chave" required>
 							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="campoFormularioNome">Nome</label>
+							<div class="controls">
+								<input type="text" id="campoFormularioNome" name="campoFormularioNome.nome" placeholder="Nome" required>
+							</div>
+						</div>						
+						<div class="control-group">
+							<label class="control-label" for="campoFormularioIsMostrado">Mostrado</label>
+							<div class="controls">
+								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormularioIsMostrado.ismostrado">							
+							</div>							
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="campoFormularioIsSomenteLeitura">Somente Leitura</label>
+							<div class="controls">
+								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormularioIsSomenteLeitura.issomenteleitura">							
+							</div>							
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="campoFormularioIsActive">Ativo</label>
+							<div class="controls">
+								<input type="checkbox" id="campoFormularioIsActive" name="campoFormularioIsActive.isactive">							
+							</div>							
+						</div>
+						<div class="btn-toolbar">
+							<div class="btn-group">
+								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+							</div>	
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+							</div>
+						</div>
+						
 					</form>
 
 

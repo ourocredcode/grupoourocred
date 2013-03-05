@@ -20,10 +20,7 @@ public class CampoFormulario {
 	@Column(name = "campo_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)	
 	private Long campo_id;
-
-	@Column(name = "nome")
-	private String nome;
-
+	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
@@ -40,20 +37,27 @@ public class CampoFormulario {
 	@JoinColumn(name="colunabd_id",updatable = true, nullable = false) 
 	private ColunaBd colunabd;
 
+	@Column(name = "chave")
+	private String chave;
+
+	@Column(name = "nome")
+	private String nome;	
+
+	@Column(name = "ismostrado")
+	private Boolean ismostrado;
+
+	@Column(name = "issomenteleitura")
+	private Boolean issomenteleitura;
+
+	@Column(name = "sequenciacampos")
+	private Integer sequenciacampos;
+	
 	public Long getCampo_id() {
 		return campo_id;
 	}
 
 	public void setCampo_id(Long campo_id) {
 		this.campo_id = campo_id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public Empresa getEmpresa() {
@@ -87,4 +91,45 @@ public class CampoFormulario {
 	public void setColunabd(ColunaBd colunabd) {
 		this.colunabd = colunabd;
 	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public Integer getSequenciacampos() {
+		return sequenciacampos;
+	}
+
+	public void setSequenciacampos(Integer sequenciacampos) {
+		this.sequenciacampos = sequenciacampos;
+	}
+
+	public Boolean getIsmostrado() {
+		return ismostrado;
+	}
+
+	public void setIsmostrado(Boolean ismostrado) {
+		this.ismostrado = ismostrado;
+	}
+
+	public Boolean getIssomenteleitura() {
+		return issomenteleitura;
+	}
+
+	public void setIssomenteleitura(Boolean issomenteleitura) {
+		this.issomenteleitura = issomenteleitura;
+	}
+
 }
