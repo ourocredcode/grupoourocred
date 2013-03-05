@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
 @Entity
 @Component
@@ -40,10 +39,6 @@ public class FormulariosJanela {
 	@ManyToOne
 	@JoinColumn(name="tabelabd_id",updatable = true, nullable = false) 
 	private TabelaBd tabelabd;
-	
-	@ManyToOne
-	@JoinColumn(name="colunadb_id",updatable = true, nullable = false) 
-	private ColunaBd colunabd;
 
 	public Long getFormulariosjanela_id() {
 		return formulariosjanela_id;
@@ -91,13 +86,5 @@ public class FormulariosJanela {
 
 	public void setTabelabd(TabelaBd tabelabd) {
 		this.tabelabd = tabelabd;
-	}
-
-	public ColunaBd getColunabd() {
-		return colunabd;
-	}
-
-	public void setColunabd(ColunaBd colunabd) {
-		this.colunabd = colunabd;
 	}
 }

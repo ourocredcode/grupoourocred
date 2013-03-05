@@ -2,6 +2,18 @@
 
 <script type="text/javascript">
 jQuery(function($){
+	
+	$('#janela-li-a').click(function() {
+		window.location.href = '<c:url value="/janela/cadastro" />';
+	});
+	
+	$('#formulariosjanela-li-a').click(function() {
+		window.location.href = '<c:url value="/formulariosjanela/cadastro" />';
+	});
+	
+	$('#campoformulario-li-a').click(function() {
+		window.location.href = '<c:url value="/campoformulario/cadastro" />';
+	});
 
 	$('#tabelabd-li-a').click(function() {
 		window.location.href = '<c:url value="/tabelabd/cadastro" />';
@@ -96,6 +108,9 @@ function limpaForm(){
 		<div class="bs-docs-example">
 
 			<ul id="myTab" class="nav nav-tabs">
+				<li class="" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
+				<li class="" id="formulariosjanela-li"><a href="#formulariosjanela-div" data-toggle="tab" id="formulariosjanela-li-a">Formulários Janela</a></li>
+				<li class="" id="campoformulario-li"><a href="#campoformulario-div" data-toggle="tab" id="campoformulario-li-a">Campo Formulário</a></li>
 				<li class="active" id="tabelabd-li"><a href="#" data-toggle="tab" id="tabelabd-li-a">Tabela BD</a></li>
 				<li class="" id="colunabd-li"><a href="#colunabd-div" data-toggle="tab" id="colunabd-li-a">Coluna BD</a></li>	
 				<li class="" id="elementobd-li"><a href="#elementobd-div" data-toggle="tab" id="elementobd-li-a">Elemento BD</a></li>
@@ -103,6 +118,18 @@ function limpaForm(){
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
+
+				<div class="tab-pane fade" id="janela-div">
+					
+				</div>
+				
+				<div class="tab-pane fade" id="formulariosjanela-div">
+					
+				</div>
+				
+				<div class="tab-pane fade" id="campoformulario-div">
+					
+				</div>
 
 				<div class="tab-pane fade active in" id="tabelabd-div">
 					

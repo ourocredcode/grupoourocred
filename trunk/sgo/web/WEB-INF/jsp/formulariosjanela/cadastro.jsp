@@ -51,8 +51,8 @@ function limpaForm(){
 		<div class="bs-docs-example">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="active" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
-				<li class="" id="formulariosjanela-li"><a href="#formulariosjanela-div" data-toggle="tab" id="formulariosjanela-li-a">Formulários Janela</a></li>
+				<li class="" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
+				<li class="active" id="formulariosjanela-li"><a href="#formulariosjanela-div" data-toggle="tab" id="formulariosjanela-li-a">Formulários Janela</a></li>
 				<li class="" id="campoformulario-li"><a href="#campoformulario-div" data-toggle="tab" id="campoformulario-li-a">Campo Formulário</a></li>
 				<li class="" id="tabelabd-li"><a href="#tabelabd-div" data-toggle="tab" id="tabelabd-li-a">Tabela BD</a></li>
 				<li class="" id="colunabd-li"><a href="#colunabd-div" data-toggle="tab" id="colunabd-li-a">Coluna BD</a></li>	
@@ -62,13 +62,13 @@ function limpaForm(){
 
 			<div id="myTabContent" class="tab-content">
 			
-				<div class="tab-pane fade active in" id="janela-div">
-					
-					CADASTRO JANELA
+				<div class="tab-pane fade" id="janela-div">
 					
 				</div>
 				
-				<div class="tab-pane fade" id="formulariosjanela-div">
+				<div class="tab-pane fade active in" id="formulariosjanela-div">
+					
+					CADASTRO FORMULARIOS JANELA
 					
 				</div>
 

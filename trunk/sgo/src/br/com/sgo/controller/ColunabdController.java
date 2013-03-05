@@ -14,7 +14,6 @@ import br.com.sgo.dao.TabelaBdDao;
 import br.com.sgo.dao.TipoDadoBdDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.ColunaBd;
-import br.com.sgo.modelo.TabelaBd;
 
 @Resource
 public class ColunabdController {
