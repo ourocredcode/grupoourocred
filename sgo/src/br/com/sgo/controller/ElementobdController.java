@@ -5,6 +5,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.sgo.dao.ElementoBdDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
@@ -18,13 +19,15 @@ public class ElementobdController {
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
 	private final ElementoBdDao elementoBdDao;
+	private final Validator validator;
 
-	public ElementobdController(Result result,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,ElementoBdDao elementoBdDao){
+	public ElementobdController(Result result,Validator validator,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,ElementoBdDao elementoBdDao){
 
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;
 		this.elementoBdDao = elementoBdDao;
 		this.result = result;
+		this.validator = validator;
 
 	}	
 
@@ -40,15 +43,34 @@ public class ElementobdController {
 	@Path("/elementobd/salva")
 	public void salva(ElementoBd elementoBd){
 
-		elementoBd.setEmpresa(this.empresaDao.load(elementoBd.getEmpresa().getEmpresa_id()));
-		elementoBd.setOrganizacao(this.organizacaoDao.load(elementoBd.getOrganizacao().getOrganizacao_id()));
+		validator.validate(elementoBd);
+		validator.onErrorUsePageOf(this).cadastro();
 
-		this.elementoBdDao.beginTransaction();
-		this.elementoBdDao.adiciona(elementoBd);
-		this.elementoBdDao.commit();
+		String mensagem = "";
 
-		this.result.nothing();
+		try {
+
+			elementoBd.setEmpresa(this.empresaDao.load(elementoBd.getEmpresa().getEmpresa_id()));
+			elementoBd.setOrganizacao(this.organizacaoDao.load(elementoBd.getOrganizacao().getOrganizacao_id()));
+
+			this.elementoBdDao.beginTransaction();
+			this.elementoBdDao.adiciona(elementoBd);
+			this.elementoBdDao.commit();
+			
+			mensagem = "Elemento BD " + elementoBd.getNome() + " adicionado com sucesso";
+
+		} catch(Exception e) {
+
+			if (e.getCause().toString().indexOf("IX_ELEMENTOBD_NOMECOLUNABD") != -1){
+				mensagem = "Erro: Elemento Bd " + elementoBd.getNome() + " já existente.";
+			} else {
+				mensagem = "Erro ao adicionar Tabela Bd:";
+			}
+
+		}
+
+		result.include("notice",mensagem);
+		result.redirectTo(this).cadastro();
 
 	}
-
 }

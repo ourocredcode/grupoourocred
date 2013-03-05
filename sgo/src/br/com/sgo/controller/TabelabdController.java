@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TabelaBdDao;
@@ -58,7 +59,7 @@ public class TabelabdController {
 			
 		} catch(Exception e) {
 
-			if (e.getCause().toString().indexOf("IX_TABELABD_NOMETABELABD") != -1){
+			if (e.getCause().toString().indexOf("IX_COLUNABD_ELEMENTOBDID") != -1){
 				mensagem = "Erro: Tabela Bd " + tabelaBd.getNome() + " já existente.";
 			} else {
 				mensagem = "Erro ao adicionar Tabela Bd:";
@@ -69,6 +70,12 @@ public class TabelabdController {
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 
+	}
+	
+	@Get @Path("/tabelabd/busca.json")
+	@Public
+	public void tabelas(Long empresa_id, Long organizacao_id, String nometabelabd){
+		result.use(Results.json()).withoutRoot().from(tabelaBdDao.buscaTabelas(empresa_id, organizacao_id,nometabelabd)).serialize();
 	}
 
 }

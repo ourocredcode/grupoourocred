@@ -83,9 +83,8 @@ jQuery(function($){
     });
 });
 
-function limpaCampo(campo,campoId){
-	campo.value='';
-	campoId.value='';
+function limpaForm(){
+	document.tabelaBdForm.reset();
 }
 
 
@@ -112,7 +111,7 @@ function limpaCampo(campo,campoId){
 							<label class="control-label" for="tabelaBdEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdEmpresa" name="tabelaBd.empresa.nome" type="text" required onChange="limpaCampo(tabelaBdEmpresa,tabelaBdEmpresaId);">
+	      						<input class="span2" id="tabelaBdEmpresa" name="tabelaBd.empresa.nome" type="text" required onChange="limpaForm();">
 	      						<input class="span2" id="tabelaBdEmpresaId" name="tabelaBd.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
@@ -120,14 +119,14 @@ function limpaCampo(campo,campoId){
 							<label class="control-label" for="tabelaBdOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaCampo(tabelaBdOrganizacao,tabelaBdOrganizacaoId);">
+	      						<input class="span2" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaForm();">
 	      						<input class="span2" id="tabelaBdOrganizacaoId" name="tabelaBd.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="tabelaBd.nometabelabd">Nome Tabela BD</label>
+							<label class="control-label" for="tabelaBdNomeTabelaBd">Nome Tabela BD</label>
 							<div class="controls">
-								<input type="text" id="tabelaBd.nometabelabd" name="tabelaBd.nometabelabd" placeholder="Nome da tabela BD" required>
+								<input type="text" id="tabelaBdNomeTabelaBd" name="tabelaBd.nomeTabelaBd" placeholder="Nome da tabela BD" required>
 							</div>
 						</div>
 						<div class="control-group">
