@@ -32,7 +32,7 @@ public class ColunaBdDao  extends Dao<ColunaBd> {
 				"		  WHERE COLUNABD.empresa_id = ? AND" +
 				"		  	    COLUNABD.organizacao_id = ? AND" +
 				"		 	    COLUNABD.tabelabd_id = ? AND" +
-				"	      		COLUNABD.elementobd_id = ? ";
+				"	      		COLUNABD.elementobd_id = ? AND COLUNABD.isactive=1";
 
 		this.conn = this.conexao.getConexao();
 
