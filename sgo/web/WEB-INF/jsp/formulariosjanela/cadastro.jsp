@@ -68,7 +68,86 @@ function limpaForm(){
 				
 				<div class="tab-pane fade active in" id="formulariosjanela-div">
 					
-					CADASTRO FORMULARIOS JANELA
+					<form id="formularioJanelaForm" name="formularioJanelaForm" action="<c:url value="/formulariojanela/salva"/>" method="POST">
+
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaEmpresa">Empresa</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="formularioJanelaEmpresa" name="formularioJanelaEmpresa.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="formularioJanelaEmpresaId" name="formularioJanelaEmpresa.empresa.empresa_id" type="hidden">
+	    					</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaOrganizacao">Organização</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="formularioJanelaOrganizacao" name="formularioJanela.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="formularioJanelaOrganizacaoId" name="formularioJanela.organizacao.organizacao_id" type="hidden">
+	    					</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaJanela">Janela</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="formularioJanelaJanela" name="formularioJanela.janela.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="formularioJanelaJanelaId" name="formularioJanela.janela.janela_id" type="hidden">
+	    					</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaTabelaBd">Tabela Bd</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="formularioJanelaTabelaBd" name="formularioJanela.tabelabd.nometabelabd" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="formularioJanelaTabelaBdId" name="formularioJanela.tabelabd.tabelabd_id" type="hidden">
+	    					</div>
+						</div>						
+						
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaChave">Chave</label>
+							<div class="controls">
+								<input type="text" id="formularioJanelaChave" name="formularioJanelaChave.chave" placeholder="Chave" required>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaNome">Nome</label>
+							<div class="controls">
+								<input type="text" id="formularioJanelaNome" name="formularioJanelaNome.nome" placeholder="Nome" required>
+							</div>
+						</div>						
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaIsMostrado">Mostrado</label>
+							<div class="controls">
+								<input type="checkbox" id="formularioJanelaIsMostrado" name="formularioJanelaIsMostrado.ismostrado">							
+							</div>							
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaIsSomenteLeitura">Somente Leitura</label>
+							<div class="controls">
+								<input type="checkbox" id="formularioJanelaIsSomenteLeitura" name="formularioJanelaIsSomenteLeitura.issomenteleitura">							
+							</div>							
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="formularioJanelaIsActive">Ativo</label>
+							<div class="controls">
+								<input type="checkbox" id="formularioJanelaIsActive" name="formularioJanelaIsActive.isactive">							
+							</div>							
+						</div>
+						<div class="btn-toolbar">
+							<div class="btn-group">
+								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+							</div>	
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+							</div>
+						</div>
+						
+					</form>
 					
 				</div>
 
