@@ -63,10 +63,10 @@ function limpaForm(){
 		<div class="bs-docs-example">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="active" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
+				<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
 				<li class="" id="perfilorganizacao-li"><a href="#perfilperfilorganizacao-div" data-toggle="tab" id="perfilorganizacao-li-a">Perfil Organização</a></li>
 				<li class="" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
-				<li class="" id="perfiljanelaacesso-li"><a href="#perfiljanelaacesso-div" data-toggle="tab" id="perfiljanelaacesso-li-a">Janela Perfil</a></li>
+				<li class="active" id="perfiljanelaacesso-li"><a href="#perfiljanelaacesso-div" data-toggle="tab" id="perfiljanelaacesso-li-a">Janela Perfil</a></li>
 				<li class="" id="formulariosjanela-li"><a href="#formulariosjanela-div" data-toggle="tab" id="formulariosjanela-li-a">Formulários Janela</a></li>
 				<li class="" id="campoformulario-li"><a href="#campoformulario-div" data-toggle="tab" id="campoformulario-li-a">Campo Formulário</a></li>
 				<li class="" id="tabelabd-li"><a href="#tabelabd-div" data-toggle="tab" id="tabelabd-li-a">Tabela BD</a></li>
@@ -77,7 +77,19 @@ function limpaForm(){
 
 			<div id="myTabContent" class="tab-content">
 				
-				<div class="tab-pane fade active in" id="perfil-div">
+				<div class="tab-pane fade" id="perfil-div">					
+
+				</div>
+				
+				<div class="tab-pane fade" id="perfilorganizacao-div">					
+
+				</div>
+			
+				<div class="tab-pane fade" id="janela-div">					
+
+				</div>
+				
+				<div class="tab-pane fade active in" id="perfiljanelaacesso-div">
 					<form id="perfilJanelaAcessoForm" name="perfilJanelaAcessoForm" action="<c:url value="/perfiljanelaacesso/salva"/>" method="POST">
 
 						<div class="control-group">
@@ -131,19 +143,6 @@ function limpaForm(){
 						</div>
 
 					</form>
-
-				</div>
-				
-				<div class="tab-pane fade" id="perfilorganizacao-div">					
-
-				</div>
-				
-				<div class="tab-pane fade" id="janela-div">					
-
-				</div>
-				
-				<div class="tab-pane fade" id="perfiljanelaacesso-div">
-					
 				</div>
 
 				<div class="tab-pane fade" id="formulariosjanela-div">
