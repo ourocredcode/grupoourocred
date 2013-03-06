@@ -61,6 +61,8 @@ public class TipodadobdController {
 			mensagem = "Tipo Dado BD " + tipoDadoBd.getNome() + " adicionado com sucesso";			
 			
 		} catch(Exception e) {
+			
+			this.tipoDadoBdDao.rollback();
 
 			if (e.getCause().toString().indexOf("IX_TIPODADOBD_NOME") != -1){
 				mensagem = "Erro: Tipo Dado Bd " + tipoDadoBd.getNome() + " já existente.";
@@ -69,7 +71,9 @@ public class TipodadobdController {
 			}
 
 		}
-
+		
+		this.tipoDadoBdDao.clear();
+		this.tipoDadoBdDao.close();
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 

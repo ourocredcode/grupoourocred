@@ -121,7 +121,7 @@ public class Dao <T>{
     	return this.tx != null;
     }
 
-    public void close() {
+    public void close() {	
     	this.session.close();
     }
 

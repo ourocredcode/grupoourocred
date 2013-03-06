@@ -28,7 +28,7 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 		this.session = session;
 		this.conexao = conexao;
 	}
-	
+
 	public Collection<ElementoBd> buscaElementos(String nomecolunabd){
 
 		String sql = "select ELEMENTOBD.elementobd_id, ELEMENTOBD.nomecolunabd from ELEMENTOBD (NOLOCK) " +

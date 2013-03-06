@@ -24,13 +24,14 @@ public class OrganizacaoDao extends Dao<Organizacao> {
 	private Connection conn;
 	private ResultSet rsOrganizacoes;
 	
-	public OrganizacaoDao(Session session, ConnJDBC conexao) {
+	public OrganizacaoDao(Session session,ConnJDBC conexao) {
 		super(session, Organizacao.class);
 		this.session = session;
 		this.conexao = conexao;
 	}
 	
 	public Collection<Organizacao> buscaOrganizacoes(Long empresa_id, String org_nome){
+
 		String sql = "select ORGANIZACAO.organizacao_id, ORGANIZACAO.nome from ORGANIZACAO (NOLOCK) " +
 				"	WHERE ORGANIZACAO.empresa_id = ? AND ORGANIZACAO.nome like ? ";
 		this.conn = this.conexao.getConexao();
