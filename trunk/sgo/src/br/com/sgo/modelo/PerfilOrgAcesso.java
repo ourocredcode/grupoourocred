@@ -10,7 +10,7 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 @Embeddable
-@Table(name="PERFILJANELAACESSO")
+@Table(name="PERFILORGACESSO")
 public class PerfilOrgAcesso {
 
 	@ManyToOne
