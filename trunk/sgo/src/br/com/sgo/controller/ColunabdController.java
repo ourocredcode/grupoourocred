@@ -71,6 +71,8 @@ public class ColunabdController {
 			mensagem = "Coluna BD " + colunaBd.getNome() + " adicionado com sucesso";			
 			
 		} catch(Exception e) {
+			
+			this.colunaBdDao.rollback();
 
 			if (e.getCause().toString().indexOf("IX_COLUNABD_ELEMENTOBDID") != -1){
 				mensagem = "Erro: Elemento Bd " + colunaBd.getNome() + " já existente.";
@@ -80,6 +82,8 @@ public class ColunabdController {
 
 		}
 
+		this.colunaBdDao.clear();
+		this.colunaBdDao.close();
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 

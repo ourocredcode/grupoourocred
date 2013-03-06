@@ -23,7 +23,7 @@ public class EmpresaDao  extends Dao<Empresa> {
 	private Connection conn;
 	private ResultSet rsEmpresas;
 
-	public EmpresaDao(Session session,ConnJDBC conexao) {
+	public EmpresaDao(Session session, ConnJDBC conexao) {
 		super(session, Empresa.class);
 		this.session = session;
 		this.conexao = conexao;

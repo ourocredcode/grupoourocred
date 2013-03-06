@@ -57,10 +57,12 @@ public class ElementobdController {
 			this.elementoBdDao.beginTransaction();
 			this.elementoBdDao.adiciona(elementoBd);
 			this.elementoBdDao.commit();
-			
+
 			mensagem = "Elemento BD " + elementoBd.getNome() + " adicionado com sucesso";
 
 		} catch(Exception e) {
+
+			this.elementoBdDao.rollback();
 
 			if (e.getCause().toString().indexOf("IX_ELEMENTOBD_NOMECOLUNABD") != -1){
 				mensagem = "Erro: Elemento Bd " + elementoBd.getNome() + " já existente.";
@@ -69,6 +71,9 @@ public class ElementobdController {
 			}
 
 		}
+
+		this.elementoBdDao.clear();
+		this.elementoBdDao.close();
 
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();

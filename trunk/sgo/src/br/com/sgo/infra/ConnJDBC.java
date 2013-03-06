@@ -50,9 +50,13 @@ public class ConnJDBC {
 
 	public void closeConnection(ResultSet rs, Statement stmt, Connection conn) {
 		try {
+
 			rs.close();
 			stmt.close();
 			conn.close();
+
+			System.out.println("ControladorConexao - Fechados Resultset, Statement e Conexao.");
+
 		} catch (SQLException e) {
 			System.out.println("Exc: ControladorConexao - Erro ao fechar Resultset, Statement e Conexao.");
 		}

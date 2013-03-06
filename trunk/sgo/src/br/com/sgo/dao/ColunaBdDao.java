@@ -21,9 +21,10 @@ public class ColunaBdDao  extends Dao<ColunaBd> {
 	private Connection conn;
 	private ResultSet rsColunasBd;
 
-	public ColunaBdDao(Session session) {
+	public ColunaBdDao(Session session,ConnJDBC conexao) {
 		super(session, ColunaBd.class);
 		this.session = session;
+		this.conexao = conexao;
 	}
 	
 	public ColunaBd buscaColunasBd(Long empresa_id, Long organizacao_id, Long tabelaBd_id, Long elementoBd_id){

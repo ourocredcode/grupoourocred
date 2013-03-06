@@ -59,6 +59,8 @@ public class TabelabdController {
 			
 		} catch(Exception e) {
 
+			this.tabelaBdDao.rollback();
+
 			if (e.getCause().toString().indexOf("IX_COLUNABD_ELEMENTOBDID") != -1){
 				mensagem = "Erro: Tabela Bd " + tabelaBd.getNome() + " já existente.";
 			} else {
@@ -67,6 +69,8 @@ public class TabelabdController {
 
 		}
 
+		this.tabelaBdDao.clear();
+		this.tabelaBdDao.close();
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 
