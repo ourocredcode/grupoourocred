@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.ElementoBdDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
@@ -72,5 +73,11 @@ public class ElementobdController {
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 
+	}
+
+	@Get @Path("/elementobd/busca.json")
+	@Public
+	public void empresas(String nomecolunabd){
+		result.use(Results.json()).withoutRoot().from(elementoBdDao.buscaElementos(nomecolunabd)).serialize();
 	}
 }

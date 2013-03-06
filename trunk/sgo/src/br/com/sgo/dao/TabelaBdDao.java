@@ -56,8 +56,11 @@ public class TabelaBdDao extends Dao<TabelaBd> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.conexao.closeConnection(conn);
+
+		this.conexao.closeConnection(rsTabelas, stmt, conn);
+
 		return tabelas;
+
 	}
 
 }

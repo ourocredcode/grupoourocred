@@ -59,7 +59,7 @@ public class ColunaBdDao  extends Dao<ColunaBd> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(conn);
+		this.conexao.closeConnection(rsColunasBd, stmt, conn);
 
 		return colunaBd;
 

@@ -58,8 +58,11 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.conexao.closeConnection(conn);
+
+		this.conexao.closeConnection(rsElementos, stmt, conn);
+
 		return elementosbd;
+
 	}
 
 }
