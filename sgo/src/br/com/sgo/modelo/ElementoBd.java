@@ -15,7 +15,7 @@ import br.com.caelum.vraptor.ioc.Component;
 @Component
 @Table(name="ELEMENTOBD")
 public class ElementoBd {
-	
+
 	@Id	
 	@Column(name = "elementobd_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO)	
@@ -24,17 +24,17 @@ public class ElementoBd {
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
-		
+
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;	
-	
+
 	@Column(name="nome")
 	private String nome;
-	
+
 	@Column(name="descricao")
 	private String descricao;
-	
+
 	@Column(name="nomecolunabd")
 	private String nomeColunaBd;
 
