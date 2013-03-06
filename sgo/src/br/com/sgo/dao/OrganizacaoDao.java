@@ -53,8 +53,11 @@ public class OrganizacaoDao extends Dao<Organizacao> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.conexao.closeConnection(conn);
+
+		this.conexao.closeConnection(rsOrganizacoes, stmt, conn);
+
 		return organizacoes;
+
 	}
 
 }

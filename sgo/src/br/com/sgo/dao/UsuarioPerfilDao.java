@@ -73,7 +73,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(conn);
+		this.conexao.closeConnection(rsUsuarioPerfil,stmt,conn);
 
 		return perfis;
 	}
@@ -124,9 +124,10 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(conn);
+		this.conexao.closeConnection(rsUsuarioPerfil,stmt,conn);
 
 		return empresas;
+
 	}
 	
 	public Collection<Organizacao> buscaOrganizacaoPerfilAcesso(Long perfil_id, Long empresa_id,Long usuario_id){
@@ -177,9 +178,10 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(conn);
+		this.conexao.closeConnection(rsUsuarioPerfil,stmt,conn);
 
 		return organizacoes;
+
 	}
 
 }

@@ -56,8 +56,11 @@ public class TipoDadoBdDao extends Dao<TipoDadoBd> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.conexao.closeConnection(conn);
+
+		this.conexao.closeConnection(rsTiposDado, stmt, conn);
+
 		return tiposDadoBd;
+
 	}
 
 }

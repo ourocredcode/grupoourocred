@@ -58,7 +58,8 @@ public class FormulariosJanelaDao extends Dao<FormulariosJanela> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.conexao.closeConnection(conn);
+
+		this.conexao.closeConnection(rsFormulariosJanela, stmt, conn);
 
 		return formulariosJanela;
 

@@ -59,9 +59,10 @@ public class EmpresaDao  extends Dao<Empresa> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(conn);
+		this.conexao.closeConnection(rsEmpresas, stmt, conn);
 
 		return empresas;
+
 	}
 
 }
