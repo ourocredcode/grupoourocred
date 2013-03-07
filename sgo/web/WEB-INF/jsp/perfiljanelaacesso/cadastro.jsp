@@ -237,7 +237,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilJanelaAcessoEmpresa" name="perfilJanelaAcesso.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoEmpresaId" name="perfilJanelaAcesso.empresa.empresa_id" type="text">
+	      						<input class="span2" id="perfilJanelaAcessoEmpresaId" name="perfilJanelaAcesso.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -245,7 +245,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilJanelaAcessoOrganizacao" name="perfilJanelaAcesso.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoOrganizacaoId" name="perfilJanelaAcesso.organizacao.organizacao_id" type="text">
+	      						<input class="span2" id="perfilJanelaAcessoOrganizacaoId" name="perfilJanelaAcesso.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -253,7 +253,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilJanelaAcessoJanela" name="perfilJanelaAcesso.janela.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoJanelaId" name="perfilJanelaAcesso.janela.janela_id" type="text">
+	      						<input class="span2" id="perfilJanelaAcessoJanelaId" name="perfilJanelaAcesso.janela.janela_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -261,7 +261,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilJanelaAcessoPerfil" name="perfilJanelaAcesso.perfil.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoPerfilId" name="perfilJanelaAcesso.perfil.perfil_id" type="text">
+	      						<input class="span2" id="perfilJanelaAcessoPerfilId" name="perfilJanelaAcesso.perfil.perfil_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
