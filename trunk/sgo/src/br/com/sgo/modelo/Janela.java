@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
 
 @Entity
@@ -26,6 +25,9 @@ public class Janela {
 	@Column(name="nome")
 	private String nome;
 	
+	@Column(name="chave")
+	private String chave;
+	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
@@ -33,6 +35,17 @@ public class Janela {
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
+	
+	@Column(name="isactive")
+	private Boolean isActive;
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
 
 	public Long getJanela_id() {
 		return janela_id;
@@ -64,6 +77,14 @@ public class Janela {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}	
 
 }
