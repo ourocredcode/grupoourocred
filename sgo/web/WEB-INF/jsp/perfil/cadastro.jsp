@@ -146,7 +146,7 @@ jQuery(function($){
 	});
 	
 	$('#btnNovo').click(function() {
-		limpaForm();
+		document.perfilForm.reset();
 	});
 	
 	$("#perfilIsActive").change(function(e){
@@ -192,7 +192,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilEmpresa" name="perfil.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilEmpresaId" name="perfil.empresa.empresa_id" type="text">
+	      						<input class="span2" id="perfilEmpresaId" name="perfil.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -200,7 +200,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilOrganizacao" name="perfil.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilOrganizacaoId" name="perfil.organizacao.organizacao_id" type="text">
+	      						<input class="span2" id="perfilOrganizacaoId" name="perfil.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -208,7 +208,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilUsuario" name="perfil.usuario.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilUsuarioId" name="perfil.usuario.usuario_id" type="text">
+	      						<input class="span2" id="perfilUsuarioId" name="perfil.usuario.usuario_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
