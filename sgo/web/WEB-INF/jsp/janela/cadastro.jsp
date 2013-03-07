@@ -43,6 +43,74 @@ jQuery(function($){
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/colunabd/cadastro" />';
 	});
+	
+	$('#janelaEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
+
+           		  if (!data || data.length == 0) {
+           	            $('#janelaEmpresa').val('');
+						$('#janelaEmpresaId').val('');
+           	        }
+
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#janelaEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+        	 $('#janelaEmpresa').val(ui.item.label);
+             $('#janelaEmpresaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#janelaOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#janelaEmpresaId').val() == '' ? '0' :  $('#janelaEmpresaId').val(), org_nome : $('#janelaOrganizacao').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#janelaOrganizacao').val('');
+         	           $('#janelaOrganizacaoId').val('');
+         	        }
+
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome,
+            			  value: organizacao.organizacao_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#janelaOrganizacao').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#janelaOrganizacao').val(ui.item.label);
+             $('#janelaOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	
 
 });
 
@@ -93,8 +161,8 @@ function limpaForm(){
 							<label class="control-label" for="janelaEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="janelaEmpresa" name="janelaEmpresa.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="janelaEmpresaId" name="janelaEmpresa.empresa.empresa_id" type="hidden">
+	      						<input class="span2" id="janelaEmpresa" name="janela.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="janelaEmpresaId" name="janela.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -106,40 +174,22 @@ function limpaForm(){
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="janelaImagem">Imagem</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="janelaImagem" name="janela.imagem.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="janelaImagemId" name="janela.imagem.imagem_id" type="hidden">
-	    					</div>
-						</div>
-
-						<div class="control-group">
-							<label class="control-label" for="janelaCor">Cor</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="janelaCor" name="janela.cor.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="janelaCorId" name="janela.cor.cor_id" type="hidden">
-	    					</div>
-						</div>						
-						
-						<div class="control-group">
 							<label class="control-label" for="janelaChave">Chave</label>
 							<div class="controls">
-								<input type="text" id="janelaChave" name="janelaChave.chave" placeholder="Chave" required>
+								<input type="text" id="janelaChave" name="janela.chave" placeholder="Chave" required>
 							</div>
 						</div>
 						
 						<div class="control-group">
 							<label class="control-label" for="janelaNome">Nome</label>
 							<div class="controls">
-								<input type="text" id="janelaNome" name="janelaNome.nome" placeholder="Nome" required>
+								<input type="text" id="janelaNome" name="janela.nome" placeholder="Nome" required>
 							</div>
 						</div>						
 						<div class="control-group">
-							<label class="control-label" for="formularioJanelaIsActive">Ativo</label>
+							<label class="control-label" for="janelaIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="formularioJanelaIsActive" name="formularioJanelaIsActive.isactive">							
+								<input type="checkbox" id="janelaIsActive" name="janela.isActive">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">
