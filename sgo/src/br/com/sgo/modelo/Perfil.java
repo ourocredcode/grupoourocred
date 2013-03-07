@@ -21,9 +21,6 @@ public class Perfil {
 	@GeneratedValue(strategy = GenerationType.AUTO)  
 	private Long perfil_id;
 
-	@Column(name="nome")
-	private String nome;
-	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
@@ -31,6 +28,43 @@ public class Perfil {
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
+	
+	@ManyToOne
+	@JoinColumn(name="supervisor_perfil_id",updatable = true, nullable = false) 
+	private Usuario usuario;
+
+	@Column(name="nome")
+	private String nome;
+	
+	@Column(name="chave")
+	private String chave;
+	
+	@Column(name="isactive")
+	private Boolean isActive;
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
 
 	public Long getPerfil_id() {
 		return perfil_id;

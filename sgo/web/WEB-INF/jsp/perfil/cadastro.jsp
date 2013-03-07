@@ -38,20 +38,127 @@ jQuery(function($){
 	});
 	$('#tipodadobd-li-a').click(function() {
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
+	});	
+	
+	$('#perfilEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+	          success : function(data) {  
+
+	       		  if (!data || data.length == 0) {
+	       	            $('#perfilEmpresa').val('');
+						$('#perfilEmpresaId').val('');
+	       	        }
+
+	        	  response($.map(data, function(empresa) {  
+	        		  return {
+	                      label: empresa.nome,
+	                      value: empresa.empresa_id
+	                  };
+	              }));  
+	           }
+	        });
+	     } ,
+	     focus: function( event, ui ) {
+	    	 $('#perfilEmpresa').val(ui.item.label);
+	         return false;
+	     } ,
+	     select: function( event, ui ) {
+	    	 $('#perfilEmpresa').val(ui.item.label);
+	         $('#perfilEmpresaId').val(ui.item.value);
+	         return false;
+	     }
 	});
 
+	$('#perfilOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#perfilEmpresaId').val() == '' ? '0' :  $('#perfilEmpresaId').val(), org_nome : $('#perfilOrganizacao').val()},
+	          success : function(data) {  
+
+	        	  if (!data || data.length == 0) {
+	     	            $('#perfilOrganizacao').val('');
+	     	           $('#perfilOrganizacaoId').val('');
+	     	        }
+
+	        	  response($.map(data, function(organizacao) {  
+	        		  return {
+	        			  label: organizacao.nome,
+	        			  value: organizacao.organizacao_id
+	                  };
+	              }));  
+	           }
+	        });
+	     },
+	     focus: function( event, ui ) {
+	      	 $('#perfilOrganizacao').val(ui.item.label);
+	           return false;
+	       } ,
+	     select: function( event, ui ) {
+	         $('#perfilOrganizacao').val(ui.item.label);
+	         $('#perfilOrganizacaoId').val(ui.item.value);
+	         return false;
+	     }
+	});
+
+	$('#perfilUsuario').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/usuarios/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#perfilEmpresaId').val() == '' ? '0' :  $('#perfilEmpresaId').val(), 
+	        		  organizacao_id: $('#perfilOrganizacaoId').val() == '' ? '0' :  $('#perfilOrganizacaoId').val(),
+	        		  nome : $('#perfilUsuario').val()},
+	          success : function(data) {  
+
+	        	  if (!data || data.length == 0) {
+	     	            $('#perfilUsuario').val('');
+	     	           $('#perfilUsuarioId').val('');
+	     	        }
+
+	        	  response($.map(data, function(usuario) {  
+	        		  return {
+	        			  label: usuario.nome,
+	        			  value: usuario.usuario_id
+	                  };
+	              }));  
+	           }
+	        });
+	     },
+	     focus: function( event, ui ) {
+	      	 $('#perfilUsuario').val(ui.item.label);
+	           return false;
+	       } ,
+	     select: function( event, ui ) {
+	         $('#perfilUsuario').val(ui.item.label);
+	         $('#perfilUsuarioId').val(ui.item.value);
+	         return false;
+	     }
+	});
+	
 	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/colunabd/cadastro" />';
+		window.location.href = '<c:url value="/perfil/cadastro" />';
+	});
+	
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+	
+	$("#perfilIsActive").change(function(e){
+		$(this).val( $("#perfilIsActive:checked").length > 0 ? "1" : "0");
 	});
 
 });
 
 function limpaForm(){
-
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.colunaBdForm.reset();
+		document.perfilForm.reset();
 	}
-
 }
 
 
@@ -78,46 +185,50 @@ function limpaForm(){
 			<div id="myTabContent" class="tab-content">
 				
 				<div class="tab-pane fade active in" id="perfil-div">
-					<form id="perfilJanelaAcessoForm" name="perfilJanelaAcessoForm" action="<c:url value="/perfiljanelaacesso/salva"/>" method="POST">
+					<form id="perfilForm" name="perfilForm" action="<c:url value="/perfil/salva"/>" method="POST">
 
 						<div class="control-group">
-							<label class="control-label" for="perfilJanelaAcessoEmpresa">Empresa</label>
+							<label class="control-label" for="perfilEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="perfilJanelaAcessoEmpresa" name="perfilJanelaAcessoEmpresa.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoEmpresaId" name="perfilJanelaAcessoEmpresa.empresa.empresa_id" type="hidden">
+	      						<input class="span2" id="perfilEmpresa" name="perfil.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="perfilEmpresaId" name="perfil.empresa.empresa_id" type="text">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="perfilJanelaAcessoOrganizacao">Organização</label>
+							<label class="control-label" for="perfilOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="perfilJanelaAcessoOrganizacao" name="perfiljanelaacesso.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoOrganizacaoId" name="perfiljanelaacesso.organizacao.organizacao_id" type="hidden">
+	      						<input class="span2" id="perfilOrganizacao" name="perfil.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="perfilOrganizacaoId" name="perfil.organizacao.organizacao_id" type="text">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="perfilJanelaAcessoJanela">Janela</label>
+							<label class="control-label" for="perfilUsuario">Supervisor Usuário</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="perfilJanelaAcessoJanela" name="perfiljanelaacesso.janela.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoJanelaId" name="perfiljanelaacesso.jabela.janela_id" type="hidden">
+	      						<input class="span2" id="perfilUsuario" name="perfil.usuario.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="perfilUsuarioId" name="perfil.usuario.usuario_id" type="text">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="perfilJanelaAcessoPerfil">Perfil</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="perfilJanelaAcessoPerfil" name="perfiljanelaacesso.perfil.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoPerfilId" name="perfiljanelaacesso.perfil.perfil_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="formularioJanelaIsActive">Ativo</label>
+							<label class="control-label" for="perfilChave">Chave</label>
 							<div class="controls">
-								<input type="checkbox" id="formularioJanelaIsActive" name="formularioJanelaIsActive.isactive">							
-							</div>							
+								<input type="text" id="perfilChave" name="perfil.chave" placeholder="Chave" required>
+							</div>
 						</div>
+						<div class="control-group">
+							<label class="control-label" for="perfilNome">Nome</label>
+							<div class="controls">
+								<input type="text" id="perfilNome" name="perfil.nome" placeholder="Nome" required>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="perfilIsActive">Ativo</label>
+							<div class="controls">
+								<input type="checkbox" id="perfilIsActive" name="perfil.isActive" checked="checked" value="1" >							
+							</div>							
+						</div>				
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
