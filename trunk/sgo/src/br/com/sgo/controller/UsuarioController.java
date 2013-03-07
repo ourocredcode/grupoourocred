@@ -5,6 +5,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.UsuarioDao;
@@ -58,13 +59,17 @@ public class UsuarioController {
 		this.result.redirectTo(this).usuarioPerfil(usuarioId);
 
 	}
+	
+	@Get @Path("/usuarios/busca.json")
+	@Public
+	public void perfis(Long empresa_id, Long organizacao_id, String nome){
+		result.use(Results.json()).withoutRoot().from(usuarioDao.buscaUsuarios(empresa_id, organizacao_id, nome)).serialize();
+	}
 
 	@Get
 	@Public
 	public void usuarioPerfil(Long usuarioId){
-
 		result.include("usuario",this.usuarioDao.load(usuarioId));
-
 	}
 
 }
