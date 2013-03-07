@@ -27,7 +27,7 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso>{
 		
 	}
 	
-	public void adiciona(PerfilJanelaAcesso perfilJanelaAcesso){
+	public void insert(PerfilJanelaAcesso perfilJanelaAcesso) throws SQLException {
 
 		String sql = "INSERT INTO PERFILJANELAACESSO " +
 				"	(perfil_id, " +
@@ -40,9 +40,9 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso>{
 		this.conn = this.conexao.getConexao();
 
 		try {
-
-			this.stmt = conn.prepareStatement(sql);	
-
+		
+			this.stmt = conn.prepareStatement(sql);
+	
 			this.stmt.setLong(1,perfilJanelaAcesso.getPerfil().getPerfil_id());			
 			this.stmt.setLong(2,perfilJanelaAcesso.getJanela().getJanela_id());
 			this.stmt.setLong(3,perfilJanelaAcesso.getEmpresa().getEmpresa_id());
@@ -51,9 +51,11 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso>{
 
 			this.stmt.executeUpdate();
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			this.conn.commit();
+
+		}  catch (SQLException e) {
+			throw e;
+		}	
 
 		this.conexao.closeConnection(stmt, conn);
 

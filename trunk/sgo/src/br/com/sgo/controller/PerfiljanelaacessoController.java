@@ -1,6 +1,6 @@
 package br.com.sgo.controller;
 
-import org.hibernate.MappingException;
+import java.sql.SQLException;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -59,17 +59,13 @@ public class PerfiljanelaacessoController {
 			perfilJanelaAcesso.setPerfil(this.perfilDao.load(perfilJanelaAcesso.getPerfil().getPerfil_id()));
 			perfilJanelaAcesso.setIsActive(perfilJanelaAcesso.getIsActive() == null ? false : true);
 
-			this.perfilJanelaAcessoDao.beginTransaction();
-			this.perfilJanelaAcessoDao.adiciona(perfilJanelaAcesso);
-			this.perfilJanelaAcessoDao.commit();
+			this.perfilJanelaAcessoDao.insert(perfilJanelaAcesso);
 
 			mensagem = "Perfil Janela Acesso adicionado com sucesso";
-			
+
 		} catch(Exception e) {
 
-			this.perfilJanelaAcessoDao.rollback();
-
-			if (e.getCause().toString().indexOf("PK_PERFILJANELAACESSO") != -1){
+			if (e.getMessage().indexOf("PK_PERFILJANELAACESSO") != -1){
 				mensagem = "Erro: Perfil Janela Acesso  já existente.";
 			} else {
 				mensagem = "Erro ao adicionar Perfil:";
