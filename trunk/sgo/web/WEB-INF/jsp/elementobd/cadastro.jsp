@@ -113,7 +113,7 @@ jQuery(function($){
 function limpaForm(){
 
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.colunaBdForm.reset();
+		document.elementoBdForm.reset();
 	}
 
 }
