@@ -2,9 +2,10 @@ package br.com.sgo.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.hibernate.Session;
+
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
@@ -17,7 +18,6 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso>{
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
-	private ResultSet rsPerfilJanelaAcesso;
 
 	public PerfilJanelaAcessoDao(Session session, ConnJDBC conexao) {
 		
@@ -25,6 +25,38 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso>{
 		this.session = session;
 		this.conexao = conexao;
 		
+	}
+	
+	public void adiciona(PerfilJanelaAcesso perfilJanelaAcesso){
+
+		String sql = "INSERT INTO PERFILJANELAACESSO " +
+				"	(perfil_id, " +
+				"	 janela_id," +
+				"	 empresa_id ," +
+				"	 organizacao_id ," +
+				"	 isactive) " +
+				"    VALUES (?,?,?,?,?)";
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);	
+
+			this.stmt.setLong(1,perfilJanelaAcesso.getPerfil().getPerfil_id());			
+			this.stmt.setLong(2,perfilJanelaAcesso.getJanela().getJanela_id());
+			this.stmt.setLong(3,perfilJanelaAcesso.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(4,perfilJanelaAcesso.getOrganizacao().getOrganizacao_id());
+			this.stmt.setBoolean(5,perfilJanelaAcesso.getIsActive());
+
+			this.stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(stmt, conn);
+
 	}
 
 }
