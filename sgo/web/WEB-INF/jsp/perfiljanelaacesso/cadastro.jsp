@@ -43,6 +43,146 @@ jQuery(function($){
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/colunabd/cadastro" />';
 	});
+	
+	$('#perfilJanelaAcessoEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
+
+           		  if (!data || data.length == 0) {
+           	            $('#perfilJanelaAcessoEmpresa').val('');
+						$('#perfilJanelaAcessoEmpresaId').val('');
+           	        }
+
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#perfilJanelaAcessoEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+        	 $('#perfilJanelaAcessoEmpresa').val(ui.item.label);
+             $('#perfilJanelaAcessoEmpresaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#perfilJanelaAcessoOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#perfilJanelaAcessoEmpresaId').val() == '' ? '0' :  $('#perfilJanelaAcessoEmpresaId').val(), org_nome : $('#perfilJanelaAcessoOrganizacao').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#perfilJanelaAcessoOrganizacao').val('');
+         	           $('#perfilJanelaAcessoOrganizacaoId').val('');
+         	        }
+
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome,
+            			  value: organizacao.organizacao_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#perfilJanelaAcessoOrganizacao').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#perfilJanelaAcessoOrganizacao').val(ui.item.label);
+             $('#perfilJanelaAcessoOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#perfilJanelaAcessoJanela').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/janela/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#perfilJanelaAcessoEmpresaId').val() == '' ? '0' :  $('#perfilJanelaAcessoEmpresaId').val(), 
+	        		  organizacao_id: $('#perfilJanelaAcessoOrganizacaoId').val() == '' ? '0' :  $('#perfilJanelaAcessoOrganizacaoId').val(),
+	        		  nome : $('#perfilJanelaAcessoJanela').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#perfilJanelaAcessoJanela').val('');
+         	           $('#perfilJanelaAcessoJanelaId').val('');
+         	        }
+
+            	  response($.map(data, function(janela) {  
+            		  return {
+            			  label: janela.nome,
+            			  value: janela.janela_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#perfilJanelaAcessoJanela').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#perfilJanelaAcessoJanela').val(ui.item.label);
+             $('#perfilJanelaAcessoJanelaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#perfilJanelaAcessoPerfil').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/perfil/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#perfilJanelaAcessoEmpresaId').val() == '' ? '0' :  $('#perfilJanelaAcessoEmpresaId').val(), 
+	        		  organizacao_id: $('#perfilJanelaAcessoOrganizacaoId').val() == '' ? '0' :  $('#perfilJanelaAcessoOrganizacaoId').val(),
+	        		  nome : $('#perfilJanelaAcessoPerfil').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#perfilJanelaAcessoPerfil').val('');
+         	           $('#perfilJanelaAcessoPerfilId').val('');
+         	        }
+
+            	  response($.map(data, function(perfil) {  
+            		  return {
+            			  label: perfil.nome,
+            			  value: perfil.perfil_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#perfilJanelaAcessoPerfil').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#perfilJanelaAcessoPerfil').val(ui.item.label);
+             $('#perfilJanelaAcessoPerfilId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$("#perfilJanelaAcessoIsActive").change(function(e){
+		$(this).val( $("#perfilJanelaAcessoIsActive:checked").length > 0 ? "1" : "0");
+	});
 
 });
 
@@ -96,38 +236,38 @@ function limpaForm(){
 							<label class="control-label" for="perfilJanelaAcessoEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="perfilJanelaAcessoEmpresa" name="perfilJanelaAcessoEmpresa.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoEmpresaId" name="perfilJanelaAcessoEmpresa.empresa.empresa_id" type="hidden">
+	      						<input class="span2" id="perfilJanelaAcessoEmpresa" name="perfilJanelaAcesso.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="perfilJanelaAcessoEmpresaId" name="perfilJanelaAcesso.empresa.empresa_id" type="text">
 	    					</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="perfilJanelaAcessoOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="perfilJanelaAcessoOrganizacao" name="perfiljanelaacesso.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoOrganizacaoId" name="perfiljanelaacesso.organizacao.organizacao_id" type="hidden">
+	      						<input class="span2" id="perfilJanelaAcessoOrganizacao" name="perfilJanelaAcesso.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="perfilJanelaAcessoOrganizacaoId" name="perfilJanelaAcesso.organizacao.organizacao_id" type="text">
 	    					</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="perfilJanelaAcessoJanela">Janela</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="perfilJanelaAcessoJanela" name="perfiljanelaacesso.janela.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoJanelaId" name="perfiljanelaacesso.jabela.janela_id" type="hidden">
+	      						<input class="span2" id="perfilJanelaAcessoJanela" name="perfilJanelaAcesso.janela.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="perfilJanelaAcessoJanelaId" name="perfilJanelaAcesso.janela.janela_id" type="text">
 	    					</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="perfilJanelaAcessoPerfil">Perfil</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="perfilJanelaAcessoPerfil" name="perfiljanelaacesso.perfil.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilJanelaAcessoPerfilId" name="perfiljanelaacesso.perfil.perfil_id" type="hidden">
+	      						<input class="span2" id="perfilJanelaAcessoPerfil" name="perfilJanelaAcesso.perfil.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="perfilJanelaAcessoPerfilId" name="perfilJanelaAcesso.perfil.perfil_id" type="text">
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="formularioJanelaIsActive">Ativo</label>
+							<label class="control-label" for="perfilJanelaAcessoIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="formularioJanelaIsActive" name="formularioJanelaIsActive.isactive">							
+								<input type="checkbox" id="perfilJanelaAcessoIsActive" name="perfilJanelaAcesso.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

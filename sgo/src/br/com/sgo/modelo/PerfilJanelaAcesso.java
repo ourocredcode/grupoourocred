@@ -1,7 +1,6 @@
 package br.com.sgo.modelo;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -9,7 +8,6 @@ import javax.persistence.Table;
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
-@Embeddable
 @Table(name="PERFILJANELAACESSO")
 public class PerfilJanelaAcesso {
 
@@ -26,11 +24,11 @@ public class PerfilJanelaAcesso {
 	private Perfil perfil;  
 
 	@ManyToOne
-	@JoinColumn(name = "janela_id")  
+	@JoinColumn(name = "janela_id",updatable = true, nullable = false)  
 	private Janela janela;
 	
 	@Column(name="isactive")
-	private Boolean isactive;
+	private Boolean isActive;
 
 	public Perfil getPerfil() {
 		return perfil;
@@ -48,14 +46,6 @@ public class PerfilJanelaAcesso {
 		this.janela = janela;
 	}
 
-	public Boolean getIsactive() {
-		return isactive;
-	}
-
-	public void setIsactive(Boolean isactive) {
-		this.isactive = isactive;
-	}
-
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -70,5 +60,13 @@ public class PerfilJanelaAcesso {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 }

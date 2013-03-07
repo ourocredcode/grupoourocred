@@ -63,9 +63,7 @@ public class PerfilController {
 			perfil.setUsuario(this.usuarioDao.load(perfil.getUsuario().getUsuario_id()));
 			perfil.setIsActive(perfil.getIsActive() == null ? false : true);
 
-			this.perfilDao.beginTransaction();
 			this.perfilDao.adiciona(perfil);
-			this.perfilDao.commit();
 
 			mensagem = "Perfil " + perfil.getNome() + " adicionado com sucesso";			
 			
@@ -73,7 +71,7 @@ public class PerfilController {
 
 			this.perfilDao.rollback();
 
-			if (e.getCause().toString().indexOf("IX_PERFIL_PERFILNOME") != -1){
+			if (e.getCause().toString().indexOf("PK_PERFILJANELAACESSO") != -1){
 				mensagem = "Erro: Perfil " + perfil.getNome() + " já existente.";
 			} else {
 				mensagem = "Erro ao adicionar Perfil:";
