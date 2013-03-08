@@ -9,7 +9,6 @@ import javax.persistence.Table;
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
-@Embeddable
 @Table(name="PERFILORGACESSO")
 public class PerfilOrgAcesso {
 
@@ -18,11 +17,15 @@ public class PerfilOrgAcesso {
 	private Perfil perfil; 
 
 	@ManyToOne
+	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	private Empresa empresa;
+
+	@ManyToOne
 	@JoinColumn(name = "organizacao_id",updatable = true, nullable = false)  
 	private Organizacao organizacao; 
 	
 	@Column(name="isactive")
-	private Boolean isactive;
+	private Boolean isActive;
 
 	public Perfil getPerfil() {
 		return perfil;
@@ -40,12 +43,20 @@ public class PerfilOrgAcesso {
 		this.organizacao = organizacao;
 	}
 
-	public Boolean getIsactive() {
-		return isactive;
+	public Empresa getEmpresa() {
+		return empresa;
 	}
 
-	public void setIsactive(Boolean isactive) {
-		this.isactive = isactive;
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+	
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }
