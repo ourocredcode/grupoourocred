@@ -7,8 +7,8 @@ jQuery(function($){
 		window.location.href = '<c:url value="/perfil/cadastro" />';
 	});
 
-	$('#perfilorganizacao-li-a').click(function() {
-		window.location.href = '<c:url value="/perfilorganizacao/cadastro" />';
+	$('#perfilorgacesso-li-a').click(function() {
+		window.location.href = '<c:url value="/perfilorgacesso/cadastro" />';
 	});
 
 	$('#janela-li-a').click(function() {
@@ -171,7 +171,7 @@ function limpaForm(){
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="active" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
-				<li class="" id="perfilorganizacao-li"><a href="#perfilperfilorganizacao-div" data-toggle="tab" id="perfilorganizacao-li-a">Perfil Organização</a></li>
+				<li class="" id="perfilorgacesso-li"><a href="#perfilorgacesso-div" data-toggle="tab" id="perfilorgacesso-li-a">Perfil Organização</a></li>
 				<li class="" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
 				<li class="" id="perfiljanelaacesso-li"><a href="#perfiljanelaacesso-div" data-toggle="tab" id="perfiljanelaacesso-li-a">Janela Perfil</a></li>
 				<li class="" id="formulariosjanela-li"><a href="#formulariosjanela-div" data-toggle="tab" id="formulariosjanela-li-a">Formulários Janela</a></li>
@@ -245,7 +245,7 @@ function limpaForm(){
 
 				</div>
 				
-				<div class="tab-pane fade" id="perfilorganizacao-div">					
+				<div class="tab-pane fade" id="perfilorgacesso-div">					
 
 				</div>
 				
