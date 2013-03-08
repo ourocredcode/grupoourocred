@@ -53,7 +53,8 @@ public class JanelaController {
 
 				janela.setEmpresa(this.empresaDao.load(janela.getEmpresa().getEmpresa_id()));		
 				janela.setOrganizacao(this.organizacaoDao.load(janela.getOrganizacao().getOrganizacao_id()));
-	
+				janela.setIsActive(janela.getIsActive() == null ? false : true);
+				
 				this.janelaDao.beginTransaction();
 				this.janelaDao.adiciona(janela);
 				this.janelaDao.commit();
@@ -64,7 +65,7 @@ public class JanelaController {
 				
 				this.janelaDao.rollback();
 	
-				if (e.getCause().toString().indexOf("IX_JANELA_NOME") != -1){
+				if (e.getCause().toString().indexOf("IX_JANELA_EMP_ORG_NOME") != -1){
 					mensagem = "Erro: Janela " + janela.getNome() + " já existente.";
 				} else {
 					mensagem = "Erro ao adicionar Janela:";
