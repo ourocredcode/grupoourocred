@@ -55,7 +55,7 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso>{
 			this.conn.commit();
 
 		}  catch (SQLException e) {
-
+			this.conn.rollback();
 			throw e;
 			
 		}	finally {
