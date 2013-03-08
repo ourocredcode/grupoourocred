@@ -38,7 +38,16 @@ public class FormulariosJanela {
 	
 	@ManyToOne
 	@JoinColumn(name="tabelabd_id",updatable = true, nullable = false) 
-	private TabelaBd tabelabd;
+	private TabelaBd tabelaBd;
+	
+	@Column(name="isactive")
+	private Boolean isActive;
+	
+	@Column(name="ismostrado")
+	private Boolean isMostrado;
+	
+	@Column(name="issomenteleitura")
+	private Boolean isSomenteLeitura;
 
 	public Long getFormulariosjanela_id() {
 		return formulariosjanela_id;
@@ -80,11 +89,35 @@ public class FormulariosJanela {
 		this.janela = janela;
 	}
 
-	public TabelaBd getTabelabd() {
-		return tabelabd;
+	public TabelaBd getTabelaBd() {
+		return tabelaBd;
 	}
 
-	public void setTabelabd(TabelaBd tabelabd) {
-		this.tabelabd = tabelabd;
+	public void setTabelaBd(TabelaBd tabelaBd) {
+		this.tabelaBd = tabelaBd;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Boolean getIsMostrado() {
+		return isMostrado;
+	}
+
+	public void setIsMostrado(Boolean isMostrado) {
+		this.isMostrado = isMostrado;
+	}
+
+	public Boolean getIsSomenteLeitura() {
+		return isSomenteLeitura;
+	}
+
+	public void setIsSomenteLeitura(Boolean isSomenteLeitura) {
+		this.isSomenteLeitura = isSomenteLeitura;
 	}
 }
