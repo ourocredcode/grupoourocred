@@ -35,12 +35,12 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso>{
 				"	 empresa_id ," +
 				"	 organizacao_id ," +
 				"	 isactive) " +
-				"    VALUES (?,?,?,?,?)";
+				"    VALUES (?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
 		try {
-		
+			//conn.setAutoCommit(false);
 			this.stmt = conn.prepareStatement(sql);
 	
 			this.stmt.setLong(1,perfilOrgAcesso.getPerfil().getPerfil_id());			
@@ -53,10 +53,14 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso>{
 			this.conn.commit();
 
 		}  catch (SQLException e) {
-			throw e;
-		}	
 
-		this.conexao.closeConnection(stmt, conn);
+			this.conn.rollback();
+
+			throw e;
+	
+		}
+			this.conexao.closeConnection(stmt, conn);
+			
 	}
 	
 }

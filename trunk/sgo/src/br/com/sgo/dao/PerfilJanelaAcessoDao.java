@@ -40,9 +40,10 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso>{
 		this.conn = this.conexao.getConexao();
 
 		try {
-		
+			
+			
 			this.stmt = conn.prepareStatement(sql);
-	
+
 			this.stmt.setLong(1,perfilJanelaAcesso.getPerfil().getPerfil_id());			
 			this.stmt.setLong(2,perfilJanelaAcesso.getJanela().getJanela_id());
 			this.stmt.setLong(3,perfilJanelaAcesso.getEmpresa().getEmpresa_id());
@@ -54,11 +55,14 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso>{
 			this.conn.commit();
 
 		}  catch (SQLException e) {
+
+			this.conn.rollback();
+
 			throw e;
+
 		}	
-
-		this.conexao.closeConnection(stmt, conn);
-
-	}
+			this.conexao.closeConnection(stmt, conn);
+			
+		}	
 
 }
