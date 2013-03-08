@@ -145,6 +145,57 @@ jQuery(function($){
          }
     });
 	
+	$('#campoFormularioColunaBd').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/colunaBd/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id : $('#campoFormularioEmpresaId').val() == '' ? '0' :  $('#campoFormularioEmpresaId').val(),
+	        		  organizacao_id: $('#campoFormularioOrganizacaoId').val() == '' ? '0' :  $('#campoFormularioOrganizacaoId').val(),
+	        				  nomeColunaBd : $('#campoFormularioColunaBd').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#campoFormularioColunaBd').val('');
+         	           $('#campoFormularioColunaBdId').val('');
+         	        }
+
+            	  response($.map(data, function(colunabd) {  
+            		  return {
+            			  label: colunabd.nomeColunaBd,
+            			  value: colunabd.colunabd_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+
+			$('#campoFormularioColunaBd').val(ui.item.label);
+          	$('#campoFormularioColunaBdId').val(ui.item.label);
+
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#campoFormularioColunaBd').val(ui.item.label);
+             $('#campoFormularioNome').val(ui.item.label);
+             $('#campoFormularioColunaBdId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	
+	$("#campoFormularioIsMostrado").change(function(e){
+		$(this).val( $("#campoFormularioIsMostrado:checked").length > 0 ? "1" : "0");
+	});
+	
+	$("#campoFormularioIsSomenteLeitura").change(function(e){
+		$(this).val( $("#campoFormularioIsSomenteLeitura:checked").length > 0 ? "1" : "0");
+	});
+	
+	$("#campoFormularioIsActive").change(function(e){
+		$(this).val( $("#campoFormularioIsActive:checked").length > 0 ? "1" : "0");
+	});
 });
 
 function limpaForm(){
@@ -246,25 +297,25 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioNome">Nome</label>
 							<div class="controls">
-								<input type="text" id="campoFormularioNome" name="campoFormulario.nome" placeholder="Nome" required>
+								<input type="text" id="campoFormularioNome" name="campoFormulario.nome" placeholder="Nome" required readonly="readonly">
 							</div>
 						</div>						
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsMostrado">Mostrado</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado">							
+								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsSomenteLeitura">Somente Leitura</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.issomenteleitura">							
+								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.isSomenteLeitura" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isactive">							
+								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

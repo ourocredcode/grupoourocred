@@ -35,23 +35,23 @@ public class CampoFormulario {
 
 	@ManyToOne
 	@JoinColumn(name="colunabd_id",updatable = true, nullable = false) 
-	private ColunaBd colunabd;
+	private ColunaBd colunaBd;
 
 	@Column(name = "chave")
 	private String chave;
 
 	@Column(name = "nome")
 	private String nome;	
+	
+	@Column(name="isactive")
+	private Boolean isActive;
 
 	@Column(name = "ismostrado")
-	private Boolean ismostrado;
+	private Boolean isMostrado;
 
 	@Column(name = "issomenteleitura")
-	private Boolean issomenteleitura;
+	private Boolean isSomenteLeitura;
 
-	@Column(name = "sequenciacampos")
-	private Integer sequenciacampos;
-	
 	public Long getCampo_id() {
 		return campo_id;
 	}
@@ -84,12 +84,12 @@ public class CampoFormulario {
 		this.formulariosJanela = formulariosJanela;
 	}
 
-	public ColunaBd getColunabd() {
-		return colunabd;
+	public ColunaBd getColunaBd() {
+		return colunaBd;
 	}
 
-	public void setColunabd(ColunaBd colunabd) {
-		this.colunabd = colunabd;
+	public void setColunaBd(ColunaBd colunaBd) {
+		this.colunaBd = colunaBd;
 	}
 
 	public String getChave() {
@@ -108,28 +108,27 @@ public class CampoFormulario {
 		this.nome = nome;
 	}
 
-	public Integer getSequenciacampos() {
-		return sequenciacampos;
+	public Boolean getIsActive() {
+		return isActive;
 	}
 
-	public void setSequenciacampos(Integer sequenciacampos) {
-		this.sequenciacampos = sequenciacampos;
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
-	public Boolean getIsmostrado() {
-		return ismostrado;
+	public Boolean getIsMostrado() {
+		return isMostrado;
 	}
 
-	public void setIsmostrado(Boolean ismostrado) {
-		this.ismostrado = ismostrado;
+	public void setIsMostrado(Boolean isMostrado) {
+		this.isMostrado = isMostrado;
 	}
 
-	public Boolean getIssomenteleitura() {
-		return issomenteleitura;
+	public Boolean getIsSomenteLeitura() {
+		return isSomenteLeitura;
 	}
 
-	public void setIssomenteleitura(Boolean issomenteleitura) {
-		this.issomenteleitura = issomenteleitura;
+	public void setIsSomenteLeitura(Boolean isSomenteLeitura) {
+		this.isSomenteLeitura = isSomenteLeitura;
 	}
-
 }
