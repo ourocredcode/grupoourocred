@@ -65,10 +65,8 @@ public class PerfiljanelaacessoController {
 
 		} catch(Exception e) {
 
-			this.perfilJanelaAcessoDao.rollback();
-
-			if (e.getCause().toString().indexOf("PK_PERFILJANELAACESSO") != -1){
-				mensagem = "Erro: Perfil Janela Acesso  já existente.";
+			if (e.getMessage().indexOf("PK_PERFILJANELAACESSO") != -1){
+				mensagem = "Erro: Perfil Janela Acesso  jÃ¡ existente.";
 			} else {
 				mensagem = "Erro ao adicionar Perfil:";
 			}
