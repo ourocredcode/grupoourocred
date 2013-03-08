@@ -46,7 +46,7 @@ public class PerfilorgacessoController {
 		String mensagem = "";
 
 		try {
-
+			
 			perfilOrgAcesso.setEmpresa(this.empresaDao.load(perfilOrgAcesso.getEmpresa().getEmpresa_id()));		
 			perfilOrgAcesso.setOrganizacao(this.organizacaoDao.load(perfilOrgAcesso.getOrganizacao().getOrganizacao_id()));			
 			perfilOrgAcesso.setPerfil(this.perfilDao.load(perfilOrgAcesso.getPerfil().getPerfil_id()));
@@ -57,8 +57,10 @@ public class PerfilorgacessoController {
 			mensagem = "Perfil Janela Acesso adicionado com sucesso";
 
 		} catch(Exception e) {
+			
+			System.out.println(e);
 
-			if (e.getMessage().indexOf("PK_PERFILORGACESSO_1") != -1){
+			if (e.getMessage().indexOf("IX_PERFILORGACESSO_EMPORGPER") != -1){
 				mensagem = "Erro: Organização já existente para este perfil.";
 			} else {
 				mensagem = "Erro ao adicionar a Organização para o perfil:";

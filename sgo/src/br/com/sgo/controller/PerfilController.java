@@ -63,7 +63,9 @@ public class PerfilController {
 			perfil.setUsuario(this.usuarioDao.load(perfil.getUsuario().getUsuario_id()));
 			perfil.setIsActive(perfil.getIsActive() == null ? false : true);
 
+			this.perfilDao.beginTransaction();
 			this.perfilDao.adiciona(perfil);
+			this.perfilDao.commit();		
 
 			mensagem = "Perfil " + perfil.getNome() + " adicionado com sucesso";			
 			
