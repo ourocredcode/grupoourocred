@@ -65,6 +65,8 @@ public class PerfiljanelaacessoController {
 
 		} catch(Exception e) {
 
+			System.out.println(e);
+
 			if (e.getMessage().indexOf("PK_PERFILJANELAACESSO") != -1){
 				mensagem = "Erro: Perfil Janela Acesso  jÃ¡ existente.";
 			} else {
