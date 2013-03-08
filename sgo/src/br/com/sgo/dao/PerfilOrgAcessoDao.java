@@ -40,7 +40,8 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso>{
 		this.conn = this.conexao.getConexao();
 
 		try {
-			//conn.setAutoCommit(false);
+			
+			this.conn.setAutoCommit(false);
 			this.stmt = conn.prepareStatement(sql);
 	
 			this.stmt.setLong(1,perfilOrgAcesso.getPerfil().getPerfil_id());			
@@ -52,12 +53,15 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso>{
 
 			this.conn.commit();
 
-		}  catch (SQLException e) {
-
+		}  catch (SQLException e) {			
+			
 			this.conn.rollback();
-
 			throw e;
-	
+
+		} finally {
+
+			this.conn.setAutoCommit(true);
+
 		}
 			this.conexao.closeConnection(stmt, conn);
 			
