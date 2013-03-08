@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.ColunaBdDao;
 import br.com.sgo.dao.ElementoBdDao;
 import br.com.sgo.dao.EmpresaDao;
@@ -87,5 +88,11 @@ public class ColunabdController {
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 
+	}
+	
+	@Get @Path("/colunaBd/busca.json")
+	@Public
+	public void colunas(Long empresa_id, Long organizacao_id, String nomeColunaBd){
+		result.use(Results.json()).withoutRoot().from(this.colunaBdDao.buscaColunasBd(empresa_id, organizacao_id, nomeColunaBd)).serialize();
 	}
 }

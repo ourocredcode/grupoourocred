@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.hibernate.Session;
 
@@ -63,6 +65,48 @@ public class ColunaBdDao  extends Dao<ColunaBd> {
 		this.conexao.closeConnection(rsColunasBd, stmt, conn);
 
 		return colunaBd;
+
+	}
+	
+	public Collection<ColunaBd> buscaColunasBd(Long empresa_id, Long organizacao_id, String nomeColunaBd){
+
+		String sql = "select COLUNABD.colunabd_id, COLUNABD.nomeColunaBd from COLUNABD (NOLOCK) " +
+				"		  WHERE COLUNABD.empresa_id = ? AND" +
+				"		  	    COLUNABD.organizacao_id = ? AND" +
+				"		 	    COLUNABD.nomecolunabd like ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<ColunaBd> colunasBd = new ArrayList<ColunaBd>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);	
+
+			this.stmt.setLong(1,empresa_id);			
+			this.stmt.setLong(2,organizacao_id);
+			this.stmt.setString(3,"%" + nomeColunaBd + "%");
+
+			this.rsColunasBd = this.stmt.executeQuery();
+
+			while (rsColunasBd.next()) {
+				
+				ColunaBd colunaBd = new ColunaBd();
+
+				colunaBd.setColunabd_id(rsColunasBd.getLong("colunabd_id"));
+				colunaBd.setNomeColunaBd(rsColunasBd.getString("nomeColunaBd"));
+				
+				colunasBd.add(colunaBd);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsColunasBd, stmt, conn);
+
+		return colunasBd;
 
 	}
 
