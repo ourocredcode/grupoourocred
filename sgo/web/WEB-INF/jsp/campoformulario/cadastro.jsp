@@ -222,8 +222,8 @@ function limpaForm(){
 							<label class="control-label" for="campoFormularioFormulariosJanela">Fomulário</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="campoFormularioFormulariosJanela" name="campoFormulario.formulariosjanela.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="campoFormularioFormulariosJanelaId" name="campoFormulario.formulariosjanela.formulariosjanela_id" type="hidden">
+	      						<input class="span2" id="campoFormularioFormulariosJanela" name="campoFormulario.formulariosJanela.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="campoFormularioFormulariosJanelaId" name="campoFormulario.formulariosJanela.formulariosjanela_id" type="hidden">
 	    					</div>
 						</div>
 
@@ -231,40 +231,40 @@ function limpaForm(){
 							<label class="control-label" for="campoFormularioColunaBd">Coluna Bd</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="campoFormularioColunaBd" name="campoFormulario.colunabd.nomecolunadb" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="campoFormularioColunaBdId" name="campoFormulario.colunabd.colunabd_id" type="hidden">
+	      						<input class="span2" id="campoFormularioColunaBd" name="campoFormulario.colunaBd.nomeColunaBb" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="campoFormularioColunaBdId" name="campoFormulario.colunaBd.colunabd_id" type="hidden">
 	    					</div>
 						</div>
 						 
 						 <div class="control-group">
 							<label class="control-label" for="campoFormularioChave">Chave</label>
 							<div class="controls">
-								<input type="text" id="campoFormularioChave" name="campoFormularioChave.chave" placeholder="Chave" required>
+								<input type="text" id="campoFormularioChave" name="campoFormulario.chave" placeholder="Chave" required>
 							</div>
 						</div>
 						
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioNome">Nome</label>
 							<div class="controls">
-								<input type="text" id="campoFormularioNome" name="campoFormularioNome.nome" placeholder="Nome" required>
+								<input type="text" id="campoFormularioNome" name="campoFormulario.nome" placeholder="Nome" required>
 							</div>
 						</div>						
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsMostrado">Mostrado</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormularioIsMostrado.ismostrado">							
+								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsSomenteLeitura">Somente Leitura</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormularioIsSomenteLeitura.issomenteleitura">							
+								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.issomenteleitura">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsActive" name="campoFormularioIsActive.isactive">							
+								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isactive">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">
