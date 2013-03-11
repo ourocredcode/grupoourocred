@@ -194,7 +194,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilOrgAcessoEmpresa" name="perfilOrgAcesso.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilOrgAcessoEmpresaId" name="perfilOrgAcesso.empresa.empresa_id" type="text">
+	      						<input class="span2" id="perfilOrgAcessoEmpresaId" name="perfilOrgAcesso.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -202,7 +202,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilOrgAcessoOrganizacao" name="perfilOrgAcesso.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilOrgAcessoOrganizacaoId" name="perfilOrgAcesso.organizacao.organizacao_id" type="text">
+	      						<input class="span2" id="perfilOrgAcessoOrganizacaoId" name="perfilOrgAcesso.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -210,7 +210,7 @@ function limpaForm(){
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="perfilOrgAcessoPerfil" name="perfilOrgAcesso.perfil.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="perfilOrgAcessoPerfilId" name="perfilOrgAcesso.perfil.perfil_id" type="text">
+	      						<input class="span2" id="perfilOrgAcessoPerfilId" name="perfilOrgAcesso.perfil.perfil_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
