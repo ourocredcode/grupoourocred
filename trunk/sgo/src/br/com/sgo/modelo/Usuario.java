@@ -26,6 +26,14 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)	
 	private Long usuario_id;
 
+	@ManyToOne
+	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	private Empresa empresa;
+		
+	@ManyToOne
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	private Organizacao organizacao;
+
 	@Column(name="nome")
 	private String nome;
 
@@ -40,14 +48,6 @@ public class Usuario implements Serializable {
 	
 	@Column(name="chave")
 	private String chave;
-
-	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
-	private Empresa empresa;
-		
-	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Organizacao organizacao;
 
 	public Long getUsuario_id() {
 		return usuario_id;
