@@ -51,7 +51,51 @@ function limpaForm(){
 
 				<div class="tab-pane fade active in" id="usuarioorgacesso-div">
 
-						CADASTRO USUÁRIO ORG ACESSO
+						<form id="usuarioOrgAcessoForm" name="usuarioOrgAcessoForm" action="<c:url value="/usuarioorgacesso/salva"/>" method="POST">
+						
+						<div class="control-group">
+							<label class="control-label" for="usuarioOrgAcessoEmpresa">Empresa</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="usuarioOrgAcessoEmpresa" name="usuarioOrgAcesso.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="usuarioOrgAcessoEmpresaId" name="usuarioOrgAcesso.empresa.empresa_id" type="hidden">
+	    					</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="usuarioOrgAcessoOrganizacao">Organização</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="usuarioOrgAcessoOrganizacao" name="usuarioOrgAcesso.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="usuarioOrgAcessoOrganizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" type="hidden">
+	    					</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="usuarioOrgAcessoPerfil">Usuário</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span2" id="usuarioOrgAcessoPerfil" name="usuarioOrgAcesso.usuario.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="usuarioOrgAcessoPerfilId" name="usuarioOrgAcesso.usuario.usuario_id" type="hidden">
+	    					</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="usuarioOrgAcessoIsActive">Ativo</label>
+							<div class="controls">
+								<input type="checkbox" id="usuarioOrgAcessoIsActive" name="usuarioOrgAcesso.isActive" checked="checked" value="1">							
+							</div>							
+						</div>
+						<div class="btn-toolbar">
+							<div class="btn-group">
+								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+							</div>	
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+							</div>
+						</div>
+
+					</form>
 
 				</div>
 
