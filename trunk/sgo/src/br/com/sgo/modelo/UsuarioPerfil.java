@@ -30,7 +30,7 @@ public class UsuarioPerfil {
 	private Perfil perfil;  
 	
 	@Column(name="isactive")
-	private Boolean isactive;
+	private Boolean isActive;
 
 	public Usuario getUsuario() {
 		return usuario;
@@ -48,14 +48,6 @@ public class UsuarioPerfil {
 		this.perfil = perfil;
 	}
 
-	public Boolean getIsactive() {
-		return isactive;
-	}
-
-	public void setIsactive(Boolean isactive) {
-		this.isactive = isactive;
-	}
-
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -70,6 +62,14 @@ public class UsuarioPerfil {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

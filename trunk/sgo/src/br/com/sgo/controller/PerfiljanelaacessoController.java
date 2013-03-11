@@ -1,7 +1,5 @@
 package br.com.sgo.controller;
 
-import java.sql.SQLException;
-
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
