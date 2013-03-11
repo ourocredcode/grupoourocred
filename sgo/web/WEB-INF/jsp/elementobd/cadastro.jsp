@@ -204,10 +204,10 @@ function limpaForm(){
 						</div>
 						
 						 <div class="btn-toolbar">
-								<div class="btn-group">
-									<button type="submit" class="btn btn-primary">Salvar</button>
-								</div>	
-							</div>
+							<div class="btn-group">
+								<button type="submit" class="btn btn-primary">Salvar</button>
+							</div>	
+						</div>
 					</form>
 
 				</div>

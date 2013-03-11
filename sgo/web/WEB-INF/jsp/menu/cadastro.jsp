@@ -76,11 +76,11 @@ jQuery(function($){
 	$('#menuJanela').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
-	          url: "<c:url value='/janelas/busca.json' />",
+	          url: "<c:url value='/janela/busca.json' />",
 	          dataType: "json",
 	          data : {empresa_id: $('#menuEmpresaId').val() == '' ? '0' :  $('#menuEmpresaId').val(), 
 	        		  organizacao_id: $('#perfilOrganizacaoId').val() == '' ? '0' :  $('#menuOrganizacaoId').val(),
-	        		  nome : $('#Usuario').val()},
+	        		  nome : $('#menuJanela').val()},
 	          success : function(data) {  
 
 	        	  if (!data || data.length == 0) {
@@ -180,7 +180,7 @@ function limpaForm(){
 								<input type="checkbox" id="menuIsActive" name="menu.isActive" checked="checked" value="1" >							
 							</div>							
 						</div>				
-						<div class="btn-toolbar">s
+						<div class="btn-toolbar">
 						<div class="control-group">
 							<label class="control-label" for="menuAcao">Ação</label>
 							<div class="controls">
@@ -188,7 +188,7 @@ function limpaForm(){
 							</div>							
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="menuJanela">Janelas</label>
+							<label class="control-label" for="menuJanela">Janela</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
 	      						<input class="span2" id="menuJanela" name="menu.janela.nome" type="text" required onChange="limpaForm();">
