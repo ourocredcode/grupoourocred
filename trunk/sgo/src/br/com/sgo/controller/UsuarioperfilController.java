@@ -63,8 +63,6 @@ public class UsuarioperfilController {
 
 		} catch(Exception e) {
 
-			System.out.println(e);
-
 			if (e.getMessage().indexOf("PK_USUARIOPERFIL") != -1){
 				mensagem = "Erro: Usuário Perfil Acesso  já existente.";
 			} else {
