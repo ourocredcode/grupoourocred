@@ -73,7 +73,7 @@ public class PerfilController {
 
 			this.perfilDao.rollback();
 
-			if (e.getCause().toString().indexOf("IX_PERFIL_PERFIL_EMP_ORG_NOME") != -1){
+			if (e.getCause().toString().indexOf("IX_PERFIL_EMPORGNOME") != -1){
 				mensagem = "Erro: Perfil " + perfil.getNome() + " já existente.";
 			} else {
 				mensagem = "Erro ao adicionar Perfil:";

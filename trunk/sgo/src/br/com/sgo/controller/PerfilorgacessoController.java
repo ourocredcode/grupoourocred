@@ -58,12 +58,12 @@ public class PerfilorgacessoController {
 
 		} catch(Exception e) {
 			
-			System.out.println(e);
-
 			if (e.getMessage().indexOf("IX_PERFILORGACESSO_EMPORGPER") != -1){
-				mensagem = "Erro: Organização já existente para este perfil.";
+				mensagem = "Erro: Perfil " + perfilOrgAcesso.getPerfil().getNome() + " já cadastrado.";
 			} else {
-				mensagem = "Erro ao adicionar a Organização para o perfil:";
+				mensagem = "Erro: Organização " + perfilOrgAcesso.getOrganizacao().getNome() + " já cadastrado para a empresa " +
+						"" + perfilOrgAcesso.getEmpresa().getNome() + " e perfil " +
+						"" + perfilOrgAcesso.getPerfil().getNome() + ".";
 			}
 
 		} 
