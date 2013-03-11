@@ -35,36 +35,25 @@ jQuery(function($){
 	});
 	
 	$('#perfil_id').change(function() {
-
 		var perfil_id = $("#perfil_id").val();
-
 		$("#empresa_id").load('<c:url value="/home/empresas" />',{'perfil_id': perfil_id});
-
 	});
 	
 	$('#empresa_id').change(function() {
-
 		var empresa_id = $("#empresa_id").val();
 		var perfil_id = $("#perfil_id").val();
-
 		$("#organizacao_id").load('<c:url value="/home/organizacoes" />',{'perfil_id': perfil_id, 'empresa_id':empresa_id});
-
 	});
 	
 	$('#empresa_id').change(function() {
-
 		var empresa_id = $("#empresa_id").val();
 		var perfil_id = $("#perfil_id").val();
-
 		$("#organizacao_id").load('<c:url value="/home/organizacoes" />',{'perfil_id': perfil_id, 'empresa_id':empresa_id});
-
 	});
 
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/home/logout" />';
 	});
-	
-	
 
 }); 
 
@@ -122,10 +111,20 @@ jQuery(function($){
 						</select>
 					</div>
 
+
 					<div class="control-group">
-						<label class="control-label" for="inputEmail">Empresa</label>
+						<label class="control-label" for="perfilEmpresa">Empresa</label>
 						<div class="controls">
-							<select id="empresa_id">	
+							<span class="add-on"><i class="icon-plus-sign"></i></span>
+      						<input class="span2" id="perfilEmpresa" name="perfil.empresa.nome" type="text" required onChange="limpaForm();">
+      						<input class="span2" id="perfilEmpresaId" name="perfil.empresa.empresa_id" type="hidden">
+    					</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="usuarioPerfilEmpresa">Empresa</label>
+						<div class="controls">
+							<select id="usuarioPerfilEmpresaId" name="usuarioperfil.empresa.empresa_id" type="hidden">	
 								<option value="">Selecione a empresa</option>
 							</select>
 						</div>

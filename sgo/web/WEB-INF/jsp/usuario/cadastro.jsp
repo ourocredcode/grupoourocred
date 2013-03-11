@@ -15,152 +15,153 @@ jQuery(function($){
 		window.location.href = '<c:url value="/usuarioorgacesso/cadastro" />';
 	});
 
+	$('#usuarioEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
+
+           		  if (!data || data.length == 0) {
+           	            $('#usuarioEmpresa').val('');
+						$('#usuarioEmpresaId').val('');
+           	        }
+
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#usuarioEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+        	 $('#usuarioEmpresa').val(ui.item.label);
+             $('#usuarioEmpresaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#usuarioOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#usuarioEmpresaId').val() == '' ? '0' :  $('#usuarioEmpresaId').val(), org_nome : $('#usuarioOrganizacao').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#usuarioOrganizacao').val('');
+         	           $('#usuarioOrganizacaoId').val('');
+         	        }
+
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome,
+            			  value: organizacao.organizacao_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#usuarioOrganizacao').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#usuarioOrganizacao').val(ui.item.label);
+             $('#usuarioOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#usuarioParceiroNegocio').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/parceironegocio/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#usuarioEmpresaId').val() == '' ? '0' :  $('#usuarioEmpresaId').val(), 
+	        		  organizacao_id: $('#usuarioOrganizacaoId').val() == '' ? '0' :  $('#usuarioOrganizacaoId').val(),
+	        		  nome : $('#usuarioParceiroNegocio').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#usuarioParceiroNegocio').val('');
+         	           $('#usuarioParceiroNegocioId').val('');
+         	        }
+
+            	  response($.map(data, function(parceironegocio) {  
+            		  return {
+            			  label: parceironegocio.nome,
+            			  value: parceironegocio.perfil_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#usuarioParceiroNegocio').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#usuarioParceiroNegocio').val(ui.item.label);
+             $('#usuarioParceiroNegocioId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#usuarioSupervisorUsuario').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/usuarios/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#usuarioEmpresaId').val() == '' ? '0' :  $('#usuarioEmpresaId').val(), 
+	        		  organizacao_id: $('#usuarioOrganizacaoId').val() == '' ? '0' :  $('#usuarioOrganizacaoId').val(),
+	        		  nome : $('#usuarioSupervisorUsuario').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	           $('#usuarioSupervisorUsuario').val('');
+         	           $('#usuarioSupervisorUsuarioId').val('');
+         	        }
+
+            	  response($.map(data, function(usuario) {  
+            		  return {
+            			  label: usuario.nome,
+            			  value: usuario.usuario_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#usuarioSupervisorUsuario').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#usuarioSupervisorUsuario').val(ui.item.label);
+             $('#usuarioSupervisorUsuarioId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$("#usuarioIsActive").change(function(e){
+		$(this).val( $("#usuarioIsActive:checked").length > 0 ? "1" : "0");
+	});
+
 });
 
-$('#usuarioEmpresa').autocomplete({
-	source: function( request, response ) {
-        $.ajax({
-          url: "<c:url value='/empresa/busca.json' />",
-          dataType: "json",
-          data : {n: request.term},
-          success : function(data) {  
-
-       		  if (!data || data.length == 0) {
-       	            $('#usuarioEmpresa').val('');
-					$('#usuarioEmpresaId').val('');
-       	        }
-
-        	  response($.map(data, function(empresa) {  
-        		  return {
-                      label: empresa.nome,
-                      value: empresa.empresa_id
-                  };
-              }));  
-           }
-        });
-     } ,
-     focus: function( event, ui ) {
-    	 $('#usuarioEmpresa').val(ui.item.label);
-         return false;
-     } ,
-     select: function( event, ui ) {
-    	 $('#usuarioEmpresa').val(ui.item.label);
-         $('#usuarioEmpresaId').val(ui.item.value);
-         return false;
-     }
-});
-
-$('#usuarioOrganizacao').autocomplete({
-	source: function( request, response ) {
-        $.ajax({
-          url: "<c:url value='/organizacao/busca.json' />",
-          dataType: "json",
-          data : {empresa_id: $('#usuarioEmpresaId').val() == '' ? '0' :  $('#usuarioEmpresaId').val(), org_nome : $('#usuarioOrganizacao').val()},
-          success : function(data) {  
-
-        	  if (!data || data.length == 0) {
-     	            $('#usuarioOrganizacao').val('');
-     	           $('#usuarioOrganizacaoId').val('');
-     	        }
-
-        	  response($.map(data, function(organizacao) {  
-        		  return {
-        			  label: organizacao.nome,
-        			  value: organizacao.organizacao_id
-                  };
-              }));  
-           }
-        });
-     },
-     focus: function( event, ui ) {
-      	 $('#usuarioOrganizacao').val(ui.item.label);
-           return false;
-       } ,
-     select: function( event, ui ) {
-         $('#usuarioOrganizacao').val(ui.item.label);
-         $('#usuarioOrganizacaoId').val(ui.item.value);
-         return false;
-     }
-});
-
-$('#usuarioParceiroNegocio').autocomplete({
-	source: function( request, response ) {
-        $.ajax({
-          url: "<c:url value='/parceironegocio/busca.json' />",
-          dataType: "json",
-          data : {empresa_id: $('#usuarioEmpresaId').val() == '' ? '0' :  $('#usuarioEmpresaId').val(), 
-        		  organizacao_id: $('#usuarioOrganizacaoId').val() == '' ? '0' :  $('#usuarioOrganizacaoId').val(),
-        		  nome: $('#usuarioParceiroNegocio').val()},
-          success : function(data) {  
-
-        	  if (!data || data.length == 0) {
-     	            $('#usuarioParceiroNegocio').val('');
-     	           $('#usuarioParceiroNegocioId').val('');
-     	        }
-
-        	  response($.map(data, function(parceironegocio) {  
-        		  return {
-        			  label: parceironegocio.nome,
-        			  value: parceironegocio.parceironegocio_id
-                  };
-              }));  
-           }
-        });
-     },
-     focus: function( event, ui ) {
-      	 $('#usuarioParceiroNegocio').val(ui.item.label);
-           return false;
-       } ,
-     select: function( event, ui ) {
-         $('#usuarioParceiroNegocio').val(ui.item.label);
-         $('#usuarioParceiroNegocioId').val(ui.item.value);
-         return false;
-     }
-});
-
-$('#usuarioElementoBd').autocomplete({
-	source: function( request, response ) {
-        $.ajax({
-          url: "<c:url value='/elementobd/busca.json' />",
-          dataType: "json",
-          data : {nomecolunabd : $('#colunaBdElementoBd').val()},
-          success : function(data) {  
-
-        	  if (!data || data.length == 0) {
-     	            $('#colunaBdElementoBd').val('');
-     	           $('#colunaBdElementoBdId').val('');
-     	        }
-
-        	  response($.map(data, function(elementobd) {  
-        		  return {
-        			  label: elementobd.nomeColunaBd,
-        			  value: elementobd.elementoBd_id
-                  };
-              }));  
-           }
-        });
-     },
-     focus: function( event, ui ) {
-      	
-    	 $('#colunaBdElementoBd').val(ui.item.label);
-      	$('#colunaBdNomeColunaBd').val(ui.item.label);
-      	
-           return false;
-       } ,
-     select: function( event, ui ) {
-         $('#colunaBdElementoBd').val(ui.item.label);
-         $('#colunaBdNomeColunaBd').val(ui.item.label);
-         $('#colunaBdElementoBdId').val(ui.item.value);
-         return false;
-     }
-});
 
 function limpaForm(){
-
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.elementoBdForm.reset();
-	}
-
+		document.usuarioForm.reset();
+	}	
 }
 
 
@@ -208,11 +209,11 @@ function limpaForm(){
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="usuarioUsuario">Supervisor Usuário</label>
+							<label class="control-label" for="usuarioSupervisorUsuario">Supervisor Usuário</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="usuarioUsuario" name="usuario.usuario.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="usuarioUsuarioId" name="usuario.usuario.usuario_id" type="hidden">
+	      						<input class="span2" id="usuarioSupervisorUsuario" name="usuario.usuario.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="usuarioSupervisorUsuarioId" name="usuario.usuario.usuario_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
