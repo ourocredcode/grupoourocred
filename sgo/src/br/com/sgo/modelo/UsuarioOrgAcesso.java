@@ -26,7 +26,7 @@ public class UsuarioOrgAcesso {
 	private Usuario usuario;  
 
 	@Column(name="isactive")
-	private Boolean isactive;
+	private Boolean isActive;
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -52,12 +52,11 @@ public class UsuarioOrgAcesso {
 		this.usuario = usuario;
 	}
 
-	public Boolean getIsactive() {
-		return isactive;
+	public Boolean getIsActive() {
+		return isActive;
 	}
 
-	public void setIsactive(Boolean isactive) {
-		this.isactive = isactive;
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
-
 }

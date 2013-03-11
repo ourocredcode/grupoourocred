@@ -14,6 +14,107 @@ jQuery(function($){
 	$('#usuarioorgacesso-li-a').click(function() {
 		window.location.href = '<c:url value="/usuarioorgacesso/cadastro" />';
 	});
+	
+	$('#usuarioOrgAcessoEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
+
+           		  if (!data || data.length == 0) {
+           	            $('#usuarioOrgAcessoEmpresa').val('');
+						$('#usuarioOrgAcessoEmpresaId').val('');
+           	        }
+
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#usuarioOrgAcessoEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+        	 $('#usuarioOrgAcessoEmpresa').val(ui.item.label);
+             $('#usuarioOrgAcessoEmpresaId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#usuarioOrgAcessoOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#usuarioOrgAcessoEmpresaId').val() == '' ? '0' :  $('#usuarioOrgAcessoEmpresaId').val(), org_nome : $('#usuarioOrgAcessoOrganizacao').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#usuarioOrgAcessoOrganizacao').val('');
+         	           $('#usuarioOrgAcessoOrganizacaoId').val('');
+         	        }
+
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome,
+            			  value: organizacao.organizacao_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#usuarioOrgAcessoOrganizacao').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#usuarioOrgAcessoOrganizacao').val(ui.item.label);
+             $('#usuarioOrgAcessoOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#usuarioOrgAcessoUsuario').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/usuarios/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#usuarioOrgAcessoEmpresaId').val() == '' ? '0' :  $('#usuarioOrgAcessoEmpresaId').val(), 
+	        		  organizacao_id: $('#usuarioOrgAcessoOrganizacaoId').val() == '' ? '0' :  $('#usuarioOrgAcessoOrganizacaoId').val(),
+	        				  nome : $('#usuarioOrgAcessoUsuario').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#usuarioOrgAcessoUsuario').val('');
+         	           $('#usuarioOrgAcessoUsuarioId').val('');
+         	        }
+
+            	  response($.map(data, function(usuario) {  
+            		  return {
+            			  label: usuario.nome,
+            			  value: usuario.usuario_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#usuarioOrgAcessoUsuario').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#usuarioOrgAcessoUsuario').val(ui.item.label);
+             $('#usuarioOrgAcessoUsuarioId').val(ui.item.value);
+             return false;
+         }
+    });
 
 });
 
@@ -70,11 +171,11 @@ function limpaForm(){
 	    					</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="usuarioOrgAcessoPerfil">Usuário</label>
+							<label class="control-label" for="usuarioOrgAcessoUsuario">Usuário</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="usuarioOrgAcessoPerfil" name="usuarioOrgAcesso.usuario.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="usuarioOrgAcessoPerfilId" name="usuarioOrgAcesso.usuario.usuario_id" type="hidden">
+	      						<input class="span2" id="usuarioOrgAcessoUsuario" name="usuarioOrgAcesso.usuario.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="usuarioOrgAcessoUsuarioId" name="usuarioOrgAcesso.usuario.usuario_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
