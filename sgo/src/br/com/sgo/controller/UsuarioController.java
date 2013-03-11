@@ -30,17 +30,11 @@ public class UsuarioController {
 		this.result = result;
 
 	}
-	
+
 	@Get
 	@Public
 	@Path("/usuario/cadastro")
 	public void cadastro() {
-
-		Empresa empresa = this.empresaDao.load(1L);
-		Organizacao organizacao = this.organizacaoDao.load(1L);
-
-		result.include("empresa",empresa);
-		result.include("organizacao",organizacao);
 
 	}
 
@@ -59,7 +53,7 @@ public class UsuarioController {
 		this.result.redirectTo(this).usuarioPerfil(usuarioId);
 
 	}
-	
+
 	@Get @Path("/usuarios/busca.json")
 	@Public
 	public void perfis(Long empresa_id, Long organizacao_id, String nome){

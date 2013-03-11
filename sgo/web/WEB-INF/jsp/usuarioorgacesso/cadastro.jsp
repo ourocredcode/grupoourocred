@@ -34,16 +34,14 @@ function limpaForm(){
 		<div class="bs-docs-example">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="active" id="usuario-li"><a href="#usuario-div" data-toggle="tab" id="usuario-li-a">Usuário</a></li>
+				<li class="" id="usuario-li"><a href="#usuario-div" data-toggle="tab" id="usuario-li-a">Usuário</a></li>
 				<li class="" id="usuarioperfil-li"><a href="#usuarioperfil-div" data-toggle="tab" id="usuarioperfil-li-a">Usuario Perfil</a></li>
-				<li class="" id="usuarioorgacesso-li"><a href="#usuarioorgacesso-div" data-toggle="tab" id="usuarioorgacesso-li-a">Usuário Organização</a></li>
+				<li class="active" id="usuarioorgacesso-li"><a href="#usuarioorgacesso-div" data-toggle="tab" id="usuarioorgacesso-li-a">Usuário Organização</a></li>
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
 
-				<div class="tab-pane fade active in" id="usuario-div">					
-
-					CADASTRO USUÁRIO
+				<div class="tab-pane fade" id="usuario-div">					
 
 				</div>
 
@@ -51,7 +49,9 @@ function limpaForm(){
 
 				</div>
 
-				<div class="tab-pane fade" id="usuarioorgacesso-div">
+				<div class="tab-pane fade active in" id="usuarioorgacesso-div">
+
+						CADASTRO USUÁRIO ORG ACESSO
 
 				</div>
 
