@@ -111,8 +111,9 @@ jQuery(function($){
            } ,
          select: function( event, ui ) {
              $('#usuarioParceiroNegocio').val(ui.item.label);
+             $('#usuarioNome').val(ui.item.label);             
              $('#usuarioParceiroNegocioId').val(ui.item.value);
-             return false;
+             return false;             
          }
     });
 	
@@ -212,14 +213,14 @@ function limpaForm(){
 							<label class="control-label" for="usuarioSupervisorUsuario">Supervisor Usuário</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="usuarioSupervisorUsuario" name="usuario.usuario.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="usuarioSupervisorUsuario" name="usuario.usuario.nome" type="text" onChange="limpaForm();">
 	      						<input class="span2" id="usuarioSupervisorUsuarioId" name="usuario.usuario.usuario_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="usuarioNome">Nome</label>
 							<div class="controls">
-								<input type="text" id="usuarioNome" name="usuario.nome" placeholder="Nome" required>
+								<input type="text" id="usuarioNome" name="usuario.nome" placeholder="Nome" required readonly="readonly">
 							</div>
 						</div>
 						<div class="control-group">
