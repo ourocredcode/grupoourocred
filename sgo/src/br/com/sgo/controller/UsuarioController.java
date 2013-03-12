@@ -58,6 +58,7 @@ public class UsuarioController {
 			usuario.setEmpresa(this.empresaDao.load(usuario.getEmpresa().getEmpresa_id()));
 			usuario.setOrganizacao(this.organizacaoDao.load(usuario.getOrganizacao().getOrganizacao_id()));
 			usuario.setParceiroNegocio(this.parceiroNegocioDao.load(usuario.getParceiroNegocio().getParceiroNegocio_id()));
+			usuario.setIsActive(usuario.getIsActive() == null ? false : true);
 	
 			this.usuarioDao.beginTransaction();
 			this.usuarioDao.adiciona(usuario);

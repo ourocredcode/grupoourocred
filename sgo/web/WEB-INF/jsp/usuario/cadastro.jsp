@@ -246,6 +246,12 @@ function limpaForm(){
 								<input type="text" id="usuarioTelefone" name="usuario.telefone" placeholder="Telefone" required>
 							</div>
 						</div>
+							<div class="control-group">
+							<label class="control-label" for="usuarioIsActive">Ativo</label>
+							<div class="controls">
+								<input type="checkbox" id="usuarioIsActive" name="usuario.isActive" checked="checked" value="1" >							
+							</div>							
+						</div>
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
