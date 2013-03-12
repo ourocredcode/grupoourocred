@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
@@ -45,6 +44,9 @@ public class Usuario implements Serializable {
 	
 	@Column(name="nome")
 	private String nome;
+	
+	@Column(name="chave")
+	private String chave;
 
 	@Column(name="descricao")
 	private String descricao;
@@ -147,6 +149,14 @@ public class Usuario implements Serializable {
 
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
 	}
 
 }
