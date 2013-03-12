@@ -51,7 +51,7 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			while (rsParceiroNegocio.next()) {
 				ParceiroNegocio parceiro = new ParceiroNegocio();
 
-				parceiro.setParceiroNegocio(rsParceiroNegocio.getLong("parceironegocio_id"));				
+				parceiro.setParceiroNegocio_id(rsParceiroNegocio.getLong("parceironegocio_id"));				
 				parceiro.setNome(rsParceiroNegocio.getString("nome"));
 
 				parceiros.add(parceiro);

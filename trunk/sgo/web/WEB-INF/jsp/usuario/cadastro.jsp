@@ -99,7 +99,7 @@ jQuery(function($){
             	  response($.map(data, function(parceironegocio) {  
             		  return {
             			  label: parceironegocio.nome,
-            			  value: parceironegocio.perfil_id
+            			  value: parceironegocio.parceiroNegocio_id
                       };
                   }));  
                }
@@ -192,7 +192,6 @@ function limpaForm(){
 	      						<input class="span2" id="usuarioEmpresaId" name="usuario.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
-						
 						<div class="control-group">
 							<label class="control-label" for="usuarioOrganizacao">Organização</label>
 							<div class="input-prepend">
@@ -205,8 +204,8 @@ function limpaForm(){
 							<label class="control-label" for="usuarioParceiroNegocio">Perceiro de Negócios</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="usuarioParceiroNegocio" name="usuario.parceironegocio.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="usuarioParceiroNegocioId" name="usuario.parceironegocio.parceironegocio_id" type="hidden">
+	      						<input class="span2" id="usuarioParceiroNegocio" name="usuario.parceiroNegocio.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span2" id="usuarioParceiroNegocioId" name="usuario.parceiroNegocio.parceiroNegocio_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -226,7 +225,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="usuarioDescricao">Descrição</label>
 							<div class="controls">
-								<input type="text" id="usuarioDescricao" name="usuario.descricao" placeholder="Descricao" required>
+								<input type="text" id="usuarioDescricao" name="usuario.descricao" placeholder="Descricao">
 							</div>
 						</div>
 						<div class="control-group">
@@ -249,10 +248,13 @@ function limpaForm(){
 						</div>
 						<div class="btn-toolbar">
 							<div class="btn-group">
-								<button type="submit" class="btn btn-primary">Salvar</button>
+								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
 							</div>	
 							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="btnSair" >Novo</button>
+								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 							</div>
 						</div>
 

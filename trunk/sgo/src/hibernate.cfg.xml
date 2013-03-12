@@ -27,22 +27,31 @@
 
 		<!-- entidades -->
 
-		<!-- Solicitacao Digital -->
+		<!-- SGO -->
 		<mapping class="br.com.sgo.modelo.Empresa" />
-		<mapping class="br.com.sgo.modelo.Organizacao" />
+		<mapping class="br.com.sgo.modelo.Organizacao" />		
+		<mapping class="br.com.sgo.modelo.Banco" />
 		<mapping class="br.com.sgo.modelo.ElementoBd" />
 		<mapping class="br.com.sgo.modelo.CampoFormulario" />
+		<mapping class="br.com.sgo.modelo.CategoriaParceiro" />
+		<mapping class="br.com.sgo.modelo.ClassificacaoParceiro" />
 		<mapping class="br.com.sgo.modelo.ColunaBd" />
 		<mapping class="br.com.sgo.modelo.FormulariosJanela" />
+		<mapping class="br.com.sgo.modelo.GrupoBanco" />
+		<mapping class="br.com.sgo.modelo.GrupoParceiro" />
+		<mapping class="br.com.sgo.modelo.Idioma" />
+		<mapping class="br.com.sgo.modelo.Menu" />
 		<mapping class="br.com.sgo.modelo.Janela" />
 		<mapping class="br.com.sgo.modelo.Perfil" />
 		<mapping class="br.com.sgo.modelo.PerfilJanelaAcesso" />
 		<mapping class="br.com.sgo.modelo.PerfilOrgAcesso" />
 		<mapping class="br.com.sgo.modelo.TabelaBd" />
 		<mapping class="br.com.sgo.modelo.TipoDadoBd" />
+		<mapping class="br.com.sgo.modelo.TipoParceiro" />
 		<mapping class="br.com.sgo.modelo.Usuario" />
 		<mapping class="br.com.sgo.modelo.UsuarioOrgAcesso" />
 		<mapping class="br.com.sgo.modelo.UsuarioPerfil" />
+		<mapping class="br.com.sgo.modelo.ParceiroNegocio" />
 
 	</session-factory>
 </hibernate-configuration>

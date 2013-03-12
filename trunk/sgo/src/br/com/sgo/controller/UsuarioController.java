@@ -5,9 +5,11 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
+import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Empresa;
@@ -18,16 +20,20 @@ import br.com.sgo.modelo.Usuario;
 public class UsuarioController {
 
 	private final Result result;
+	private final Validator validator;
+	private final UsuarioDao usuarioDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
-	private final UsuarioDao usuarioDao;
+	private final ParceiroNegocioDao parceiroNegocioDao;
 
-	public UsuarioController(Result result,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,UsuarioDao usuarioDao){
+	public UsuarioController(Result result,Validator validator, UsuarioDao usuarioDao,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao, ParceiroNegocioDao parceiroNegocioDao){
 
+		this.result = result;
+		this.validator = validator;
+		this.usuarioDao = usuarioDao;
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;
-		this.usuarioDao = usuarioDao;
-		this.result = result;
+		this.parceiroNegocioDao = parceiroNegocioDao;
 
 	}
 
@@ -43,14 +49,41 @@ public class UsuarioController {
 	@Path("/usuario/salva")
 	public void salva(Usuario usuario){
 
-		usuario.setEmpresa(this.empresaDao.load(usuario.getEmpresa().getEmpresa_id()));
-		usuario.setOrganizacao(this.organizacaoDao.load(usuario.getOrganizacao().getOrganizacao_id()));
+		validator.validate(usuario);
+		validator.onErrorUsePageOf(this).cadastro();
 
-		this.usuarioDao.beginTransaction();
-		Long usuarioId = this.usuarioDao.salva(usuario);
-		this.usuarioDao.commit();
+		String mensagem = "";
 
-		this.result.redirectTo(this).usuarioPerfil(usuarioId);
+		try {
+			usuario.setEmpresa(this.empresaDao.load(usuario.getEmpresa().getEmpresa_id()));
+			usuario.setOrganizacao(this.organizacaoDao.load(usuario.getOrganizacao().getOrganizacao_id()));
+			usuario.setParceiroNegocio(this.parceiroNegocioDao.load(usuario.getParceiroNegocio().getParceiroNegocio_id()));
+	
+			this.usuarioDao.beginTransaction();
+			this.usuarioDao.adiciona(usuario);
+			this.usuarioDao.commit();
+	
+			
+			mensagem = "Ususário " + usuario.getNome() + " adicionado com sucesso";
+	
+			} catch(Exception e) {
+			
+			this.usuarioDao.rollback();
+
+			if (e.getCause().toString().indexOf("IX_USUARIO_EMP_ORG_PARC") != -1){
+				mensagem = "Erro: Parceiro de negócios " + usuario.getNome() + " já existente.";
+			} else {
+				mensagem = "Erro: Parceiro de negócios " + usuario.getParceiroNegocio().getNome() + " já cadastrado para a empresa " +
+						"" +  usuario.getEmpresa().getNome() + " e organização " +
+						"" + usuario.getOrganizacao().getNome() + ".";				
+			}
+
+		}
+
+		this.usuarioDao.clear();
+		this.usuarioDao.close();
+		result.include("notice",mensagem);
+		result.redirectTo(this).cadastro();
 
 	}
 
@@ -58,14 +91,8 @@ public class UsuarioController {
 	@Public
 	public void usuarios(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(usuarioDao.buscaUsuarios(empresa_id, organizacao_id, nome)).serialize();
-	}
+	}	
 	
-	/*@Get @Path("/usuario/busca.json")
-	@Public
-	public void perfis(Long empresa_id, Long organizacao_id, String nome){
-		result.use(Results.json()).withoutRoot().from(usuarioDao.buscaUsuarios(empresa_id, organizacao_id, nome)).serialize();
-	}*/
-
 	@Get
 	@Public
 	public void usuarioPerfil(Long usuarioId){
