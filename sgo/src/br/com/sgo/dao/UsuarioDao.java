@@ -38,11 +38,35 @@ public class UsuarioDao extends Dao<Usuario> {
 	}
 
 	public Usuario find(String login, String senha) {		
-		String hql = "from Usuario u where u.chave = :login and u.senha = :senha";
-		Query query = session.createQuery(hql)
-				.setParameter("login", login)
-				.setParameter("senha", senha);		
-		return (Usuario) query.uniqueResult();
+
+		String sql = "SELECT USUARIO.usuario_id FROM USUARIO (NOLOCK) " +
+				"		WHERE USUARIO.chave = ? AND USUARIO.senha = ? ";
+		
+		Usuario usuario  = new Usuario();
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);			
+			this.stmt.setString(1, login);			
+			this.stmt.setString(2, senha);	
+			this.rsUsuarios = this.stmt.executeQuery();
+
+			while (rsUsuarios.next()) {
+
+				usuario.setUsuario_id(rsUsuarios.getLong("usuario_id"));				
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsUsuarios, stmt, conn);
+		
+		return usuario;
+
 	}
 
 	public Collection<Usuario> buscaUsuarios(Long empresa_id, Long organizacao_id, String nome){

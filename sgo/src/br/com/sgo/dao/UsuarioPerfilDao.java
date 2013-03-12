@@ -124,7 +124,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(rsUsuarioPerfil,stmt,conn);
+		this.conexao.closeConnection(rsEmpresaPerfil,stmt,conn);
 
 		return empresas;
 
@@ -178,7 +178,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(rsUsuarioPerfil,stmt,conn);
+		this.conexao.closeConnection(rsOrganizacaoPerfil,stmt,conn);
 
 		return organizacoes;
 
