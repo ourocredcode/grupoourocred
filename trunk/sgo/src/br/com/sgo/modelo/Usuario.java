@@ -55,8 +55,19 @@ public class Usuario implements Serializable {
 	@Column(name="email")
 	private String email;
 
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
 	@Column(name="telefone")
 	private String telefone;
+	
+	@Column(name="isactive")
+	private Boolean isActive;
 
 	public Long getUsuario_id() {
 		return usuario_id;
