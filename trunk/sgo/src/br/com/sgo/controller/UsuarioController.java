@@ -12,8 +12,6 @@ import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
-import br.com.sgo.modelo.Empresa;
-import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Usuario;
 
 @Resource
