@@ -36,7 +36,7 @@ public class TipodadobdController {
 	@Public
 	@Path("/tipodadobd/cadastro")
 	public void cadastro(){
-		
+		result.include("tiposDadosBd",this.tipoDadoBdDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
@@ -83,6 +83,12 @@ public class TipodadobdController {
 	@Public
 	public void tiposdadobd(String nome){
 		result.use(Results.json()).withoutRoot().from(tipoDadoBdDao.buscaTiposDado(nome)).serialize();
+	}
+	
+	@Post @Path("/tipodadobd/lista")
+	@Public
+	public void lista(Long empresa_id, Long organizacao_id, String nome){
+		result.include("tiposDadosBd",this.tipoDadoBdDao.buscaTiposDadosLista(empresa_id, organizacao_id, nome));
 	}
 
 }
