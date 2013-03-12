@@ -12,6 +12,7 @@ import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Menu;
+import br.com.sgo.modelo.UsuarioPerfil;
 
 @Resource
 public class MenuController {
@@ -29,6 +30,14 @@ public class MenuController {
 		this.menuDao = menuDao;
 		this.result = result;
 		this.validator = validator;
+
+	}
+
+	@Post
+	@Path("/menu/inicio") 
+	public void inicio(UsuarioPerfil usuarioPerfil) {
+
+		
 
 	}
 	

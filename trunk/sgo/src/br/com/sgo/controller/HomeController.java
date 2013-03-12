@@ -52,7 +52,9 @@ public class HomeController {
 	@Public
 	public void login(String login, String password) {
 
-		final Usuario currentUsuario = usuarioDao.find(login, password);
+		Long usuario_id = usuarioDao.find(login, password).getUsuario_id();
+
+		final Usuario currentUsuario = usuarioDao.load(usuario_id);
 
 		validator.checking(new Validations() {{
 			that(currentUsuario, is(notNullValue()), "login", "invalid_login_or_password");
