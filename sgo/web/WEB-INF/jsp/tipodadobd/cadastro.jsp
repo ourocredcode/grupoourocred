@@ -3,125 +3,160 @@
 <script type="text/javascript">
 jQuery(function($){
 
-	$('#perfil-li-a').click(function() {
-		window.location.href = '<c:url value="/perfil/cadastro" />';
-	});
-
-	$('#perfilorgacesso-li-a').click(function() {
-		window.location.href = '<c:url value="/perfilorgacesso/cadastro" />';
-	});
-
-	$('#janela-li-a').click(function() {
-		window.location.href = '<c:url value="/janela/cadastro" />';
-	});
+		$('#perfil-li-a').click(function() {
+			window.location.href = '<c:url value="/perfil/cadastro" />';
+		});
 	
-	$('#perfiljanelaacesso-li-a').click(function() {
-		window.location.href = '<c:url value="/perfiljanelaacesso/cadastro" />';
-	});
+		$('#perfilorgacesso-li-a').click(function() {
+			window.location.href = '<c:url value="/perfilorgacesso/cadastro" />';
+		});
 	
-	$('#formulariosjanela-li-a').click(function() {
-		window.location.href = '<c:url value="/formulariosjanela/cadastro" />';
-	});
+		$('#janela-li-a').click(function() {
+			window.location.href = '<c:url value="/janela/cadastro" />';
+		});
+		
+		$('#perfiljanelaacesso-li-a').click(function() {
+			window.location.href = '<c:url value="/perfiljanelaacesso/cadastro" />';
+		});
+		
+		$('#formulariosjanela-li-a').click(function() {
+			window.location.href = '<c:url value="/formulariosjanela/cadastro" />';
+		});
+		
+		$('#campoformulario-li-a').click(function() {
+			window.location.href = '<c:url value="/campoformulario/cadastro" />';
+		});
 	
-	$('#campoformulario-li-a').click(function() {
-		window.location.href = '<c:url value="/campoformulario/cadastro" />';
-	});
+		$('#tabelabd-li-a').click(function() {
+			window.location.href = '<c:url value="/tabelabd/cadastro" />';
+		});
+		$('#colunabd-li-a').click(function() {
+			window.location.href = '<c:url value="/colunabd/cadastro" />';
+		});
+		$('#elementobd-li-a').click(function() {
+			window.location.href = '<c:url value="/elementobd/cadastro" />';
+		});
+		$('#tipodadobd-li-a').click(function() {
+			window.location.href = '<c:url value="/tipodadobd/cadastro" />';
+		});
 
-	$('#tabelabd-li-a').click(function() {
-		window.location.href = '<c:url value="/tabelabd/cadastro" />';
-	});
-	$('#colunabd-li-a').click(function() {
-		window.location.href = '<c:url value="/colunabd/cadastro" />';
-	});
-	$('#elementobd-li-a').click(function() {
-		window.location.href = '<c:url value="/elementobd/cadastro" />';
-	});
-	$('#tipodadobd-li-a').click(function() {
-		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
-	});
+		$('#tipoDadoBdEmpresa').autocomplete({
+			source: function( request, response ) {
+		        $.ajax({
+		          url: "<c:url value='/empresa/busca.json' />",
+		          dataType: "json",
+		          data : {n: request.term},
+	              success : function(data) {  
 	
-	$('#tipoDadoBdEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
-
-           		  if (!data || data.length == 0) {
-           	            $('#tipoDadoBdEmpresa').val('');
-						$('#tipoDadoBdEmpresaId').val('');
-           	        }
-
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#tipoDadoBdEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-        	 $('#tipoDadoBdEmpresa').val(ui.item.label);
-             $('#tipoDadoBdEmpresaId').val(ui.item.value);
-             return false;
-         }
-    });
+	           		  if (!data || data.length == 0) {
+	           	            $('#tipoDadoBdEmpresa').val('');
+							$('#tipoDadoBdEmpresaId').val('');
+	           	        }
 	
-	$('#tipoDadoBdOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#tipoDadoBdEmpresaId').val() == '' ? '0' :  $('#tipoDadoBdEmpresaId').val(), org_nome : $('#tipoDadoBdOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#tipoDadoBdOrganizacao').val('');
-         	            $('#tipoDadoBdOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#tipoDadoBdOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#tipoDadoBdOrganizacao').val(ui.item.label);
-             $('#tipoDadoBdOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
+	            	  response($.map(data, function(empresa) {  
+	            		  return {
+	                          label: empresa.nome,
+	                          value: empresa.empresa_id
+	                      };
+	                  }));  
+	               }
+		        });
+	         } ,
+	         focus: function( event, ui ) {
+	        	 $('#tipoDadoBdEmpresa').val(ui.item.label);
+	             return false;
+	         } ,
+	         select: function( event, ui ) {
 	
+	        	 $('#tipoDadoBdEmpresa').val(ui.item.label);
+	             $('#tipoDadoBdEmpresaId').val(ui.item.value);
+	
+	             return false;
+	
+	         }
+	    });
 
-	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/colunabd/cadastro" />';
+		$('#tipoDadoBdOrganizacao').autocomplete({
+			source: function( request, response ) {
+		        $.ajax({
+		          url: "<c:url value='/organizacao/busca.json' />",
+		          dataType: "json",
+		          data : {empresa_id: $('#tipoDadoBdEmpresaId').val() == '' ? '0' :  $('#tipoDadoBdEmpresaId').val(), org_nome : $('#tipoDadoBdOrganizacao').val()},
+	              success : function(data) {  
+	
+	            	  if (!data || data.length == 0) {
+	         	            $('#tipoDadoBdOrganizacao').val('');
+	         	            $('#tipoDadoBdOrganizacaoId').val('');
+	         	        }
+	
+	            	  response($.map(data, function(organizacao) {  
+	            		  return {
+	            			  label: organizacao.nome,
+	            			  value: organizacao.organizacao_id
+	                      };
+	                  }));  
+	               }
+		        });
+	         },
+	         focus: function( event, ui ) {
+	          	 $('#tipoDadoBdOrganizacao').val(ui.item.label);
+	               return false;
+	           } ,
+	         select: function( event, ui ) {
+	             $('#tipoDadoBdOrganizacao').val(ui.item.label);
+	             $('#tipoDadoBdOrganizacaoId').val(ui.item.value);
+	             return false;
+	         }
+	    });
+	
+		$('#btnSair').click(function() {
+			window.location.href = '<c:url value="/colunabd/cadastro" />';
+		});
+
+	
+		$("#tipoDadoBdEmpresa").change(function() {
+			var empresa_id = $("#tipoDadoBdEmpresaId").val();
+			var organizacao_id = $("#tipoDadoBdOrganizacaoId").val();
+			var nome = $("#tipoDadoBdNome").val();
+			
+			$('#lista').load('<c:url value="/tipodadobd/lista" />', {
+				'empresa_id' : empresa_id,
+				'organizacao_id' : organizacao_id,
+				'nome' : nome
+			});
+		});
+
+		$("#tipoDadoBdOrganizacao").change(function() {
+			var empresa_id = $("#tipoDadoBdEmpresaId").val();
+			var organizacao_id = $("#tipoDadoBdOrganizacaoId").val();
+			var nome = $("#tipoDadoBdNome").val();
+			$('#lista').load('<c:url value="/tipodadobd/lista" />', {
+				'empresa_id' : empresa_id,
+				'organizacao_id' : organizacao_id,
+				'nome' : nome
+			});
+		});
+		
+		$("#tipoDadoBdNome").change(function() {
+			var empresa_id = $("#tipoDadoBdEmpresaId").val();
+			var organizacao_id = $("#tipoDadoBdOrganizacaoId").val();
+			var nome = $("#tipoDadoBdNome").val();
+			$('#lista').load('<c:url value="/tipodadobd/lista" />', {
+				'empresa_id' : empresa_id,
+				'organizacao_id' : organizacao_id,
+				'nome' : nome
+			});
+		});
+
 	});
 
-});
+	function limpaForm() {
 
-function limpaForm(){
+		if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
+			document.colunaBdForm.reset();
+		}
 
-	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.colunaBdForm.reset();
 	}
-
-}
-
-
 </script>
 
 <div class="span9">
@@ -179,43 +214,68 @@ function limpaForm(){
 				</div>
 				<div class="tab-pane fade active in" id="tipodadobd-div">
 				
-					<form id="tipoDadoBdForm" name="tipoDadoBdForm" action="<c:url value="/tipodadobd/salva"/>" method="POST">
-						<div class="control-group">
-							<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
-	    					</div>
+					<div class="row25MarginTop">
+						<div class="span3">
+							<form id="tipoDadoBdForm" name="tipoDadoBdForm" action="<c:url value="/tipodadobd/salva"/>" method="POST">
+								<div class="control-group">
+									<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
+									<div class="input-prepend">
+										<span class="add-on"><i class="icon-plus-sign"></i></span>
+			      						<input class="span2" id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span2" id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
+			    					</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>
+									<div class="input-prepend">
+										<span class="add-on"><i class="icon-plus-sign"></i></span>
+			      						<input class="span2" id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span2" id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
+			    					</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="tipoDadoBdNome">Nome Tipo Dado BD</label>
+									<div class="controls">
+										<input type="text" id="tipoDadoBdNome" name="tipoDadoBd.nome" placeholder="Nome do tipo de dado BD" required>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="tipoDadoBdChave">Chave Tipo Dado BD</label>
+									<div class="controls">
+										<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
+									</div>
+								</div>
+								
+								 <div class="btn-toolbar">
+										<div class="btn-group">
+											<button type="submit" class="btn btn-primary">Salvar</button>
+										</div>	
+									</div>
+							</form>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
-	    					</div>
+						<div class="span7" id="lista">
+							<table class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>Empresa</th>
+										<th>Organização</th>
+										<th>Nome</th>
+										<th>Chave</th>
+									</tr>
+								</thead>
+								<tbody>	
+									<c:forEach items="${tiposDadosBd}" var="tipoDado">
+										<tr>
+											<td>${tipoDado.empresa.nome }</td>
+											<td>${tipoDado.organizacao.nome }</td>
+											<td>${tipoDado.nome }</td>
+											<td>${tipoDado.chave }</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="tipoDadoBdNome">Nome Tipo Dado BD</label>
-							<div class="controls">
-								<input type="text" id="tipoDadoBdNome" name="tipoDadoBd.nome" placeholder="Nome do tipo de dado BD" required>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="tipoDadoBdChave">Chave Tipo Dado BD</label>
-							<div class="controls">
-								<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
-							</div>
-						</div>
-						
-						 <div class="btn-toolbar">
-								<div class="btn-group">
-									<button type="submit" class="btn btn-primary">Salvar</button>
-								</div>	
-							</div>
-					</form>
-
+					</div>
 				</div>
 			</div>
 		</div>
