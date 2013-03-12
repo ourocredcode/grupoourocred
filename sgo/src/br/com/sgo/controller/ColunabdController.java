@@ -21,10 +21,10 @@ public class ColunabdController {
 
 	private final Result result;
 	private final Validator validator;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
-	private final TabelaBdDao tabelaBdDao;
 	private final ColunaBdDao colunaBdDao;
+	private final EmpresaDao empresaDao;	
+	private final OrganizacaoDao organizacaoDao;
+	private final TabelaBdDao tabelaBdDao;	
 	private final ElementoBdDao elementoBdDao;
 	private final TipoDadoBdDao tipoDadoBdDao;
 
@@ -64,6 +64,7 @@ public class ColunabdController {
 			colunaBd.setEmpresa(this.empresaDao.load(colunaBd.getEmpresa().getEmpresa_id()));		
 			colunaBd.setOrganizacao(this.organizacaoDao.load(colunaBd.getOrganizacao().getOrganizacao_id()));
 			colunaBd.setTabelaBd(this.tabelaBdDao.load(colunaBd.getTabelaBd().getTabelaBd_id()));
+			colunaBd.setElementoBd(this.elementoBdDao.load(colunaBd.getElementoBd().getElementoBd_id()));
 
 			this.colunaBdDao.beginTransaction();
 			this.colunaBdDao.adiciona(colunaBd);
@@ -75,10 +76,10 @@ public class ColunabdController {
 			
 			this.colunaBdDao.rollback();
 
-			if (e.getCause().toString().indexOf("IX_COLUNABD_ELEMENTOBDID") != -1){
+			if (e.getCause().toString().indexOf("IX_COLUNABD_EMP_ORG_COL_ELE") != -1){
 				mensagem = "Erro: Elemento Bd " + colunaBd.getNome() + " já existente.";
 			} else {
-				mensagem = "Erro ao adicionar Tabela Bd:";
+				mensagem = "Erro ao adicionar ColunaBd Bd:";
 			}
 
 		}
@@ -89,10 +90,11 @@ public class ColunabdController {
 		result.redirectTo(this).cadastro();
 
 	}
-	
+
 	@Get @Path("/colunaBd/busca.json")
 	@Public
-	public void colunas(Long empresa_id, Long organizacao_id, String nomeColunaBd){
-		result.use(Results.json()).withoutRoot().from(this.colunaBdDao.buscaColunasBd(empresa_id, organizacao_id, nomeColunaBd)).serialize();
+	public void colunas(Long empresa_id, Long organizacao_id, Long tabelaBd_id, Long elementoBd_id){
+		result.use(Results.json()).withoutRoot().from(this.colunaBdDao.buscaColunasBd(empresa_id, organizacao_id, tabelaBd_id, elementoBd_id)).serialize();
 	}
+
 }

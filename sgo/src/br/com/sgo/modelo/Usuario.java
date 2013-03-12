@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
@@ -33,21 +34,29 @@ public class Usuario implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
+	
+	@ManyToOne
+	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = false) 
+	private ParceiroNegocio parceiroNegocio;
 
+	@ManyToOne
+	@JoinColumn(name="supervisor_usuario_id",updatable = true, nullable = false) 
+	private Usuario supervisorUsuario;
+	
 	@Column(name="nome")
 	private String nome;
 
+	@Column(name="descricao")
+	private String descricao;
+	
+	@Column(name="senha")
+	private String senha;
+	
 	@Column(name="email")
 	private String email;
 
-	@Column(name="senha")
-	private String senha;
-
 	@Column(name="telefone")
 	private String telefone;
-	
-	@Column(name="chave")
-	private String chave;
 
 	public Long getUsuario_id() {
 		return usuario_id;
@@ -55,38 +64,6 @@ public class Usuario implements Serializable {
 
 	public void setUsuario_id(Long usuario_id) {
 		this.usuario_id = usuario_id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
 	}
 
 	public Empresa getEmpresa() {
@@ -105,11 +82,60 @@ public class Usuario implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public String getChave() {
-		return chave;
+	public ParceiroNegocio getParceiroNegocio() {
+		return parceiroNegocio;
 	}
 
-	public void setChave(String chave) {
-		this.chave = chave;
+	public void setParceiroNegocio(ParceiroNegocio parceiroNegocio) {
+		this.parceiroNegocio = parceiroNegocio;
 	}
+
+	public Usuario getSupervisorUsuario() {
+		return supervisorUsuario;
+	}
+
+	public void setSupervisorUsuario(Usuario supervisorUsuario) {
+		this.supervisorUsuario = supervisorUsuario;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
 }

@@ -23,7 +23,7 @@ public class ParceiroNegocio implements Serializable {
 	@Id
 	@Column(name = "parceironegocio_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO)  
-	private Long parceiroNegocio;
+	private Long parceiroNegocio_id;
 
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -96,12 +96,12 @@ public class ParceiroNegocio implements Serializable {
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getParceiroNegocio() {
-		return parceiroNegocio;
+	public Long getParceiroNegocio_id() {
+		return parceiroNegocio_id;
 	}
 
-	public void setParceiroNegocio(Long parceiroNegocio) {
-		this.parceiroNegocio = parceiroNegocio;
+	public void setParceiroNegocio_id(Long parceiroNegocio_id) {
+		this.parceiroNegocio_id = parceiroNegocio_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -270,10 +270,6 @@ public class ParceiroNegocio implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 	 
 }
