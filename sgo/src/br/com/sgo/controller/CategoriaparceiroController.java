@@ -8,12 +8,10 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.CategoriaParceiroDao;
-import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.CategoriaParceiro;
-import br.com.sgo.modelo.TipoParceiro;
 
 @Resource
 public class CategoriaparceiroController {
