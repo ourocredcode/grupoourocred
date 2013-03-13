@@ -53,7 +53,7 @@ public class ClassificacaoParceiroDao extends Dao<ClassificacaoParceiro> {
 			while (rsClassificacaoParceiro.next()) {
 				ClassificacaoParceiro classificacaoparceiro = new ClassificacaoParceiro();
 
-				classificacaoparceiro.setClassificacaoParceiro_id(rsClassificacaoParceiro.getLong("categoriaparceiro_id"));				
+				classificacaoparceiro.setClassificacaoParceiro_id(rsClassificacaoParceiro.getLong("classificacaoparceiro_id"));				
 				classificacaoparceiro.setNome(rsClassificacaoParceiro.getString("nome"));
 
 				classificacoesparceiro.add(classificacaoparceiro);				

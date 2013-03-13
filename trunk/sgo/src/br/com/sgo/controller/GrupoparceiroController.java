@@ -7,11 +7,11 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.modelo.GrupoParceiro;
 import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.GrupoParceiroDao;
+import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.modelo.GrupoParceiro;
 
 @Resource
 public class GrupoparceiroController {

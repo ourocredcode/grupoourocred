@@ -3,11 +3,11 @@
 <script type="text/javascript">
 jQuery(function($){
 
-	$('#tipoparceiro-li-a').click(function() {
-		window.location.href = '<c:url value="/tipoparceiro/cadastro" />';
+	$('#departamento-li-a').click(function() {
+		window.location.href = '<c:url value="/departamento/cadastro" />';
 	});
 
-	$('#tipoParceiroEmpresa').autocomplete({
+	$('#departamentoEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/empresa/busca.json' />",
@@ -16,8 +16,8 @@ jQuery(function($){
               success : function(data) {  
 
            		  if (!data || data.length == 0) {
-           	            $('#tipoParceiroEmpresa').val('');
-						$('#tipoParceiroEmpresaId').val('');
+           	            $('#departamentoEmpresa').val('');
+						$('#departamentoEmpresaId').val('');
            	        }
 
             	  response($.map(data, function(empresa) {  
@@ -30,30 +30,30 @@ jQuery(function($){
 	        });
          } ,
          focus: function( event, ui ) {
-        	 $('#tipoParceiroEmpresa').val(ui.item.label);
+        	 $('#departamentoEmpresa').val(ui.item.label);
              return false;
          } ,
          select: function( event, ui ) {
 
-        	 $('#tipoParceiroEmpresa').val(ui.item.label);
-             $('#tipoParceiroEmpresaId').val(ui.item.value);
+        	 $('#departamentoEmpresa').val(ui.item.label);
+             $('#departamentoEmpresaId').val(ui.item.value);
 
              return false;
 
          }
     });
 
-	$('#tipoParceiroOrganizacao').autocomplete({
+	$('#departamentoOrganizacao').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#tipoParceiroEmpresaId').val() == '' ? '0' :  $('#tipoParceiroEmpresaId').val(), org_nome : $('#tipoParceiroOrganizacao').val()},
+	          data : {empresa_id: $('#departamentoEmpresaId').val() == '' ? '0' :  $('#departamentoEmpresaId').val(), org_nome : $('#departamentoOrganizacao').val()},
               success : function(data) {  
 
             	  if (!data || data.length == 0) {
-         	            $('#tipoParceiroOrganizacao').val('');
-         	            $('#tipoParceiroOrganizacaoId').val('');
+         	            $('#departamentoOrganizacao').val('');
+         	            $('#departamentoOrganizacaoId').val('');
          	        }
 
             	  response($.map(data, function(organizacao) {  
@@ -66,33 +66,33 @@ jQuery(function($){
 	        });
          },
          focus: function( event, ui ) {
-          	 $('#tipoParceiroOrganizacao').val(ui.item.label);
+          	 $('#departamentoOrganizacao').val(ui.item.label);
                return false;
            } ,
          select: function( event, ui ) {
-             $('#tipoParceiroOrganizacao').val(ui.item.label);
-             $('#tipoParceiroOrganizacaoId').val(ui.item.value);
+             $('#departamentoOrganizacao').val(ui.item.label);
+             $('#departamentoOrganizacaoId').val(ui.item.value);
              return false;
          }
     });
 
 	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/tipoparceiro/cadastro" />';
+		window.location.href = '<c:url value="/departamento/cadastro" />';
 	});
 
 	$('#btnNovo').click(function() {
 		document.perfilForm.reset();
 	});
 
-	$("#menuIsActive").change(function(e){
-		$(this).val( $("#menuIsActive:checked").length > 0 ? "1" : "0");
+	$("#departamentoIsActive").change(function(e){
+		$(this).val( $("#departamentoIsActive:checked").length > 0 ? "1" : "0");
 	});
 
 });
 
 function limpaForm() {
 	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
-		document.tipoParceiroForm.reset();
+		document.departamentoForm.reset();
 	}
 }
 </script>
@@ -103,47 +103,47 @@ function limpaForm() {
 		<div class="bs-docs-example">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="" id="tipoparceiro-li"><a href="#tipoparceiro-div" data-toggle="tab" id="tipoparceiro-li-a">Tipo de Parceiro</a></li>				
+				<li class="" id="departamento-li"><a href="#departamento-div" data-toggle="tab" id="departamento-li-a">Cadastro de Departamentos</a></li>				
 			</ul>
 			<div id="myTabContent" class="tab-content">
 
-				<div class="tab-pane fade active in" id="tipoparceiro-div">
+				<div class="tab-pane fade active in" id="departamento-div">
 				
 					<div class="row25MarginTop">
 						<div class="span3">
-							<form id="tipoParceiroForm" name="tipoParceiroForm" action="<c:url value="/tipoparceiro/salva"/>" method="POST">
+							<form id="departamentoForm" name="departamentoForm" action="<c:url value="/departamento/salva"/>" method="POST">
 								<div class="control-group">
-									<label class="control-label" for="tipoParceiroEmpresa">Empresa</label>
+									<label class="control-label" for="departamentoEmpresa">Empresa</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="tipoParceiroEmpresa" name="tipoParceiro.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="tipoParceiroEmpresaId" name="tipoParceiro.empresa.empresa_id" type="hidden">
+			      						<input class="span2" id="departamentoEmpresa" name="departamento.empresa.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span2" id="departamentoEmpresaId" name="departamento.empresa.empresa_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label" for="tipoParceiroOrganizacao">Organização</label>
+									<label class="control-label" for="departamentoOrganizacao">Organização</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="tipoParceiroOrganizacao" name="tipoParceiro.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="tipoParceiroOrganizacaoId" name="tipoParceiro.organizacao.organizacao_id" type="hidden">
+			      						<input class="span2" id="departamentoOrganizacao" name="departamento.organizacao.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span2" id="departamentoOrganizacaoId" name="departamento.organizacao.organizacao_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label" for="tipoParceiroNome">Nome</label>
+									<label class="control-label" for="departamentoNome">Nome</label>
 									<div class="controls">
-										<input type="text" id="tipoParceiroNome" name="tipoParceiro.nome" placeholder="Nome" required>
+										<input type="text" id="departamentoNome" name="departamento.nome" placeholder="Nome" required>
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label" for="tipoParceiroDescricao">Descrição</label>
+									<label class="control-label" for="departamentoDescricao">Descrição</label>
 									<div class="controls">
-										<input type="text" id="tipoParceiroDescricao" name="tipoParceiro.descricao" placeholder="Descrição" required>
+										<input type="text" id="departamentoDescricao" name="departamento.descricao" placeholder="Descrição" required>
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label" for="tipoParceiroIsActive">Ativo</label>
+									<label class="control-label" for="departamentoIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="tipoParceiroIsActive" name="tipoParceiro.isActive" checked="checked" value="1" >							
+										<input type="checkbox" id="departamentoIsActive" name="departamento.isActive" checked="checked" value="1" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

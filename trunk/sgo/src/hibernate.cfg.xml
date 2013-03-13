@@ -52,6 +52,8 @@
 		<mapping class="br.com.sgo.modelo.UsuarioOrgAcesso" />
 		<mapping class="br.com.sgo.modelo.UsuarioPerfil" />
 		<mapping class="br.com.sgo.modelo.ParceiroNegocio" />
+		<mapping class="br.com.sgo.modelo.Departamento" />
+		<mapping class="br.com.sgo.modelo.Funcao" />
 
 	</session-factory>
 </hibernate-configuration>

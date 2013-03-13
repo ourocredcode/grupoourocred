@@ -137,7 +137,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="categoriaParceiroDescricao">Descrição</label>
 									<div class="controls">
-										<input type="text" id="categoriaParceiroDescricao" name="categoriaParceiro.chave" placeholder="Descrição" required>
+										<input type="text" id="categoriaParceiroDescricao" name="categoriaParceiro.descricao" placeholder="Descrição" required>
 									</div>
 								</div>
 								<div class="control-group">
