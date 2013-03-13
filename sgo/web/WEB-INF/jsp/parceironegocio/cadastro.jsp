@@ -3,6 +3,34 @@
 <script type="text/javascript">
 jQuery(function($){
 
+	   $("#parceiroNegocioTipo").change(function(evento){
+
+		   var parceiroNegocioTipo = $("#parceiroNegocioTipo").val();
+		   
+		   if(parceiroNegocioTipo == 'PessoaFisica'){
+			   $("#parceiroNegocioTipoPessoaFisica").css("display", "block");
+		   } else {
+			   $("#parceiroNegocioTipoPessoaFisica").css("display", "none");
+		   }
+		   
+		   if(parceiroNegocioTipo == 'PessoaJuridica'){
+			   $("#parceiroNegocioTipoPessoaJuridica").css("display", "block");
+		   } else {
+			   $("#parceiroNegocioTipoPessoaJuridica").css("display", "none");
+		   }
+
+	   });
+	   
+	   $("#parceiroNegocioIsFuncionario").click(function(evento){
+
+		   if ($('#parceiroNegocioIsFuncionario').is(':checked')){
+		         $("#parceiroNegocioFuncionario").css("display", "block");
+		      }else{
+		         $("#parceiroNegocioFuncionario").css("display", "none");
+		      }
+		   
+	   });
+
 });
 
 function limpaForm(){
@@ -12,64 +40,103 @@ function limpaForm(){
 }
 </script>
 
-	<ul id="myTab" class="nav nav-tabs">
-		<li class="active" id="parceiroNegocio-li"><a href="#parceiroNegocio-div" data-toggle="tab" id="parceiroNegocio-li-a">Cadastro Parceiro Negócio</a></li>
-	</ul>
-
-	<div id="myTabContent" class="tab-content">
-
-		<div class="tab-pane fade active in" id="parceiroNegocio-div">		
+	<div class="container-fluid" id="parceiroNegocio-div">	
+	
+		<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceiroNegocio/salva"/>" method="POST">
+			<div class="row-fluid">
+				<div class="span2">
+					<label class="control-label" for="parceiroNegocioEmpresa">Empresa</label>
+					<input id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.usuario.empresa.nome }" type="text" required>
+					<input id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden" value="${usuarioInfo.usuario.empresa.empresa_id }">
+				</div>
+				<div class="span2">
+					<label class="control-label" for="parceiroNegocioOrganizacao">Organização</label>
+					<input id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" value="${usuarioInfo.usuario.organizacao.nome }" type="text" required>
+					<input id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.usuario.organizacao.organizacao_id }" type="hidden">
+				</div>
+	
+				<div class="span2"> 
+					<label class="control-label">Tipo de Parceiro</label>	
+					<select id="parceiroNegocioTipo">
+						<option value=""> Escolha o Tipo </option>
+						<option value="PessoaFisica"> Pessoa Fisica </option>
+						<option value="PessoaJuridica"> Pessoa Juridica </option>
+					</select>
+				</div>
+	
+				<div class="span3">
+					<label class="control-label">Tipo de Cadastro</label>	
+					<label class="checkbox inline">
+								<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
+					</label>
+					<label class="checkbox inline">
+								<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
+					</label>
+					<label class="checkbox inline">
+								<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
+					</label>
+				</div>	
+	
+			</div>
+			<div class="row-fluid">
+				<div class="span5">
+					<label class="control-label" for="parceiroNegocioNome">Nome</label>
+					<input  class="input-xxlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" required>
+				</div>
 				
-				<div class="row25MarginTop">
-					<div class="span3">
-
-						<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceiroNegocio/salva"/>" method="POST">
-							<div class="control-group">
-								<label class="control-label" for="parceiroNegocioEmpresa">Empresa</label>
-								<div class="input-prepend">
-									<span class="add-on"><i class="icon-plus-sign"></i></span>
-		      						<input class="span2" id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" type="text" required onChange="limpaForm();">
-		      						<input class="span2" id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden">
-		    					</div>
-							</div>
-
-							<div class="control-group">
-								<label class="control-label" for="parceiroNegocioOrganizacao">Organização</label>
-								<div class="input-prepend">
-									<span class="add-on"><i class="icon-plus-sign"></i></span>
-		      						<input class="span2" id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" type="text" required onChange="limpaForm();">
-		      						<input class="span2" id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id" type="hidden">
-		    					</div>
-							</div>
-
-							<div class="control-group">
-								<label class="control-label" for="parceiroNegocioNome">Nome</label>
-								<div class="controls">
-									<input type="text" id="parceiroNegocioNome" name="parceiroNegocio.nome" placeholder="Nome do parceiro" required>
-								</div>
-							</div>
-
-    						<label class="radio">
-  								<input type="radio" name="optionsRadios" id="parceiroNegocioIs" value="funcionario" checked> Funcionário
-							</label>
-							<label class="radio">
-  								<input type="radio" name="optionsRadios" id="parceiroNegocioIs" value="fornecedor"> Fornecedor
-							</label>
-							<label class="radio">
-  								<input type="radio" name="optionsRadios" id="parceiroNegocioIs" value="cliente"> Cliente
-							</label>
-
-							<div class="btn-toolbar">
-								<div class="btn-group">
-									<button type="submit" class="btn btn-primary">Salvar</button>
-								</div>	
-							</div>
-						</form>
-		
+				<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" style="display: none;">
+					<div class="span2" >
+						<label class="control-label" for="parceiroNegocioCpf">CPF</label>
+						<input  class="input-large" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text" required>
+					</div>
+					<div class="span2">
+						<label class="control-label" for="parceiroNegocioRg">RG</label>
+						<input  class="input-large" id="parceiroNegocioRg" name="parceiroNegocio.rg" type="text" required>
 					</div>
 				</div>
-		</div>
+				
+				<div id="parceiroNegocioTipoPessoaJuridica" class="row-fluid" style="display: none;">
+					<div class="span2" >
+						<label class="control-label" for="parceiroNegocioIe">CNPJ</label>
+						<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text" required>
+					</div>
+					<div class="span2" >
+						<label class="control-label" for="parceiroNegocioIe">Inscrição Estadual</label>
+						<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text" required>
+					</div>
+				</div>
+			</div>
+			
+			<div id="parceiroNegocioFuncionario" class="row-fluid" style="display: none;">
+				<div class="row-fluid">
+					<div class="span2" >
+						<label class="control-label" for="funcionarioDepartamento">Departamento</label>
+						<select  id="funcionarioDepartamento" name="funcionario.departamento" >
+							<option value="">Selecione</option>
+							<c:forEach var="departamento" items="${departamentos }">
+								<option value="${departamento.departamento_id }"> ${departamento.nome }</option>
+							</c:forEach>
+						</select>
+					</div>
+					<div class="span2">
+						<label class="control-label" for="funcionarioFuncao">Função</label>
+						<select  id="funcionarioFuncao" name="funcionario.funcao" >
+							<option value="">Selecione</option>
+							<c:forEach var="funcao" items="${funcoes }">
+								<option value="${funcao.funcao_id }"> ${funcao.nome }</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+			</div>
 
+			<div class="btn-toolbar">
+				<div class="btn-group">
+					<button type="submit" class="btn btn-primary">Salvar</button>
+				</div>	
+			</div>
+
+		</form>		
 	</div>
 
 <%@ include file="/footer.jspf"%>
