@@ -5,30 +5,27 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CategoriaParceiroDao;
 import br.com.sgo.dao.ClassificacaoParceiroDao;
-import br.com.sgo.dao.ColunaBdDao;
-import br.com.sgo.dao.ElementoBdDao;
+import br.com.sgo.dao.DepartamentoDao;
 import br.com.sgo.dao.EmpresaDao;
+import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.GrupoParceiroDao;
 import br.com.sgo.dao.IdiomaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
-import br.com.sgo.dao.TabelaBdDao;
-import br.com.sgo.dao.TipoDadoBdDao;
 import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.interceptor.Public;
-import br.com.sgo.modelo.ColunaBd;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.ParceiroNegocio;
 
 @Resource
-public class ParceiroNegocioController {
+public class ParceironegocioController {
 
 	private final Result result;
-	private final Validator validator;
+	private final UsuarioInfo usuarioInfo;
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
@@ -38,13 +35,15 @@ public class ParceiroNegocioController {
 	private final TipoParceiroDao tipoParceiroDao;
 	private final BancoDao bancoDao;
 	private final IdiomaDao idiomaDao;
+	private final DepartamentoDao departamentoDao;
+	private final FuncaoDao funcaoDao;
+	
 
-	public ParceiroNegocioController(Result result, Validator validator, ParceiroNegocioDao parceiroNegocioDao, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,GrupoParceiroDao grupoParceiroDao
+	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,GrupoParceiroDao grupoParceiroDao
 			,CategoriaParceiroDao categoriaParceiroDao,ClassificacaoParceiroDao classificacaoParceiroDao,TipoParceiroDao tipoParceiroDao,
-			BancoDao bancoDao,IdiomaDao idiomaDao) {
+			BancoDao bancoDao,IdiomaDao idiomaDao,DepartamentoDao departamentoDao,FuncaoDao funcaoDao) {
 
 		this.result = result;
-		this.validator=validator;
 		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;
@@ -54,13 +53,22 @@ public class ParceiroNegocioController {
 		this.tipoParceiroDao = tipoParceiroDao;
 		this.bancoDao = bancoDao;
 		this.idiomaDao = idiomaDao;
+		this.departamentoDao = departamentoDao;
+		this.funcaoDao = funcaoDao;
+		this.usuarioInfo = usuarioInfo;
 
 	}
 
 	@Get
-	@Public
 	@Path("/parceironegocio/cadastro")
 	public void cadastro(){
+
+		result.include("departamentos", this.departamentoDao.buscaDepartamentos(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
+					usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
+		result.include("funcoes", this.funcaoDao.buscaFuncoes(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
+				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
+		
+		System.out.println("cadastro");
 
 	}
 
@@ -70,8 +78,7 @@ public class ParceiroNegocioController {
 	@Path("/parceironegocio/salva")
 	public void salva(ParceiroNegocio parceiroNegocio){
 
-		validator.validate(parceiroNegocio);
-		validator.onErrorUsePageOf(this).cadastro();
+		
 
 		String mensagem = "";
 
