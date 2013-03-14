@@ -56,17 +56,7 @@ function limpaForm(){
 					<input id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" value="${usuarioInfo.usuario.organizacao.nome }" type="text" required>
 					<input id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.usuario.organizacao.organizacao_id }" type="hidden">
 				</div>
-	
-				<div class="span2"> 
-					<label class="control-label">Tipo de Parceiro</label>	
-					<select id="parceiroNegocioTipo">
-						<option value=""> Escolha o Tipo </option>
-						<option value="PessoaFisica"> Pessoa Fisica </option>
-						<option value="PessoaJuridica"> Pessoa Juridica </option>
-					</select>
-				</div>
-	
-				<div class="span3">
+				<div class="span4">
 					<label class="control-label">Tipo de Cadastro</label>	
 					<label class="checkbox inline">
 								<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
@@ -80,12 +70,40 @@ function limpaForm(){
 				</div>	
 	
 			</div>
+
 			<div class="row-fluid">
-				<div class="span6">
-					<label class="control-label" for="parceiroNegocioNome">Nome</label>
-					<input  class="input-xxlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text">
+				<div class="span2"> 
+					<label class="control-label">Tipo</label>	
+					<select id="parceiroNegocioTipo">
+						<option value=""> Escolha o Tipo </option>
+						<option value="PessoaFisica"> Pessoa Fisica </option>
+						<option value="PessoaJuridica"> Pessoa Juridica </option>
+					</select>
 				</div>
-				
+				<div class="span2">
+					<label class="control-label" for="parceiroNegocioCategoriaParceiro">Categoria</label>
+					<input  class="input-large" id="parceiroNegocioCategoriaParceiro" name="parceiroNegocio.categoriaParceiro.nome" type="text" value="Serviço">
+					<input  class="input-large" id="parceiroNegocioCategoriaParceiroId" name="parceiroNegocio.categoriaParceiro.categoriaParceiro_id" type="hidden" value="1">
+				</div>
+				<div class="span2">
+					<label class="control-label" for="parceiroNegocioClassificacaoParceiro">Classificacao</label>
+					<input  class="input-large" id="parceiroNegocioClassificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.nome" type="text" value="Normal">
+					<input  class="input-large" id="parceiroNegocioClassificacaoParceiroId" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id" type="hidden" value="1">
+				</div>
+				<div class="span2">
+					<label class="control-label" for="parceiroNegocioGrupoParceiro">Grupo</label>
+					<input  class="input-large" id="parceiroNegocioGrupoParceiro" name="parceiroNegocio.grupoParceiro.nome" type="text" value="Teste">
+					<input  class="input-large" id="parceiroNegocioGrupoParceiroId" name="parceiroNegocio.grupoParceiro.grupoParceiro_id" type="hidden" value="1">
+				</div>
+			</div>
+
+			<div class="row-fluid">
+
+				<div class="span3">
+					<label class="control-label" for="parceiroNegocioNome">Nome</label>
+					<input  class="input-xlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text">
+				</div>
+
 				<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" style="display: none;">
 					<div class="span2" >
 						<label class="control-label" for="parceiroNegocioCpf">CPF</label>
@@ -96,7 +114,7 @@ function limpaForm(){
 						<input  class="input-large" id="parceiroNegocioRg" name="parceiroNegocio.rg" type="text">
 					</div>
 				</div>
-				
+
 				<div id="parceiroNegocioTipoPessoaJuridica" class="row-fluid" style="display: none;">
 					<div class="span2" >
 						<label class="control-label" for="parceiroNegocioIe">CNPJ</label>
