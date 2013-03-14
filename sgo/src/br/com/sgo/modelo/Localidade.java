@@ -15,15 +15,15 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="BANCO")
-public class Banco implements Serializable {
+@Table(name="LOCALIDADE")
+public class Localidade implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "banco_id")  
+	@Column(name = "localidade_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long banco_id;
+	private Long localidade_id;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -32,30 +32,22 @@ public class Banco implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name="localidade_id",updatable = true, nullable = false) 
-	private Localidade localidade;
 
-	@ManyToOne
-	@JoinColumn(name="grupobanco_id",updatable = true, nullable = false) 
-	private GrupoBanco grupoBanco_id;
-	
 	@Column(name="nome")
 	private String nome;
-	
+
 	@Column(name="descricao")
 	private String descricao;
-	
+
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getBanco_id() {
-		return banco_id;
+	public Long getLocalidade_id() {
+		return localidade_id;
 	}
 
-	public void setBanco_id(Long banco_id) {
-		this.banco_id = banco_id;
+	public void setLocalidade_id(Long localidade_id) {
+		this.localidade_id = localidade_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -72,22 +64,6 @@ public class Banco implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public Localidade getLocalidade() {
-		return localidade;
-	}
-
-	public void setLocalidade(Localidade localidade) {
-		this.localidade = localidade;
-	}
-
-	public GrupoBanco getGrupoBanco_id() {
-		return grupoBanco_id;
-	}
-
-	public void setGrupoBanco_id(GrupoBanco grupoBanco_id) {
-		this.grupoBanco_id = grupoBanco_id;
 	}
 
 	public String getNome() {

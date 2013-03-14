@@ -31,7 +31,8 @@ public class DepartamentoDao extends Dao<Departamento> {
 	
 	public Collection<Departamento> buscaDepartamentos(Long empresa_id, Long organizacao_id, String nome){
 
-		String sql = "select DEPARTAMENTO.departamento_id, DEPARTAMENTO.nome from DEPARTAMENTO (NOLOCK) WHERE DEPARTAMENTO.empresa_id = ? AND DEPARTAMENTO.organizacao_id = ? AND DEPARTAMENTO.nome like ?";
+		String sql = "select DEPARTAMENTO.departamento_id, DEPARTAMENTO.nome from DEPARTAMENTO (NOLOCK) " +
+				"	WHERE DEPARTAMENTO.empresa_id = ? AND DEPARTAMENTO.organizacao_id = ? AND DEPARTAMENTO.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -66,7 +67,8 @@ public class DepartamentoDao extends Dao<Departamento> {
 	
 	public Collection<Departamento> buscaDepartamentos(Long empresa_id, Long organizacao_id){
 
-		String sql = "select DEPARTAMENTO.departamento_id, DEPARTAMENTO.nome from DEPARTAMENTO (NOLOCK) WHERE DEPARTAMENTO.empresa_id = ? AND DEPARTAMENTO.organizacao_id = ? ";
+		String sql = "select DEPARTAMENTO.departamento_id, DEPARTAMENTO.nome from DEPARTAMENTO (NOLOCK) " +
+				"	WHERE DEPARTAMENTO.empresa_id = ? AND DEPARTAMENTO.organizacao_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
