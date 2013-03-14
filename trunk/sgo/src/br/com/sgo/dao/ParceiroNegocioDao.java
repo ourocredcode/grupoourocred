@@ -12,7 +12,6 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
-import br.com.sgo.modelo.Janela;
 import br.com.sgo.modelo.ParceiroNegocio;
 
 @Component
@@ -29,7 +28,14 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 		this.session = session;
 		this.conexao =conexao;
 	}
-	
+
+	/*
+	public Long salva(ParceiroNegocio p){
+		this.session.saveOrUpdate(p);
+		return p.getParceiroNegocio_id();
+	}
+	*/
+
 	public Collection<ParceiroNegocio> buscaParceiroNegocio(Long empresa_id, Long organizacao_id, String nome){
 
 		String sql = "select PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.nome from PARCEIRONEGOCIO (NOLOCK) " +

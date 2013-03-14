@@ -54,6 +54,8 @@
 		<mapping class="br.com.sgo.modelo.ParceiroNegocio" />
 		<mapping class="br.com.sgo.modelo.Departamento" />
 		<mapping class="br.com.sgo.modelo.Funcao" />
+		<mapping class="br.com.sgo.modelo.Localidade" />
+		<mapping class="br.com.sgo.modelo.Funcionario" />
 
 	</session-factory>
 </hibernate-configuration>

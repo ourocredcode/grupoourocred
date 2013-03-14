@@ -34,28 +34,28 @@ public class ParceiroNegocio implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="classificacaoparceiro_id",updatable = true, nullable = false) 
-	private Organizacao classificacaoParceiro; 
+	@JoinColumn(name="classificacaoparceiro_id",updatable = true, nullable = true) 
+	private ClassificacaoParceiro classificacaoParceiro; 
 
 	@ManyToOne
-	@JoinColumn(name="tipoparceiro_id",updatable = true, nullable = false) 
-	private Empresa tipoParceiro;
+	@JoinColumn(name="tipoparceiro_id",updatable = true, nullable = true) 
+	private TipoParceiro tipoParceiro;
 
 	@ManyToOne
-	@JoinColumn(name="grupoparceiro_id",updatable = true, nullable = false) 
-	private Organizacao grupoParceiro;
+	@JoinColumn(name="grupoparceiro_id",updatable = true, nullable = true) 
+	private GrupoParceiro grupoParceiro;
 
 	@ManyToOne
-	@JoinColumn(name="categoriaparceiro_id",updatable = true, nullable = false) 
-	private Empresa categoriaParceiro;
+	@JoinColumn(name="categoriaparceiro_id",updatable = true, nullable = true) 
+	private CategoriaParceiro categoriaParceiro;
 
 	@ManyToOne
-	@JoinColumn(name="banco_id",updatable = true, nullable = false) 
-	private Organizacao banco;
+	@JoinColumn(name="banco_id",updatable = true, nullable = true) 
+	private Banco banco;
 	
 	@ManyToOne
-	@JoinColumn(name="idioma_id",updatable = true, nullable = false) 
-	private Organizacao idioma;
+	@JoinColumn(name="idioma_id",updatable = true, nullable = true) 
+	private Idioma idioma;
 	
 	@Column(name="nome")
 	private String nome;
@@ -120,52 +120,52 @@ public class ParceiroNegocio implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public Organizacao getClassificacaoParceiro() {
+	public ClassificacaoParceiro getClassificacaoParceiro() {
 		return classificacaoParceiro;
 	}
 
-	public void setClassificacaoParceiro(Organizacao classificacaoParceiro) {
+	public void setClassificacaoParceiro(ClassificacaoParceiro classificacaoParceiro) {
 		this.classificacaoParceiro = classificacaoParceiro;
 	}
 
-	public Empresa getTipoParceiro() {
+	public TipoParceiro getTipoParceiro() {
 		return tipoParceiro;
 	}
 
-	public void setTipoParceiro(Empresa tipoParceiro) {
+	public void setTipoParceiro(TipoParceiro tipoParceiro) {
 		this.tipoParceiro = tipoParceiro;
 	}
 
-	public Organizacao getGrupoParceiro() {
+	public GrupoParceiro getGrupoParceiro() {
 		return grupoParceiro;
 	}
 
-	public void setGrupoParceiro(Organizacao grupoParceiro) {
+	public void setGrupoParceiro(GrupoParceiro grupoParceiro) {
 		this.grupoParceiro = grupoParceiro;
 	}
 
-	public Empresa getCategoriaParceiro() {
+	public CategoriaParceiro getCategoriaParceiro() {
 		return categoriaParceiro;
 	}
 
-	public void setCategoriaParceiro(Empresa categoriaParceiro) {
+	public void setCategoriaParceiro(CategoriaParceiro categoriaParceiro) {
 		this.categoriaParceiro = categoriaParceiro;
 	}
 
-	public Organizacao getIdioma() {
-		return idioma;
-	}
-
-	public void setIdioma(Organizacao idioma) {
-		this.idioma = idioma;
-	}
-
-	public Organizacao getBanco() {
+	public Banco getBanco() {
 		return banco;
 	}
 
-	public void setBanco(Organizacao banco) {
+	public void setBanco(Banco banco) {
 		this.banco = banco;
+	}
+
+	public Idioma getIdioma() {
+		return idioma;
+	}
+
+	public void setIdioma(Idioma idioma) {
+		this.idioma = idioma;
 	}
 
 	public String getNome() {
@@ -271,5 +271,4 @@ public class ParceiroNegocio implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	 
 }

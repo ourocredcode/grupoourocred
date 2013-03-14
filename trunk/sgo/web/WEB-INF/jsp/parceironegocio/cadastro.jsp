@@ -41,9 +41,11 @@ function limpaForm(){
 </script>
 
 	<div class="container-fluid" id="parceiroNegocio-div">	
-	
-		<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceiroNegocio/salva"/>" method="POST">
+
+		<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
+
 			<div class="row-fluid">
+
 				<div class="span2">
 					<label class="control-label" for="parceiroNegocioEmpresa">Empresa</label>
 					<input id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.usuario.empresa.nome }" type="text" required>
@@ -70,7 +72,7 @@ function limpaForm(){
 								<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
 					</label>
 					<label class="checkbox inline">
-								<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
+							<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
 					</label>
 					<label class="checkbox inline">
 								<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
@@ -79,34 +81,40 @@ function limpaForm(){
 	
 			</div>
 			<div class="row-fluid">
-				<div class="span5">
+				<div class="span6">
 					<label class="control-label" for="parceiroNegocioNome">Nome</label>
-					<input  class="input-xxlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" required>
+					<input  class="input-xxlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text">
 				</div>
 				
 				<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" style="display: none;">
 					<div class="span2" >
 						<label class="control-label" for="parceiroNegocioCpf">CPF</label>
-						<input  class="input-large" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text" required>
+						<input  class="input-large" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text">
 					</div>
 					<div class="span2">
 						<label class="control-label" for="parceiroNegocioRg">RG</label>
-						<input  class="input-large" id="parceiroNegocioRg" name="parceiroNegocio.rg" type="text" required>
+						<input  class="input-large" id="parceiroNegocioRg" name="parceiroNegocio.rg" type="text">
 					</div>
 				</div>
 				
 				<div id="parceiroNegocioTipoPessoaJuridica" class="row-fluid" style="display: none;">
 					<div class="span2" >
 						<label class="control-label" for="parceiroNegocioIe">CNPJ</label>
-						<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text" required>
+						<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text">
 					</div>
 					<div class="span2" >
 						<label class="control-label" for="parceiroNegocioIe">Inscrição Estadual</label>
-						<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text" required>
+						<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text">
 					</div>
 				</div>
 			</div>
-			
+
+			<div class="row-fluid">
+				<label class="checkbox">
+						<input type="checkbox" id="parceiroNegocioIsActive" name="parceiroNegocio.isActive" checked="checked" value="1"> Ativo
+				</label>							
+			</div>
+
 			<div id="parceiroNegocioFuncionario" class="row-fluid" style="display: none;">
 				<div class="row-fluid">
 					<div class="span2" >
