@@ -59,13 +59,13 @@ function limpaForm(){
 				<div class="span4">
 					<label class="control-label">Tipo de Cadastro</label>	
 					<label class="checkbox inline">
-								<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
+						<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
 					</label>
 					<label class="checkbox inline">
-							<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
+						<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
 					</label>
 					<label class="checkbox inline">
-								<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
+						<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
 					</label>
 				</div>	
 	
