@@ -82,16 +82,20 @@ public class ParceironegocioController {
 
 		String mensagem = "";
 
-				
-
 			this.parceiroNegocioDao.beginTransaction();
 			this.parceiroNegocioDao.adiciona(parceiroNegocio);
 			this.parceiroNegocioDao.commit();
 
 			if(parceiroNegocio.getIsFuncionario()){
 
-				Funcionario f = new Funcionario(parceiroNegocio.getEmpresa(),parceiroNegocio.getOrganizacao(),
-											funcionario.getDepartamento(),parceiroNegocio,funcionario.getFuncao(), funcionario.getApelido(),parceiroNegocio.getIsActive());
+				Funcionario f = new Funcionario();
+
+				f.setEmpresa(parceiroNegocio.getEmpresa());
+				f.setOrganizacao(parceiroNegocio.getOrganizacao());
+				f.setDepartamento(funcionario.getDepartamento());
+				f.setFuncao(funcionario.getFuncao());
+				f.setApelido(funcionario.getApelido());
+				f.setIsActive(parceiroNegocio.getIsActive());
 
 				this.funcionarioDao.beginTransaction();
 				this.funcionarioDao.adiciona(f);

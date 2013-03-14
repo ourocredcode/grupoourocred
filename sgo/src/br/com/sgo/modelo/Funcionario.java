@@ -20,31 +20,11 @@ public class Funcionario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public Funcionario() {
-
-	}
-
-	public Funcionario(Empresa empresa,
-			Organizacao organizacao, Departamento departamento,
-			ParceiroNegocio parceiroNegocio, Funcao funcao, String apelido,
-			Boolean isActive) {
-		super();
-		this.empresa = empresa;
-		this.organizacao = organizacao;
-		this.departamento = departamento;
-		this.parceiroNegocio = parceiroNegocio;
-		this.funcao = funcao;
-		this.apelido = apelido;
-		this.isActive = isActive;
-	}
-
-
-
 	@Id
 	@Column(name = "funcionario_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
 	private Long funcionario_id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
