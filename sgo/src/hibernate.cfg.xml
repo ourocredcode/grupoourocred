@@ -59,6 +59,7 @@
 		<mapping class="br.com.sgo.modelo.Funcao" />
 		<mapping class="br.com.sgo.modelo.Localidade" />
 		<mapping class="br.com.sgo.modelo.Funcionario" />
+		<mapping class="br.com.sgo.modelo.Produto" />
 
 	</session-factory>
 </hibernate-configuration>

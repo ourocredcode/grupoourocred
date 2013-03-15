@@ -9,6 +9,10 @@ jQuery(function($){
 	$('#subgrupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/subgrupoproduto/cadastro" />';
 	});
+	
+	$('#produto-li-a').click(function() {
+		window.location.href = '<c:url value="/produto/cadastro" />';
+	});
 
 	$('#subGrupoProdutoEmpresa').autocomplete({
 		source: function( request, response ) {
@@ -143,12 +147,12 @@ function limpaForm() {
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="grupoproduto-li"><a href="#grupoproduto-div" data-toggle="tab" id="grupoproduto-li-a">Grupo de Produtos</a></li>
 				<li class="active" id="subgrupoproduto-li"><a href="#subgrupoproduto-div" data-toggle="tab" id="subgrupoproduto-li-a">Sub Grupo de Produtos</a></li>
+				<li class="" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
 			</ul>
 			<div id="myTabContent" class="tab-content">
 				
-				<div class="tab-pane fade" id="grupoproduto-div">
-				
-				</div>
+				<div class="tab-pane fade" id="grupoproduto-div"></div>
+
 				<div class="tab-pane fade active in" id="subgrupoproduto-div">
 				
 					<div class="row25MarginTop">
@@ -159,7 +163,7 @@ function limpaForm() {
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
 			      						<input class="span2" id="subGrupoProdutoEmpresa" name="subGrupoProduto.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="subGrupoProdutoEmpresaId" name="subGrupoProduto.empresa.empresa_id" type="text">
+			      						<input class="span2" id="subGrupoProdutoEmpresaId" name="subGrupoProduto.empresa.empresa_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
@@ -167,7 +171,7 @@ function limpaForm() {
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
 			      						<input class="span2" id="subGrupoProdutoOrganizacao" name="subGrupoProduto.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="subGrupoProdutoOrganizacaoId" name="subGrupoProduto.organizacao.organizacao_id" type="text">
+			      						<input class="span2" id="subGrupoProdutoOrganizacaoId" name="subGrupoProduto.organizacao.organizacao_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
@@ -175,7 +179,7 @@ function limpaForm() {
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
 			      						<input class="span2" id="subGrupoProdutoGrupoProduto" name="subGrupoProduto.grupoProduto.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="subGrupoProdutoGrupoProdutoId" name="subGrupoProduto.grupoProduto.grupoproduto_id" type="text">
+			      						<input class="span2" id="subGrupoProdutoGrupoProdutoId" name="subGrupoProduto.grupoProduto.grupoproduto_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
@@ -210,6 +214,8 @@ function limpaForm() {
 						
 					</div>
 				</div>
+			
+				<div class="tab-pane fade" id="produto-div"></div>
 			</div>
 		</div>
 	</section>
