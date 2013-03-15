@@ -15,31 +15,31 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="BANCO")
-public class Banco implements Serializable {
+@Table(name="PRODUTO")
+public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "banco_id")  
+	@Column(name = "produto_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long banco_id;
+	private Long produto_id;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
-
+	
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name="localidade_id",updatable = true, nullable = false) 
-	private Localidade localidade;
 
 	@ManyToOne
-	@JoinColumn(name="grupobanco_id",updatable = true, nullable = false) 
-	private GrupoBanco grupoBanco;
+	@JoinColumn(name="grupoproduto_id",updatable = true, nullable = false) 
+	private GrupoProduto grupoProduto;
+
+	@ManyToOne
+	@JoinColumn(name="subgrupoproduto_id",updatable = true, nullable = false) 
+	private SubGrupoProduto subGrupoProduto;
 	
 	@Column(name="nome")
 	private String nome;
@@ -50,12 +50,12 @@ public class Banco implements Serializable {
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getBanco_id() {
-		return banco_id;
+	public Long getProduto_id() {
+		return produto_id;
 	}
 
-	public void setBanco_id(Long banco_id) {
-		this.banco_id = banco_id;
+	public void setProduto_id(Long produto_id) {
+		this.produto_id = produto_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -66,20 +66,12 @@ public class Banco implements Serializable {
 		this.empresa = empresa;
 	}
 
-	public Organizacao getOrganizacao() {
-		return organizacao;
+	public GrupoProduto getGrupoProduto() {
+		return grupoProduto;
 	}
 
-	public void setOrganizacao(Organizacao organizacao) {
-		this.organizacao = organizacao;
-	}
-
-	public Localidade getLocalidade() {
-		return localidade;
-	}
-
-	public void setLocalidade(Localidade localidade) {
-		this.localidade = localidade;
+	public void setGrupoProduto(GrupoProduto grupoProduto) {
+		this.grupoProduto = grupoProduto;
 	}
 
 	public String getNome() {
@@ -106,11 +98,20 @@ public class Banco implements Serializable {
 		this.isActive = isActive;
 	}
 
-	public GrupoBanco getGrupoBanco() {
-		return grupoBanco;
+	public Organizacao getOrganizacao() {
+		return organizacao;
 	}
 
-	public void setGrupoBanco(GrupoBanco grupoBanco) {
-		this.grupoBanco = grupoBanco;
+	public void setOrganizacao(Organizacao organizacao) {
+		this.organizacao = organizacao;
 	}
+
+	public SubGrupoProduto getSubGrupoProduto() {
+		return subGrupoProduto;
+	}
+
+	public void setSubGrupoProduto(SubGrupoProduto subGrupoProduto) {
+		this.subGrupoProduto = subGrupoProduto;
+	}
+
 }

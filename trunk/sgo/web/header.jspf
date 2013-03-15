@@ -36,8 +36,8 @@
 			</div>
 		</c:if>
 
-		<div id="main-content">
-			<div id="feature-content">
+		<div>
+			<div>
 
           <c:if test="${not empty usuarioInfo.usuario}">
 	            <div id="navbar-example" class="navbar navbar-static">
@@ -49,6 +49,8 @@
 	                      <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">CADASTROS <b class="caret"></b></a>
 	                      <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
 	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/parceironegocio/cadastro"/>">Parceiros Negócio</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/banco/cadastro"/>">Bancos</a></li>
+	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/produto/cadastro"/>">Produtos</a></li>
 	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
 	                      </ul>
 	                    </li>

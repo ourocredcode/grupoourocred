@@ -10,6 +10,10 @@ jQuery(function($){
 	$('#subgrupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/subgrupoproduto/cadastro" />';
 	});
+	
+	$('#produto-li-a').click(function() {
+		window.location.href = '<c:url value="/produto/cadastro" />';
+	});
 
 	$('#grupoProdutoEmpresa').autocomplete({
 		source: function( request, response ) {
@@ -108,7 +112,8 @@ function limpaForm() {
 
 			<ul id="myTab" class="nav nav-tabs">								
 				<li class="active" id="grupoproduto-li"><a href="#grupoproduto-div" data-toggle="tab" id="grupoproduto-li-a">Grupo de Produtos</a></li>
-				<li class="" id="subgrupoproduto-li"><a href="#subgrupoproduto-div" data-toggle="tab" id="subgrupoproduto-li-a">Sub Grupo de Produtos</a></li>				
+				<li class="" id="subgrupoproduto-li"><a href="#subgrupoproduto-div" data-toggle="tab" id="subgrupoproduto-li-a">Sub Grupo de Produtos</a></li>
+				<li class="" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
 			</ul>
 			<div id="myTabContent" class="tab-content">
 
@@ -165,6 +170,10 @@ function limpaForm() {
 						
 					</div>
 				</div>
+
+				<div class="tab-pane fade" id="subgrupoproduto-div" ></div>
+				<div class="tab-pane fade" id="produto-div" ></div>
+	
 			</div>
 		</div>
 	</section>
