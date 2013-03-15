@@ -220,7 +220,7 @@ jQuery(function($){
 								<div class="control-group">
 									<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
 									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
+										<span class="add-on"><i class="icon-plus-sign"></i></span>										
 			      						<input class="span2" id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
 			      						<input class="span2" id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
 			    					</div>
@@ -245,12 +245,17 @@ jQuery(function($){
 										<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
 									</div>
 								</div>
-								
-								 <div class="btn-toolbar">
-										<div class="btn-group">
-											<button type="submit" class="btn btn-primary">Salvar</button>
-										</div>	
+								<div class="btn-toolbar">
+									<div class="btn-group">
+										<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
 									</div>
+									<div class="btn-group">
+										<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+									</div>
+									<div class="btn-group">
+										<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+									</div>
+								</div>
 							</form>
 						</div>
 						<div class="span7" id="lista">

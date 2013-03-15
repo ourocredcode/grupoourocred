@@ -441,6 +441,7 @@
   textarea.span2,
   .uneditable-input.span2 {
     width: 156px;
+    height: 15px;
   }
   input.span1,
   textarea.span1,
