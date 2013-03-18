@@ -51,6 +51,7 @@
 		<mapping class="br.com.sgo.modelo.TipoDadoBd" />
 		<mapping class="br.com.sgo.modelo.TipoParceiro" />
 		<mapping class="br.com.sgo.modelo.TipoProduto" />
+		<mapping class="br.com.sgo.modelo.TipoTabela" />
 		<mapping class="br.com.sgo.modelo.Usuario" />
 		<mapping class="br.com.sgo.modelo.UsuarioOrgAcesso" />
 		<mapping class="br.com.sgo.modelo.UsuarioPerfil" />
@@ -60,6 +61,7 @@
 		<mapping class="br.com.sgo.modelo.Localidade" />
 		<mapping class="br.com.sgo.modelo.Funcionario" />
 		<mapping class="br.com.sgo.modelo.Produto" />
+		<mapping class="br.com.sgo.modelo.Tabela" />
 
 	</session-factory>
 </hibernate-configuration>

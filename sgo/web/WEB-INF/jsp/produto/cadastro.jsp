@@ -159,7 +159,7 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		document.produtoForm.reset();
 	});
 
 	$("#produtoIsActive").change(function(e){
