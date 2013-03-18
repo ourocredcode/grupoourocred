@@ -5,7 +5,9 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TabelaDao;
+import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Tabela;
 
 @Resource
@@ -60,6 +62,12 @@ public class TabelaController {
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 
+	}
+	
+	@Get @Path("/tabela/busca.json")
+	@Public
+	public void tabelas(Long empresa_id, Long organizacao_id, String nome){
+		result.use(Results.json()).withoutRoot().from(tabelaDao.buscaTabelas(empresa_id, organizacao_id, nome)).serialize();
 	}
 
 }
