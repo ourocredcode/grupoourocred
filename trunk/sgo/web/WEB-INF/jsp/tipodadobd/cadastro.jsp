@@ -159,92 +159,57 @@ jQuery(function($){
 	}
 </script>
 
-<div class="span9">
-
+<div class="container-fluid" id="tipodadobd-div">
 	<section id="tabs">
-		<div class="bs-docs-example">
-
-			<ul id="myTab" class="nav nav-tabs">
-				<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
-				<li class="" id="perfilorgacesso-li"><a href="#perfilorgacesso-div" data-toggle="tab" id="perfilorgacesso-li-a">Perfil Organização</a></li>
-				<li class="" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
-				<li class="" id="perfiljanelaacesso-li"><a href="#perfiljanelaacesso-div" data-toggle="tab" id="perfiljanelaacesso-li-a">Janela Perfil</a></li>
-				<li class="" id="formulariosjanela-li"><a href="#formulariosjanela-div" data-toggle="tab" id="formulariosjanela-li-a">Formulários Janela</a></li>
-				<li class="" id="campoformulario-li"><a href="#campoformulario-div" data-toggle="tab" id="campoformulario-li-a">Campo Formulário</a></li>
-				<li class="" id="tabelabd-li"><a href="#tabelabd-div" data-toggle="tab" id="tabelabd-li-a">Tabela BD</a></li>
-				<li class="" id="colunabd-li"><a href="#colunabd-div" data-toggle="tab" id="colunabd-li-a">Coluna BD</a></li>	
-				<li class="" id="elementobd-li"><a href="#elementobd-div" data-toggle="tab" id="elementobd-li-a">Elemento BD</a></li>
-				<li class="active" id="tipodadobd-li"><a href="#tipodadobd-div" data-toggle="tab" id="tipodadobd-li-a">TipoDado BD</a></li>
-			</ul>
-
-			<div id="myTabContent" class="tab-content">
+		<ul id="myTab" class="nav nav-tabs">
+			<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
+			<li class="" id="perfilorgacesso-li"><a href="#perfilorgacesso-div" data-toggle="tab" id="perfilorgacesso-li-a">Perfil Organização</a></li>
+			<li class="" id="janela-li"><a href="#janela-div" data-toggle="tab" id="janela-li-a">Janela</a></li>
+			<li class="" id="perfiljanelaacesso-li"><a href="#perfiljanelaacesso-div" data-toggle="tab" id="perfiljanelaacesso-li-a">Janela Perfil</a></li>
+			<li class="" id="formulariosjanela-li"><a href="#formulariosjanela-div" data-toggle="tab" id="formulariosjanela-li-a">Formulários Janela</a></li>
+			<li class="" id="campoformulario-li"><a href="#campoformulario-div" data-toggle="tab" id="campoformulario-li-a">Campo Formulário</a></li>
+			<li class="" id="tabelabd-li"><a href="#tabelabd-div" data-toggle="tab" id="tabelabd-li-a">Tabela BD</a></li>
+			<li class="" id="colunabd-li"><a href="#colunabd-div" data-toggle="tab" id="colunabd-li-a">Coluna BD</a></li>	
+			<li class="" id="elementobd-li"><a href="#elementobd-div" data-toggle="tab" id="elementobd-li-a">Elemento BD</a></li>
+			<li class="active" id="tipodadobd-li"><a href="#tipodadobd-div" data-toggle="tab" id="tipodadobd-li-a">TipoDado BD</a></li>
+		</ul>
+	
+		<div id="myTabContent" class="tab-content">
+		
+			<div class="tab-pane fade" id="perfil-div"></div>
+			<div class="tab-pane fade" id="perfilorgacesso-div"></div>		
+			<div class="tab-pane fade" id="janela-div"></div>		
+			<div class="tab-pane fade" id="perfiljanelaacesso-div"></div>
+			<div class="tab-pane fade" id="formulariosjanela-div"></div>			
+			<div class="tab-pane fade" id="campoformulario-div"></div>	
+			<div class="tab-pane fade " id="tabelabd-div"></div>
+			<div class="tab-pane fade " id="colunabd-div"></div>
+			<div class="tab-pane fade" id="elementobd-div"></div>
 			
-				<div class="tab-pane fade" id="perfil-div">					
-
-				</div>
-				
-				<div class="tab-pane fade" id="perfilorgacesso-div">					
-
-				</div>
-			
-				<div class="tab-pane fade" id="janela-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="perfiljanelaacesso-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="formulariosjanela-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="campoformulario-div">
-					
-				</div>
-
-				<div class="tab-pane fade " id="tabelabd-div">
-
-				</div>
-				<div class="tab-pane fade " id="colunabd-div">
-
-				</div>
-				<div class="tab-pane fade" id="elementobd-div">
-
-				</div>
 				<div class="tab-pane fade active in" id="tipodadobd-div">
-				
-					<div class="row25MarginTop">
-						<div class="span3">
-							<form id="tipoDadoBdForm" name="tipoDadoBdForm" action="<c:url value="/tipodadobd/salva"/>" method="POST">
-								<div class="control-group">
-									<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>										
-			      						<input class="span2" id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="tipoDadoBdNome">Nome Tipo Dado BD</label>
-									<div class="controls">
-										<input type="text" id="tipoDadoBdNome" name="tipoDadoBd.nome" placeholder="Nome do tipo de dado BD" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="tipoDadoBdChave">Chave Tipo Dado BD</label>
-									<div class="controls">
-										<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
-									</div>
-								</div>
+
+									
+					<form id="tipoDadoBdForm" name="tipoDadoBdForm" action="<c:url value="/tipodadobd/salva"/>" method="POST">												
+						<div class="row-fluid">
+							<div class="span2">
+								<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
+		      					<input id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
+		      					<input id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
+							</div>
+							<div class="span2">
+								<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>							
+	      						<input id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
+							</div>
+							<div class="span2">						
+								<label class="control-label" for="tipoDadoBdNome">Nome Tipo Dado BD</label>							
+								<input type="text" id="tipoDadoBdNome" name="tipoDadoBd.nome" placeholder="Nome do tipo de dado BD" required>							
+							</div>						
+							<div class="span2">						
+								<label class="control-label" for="tipoDadoBdChave">Chave Tipo Dado BD</label>
+								<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
+							</div>	
+						</div>										
 								<div class="btn-toolbar">
 									<div class="btn-group">
 										<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
@@ -257,34 +222,34 @@ jQuery(function($){
 									</div>
 								</div>
 							</form>
+
 						</div>
-						<div class="span7" id="lista">
-							<table class="table table-striped table-bordered">
-								<thead>
-									<tr>
-										<th>Empresa</th>
-										<th>Organização</th>
-										<th>Nome</th>
-										<th>Chave</th>
-									</tr>
-								</thead>
-								<tbody>	
-									<c:forEach items="${tiposDadosBd}" var="tipoDado">
-										<tr>
-											<td>${tipoDado.empresa.nome }</td>
-											<td>${tipoDado.organizacao.nome }</td>
-											<td>${tipoDado.nome }</td>
-											<td>${tipoDado.chave }</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</div>
+					</form>
+
+					<table class="table table-striped table-bordered" id="lista">
+						<thead>
+							<tr>
+								<th>Empresa</th>
+								<th>Organização</th>
+								<th>Nome</th>
+								<th>Chave</th>
+							</tr>
+						</thead>
+						<tbody>	
+							<c:forEach items="${tiposDadosBd}" var="tipoDado">
+								<tr>
+									<td>${tipoDado.empresa.nome }</td>
+									<td>${tipoDado.organizacao.nome }</td>
+									<td>${tipoDado.nome }</td>
+									<td>${tipoDado.chave }</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
 				</div>
 			</div>
-		</div>
-	</section>
-</div>
+		</section>
+	</div>	
+
 
 <%@ include file="/footer.jspf"%>
