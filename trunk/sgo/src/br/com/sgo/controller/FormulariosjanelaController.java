@@ -5,7 +5,6 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.FormulariosJanelaDao;
@@ -19,18 +18,17 @@ import br.com.sgo.modelo.FormulariosJanela;
 public class FormulariosjanelaController {
 
 	private final Result result;
-	private final Validator validator;
+
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;	
 	private final TabelaBdDao tabelaBdDao;
 	private final JanelaDao janelaDao;
 	private final FormulariosJanelaDao formulariosJanelaDao;
 
-	public FormulariosjanelaController(Result result,Validator validator,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,
+	public FormulariosjanelaController(Result result,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,
 										FormulariosJanelaDao formulariosJanelaDao,TabelaBdDao tabelaBdDao,JanelaDao janelaDao){
 
 		this.result = result;
-		this.validator = validator;
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;
 		this.tabelaBdDao = tabelaBdDao;

@@ -12,7 +12,6 @@ import br.com.sgo.dao.ElementoBdDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TabelaBdDao;
-import br.com.sgo.dao.TipoDadoBdDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.ColunaBd;
 
@@ -26,10 +25,9 @@ public class ColunabdController {
 	private final OrganizacaoDao organizacaoDao;
 	private final TabelaBdDao tabelaBdDao;	
 	private final ElementoBdDao elementoBdDao;
-	private final TipoDadoBdDao tipoDadoBdDao;
 
 	public ColunabdController(Result result, Validator validator, ColunaBdDao colunaBdDao, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,
-			TabelaBdDao tabelaBdDao,ElementoBdDao elementoBdDao, TipoDadoBdDao tipoDadoBdDao){
+			TabelaBdDao tabelaBdDao,ElementoBdDao elementoBdDao){
 
 		this.result = result;
 		this.validator=validator;
@@ -38,7 +36,7 @@ public class ColunabdController {
 		this.organizacaoDao = organizacaoDao;
 		this.tabelaBdDao = tabelaBdDao;
 		this.elementoBdDao = elementoBdDao;
-		this.tipoDadoBdDao = tipoDadoBdDao;
+
 	}
 
 	@Get

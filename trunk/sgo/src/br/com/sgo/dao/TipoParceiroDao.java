@@ -12,12 +12,6 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
-
-import br.com.sgo.modelo.CategoriaParceiro;
-import br.com.sgo.modelo.ClassificacaoParceiro;
-import br.com.sgo.modelo.GrupoParceiro;
-import br.com.sgo.modelo.Janela;
-import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.TipoParceiro;
 
 @Component

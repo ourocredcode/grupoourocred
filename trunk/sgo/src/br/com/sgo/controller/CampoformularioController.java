@@ -5,7 +5,6 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.sgo.dao.CampoFormularioDao;
 import br.com.sgo.dao.ColunaBdDao;
 import br.com.sgo.dao.EmpresaDao;
@@ -18,14 +17,13 @@ import br.com.sgo.modelo.CampoFormulario;
 public class CampoformularioController {
 
 	private final Result result;
-	private final Validator validator;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;	
 	private final FormulariosJanelaDao formulariosJanelaDao;
 	private final CampoFormularioDao campoFormularioDao;
 	private final ColunaBdDao colunaBdDao;	
 
-	public CampoformularioController(Result result, Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,FormulariosJanelaDao formulariosJanelaDao,
+	public CampoformularioController(Result result, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,FormulariosJanelaDao formulariosJanelaDao,
 			ColunaBdDao colunaBdDao,CampoFormularioDao campoFormularioDao){
 
 		this.empresaDao = empresaDao;
@@ -34,7 +32,6 @@ public class CampoformularioController {
 		this.colunaBdDao = colunaBdDao;
 		this.campoFormularioDao = campoFormularioDao;
 		this.result = result;
-		this.validator = validator;
 
 	}	
 

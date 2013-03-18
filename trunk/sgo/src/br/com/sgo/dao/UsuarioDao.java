@@ -7,13 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
-import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Usuario;
 
 @Component
