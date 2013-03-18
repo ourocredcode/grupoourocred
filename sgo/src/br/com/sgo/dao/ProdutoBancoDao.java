@@ -47,9 +47,10 @@ public class ProdutoBancoDao extends Dao<ProdutoBanco>{
 	
 			this.stmt.setLong(1,produtoBanco.getProduto().getProduto_id());			
 			this.stmt.setLong(2,produtoBanco.getBanco().getBanco_id());
-			this.stmt.setLong(3,produtoBanco.getOrganizacao().getOrganizacao_id());
-			this.stmt.setLong(4,produtoBanco.getTabela().getTabela_id());
-			this.stmt.setBoolean(5,produtoBanco.getIsActive());
+			this.stmt.setLong(3,produtoBanco.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(4,produtoBanco.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(5,produtoBanco.getTabela().getTabela_id());
+			this.stmt.setBoolean(6,produtoBanco.getIsActive());
 
 			this.stmt.executeUpdate();
 
