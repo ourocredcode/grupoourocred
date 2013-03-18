@@ -9,32 +9,34 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
-import br.com.sgo.modelo.PerfilOrgAcesso;
+import br.com.sgo.modelo.ProdutoBanco;
 
 @Component
-public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso>{
+public class ProdutoBancoDao extends Dao<ProdutoBanco>{
 
 	private Session session;	
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 
-	public PerfilOrgAcessoDao(Session session, ConnJDBC conexao) {
+	public ProdutoBancoDao(Session session, ConnJDBC conexao) {
 		
-		super(session, PerfilOrgAcesso.class);
+		super(session, ProdutoBanco.class);
 		this.session = session;
 		this.conexao = conexao;
 		
 	}
 	
-	public void insert(PerfilOrgAcesso perfilOrgAcesso) throws SQLException {
+	public void insert(ProdutoBanco produtoBanco) throws SQLException {
 
-		String sql = "INSERT INTO PERFILORGACESSO " +
-				"	(perfil_id, " +				
+		String sql = "INSERT INTO PRODUTOBANCO " +
+				"	(produto_id, " +				
+				"	 banco_id ," +
 				"	 empresa_id ," +
-				"	 organizacao_id ," +
-				"	 isactive) " +
-				"    VALUES (?,?,?,?)";
+				"	 organizacao_id, " +
+				"    tabela_id," +
+				"    isactive) " +
+				"    VALUES (?,?,?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
@@ -43,10 +45,11 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso>{
 			this.conn.setAutoCommit(false);
 			this.stmt = conn.prepareStatement(sql);
 	
-			this.stmt.setLong(1,perfilOrgAcesso.getPerfil().getPerfil_id());			
-			this.stmt.setLong(2,perfilOrgAcesso.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(3,perfilOrgAcesso.getOrganizacao().getOrganizacao_id());
-			this.stmt.setBoolean(4,perfilOrgAcesso.getIsActive());
+			this.stmt.setLong(1,produtoBanco.getProduto().getProduto_id());			
+			this.stmt.setLong(2,produtoBanco.getBanco().getBanco_id());
+			this.stmt.setLong(3,produtoBanco.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(4,produtoBanco.getTabela().getTabela_id());
+			this.stmt.setBoolean(5,produtoBanco.getIsActive());
 
 			this.stmt.executeUpdate();
 

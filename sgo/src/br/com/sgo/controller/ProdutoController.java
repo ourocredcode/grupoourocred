@@ -5,9 +5,6 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Produto;
@@ -16,19 +13,12 @@ import br.com.sgo.modelo.Produto;
 public class ProdutoController {
 
 	private final Result result;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
 	private final ProdutoDao produtoDao;
-	private final Validator validator;
 
-	public ProdutoController(Result result,Validator validator,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,ProdutoDao produtoDao){
 
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
+	public ProdutoController(Result result,ProdutoDao produtoDao){
 		this.produtoDao = produtoDao;
 		this.result = result;
-		this.validator = validator;
-
 	}	
 
 	@Get

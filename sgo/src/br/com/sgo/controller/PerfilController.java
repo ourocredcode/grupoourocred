@@ -10,13 +10,9 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
-import br.com.sgo.dao.TabelaBdDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
-import br.com.sgo.modelo.Empresa;
-import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
-import br.com.sgo.modelo.TabelaBd;
 
 @Resource
 public class PerfilController {

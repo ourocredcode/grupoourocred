@@ -13,7 +13,6 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Perfil;
-import br.com.sgo.modelo.TabelaBd;
 
 @Component
 public class PerfilDao extends Dao<Perfil> {

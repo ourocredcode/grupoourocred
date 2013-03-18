@@ -7,8 +7,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TipoTabelaDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.TipoTabela;
@@ -17,18 +15,13 @@ import br.com.sgo.modelo.TipoTabela;
 public class TipotabelaController {
 
 	private final Result result;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
 	private final TipoTabelaDao tipoTabelaDao;
-	private final Validator validator;
 
-	public TipotabelaController(Result result,Validator validator,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,TipoTabelaDao tipoTabelaDao){
 
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
+	public TipotabelaController(Result result,Validator validator,TipoTabelaDao tipoTabelaDao){
+
 		this.tipoTabelaDao = tipoTabelaDao;
 		this.result = result;
-		this.validator = validator;
 
 	}	
 

@@ -1,9 +1,5 @@
 package br.com.sgo.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 import org.hibernate.Session;
 
 import br.com.caelum.vraptor.ioc.Component;
@@ -16,10 +12,6 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 	private Session session;
 	private ConnJDBC conexao;
-	private PreparedStatement stmt;
-	private Connection conn;
-	private ResultSet rsUsuarios;
-
 
 	public FuncionarioDao(Session session, ConnJDBC conexao) {
 		super(session, Funcionario.class);
