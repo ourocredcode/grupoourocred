@@ -5,11 +5,10 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.TipoProdutoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
+import br.com.sgo.dao.TipoProdutoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.TipoProduto;
 
@@ -17,17 +16,15 @@ import br.com.sgo.modelo.TipoProduto;
 public class TipoprodutoController {
 
 	private final Result result;
-	private final Validator validator;
 	private final TipoProdutoDao tipoProdutoDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
 
-	public TipoprodutoController(Result result,Validator validator, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,TipoProdutoDao tipoProdutoDao){
+	public TipoprodutoController(Result result, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,TipoProdutoDao tipoProdutoDao){
 		this.tipoProdutoDao = tipoProdutoDao;
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;		
 		this.result = result;
-		this.validator = validator;
 	}
 
 	@Get
@@ -41,9 +38,6 @@ public class TipoprodutoController {
 	@Public
 	@Path("/tipoproduto/salva")
 	public void salva(TipoProduto tipoProduto){
-
-		validator.validate(tipoProduto);
-		validator.onErrorUsePageOf(this).cadastro();
 
 		String mensagem = "";
 
