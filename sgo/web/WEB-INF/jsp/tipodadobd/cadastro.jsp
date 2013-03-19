@@ -160,7 +160,7 @@ jQuery(function($){
 </script>
 
 <div class="container-fluid" id="tipodadobd-div">
-	<section id="tabs">
+
 		<ul id="myTab" class="nav nav-tabs">
 			<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
 			<li class="" id="perfilorgacesso-li"><a href="#perfilorgacesso-div" data-toggle="tab" id="perfilorgacesso-li-a">Perfil Organização</a></li>
@@ -188,68 +188,67 @@ jQuery(function($){
 			
 				<div class="tab-pane fade active in" id="tipodadobd-div">
 
-									
-					<form id="tipoDadoBdForm" name="tipoDadoBdForm" action="<c:url value="/tipodadobd/salva"/>" method="POST">												
-						<div class="row-fluid">
-							<div class="span2">
-								<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
-		      					<input id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
-		      					<input id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
-							</div>
-							<div class="span2">
-								<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>							
-	      						<input id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
-							</div>
-							<div class="span2">						
-								<label class="control-label" for="tipoDadoBdNome">Nome Tipo Dado BD</label>							
-								<input type="text" id="tipoDadoBdNome" name="tipoDadoBd.nome" placeholder="Nome do tipo de dado BD" required>							
-							</div>						
-							<div class="span2">						
-								<label class="control-label" for="tipoDadoBdChave">Chave Tipo Dado BD</label>
-								<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
-							</div>	
-						</div>										
-								<div class="btn-toolbar">
-									<div class="btn-group">
-										<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-									</div>
-									<div class="btn-group">
-										<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-									</div>
-									<div class="btn-group">
-										<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-									</div>
+						<form id="tipoDadoBdForm" name="tipoDadoBdForm" action="<c:url value="/tipodadobd/salva"/>" method="POST">												
+							<div class="row-fluid">
+								<div class="span2">
+									<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
+			      					<input id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
+			      					<input id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
 								</div>
-							</form>
+								<div class="span2">
+									<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>							
+		      						<input id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
+		      						<input id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
+								</div>
+								<div class="span2">						
+									<label class="control-label" for="tipoDadoBdNome">Nome Tipo Dado BD</label>							
+									<input type="text" id="tipoDadoBdNome" name="tipoDadoBd.nome" placeholder="Nome do tipo de dado BD" required>							
+								</div>						
+								<div class="span2">						
+									<label class="control-label" for="tipoDadoBdChave">Chave Tipo Dado BD</label>
+									<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
+								</div>	
+							</div>										
+							<div class="btn-toolbar">
+								<div class="btn-group">
+									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+								</div>
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+								</div>
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+								</div>
+							</div>
+						</form>
 
-						</div>
-					</form>
-
-					<table class="table table-striped table-bordered" id="lista">
-						<thead>
-							<tr>
-								<th>Empresa</th>
-								<th>Organização</th>
-								<th>Nome</th>
-								<th>Chave</th>
-							</tr>
-						</thead>
-						<tbody>	
-							<c:forEach items="${tiposDadosBd}" var="tipoDado">
-								<tr>
-									<td>${tipoDado.empresa.nome }</td>
-									<td>${tipoDado.organizacao.nome }</td>
-									<td>${tipoDado.nome }</td>
-									<td>${tipoDado.chave }</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
 				</div>
-			</div>
-		</section>
-	</div>	
+				
+
+				<table class="table table-striped table-bordered" id="lista">
+					<thead>
+						<tr>
+							<th>Empresa</th>
+							<th>Organização</th>
+							<th>Nome</th>
+							<th>Chave</th>
+						</tr>
+					</thead>
+					<tbody>	
+						<c:forEach items="${tiposDadosBd}" var="tipoDado">
+							<tr>
+								<td>${tipoDado.empresa.nome }</td>
+								<td>${tipoDado.organizacao.nome }</td>
+								<td>${tipoDado.nome }</td>
+								<td>${tipoDado.chave }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+		</div>
+	</div>
+		
+	
 
 
 <%@ include file="/footer.jspf"%>
