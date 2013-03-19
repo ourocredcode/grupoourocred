@@ -15,15 +15,15 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="LOCALIDADE")
-public class Localidade implements Serializable {
+@Table(name="REGIAO")
+public class Regiao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "localidade_id")  
+	@Column(name = "regiao_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long localidade_id;
+	private Long regiao_id;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -37,39 +37,21 @@ public class Localidade implements Serializable {
 	@JoinColumn(name="pais_id",updatable = true, nullable = false) 
 	private Pais pais;
 	
-	@ManyToOne
-	@JoinColumn(name="cidade_id",updatable = true, nullable = false) 
-	private Cidade cidade;
+	@Column(name="nome")
+	private String nome;
 	
-	@ManyToOne
-	@JoinColumn(name="regiao_id",updatable = true, nullable = false) 
-	private Regiao regiao;
-
-	@ManyToOne
-	@JoinColumn(name="tipolocalidade_id",updatable = true, nullable = false) 
-	private TipoLocalidade tipoLocalidade;
-
-	@Column(name="endereco1")
-	private String endereco1;
-	
-	@Column(name="bairro")
-	private String bairro;
-	
-	@Column(name="cep")
-	private String cep;
-
 	@Column(name="descricao")
 	private String descricao;
-
+	
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getLocalidade_id() {
-		return localidade_id;
+	public Long getRegiao_id() {
+		return regiao_id;
 	}
 
-	public void setLocalidade_id(Long localidade_id) {
-		this.localidade_id = localidade_id;
+	public void setRegiao_id(Long regiao_id) {
+		this.regiao_id = regiao_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -96,44 +78,12 @@ public class Localidade implements Serializable {
 		this.pais = pais;
 	}
 
-	public Cidade getCidade() {
-		return cidade;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
-	}
-
-	public TipoLocalidade getTipoLocalidade() {
-		return tipoLocalidade;
-	}
-
-	public void setTipoLocalidade(TipoLocalidade tipoLocalidade) {
-		this.tipoLocalidade = tipoLocalidade;
-	}
-
-	public String getEndereco1() {
-		return endereco1;
-	}
-
-	public void setEndereco1(String endereco1) {
-		this.endereco1 = endereco1;
-	}
-
-	public String getBairro() {
-		return bairro;
-	}
-
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
-
-	public String getCep() {
-		return cep;
-	}
-
-	public void setCep(String cep) {
-		this.cep = cep;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getDescricao() {
@@ -150,13 +100,5 @@ public class Localidade implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public Regiao getRegiao() {
-		return regiao;
-	}
-
-	public void setRegiao(Regiao regiao) {
-		this.regiao = regiao;
 	}
 }

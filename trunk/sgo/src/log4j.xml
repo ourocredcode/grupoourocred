@@ -19,7 +19,7 @@
 	</category>
 
 	<category name="org.vraptor">
-		<priority value="ERROR" />
+		<priority value="DEBUG" />
 		<appender-ref ref="stdout" />
 	</category>
 

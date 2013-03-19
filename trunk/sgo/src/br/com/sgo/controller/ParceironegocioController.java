@@ -1,19 +1,26 @@
 package br.com.sgo.controller;
 
+import br.com.caelum.restfulie.RestClient;
+import br.com.caelum.restfulie.Restfulie;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.CidadeDao;
 import br.com.sgo.dao.DepartamentoDao;
 import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
+import br.com.sgo.dao.RegiaoDao;
+import br.com.sgo.dao.TipoLocalidadeDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Funcionario;
+import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.ParceiroNegocio;
+import br.com.sgo.modelo.cep.BrazilianAddressFinder;
 
 @Resource
 public class ParceironegocioController {
@@ -23,17 +30,26 @@ public class ParceironegocioController {
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final FuncionarioDao funcionarioDao;
 	private final DepartamentoDao departamentoDao;
+	private final RegiaoDao regiaoDao;
+	private final CidadeDao cidadeDao;
+	private final TipoLocalidadeDao tipoLocalidadeDao;
 	private final FuncaoDao funcaoDao;
+	
+	private BrazilianAddressFinder addressFinder;
+	private RestClient restfulie;
 	
 
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,
-			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao) {
+			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,RegiaoDao regiaoDao,CidadeDao cidadeDao,TipoLocalidadeDao tipoLocalidadeDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.departamentoDao = departamentoDao;
 		this.funcaoDao = funcaoDao;
 		this.usuarioInfo = usuarioInfo;
+		this.regiaoDao = regiaoDao;
+		this.cidadeDao = cidadeDao;
+		this.tipoLocalidadeDao = tipoLocalidadeDao;
 		this.funcionarioDao = funcionarioDao;
 
 	}
@@ -94,4 +110,5 @@ public class ParceironegocioController {
 	public void parceironegocio(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(this.parceiroNegocioDao.buscaParceiroNegocio(empresa_id, organizacao_id, nome)).serialize();
 	}
+
 }

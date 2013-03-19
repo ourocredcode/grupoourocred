@@ -59,6 +59,10 @@
 		<mapping class="br.com.sgo.modelo.Departamento" />
 		<mapping class="br.com.sgo.modelo.Funcao" />
 		<mapping class="br.com.sgo.modelo.Localidade" />
+		<mapping class="br.com.sgo.modelo.TipoLocalidade" />
+		<mapping class="br.com.sgo.modelo.Regiao" />
+		<mapping class="br.com.sgo.modelo.Cidade" />
+		<mapping class="br.com.sgo.modelo.Pais" />
 		<mapping class="br.com.sgo.modelo.Funcionario" />
 		<mapping class="br.com.sgo.modelo.Produto" />
 		<mapping class="br.com.sgo.modelo.Tabela" />
