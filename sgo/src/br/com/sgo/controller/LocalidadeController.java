@@ -8,6 +8,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.CidadeDao;
+import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.RegiaoDao;
 import br.com.sgo.dao.TipoLocalidadeDao;
 import br.com.sgo.interceptor.Public;
@@ -18,19 +19,23 @@ import br.com.sgo.modelo.cep.BrazilianAddressFinder;
 @Resource
 public class LocalidadeController {
 
+	private final UsuarioInfo usuarioInfo;
 	private final Result result;
 	private final RegiaoDao regiaoDao;
 	private final CidadeDao cidadeDao;
+	private final PaisDao paisDao;
 	private final TipoLocalidadeDao tipoLocalidadeDao;
 	private BrazilianAddressFinder addressFinder;
 	private RestClient restfulie;
 
-	public LocalidadeController(Result result, UsuarioInfo usuarioInfo,RegiaoDao regiaoDao,CidadeDao cidadeDao,TipoLocalidadeDao tipoLocalidadeDao) {
+	public LocalidadeController(Result result, UsuarioInfo usuarioInfo,RegiaoDao regiaoDao,CidadeDao cidadeDao,TipoLocalidadeDao tipoLocalidadeDao,PaisDao paisDao) {
 
 		this.result = result;
 		this.regiaoDao = regiaoDao;
 		this.cidadeDao = cidadeDao;
+		this.paisDao = paisDao;
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
+		this.usuarioInfo = usuarioInfo;
 
 	}
 
@@ -65,11 +70,12 @@ public class LocalidadeController {
 		} else {
 
 			Localidade l = new Localidade();
-
+			
+			l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
 			l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
 			l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
 			l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-			l.setEndereco1(resultado[1]);
+			l.setEndereco(resultado[1]);
 			l.setBairro(resultado[2]);
 			l.setCep(enderecoCEP);
 			

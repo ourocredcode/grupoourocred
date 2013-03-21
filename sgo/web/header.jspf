@@ -17,12 +17,14 @@
 		<link href="<c:url value="/css/bootstrap/bootstrap.css"/>" rel="stylesheet" type="text/css" media="screen" />
 		<link href="<c:url value="/css/bootstrap/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" media="screen" />
 		<link href="<c:url value="/css/bootstrap/docs.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		
+		<link href="<c:url value="/css/bootstrap/datepicker.css"/>" rel="stylesheet" type="text/css" media="screen" />
 
 		<script type="text/javascript" src="<c:url value="/javascripts/jquery-1.9.1.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/javascripts/jquery-ui-1.10.1.custom.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/javascripts/bootstrap.js"/>"></script>
-	    
+		<script type="text/javascript" src="<c:url value="/javascripts/bootstrap-datepicker.js"/>"></script>
+		
+		
 
 		<fmt:setLocale value="pt_br"/>
 	</head>

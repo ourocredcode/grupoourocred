@@ -49,8 +49,8 @@ public class Localidade implements Serializable {
 	@JoinColumn(name="tipolocalidade_id",updatable = true, nullable = false) 
 	private TipoLocalidade tipoLocalidade;
 
-	@Column(name="endereco1")
-	private String endereco1;
+	@Column(name="endereco")
+	private String endereco;
 	
 	@Column(name="bairro")
 	private String bairro;
@@ -112,14 +112,6 @@ public class Localidade implements Serializable {
 		this.tipoLocalidade = tipoLocalidade;
 	}
 
-	public String getEndereco1() {
-		return endereco1;
-	}
-
-	public void setEndereco1(String endereco1) {
-		this.endereco1 = endereco1;
-	}
-
 	public String getBairro() {
 		return bairro;
 	}
@@ -158,5 +150,13 @@ public class Localidade implements Serializable {
 
 	public void setRegiao(Regiao regiao) {
 		this.regiao = regiao;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 }
