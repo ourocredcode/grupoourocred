@@ -1,6 +1,7 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,6 +55,14 @@ public class ParceiroNegocio implements Serializable {
 	private Banco banco;
 	
 	@ManyToOne
+	@JoinColumn(name="estadocivil_id",updatable = true, nullable = true) 
+	private EstadoCivil estadoCivil;
+	
+	@ManyToOne
+	@JoinColumn(name="sexo_id",updatable = true, nullable = true) 
+	private Sexo sexo;
+
+	@ManyToOne
 	@JoinColumn(name="idioma_id",updatable = true, nullable = true) 
 	private Idioma idioma;
 	
@@ -80,18 +89,18 @@ public class ParceiroNegocio implements Serializable {
 	
 	@Column(name="ccm")
 	private String ccm;
-	
+
+	@Column(name="datanascimento")
+	private Calendar dataNascimento;
+
 	@Column(name="iscliente")
 	private Boolean isCliente;
-	
+
 	@Column(name="isfornecedor")
 	private Boolean isFornecedor;
 	
 	@Column(name="isfuncionario")
 	private Boolean isFuncionario;
-
-	@Column(name="isisentodeimposto")
-	private Boolean isIsentoImposto;
 
 	@Column(name="isactive")
 	private Boolean isActive;
@@ -158,6 +167,22 @@ public class ParceiroNegocio implements Serializable {
 
 	public void setBanco(Banco banco) {
 		this.banco = banco;
+	}
+
+	public EstadoCivil getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	public void setEstadoCivil(EstadoCivil estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+
+	public Sexo getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(Sexo sexo) {
+		this.sexo = sexo;
 	}
 
 	public Idioma getIdioma() {
@@ -232,6 +257,14 @@ public class ParceiroNegocio implements Serializable {
 		this.ccm = ccm;
 	}
 
+	public Calendar getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Calendar dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
 	public Boolean getIsCliente() {
 		return isCliente;
 	}
@@ -256,19 +289,11 @@ public class ParceiroNegocio implements Serializable {
 		this.isFuncionario = isFuncionario;
 	}
 
-	public Boolean getIsIsentoImposto() {
-		return isIsentoImposto;
-	}
-
-	public void setIsIsentoImposto(Boolean isIsentoImposto) {
-		this.isIsentoImposto = isIsentoImposto;
-	}
-
 	public Boolean getIsActive() {
 		return isActive;
 	}
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
+	}	
 }

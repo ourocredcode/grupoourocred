@@ -3,6 +3,8 @@
 <script type="text/javascript">
 jQuery(function($){
 	
+		$('#parceiroNegocioDataNascimento').datepicker();
+	
 		$('#parceironegocio-li-a').click(function() {
 			window.location.href = '<c:url value="/parceironegocio/cadastro" />';
 		});
@@ -41,6 +43,16 @@ jQuery(function($){
 		   
 	   });
 	   
+	   $("#parceiroNegocioIsCliente").click(function(evento){
+
+		   if ($('#parceiroNegocioIsCliente').is(':checked')){
+		         $("#parceiroNegocioClienteSearch").css("display", "block");
+		      }else{
+		         $("#parceiroNegocioClienteSearch").css("display", "none");
+		      }
+		   
+	   });
+	   
 	   $("#localidadeCep").change(function(){
 			var enderecoCEP = $("#localidadeCep").val();
 			$.ajax({
@@ -63,7 +75,8 @@ jQuery(function($){
 		           }
 		       });
 		});
-
+	   
+	   
 });
 
 function limpaForm(){
@@ -86,12 +99,23 @@ function limpaForm(){
 		</ul>
 
 		<div id="myTabContent" class="tab-content">	
+		
+					
 
 			<div class="tab-pane fade active in" id="parceironegocio-div">
-			
-				<div class="control-group"></div>
 
-				<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
+					<div class="control-group"></div>
+					
+					<form class="form-search">
+						<div id="parceiroNegocioClienteSearch" style="display: none;">
+							<div class="input-append">
+								<input type="text" class="span2 search-query">
+								<button type="submit" class="btn">Busca PN</button>
+							</div>
+						</div>
+					</form>
+
+					<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
 	
 					<div class="controls controls-row">
 						<input class="span2" id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.usuario.empresa.nome }" type="text" required />
@@ -99,57 +123,55 @@ function limpaForm(){
 
 						<input class="span2" id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" value="${usuarioInfo.usuario.organizacao.nome }" type="text" required />
 						<input id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.usuario.organizacao.organizacao_id }" type="hidden" />
-					</div>
-					
-					<div class="controls controls-row">
-						
-						<label class="checkbox inline">
-							<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
-						</label>
-						<label class="checkbox inline">
-							<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
-						</label>
-						<label class="checkbox inline">
-							<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
-						</label>
-					
-					</div>
-					
+					</div>					
+
 					<div class="control-group"></div>
 		
 					<div class="controls controls-row">
-	
 						<select id="parceiroNegocioTipo">
 							<option value=""> Escolha o Tipo </option>
 							<option value="PessoaFisica"> Pessoa Fisica </option>
 							<option value="PessoaJuridica"> Pessoa Juridica </option>
 						</select>
-
-						<input  class="input-large" id="parceiroNegocioCategoriaParceiro" name="parceiroNegocio.categoriaParceiro.nome" type="text" value="Serviço">
-						<input  class="input-large" id="parceiroNegocioCategoriaParceiroId" name="parceiroNegocio.categoriaParceiro.categoriaParceiro_id" type="hidden" value="1">
-
-						<input  class="input-large" id="parceiroNegocioClassificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.nome" type="text" value="Normal">
-						<input  class="input-large" id="parceiroNegocioClassificacaoParceiroId" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id" type="hidden" value="1">
-
-						<input  class="input-large" id="parceiroNegocioGrupoParceiro" name="parceiroNegocio.grupoParceiro.nome" type="text" value="Teste">
-						<input  class="input-large" id="parceiroNegocioGrupoParceiroId" name="parceiroNegocio.grupoParceiro.grupoParceiro_id" type="hidden" value="1">
-
 					</div>
 
 					<div class="controls controls-row">
 
 						<input  class="input-xlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" placeholder="Nome">
 
-						<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" style="display: none;">
-							<input  class="input-large" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text" placeholder="Cpf">
-							<input  class="input-large" id="parceiroNegocioRg" name="parceiroNegocio.rg" type="text">
+					</div>
+					
+					<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" style="display: none;">
+							
+							<div class="controls controls-row">
+								<input  class="input-medium" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text" placeholder="Cpf">
+								<input  class="input-medium" id="parceiroNegocioRg" name="parceiroNegocio.rg" type="text" placeholder="Rg">
+								<input  class="input-medium" id="parceiroNegocioDataNascimento" name="parceiroNegocio.dataNascimento" type="text" placeholder="Nasc." >
+
+								<select  id="parceiroNegocioSexo" name="parceiroNegocio.sexo" class="input-medium">
+									<option value="" selected="selected">Sexo:</option>
+									<option value="MASCULINO">Masculino</option>
+									<option value="FEMININO">Feminino</option>
+								</select>
+								
+								<select  id="parceiroNegocioEstadoCivil" name="parceiroNegocio.estadoCivil" class="input-medium">
+									<option value="" selected="selected">Est Civil:</option>
+									<option value="SOLTEIRO">Solteiro</option>
+									<option value="CASADO">Casado</option>
+								</select>
+							</div>
+							<div class="controls controls-row">
+
+								
+
+							</div>
+							
 						</div>
 
 						<div id="parceiroNegocioTipoPessoaJuridica" class="row-fluid" style="display: none;">
 							<input  class="input-large" id="parceiroNegocioCnpj" name="parceiroNegocio.cnpj" type="text" placeholder="Cnpj">
 							<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text" placeholder="Insc Estadual">
 						</div>
-					</div>
 
 					<div id="parceiroNegocioFuncionario" class="row-fluid" style="display: none;">
 
@@ -175,22 +197,74 @@ function limpaForm(){
 					<div id="ajax_endereco">
 
 						<div class="controls controls-row">
-							<input class="span2" id="localidadeCep" name="localidadeCep" type="text" placeholder="Busca Cep" />
+							<input class="span2" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" />
 						</div>
 						<div id="alertCEP" style="position:absolute; float: right;width: 250px;margin-left: 180px;margin-top: -27px;"><i>Digite para buscar</i></div>
 
 						<div class="controls controls-row">
-							<input class="span7" id="localidadeEndereco" name="localidadeEndereco" type="text" placeholder="Endereço"/>
-							<input class="span1" id="localidadeNumero" name="localidadeNumero" type="text" placeholder="Número"/>
+							<input class="span7" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço"/>
+							<input class="span1" id="localidadeNumero" name="localidade.numero" type="text" placeholder="Número"/>
 						</div>
 
 						<div class="controls controls-row">
-							<input class="span3" id="localidadeComplemento" name="localidadeComplemento" type="text" placeholder="Complemento" />
-							<input class="span2" id="localidadeBairro" name="localidadeBairro" type="text" placeholder="Bairro" />
-							<input class="span2" id="localidadeCidade" name="localidadeCidade" type="text" placeholder="Cidade" />
-							<input class="span1" id="localidadeRegiao" name="localidadeRegiao" type="text" placeholder="UF"  />
+							<input class="span3" id="localidadeComplemento" name="localidade.complemento" type="text" placeholder="Complemento" />
+							<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" />
+							<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" />
+							<input class="span2" id="localidadeCidade" name="localidade.cidade.cidade_id" type="hidden" />
+							<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  />
 						</div>
-		
+
+					</div>
+
+					<c:if test="${not empty parceiroLocalidades}">
+					<div id="enderecos">
+
+						<table class="table table-striped table-bordered" id="lista">
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Nome</th>
+									<th>Chave</th>
+								</tr>
+							</thead>
+							<tbody>	
+								<c:forEach items="${parceiroLocalidades}" var="parceiroLocalidade">
+									<tr>
+										<td>${parceiroLocalidade.localidade.endereco }</td>
+										<td>${parceiroLocalidade.localidade.bairro }</td>
+										<td>${parceiroLocalidade.localidade.cidade.nome }</td>
+										<td>${parceiroLocalidade.localidade.cep }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+
+					</div>
+					</c:if>
+					<div class="controls controls-row">
+						<input  class="input-large" id="parceiroNegocioCategoriaParceiro" name="parceiroNegocio.categoriaParceiro.nome" type="text" value="Serviço">
+						<input  class="input-large" id="parceiroNegocioCategoriaParceiroId" name="parceiroNegocio.categoriaParceiro.categoriaParceiro_id" type="hidden" value="1">
+
+						<input  class="input-large" id="parceiroNegocioClassificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.nome" type="text" value="Normal">
+						<input  class="input-large" id="parceiroNegocioClassificacaoParceiroId" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id" type="hidden" value="1">
+
+						<input  class="input-large" id="parceiroNegocioGrupoParceiro" name="parceiroNegocio.grupoParceiro.nome" type="text" value="Teste">
+						<input  class="input-large" id="parceiroNegocioGrupoParceiroId" name="parceiroNegocio.grupoParceiro.grupoParceiro_id" type="hidden" value="1">
+					</div>
+					
+					<div class="controls controls-row">
+						
+						<label class="checkbox inline">
+							<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
+						</label>
+						<label class="checkbox inline">
+							<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
+						</label>
+						<label class="checkbox inline">
+							<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
+						</label>
+					
 					</div>
 
 					<div class="controls controls-row">
