@@ -28,7 +28,7 @@ public class RegiaoDao extends Dao<Regiao> {
 	
 	public Regiao buscaPorNome(String nome){
 
-		String sql = "select REGIAO.regiao_id, REGIAO.nome from REGIAO (NOLOCK) WHERE REGIAO.nome like ?";
+		String sql = "select REGIAO.regiao_id, REGIAO.nome, REGIAO.chave from REGIAO (NOLOCK) WHERE REGIAO.chave like ?";
 
 		this.conn = this.conexao.getConexao();
 		Regiao regiao = new Regiao();
@@ -42,6 +42,7 @@ public class RegiaoDao extends Dao<Regiao> {
 			while (rsRegiao.next()) {
 				regiao.setRegiao_id(rsRegiao.getLong("regiao_id"));				
 				regiao.setNome(rsRegiao.getString("nome"));
+				regiao.setChave(rsRegiao.getString("chave"));
 			}
 
 		} catch (SQLException e) {

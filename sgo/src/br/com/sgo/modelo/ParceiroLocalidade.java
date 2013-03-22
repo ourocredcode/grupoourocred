@@ -36,31 +36,20 @@ public class ParceiroLocalidade implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = true) 
 	private ParceiroNegocio parceiroNegocio; 
-
+	
 	@ManyToOne
 	@JoinColumn(name="localidade_id",updatable = true, nullable = true) 
 	private Localidade localidade;
+
+	@ManyToOne
+	@JoinColumn(name="tipoendereco_id",updatable = true, nullable = true)
+	private TipoEndereco tipoEndereco;
 
 	@Column(name="nome")
 	private String nome;
 
 	@Column(name="descricao")
 	private String descricao;
-
-	@Column(name="isentrega")
-	private Boolean isEntrega;
-
-	@Column(name="iscobranca")
-	private Boolean isCobranca;
-	
-	@Column(name="isfatura")
-	private Boolean isFatura;
-	
-	@Column(name="isassinatura")
-	private Boolean isAssinatura;
-	
-	@Column(name="isresidencial")
-	private Boolean isResidencial;
 
 	@Column(name="isactive")
 	private Boolean isActive;
@@ -70,6 +59,9 @@ public class ParceiroLocalidade implements Serializable {
 	
 	@Column(name="complemento")
 	private String complemento;
+	
+	@Column(name="pontoreferencia")
+	private String pontoReferencia;
 
 	public Long getParceiroLocalidade_id() {
 		return parceiroLocalidade_id;
@@ -111,6 +103,14 @@ public class ParceiroLocalidade implements Serializable {
 		this.localidade = localidade;
 	}
 
+	public TipoEndereco getTipoEndereco() {
+		return tipoEndereco;
+	}
+
+	public void setTipoEndereco(TipoEndereco tipoEndereco) {
+		this.tipoEndereco = tipoEndereco;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -125,46 +125,6 @@ public class ParceiroLocalidade implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public Boolean getIsEntrega() {
-		return isEntrega;
-	}
-
-	public void setIsEntrega(Boolean isEntrega) {
-		this.isEntrega = isEntrega;
-	}
-
-	public Boolean getIsCobranca() {
-		return isCobranca;
-	}
-
-	public void setIsCobranca(Boolean isCobranca) {
-		this.isCobranca = isCobranca;
-	}
-
-	public Boolean getIsFatura() {
-		return isFatura;
-	}
-
-	public void setIsFatura(Boolean isFatura) {
-		this.isFatura = isFatura;
-	}
-
-	public Boolean getIsAssinatura() {
-		return isAssinatura;
-	}
-
-	public void setIsAssinatura(Boolean isAssinatura) {
-		this.isAssinatura = isAssinatura;
-	}
-
-	public Boolean getIsResidencial() {
-		return isResidencial;
-	}
-
-	public void setIsResidencial(Boolean isResidencial) {
-		this.isResidencial = isResidencial;
 	}
 
 	public Boolean getIsActive() {
@@ -189,5 +149,13 @@ public class ParceiroLocalidade implements Serializable {
 
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
+	}
+
+	public String getPontoReferencia() {
+		return pontoReferencia;
+	}
+
+	public void setPontoReferencia(String pontoReferencia) {
+		this.pontoReferencia = pontoReferencia;
 	}
 }

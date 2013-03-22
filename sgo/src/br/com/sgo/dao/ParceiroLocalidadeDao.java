@@ -30,19 +30,19 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 	}
 	
 	public Collection<ParceiroLocalidade> buscaParceiroLocalidades(Long parceironegocio_id){
-
-		String sql = "SELECT PARCEIROLOCALIDADE.parceirolocalidade_id, PARCEIROLOCALIDADE.parceironegocio_id, " +
-				"		LOCALIDADE.localidade_id, LOCALIDADE.endereco, LOCALIDADE.bairro, LOCALIDADE.cep, PARCEIROLOCALIDADE.numero, " +
-				"		PARCEIROLOCALIDADE.complemento, LOCALIDADE.cidade_id, CIDADE.nome as cidade_nome, LOCALIDADE.regiao_id, REGIAO.nome, " +
-				"		LOCALIDADE.pais_id, PAIS.nome, PARCEIROLOCALIDADE.isentrega, PARCEIROLOCALIDADE.iscobranca, PARCEIROLOCALIDADE.isfatura, " +
-				"		PARCEIROLOCALIDADE.isassinatura, PARCEIROLOCALIDADE.isresidencial FROM ((((((ORGANIZACAO (NOLOCK) " +
-				"			INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON ORGANIZACAO.organizacao_id = PARCEIRONEGOCIO.organizacao_id) " +
-				"			INNER JOIN PARCEIROLOCALIDADE ON PARCEIRONEGOCIO.parceironegocio_id = PARCEIROLOCALIDADE.parceironegocio_id) " +
-				"			INNER JOIN LOCALIDADE (NOLOCK) ON PARCEIROLOCALIDADE.localidade_id = LOCALIDADE.localidade_id) " +
-				"			INNER JOIN EMPRESA (NOLOCK) ON PARCEIRONEGOCIO.empresa_id = EMPRESA.empresa_id) " +
-				"			INNER JOIN PAIS (NOLOCK) ON LOCALIDADE.pais_id = PAIS.pais_id) " +
-				"			INNER JOIN REGIAO ON LOCALIDADE.regiao_id = REGIAO.regiao_id) " +
-				"			INNER JOIN CIDADE (NOLOCK) ON LOCALIDADE.cidade_id = CIDADE.cidade_id WHERE PARCEIRONEGOCIO.parceironegocio_id = ?";
+		
+		String sql = "SELECT PARCEIROLOCALIDADE.parceirolocalidade_id, PARCEIROLOCALIDADE.parceironegocio_id , LOCALIDADE.localidade_id, " +
+				"		LOCALIDADE.endereco, LOCALIDADE.bairro, LOCALIDADE.cep, PARCEIROLOCALIDADE.numero , PARCEIROLOCALIDADE.complemento, " +
+				"		LOCALIDADE.cidade_id, CIDADE.nome as cidade_nome, LOCALIDADE.regiao_id, REGIAO.nome as regiao_nome , " +
+				"		LOCALIDADE.pais_id, PAIS.nome as pais_nome, PARCEIROLOCALIDADE.tipoendereco_id, TIPOENDERECO.nome as tipoendereco_nome FROM " +
+				"		((((LOCALIDADE INNER JOIN PAIS ON LOCALIDADE.pais_id = PAIS.pais_id) INNER JOIN REGIAO ON LOCALIDADE.regiao_id = REGIAO.regiao_id) " +
+				"			INNER JOIN CIDADE ON LOCALIDADE.cidade_id = CIDADE.cidade_id) " +
+				"			INNER JOIN (((ORGANIZACAO INNER JOIN PARCEIRONEGOCIO ON ORGANIZACAO.organizacao_id = PARCEIRONEGOCIO.organizacao_id) " +
+				"			INNER JOIN EMPRESA ON PARCEIRONEGOCIO.empresa_id = EMPRESA.empresa_id) " +
+				"			INNER JOIN PARCEIROLOCALIDADE ON PARCEIRONEGOCIO.parceironegocio_id = PARCEIROLOCALIDADE.parceironegocio_id) ON " +
+				"				LOCALIDADE.localidade_id = PARCEIROLOCALIDADE.localidade_id) " +
+				"			INNER JOIN TIPOENDERECO ON PARCEIROLOCALIDADE.tipoendereco_id = TIPOENDERECO.tipoendereco_id " +
+				"		WHERE PARCEIROLOCALIDADE.parceironegocio_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -74,10 +74,8 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 
 				parceiroLocalidade.setNumero(rsParceiroLocalidade.getString("numero"));
 				parceiroLocalidade.setComplemento(rsParceiroLocalidade.getString("complemento"));
-				
-				parceiroLocalidade.setIsAssinatura(rsParceiroLocalidade.getBoolean("isassinatura"));
-				parceiroLocalidade.setIsResidencial(rsParceiroLocalidade.getBoolean("isresidencial"));
-				
+				parceiroLocalidade.setPontoReferencia(rsParceiroLocalidade.getString("pontoreferencia"));
+
 				parceiroLocalidade.setLocalidade(localidade);
 
 				parceiroLocalidades.add(parceiroLocalidade);

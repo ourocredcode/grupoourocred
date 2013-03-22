@@ -42,7 +42,7 @@
 			<div>
 
           <c:if test="${not empty usuarioInfo.usuario}">
-	            <div id="navbar-example" class="navbar navbar-static">
+	            <div id="navbar" class="navbar">
 	              <div class="navbar-inner">
 	                <div class="container" style="width: auto;">
 	                  <a class="brand" href="#">${usuarioInfo.usuario.organizacao.nome }</a>
