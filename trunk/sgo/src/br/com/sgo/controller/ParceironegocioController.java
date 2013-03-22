@@ -8,12 +8,15 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.DepartamentoDao;
 import br.com.sgo.dao.EmpresaDao;
+import br.com.sgo.dao.EstadoCivilDao;
 import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
+import br.com.sgo.dao.SexoDao;
+import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Funcionario;
@@ -34,10 +37,13 @@ public class ParceironegocioController {
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
+	private final SexoDao sexoDao;
+	private final EstadoCivilDao estadoCivilDao;
+	private final TipoParceiroDao tipoParceiroDao;
 
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,
-			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao) {
+			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -48,7 +54,10 @@ public class ParceironegocioController {
 		this.localidadeDao = localidadeDao;
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;
+		this.sexoDao = sexoDao;
+		this.estadoCivilDao = estadoCivilDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
+		this.tipoParceiroDao = tipoParceiroDao;
 
 	}
 
@@ -61,9 +70,31 @@ public class ParceironegocioController {
 		result.include("funcoes", this.funcaoDao.buscaFuncoes(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
 				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
 
+		result.include("sexos", this.sexoDao.buscaSexos());
+		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
+		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
+
 	}
 
-	
+	@Get
+	@Path("/parceironegocio/cadastro/{parceironegocio_id}")
+	public void cadastro(Long parceironegocio_id){
+
+		result.include("departamentos", this.departamentoDao.buscaDepartamentos(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
+					usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
+		result.include("funcoes", this.funcaoDao.buscaFuncoes(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
+				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
+
+		result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceironegocio_id));
+
+		result.include("sexos", this.sexoDao.buscaSexos());
+		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
+		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
+		
+		result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceironegocio_id));
+
+	}
+
 	@Post
 	@Public
 	@Path("/parceironegocio/salva")
@@ -82,6 +113,7 @@ public class ParceironegocioController {
 				f.setEmpresa(parceiroNegocio.getEmpresa());
 				f.setOrganizacao(parceiroNegocio.getOrganizacao());
 				f.setDepartamento(funcionario.getDepartamento());
+				f.setParceiroNegocio(parceiroNegocio);
 				f.setFuncao(funcionario.getFuncao());
 				f.setApelido(funcionario.getApelido());
 				f.setIsActive(parceiroNegocio.getIsActive());
@@ -123,6 +155,31 @@ public class ParceironegocioController {
 	@Public
 	public void parceironegocio(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(this.parceiroNegocioDao.buscaParceiroNegocio(empresa_id, organizacao_id, nome)).serialize();
+	}
+
+	@Post
+	@Path("/parceironegocio/busca.funcionario")
+	public void buscaFuncionario(String doc){
+
+		result.redirectTo(this).cadastro(this.parceiroNegocioDao.buscaParceiroNegocioDocumento(
+				usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), doc).getParceiroNegocio_id());
+
+	}
+	
+	@Post
+	@Path("/parceironegocio/salvaLocalidade")
+	public void salvaLocalidade(Localidade localidade, ParceiroLocalidade parceiroLocalidade){
+
+		System.out.println(localidade.getCep());
+		System.out.println(localidade.getEndereco());
+		System.out.println(localidade.getBairro());
+		System.out.println(localidade.getCidade().getCidade_id());
+		System.out.println(localidade.getRegiao().getRegiao_id());
+		System.out.println(parceiroLocalidade.getComplemento());
+		System.out.println(parceiroLocalidade.getNumero());
+
+		result.nothing();
+
 	}
 
 }

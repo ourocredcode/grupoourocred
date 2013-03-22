@@ -15,17 +15,17 @@ jQuery(function($){
 	
 		
 
-	   $("#parceiroNegocioTipo").change(function(evento){
+	   $("#parceiroNegocioTipoParceiroId").change(function(evento){
 
-		   var parceiroNegocioTipo = $("#parceiroNegocioTipo").val();
-		   
-		   if(parceiroNegocioTipo == 'PessoaFisica'){
+		   var id = $("#parceiroNegocioTipoParceiroId").val();
+
+		   if(id == 1){
 			   $("#parceiroNegocioTipoPessoaFisica").css("display", "block");
 		   } else {
 			   $("#parceiroNegocioTipoPessoaFisica").css("display", "none");
 		   }
 		   
-		   if(parceiroNegocioTipo == 'PessoaJuridica'){
+		   if(id == 2){
 			   $("#parceiroNegocioTipoPessoaJuridica").css("display", "block");
 		   } else {
 			   $("#parceiroNegocioTipoPessoaJuridica").css("display", "none");
@@ -53,6 +53,16 @@ jQuery(function($){
 		   
 	   });
 	   
+	   $("#parceiroNegocioIsFuncionario").click(function(evento){
+
+		   if ($('#parceiroNegocioIsFuncionario').is(':checked')){
+		         $("#parceiroNegocioFuncionarioSearch").css("display", "block");
+		      }else{
+		         $("#parceiroNegocioFuncionarioSearch").css("display", "none");
+		      }
+		   
+	   });
+	   
 	   $("#localidadeCep").change(function(){
 			var enderecoCEP = $("#localidadeCep").val();
 			$.ajax({
@@ -65,9 +75,9 @@ jQuery(function($){
 		           success: function(txt) {
 		              if(txt!='ERRO'){
 		            	  $('#ajax_endereco').html(txt);
-		            	  $('#alertCEP').html('CEP Encontrado');
+		            	  $('#alertCEP').html('ICON');
 		              }else{
-		                  $('#alertCEP').html('CEP Inexistente');
+		                  $('#alertCEP').html('ICON');
 		              }
 		           },
 		           error: function(txt) {
@@ -76,7 +86,9 @@ jQuery(function($){
 		       });
 		});
 	   
-	   
+	   $('#bttNovo').click(function() {
+			window.location.href = '<c:url value="/parceironegocio/cadastro" />';
+		});
 });
 
 function limpaForm(){
@@ -84,6 +96,32 @@ function limpaForm(){
 		document.usuarioForm.reset();
 	}	
 }
+
+function salvaEndereco() {
+
+	var cep = $("#localidadeCep").val();
+	var endereco = $("#localidadeEndereco").val();
+	var numero = $("#parceirolocalidadeNumero").val();
+	var complemento = $("#parceirolocalidadeComplemento").val();
+	var bairro = $("#localidadeBairro").val();
+	var cidadeId = $("#localidadeCidadeId").val();
+	var regiaoId = $("#localidadeRegiaoId").val();
+
+	if (window.confirm("Deseja salvar o endereço?"))
+		$.post('<c:url value='/parceironegocio/salvaLocalidade' />',{
+				'localidade.cep' : cep ,
+				'localidade.endereco' : endereco,
+				'localidade.bairro' : bairro,
+				'parceiroLocalidade.complemento' : complemento,
+				'parceiroLocalidade.numero' : numero,
+				'localidade.cidade.cidade_id' : cidadeId,
+				'localidade.regiao.regiao_id' : regiaoId,}
+		, function(resposta) { alert(resposta); });
+
+	return false;
+}
+
+
 </script>
 
 
@@ -99,162 +137,13 @@ function limpaForm(){
 		</ul>
 
 		<div id="myTabContent" class="tab-content">	
-		
-					
 
-			<div class="tab-pane fade active in" id="parceironegocio-div">
+			<div class="tab-pane fade active in" id="parceironegocio-div" >
 
 					<div class="control-group"></div>
 					
-					<form class="form-search">
-						<div id="parceiroNegocioClienteSearch" style="display: none;">
-							<div class="input-append">
-								<input type="text" class="span2 search-query">
-								<button type="submit" class="btn">Busca PN</button>
-							</div>
-						</div>
-					</form>
+					<div class="controls controls-row" style=" height: 85px">
 
-					<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
-	
-					<div class="controls controls-row">
-						<input class="span2" id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.usuario.empresa.nome }" type="text" required />
-						<input class="span2" id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden" value="${usuarioInfo.usuario.empresa.empresa_id }" />
-
-						<input class="span2" id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" value="${usuarioInfo.usuario.organizacao.nome }" type="text" required />
-						<input id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.usuario.organizacao.organizacao_id }" type="hidden" />
-					</div>					
-
-					<div class="control-group"></div>
-		
-					<div class="controls controls-row">
-						<select id="parceiroNegocioTipo">
-							<option value=""> Escolha o Tipo </option>
-							<option value="PessoaFisica"> Pessoa Fisica </option>
-							<option value="PessoaJuridica"> Pessoa Juridica </option>
-						</select>
-					</div>
-
-					<div class="controls controls-row">
-
-						<input  class="input-xlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" placeholder="Nome">
-
-					</div>
-					
-					<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" style="display: none;">
-							
-							<div class="controls controls-row">
-								<input  class="input-medium" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text" placeholder="Cpf">
-								<input  class="input-medium" id="parceiroNegocioRg" name="parceiroNegocio.rg" type="text" placeholder="Rg">
-								<input  class="input-medium" id="parceiroNegocioDataNascimento" name="parceiroNegocio.dataNascimento" type="text" placeholder="Nasc." >
-
-								<select  id="parceiroNegocioSexo" name="parceiroNegocio.sexo" class="input-medium">
-									<option value="" selected="selected">Sexo:</option>
-									<option value="MASCULINO">Masculino</option>
-									<option value="FEMININO">Feminino</option>
-								</select>
-								
-								<select  id="parceiroNegocioEstadoCivil" name="parceiroNegocio.estadoCivil" class="input-medium">
-									<option value="" selected="selected">Est Civil:</option>
-									<option value="SOLTEIRO">Solteiro</option>
-									<option value="CASADO">Casado</option>
-								</select>
-							</div>
-							<div class="controls controls-row">
-
-								
-
-							</div>
-							
-						</div>
-
-						<div id="parceiroNegocioTipoPessoaJuridica" class="row-fluid" style="display: none;">
-							<input  class="input-large" id="parceiroNegocioCnpj" name="parceiroNegocio.cnpj" type="text" placeholder="Cnpj">
-							<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text" placeholder="Insc Estadual">
-						</div>
-
-					<div id="parceiroNegocioFuncionario" class="row-fluid" style="display: none;">
-
-						<div class="controls controls-row">
-
-							<select  id="funcionarioDepartamento" name="funcionario.departamento" >
-								<option value="">Selecione</option>
-								<c:forEach var="departamento" items="${departamentos }">
-									<option value="${departamento.departamento_id }"> ${departamento.nome }</option>
-								</c:forEach>
-							</select>
-
-							<select  id="funcionarioFuncao" name="funcionario.funcao" >
-								<option value="">Selecione</option>
-								<c:forEach var="funcao" items="${funcoes }">
-									<option value="${funcao.funcao_id }"> ${funcao.nome }</option>
-								</c:forEach>
-							</select>
-
-						</div>
-					</div>
-					
-					<div id="ajax_endereco">
-
-						<div class="controls controls-row">
-							<input class="span2" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" />
-						</div>
-						<div id="alertCEP" style="position:absolute; float: right;width: 250px;margin-left: 180px;margin-top: -27px;"><i>Digite para buscar</i></div>
-
-						<div class="controls controls-row">
-							<input class="span7" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço"/>
-							<input class="span1" id="localidadeNumero" name="localidade.numero" type="text" placeholder="Número"/>
-						</div>
-
-						<div class="controls controls-row">
-							<input class="span3" id="localidadeComplemento" name="localidade.complemento" type="text" placeholder="Complemento" />
-							<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" />
-							<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" />
-							<input class="span2" id="localidadeCidade" name="localidade.cidade.cidade_id" type="hidden" />
-							<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  />
-						</div>
-
-					</div>
-
-					<c:if test="${not empty parceiroLocalidades}">
-					<div id="enderecos">
-
-						<table class="table table-striped table-bordered" id="lista">
-							<thead>
-								<tr>
-									<th>Empresa</th>
-									<th>Organização</th>
-									<th>Nome</th>
-									<th>Chave</th>
-								</tr>
-							</thead>
-							<tbody>	
-								<c:forEach items="${parceiroLocalidades}" var="parceiroLocalidade">
-									<tr>
-										<td>${parceiroLocalidade.localidade.endereco }</td>
-										<td>${parceiroLocalidade.localidade.bairro }</td>
-										<td>${parceiroLocalidade.localidade.cidade.nome }</td>
-										<td>${parceiroLocalidade.localidade.cep }</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-
-					</div>
-					</c:if>
-					<div class="controls controls-row">
-						<input  class="input-large" id="parceiroNegocioCategoriaParceiro" name="parceiroNegocio.categoriaParceiro.nome" type="text" value="Serviço">
-						<input  class="input-large" id="parceiroNegocioCategoriaParceiroId" name="parceiroNegocio.categoriaParceiro.categoriaParceiro_id" type="hidden" value="1">
-
-						<input  class="input-large" id="parceiroNegocioClassificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.nome" type="text" value="Normal">
-						<input  class="input-large" id="parceiroNegocioClassificacaoParceiroId" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id" type="hidden" value="1">
-
-						<input  class="input-large" id="parceiroNegocioGrupoParceiro" name="parceiroNegocio.grupoParceiro.nome" type="text" value="Teste">
-						<input  class="input-large" id="parceiroNegocioGrupoParceiroId" name="parceiroNegocio.grupoParceiro.grupoParceiro_id" type="hidden" value="1">
-					</div>
-					
-					<div class="controls controls-row">
-						
 						<label class="checkbox inline">
 							<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
 						</label>
@@ -264,8 +153,196 @@ function limpaForm(){
 						<label class="checkbox inline">
 							<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
 						</label>
+						
+						<div id="parceiroNegocioClienteSearch" style="display: none;margin-top: 10px">
+							<form class="form-search" action="<c:url value="/parceironegocio/busca.cliente" />" method="POST">
+								<div class="input-append">
+									<input type="text" class="span2 search-query">
+									<button type="submit" class="btn">Busca PN</button>
+								</div>
+							</form>
+						</div>
+	
+						<div id="parceiroNegocioFuncionarioSearch" style="display: none;margin-top: 10px">
+							<form class="form-search" action="<c:url value="/parceironegocio/busca.funcionario"  />" method="POST">
+								<div class="input-append">
+									<input type="text" class="span2 search-query" id="doc" name="doc">
+									<button type="submit" class="btn">Busca Funcionário</button>
+								</div>
+							</form>
+						</div>
 					
 					</div>
+
+					<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
+
+					<div class="controls controls-row">
+						<input class="span2" id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.usuario.empresa.nome }" type="text" required />
+						<input class="span2" id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden" value="${usuarioInfo.usuario.empresa.empresa_id }" />
+
+						<input class="span2" id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" value="${usuarioInfo.usuario.organizacao.nome }" type="text" required />
+						<input id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.usuario.organizacao.organizacao_id }" type="hidden" />
+						
+						<input  class="input-large" id="parceiroNegocioCategoriaParceiro" name="parceiroNegocio.categoriaParceiro.nome" type="text" value="Serviço">
+						<input  class="input-large" id="parceiroNegocioCategoriaParceiroId" name="parceiroNegocio.categoriaParceiro.categoriaParceiro_id" type="hidden" value="1">
+
+						<input  class="input-large" id="parceiroNegocioClassificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.nome" type="text" value="Normal">
+						<input  class="input-large" id="parceiroNegocioClassificacaoParceiroId" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id" type="hidden" value="1">
+
+						<input  class="input-large" id="parceiroNegocioGrupoParceiro" name="parceiroNegocio.grupoParceiro.nome" type="text" value="Teste">
+						<input  class="input-large" id="parceiroNegocioGrupoParceiroId" name="parceiroNegocio.grupoParceiro.grupoParceiro_id" type="hidden" value="1">
+					</div>	
+
+					<div class="control-group"></div>
+		
+					<div class="controls controls-row">
+						<select id="parceiroNegocioTipoParceiroId" name="parceiroNegocio.tipoParceiro.tipoParceiro_id">
+							<option value="">Tipo Parceiro:</option>
+							<c:forEach var="tipoParceiro" items="${tiposParceiro }">
+							 	<option value="${tipoParceiro.tipoParceiro_id }" <c:if test="${parceiroNegocio.tipoParceiro.tipoParceiro_id eq tipoParceiro.tipoParceiro_id }"> selected="selected"</c:if>>${tipoParceiro.nome }</option>
+							</c:forEach>
+						</select>
+					</div>
+
+					<div class="controls controls-row">
+
+						<input  class="input-xlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" placeholder="Nome" value="${parceiroNegocio.nome }">
+
+					</div>
+					
+					<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" 
+							<c:if test="${parceiroNegocio.isFuncionario || parceiroNegocio.isCliente }">style="display: block;"</c:if>
+							<c:if test="${parceiroNegocio.isFornecedor || empty parceiroNegocio}">style="display: none;"</c:if>>
+
+							<div class="controls controls-row">
+
+								<input  class="input-medium" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text" placeholder="Cpf" value="${parceiroNegocio.cpf }">
+								<input  class="input-medium" id="parceiroNegocioRg" name="parceiroNegocio.rg" type="text" placeholder="Rg" value="${parceiroNegocio.rg }">
+								<input  class="input-medium" id="parceiroNegocioDataNascimento" name="parceiroNegocio.dataNascimento" type="text" placeholder="Nasc." 
+								value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${parceiroNegocio.dataNascimento.time }" />">
+
+								<select  id="parceiroNegocioSexoId" name="parceiroNegocio.sexo.sexo_id" class="input-medium">
+									<option value="">Sexo:</option>
+									<c:forEach var="sexo" items="${sexos }">
+									 	<option value="${sexo.sexo_id }" <c:if test="${parceiroNegocio.sexo.sexo_id eq sexo.sexo_id }"> selected="selected"</c:if>>${sexo.nome }</option>
+									</c:forEach>
+								</select>
+
+								<select  id="parceiroNegocioEstadoCivilId" name="parceiroNegocio.estadoCivil.estadoCivil_id" class="input-medium">
+									<option value="">Est Civil:</option>
+									<c:forEach var="estadoCivil" items="${estadosCivis }">
+									 	<option value="${estadoCivil.estadoCivil_id }" <c:if test="${parceiroNegocio.estadoCivil.estadoCivil_id eq estadoCivil.estadoCivil_id }"> selected="selected"</c:if>>${estadoCivil.nome }</option>
+									</c:forEach>
+
+								</select>
+							</div>						
+						</div>
+
+						<div id="parceiroNegocioTipoPessoaJuridica" class="row-fluid" style="display: none;">
+							<input  class="input-large" id="parceiroNegocioCnpj" name="parceiroNegocio.cnpj" type="text" placeholder="Cnpj">
+							<input  class="input-large" id="parceiroNegocioIe" name="parceiroNegocio.ie" type="text" placeholder="Insc Estadual">
+						</div>
+
+					<div id="parceiroNegocioFuncionario" class="row-fluid" 
+							<c:if test="${parceiroNegocio.isFuncionario || parceiroNegocio.isCliente }">style="display: block;"</c:if>
+							<c:if test="${parceiroNegocio.isFornecedor || empty parceiroNegocio}">style="display: none;"</c:if>>
+
+						<div class="controls controls-row">
+
+							<select  id="funcionarioDepartamentoId" name="funcionario.departamento.departamento_id" >
+								<option value="">Selecione</option>
+								<c:forEach var="departamento" items="${departamentos }">
+									<option value="${departamento_id }" <c:if test="${funcionario.departamento.departamento_id eq departamento.departamento_id }"> selected="selected"</c:if>> ${departamento.nome }</option>
+								</c:forEach>
+							</select>
+
+							<select  id="funcionarioFuncaoId" name="funcionario.funcao.funcao_id" >
+								<option value="">Selecione</option>
+								<c:forEach var="funcao" items="${funcoes }">
+									<option value="${funcao.funcao_id }" <c:if test="${funcionario.funcao.funcao_id eq funcao.funcao_id }"> selected="selected"</c:if>> ${funcao.nome }</option>
+								</c:forEach>
+							</select>
+
+						</div>
+					</div>
+					
+					
+					<div id="ajax_endereco" style="display: block;">
+					
+						<div class="row-fluid">
+							<input class="span2" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" />
+							<input class="span5 offset4" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço"/>
+							<input class="span1" id="localidadeNumero" name="localidade.numero" type="text" placeholder="Número"/>
+						</div>
+
+						<div id="alertCEP" style="position:absolute; float: right;width: 250px;margin-left: 100px;margin-top: -27px;"><i>ICON</i></div>
+
+						<div class="row-fluid">		
+							<input class="span2" id="localidadeComplemento" name="localidade.complemento" type="text" placeholder="Complemento" />
+							<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" />
+							<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" />
+							<input class="span2" id="localidadeCidade" name="localidade.cidade.cidade_id" type="hidden" />
+							<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  />
+						</div>
+						
+						<div class="btn-toolbar">
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="salvaEndereco();">Adicionar Endereço</button>
+							</div>	
+						</div>
+				
+					</div>
+					
+					
+					
+					
+					
+					<c:if test="${not empty parceiroLocalidades}">
+						<div id="enderecos" style="margin-top: 15px;">
+							<table class="table table-striped table-bordered" id="lista">
+								<thead>
+									<tr>
+										<th>Cep</th>
+										<th>Bairro</th>
+										<th>Cidade</th>
+										<th>Endereço</th>
+										<th>Número</th>
+										<th>Complemento</th>
+										<th>Tipo</th>
+										<th>Ação</th>
+										<th>Excluir</th>
+									</tr>
+								</thead>
+								<tbody>	
+									<c:forEach items="${parceiroLocalidades}" var="parceiroLocalidade">
+										<tr>
+											<td>${parceiroLocalidade.localidade.cep }</td>
+											<td>${parceiroLocalidade.localidade.bairro }</td>
+											<td>${parceiroLocalidade.localidade.cidade.nome }</td>
+											<td>${parceiroLocalidade.localidade.endereco }</td>
+											<td>${parceiroLocalidade.numero }</td>
+											<td>${parceiroLocalidade.complemento }</td>
+											<td>
+												<c:choose>
+													<c:when test="${parceiroLocalidade.isAssinatura}"> Assinatura! </c:when>
+													<c:when test="${parceiroLocalidade.isResidencial}"> Residencial! </c:when>
+													<c:otherwise> Nem um nem outro! </c:otherwise>
+												</c:choose>
+											</td>
+											<td>
+												<button type="button" class="btn btn-primary">Alterar</button>
+												
+											</td>
+											<td>
+												<button type="button" class="btn btn-primary">Excluir</button>
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+	
+						</div>
+					</c:if>
 
 					<div class="controls controls-row">
 						<label class="checkbox">
@@ -276,6 +353,7 @@ function limpaForm(){
 					<div class="btn-toolbar">
 						<div class="btn-group">
 							<button type="submit" class="btn btn-primary">Salvar</button>
+							<button type="button" class="btn btn-primary" id="bttNovo">Novo</button>
 						</div>	
 					</div>
 				</form>		

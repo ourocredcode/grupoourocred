@@ -23,7 +23,7 @@ public class EstadoCivil implements Serializable {
 	@Id
 	@Column(name = "estadocivil_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long estadocivil_id;
+	private Long estadoCivil_id;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -41,14 +41,6 @@ public class EstadoCivil implements Serializable {
 	
 	@Column(name="isactive")
 	private Boolean isActive;
-
-	public Long getEstadocivil_id() {
-		return estadocivil_id;
-	}
-
-	public void setEstadocivil_id(Long estadocivil_id) {
-		this.estadocivil_id = estadocivil_id;
-	}
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -88,5 +80,13 @@ public class EstadoCivil implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Long getEstadoCivil_id() {
+		return estadoCivil_id;
+	}
+
+	public void setEstadoCivil_id(Long estadoCivil_id) {
+		this.estadoCivil_id = estadoCivil_id;
 	}
 }

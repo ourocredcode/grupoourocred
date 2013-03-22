@@ -42,14 +42,6 @@ public class TipoParceiro implements Serializable {
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getTipoParceiro_id() {
-		return tipoParceiro_id;
-	}
-
-	public void setTipoParceiro_id(Long tipoParceiro_id) {
-		this.tipoParceiro_id = tipoParceiro_id;
-	}
-
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -94,5 +86,11 @@ public class TipoParceiro implements Serializable {
 		return serialVersionUID;
 	}
 
-	
+	public Long getTipoParceiro_id() {
+		return tipoParceiro_id;
+	}
+
+	public void setTipoParceiro_id(Long tipoParceiro_id) {
+		this.tipoParceiro_id = tipoParceiro_id;
+	}
 }

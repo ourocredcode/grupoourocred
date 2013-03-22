@@ -17,7 +17,6 @@ import br.com.sgo.modelo.ParceiroNegocio;
 @Component
 public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 
-	private Session session;	
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -25,16 +24,8 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 
 	public ParceiroNegocioDao(Session session , ConnJDBC conexao) {
 		super(session, ParceiroNegocio.class);
-		this.session = session;
 		this.conexao =conexao;
 	}
-
-	/*
-	public Long salva(ParceiroNegocio p){
-		this.session.saveOrUpdate(p);
-		return p.getParceiroNegocio_id();
-	}
-	*/
 
 	public Collection<ParceiroNegocio> buscaParceiroNegocio(Long empresa_id, Long organizacao_id, String nome){
 
@@ -69,6 +60,39 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 		}
 		this.conexao.closeConnection(rsParceiroNegocio, stmt, conn);
 		return parceiros;
+	}
+	
+	public ParceiroNegocio buscaParceiroNegocioDocumento(Long empresa_id, Long organizacao_id, String doc){
+
+		String sql = "select PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.nome from PARCEIRONEGOCIO (NOLOCK) " +
+				"	WHERE PARCEIRONEGOCIO.isactive=1 AND PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? AND " +
+				"	(PARCEIRONEGOCIO.cpf like ? OR PARCEIRONEGOCIO.rg like ?)";
+
+		this.conn = this.conexao.getConexao();
+		ParceiroNegocio parceiro = new ParceiroNegocio();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);			
+			this.stmt.setLong(1, empresa_id);			
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3,"%"+  doc + "%");		
+			this.stmt.setString(4,"%"+  doc + "%");	
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				parceiro.setParceiroNegocio_id(rsParceiroNegocio.getLong("parceironegocio_id"));				
+				parceiro.setNome(rsParceiroNegocio.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsParceiroNegocio, stmt, conn);
+		return parceiro;
 	}
 
 }

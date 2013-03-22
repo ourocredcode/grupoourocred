@@ -21,7 +21,6 @@ import br.com.sgo.modelo.UsuarioPerfil;
 @Component
 public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -31,7 +30,6 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 
 	public UsuarioPerfilDao(Session session,ConnJDBC conexao) {
 		super(session, UsuarioPerfil.class);
-		this.session = session;
 		this.conexao = conexao;
 	}
 
