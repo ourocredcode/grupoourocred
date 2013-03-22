@@ -1,27 +1,51 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <div id="ajax_endereco" style="display: block;">
 
-	<div class="row-fluid">
-		<input class="span2" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
-		<input class="span5 offset4" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço" value="${localidade.endereco }"/>
-		<input class="span1" id="parceirolocalidadeNumero" name="parceiroLocalidade.numero" type="text" placeholder="Número"/>
-	</div>
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container">
+				
+				<div class="control-group"></div>
+				<div class="page-header">
+					<h1><small>Endereço</small></h1>
+				</div>
+				
+				<div class="input-append">
+					<input class="span2" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
+					<span class="add-on"><i class="icon-search"></i></span>
+				</div>
 
-	<div id="alertCEP" style="position:absolute; float: right;width: 250px;margin-left: 100px;margin-top: -27px;"><i>icon</i></div>
+				<div class="row-fluid">
+					<input class="span5" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço" value="${localidade.endereco }"/>
+					<input class="span1" id="parceirolocalidadeNumero" name="parceiroLocalidade.numero" type="text" placeholder="Número"/>
+					<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" value="${localidade.bairro }" />
+					<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />
+					<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  value="${localidade.regiao.chave }"  />
+				</div>
 
-	<div class="row-fluid">		
-		<input class="span2" id="parceirolocalidadeComplemento" name="parceirolocalidade.complemento" type="text" placeholder="Complemento" />
-		<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" value="${localidade.bairro }" />
-		<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />
-		<input class="span2" id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
-		<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  value="${localidade.regiao.nome }"  />
-		<input class="span1" id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
-		<input class="span1" id="localidadePaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
-	</div>
-	
-	<div class="btn-toolbar">
-		<div class="btn-group">
-			<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="salvaEndereco();">Adicionar Endereço</button>
-		</div>	
+				<div id="alertCEP" style="position:absolute; float: right;width: 250px;margin-left: 100px;margin-top: -27px;"><i></i></div>
+
+				<div class="row-fluid">		
+
+					<input class="span2" id="parceirolocalidadeComplemento" name="parceirolocalidade.complemento" type="text" placeholder="Complemento" />
+					<input class="span9" id="parceirolocalidadePontoReferencia" name="parceirolocalidade.pontoreferencia" type="text" placeholder="Ponto de Referência" />
+
+					<input  id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
+					<input  id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
+					<input  id="localidadePaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
+				</div>
+			
+				<c:if test="${not empty parceiroNegocio }">
+					<div class="btn-toolbar">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="salvaEndereco();">Adicionar Endereço</button>
+						</div>	
+					</div>
+				</c:if>
+				
+			</div>
+		</div>
 	</div>
 
 </div>

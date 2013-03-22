@@ -15,46 +15,39 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="REGIAO")
-public class Regiao implements Serializable {
+@Table(name="TIPOENDERECO")
+public class TipoEndereco implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "regiao_id")  
+	@Column(name = "tipoendereco_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long regiao_id;
+	private Long tipoEndereco_id;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
-
+		
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
-
-	@ManyToOne
-	@JoinColumn(name="pais_id",updatable = true, nullable = false) 
-	private Pais pais;
-
+	
 	@Column(name="nome")
 	private String nome;
-
-	@Column(name="chave")
-	private String chave;
-
+	
 	@Column(name="descricao")
 	private String descricao;
-
+	
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getRegiao_id() {
-		return regiao_id;
+	public Long getTipoEndereco_id() {
+		return tipoEndereco_id;
 	}
 
-	public void setRegiao_id(Long regiao_id) {
-		this.regiao_id = regiao_id;
+	public void setTipoEndereco_id(Long tipoEndereco_id) {
+		this.tipoEndereco_id = tipoEndereco_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -71,14 +64,6 @@ public class Regiao implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public Pais getPais() {
-		return pais;
-	}
-
-	public void setPais(Pais pais) {
-		this.pais = pais;
 	}
 
 	public String getNome() {
@@ -103,13 +88,5 @@ public class Regiao implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public String getChave() {
-		return chave;
-	}
-
-	public void setChave(String chave) {
-		this.chave = chave;
 	}
 }
