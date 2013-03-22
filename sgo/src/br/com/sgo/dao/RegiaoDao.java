@@ -15,7 +15,7 @@ import br.com.sgo.modelo.Regiao;
 @Component
 public class RegiaoDao extends Dao<Regiao> {
 
-	private Session session;
+	
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -23,7 +23,6 @@ public class RegiaoDao extends Dao<Regiao> {
 	
 	public RegiaoDao(Session session,ConnJDBC conexao) {
 		super(session, Regiao.class);
-		this.session = session;
 		this.conexao = conexao;
 	}
 	
