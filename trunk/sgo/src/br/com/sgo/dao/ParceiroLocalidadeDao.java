@@ -32,7 +32,7 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 	public Collection<ParceiroLocalidade> buscaParceiroLocalidades(Long parceironegocio_id){
 		
 		String sql = "SELECT PARCEIROLOCALIDADE.parceirolocalidade_id, PARCEIROLOCALIDADE.parceironegocio_id , LOCALIDADE.localidade_id, " +
-				"		LOCALIDADE.endereco, LOCALIDADE.bairro, LOCALIDADE.cep, PARCEIROLOCALIDADE.numero , PARCEIROLOCALIDADE.complemento, " +
+				"		LOCALIDADE.endereco, LOCALIDADE.bairro, LOCALIDADE.cep, PARCEIROLOCALIDADE.numero , PARCEIROLOCALIDADE.complemento,PARCEIROLOCALIDADE.pontoreferencia, " +
 				"		LOCALIDADE.cidade_id, CIDADE.nome as cidade_nome, LOCALIDADE.regiao_id, REGIAO.nome as regiao_nome , " +
 				"		LOCALIDADE.pais_id, PAIS.nome as pais_nome, PARCEIROLOCALIDADE.tipoendereco_id, TIPOENDERECO.nome as tipoendereco_nome FROM " +
 				"		((((LOCALIDADE INNER JOIN PAIS ON LOCALIDADE.pais_id = PAIS.pais_id) INNER JOIN REGIAO ON LOCALIDADE.regiao_id = REGIAO.regiao_id) " +
