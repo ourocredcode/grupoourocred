@@ -21,6 +21,10 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsParceiroNegocio;
+	private static final String sqlParceiroNegocio = "SELECT PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.nome, " +
+			"PARCEIRONEGOCIO.empresa_id, EMPRESA.nome, PARCEIRONEGOCIO.organizacao_id, ORGANIZACAO.nome FROM ORGANIZACAO " +
+			"INNER JOIN (EMPRESA INNER JOIN PARCEIRONEGOCIO ON EMPRESA.empresa_id = PARCEIRONEGOCIO.empresa_id) " +
+			"ON ORGANIZACAO.organizacao_id = PARCEIRONEGOCIO.organizacao_id";
 
 	public ParceiroNegocioDao(Session session , ConnJDBC conexao) {
 		super(session, ParceiroNegocio.class);
@@ -29,9 +33,8 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 
 	public Collection<ParceiroNegocio> buscaParceiroNegocio(Long empresa_id, Long organizacao_id, String nome){
 
-		String sql = "select PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.nome from PARCEIRONEGOCIO (NOLOCK) " +
-				"	WHERE PARCEIRONEGOCIO.isactive=1 AND PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? AND PARCEIRONEGOCIO.nome like ?";
-
+		String sql = sqlParceiroNegocio;
+		
 		this.conn = this.conexao.getConexao();
 
 		Collection<ParceiroNegocio> parceiros = new ArrayList<ParceiroNegocio>();
@@ -64,9 +67,12 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 	
 	public ParceiroNegocio buscaParceiroNegocioDocumento(Long empresa_id, Long organizacao_id, String doc){
 
-		String sql = "select PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.nome from PARCEIRONEGOCIO (NOLOCK) " +
-				"	WHERE PARCEIRONEGOCIO.isactive=1 AND PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? AND " +
-				"	(PARCEIRONEGOCIO.cpf like ? OR PARCEIRONEGOCIO.rg like ?)";
+		String sql = sqlParceiroNegocio;
+		
+		if(empresa_id != null)
+			sql +=	" WHERE EMPRESA.empresa_id = ? ";
+		if(organizacao_id != null)
+			sql += 	" AND ORGANIZACAO.organizacao_id = ? AND (PARCEIRONEGOCIO.cpf like ? OR PARCEIRONEGOCIO.rg like ?)";
 
 		this.conn = this.conexao.getConexao();
 		ParceiroNegocio parceiro = new ParceiroNegocio();
