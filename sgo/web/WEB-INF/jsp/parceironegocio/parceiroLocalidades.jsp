@@ -25,16 +25,9 @@
 						<td>${parceiroLocalidade.localidade.endereco }</td>
 						<td>${parceiroLocalidade.numero }</td>
 						<td>${parceiroLocalidade.complemento }</td>
-						<td>
-							<c:choose>
-								<c:when test="${parceiroLocalidade.isAssinatura}"> Assinatura! </c:when>
-								<c:when test="${parceiroLocalidade.isResidencial}"> Residencial! </c:when>
-								<c:otherwise> Nem um nem outro! </c:otherwise>
-							</c:choose>
-						</td>
+						<td>${parceiroLocalidade.tipoEndereco.nome }</td>
 						<td>
 							<button type="button" class="btn btn-primary">Alterar</button>
-							
 						</td>
 						<td>
 							<button type="button" class="btn btn-primary">Excluir</button>
