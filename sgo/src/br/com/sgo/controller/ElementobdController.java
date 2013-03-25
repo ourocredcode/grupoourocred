@@ -36,7 +36,7 @@ public class ElementobdController {
 	@Public
 	@Path("/elementobd/cadastro")
 	public void cadastro(){
-		
+		result.include("elementosBd",this.elementoBdDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
@@ -82,7 +82,14 @@ public class ElementobdController {
 
 	@Get @Path("/elementobd/busca.json")
 	@Public
-	public void empresas(String nomecolunabd){
-		result.use(Results.json()).withoutRoot().from(elementoBdDao.buscaElementos(nomecolunabd)).serialize();
+	public void busca(Long empresa_id, Long organizacao_id, String nomeColunaBd){
+		result.use(Results.json()).withoutRoot().from(elementoBdDao.buscaElementosLista(empresa_id, organizacao_id, nomeColunaBd)).serialize();
 	}
+
+	@Post @Path("/elementobd/lista")
+	@Public
+	public void lista(Long empresa_id, Long organizacao_id, String nomeColunaBd){
+		result.include("elementosBd",this.elementoBdDao.buscaElementosLista(empresa_id, organizacao_id, nomeColunaBd));
+	}
+
 }

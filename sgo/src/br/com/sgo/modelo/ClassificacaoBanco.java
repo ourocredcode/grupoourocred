@@ -15,15 +15,15 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="BANCO")
-public class Banco implements Serializable {
+@Table(name="CLASSIFICACAOBANCO")
+public class ClassificacaoBanco implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "banco_id")  
+	@Column(name = "classificacaobanco_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long banco_id;
+	private Long classificacaobanco_id;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -31,15 +31,7 @@ public class Banco implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name="localidade_id",updatable = true, nullable = true) 
-	private Localidade localidade;
-
-	@ManyToOne
-	@JoinColumn(name="grupobanco_id",updatable = true, nullable = true) 
-	private GrupoBanco grupoBanco;
+	private Organizacao organizacao;	
 	
 	@Column(name="nome")
 	private String nome;
@@ -50,12 +42,12 @@ public class Banco implements Serializable {
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getBanco_id() {
-		return banco_id;
+	public Long getClassificacaobanco_id() {
+		return classificacaobanco_id;
 	}
 
-	public void setBanco_id(Long banco_id) {
-		this.banco_id = banco_id;
+	public void setClassificacaobanco_id(Long classificacaobanco_id) {
+		this.classificacaobanco_id = classificacaobanco_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -72,14 +64,6 @@ public class Banco implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public Localidade getLocalidade() {
-		return localidade;
-	}
-
-	public void setLocalidade(Localidade localidade) {
-		this.localidade = localidade;
 	}
 
 	public String getNome() {
@@ -106,11 +90,6 @@ public class Banco implements Serializable {
 		this.isActive = isActive;
 	}
 
-	public GrupoBanco getGrupoBanco() {
-		return grupoBanco;
-	}
-
-	public void setGrupoBanco(GrupoBanco grupoBanco) {
-		this.grupoBanco = grupoBanco;
-	}
+	
+	
 }

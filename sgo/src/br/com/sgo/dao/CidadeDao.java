@@ -15,31 +15,31 @@ import br.com.sgo.modelo.Cidade;
 @Component
 public class CidadeDao extends Dao<Cidade> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsCidade;
 	
+	private static final String sqlCidades = "SELECT CIDADE.cidade_id, CIDADE.nome, CIDADE.empresa_id, EMPRESA.nome, CIDADE.organizacao_id, " +
+												"ORGANIZACAO.nome FROM (ORGANIZACAO INNER JOIN CIDADE ON ORGANIZACAO.organizacao_id = CIDADE.organizacao_id) " +
+												"INNER JOIN EMPRESA ON CIDADE.empresa_id = EMPRESA.empresa_id";
+
 	public CidadeDao(Session session,ConnJDBC conexao) {
 		super(session, Cidade.class);
-		this.session = session;
 		this.conexao = conexao;
 	}
 	
 	public Cidade buscaPorNome(String nome){
 
-		String sql = "select CIDADE.cidade_id, CIDADE.nome from CIDADE (NOLOCK) WHERE CIDADE.nome like ?";
+		String sql = sqlCidades;
 
 		this.conn = this.conexao.getConexao();
 		Cidade cidade = new Cidade();
 
 		try {
-
 			this.stmt = conn.prepareStatement(sql);			
 			this.stmt.setString(1,"%"+  nome + "%");			
 			this.rsCidade = this.stmt.executeQuery();
-
 			while (rsCidade.next()) {
 				cidade.setCidade_id(rsCidade.getLong("cidade_id"));				
 				cidade.setNome(rsCidade.getString("nome"));

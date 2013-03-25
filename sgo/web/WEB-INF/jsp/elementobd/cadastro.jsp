@@ -34,14 +34,14 @@ jQuery(function($){
 		window.location.href = '<c:url value="/colunabd/cadastro" />';
 	});
 	$('#elementobd-li-a').click(function() {
-		window.location.href = '<c:url value="/elementobd/cadastro" />';
+		window.location.href = '<c:url value="/elementobd/cadastro" />';		
 	});
 	$('#tipodadobd-li-a').click(function() {
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
 	});
 	
 	$('#elementoBdEmpresa').autocomplete({
-		source: function( request, response ) {
+		source: function( request, response ) {			
 	        $.ajax({
 	          url: "<c:url value='/empresa/busca.json' />",
 	          dataType: "json",
@@ -56,14 +56,15 @@ jQuery(function($){
             	  response($.map(data, function(empresa) {  
             		  return {
                           label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
+                          value: empresa.empresa_id                          
+                      };                      
                   }));  
                }
 	        });
          } ,
          focus: function( event, ui ) {
         	 $('#elementoBdEmpresa').val(ui.item.label);
+        	 $('#elementoBdOrganizacao').removeAttr("readonly");
              return false;
          } ,
          select: function( event, ui ) {
@@ -73,7 +74,7 @@ jQuery(function($){
          }
     });
 	
-	$('#elementoBdOrganizacao').autocomplete({
+	$('#elementoBdOrganizacao').autocomplete({		
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
@@ -105,26 +106,104 @@ jQuery(function($){
              return false;
          }
     });
+
+	$('#elementoBdNomeColunaBd').autocomplete({
+		source: function( request, response ) {
+			
+			if($('#elementoBdEmpresaId').val() == ''){
+				alert("Empresa não preenchida");
+				$('#elementoBdNomeColunaBd').val('');
+				$('#elementoBdEmpresa').focus();				
+				return false;
+			}
+
+			$.ajax({
+	          url: "<c:url value='/elementobd/busca.json' />",
+	          
+	          dataType: "json",
+	          
+	          data : {empresa_id: $('#elementoBdEmpresaId').val() == '' ? '0' :  $('#elementoBdEmpresaId').val(), 
+	        		  organizacao_id: $('#elementoBdOrganizacaoId').val() == '' ? '0' :  $('#elementoBdOrganizacaoId').val(),
+	        		  nomeColunaBd : $('#elementoBdNomeColunaBd').val()},
+              success : function(data) {
+
+            	  if (!data || data.length == 0) {
+         	            $('#elementoBdNomeColunaBd').val('');	       	          	
+         	        }
+
+            	  response($.map(data, function(elementobd) {  
+            		  return {
+            			  label: elementobd.nomeColunaBd
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#elementoBdNomeColunaBd').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#elementoBdNomeColunaBd').val(ui.item.label);
+             $('#elementoBdNomeColunaBdId').val(ui.item.value);
+             return false;
+         }
+    });
 	
+	$("#elementoBdEmpresa").blur(function() {
+		var empresa_id = $("#elementoBdEmpresaId").val();
+		var organizacao_id = $("#elementoBdOrganizacaoId").val();
+		var nomeColunaBd = $("#elementoBdNomeColunaBd").val();
+		
+		$('#lista').load('<c:url value="/elementobd/lista" />', {
+			'empresa_id' : empresa_id,
+			'organizacao_id' : organizacao_id,
+			'nomeColunaBd' : nomeColunaBd
+		});
+	});
+
+	$("#elementoBdOrganizacao").blur(function() {
+		var empresa_id = $("#elementoBdEmpresaId").val();
+		var organizacao_id = $("#elementoBdOrganizacaoId").val();
+		var nomeColunaBd = $("#elementoBdNomeColunaBd").val();
+		
+		$('#lista').load('<c:url value="/elementobd/lista" />', {
+			'empresa_id' : empresa_id,
+			'organizacao_id' : organizacao_id,
+			'nomeColunaBd' : nomeColunaBd
+		});
+	});
 	
 
+	$("#elementoBdNomeColunaBd").blur(function() {
+		var empresa_id = $("#elementoBdEmpresaId").val();
+		var organizacao_id = $("#elementoBdOrganizacaoId").val();
+		var nomeColunaBd = $("#elementoBdNomeColunaBd").val();
+		if($('#elementoBdEmpresaId').val() == ''){
+			alert("Empresa não preenchida");
+			$('#elementoBdNomeColunaBd').val('');
+			$('#elementoBdEmpresa').focus();				
+			return false;
+		}	
+		$('#lista').load('<c:url value="/elementobd/lista" />', {
+			'empresa_id' : empresa_id,
+			'organizacao_id' : organizacao_id,
+			'nomeColunaBd' : nomeColunaBd
+		});
+	});
+	
 });
 
 function limpaForm(){
-
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
 		document.elementoBdForm.reset();
 	}
-
 }
-
 
 </script>
 
-<div class="span9">
-
+<div class="container-fluid" id="tipodadobd-div">
 	<section id="tabs">
-		<div class="bs-docs-example">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
@@ -141,81 +220,78 @@ function limpaForm(){
 
 			<div id="myTabContent" class="tab-content">
 			
-				<div class="tab-pane fade" id="perfil-div">					
-
-				</div>
+				<div class="tab-pane fade" id="perfil-div"></div>
+				<div class="tab-pane fade" id="perfilorgacesso-div"></div>
+				<div class="tab-pane fade" id="janela-div"></div>
+				<div class="tab-pane fade" id="perfiljanelaacesso-div"></div>
+				<div class="tab-pane fade" id="formulariosjanela-div"></div>
+				<div class="tab-pane fade" id="campoformulario-div"></div>
+				<div class="tab-pane fade " id="tabelabd-div"></div>
+				<div class="tab-pane fade " id="colunabd-div"></div>
 				
-				<div class="tab-pane fade" id="perfilorgacesso-div">					
-
-				</div>
-
-				<div class="tab-pane fade" id="janela-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="perfiljanelaacesso-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="formulariosjanela-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="campoformulario-div">
-					
-				</div>
-
-				<div class="tab-pane fade " id="tabelabd-div">
-
-				</div>
-				<div class="tab-pane fade " id="colunabd-div">
-
-				</div>
 				<div class="tab-pane fade active in" id="elementobd-div">
 
 					<form id="elementoBdForm" name="elementoBdForm" action="<c:url value="/elementobd/salva"/>" method="POST">
-						<div class="control-group">
-							<label class="control-label" for="elementoBdEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="elementoBdEmpresa" name="elementoBd.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="elementoBdEmpresaId" name="elementoBd.empresa.empresa_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="elementoBdOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="elementoBdOrganizacao" name="elementoBd.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="elementoBdOrganizacaoId" name="elementoBd.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="elementoBdNomeColunaBd">Nome Coluna BD</label>
-							<div class="controls">
-								<input type="text" id="elementoBdNomeColunaBd" name="elementoBd.nomeColunaBd" placeholder="Nome da coluna BD" required>
+						<div class="row-fluid">						
+							<div class="span2">
+								<p>
+									<label class="control-label" for="elementoBdEmpresa">Empresa</label>
+		      						<input id="elementoBdEmpresa" name="elementoBd.empresa.nome" type="text" required onChange="limpaForm();">
+		      						<input id="elementoBdEmpresaId" name="elementoBd.empresa.empresa_id" type="text">
+	      						</p>
 							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="elementoBd.nome">Nome</label>
-							<div class="controls">
+							<div class="span2">
+								<label class="control-label" for="elementoBdOrganizacao">Organização</label>
+	      						<input id="elementoBdOrganizacao" name="elementoBd.organizacao.nome" type="text" required readonly onChange="limpaForm();">
+								<input id="elementoBdOrganizacaoId" name="elementoBd.organizacao.organizacao_id" type="text">
+							</div>
+							<div class="span2">
+								<label class="control-label" for="elementoBdNomeColunaBd">Nome Coluna BD</label>								
+								<input type="text" id="elementoBdNomeColunaBd" name="elementoBd.nomeColunaBd" placeholder="Nome da coluna BD" required readonly>
+							</div>
+							<div class="span2">
+								<label class="control-label" for="elementoBd.nome">Nome</label>								
 								<input type="text" id="elementoBd.nome" name="elementoBd.nome" placeholder="Nome" required>
 							</div>
-						</div>
 						
-						 <div class="btn-toolbar">
+						</div>
+												
+					 	<div class="btn-toolbar">
 							<div class="btn-group">
-								<button type="submit" class="btn btn-primary">Salvar</button>
-							</div>	
+								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+							</div>
 						</div>
 					</form>
-
 				</div>
-				<div class="tab-pane fade" id="tipodadobd-div">
 
-				</div>
-			</div>
-		</div>
+				<table class="table table-striped table-bordered" id="lista">
+						<thead>
+							<tr>
+								<th>Empresa</th>
+								<th>Organização</th>
+								<th>Nome</th>								
+							</tr>
+						</thead>
+						<tbody>	
+							<c:forEach items="${elementosBd}" var="elementosBd">
+								<tr>
+									<td>${elementosBd.empresa.nome }</td>
+									<td>${elementosBd.organizacao.nome }</td>
+									<td>${elementosBd.nomeColunaBd }</td>									
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+
+				<div class="tab-pane fade" id="tipodadobd-div"></div>							
+
+			</div>			
 	</section>
 </div>
 
