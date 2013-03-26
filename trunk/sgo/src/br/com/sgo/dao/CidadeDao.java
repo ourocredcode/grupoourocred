@@ -19,8 +19,7 @@ public class CidadeDao extends Dao<Cidade> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsCidade;
-	
-	private static final String sqlCidades = "SELECT CIDADE.cidade_id, CIDADE.nome, CIDADE.empresa_id, EMPRESA.nome, CIDADE.organizacao_id, " +
+	private String sqlCidades = "SELECT CIDADE.cidade_id, CIDADE.nome, CIDADE.empresa_id, EMPRESA.nome, CIDADE.organizacao_id, " +
 												"ORGANIZACAO.nome FROM (ORGANIZACAO INNER JOIN CIDADE ON ORGANIZACAO.organizacao_id = CIDADE.organizacao_id) " +
 												"INNER JOIN EMPRESA ON CIDADE.empresa_id = EMPRESA.empresa_id";
 
@@ -28,16 +27,18 @@ public class CidadeDao extends Dao<Cidade> {
 		super(session, Cidade.class);
 		this.conexao = conexao;
 	}
-	
+
 	public Cidade buscaPorNome(String nome){
 
-		String sql = sqlCidades;
+		if(!nome.equals(""))
+			sqlCidades += " WHERE CIDADE.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 		Cidade cidade = new Cidade();
 
 		try {
-			this.stmt = conn.prepareStatement(sql);			
+
+			this.stmt = conn.prepareStatement(sqlCidades);			
 			this.stmt.setString(1,"%"+  nome + "%");			
 			this.rsCidade = this.stmt.executeQuery();
 			while (rsCidade.next()) {

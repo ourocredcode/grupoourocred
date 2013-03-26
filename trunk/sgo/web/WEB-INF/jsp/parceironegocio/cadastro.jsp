@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 jQuery(function($){
-	
+
 		$('#parceiroNegocioDataNascimento').datepicker();
 	
 		$('#parceironegocio-li-a').click(function() {
@@ -108,6 +108,7 @@ function salvaEndereco() {
 	var cidadeId = $("#localidadeCidadeId").val();
 	var regiaoId = $("#localidadeRegiaoId").val();
 	var parceiroId = $("#parceiroNegocioId").val();
+	var localidadeId = $("#localidadeId").val();
 	var paisId = $("#localidadePaisId").val();
 
 	if (window.confirm("Deseja salvar o endereço?"))
@@ -121,12 +122,72 @@ function salvaEndereco() {
 				'localidade.cidade.cidade_id' : cidadeId,
 				'localidade.regiao.regiao_id' : regiaoId,
 				'localidade.pais.pais_id' : paisId,
+				'localidade.localidade_id' : localidadeId,
 				'parceiroLocalidade.parceiroNegocio.parceiroNegocio_id': parceiroId}
-		, function(resposta) { $('#enderecos').html(resposta); } );
+		, function(resposta) { 
+			if(resposta.indexOf("Erro") != -1){
+				alert(resposta);
+			} else {
+				$('#enderecos').html(resposta);	
+			};
+		} );
+
+	return false;
+
+}
+
+function exclui(linha, id) {
+
+	if (window.confirm("Deseja realmente excluir a Localidade do Parceiro ?"))
+		$.post('<c:url value='/parceironegocio/excluiLocalidade' />'
+		, {'parceiroLocalidade.parceiroLocalidade_id' : id}
+		, function(resposta) { alert(resposta); excluiLinha(linha, resposta); });
 
 	return false;
 }
 
+function excluiLinha(linha, resposta) {
+
+	var objTR = linha.parentNode.parentNode;
+	var objTable = objTR.parentNode;
+
+	objTable.deleteRow(objTR.rowIndex - 1);
+
+	return false;
+}
+
+function altera(linha, atributo,parceiroLocalidade_id,valor) {
+
+	if(atributo == 'numero'){
+		var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
+				 'parceiroLocalidade.numero' : valor };
+	}
+	
+	if(atributo == 'complemento'){
+		var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
+				 'parceiroLocalidade.complemento ' : valor };
+	}
+
+	if(atributo == 'tipoEndereco'){
+		var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
+				 'parceiroLocalidade.tipoEndereco.tipoEndereco_id' : valor} ;
+	}
+
+	if (window.confirm("Deseja realmente alterar o atributo do Parceiro Localidade?"))
+		$.post('<c:url value='/parceironegocio/alteraParceiroLocalidade' />'
+		, attr , function(resposta) { 
+
+				if(resposta.indexOf("Erro") != -1){
+					alert(resposta);
+					window.location.reload();
+				} else {
+					alert(resposta);	
+				};
+				
+		});
+
+	return false;
+}
 
 </script>
 
@@ -275,11 +336,13 @@ function salvaEndereco() {
 								
 								<br/>
 								
-								<div id="ajax_endereco" style="display: block;">
+								
 			
 									<div class="navbar">
 										<div class="navbar-inner">
 											<div class="container">
+											
+											<div id="ajax_endereco" style="display: block;">
 
 												<div class="control-group"></div>
 												<div class="page-header">
@@ -309,17 +372,19 @@ function salvaEndereco() {
 													<input  id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
 													<input  id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
 													<input  id="localidadePaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
+													<input  id="localidadeId" name="localidade.localidade_id" type="hidden"  value="${localidade.localidade_id }" />
 												</div>
 
-												<c:if test="${not empty parceiroNegocio }">
-													<div class="btn-toolbar">
-														<div class="btn-group">
-															<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="salvaEndereco();">Adicionar Endereço</button>
-														</div>	
-													</div>
-												</c:if>
-												
 											</div>
+											
+											<c:if test="${not empty parceiroNegocio }">
+												<div class="btn-toolbar">
+													<div class="btn-group">
+														<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="salvaEndereco();">Adicionar Endereço</button>
+													</div>	
+												</div>
+											</c:if>
+											
 										</div>
 									</div>
 			
@@ -337,7 +402,6 @@ function salvaEndereco() {
 													<th>Número</th>
 													<th>Complemento</th>
 													<th>Tipo</th>
-													<th>Ação</th>
 													<th>Excluir</th>
 												</tr>
 											</thead>
@@ -348,15 +412,18 @@ function salvaEndereco() {
 														<td>${parceiroLocalidade.localidade.bairro }</td>
 														<td>${parceiroLocalidade.localidade.cidade.nome }</td>
 														<td>${parceiroLocalidade.localidade.endereco }</td>
-														<td>${parceiroLocalidade.numero }</td>
-														<td>${parceiroLocalidade.complemento }</td>
-														<td>${parceiroLocalidade.tipoEndereco.nome }</td>
+														<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-medium" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+														<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-medium" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
 														<td>
-															<button type="button" class="btn btn-primary">Alterar</button>
-															
+														<select id="parceiroLocalidadeTipoEnderecoLista" onChange="return altera(this,'tipoEndereco','${parceiroLocalidade.parceiroLocalidade_id}', this.value);">
+															<option value="0" selected="selected">Selecione</option>
+																<c:forEach var="tipoEndereco" items="${tiposEndereco}">
+																	<option value="${tipoEndereco.tipoEndereco_id}" <c:if test="${parceiroLocalidade.tipoEndereco.tipoEndereco_id eq tipoEndereco.tipoEndereco_id}">SELECTED</c:if>>${tipoEndereco.nome}</option>
+																</c:forEach>
+														</select>
 														</td>
-														<td>
-															<button type="button" class="btn btn-primary">Excluir</button>
+														<td style="text-align: center;">
+															<button type="button" class="btn btn-danger" onClick="return exclui(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
 														</td>
 													</tr>
 												</c:forEach>
