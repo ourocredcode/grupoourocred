@@ -18,7 +18,7 @@ import br.com.sgo.modelo.Organizacao;
 @Component
 public class OrganizacaoDao extends Dao<Organizacao> {
 
-	private Session session;
+
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -26,7 +26,7 @@ public class OrganizacaoDao extends Dao<Organizacao> {
 	
 	public OrganizacaoDao(Session session,ConnJDBC conexao) {
 		super(session, Organizacao.class);
-		this.session = session;
+
 		this.conexao = conexao;
 	}
 	

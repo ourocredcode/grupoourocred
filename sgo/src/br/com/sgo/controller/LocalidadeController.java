@@ -8,6 +8,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.CidadeDao;
+import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.RegiaoDao;
 import br.com.sgo.dao.TipoLocalidadeDao;
@@ -25,16 +26,19 @@ public class LocalidadeController {
 	private final CidadeDao cidadeDao;
 	private final PaisDao paisDao;
 	private final TipoLocalidadeDao tipoLocalidadeDao;
+	private final LocalidadeDao localidadeDao;
 	private BrazilianAddressFinder addressFinder;
 	private RestClient restfulie;
 
-	public LocalidadeController(Result result, UsuarioInfo usuarioInfo,RegiaoDao regiaoDao,CidadeDao cidadeDao,TipoLocalidadeDao tipoLocalidadeDao,PaisDao paisDao) {
+	public LocalidadeController(Result result, UsuarioInfo usuarioInfo,RegiaoDao regiaoDao,CidadeDao cidadeDao,TipoLocalidadeDao tipoLocalidadeDao,PaisDao paisDao
+			,LocalidadeDao localidadeDao) {
 
 		this.result = result;
 		this.regiaoDao = regiaoDao;
 		this.cidadeDao = cidadeDao;
 		this.paisDao = paisDao;
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
+		this.localidadeDao = localidadeDao;
 		this.usuarioInfo = usuarioInfo;
 
 	}
@@ -61,27 +65,36 @@ public class LocalidadeController {
 		restfulie = Restfulie.custom();
 		addressFinder = new BrazilianAddressFinder(restfulie);
 
-		String[] resultado = addressFinder.findAddressByZipCode(enderecoCEP).asAddressArray();
+		Localidade l = this.localidadeDao.buscaLocalidade(enderecoCEP);
 
-		if(resultado[0].equals("")) {
+		if(l.getLocalidade_id() == null) {
 
-			result.include("notice","ERRO").redirectTo(this).cadastro();
+			String[] resultado = addressFinder.findAddressByZipCode(enderecoCEP).asAddressArray();
 
-		} else {
+			if(resultado[0].equals("")) {
 
-			Localidade l = new Localidade();
-			
-			l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
-			l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
-			l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
-			l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-			l.setEndereco(resultado[1]);
-			l.setBairro(resultado[2]);
-			l.setCep(enderecoCEP);
-			
-			result.include("localidade",l);
+				result.include("notice","ERRO").redirectTo(this).cadastro();
+
+			} else {
+
+				l = new Localidade();
+
+				l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
+				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+				l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+				l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+				l.setEndereco(resultado[1]);
+				l.setBairro(resultado[2]);
+				l.setCep(enderecoCEP);
+
+				result.include("localidade",l);
+
+			}
+
+		} else {				
+
+				result.include("localidade",l);
 
 		}
 	}
-
 }

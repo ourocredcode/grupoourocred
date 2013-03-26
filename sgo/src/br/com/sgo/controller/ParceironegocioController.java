@@ -93,6 +93,7 @@ public class ParceironegocioController {
 				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
 
 		result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceironegocio_id));
+		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
 
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
@@ -166,28 +167,32 @@ public class ParceironegocioController {
 
 			}
 
-		localidade.setEmpresa(this.empresaDao.load(1L));
-		localidade.setOrganizacao(this.organizacaoDao.load(1L));
-		localidade.setIsActive(true);
-		
-		try {
+		if(localidade.getLocalidade_id() == null)	{
 
-			this.localidadeDao.beginTransaction();
-			this.localidadeDao.adiciona(localidade);
-			this.localidadeDao.commit();
-		
-		} catch(Exception e) {
+			localidade.setEmpresa(this.empresaDao.load(1L));
+			localidade.setOrganizacao(this.organizacaoDao.load(1L));
+			localidade.setIsActive(true);
+			
+			try {
 
-			this.localidadeDao.rollback();
+				this.localidadeDao.beginTransaction();
+				this.localidadeDao.adiciona(localidade);
+				this.localidadeDao.commit();
+			
+			} catch(Exception e) {
 
-			if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
-				mensagem = "Erro: Localidade " + funcionario.getApelido() + " já existente.";
-			} else {
-				mensagem = "Erro ao adicionar Localidade:";
+				this.localidadeDao.rollback();
+
+				if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
+					mensagem = "Erro: Localidade " + funcionario.getApelido() + " já existente.";
+				} else {
+					mensagem = "Erro ao adicionar Localidade:";
+				}
+
 			}
 
 		}
-
+		
 		Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
 
 		for(TipoEndereco tipoEndereco : tiposEndereco){
@@ -199,6 +204,9 @@ public class ParceironegocioController {
 			pl.setParceiroNegocio(parceiroNegocio);
 			pl.setLocalidade(localidade);
 			pl.setTipoEndereco(tipoEndereco);
+			pl.setNumero(parceiroLocalidade.getNumero());
+			pl.setComplemento(parceiroLocalidade.getComplemento());
+			pl.setPontoReferencia(parceiroLocalidade.getPontoReferencia());
 			pl.setIsActive(true);
 
 			try{
@@ -246,25 +254,122 @@ public class ParceironegocioController {
 	}
 	
 	@Post
+	@Path("/parceironegocio/excluiLocalidade")
+	public void excluiLocalidade(ParceiroLocalidade parceiroLocalidade){
+
+		ParceiroLocalidade pl = this.parceiroLocalidadeDao.load(parceiroLocalidade.getParceiroLocalidade_id());
+
+		pl.setIsActive(false);
+
+		this.parceiroLocalidadeDao.beginTransaction();
+		this.parceiroLocalidadeDao.atualiza(pl);
+		this.parceiroLocalidadeDao.commit();
+
+		result.include("msg","Registro removido com sucesso").forwardTo(this).msg();
+
+	}
+	
+	@Post
 	@Path("/parceironegocio/salvaLocalidade")
 	public void salvaLocalidade(Localidade localidade, ParceiroLocalidade parceiroLocalidade){
 
 		localidade.setIsActive(true);
 
-		this.localidadeDao.beginTransaction();
-		this.localidadeDao.adiciona(localidade);
-		this.localidadeDao.commit();
+		String mensagem = "";
 
-		parceiroLocalidade.setEmpresa(usuarioInfo.getEmpresa());
-		parceiroLocalidade.setOrganizacao(usuarioInfo.getOrganizacao());
-		parceiroLocalidade.setLocalidade(localidade);
-		parceiroLocalidade.setIsActive(true);
+		try {
 
-		this.parceiroLocalidadeDao.beginTransaction();
-		this.parceiroLocalidadeDao.adiciona(parceiroLocalidade);
-		this.parceiroLocalidadeDao.commit();
+			this.localidadeDao.beginTransaction();
+			this.localidadeDao.adiciona(localidade);
+			this.localidadeDao.commit();
+		
+		} catch(Exception e) {
+
+			this.localidadeDao.rollback();
+
+			if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
+				mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
+			} else {
+				mensagem = "Erro ao adicionar Localidade:";
+			}
+
+			result.include("msg",mensagem).redirectTo(this).msg();
+
+		}
+		
+		Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
+
+		for(TipoEndereco tipoEndereco : tiposEndereco){
+
+			ParceiroLocalidade pl = new ParceiroLocalidade();
+
+			pl.setEmpresa(usuarioInfo.getEmpresa());
+			pl.setOrganizacao(usuarioInfo.getOrganizacao());
+			pl.setParceiroNegocio(parceiroLocalidade.getParceiroNegocio());
+			pl.setLocalidade(localidade);
+			pl.setTipoEndereco(tipoEndereco);
+			pl.setNumero(parceiroLocalidade.getNumero());
+			pl.setComplemento(parceiroLocalidade.getComplemento());
+			pl.setPontoReferencia(parceiroLocalidade.getPontoReferencia());
+			pl.setIsActive(true);
+
+			try{
+				
+				this.parceiroLocalidadeDao.beginTransaction();
+				this.parceiroLocalidadeDao.adiciona(pl);
+				this.parceiroLocalidadeDao.commit();
+				
+			} catch(Exception e) {
+
+				this.parceiroLocalidadeDao.rollback();
+
+				if (e.getCause().toString().indexOf("PK__PARCEIROLOCALIDADE") != -1){
+					mensagem = "Erro: Parceiro Localidade " + parceiroLocalidade.getLocalidade().getCep() + " já existente.";
+				} else {
+					mensagem = "Erro ao adicionar Parceiro Localidade :";
+				}
+				
+				result.include("msg",mensagem).redirectTo(this).msg();
+
+			}
+
+		}
 
 		result.redirectTo(this).parceiroLocalidades(parceiroLocalidade.getParceiroNegocio().getParceiroNegocio_id());
+
+	}
+	
+	@Post
+	@Path("/parceironegocio/alteraParceiroLocalidade")
+	public void alteraParceiroLocalidade(ParceiroLocalidade parceiroLocalidade){
+
+		ParceiroLocalidade pl = this.parceiroLocalidadeDao.load(parceiroLocalidade.getParceiroLocalidade_id());
+
+		if(parceiroLocalidade.getNumero() != null)
+			pl.setNumero(parceiroLocalidade.getNumero());
+		if(parceiroLocalidade.getComplemento() != null)
+			pl.setComplemento(parceiroLocalidade.getComplemento());
+		if(parceiroLocalidade.getTipoEndereco() != null)
+			pl.setTipoEndereco(this.tipoEnderecoDao.load(parceiroLocalidade.getTipoEndereco().getTipoEndereco_id()));
+
+		if(this.parceiroLocalidadeDao.buscaParceiroLocalidade(pl.getParceiroNegocio(), pl.getLocalidade(), pl.getTipoEndereco()) == null) {
+
+			this.parceiroLocalidadeDao.beginTransaction();
+			this.parceiroLocalidadeDao.atualiza(pl);
+			this.parceiroLocalidadeDao.commit();
+			
+			result.include("msg","Parceiro Localidade atualizado com sucesso.").redirectTo(this).msg();
+
+		} else {
+
+			result.include("msg","Erro : Parceiro Localidade já existente neste endereço.").redirectTo(this).msg();
+
+		}
+
+	}
+
+	@Get
+	public void msg(){
 
 	}
 

@@ -23,7 +23,7 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsElementos;	
-	private static final String sqlElementosBd = "SELECT EMPRESA.nome as empresa_nome, EMPRESA.empresa_id, ORGANIZACAO.nome as organizacao_nome, ORGANIZACAO.organizacao_id, " +
+	private final String sqlElementosBd = "SELECT EMPRESA.nome as empresa_nome, EMPRESA.empresa_id, ORGANIZACAO.nome as organizacao_nome, ORGANIZACAO.organizacao_id, " +
 											"ELEMENTOBD.nomecolunabd, ELEMENTOBD.elementobd_id FROM (EMPRESA (NOLOCK) INNER JOIN ELEMENTOBD (NOLOCK) ON EMPRESA.empresa_id = ELEMENTOBD.empresa_id) " +
 											"INNER JOIN ORGANIZACAO (NOLOCK) ON ELEMENTOBD.organizacao_id = ORGANIZACAO.organizacao_id"; 
 
@@ -53,7 +53,9 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 	}
 
 	public Collection<ElementoBd> buscaElementosLista(Long empresa_id){
+
 		String sql = sqlElementosBd;
+
 		if(empresa_id != null)
 			sql +=	" WHERE EMPRESA.empresa_id = ? ";			
 
