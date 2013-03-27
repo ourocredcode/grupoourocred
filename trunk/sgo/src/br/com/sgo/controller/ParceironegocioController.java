@@ -310,24 +310,29 @@ public class ParceironegocioController {
 
 		String mensagem = "";
 
-		try {
-
-			this.localidadeDao.beginTransaction();
-			this.localidadeDao.adiciona(localidade);
-			this.localidadeDao.commit();
 		
-		} catch(Exception e) {
-
-			this.localidadeDao.rollback();
-
-			if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
-				mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
-			} else {
-				mensagem = "Erro ao adicionar Localidade:";
+		if(localidade.getLocalidade_id() == null)	{
+		
+			try {
+	
+				this.localidadeDao.beginTransaction();
+				this.localidadeDao.adiciona(localidade);
+				this.localidadeDao.commit();
+			
+			} catch(Exception e) {
+	
+				this.localidadeDao.rollback();
+	
+				if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
+					mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
+				} else {
+					mensagem = "Erro ao adicionar Localidade:";
+				}
+	
+				result.include("msg",mensagem).redirectTo(this).msg();
+	
 			}
-
-			result.include("msg",mensagem).redirectTo(this).msg();
-
+		
 		}
 		
 		Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
