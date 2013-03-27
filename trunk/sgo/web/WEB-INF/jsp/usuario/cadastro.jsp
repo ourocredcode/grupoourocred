@@ -217,6 +217,12 @@ function limpaForm(){
 	    					</div>
 						</div>
 						<div class="control-group">
+							<label class="control-label" for="usuarioChave">Login</label>
+							<div class="controls">
+								<input type="text" id="usuarioChave" name="usuario.chave" placeholder="Login" required>
+							</div>
+						</div>
+						<div class="control-group">
 							<label class="control-label" for="usuarioNome">Nome</label>
 							<div class="controls">
 								<input type="text" id="usuarioNome" name="usuario.nome" placeholder="Nome" required readonly="readonly">

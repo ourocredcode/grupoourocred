@@ -54,6 +54,11 @@
 		<mapping class="br.com.sgo.modelo.TipoProduto" />
 		<mapping class="br.com.sgo.modelo.TipoTabela" />
 		<mapping class="br.com.sgo.modelo.TipoContato" />
+		
+		<mapping class="br.com.sgo.modelo.Agencia" />
+		<mapping class="br.com.sgo.modelo.TipoConta" />
+		<mapping class="br.com.sgo.modelo.ContaBancaria" />
+		
 		<mapping class="br.com.sgo.modelo.TipoEndereco" />
 		<mapping class="br.com.sgo.modelo.Usuario" />
 		<mapping class="br.com.sgo.modelo.UsuarioOrgAcesso" />
