@@ -97,7 +97,7 @@ function limpaForm(){
 	}	
 }
 
-function salvaEndereco() {
+function salvaLocalidade() {
 
 	var cep = $("#localidadeCep").val();
 	var endereco = $("#localidadeEndereco").val();
@@ -164,7 +164,7 @@ function mostraEndereco() {
 	 $("#ajax_endereco").css("display", "block");
  
 	 var mudar = document.getElementById('bttLocalidade');
-	 mudar.setAttribute('onclick', 'salvaEndereco()');
+	 mudar.setAttribute('onclick', 'salvaLocalidade()');
 	
 }
 
