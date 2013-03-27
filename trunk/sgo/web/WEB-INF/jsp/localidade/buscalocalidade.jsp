@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div id="ajax_endereco" style="display: block;">
+<div id="ajax_endereco" style="display: block;width: 1050px;">
 
 	<div class="control-group"></div>
 	<div class="page-header">
@@ -24,8 +24,8 @@
 
 	<div class="row-fluid">		
 
-		<input class="span2" id="parceirolocalidadeComplemento" name="parceirolocalidade.complemento" type="text" placeholder="Complemento" />
-		<input class="span9" id="parceirolocalidadePontoReferencia" name="parceirolocalidade.pontoreferencia" type="text" placeholder="Ponto de Referência" />
+		<input class="span2" id="parceirolocalidadeComplemento" name="parceiroLocalidade.complemento" type="text" placeholder="Complemento" />
+		<input class="span9" id="parceirolocalidadePontoReferencia" name="parceiroLocalidade.pontoReferencia" type="text" placeholder="Ponto de Referência" />
 
 		<input  id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
 		<input  id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
