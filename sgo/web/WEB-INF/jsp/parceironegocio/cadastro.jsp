@@ -136,6 +136,24 @@ function salvaEndereco() {
 
 }
 
+function mostraEndereco() {
+	
+	 $("#ajax_endereco").css("display", "block");
+ 
+	 var mudar = document.getElementById('bttLocalidade');
+	 mudar.setAttribute('onclick', 'salvaEndereco()');
+	
+}
+
+function cancelar() {
+	
+	 $("#ajax_endereco").css("display", "none");
+
+	 var mudar = document.getElementById('bttLocalidade');
+	 mudar.setAttribute('onclick', 'mostraEndereco()');
+	
+}
+
 function exclui(linha, id) {
 
 	if (window.confirm("Deseja realmente excluir a Localidade do Parceiro ?"))
@@ -337,127 +355,295 @@ function altera(linha, atributo,parceiroLocalidade_id,valor) {
 								<br/>
 								
 								
-			
-									<div class="navbar">
-										<div class="navbar-inner">
-											<div class="container">
-											
-											<div id="ajax_endereco" style="display: block;">
-
-												<div class="control-group"></div>
-												<div class="page-header">
-													<h1><small>Endereço</small></h1>
-												</div>
-												
-												<div class="input-append">
-													<input class="span2" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
-													<span class="add-on"><i class="icon-search"></i></span>
-												</div>
-
-												<div class="row-fluid">
-													<input class="span5" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço" value="${localidade.endereco }"/>
-													<input class="span1" id="parceirolocalidadeNumero" name="parceiroLocalidade.numero" type="text" placeholder="Número"/>
-													<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" value="${localidade.bairro }" />
-													<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />
-													<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  value="${localidade.regiao.chave }"  />
-												</div>
-				
-												<div id="alertCEP" style="position:absolute; float: right;width: 250px;margin-left: 100px;margin-top: -27px;"><i></i></div>
-				
-												<div class="row-fluid">		
-
-													<input class="span2" id="parceirolocalidadeComplemento" name="parceirolocalidade.complemento" type="text" placeholder="Complemento" />
-													<input class="span9" id="parceirolocalidadePontoReferencia" name="parceirolocalidade.pontoreferencia" type="text" placeholder="Ponto de Referência" />
-
-													<input  id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
-													<input  id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
-													<input  id="localidadePaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
-													<input  id="localidadeId" name="localidade.localidade_id" type="hidden"  value="${localidade.localidade_id }" />
-												</div>
-
+								<div class="navbar" style="display: block;width: 350px;float: left">
+									
+								<div class="navbar-inner" >
+								
+									<div class="container">
+										<div class="control-group"></div>
+										<div class="page-header">
+											<h2><small>Contato</small></h2>
+										</div>
+										<div>	
+											<table class="table table-striped table-bordered" id="lista">
+												<thead>
+													<tr>
+														<th>TipoContato</th>
+														<th>Contato</th>
+														<th>Excluir</th>
+													</tr>
+												</thead>
+												<tbody>	
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="btn-toolbar" align="right">
+											<div class="btn-group">
+												<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
+											</div>	
+											<div class="btn-group">
+												<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelar();"><i class="icon-remove"></i></button>
 											</div>
-											
-											<c:if test="${not empty parceiroNegocio }">
-												<div class="btn-toolbar">
-													<div class="btn-group">
-														<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="salvaEndereco();">Adicionar Endereço</button>
-													</div>	
-												</div>
-											</c:if>
-											
+										</div>
+									
 										</div>
 									</div>
-			
 								</div>
-			
-								<c:if test="${not empty parceiroLocalidades}">
-									<div id="enderecos" style="margin-top: 15px;">
-										<table class="table table-striped table-bordered" id="lista">
-											<thead>
-												<tr>
-													<th>Cep</th>
-													<th>Bairro</th>
-													<th>Cidade</th>
-													<th>Endereço</th>
-													<th>Número</th>
-													<th>Complemento</th>
-													<th>Tipo</th>
-													<th>Excluir</th>
-												</tr>
-											</thead>
-											<tbody>	
-												<c:forEach items="${parceiroLocalidades}" var="parceiroLocalidade">
-													<tr>
-														<td>${parceiroLocalidade.localidade.cep }</td>
-														<td>${parceiroLocalidade.localidade.bairro }</td>
-														<td>${parceiroLocalidade.localidade.cidade.nome }</td>
-														<td>${parceiroLocalidade.localidade.endereco }</td>
-														<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-medium" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
-														<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-medium" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
-														<td>
-														<select id="parceiroLocalidadeTipoEnderecoLista" onChange="return altera(this,'tipoEndereco','${parceiroLocalidade.parceiroLocalidade_id}', this.value);">
-															<option value="0" selected="selected">Selecione</option>
-																<c:forEach var="tipoEndereco" items="${tiposEndereco}">
-																	<option value="${tipoEndereco.tipoEndereco_id}" <c:if test="${parceiroLocalidade.tipoEndereco.tipoEndereco_id eq tipoEndereco.tipoEndereco_id}">SELECTED</c:if>>${tipoEndereco.nome}</option>
-																</c:forEach>
-														</select>
-														</td>
-														<td style="text-align: center;">
-															<button type="button" class="btn btn-danger" onClick="return exclui(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
-														</td>
-													</tr>
-												</c:forEach>
-											</tbody>
-										</table>
-				
-									</div>
-								</c:if>
+								<div class="navbar" style="display: block;width: 350px;float: left">
+									
+								<div class="navbar-inner" >
 								
-								<div class="controls controls-row">
-									<label class="checkbox inline">
-										<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
-									</label>
-									<label class="checkbox inline">
-										<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
-									</label>
-									<label class="checkbox inline">
-										<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
-									</label>
+									<div class="container">
+										<div class="control-group"></div>
+										<div class="page-header">
+											<h2><small>Inf. Bancárias</small></h2>
+										</div>
+										<div>	
+											<table class="table table-striped table-bordered" id="lista">
+												<thead>
+													<tr>
+														<th>TipoContato</th>
+														<th>Contato</th>
+														<th>Excluir</th>
+													</tr>
+												</thead>
+												<tbody>	
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="btn-toolbar" align="right">
+											<div class="btn-group">
+												<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
+											</div>	
+											<div class="btn-group">
+												<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelar();"><i class="icon-remove"></i></button>
+											</div>
+										</div>
+									
+										</div>
+									</div>
 								</div>
+								<div class="navbar" style="display: block;width: 350px;float: left">
+									
+								<div class="navbar-inner" >
+								
+									<div class="container">
+										<div class="control-group"></div>
+										<div class="page-header">
+											<h2><small>Benefícios</small></h2>
+										</div>
+										<div>	
+											<table class="table table-striped table-bordered" id="lista">
+												<thead>
+													<tr>
+														<th>TipoContato</th>
+														<th>Contato</th>
+														<th>Excluir</th>
+													</tr>
+												</thead>
+												<tbody>	
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="btn-toolbar" align="right">
+											<div class="btn-group">
+												<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
+											</div>	
+											<div class="btn-group">
+												<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelar();"><i class="icon-remove"></i></button>
+											</div>
+										</div>
+									
+										</div>
+									</div>
+								</div>
+
+								<br/>	
+
+							<div class="navbar" style="clear: both;width: 1050px;">
+									
+									<div class="navbar-inner"  >
+										<div class="container">
+											
+											<div class="control-group"></div>
+											<div class="page-header">
+												<h2><small>Endereços</small></h2>
+											</div>
+											
+											<c:if test="${not empty parceiroLocalidades}">
+												<div id="enderecos" style="margin-top: 15px;">
+													<table class="table table-striped table-bordered" id="lista">
+														<thead>
+															<tr>
+																<th>Cep</th>
+																<th>Bairro</th>
+																<th>Cidade</th>
+																<th>Endereço</th>
+																<th>Número</th>
+																<th>Complemento</th>
+																<th>Tipo</th>
+																<th>Excluir</th>
+															</tr>
+														</thead>
+														<tbody>	
+															<c:forEach items="${parceiroLocalidades}" var="parceiroLocalidade">
+																<tr>
+																	<td>${parceiroLocalidade.localidade.cep }</td>
+																	<td>${parceiroLocalidade.localidade.bairro }</td>
+																	<td>${parceiroLocalidade.localidade.cidade.nome }</td>
+																	<td>${parceiroLocalidade.localidade.endereco }</td>
+																	<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-medium" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+																	<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-medium" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+																	<td>
+																	<select id="parceiroLocalidadeTipoEnderecoLista" onChange="return altera(this,'tipoEndereco','${parceiroLocalidade.parceiroLocalidade_id}', this.value);">
+																		<option value="0" selected="selected">Selecione</option>
+																			<c:forEach var="tipoEndereco" items="${tiposEndereco}">
+																				<option value="${tipoEndereco.tipoEndereco_id}" <c:if test="${parceiroLocalidade.tipoEndereco.tipoEndereco_id eq tipoEndereco.tipoEndereco_id}">SELECTED</c:if>>${tipoEndereco.nome}</option>
+																			</c:forEach>
+																	</select>
+																	</td>
+																	<td style="text-align: center;">
+																		<button type="button" class="btn btn-danger" onClick="return exclui(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
+																	</td>
+																</tr>
+															</c:forEach>
+														</tbody>
+													</table>
+							
+												</div>
+											</c:if>
+									
+										</div>
+									</div>										
+							</div>
+
+							<div class="navbar" style="clear: both;width: 1050px;">
+									<div class="navbar-inner">
+										<div class="container">
+										
+										<div id="ajax_endereco" style="display: none;">
+
+											<div class="control-group"></div>
+											<div class="page-header">
+												<h2><small>Novo Endereço</small></h2>
+											</div>
+											
+											<div class="input-append">
+												<input class="span2" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
+												<span class="add-on"><i class="icon-search"></i></span>
+											</div>
+
+											<div class="row-fluid">
+												<input class="span5" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço" value="${localidade.endereco }"/>
+												<input class="span1" id="parceirolocalidadeNumero" name="parceiroLocalidade.numero" type="text" placeholder="Número"/>
+												<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" value="${localidade.bairro }" />
+												<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />
+												<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  value="${localidade.regiao.chave }"  />
+											</div>
 			
-								<div class="controls controls-row">
-									<label class="checkbox">
-										<input type="checkbox" id="parceiroNegocioIsActive" name="parceiroNegocio.isActive" checked="checked" value="1"> Ativo
-									</label>							
+											<div id="alertCEP" style="position:absolute; float: right;width: 250px;margin-left: 100px;margin-top: -27px;"><i></i></div>
+			
+											<div class="row-fluid">		
+
+												<input class="span2" id="parceirolocalidadeComplemento" name="parceiroLocalidade.complemento" type="text" placeholder="Complemento" />
+												<input class="span9" id="parceirolocalidadePontoReferencia" name="parceiroLocalidade.pontoReferencia" type="text" placeholder="Ponto de Referência" />
+
+												<input  id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
+												<input  id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
+												<input  id="localidadePaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
+												<input  id="localidadeId" name="localidade.localidade_id" type="hidden"  value="${localidade.localidade_id }" />
+											</div>
+
+										</div>
+										
+										<c:if test="${not empty parceiroNegocio }">
+											<div class="btn-toolbar" align="right">
+												<div class="btn-group">
+													<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
+												</div>	
+												<div class="btn-group">
+													<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelar();"><i class="icon-remove"></i></button>
+												</div>
+											</div>
+										</c:if>
+										
+									</div>
 								</div>
-					
-								<div class="btn-toolbar">
-									<div class="btn-group">
-										<button type="submit" class="btn btn-primary">Salvar</button>
-										<button type="button" class="btn btn-primary" id="bttNovo">Novo</button>
-									</div>	
-								</div>
-							</form>		
+		
+							</div>
+	
+							<div class="controls controls-row" style="clear: both;">
+								<label class="checkbox inline">
+									<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
+								</label>
+								<label class="checkbox inline">
+									<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
+								</label>
+								<label class="checkbox inline">
+									<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
+								</label>
+							</div>
+		
+							<div class="controls controls-row">
+								<label class="checkbox">
+									<input type="checkbox" id="parceiroNegocioIsActive" name="parceiroNegocio.isActive" checked="checked" value="1"> Ativo
+								</label>							
+							</div>
+				
+							<div class="btn-toolbar">
+								<div class="btn-group">
+									<button type="submit" class="btn btn-primary">Salvar</button>
+								</div>		
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary" id="bttNovo">Novo</button>
+								</div>	
+							</div>
+						</form>		
 							
 						</div>
 					</div>
