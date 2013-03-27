@@ -136,6 +136,29 @@ function salvaEndereco() {
 
 }
 
+function salvaContato() {
+	
+	var parceiroId = $("#parceiroNegocioId").val();
+	var parceiroContatoTipoContatoId = $("#parceiroContatoTipoContatoNovo").val();
+	var parceiroContatoNome = $("#parceiroContatoNomeNovo").val();
+
+	if (window.confirm("Deseja salvar o endereço?"))
+		$.post('<c:url value='/parceironegocio/salvaContato' />',{
+				'parceiroContato.tipoContato.tipoContato_id' : parceiroContatoTipoContatoId ,
+				'parceiroContato.nome' : parceiroContatoNome,
+				'parceiroContato.parceiroNegocio.parceiroNegocio_id ' : parceiroId}
+		, function(resposta) { 
+			if(resposta.indexOf("Erro") != -1){
+				alert(resposta);
+			} else {
+				$('#parceiroContatosDiv').html(resposta);	
+			};
+		} );
+
+	return false;
+
+}
+
 function mostraEndereco() {
 	
 	 $("#ajax_endereco").css("display", "block");
@@ -145,7 +168,7 @@ function mostraEndereco() {
 	
 }
 
-function cancelar() {
+function cancelaEndereco() {
 	
 	 $("#ajax_endereco").css("display", "none");
 
@@ -159,6 +182,16 @@ function exclui(linha, id) {
 	if (window.confirm("Deseja realmente excluir a Localidade do Parceiro ?"))
 		$.post('<c:url value='/parceironegocio/excluiLocalidade' />'
 		, {'parceiroLocalidade.parceiroLocalidade_id' : id}
+		, function(resposta) { alert(resposta); excluiLinha(linha, resposta); });
+
+	return false;
+}
+
+function excluiContato(linha, id) {
+
+	if (window.confirm("Deseja realmente excluir o Contato do Parceiro ?"))
+		$.post('<c:url value='/parceironegocio/excluiContato' />'
+		, {'parceiroContato.parceiroContato_id' : id}
 		, function(resposta) { alert(resposta); excluiLinha(linha, resposta); });
 
 	return false;
@@ -193,6 +226,34 @@ function altera(linha, atributo,parceiroLocalidade_id,valor) {
 
 	if (window.confirm("Deseja realmente alterar o atributo do Parceiro Localidade?"))
 		$.post('<c:url value='/parceironegocio/alteraParceiroLocalidade' />'
+		, attr , function(resposta) { 
+
+				if(resposta.indexOf("Erro") != -1){
+					alert(resposta);
+					window.location.reload();
+				} else {
+					alert(resposta);	
+				};
+				
+		});
+
+	return false;
+}
+
+function alteraContato(linha, atributo,parceiroContato_id,valor) {
+
+	if(atributo == 'nome'){
+		var attr = {'parceiroContato.parceiroContato_id' : parceiroContato_id ,
+				 'parceiroContato.nome' : valor };
+	}
+
+	if(atributo == 'tipoContato'){
+		var attr = {'parceiroContato.parceiroContato_id' : parceiroContato_id ,
+				 'parceiroContato.tipoContato.tipoContato_id' : valor} ;
+	}
+
+	if (window.confirm("Deseja realmente alterar o atributo do Contato Localidade?"))
+		$.post('<c:url value='/parceironegocio/alteraParceiroContato' />'
 		, attr , function(resposta) { 
 
 				if(resposta.indexOf("Erro") != -1){
@@ -351,108 +412,67 @@ function altera(linha, atributo,parceiroLocalidade_id,valor) {
 			
 									</div>
 								</div>
-								
+
 								<br/>
-								
-								
+
 								<div class="navbar" style="display: block;width: 350px;float: left">
 									
 								<div class="navbar-inner" >
 								
 									<div class="container">
-										<div class="control-group"></div>
-										<div class="page-header">
-											<h2><small>Contato</small></h2>
-										</div>
-										<div>	
-											<table class="table table-striped table-bordered" id="lista">
-												<thead>
-													<tr>
-														<th>TipoContato</th>
-														<th>Contato</th>
-														<th>Excluir</th>
-													</tr>
-												</thead>
-												<tbody>	
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
+										<br/>
+										<c:if test="${not empty parceiroContatos}">	
+											<div id="parceiroContatosDiv">	
+												<table class="table table-striped table-bordered" id="lista">
+													<thead>
+														<tr>
+															<th>TipoContato</th>
+															<th>Contato</th>
+															<th>Excluir</th>
+														</tr>
+													</thead>
+													<tbody>
+														
+													<c:forEach items="${parceiroContatos}" var="parceiroContato">
+														<tr>
+															<td>
+																<select id="parceiroContatoTipoContatoLista" onChange="return alteraContato(this,'tipoContato','${parceiroContato.parceiroContato_id}', this.value);" class="input-small">
+																	<option value="0" selected="selected">Selecione</option>
+																	<c:forEach var="tipoContato" items="${tiposContato}">
+																		<option value="${tipoContato.tipoContato_id}" <c:if test="${parceiroContato.tipoContato.tipoContato_id eq tipoContato.tipoContato_id}">SELECTED</c:if>>${tipoContato.chave}</option>
+																	</c:forEach>
+																</select>
+															</td>
+															<td><input type="text" id="parceiroContatoNomeLista" value="${parceiroContato.nome }" class="input-small" onChange="return alteraContato(this,'nome','${parceiroContato.parceiroContato_id}', this.value);"/></td>
+															<td style="text-align: center;">
+																<button type="button" class="btn btn-danger btn-mini" onClick="return excluiContato(this,'${parceiroContato.parceiroContato_id}');">Excluir</button>
+															</td>
+														</tr>
+													</c:forEach>
+													<c:if test="${not empty parceiroNegocio}">
+														<tr>
+															<td>
+																<select id="parceiroContatoTipoContatoNovo" class="input-small">
+																	<option value="0" selected="selected">Selecione</option>
+																	<c:forEach var="tipoContato" items="${tiposContato}">
+																		<option value="${tipoContato.tipoContato_id}" >${tipoContato.chave}</option>
+																	</c:forEach>
+																</select>
+															</td>
+															<td><input type="text" id="parceiroContatoNomeNovo" value="${parceiroContato.nome }" class="input-small"/></td>
+															<td style="text-align: center;">
+																<button type="button" class="btn btn-mini" id="bttParceiroContatoNovo" onClick="return salvaContato();">Novo</button>
+															</td>
+														</tr>
+													</c:if>
 												</tbody>
 											</table>
 										</div>
-										<div class="btn-toolbar" align="right">
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
-											</div>	
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelar();"><i class="icon-remove"></i></button>
-											</div>
-										</div>
-									
-										</div>
+									</c:if>
 									</div>
 								</div>
-								<div class="navbar" style="display: block;width: 350px;float: left">
-									
-								<div class="navbar-inner" >
-								
-									<div class="container">
-										<div class="control-group"></div>
-										<div class="page-header">
-											<h2><small>Inf. Bancárias</small></h2>
-										</div>
-										<div>	
-											<table class="table table-striped table-bordered" id="lista">
-												<thead>
-													<tr>
-														<th>TipoContato</th>
-														<th>Contato</th>
-														<th>Excluir</th>
-													</tr>
-												</thead>
-												<tbody>	
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-										<div class="btn-toolbar" align="right">
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
-											</div>	
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelar();"><i class="icon-remove"></i></button>
-											</div>
-										</div>
-									
-										</div>
-									</div>
-								</div>
+							</div>
+
 								<div class="navbar" style="display: block;width: 350px;float: left">
 									
 								<div class="navbar-inner" >
@@ -490,22 +510,53 @@ function altera(linha, atributo,parceiroLocalidade_id,valor) {
 												</tbody>
 											</table>
 										</div>
-										<div class="btn-toolbar" align="right">
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
-											</div>	
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelar();"><i class="icon-remove"></i></button>
-											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="navbar" style="display: block;width: 350px;float: left">
+									
+								<div class="navbar-inner" >
+								
+									<div class="container">
+										<div class="control-group"></div>
+										<div class="page-header">
+											<h2><small>Inf. Bancárias</small></h2>
+										</div>
+										<div>	
+											<table class="table table-striped table-bordered" id="lista">
+												<thead>
+													<tr>
+														<th>TipoContato</th>
+														<th>Contato</th>
+														<th>Excluir</th>
+													</tr>
+												</thead>
+												<tbody>	
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Residencial</td>
+														<td>6468338</td>
+														<td></td>
+													</tr>
+												</tbody>
+											</table>
 										</div>
 									
 										</div>
 									</div>
 								</div>
 
-								<br/>	
-
-							<div class="navbar" style="clear: both;width: 1050px;">
+								<div class="navbar" style="clear: both;width: 1050px;">
 									
 									<div class="navbar-inner"  >
 										<div class="container">
@@ -548,7 +599,7 @@ function altera(linha, atributo,parceiroLocalidade_id,valor) {
 																	</select>
 																	</td>
 																	<td style="text-align: center;">
-																		<button type="button" class="btn btn-danger" onClick="return exclui(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
+																		<button type="button" class="btn btn-danger btn-mini" onClick="return exclui(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
 																	</td>
 																</tr>
 															</c:forEach>
@@ -566,7 +617,7 @@ function altera(linha, atributo,parceiroLocalidade_id,valor) {
 									<div class="navbar-inner">
 										<div class="container">
 										
-										<div id="ajax_endereco" style="display: none;">
+										<div id="ajax_endereco" <c:if test="${not empty parceiroNegocio }">style="display: none;"</c:if>>
 
 											<div class="control-group"></div>
 											<div class="page-header">
@@ -607,7 +658,7 @@ function altera(linha, atributo,parceiroLocalidade_id,valor) {
 													<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
 												</div>	
 												<div class="btn-group">
-													<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelar();"><i class="icon-remove"></i></button>
+													<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelaEndereco();"><i class="icon-remove"></i></button>
 												</div>
 											</div>
 										</c:if>
