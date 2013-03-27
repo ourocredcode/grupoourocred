@@ -36,6 +36,9 @@ public class TipoContato implements Serializable {
 	@Column(name="nome")
 	private String nome;
 	
+	@Column(name="chave")
+	private String chave;
+	
 	@Column(name="descricao")
 	private String descricao;
 	
@@ -88,5 +91,13 @@ public class TipoContato implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
 	}
 }

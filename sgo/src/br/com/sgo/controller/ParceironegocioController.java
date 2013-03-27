@@ -15,15 +15,18 @@ import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.OrganizacaoDao;
+import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.SexoDao;
+import br.com.sgo.dao.TipoContatoDao;
 import br.com.sgo.dao.TipoEnderecoDao;
 import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Funcionario;
 import br.com.sgo.modelo.Localidade;
+import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.TipoEndereco;
@@ -39,16 +42,18 @@ public class ParceironegocioController {
 	private final FuncaoDao funcaoDao;
 	private final LocalidadeDao localidadeDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
+	private final ParceiroContatoDao parceiroContatoDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
 	private final SexoDao sexoDao;
 	private final EstadoCivilDao estadoCivilDao;
 	private final TipoParceiroDao tipoParceiroDao;
 	private final TipoEnderecoDao tipoEnderecoDao;
+	private final TipoContatoDao tipoContatoDao;
 
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,
-			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,
-			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao) {
+			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
+			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,TipoContatoDao tipoContatoDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -62,8 +67,10 @@ public class ParceironegocioController {
 		this.sexoDao = sexoDao;
 		this.estadoCivilDao = estadoCivilDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
+		this.parceiroContatoDao = parceiroContatoDao;
 		this.tipoParceiroDao = tipoParceiroDao;
 		this.tipoEnderecoDao = tipoEnderecoDao;
+		this.tipoContatoDao = tipoContatoDao;
 
 	}
 
@@ -79,6 +86,7 @@ public class ParceironegocioController {
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
+		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
 
 	}
 
@@ -93,7 +101,9 @@ public class ParceironegocioController {
 				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
 
 		result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceironegocio_id));
+		result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceironegocio_id));
 		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
+		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
 
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
@@ -102,11 +112,18 @@ public class ParceironegocioController {
 		result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceironegocio_id));
 
 	}
-	
+
 	@Get
 	@Path("/parceironegocio/parceiroLocalidades")
 	public void parceiroLocalidades(Long parceironegocio_id){
 		result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceironegocio_id));
+	}
+
+	@Get
+	@Path("/parceironegocio/parceiroContatos")
+	public void parceiroContatos(Long parceironegocio_id){
+		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
+		result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceironegocio_id));
 	}
 
 	@Post
@@ -270,6 +287,22 @@ public class ParceironegocioController {
 	}
 	
 	@Post
+	@Path("/parceironegocio/excluiContato")
+	public void excluiContato(ParceiroContato parceiroContato){
+
+		ParceiroContato pc = this.parceiroContatoDao.load(parceiroContato.getParceiroContato_id());
+
+		pc.setIsActive(false);
+
+		this.parceiroContatoDao.beginTransaction();
+		this.parceiroContatoDao.atualiza(pc);
+		this.parceiroContatoDao.commit();
+
+		result.include("msg","Registro removido com sucesso").forwardTo(this).msg();
+
+	}
+	
+	@Post
 	@Path("/parceironegocio/salvaLocalidade")
 	public void salvaLocalidade(Localidade localidade, ParceiroLocalidade parceiroLocalidade){
 
@@ -338,6 +371,40 @@ public class ParceironegocioController {
 		result.redirectTo(this).parceiroLocalidades(parceiroLocalidade.getParceiroNegocio().getParceiroNegocio_id());
 
 	}
+
+	@Post
+	@Path("/parceironegocio/salvaContato")
+	public void salvaContato(ParceiroContato parceiroContato){
+
+		parceiroContato.setIsActive(true);
+		parceiroContato.setEmpresa(usuarioInfo.getEmpresa());
+		parceiroContato.setOrganizacao(usuarioInfo.getOrganizacao());
+
+		String mensagem = "";
+
+		try {
+
+			this.parceiroContatoDao.beginTransaction();
+			this.parceiroContatoDao.adiciona(parceiroContato);
+			this.parceiroContatoDao.commit();
+		
+		} catch(Exception e) {
+
+			this.parceiroContatoDao.rollback();
+
+			if (e.getCause().toString().indexOf("PK_PARCEIROCONTATO") != -1){
+				mensagem = "Erro: Contato " + parceiroContato.getNome() + " já existente.";
+			} else {
+				mensagem = "Erro ao adicionar Contato:";
+			}
+
+			result.include("msg",mensagem).redirectTo(this).msg();
+
+		}
+
+		result.redirectTo(this).parceiroContatos(parceiroContato.getParceiroNegocio().getParceiroNegocio_id());
+
+	}
 	
 	@Post
 	@Path("/parceironegocio/alteraParceiroLocalidade")
@@ -363,6 +430,34 @@ public class ParceironegocioController {
 		} else {
 
 			result.include("msg","Erro : Parceiro Localidade já existente neste endereço.").redirectTo(this).msg();
+
+		}
+
+	}
+	
+	@Post
+	@Path("/parceironegocio/alteraParceiroContato")
+	public void alteraParceiroContato(ParceiroContato parceiroContato){
+
+		ParceiroContato pc = this.parceiroContatoDao.load(parceiroContato.getParceiroContato_id());
+
+		if(parceiroContato.getNome() != null)
+			pc.setNome(parceiroContato.getNome());
+
+		if(parceiroContato.getTipoContato() != null)
+			pc.setTipoContato(this.tipoContatoDao.load(parceiroContato.getTipoContato().getTipoContato_id()));
+
+		if(this.parceiroContatoDao.buscaParceiroContato(pc.getTipoContato().getTipoContato_id(),pc.getNome()) == null) {
+
+			this.parceiroContatoDao.beginTransaction();
+			this.parceiroContatoDao.atualiza(pc);
+			this.parceiroContatoDao.commit();
+
+			result.include("msg","Parceiro Contato atualizado com sucesso.").redirectTo(this).msg();
+
+		} else {
+
+			result.include("msg","Erro : Parceiro Contato já existente.").redirectTo(this).msg();
 
 		}
 
