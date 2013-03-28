@@ -34,7 +34,7 @@ public class ContabancariaController {
 		String mensagem = "";
 		
 		try {
-			if(this.contaBancariaDao.buscaContaBancariaByEmpOrgBanTipNum(contaBancaria.getEmpresa().getEmpresa_id(), contaBancaria.getOrganizacao().getOrganizacao_id(), contaBancaria.getAgencia().getAgencia_id(), contaBancaria.getTipoConta().getTipoConta_id(), contaBancaria.getNumeroconta()) == null) {
+			if(this.contaBancariaDao.buscaContaBancariaByEmpOrgAgeTipNum(contaBancaria.getEmpresa().getEmpresa_id(), contaBancaria.getOrganizacao().getOrganizacao_id(), contaBancaria.getAgencia().getAgencia_id(), contaBancaria.getTipoConta().getTipoConta_id(), contaBancaria.getNumeroconta()) == null) {
 				
 				this.contaBancariaDao.beginTransaction();
 				this.contaBancariaDao.atualiza(contaBancaria);
@@ -67,7 +67,7 @@ public class ContabancariaController {
 	@Get @Path("/contabancaria/busca.json")
 	@Public
 	public void contabancaria(Long empresa_id, Long organizacao_id, Long banco_id, Long tipoconta_id, String numeroconta){
-		result.use(Results.json()).withoutRoot().from(contaBancariaDao.buscaContaBancariaByEmpOrgBanTipNum(empresa_id, organizacao_id, banco_id, tipoconta_id, numeroconta)).serialize();
+		result.use(Results.json()).withoutRoot().from(contaBancariaDao.buscaContaBancariaByEmpOrgAgeTipNum(empresa_id, organizacao_id, banco_id, tipoconta_id, numeroconta)).serialize();
 	}
 
 }
