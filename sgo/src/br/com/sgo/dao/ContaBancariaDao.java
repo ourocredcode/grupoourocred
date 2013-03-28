@@ -50,25 +50,17 @@ public class ContaBancariaDao extends Dao<ContaBancaria> {
 		return contas;
 	}
 
-	public Collection<ContaBancaria> buscaContaBancariaByNumeroConta(String numeroConta){		
-
+	public Collection<ContaBancaria> buscaContaBancariaByNumeroConta(String numeroConta){
 		String sql = sqlContaBancaria;
-
 		if(numeroConta != null)
 			sql += 	" WHERE CONTABANCARIA.numeroconta like ?";
-
-		this.conn = this.conexao.getConexao();		
-
+		this.conn = this.conexao.getConexao();
 		Collection<ContaBancaria> contas = new ArrayList<ContaBancaria>();
-
 		try {
 			this.stmt = conn.prepareStatement(sql);			
 			this.stmt.setString(1,"%"+  numeroConta + "%");
-
 			this.rsContaBancaria = this.stmt.executeQuery();
-
 			ContaBancaria conta = new ContaBancaria();
-
 			while (rsContaBancaria.next()) {
 				conta.setContaBancaria_id(rsContaBancaria.getLong("contabancaria_id"));
 				conta.setNumeroconta(rsContaBancaria.getString("numeroconta"));
@@ -79,34 +71,51 @@ public class ContaBancariaDao extends Dao<ContaBancaria> {
 		this.conexao.closeConnection(rsContaBancaria, stmt, conn);
 		return contas;
 	}
+	
+	public ContaBancaria buscaContaBancariaByAgeNum(Long agencia_id, String numeroconta){
+		String sql = sqlContaBancaria;		
+		if(agencia_id != null)
+			sql += 	" AND CONTABANCARIA.agencia_id = ?";		
+		if(numeroconta != null)
+			sql += 	" AND (CONTABANCARIA.numeroconta like ?)";
+		this.conn = this.conexao.getConexao();		
+		ContaBancaria conta = null;		
+		try {
+			this.stmt = conn.prepareStatement(sql);			
+			this.stmt.setLong(1, agencia_id);			
+			this.stmt.setString(2,"%"+  numeroconta + "%");
+			this.rsContaBancaria = this.stmt.executeQuery();
+			while (rsContaBancaria.next()) {
+				conta = new ContaBancaria();
+				conta.setContaBancaria_id(rsContaBancaria.getLong("contabancaria_id"));
+				conta.setNumeroconta(rsContaBancaria.getString("numeroconta"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsContaBancaria, stmt, conn);
+		return conta;
+	}
 
-	public ContaBancaria buscaContaBancariaByEmpOrgBanNum(Long empresa_id, Long organizacao_id, Long banco_id, String numeroconta){		
-
-		String sql = sqlContaBancaria;
-		
+	public ContaBancaria buscaContaBancariaByEmpOrgAgeNum(Long empresa_id, Long organizacao_id, Long agencia_id, String numeroconta){
+		String sql = sqlContaBancaria;		
 		if(empresa_id != null)
 			sql +=	" WHERE CONTABANCARIA.empresa_id = ?";
 		if(organizacao_id != null)
 			sql += 	" AND CONTABANCARIA.organizacao_id = ?";
-		if(banco_id != null)
-			sql += 	" AND CONTABANCARIA.banco_id = ?";		
+		if(agencia_id != null)
+			sql += 	" AND CONTABANCARIA.agencia_id = ?";		
 		if(numeroconta != null)
-			sql += 	" AND (CONTABANCARIA.numeroconta like ?)";		
-
-		this.conn = this.conexao.getConexao();
-		
-		ContaBancaria conta = null;
-		
+			sql += 	" AND (CONTABANCARIA.numeroconta like ?)";
+		this.conn = this.conexao.getConexao();		
+		ContaBancaria conta = null;		
 		try {
-			this.stmt = conn.prepareStatement(sql);
-			
+			this.stmt = conn.prepareStatement(sql);			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, banco_id);			
-			this.stmt.setString(4,"%"+  numeroconta + "%");			
-		
+			this.stmt.setLong(3, agencia_id);			
+			this.stmt.setString(4,"%"+  numeroconta + "%");
 			this.rsContaBancaria = this.stmt.executeQuery();
-			
 			while (rsContaBancaria.next()) {
 				conta = new ContaBancaria();
 				conta.setContaBancaria_id(rsContaBancaria.getLong("contabancaria_id"));
@@ -119,36 +128,28 @@ public class ContaBancariaDao extends Dao<ContaBancaria> {
 		return conta;
 	}
 	
-	public ContaBancaria buscaContaBancariaByEmpOrgBanTipNum(Long empresa_id, Long organizacao_id, Long banco_id, Long tipoconta_id, String numeroconta){		
-
+	public ContaBancaria buscaContaBancariaByEmpOrgAgeTipNum(Long empresa_id, Long organizacao_id, Long agencia_id, Long tipoconta_id, String numeroconta){
 		String sql = sqlContaBancaria;
-		
 		if(empresa_id != null)
 			sql +=	" WHERE CONTABANCARIA.empresa_id = ?";
 		if(organizacao_id != null)
 			sql += 	" AND CONTABANCARIA.organizacao_id = ?";
-		if(banco_id != null)
-			sql += 	" AND CONTABANCARIA.banco_id = ?";
+		if(agencia_id != null)
+			sql += 	" AND CONTABANCARIA.agencia_id = ?";
 		if(tipoconta_id != null)
 			sql += 	" AND CONTABANCARIA.tipoconta_id = ?";
 		if(numeroconta != null)
-			sql += 	" AND (CONTABANCARIA.numeroconta like ?)";		
-
+			sql += 	" AND (CONTABANCARIA.numeroconta like ?)";
 		this.conn = this.conexao.getConexao();
-		
 		ContaBancaria conta = null;
-		
 		try {
 			this.stmt = conn.prepareStatement(sql);
-			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, banco_id);
+			this.stmt.setLong(3, agencia_id);
 			this.stmt.setLong(4, tipoconta_id);
 			this.stmt.setString(5,"%"+  numeroconta + "%");			
-		
 			this.rsContaBancaria = this.stmt.executeQuery();
-			
 			while (rsContaBancaria.next()) {
 				conta = new ContaBancaria();
 				conta.setContaBancaria_id(rsContaBancaria.getLong("contabancaria_id"));
