@@ -4,16 +4,6 @@
 jQuery(function($){
 
 		$('#parceiroNegocioDataNascimento').datepicker();
-	
-		$('#parceironegocio-li-a').click(function() {
-			window.location.href = '<c:url value="/parceironegocio/cadastro" />';
-		});
-		
-		$('#localidade-li-a').click(function() {
-			window.location.href = '<c:url value="/localidade/cadastro" />';
-		});
-	
-		
 
 	   $("#parceiroNegocioTipoParceiroId").change(function(evento){
 
@@ -42,27 +32,7 @@ jQuery(function($){
 		      }
 		   
 	   });
-	   
-	   $("#parceiroNegocioIsCliente").click(function(evento){
 
-		   if ($('#parceiroNegocioIsCliente').is(':checked')){
-		         $("#parceiroNegocioClienteSearch").css("display", "block");
-		      }else{
-		         $("#parceiroNegocioClienteSearch").css("display", "none");
-		      }
-		   
-	   });
-	   
-	   $("#parceiroNegocioIsFuncionario").click(function(evento){
-
-		   if ($('#parceiroNegocioIsFuncionario').is(':checked')){
-		         $("#parceiroNegocioFuncionarioSearch").css("display", "block");
-		      }else{
-		         $("#parceiroNegocioFuncionarioSearch").css("display", "none");
-		      }
-		   
-	   });
-	   
 	   $("#localidadeCep").change(function(){
 			var enderecoCEP = $("#localidadeCep").val();
 			$.ajax({
@@ -270,45 +240,56 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 
 </script>
 
+<div class="span3" style="float: left">
+	
+	<div id="myTabContent" class="tab-content">
 
-<div class="span9">
+				<div class="control-group"></div>
 
-	<section id="tabs">
+				<div class="navbar">
+					<div class="navbar-inner">
+						<div class="container">
+								
+							<div class="control-group"></div>
+								<div class="page-header">
+									<h1><small>Buscas</small></h1>
+								</div>
+						
+							<div id="parceiroNegocioClienteSearch" style="margin-top: 20px">
+									<form class="form-search" action="<c:url value="/parceironegocio/busca.cliente" />" method="POST">
+									<div class="input-append">
+										<input type="text" class="input-small">
+										<button type="submit" class="btn">Busca PN</button>
+									</div>
+									</form>
+							</div>
+							
+							<div id="parceiroNegocioFuncionarioSearch">
+								<form class="form-search" action="<c:url value="/parceironegocio/busca.funcionario"  />" method="POST">
+									<div class="input-append">
+										<input type="text" class="input-small" id="doc" name="doc">
+										<button type="submit" class="btn">Busca CPF</button>
+									</div>
+								</form>
+							</div>
+						
+						</div>
+					</div>
+				</div>
+						
+			
+	</div>
 
-		<div class="bs-docs-example">
+</div>
 
-		<ul id="myTab" class="nav nav-tabs">
-			<li class="active" id="parceironegocio-li"><a href="#parceironegocio-div" data-toggle="tab" id="parceironegocio-li-a">Parceiro de Negócios</a></li>
-			<li class="" id="localidade-li"><a href="#localidade-div" data-toggle="tab" id="localidade-li-a">Endereço</a></li>
-		</ul>
+
+<div class="span8" style="float: left">
 
 		<div id="myTabContent" class="tab-content">	
 
 			<div class="tab-pane fade active in" id="parceironegocio-div" >
-
-					<div class="control-group"></div>
-					
-					<div class="controls controls-row" style=" height: 45px">
-
-						<div id="parceiroNegocioClienteSearch" style="display: none;margin-top: 10px">
-							<form class="form-search" action="<c:url value="/parceironegocio/busca.cliente" />" method="POST">
-								<div class="input-append">
-									<input type="text" class="span2 search-query">
-									<button type="submit" class="btn">Busca PN</button>
-								</div>
-							</form>
-						</div>
-	
-						<div id="parceiroNegocioFuncionarioSearch" style="display: none;margin-top: 10px">
-							<form class="form-search" action="<c:url value="/parceironegocio/busca.funcionario"  />" method="POST">
-								<div class="input-append">
-									<input type="text" class="span2 search-query" id="doc" name="doc">
-									<button type="submit" class="btn">Busca Funcionário</button>
-								</div>
-							</form>
-						</div>
-					
-					</div>
+				
+				<div class="control-group"></div>
 					
 					<div class="navbar">
 							<div class="navbar-inner">
@@ -514,49 +495,7 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 									</div>
 								</div>
 
-								<div class="navbar" style="display: block;width: 350px;float: left">
-									
-								<div class="navbar-inner" >
-								
-									<div class="container">
-										<div class="control-group"></div>
-										<div class="page-header">
-											<h2><small>Inf. Bancárias</small></h2>
-										</div>
-										<div>	
-											<table class="table table-striped table-bordered" id="lista">
-												<thead>
-													<tr>
-														<th>TipoContato</th>
-														<th>Contato</th>
-														<th>Excluir</th>
-													</tr>
-												</thead>
-												<tbody>	
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									
-										</div>
-									</div>
-								</div>
-
-								<div class="navbar" style="clear: both;width: 1050px;">
+								<div class="navbar" style="clear: both;width: 700px;">
 									
 									<div class="navbar-inner"  >
 										<div class="container">
@@ -588,10 +527,10 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 																	<td>${parceiroLocalidade.localidade.bairro }</td>
 																	<td>${parceiroLocalidade.localidade.cidade.nome }</td>
 																	<td>${parceiroLocalidade.localidade.endereco }</td>
-																	<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-medium" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
-																	<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-medium" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+																	<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-mini" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+																	<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-mini" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
 																	<td>
-																	<select id="parceiroLocalidadeTipoEnderecoLista" onChange="return altera(this,'tipoEndereco','${parceiroLocalidade.parceiroLocalidade_id}', this.value);">
+																	<select id="parceiroLocalidadeTipoEnderecoLista" onChange="return altera(this,'tipoEndereco','${parceiroLocalidade.parceiroLocalidade_id}', this.value);" class="input-small">
 																		<option value="0" selected="selected">Selecione</option>
 																			<c:forEach var="tipoEndereco" items="${tiposEndereco}">
 																				<option value="${tipoEndereco.tipoEndereco_id}" <c:if test="${parceiroLocalidade.tipoEndereco.tipoEndereco_id eq tipoEndereco.tipoEndereco_id}">SELECTED</c:if>>${tipoEndereco.nome}</option>
@@ -613,7 +552,7 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 									</div>										
 							</div>
 
-							<div class="navbar" style="clear: both;width: 1050px;">
+							<div class="navbar" style="clear: both;width: 700px;">
 									<div class="navbar-inner">
 										<div class="container">
 										
@@ -699,16 +638,12 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 						</div>
 					</div>
 				</div>
-						
+
 			</div>
 
 			<div class="tab-pane fade" id="localidade-div"></div>
 
 		</div>
-	</div>
-
-	</section>
 
 </div>
-
 <%@ include file="/footer.jspf"%>

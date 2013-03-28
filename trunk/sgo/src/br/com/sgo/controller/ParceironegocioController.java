@@ -18,6 +18,7 @@ import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
+import br.com.sgo.dao.PnDao;
 import br.com.sgo.dao.SexoDao;
 import br.com.sgo.dao.TipoContatoDao;
 import br.com.sgo.dao.TipoEnderecoDao;
@@ -37,6 +38,7 @@ public class ParceironegocioController {
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
 	private final ParceiroNegocioDao parceiroNegocioDao;
+	private final PnDao pnDao;
 	private final FuncionarioDao funcionarioDao;
 	private final DepartamentoDao departamentoDao;
 	private final FuncaoDao funcaoDao;
@@ -51,12 +53,13 @@ public class ParceironegocioController {
 	private final TipoEnderecoDao tipoEnderecoDao;
 	private final TipoContatoDao tipoContatoDao;
 
-	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,
+	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
 			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,TipoContatoDao tipoContatoDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
+		this.pnDao = pnDao;
 		this.departamentoDao = departamentoDao;
 		this.funcaoDao = funcaoDao;
 		this.usuarioInfo = usuarioInfo;
@@ -269,6 +272,16 @@ public class ParceironegocioController {
 				usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), doc).getParceiroNegocio_id());
 
 	}
+	
+	@Post
+	@Path("/parceironegocio/busca.cliente")
+	public void buscaCliente(String beneficio){
+
+		result.redirectTo(this).cadastro(this.pnDao.buscaParceiroNegocioPN(beneficio).getParceiroNegocio_id());
+
+	}
+	
+	
 	
 	@Post
 	@Path("/parceironegocio/excluiLocalidade")
