@@ -15,46 +15,49 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="AGENCIA")
-public class Agencia implements Serializable {
+@Table(name="PARCEIROINFOBANCO")
+public class ParceiroInfoBanco implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "agencia_id")  
+	@Column(name = "parceiroinfobanco_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long agencia_id;
-	
+	private Long parceiroInfoBanco_id;
+
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
-		
+
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
 	private Organizacao organizacao;
-	
+
+	@ManyToOne
+	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = true) 
+	private ParceiroNegocio parceiroNegocio;
+
 	@ManyToOne
 	@JoinColumn(name="banco_id",updatable = true, nullable = true) 
 	private Banco banco;
-	
-	@Column(name="codigoagencia")
-	private String codigoAgencia;
-	
-	@Column(name="nome")
-	private String nome;
-	
-	@Column(name="descricao")
-	private String descricao;
-	
+
+	@ManyToOne
+	@JoinColumn(name="agencia_id",updatable = true, nullable = true) 
+	private Agencia agencia;
+
+	@ManyToOne
+	@JoinColumn(name="contabancaria_id",updatable = true, nullable = true) 
+	private ContaBancaria contaBancaria;	
+
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getAgencia_id() {
-		return agencia_id;
+	public Long getParceiroInfoBanco_id() {
+		return parceiroInfoBanco_id;
 	}
 
-	public void setAgencia_id(Long agencia_id) {
-		this.agencia_id = agencia_id;
+	public void setParceiroInfoBanco_id(Long parceiroInfoBanco_id) {
+		this.parceiroInfoBanco_id = parceiroInfoBanco_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -73,6 +76,14 @@ public class Agencia implements Serializable {
 		this.organizacao = organizacao;
 	}
 
+	public ParceiroNegocio getParceiroNegocio() {
+		return parceiroNegocio;
+	}
+
+	public void setParceiroNegocio(ParceiroNegocio parceiroNegocio) {
+		this.parceiroNegocio = parceiroNegocio;
+	}
+
 	public Banco getBanco() {
 		return banco;
 	}
@@ -81,28 +92,20 @@ public class Agencia implements Serializable {
 		this.banco = banco;
 	}
 
-	public String getCodigoAgencia() {
-		return codigoAgencia;
+	public Agencia getAgencia() {
+		return agencia;
 	}
 
-	public void setCodigoAgencia(String codigoAgencia) {
-		this.codigoAgencia = codigoAgencia;
+	public void setAgencia(Agencia agencia) {
+		this.agencia = agencia;
 	}
 
-	public String getNome() {
-		return nome;
+	public ContaBancaria getContaBancaria() {
+		return contaBancaria;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setContaBancaria(ContaBancaria contaBancaria) {
+		this.contaBancaria = contaBancaria;
 	}
 
 	public Boolean getIsActive() {
