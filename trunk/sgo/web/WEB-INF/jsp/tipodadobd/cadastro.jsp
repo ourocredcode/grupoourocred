@@ -52,7 +52,7 @@ jQuery(function($){
 	           	            $('#tipoDadoBdEmpresa').val('');
 							$('#tipoDadoBdEmpresaId').val('');
 	           	        }
-	
+
 	            	  response($.map(data, function(empresa) {  
 	            		  return {
 	                          label: empresa.nome,
