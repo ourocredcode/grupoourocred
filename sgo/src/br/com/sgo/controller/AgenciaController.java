@@ -34,7 +34,7 @@ public class AgenciaController {
 		String mensagem = "";
 		
 		try {
-			if(this.agenciaDao.buscaAgenciaByEmpOrgName(agencia.getEmpresa().getEmpresa_id(), agencia.getOrganizacao().getOrganizacao_id(), agencia.getBanco().getBanco_id(), agencia.getNome()) == null) {
+			if(this.agenciaDao.buscaAgenciaByEmOrBaCa(agencia.getEmpresa().getEmpresa_id(), agencia.getOrganizacao().getOrganizacao_id(), agencia.getBanco().getBanco_id(), agencia.getCodigoAgencia()) == null) {
 				
 				this.agenciaDao.beginTransaction();
 				this.agenciaDao.atualiza(agencia);
@@ -46,10 +46,10 @@ public class AgenciaController {
 			}
 		}catch(Exception e) {
 
-			if (e.getCause().toString().indexOf("IX_AGENCIA_EMPORGBANNOM") != -1){
-				mensagem = "Erro: Tipo Conta " + agencia.getNome() + " já existente.";
+			if (e.getCause().toString().indexOf("IX_AGENCIA_EMPORGBANCODAGENCIA") != -1){
+				mensagem = "Erro: Agência " + agencia.getNome() + " já existente.";
 			} else {
-				mensagem = "Erro ao adicionar Tipo Conta";
+				mensagem = "Erro ao adicionar Agência";
 			}
 			result.include("notice", mensagem);
 			result.redirectTo(this).cadastro();
@@ -66,8 +66,8 @@ public class AgenciaController {
 
 	@Get @Path("/agencia/busca.json")
 	@Public
-	public void agencia(Long empresa_id, Long organizacao_id, Long banco_id, String nome){
-		result.use(Results.json()).withoutRoot().from(agenciaDao.buscaAgenciaByEmpOrgName(empresa_id, organizacao_id, banco_id, nome)).serialize();
+	public void agencia(Long empresa_id, Long organizacao_id, Long banco_id, String codigoagencia){
+		result.use(Results.json()).withoutRoot().from(agenciaDao.buscaAgenciaByEmOrBaCa(empresa_id, organizacao_id, banco_id, codigoagencia)).serialize();
 	}
 
 }
