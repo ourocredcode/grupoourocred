@@ -48,7 +48,7 @@ jQuery(function($){
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#agenciaEmpresaId').val() == '' ? '0' :  $('#agenciaEmpresaId').val(), org_nome : $('#agenciaOrganizacao').val()},
+	          data : {empresa_id: $('#agenciaEmpresaId').val() == '' ? '0' :  $('#agenciaEmpresaId').val(), organizacao_id : $('#agenciaOrganizacao').val()},
               success : function(data) {  
 
             	  if (!data || data.length == 0) {
