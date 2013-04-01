@@ -15,35 +15,46 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="ORGANIZACAO")
-public class Organizacao implements Serializable {
+@Table(name="COR")
+public class Cor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "organizacao_id")  
+	@Column(name = "cor_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long organizacao_id;
-
+	private Long cor_id;
+	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
+		
+	@ManyToOne
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	private Organizacao organizacao;
 
+	@ManyToOne
+	@JoinColumn(name="imagem_id",updatable = true, nullable = false) 
+	private Imagem imagem;
+	
 	@Column(name="nome")
 	private String nome;
-
+	
 	@Column(name="descricao")
 	private String descricao;
 	
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getOrganizacao_id() {
-		return organizacao_id;
+	@Column(name="ispadrao")
+	private Boolean isPadrao;
+
+	public Long getCor_id() {
+		return cor_id;
 	}
 
-	public void setOrganizacao_id(Long organizacao_id) {
-		this.organizacao_id = organizacao_id;
+	public void setCor_id(Long cor_id) {
+		this.cor_id = cor_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -52,6 +63,22 @@ public class Organizacao implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Organizacao getOrganizacao() {
+		return organizacao;
+	}
+
+	public void setOrganizacao(Organizacao organizacao) {
+		this.organizacao = organizacao;
+	}
+
+	public Imagem getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(Imagem imagem) {
+		this.imagem = imagem;
 	}
 
 	public String getNome() {
@@ -76,6 +103,14 @@ public class Organizacao implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Boolean getIsPadrao() {
+		return isPadrao;
+	}
+
+	public void setIsPadrao(Boolean isPadrao) {
+		this.isPadrao = isPadrao;
 	}
 
 }

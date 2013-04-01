@@ -15,35 +15,36 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="ORGANIZACAO")
-public class Organizacao implements Serializable {
+@Table(name="TIPOORGANIZACAO")
+public class TipoOrganizacao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "organizacao_id")  
+	@Column(name = "tipoorganizacao_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long organizacao_id;
-
+	private Long tipoOrganizacao_id;
+	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
-
+		
+	@ManyToOne
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	private Organizacao organizacao;
+	
 	@Column(name="nome")
 	private String nome;
 
-	@Column(name="descricao")
-	private String descricao;
-	
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getOrganizacao_id() {
-		return organizacao_id;
+	public Long getTipoOrganizacao_id() {
+		return tipoOrganizacao_id;
 	}
 
-	public void setOrganizacao_id(Long organizacao_id) {
-		this.organizacao_id = organizacao_id;
+	public void setTipoOrganizacao_id(Long tipoOrganizacao_id) {
+		this.tipoOrganizacao_id = tipoOrganizacao_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -54,20 +55,20 @@ public class Organizacao implements Serializable {
 		this.empresa = empresa;
 	}
 
+	public Organizacao getOrganizacao() {
+		return organizacao;
+	}
+
+	public void setOrganizacao(Organizacao organizacao) {
+		this.organizacao = organizacao;
+	}
+
 	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 
 	public Boolean getIsActive() {

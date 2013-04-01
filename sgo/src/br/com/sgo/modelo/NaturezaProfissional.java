@@ -15,35 +15,39 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="ORGANIZACAO")
-public class Organizacao implements Serializable {
+@Table(name="NATUREZAPROFISSIONAL")
+public class NaturezaProfissional implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "organizacao_id")  
+	@Column(name = "naturezaprofissional_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long organizacao_id;
-
+	private Long naturezaProfissional_id;
+	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
+		
+	@ManyToOne
+	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	private Organizacao organizacao;
 
 	@Column(name="nome")
 	private String nome;
-
-	@Column(name="descricao")
-	private String descricao;
 	
+	@Column(name="descricao")
+	private String descricao;	
+
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getOrganizacao_id() {
-		return organizacao_id;
+	public Long getNaturezaProfissional_id() {
+		return naturezaProfissional_id;
 	}
 
-	public void setOrganizacao_id(Long organizacao_id) {
-		this.organizacao_id = organizacao_id;
+	public void setNaturezaProfissional_id(Long naturezaProfissional_id) {
+		this.naturezaProfissional_id = naturezaProfissional_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -52,6 +56,14 @@ public class Organizacao implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Organizacao getOrganizacao() {
+		return organizacao;
+	}
+
+	public void setOrganizacao(Organizacao organizacao) {
+		this.organizacao = organizacao;
 	}
 
 	public String getNome() {
