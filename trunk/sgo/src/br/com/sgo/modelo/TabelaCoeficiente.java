@@ -23,7 +23,7 @@ public class TabelaCoeficiente implements Serializable {
 	@Id
 	@Column(name = "tabelacoeficiente_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long tabelaCoeficiente;
+	private Long tabelaCoeficiente_id;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -46,12 +46,12 @@ public class TabelaCoeficiente implements Serializable {
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getTabelaCoeficiente() {
-		return tabelaCoeficiente;
+	public Long getTabelaCoeficiente_id() {
+		return tabelaCoeficiente_id;
 	}
 
-	public void setTabelaCoeficiente(Long tabelaCoeficiente) {
-		this.tabelaCoeficiente = tabelaCoeficiente;
+	public void setTabelaCoeficiente_id(Long tabelaCoeficiente_id) {
+		this.tabelaCoeficiente_id = tabelaCoeficiente_id;
 	}
 
 	public Empresa getEmpresa() {

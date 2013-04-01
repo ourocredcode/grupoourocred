@@ -1,5 +1,6 @@
 package br.com.sgo.modelo;
 
+import java.awt.Image;
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -15,15 +16,15 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="AGENCIA")
+@Table(name="IMAGEM")
 public class Imagem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "agencia_id")  
+	@Column(name = "imagem_id")  
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long agencia_id;
+	private Long imagem_id;
 	
 	@ManyToOne
 	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
@@ -31,14 +32,7 @@ public class Imagem implements Serializable {
 		
 	@ManyToOne
 	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name="banco_id",updatable = true, nullable = true) 
-	private Banco banco;
-	
-	@Column(name="codigoagencia")
-	private String codigoAgencia;
+	private Organizacao organizacao;	
 	
 	@Column(name="nome")
 	private String nome;
@@ -46,15 +40,18 @@ public class Imagem implements Serializable {
 	@Column(name="descricao")
 	private String descricao;
 	
+	@Column(name="imagem")
+	private Image imagem;
+	
 	@Column(name="isactive")
 	private Boolean isActive;
 
-	public Long getAgencia_id() {
-		return agencia_id;
+	public Long getImagem_id() {
+		return imagem_id;
 	}
 
-	public void setAgencia_id(Long agencia_id) {
-		this.agencia_id = agencia_id;
+	public void setImagem_id(Long imagem_id) {
+		this.imagem_id = imagem_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -73,22 +70,6 @@ public class Imagem implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public Banco getBanco() {
-		return banco;
-	}
-
-	public void setBanco(Banco banco) {
-		this.banco = banco;
-	}
-
-	public String getCodigoAgencia() {
-		return codigoAgencia;
-	}
-
-	public void setCodigoAgencia(String codigoAgencia) {
-		this.codigoAgencia = codigoAgencia;
-	}
-
 	public String getNome() {
 		return nome;
 	}
@@ -103,6 +84,14 @@ public class Imagem implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Image getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(Image imagem) {
+		this.imagem = imagem;
 	}
 
 	public Boolean getIsActive() {
