@@ -19,6 +19,7 @@ import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PaisDao;
+import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
@@ -33,10 +34,12 @@ import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Funcionario;
 import br.com.sgo.modelo.Localidade;
+import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.TipoEndereco;
+import br.com.sgo.modelo.TipoParceiro;
 import br.com.sgo.modelo.cep.BrazilianAddressFinder;
 
 @Resource
@@ -50,6 +53,7 @@ public class ParceironegocioController {
 	private final DepartamentoDao departamentoDao;
 	private final FuncaoDao funcaoDao;
 	private final LocalidadeDao localidadeDao;
+	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 	private final ParceiroContatoDao parceiroContatoDao;
 	private final EmpresaDao empresaDao;
@@ -69,7 +73,7 @@ public class ParceironegocioController {
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
 			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,
-			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao) {
+			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -85,6 +89,7 @@ public class ParceironegocioController {
 		this.estadoCivilDao = estadoCivilDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
 		this.parceiroContatoDao = parceiroContatoDao;
+		this.parceiroBeneficioDao = parceiroBeneficioDao;
 		this.tipoParceiroDao = tipoParceiroDao;
 		this.tipoEnderecoDao = tipoEnderecoDao;
 		this.tipoContatoDao = tipoContatoDao;
@@ -157,6 +162,7 @@ public class ParceironegocioController {
 		result.include("parceiroLocalidade",parceiroLocalidade);
 		result.include("localidade",parceiroLocalidade.getLocalidade());
 		result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
+		result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
 		result.include("parceiroInfoBanco",this.pnDao.buscaParceiroInfoBanco(parceiroNegocio));
 
 		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
@@ -164,6 +170,11 @@ public class ParceironegocioController {
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
+
+		TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Pessoa Física");
+
+		parceiroNegocio.setTipoParceiro(tipoParceiro);
+		parceiroNegocio.setIsCliente(true);
 
 		result.include("parceiroNegocio",parceiroNegocio);
 
@@ -185,12 +196,13 @@ public class ParceironegocioController {
 	@Post
 	@Public
 	@Path("/parceironegocio/salva")
-	public void salva(ParceiroNegocio parceiroNegocio,Funcionario funcionario, ParceiroLocalidade parceiroLocalidade,Localidade localidade){
+	public void salva(ParceiroNegocio parceiroNegocio,Funcionario funcionario, ParceiroLocalidade parceiroLocalidade,Collection<ParceiroContato> parceiroContatos,
+			Collection<ParceiroBeneficio> parceiroBeneficios,Localidade localidade){
 
+		
 		String mensagem = "";
 		
 			try {
-
 
 				this.parceiroNegocioDao.beginTransaction();
 				this.parceiroNegocioDao.adiciona(parceiroNegocio);
@@ -198,7 +210,9 @@ public class ParceironegocioController {
 			
 			} catch(Exception e) {
 
-				this.funcionarioDao.rollback();
+				System.out.println(e);
+
+				this.parceiroNegocioDao.rollback();
 
 				if (e.getCause().toString().indexOf("PK_PARCEIRONEGOCIO") != -1){
 					mensagem = "Erro: Parceiro Negócio " + parceiroNegocio.getNome() + " já existente.";
@@ -240,12 +254,16 @@ public class ParceironegocioController {
 
 			}
 
+		localidade.setLocalidade_id(this.localidadeDao.buscaLocalidade(localidade.getCep()).getLocalidade_id());
+
+		System.out.println(localidade.getLocalidade_id() == null);
+
 		if(localidade.getLocalidade_id() == null)	{
 
 			localidade.setEmpresa(this.empresaDao.load(1L));
 			localidade.setOrganizacao(this.organizacaoDao.load(1L));
 			localidade.setIsActive(true);
-			
+
 			try {
 
 				this.localidadeDao.beginTransaction();
@@ -257,12 +275,38 @@ public class ParceironegocioController {
 				this.localidadeDao.rollback();
 
 				if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
-					mensagem = "Erro: Localidade " + funcionario.getApelido() + " já existente.";
+					mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
 				} else {
 					mensagem = "Erro ao adicionar Localidade:";
 				}
 
 			}
+
+		}
+
+		for(ParceiroContato parceiroContato : parceiroContatos){
+
+			parceiroContato.setEmpresa(usuarioInfo.getEmpresa());
+			parceiroContato.setOrganizacao(usuarioInfo.getOrganizacao());
+			parceiroContato.setParceiroNegocio(parceiroNegocio);
+			parceiroContato.setIsActive(true);
+
+			this.parceiroContatoDao.beginTransaction();
+			this.parceiroContatoDao.adiciona(parceiroContato);
+			this.parceiroContatoDao.commit();
+
+		}
+		
+		for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
+
+			parceiroBeneficio.setEmpresa(usuarioInfo.getEmpresa());
+			parceiroBeneficio.setOrganizacao(usuarioInfo.getOrganizacao());
+			parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
+			parceiroBeneficio.setIsActive(true);
+
+			this.parceiroBeneficioDao.beginTransaction();
+			this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
+			this.parceiroBeneficioDao.commit();
 
 		}
 		

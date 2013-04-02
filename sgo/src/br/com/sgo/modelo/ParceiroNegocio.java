@@ -269,7 +269,7 @@ public class ParceiroNegocio implements Serializable {
 	}
 
 	public Boolean getIsCliente() {
-		return isCliente;
+		return isCliente  == null? false : true ;
 	}
 
 	public void setIsCliente(Boolean isCliente) {
@@ -277,7 +277,7 @@ public class ParceiroNegocio implements Serializable {
 	}
 
 	public Boolean getIsFornecedor() {
-		return isFornecedor;
+		return isFornecedor  == null? false : true;
 	}
 
 	public void setIsFornecedor(Boolean isFornecedor) {
@@ -285,7 +285,7 @@ public class ParceiroNegocio implements Serializable {
 	}
 
 	public Boolean getIsFuncionario() {
-		return isFuncionario;
+		return isFuncionario == null? false : true;
 	}
 
 	public void setIsFuncionario(Boolean isFuncionario) {
