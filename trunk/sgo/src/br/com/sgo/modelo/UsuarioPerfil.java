@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.ioc.Component;
 public class UsuarioPerfil {
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
 	private Empresa empresa;
 
 	@ManyToOne

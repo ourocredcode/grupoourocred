@@ -30,6 +30,7 @@ import br.com.sgo.dao.TipoContatoDao;
 import br.com.sgo.dao.TipoEnderecoDao;
 import br.com.sgo.dao.TipoLocalidadeDao;
 import br.com.sgo.dao.TipoParceiroDao;
+import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Funcionario;
@@ -40,6 +41,7 @@ import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.TipoEndereco;
 import br.com.sgo.modelo.TipoParceiro;
+import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.cep.BrazilianAddressFinder;
 
 @Resource
@@ -67,13 +69,14 @@ public class ParceironegocioController {
 	private final RegiaoDao regiaoDao;
 	private final CidadeDao cidadeDao;
 	private final TipoLocalidadeDao tipoLocalidadeDao;
+	private final UsuarioDao usuarioDao;
 	private BrazilianAddressFinder addressFinder;
 	private RestClient restfulie;
 
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
 			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,
-			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao) {
+			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -96,6 +99,7 @@ public class ParceironegocioController {
 		this.paisDao = paisDao;
 		this.regiaoDao = regiaoDao;
 		this.cidadeDao = cidadeDao;
+		this.usuarioDao = usuarioDao;
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
 
 	}
@@ -210,8 +214,6 @@ public class ParceironegocioController {
 			
 			} catch(Exception e) {
 
-				System.out.println(e);
-
 				this.parceiroNegocioDao.rollback();
 
 				if (e.getCause().toString().indexOf("PK_PARCEIRONEGOCIO") != -1){
@@ -252,11 +254,28 @@ public class ParceironegocioController {
 
 				}
 
+				Usuario u = new Usuario();
+
+				u.setEmpresa(parceiroNegocio.getEmpresa());
+				u.setOrganizacao(parceiroNegocio.getOrganizacao());
+				u.setParceiroNegocio(parceiroNegocio);
+				u.setChave(parceiroNegocio.getCpf());
+				u.setSenha("123456");
+				u.setNome(parceiroNegocio.getNome());
+				u.setIsActive(true);
+
+				u.setUsuario_id(this.usuarioDao.buscaUsuario(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), u.getChave())
+						.getUsuario_id());
+
+				if(u.getUsuario_id() == null) {
+					this.usuarioDao.beginTransaction();
+					this.usuarioDao.adiciona(u);
+					this.usuarioDao.commit();
+				}
+
 			}
 
 		localidade.setLocalidade_id(this.localidadeDao.buscaLocalidade(localidade.getCep()).getLocalidade_id());
-
-		System.out.println(localidade.getLocalidade_id() == null);
 
 		if(localidade.getLocalidade_id() == null)	{
 
@@ -284,32 +303,36 @@ public class ParceironegocioController {
 
 		}
 
-		for(ParceiroContato parceiroContato : parceiroContatos){
-
-			parceiroContato.setEmpresa(usuarioInfo.getEmpresa());
-			parceiroContato.setOrganizacao(usuarioInfo.getOrganizacao());
-			parceiroContato.setParceiroNegocio(parceiroNegocio);
-			parceiroContato.setIsActive(true);
-
-			this.parceiroContatoDao.beginTransaction();
-			this.parceiroContatoDao.adiciona(parceiroContato);
-			this.parceiroContatoDao.commit();
-
+		if(parceiroContatos != null){
+			for(ParceiroContato parceiroContato : parceiroContatos){
+	
+				parceiroContato.setEmpresa(usuarioInfo.getEmpresa());
+				parceiroContato.setOrganizacao(usuarioInfo.getOrganizacao());
+				parceiroContato.setParceiroNegocio(parceiroNegocio);
+				parceiroContato.setIsActive(true);
+	
+				this.parceiroContatoDao.beginTransaction();
+				this.parceiroContatoDao.adiciona(parceiroContato);
+				this.parceiroContatoDao.commit();
+	
+			}
 		}
 		
-		for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
+		if(parceiroBeneficios != null){
+			for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
 
-			parceiroBeneficio.setEmpresa(usuarioInfo.getEmpresa());
-			parceiroBeneficio.setOrganizacao(usuarioInfo.getOrganizacao());
-			parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
-			parceiroBeneficio.setIsActive(true);
+				parceiroBeneficio.setEmpresa(usuarioInfo.getEmpresa());
+				parceiroBeneficio.setOrganizacao(usuarioInfo.getOrganizacao());
+				parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
+				parceiroBeneficio.setIsActive(true);
 
-			this.parceiroBeneficioDao.beginTransaction();
-			this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
-			this.parceiroBeneficioDao.commit();
+				this.parceiroBeneficioDao.beginTransaction();
+				this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
+				this.parceiroBeneficioDao.commit();
 
+			}
 		}
-		
+
 		Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
 
 		for(TipoEndereco tipoEndereco : tiposEndereco){
