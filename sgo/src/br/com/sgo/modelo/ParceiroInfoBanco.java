@@ -48,6 +48,10 @@ public class ParceiroInfoBanco implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="contabancaria_id",updatable = true, nullable = true) 
 	private ContaBancaria contaBancaria;	
+	
+	@ManyToOne
+	@JoinColumn(name="meiopagamento_id",updatable = true, nullable = false) 
+	private MeioPagamento meioPagamento;
 
 	@Column(name="isactive")
 	private Boolean isActive;
@@ -114,6 +118,14 @@ public class ParceiroInfoBanco implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public MeioPagamento getMeioPagamento() {
+		return meioPagamento;
+	}
+
+	public void setMeioPagamento(MeioPagamento meioPagamento) {
+		this.meioPagamento = meioPagamento;
 	}
 
 }

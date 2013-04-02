@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div id="ajax_endereco" style="display: block;width: 700px;">
+<div id="ajax_endereco" style="display: block;width: 900px;">
 
 	<div class="control-group"></div>
 	<div class="page-header">

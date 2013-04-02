@@ -62,6 +62,9 @@ public class ParceiroNegocio implements Serializable {
 	@JoinColumn(name="sexo_id",updatable = true, nullable = true) 
 	private Sexo sexo;
 
+	@Column(name = "pn_id")  
+	private Long pn_id;
+
 	@ManyToOne
 	@JoinColumn(name="idioma_id",updatable = true, nullable = true) 
 	private Idioma idioma;
@@ -295,5 +298,13 @@ public class ParceiroNegocio implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Long getPn_id() {
+		return pn_id;
+	}
+
+	public void setPn_id(Long pn_id) {
+		this.pn_id = pn_id;
 	}	
 }
