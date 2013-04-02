@@ -67,6 +67,7 @@
 		<mapping class="br.com.sgo.modelo.ParceiroNegocio" />
 		<mapping class="br.com.sgo.modelo.ParceiroLocalidade" />
 		<mapping class="br.com.sgo.modelo.ParceiroContato" />
+		<mapping class="br.com.sgo.modelo.ParceiroBeneficio" />
 
 		<mapping class="br.com.sgo.modelo.Departamento" />
 		<mapping class="br.com.sgo.modelo.Funcao" />

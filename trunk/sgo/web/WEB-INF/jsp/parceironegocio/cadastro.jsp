@@ -129,6 +129,27 @@ function salvaContato() {
 
 }
 
+function salvaBeneficio() {
+	
+	var parceiroId = $("#parceiroNegocioId").val();
+	var parceiroBeneficioNumero = $("#parceiroBeneficioNovo").val();
+
+	if (window.confirm("Deseja salvar o número do benefício?"))
+		$.post('<c:url value='/parceironegocio/salvaBeneficio' />',{
+				'parceiroBeneficio.numeroBeneficio' : parceiroBeneficioNumero,
+				'parceiroContato.parceiroNegocio.parceiroNegocio_id ' : parceiroId}
+		, function(resposta) { 
+			if(resposta.indexOf("Erro") != -1){
+				alert(resposta);
+			} else {
+				$('#parceiroBeneficiosDiv').html(resposta);	
+			};
+		} );
+
+	return false;
+
+}
+
 function mostraEndereco() {
 	
 	 $("#ajax_endereco").css("display", "block");
@@ -300,10 +321,11 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 									<h1><small>Parceiro Negócio</small></h1>
 								</div>
 
-								<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
+							<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
 			
 								<input id="parceiroNegocioId" name="parceiroNegocio.parceiroNegocio_id" value="${parceiroNegocio.parceiroNegocio_id }" type="hidden"/>
-			
+								<input id="parceiroNegocioPnId" name="parceiroNegocio.pn_id" value="${parceiroNegocio.pn_id }" type="hidden"/>
+
 								<div class="controls controls-row">
 									<input class="span2" id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.usuario.empresa.nome }" type="text" required />
 									<input class="span2" id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden" value="${usuarioInfo.usuario.empresa.empresa_id }" />
@@ -349,14 +371,14 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 											<input  class="input-medium" id="parceiroNegocioDataNascimento" name="parceiroNegocio.dataNascimento" type="text" placeholder="Nasc." 
 											value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${parceiroNegocio.dataNascimento.time }" />">
 			
-											<select  id="parceiroNegocioSexoId" name="parceiroNegocio.sexo.sexo_id" class="input-medium">
+											<select  id="parceiroNegocioSexoId" name="parceiroNegocio.sexo.sexo_id" class="input-medium" required>
 												<option value="">Sexo:</option>
 												<c:forEach var="sexo" items="${sexos }">
 												 	<option value="${sexo.sexo_id }" <c:if test="${parceiroNegocio.sexo.sexo_id eq sexo.sexo_id }"> selected="selected"</c:if>>${sexo.nome }</option>
 												</c:forEach>
 											</select>
 			
-											<select  id="parceiroNegocioEstadoCivilId" name="parceiroNegocio.estadoCivil.estadoCivil_id" class="input-medium">
+											<select  id="parceiroNegocioEstadoCivilId" name="parceiroNegocio.estadoCivil.estadoCivil_id" class="input-medium" required>
 												<option value="">Est Civil:</option>
 												<c:forEach var="estadoCivil" items="${estadosCivis }">
 												 	<option value="${estadoCivil.estadoCivil_id }" <c:if test="${parceiroNegocio.estadoCivil.estadoCivil_id eq estadoCivil.estadoCivil_id }"> selected="selected"</c:if>>${estadoCivil.nome }</option>
@@ -401,7 +423,7 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 								<div class="navbar-inner" >
 								
 									<div class="container">
-										<br/>
+										<div class="control-group"></div>
 										<c:if test="${not empty parceiroContatos}">	
 											<div id="parceiroContatosDiv">	
 												<table class="table table-striped table-bordered" id="lista">
@@ -413,40 +435,39 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 														</tr>
 													</thead>
 													<tbody>
-														
-													<c:forEach items="${parceiroContatos}" var="parceiroContato">
-														<tr>
-															<td>
-																<select id="parceiroContatoTipoContatoLista" onChange="return alteraContato(this,'tipoContato','${parceiroContato.parceiroContato_id}', this.value);" class="input-small">
-																	<option value="0" selected="selected">Selecione</option>
-																	<c:forEach var="tipoContato" items="${tiposContato}">
-																		<option value="${tipoContato.tipoContato_id}" <c:if test="${parceiroContato.tipoContato.tipoContato_id eq tipoContato.tipoContato_id}">SELECTED</c:if>>${tipoContato.chave}</option>
-																	</c:forEach>
-																</select>
-															</td>
-															<td><input type="text" id="parceiroContatoNomeLista" value="${parceiroContato.nome }" class="input-small" onChange="return alteraContato(this,'nome','${parceiroContato.parceiroContato_id}', this.value);"/></td>
-															<td style="text-align: center;">
-																<button type="button" class="btn btn-danger btn-mini" onClick="return excluiContato(this,'${parceiroContato.parceiroContato_id}');">Excluir</button>
-															</td>
-														</tr>
-													</c:forEach>
-													<c:if test="${not empty parceiroNegocio}">
-														<tr>
-															<td>
-																<select id="parceiroContatoTipoContatoNovo" class="input-small">
-																	<option value="0" selected="selected">Selecione</option>
-																	<c:forEach var="tipoContato" items="${tiposContato}">
-																		<option value="${tipoContato.tipoContato_id}" >${tipoContato.chave}</option>
-																	</c:forEach>
-																</select>
-															</td>
-															<td><input type="text" id="parceiroContatoNomeNovo" value="${parceiroContato.nome }" class="input-small"/></td>
-															<td style="text-align: center;">
-																<button type="button" class="btn btn-mini" id="bttParceiroContatoNovo" onClick="return salvaContato();">Novo</button>
-															</td>
-														</tr>
-													</c:if>
-												</tbody>
+														<c:forEach items="${parceiroContatos}" var="parceiroContato" varStatus="status">
+															<tr>
+																<td>
+																	<select id="parceiroContatoTipoContatoLista"  name="parceiroContatos[${status.index}].tipoContato.tipoContato_id" onChange="return alteraContato(this,'tipoContato','${parceiroContato.parceiroContato_id}', this.value);" class="input-small">
+																		<option value="0" selected="selected">Selecione</option>
+																		<c:forEach var="tipoContato" items="${tiposContato}">
+																			<option value="${tipoContato.tipoContato_id}" <c:if test="${parceiroContato.tipoContato.tipoContato_id eq tipoContato.tipoContato_id}">SELECTED</c:if>>${tipoContato.chave}</option>
+																		</c:forEach>
+																	</select>
+																</td>
+																<td><input type="text" id="parceiroContatoNomeLista" name="parceiroContatos[${status.index}].nome" value="${parceiroContato.nome }" class="input-small" onChange="return alteraContato(this,'nome','${parceiroContato.parceiroContato_id}', this.value);"/></td>
+																<td style="text-align: center;">
+																	<button type="button" class="btn btn-danger btn-mini" onClick="return excluiContato(this,'${parceiroContato.parceiroContato_id}');">Excluir</button>
+																</td>
+															</tr>
+														</c:forEach>
+														<c:if test="${not empty parceiroNegocio.parceiroNegocio_id}">
+															<tr>
+																<td>
+																	<select id="parceiroContatoTipoContatoNovo" class="input-small">
+																		<option value="0" selected="selected">Selecione</option>
+																		<c:forEach var="tipoContato" items="${tiposContato}">
+																			<option value="${tipoContato.tipoContato_id}" >${tipoContato.chave}</option>
+																		</c:forEach>
+																	</select>
+																</td>
+																<td><input type="text" id="parceiroContatoNomeNovo" value="${parceiroContato.nome }" class="input-small"/></td>
+																<td style="text-align: center;">
+																	<button type="button" class="btn btn-mini" id="bttParceiroContatoNovo" onClick="return salvaContato();">Novo</button>
+																</td>
+															</tr>
+														</c:if>
+													</tbody>
 											</table>
 										</div>
 									</c:if>
@@ -460,97 +481,98 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 								
 									<div class="container">
 										<div class="control-group"></div>
-										<div class="page-header">
-											<h2><small>Benefícios</small></h2>
-										</div>
-										<div>	
-											<table class="table table-striped table-bordered" id="lista">
-												<thead>
-													<tr>
-														<th>TipoContato</th>
-														<th>Contato</th>
-														<th>Excluir</th>
-													</tr>
-												</thead>
-												<tbody>	
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-													<tr>
-														<td>Residencial</td>
-														<td>6468338</td>
-														<td></td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="navbar" style="clear: both;width: 900px;">
-									
-									<div class="navbar-inner"  >
-										<div class="container">
-											
-											<div class="control-group"></div>
-											<div class="page-header">
-												<h2><small>Endereços</small></h2>
-											</div>
-											
-											<c:if test="${not empty parceiroLocalidades}">
-												<div id="enderecos" style="margin-top: 15px;">
+											<c:if test="${not empty parceiroBeneficios}">	
+												<div id="parceiroBeneficiosDiv">	
 													<table class="table table-striped table-bordered" id="lista">
 														<thead>
 															<tr>
-																<th>Cep</th>
-																<th>Bairro</th>
-																<th>Cidade</th>
-																<th>Endereço</th>
-																<th>Número</th>
-																<th>Complemento</th>
-																<th>Tipo</th>
+																<th>Benefício</th>
 																<th>Excluir</th>
 															</tr>
 														</thead>
 														<tbody>	
-															<c:forEach items="${parceiroLocalidades}" var="parceiroLocalidade">
+															<c:forEach items="${parceiroBeneficios}" var="parceiroBeneficio" varStatus="status">
 																<tr>
-																	<td>${parceiroLocalidade.localidade.cep }</td>
-																	<td>${parceiroLocalidade.localidade.bairro }</td>
-																	<td>${parceiroLocalidade.localidade.cidade.nome }</td>
-																	<td>${parceiroLocalidade.localidade.endereco }</td>
-																	<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-mini" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
-																	<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-mini" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
-																	<td>
-																	<select id="parceiroLocalidadeTipoEnderecoLista" onChange="return altera(this,'tipoEndereco','${parceiroLocalidade.parceiroLocalidade_id}', this.value);" class="input-small">
-																		<option value="0" selected="selected">Selecione</option>
-																			<c:forEach var="tipoEndereco" items="${tiposEndereco}">
-																				<option value="${tipoEndereco.tipoEndereco_id}" <c:if test="${parceiroLocalidade.tipoEndereco.tipoEndereco_id eq tipoEndereco.tipoEndereco_id}">SELECTED</c:if>>${tipoEndereco.nome}</option>
-																			</c:forEach>
-																	</select>
-																	</td>
+																	<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficio(this,'nome','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
 																	<td style="text-align: center;">
-																		<button type="button" class="btn btn-danger btn-mini" onClick="return exclui(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
+																		<button type="button" class="btn btn-danger btn-mini" onClick="return excluiBeneficio(this,'${parceiroBeneficio.parceiroBeneficio_id}');">Excluir</button>
 																	</td>
 																</tr>
 															</c:forEach>
+															<c:if test="${not empty parceiroNegocio.parceiroNegocio_id}">
+																<tr>
+																	<td><input type="text" id="parceiroBeneficioNumeroNovo" value="${parceiroBeneficio.numeroBeneficio }" class="input-small"/></td>
+																	<td style="text-align: center;">
+																		<button type="button" class="btn btn-mini" id="bttParceiroBeneficioNovo" onClick="return salvaBeneficio();">Novo</button>
+																	</td>
+																</tr>
+															</c:if>
 														</tbody>
 													</table>
-							
 												</div>
 											</c:if>
-									
 										</div>
-									</div>										
-							</div>
+									</div>
+								</div>
+
+								<c:if test="${not empty parceiroLocalidades}">
+									<div class="navbar" style="clear: both;width: 900px;">
+										
+										<div class="navbar-inner"  >
+											<div class="container">
+												
+												<div class="control-group"></div>
+												<div class="page-header">
+													<h2><small>Endereços</small></h2>
+												</div>
+												
+												
+													<div id="enderecos" style="margin-top: 15px;">
+														<table class="table table-striped table-bordered" id="lista">
+															<thead>
+																<tr>
+																	<th>Cep</th>
+																	<th>Bairro</th>
+																	<th>Cidade</th>
+																	<th>Endereço</th>
+																	<th>Número</th>
+																	<th>Complemento</th>
+																	<th>Tipo</th>
+																	<th>Excluir</th>
+																</tr>
+															</thead>
+															<tbody>	
+																<c:forEach items="${parceiroLocalidades}" var="parceiroLocalidade">
+																	<tr>
+																		<td>${parceiroLocalidade.localidade.cep }</td>
+																		<td>${parceiroLocalidade.localidade.bairro }</td>
+																		<td>${parceiroLocalidade.localidade.cidade.nome }</td>
+																		<td>${parceiroLocalidade.localidade.endereco }</td>
+																		<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-mini" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+																		<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-mini" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+																		<td>
+																		<select id="parceiroLocalidadeTipoEnderecoLista" onChange="return altera(this,'tipoEndereco','${parceiroLocalidade.parceiroLocalidade_id}', this.value);" class="input-small">
+																			<option value="0" selected="selected">Selecione</option>
+																				<c:forEach var="tipoEndereco" items="${tiposEndereco}">
+																					<option value="${tipoEndereco.tipoEndereco_id}" <c:if test="${parceiroLocalidade.tipoEndereco.tipoEndereco_id eq tipoEndereco.tipoEndereco_id}">SELECTED</c:if>>${tipoEndereco.nome}</option>
+																				</c:forEach>
+																		</select>
+																		</td>
+																		<td style="text-align: center;">
+																			<button type="button" class="btn btn-danger btn-mini" onClick="return exclui(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
+																		</td>
+																	</tr>
+																</c:forEach>
+															</tbody>
+														</table>
+								
+													</div>
+											
+										
+											</div>
+										</div>										
+								</div>
+							</c:if>
 
 							<div class="navbar" style="clear: both;width: 900px;">
 									<div class="navbar-inner">
@@ -609,13 +631,16 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 	
 							<div class="controls controls-row" style="clear: both;">
 								<label class="checkbox inline">
-									<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"> Funcionário
+									<input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"
+										<c:if test="${parceiroNegocio.isFuncionario }">checked="checked"</c:if>> Funcionário
 								</label>
 								<label class="checkbox inline">
-									<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"> Cliente
+									<input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"
+										<c:if test="${parceiroNegocio.isCliente }">checked="checked"</c:if>> Cliente
 								</label>
 								<label class="checkbox inline">
-									<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"> Fornecedor
+									<input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"
+										<c:if test="${parceiroNegocio.isFornecedor }">checked="checked"</c:if>> Fornecedor
 								</label>
 							</div>
 		

@@ -62,13 +62,13 @@ public class TipoParceiroDao extends Dao<TipoParceiro> {
 
 	}
 	
-	public Collection<TipoParceiro> buscaTipoParceiro(Long empresa_id, Long organizacao_id, String nome){
+	public TipoParceiro buscaTipoParceiro(Long empresa_id, Long organizacao_id, String nome){
 
 		String sql = "select TIPOPARCEIRO.tipoparceiro_id, TIPOPARCEIRO.nome from TIPOPARCEIRO (NOLOCK) WHERE TIPOPARCEIRO.empresa_id = ? AND TIPOPARCEIRO.organizacao_id = ? AND TIPOPARCEIRO.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<TipoParceiro> tiposparceiro = new ArrayList<TipoParceiro>();
+		TipoParceiro tipoparceiro = new TipoParceiro();
 
 		try {
 
@@ -79,12 +79,12 @@ public class TipoParceiroDao extends Dao<TipoParceiro> {
 			this.rsTipoParceiro = this.stmt.executeQuery();
 
 			while (rsTipoParceiro.next()) {
-				TipoParceiro tipoparceiro = new TipoParceiro();
+				
 
 				tipoparceiro.setTipoParceiro_id(rsTipoParceiro.getLong("tipoparceiro_id"));				
 				tipoparceiro.setNome(rsTipoParceiro.getString("nome"));
 
-				tiposparceiro.add(tipoparceiro);				
+					
 			}
 
 		} catch (SQLException e) {
@@ -93,7 +93,7 @@ public class TipoParceiroDao extends Dao<TipoParceiro> {
 
 		this.conexao.closeConnection(rsTipoParceiro, stmt, conn);
 
-		return tiposparceiro;
+		return tipoparceiro;
 
 	}
 

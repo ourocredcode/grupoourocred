@@ -21,6 +21,7 @@ import br.com.sgo.modelo.ContaBancaria;
 import br.com.sgo.modelo.Detalhamento;
 import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.MeioPagamento;
+import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroInfoBanco;
 import br.com.sgo.modelo.ParceiroLocalidade;
@@ -258,6 +259,48 @@ public class PnDao {
 		}
 
 		return parceiroContatos;
+
+	}
+	
+	public Collection<ParceiroBeneficio> buscaParceiroBeneficios(ParceiroNegocio parceiroNegocio) {
+
+		String sql = "SELECT doc.str_nrdocumento as beneficio " +
+				"		FROM public.tb_ent ent " +
+				"		LEFT JOIN public.tb_ent_doc doc ON ent.id_ent = doc.id_ent	" +
+				"		LEFT JOIN public.tb_ent_end endereco ON ent.id_ent = endereco.id_ent " +
+				"		LEFT JOIN public.bairros bairro ON bairro.dne = endereco.id_bairro " +
+				"		LEFT JOIN public.cidade cidade ON cidade.id_cidade = endereco.id_cidade " +
+				"			WHERE doc.id_ent= ? and doc.id_tp_doc=3";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<ParceiroBeneficio> parceiroBeneficios = new ArrayList<ParceiroBeneficio>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1,parceiroNegocio.getPn_id());
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
+
+				parceiroBeneficio.setNumeroBeneficio(rsParceiroNegocio.getString("beneficio"));
+
+				parceiroBeneficios.add(parceiroBeneficio);
+
+			}
+
+			this.conexao.closeConnection(conn);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return parceiroBeneficios;
 
 	}
 	
