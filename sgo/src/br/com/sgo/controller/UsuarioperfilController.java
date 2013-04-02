@@ -63,6 +63,8 @@ public class UsuarioperfilController {
 
 		} catch(Exception e) {
 
+			System.out.println(e);
+
 			if (e.getMessage().indexOf("PK_USUARIOPERFIL") != -1){
 				mensagem = "Erro: Usuário Perfil Acesso  já existente.";
 			} else {
@@ -71,8 +73,8 @@ public class UsuarioperfilController {
 
 		} 
 
-		this.perfilDao.clear();
-		this.perfilDao.close();
+		this.usuarioPerfildao.clear();
+		this.usuarioPerfildao.close();
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 	}

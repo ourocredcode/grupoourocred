@@ -54,6 +54,7 @@
 	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/produto/cadastro"/>">Produtos</a></li>
 	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/produtobanco/cadastro"/>">Produto Banco</a></li>
 	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/tabela/cadastro"/>">Tabelas</a></li>
+	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/usuario/cadastro"/>">Usuários</a></li>
 	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
 	                      </ul>
 	                    </li>

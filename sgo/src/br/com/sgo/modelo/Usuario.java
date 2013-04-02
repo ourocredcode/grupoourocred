@@ -39,7 +39,7 @@ public class Usuario implements Serializable {
 	private ParceiroNegocio parceiroNegocio;
 
 	@ManyToOne
-	@JoinColumn(name="supervisor_usuario_id",updatable = true, nullable = false) 
+	@JoinColumn(name="supervisor_usuario_id",updatable = true, nullable = true) 
 	private Usuario supervisorUsuario;
 	
 	@Column(name="nome")
