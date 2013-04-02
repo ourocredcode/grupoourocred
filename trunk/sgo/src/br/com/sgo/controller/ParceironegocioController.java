@@ -2,12 +2,15 @@ package br.com.sgo.controller;
 
 import java.util.Collection;
 
+import br.com.caelum.restfulie.RestClient;
+import br.com.caelum.restfulie.Restfulie;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.CidadeDao;
 import br.com.sgo.dao.DepartamentoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.EstadoCivilDao;
@@ -15,13 +18,16 @@ import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.OrganizacaoDao;
+import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PnDao;
+import br.com.sgo.dao.RegiaoDao;
 import br.com.sgo.dao.SexoDao;
 import br.com.sgo.dao.TipoContatoDao;
 import br.com.sgo.dao.TipoEnderecoDao;
+import br.com.sgo.dao.TipoLocalidadeDao;
 import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -31,6 +37,7 @@ import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.TipoEndereco;
+import br.com.sgo.modelo.cep.BrazilianAddressFinder;
 
 @Resource
 public class ParceironegocioController {
@@ -52,10 +59,17 @@ public class ParceironegocioController {
 	private final TipoParceiroDao tipoParceiroDao;
 	private final TipoEnderecoDao tipoEnderecoDao;
 	private final TipoContatoDao tipoContatoDao;
+	private final PaisDao paisDao;
+	private final RegiaoDao regiaoDao;
+	private final CidadeDao cidadeDao;
+	private final TipoLocalidadeDao tipoLocalidadeDao;
+	private BrazilianAddressFinder addressFinder;
+	private RestClient restfulie;
 
-	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,
+	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
-			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,TipoContatoDao tipoContatoDao) {
+			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,
+			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -74,6 +88,10 @@ public class ParceironegocioController {
 		this.tipoParceiroDao = tipoParceiroDao;
 		this.tipoEnderecoDao = tipoEnderecoDao;
 		this.tipoContatoDao = tipoContatoDao;
+		this.paisDao = paisDao;
+		this.regiaoDao = regiaoDao;
+		this.cidadeDao = cidadeDao;
+		this.tipoLocalidadeDao = tipoLocalidadeDao;
 
 	}
 
@@ -113,6 +131,41 @@ public class ParceironegocioController {
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
 		result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceironegocio_id));
 		result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceironegocio_id));
+
+	}
+
+	@Post
+	@Path("/parceironegocio/cadastro")
+	public void cadastro(String doc){
+
+		ParceiroNegocio parceiroNegocio = this.pnDao.buscaParceiroNegocio(doc);
+		ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
+		
+		Localidade l = parceiroLocalidade.getLocalidade();
+
+		restfulie = Restfulie.custom();
+		addressFinder = new BrazilianAddressFinder(restfulie);
+		String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
+
+		l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
+		l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+		l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+		l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+		l.setEndereco(resultado[1]);
+		l.setBairro(resultado[2]);
+
+		result.include("parceiroLocalidade",parceiroLocalidade);
+		result.include("localidade",parceiroLocalidade.getLocalidade());
+		result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
+		result.include("parceiroInfoBanco",this.pnDao.buscaParceiroInfoBanco(parceiroNegocio));
+
+		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
+		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
+		result.include("sexos", this.sexoDao.buscaSexos());
+		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
+		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
+
+		result.include("parceiroNegocio",parceiroNegocio);
 
 	}
 
@@ -258,7 +311,8 @@ public class ParceironegocioController {
 
 	}
 	
-	@Get @Path("/parceironegocio/busca.json")
+	@Get 
+	@Path("/parceironegocio/busca.json")
 	@Public
 	public void parceironegocio(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(this.parceiroNegocioDao.buscaParceiroNegocio(empresa_id, organizacao_id, nome)).serialize();
@@ -272,17 +326,7 @@ public class ParceironegocioController {
 				usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), doc).getParceiroNegocio_id());
 
 	}
-	
-	@Post
-	@Path("/parceironegocio/busca.cliente")
-	public void buscaCliente(String beneficio){
 
-		result.redirectTo(this).cadastro(this.pnDao.buscaParceiroNegocioPN(beneficio).getParceiroNegocio_id());
-
-	}
-	
-	
-	
 	@Post
 	@Path("/parceironegocio/excluiLocalidade")
 	public void excluiLocalidade(ParceiroLocalidade parceiroLocalidade){

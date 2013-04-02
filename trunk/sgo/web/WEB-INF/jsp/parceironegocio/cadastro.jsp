@@ -256,9 +256,9 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 								</div>
 						
 							<div id="parceiroNegocioClienteSearch" style="margin-top: 20px">
-									<form class="form-search" action="<c:url value="/parceironegocio/busca.cliente" />" method="POST">
+									<form class="form-search" action="<c:url value="/parceironegocio/cadastro" />" method="POST">
 									<div class="input-append">
-										<input type="text" class="input-small">
+										<input type="text" class="input-small" id="doc" name="doc">
 										<button type="submit" class="btn">Busca PN</button>
 									</div>
 									</form>
@@ -283,7 +283,7 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 </div>
 
 
-<div class="span8" style="float: left">
+<div class="span9" style="float: left">
 
 		<div id="myTabContent" class="tab-content">	
 
@@ -372,8 +372,8 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 									</div>
 			
 								<div id="parceiroNegocioFuncionario" class="row-fluid" 
-										<c:if test="${parceiroNegocio.isFuncionario || parceiroNegocio.isCliente }">style="display: block;"</c:if>
-										<c:if test="${parceiroNegocio.isFornecedor || empty parceiroNegocio}">style="display: none;"</c:if>>
+										<c:if test="${parceiroNegocio.isFuncionario }">style="display: block;"</c:if>
+										<c:if test="${parceiroNegocio.isCliente || parceiroNegocio.isFornecedor ||  empty parceiroNegocio}">style="display: none;"</c:if>>
 			
 									<div class="controls controls-row">
 			
@@ -495,7 +495,7 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 									</div>
 								</div>
 
-								<div class="navbar" style="clear: both;width: 700px;">
+								<div class="navbar" style="clear: both;width: 900px;">
 									
 									<div class="navbar-inner"  >
 										<div class="container">
@@ -552,11 +552,11 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 									</div>										
 							</div>
 
-							<div class="navbar" style="clear: both;width: 700px;">
+							<div class="navbar" style="clear: both;width: 900px;">
 									<div class="navbar-inner">
 										<div class="container">
 										
-										<div id="ajax_endereco" <c:if test="${not empty parceiroNegocio }">style="display: none;"</c:if>>
+										<div id="ajax_endereco" <c:if test="${not empty parceiroNegocio && !parceiroNegocio.isCliente}">style="display: none;"</c:if>>
 
 											<div class="control-group"></div>
 											<div class="page-header">
@@ -570,7 +570,7 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 
 											<div class="row-fluid">
 												<input class="span5" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço" value="${localidade.endereco }"/>
-												<input class="span1" id="parceirolocalidadeNumero" name="parceiroLocalidade.numero" type="text" placeholder="Número"/>
+												<input class="span1" id="parceirolocalidadeNumero" name="parceiroLocalidade.numero" type="text" placeholder="Número" value="${parceiroLocalidade.numero }" />
 												<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" value="${localidade.bairro }" />
 												<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />
 												<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  value="${localidade.regiao.chave }"  />
@@ -580,8 +580,8 @@ function alteraContato(linha, atributo,parceiroContato_id,valor) {
 			
 											<div class="row-fluid">		
 
-												<input class="span2" id="parceirolocalidadeComplemento" name="parceiroLocalidade.complemento" type="text" placeholder="Complemento" />
-												<input class="span9" id="parceirolocalidadePontoReferencia" name="parceiroLocalidade.pontoReferencia" type="text" placeholder="Ponto de Referência" />
+												<input class="span2" id="parceirolocalidadeComplemento" name="parceiroLocalidade.complemento" type="text" placeholder="Complemento" value="${parceiroLocalidade.complemento }" />
+												<input class="span9" id="parceirolocalidadePontoReferencia" name="parceiroLocalidade.pontoReferencia" type="text" placeholder="Ponto de Referência" value="${parceiroLocalidade.pontoReferencia }" />
 
 												<input  id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
 												<input  id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />

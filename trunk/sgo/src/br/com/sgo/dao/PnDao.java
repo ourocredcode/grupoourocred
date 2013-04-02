@@ -4,14 +4,29 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.TreeMap;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConexaoPN;
+import br.com.sgo.modelo.Banco;
+import br.com.sgo.modelo.ContaBancaria;
 import br.com.sgo.modelo.Detalhamento;
+import br.com.sgo.modelo.Localidade;
+import br.com.sgo.modelo.MeioPagamento;
+import br.com.sgo.modelo.ParceiroContato;
+import br.com.sgo.modelo.ParceiroInfoBanco;
+import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
-
+import br.com.sgo.modelo.TipoContato;
+import br.com.sgo.modelo.TipoEndereco;
 
 @Component
 public class PnDao {
@@ -19,119 +34,58 @@ public class PnDao {
 	private ConexaoPN conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
-	private ResultSet rsCliente;
+	private ResultSet rsParceiroNegocio;
 	private ResultSet rsDetalhamento;
+	private String sqlPN = " SELECT ent.id_ent, doc.str_nrdocumento as cpf, " +
+			"			ent.str_descricao as clienteNome,  ent.dt_nascimento as clienteNascimento, ent.str_nomebanco as clienteBanco, " +
+			"			ent.str_nomeagencia as clienteAgencia, ent.str_contacorrenteliquidacao as clienteConta, ent.str_observacaobanco as clienteTipoConta, " +
+			"			endereco.str_endereco as clienteEndereco,bairro.bairro as clienteBairro,endereco.str_complemento as clienteComplemento, " +
+			"			endereco.str_numero as clienteNumero, endereco.str_cep as clienteCep FROM public.tb_ent ent " +
+			"				LEFT JOIN public.tb_ent_doc doc ON ent.id_ent = doc.id_ent	" +
+			"				LEFT JOIN public.tb_ent_end endereco ON ent.id_ent = endereco.id_ent " +
+			"				LEFT JOIN public.bairros bairro ON bairro.dne = endereco.id_bairro " +
+			"				LEFT JOIN public.cidade cidade ON cidade.id_cidade = endereco.id_cidade ";
 
 	public PnDao(ConexaoPN conexao) {
 		this.conexao = conexao;
 	}
 
-	public ParceiroNegocio buscaParceiroNegocioPN(String beneficio) {
+	public ParceiroNegocio buscaParceiroNegocio(String cpf) {
 		
-		/* 
-		String sql = "SELECT " +
-							"ent.str_descricao as clienteNome, ent.dt_nascimento as clienteNascimento, " +
-							"doc.str_nrdocumento as clienteCpf, " +
-							"('(' || coalesce((fone.str_ddd),'') || ')' || '  ' || coalesce((fone.str_fone),'')) as clienteFone, " +
-							"endereco.str_logradouro || ' ' || endereco.str_endereco as clienteEndereco, " +
-							"endereco.str_numero as clienteNumero, " +
-							"endereco.str_cep as clienteCep, " +
-							"bairro.bairro as clienteBairro, " +
-							"cidade.str_descricao as clienteCidade, " +
-							"ent.str_nomebanco as clienteBanco, " +
-							"ent.str_nomeagencia as clienteAgencia, " +
-							"ent.str_contacorrenteliquidacao as clienteConta, " +
-							"ent.str_observacaobanco as clienteTipoConta " +
-						"FROM public.tb_ent ent " +
-							"LEFT JOIN " +
-								"public.tb_ent_doc doc ON ent.id_ent = doc.id_ent AND doc.id_tp_doc = 2 " +
-							"INNER JOIN " +
-								"public.tb_ent_doc ben ON ent.id_ent = ben.id_ent AND (ben.str_nrdocumento = ? OR ben.str_nrdocumento = ?) " +
-							"LEFT JOIN " +
-								"public.tb_ent_fone fone ON ent.id_ent = fone.id_ent " +
-							"LEFT JOIN " +
-								"public.tb_ent_end endereco ON ent.id_ent = endereco.id_ent " +
-							"LEFT JOIN " +
-								"public.bairros bairro ON bairro.dne = endereco.id_bairro " +
-							"LEFT JOIN " +
-								"public.cidade cidade ON cidade.id_cidade = endereco.id_cidade ";
+		String sql = sqlPN;
+
+		 if(!cpf.equals(""))
+			 sql += " WHERE str_nrdocumento= ?  ";
 
 		this.conn = this.conexao.getConexao();
 
-		ParceiroNegocio c = new ParceiroNegocio();
-
-		String b = "";
-
-		if(beneficio.charAt(0) == '0')
-			b = beneficio.substring(1,10);
-		else 
-			b = beneficio;
+		ParceiroNegocio parceiroNegocio = new ParceiroNegocio();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setString(1, beneficio);
-			this.stmt.setString(2, b);
+			this.stmt.setString(1, cpf);
 
-			this.rsCliente = this.stmt.executeQuery();
+			this.rsParceiroNegocio = this.stmt.executeQuery();
 
-			if (rsCliente.next()) {
-
-				c.setBeneficio(beneficio);
-				c.setNome(rsCliente.getString("clienteNome"));
+			if (rsParceiroNegocio.next()) {
 
 				try {
 
 					Calendar cal = new GregorianCalendar();
 					SimpleDateFormat formater1 = new SimpleDateFormat("yyyy-MM-dd");
-					String data = formater1.format(rsCliente.getDate("clienteNascimento"));
+					String data = formater1.format(rsParceiroNegocio.getDate("clienteNascimento"));
 					cal.setTime(new Date(formater1.parse(data).getTime()));
-					c.setNascimento(cal);
+
+					parceiroNegocio.setDataNascimento(cal);
+					parceiroNegocio.setNome(rsParceiroNegocio.getString("clienteNome"));
+					parceiroNegocio.setCpf(rsParceiroNegocio.getString("cpf"));
+					parceiroNegocio.setPn_id(rsParceiroNegocio.getLong("id_ent"));
+					parceiroNegocio.setIsCliente(true);
 
 				} catch (ParseException e) {
 					e.printStackTrace();
-				}
-
-				if(rsCliente.getString("clienteCpf") != null)
-					c.setCpf(rsCliente.getString("clienteCpf"));
-
-				if(rsCliente.getString("clienteFone") != null)
-					c.setTelefoneRes(rsCliente.getString("clienteFone"));
-				
-				if(rsCliente.getString("clienteEndereco") != null)
-					c.setEndereco(rsCliente.getString("clienteEndereco"));
-				
-				if(rsCliente.getString("clienteNumero") != null)
-					c.setNumero(rsCliente.getString("clienteNumero"));
-
-				if(rsCliente.getString("clienteCep") != null)
-					c.setCep(rsCliente.getString("clienteCep"));
-				
-				if(rsCliente.getString("clienteBairro") != null)
-					c.setBairro(rsCliente.getString("clienteBairro"));
-				
-				if(rsCliente.getString("clienteCidade") != null)
-					c.setCidade(rsCliente.getString("clienteCidade"));
-
-				if(rsCliente.getString("clienteBanco") != null)
-					c.setBanco(rsCliente.getString("clienteBanco"));
-
-				String formatConta = rsCliente.getString("clienteConta");
-
-				while (formatConta.startsWith("0")) {
-					formatConta = formatConta.replaceFirst("0","");
-				}
-
-				c.setConta(formatConta);
-
-				if(rsCliente.getString("clienteTipoConta") != null)
-					c.setTipoConta(rsCliente.getString("clienteTipoConta"));
-
-				if (c.getTipoConta().equals("CONTA CORRENTE")) {
-					c.setTipoPagamento("DOC");
-				} else if (c.getTipoConta().equals("CARTAO MAGNETICO")) {
-					c.setTipoPagamento("OP");
 				}
 
 			} else {
@@ -145,9 +99,165 @@ public class PnDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		*/
 
-		return new ParceiroNegocio();
+		return parceiroNegocio;
+
+	}
+	
+	public ParceiroLocalidade buscaParceiroLocalidade(ParceiroNegocio parceiroNegocio) {
+		
+		String sql = sqlPN;
+
+		 if(parceiroNegocio != null)
+			 sql += " WHERE str_nrdocumento= ?  ";
+
+		this.conn = this.conexao.getConexao();
+
+		Localidade localidade = new Localidade();
+		ParceiroLocalidade parceiroLocalidade = new ParceiroLocalidade();
+
+		TipoEndereco tipoEndereco = new TipoEndereco();
+
+		tipoEndereco.setTipoEndereco_id(1L);
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1, parceiroNegocio.getCpf());
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				if(rsParceiroNegocio.getString("clienteCep") != null)
+					localidade.setCep(rsParceiroNegocio.getString("clienteCep"));
+
+				if(rsParceiroNegocio.getString("clienteEndereco") != null)
+					localidade.setEndereco(rsParceiroNegocio.getString("clienteEndereco"));
+
+				if(rsParceiroNegocio.getString("clienteBairro") != null)
+					localidade.setBairro(rsParceiroNegocio.getString("clienteBairro"));
+				
+				if(rsParceiroNegocio.getString("clienteComplemento") != null)
+					parceiroLocalidade.setComplemento(rsParceiroNegocio.getString("clienteComplemento"));
+				
+				if(rsParceiroNegocio.getString("clienteNumero") != null)
+					parceiroLocalidade.setNumero(rsParceiroNegocio.getString("clienteNumero"));
+
+				parceiroLocalidade.setLocalidade(localidade);
+				parceiroLocalidade.setParceiroNegocio(parceiroNegocio);
+				parceiroLocalidade.setTipoEndereco(tipoEndereco);
+
+			}
+
+			this.conexao.closeConnection(conn);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return parceiroLocalidade;
+
+	}
+	
+	public ParceiroInfoBanco buscaParceiroInfoBanco(ParceiroNegocio parceiroNegocio) {
+		
+		String sql = sqlPN;
+
+		 if(parceiroNegocio != null)
+			 sql += " WHERE str_nrdocumento= ?  ";
+
+		this.conn = this.conexao.getConexao();
+
+		ParceiroInfoBanco parceiroInfoBanco = new ParceiroInfoBanco();
+		Banco banco = new Banco();
+		ContaBancaria contaBancaria = new ContaBancaria();
+		MeioPagamento meioPagamento = new MeioPagamento();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1, parceiroNegocio.getCpf());
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				if(rsParceiroNegocio.getString("clienteBanco") != null)
+					banco.setNome(rsParceiroNegocio.getString("clienteBanco"));
+
+				if(rsParceiroNegocio.getString("clienteConta") != null) {
+
+					String formatConta = rsParceiroNegocio.getString("clienteConta");
+
+					while (formatConta.startsWith("0")) {
+						formatConta = formatConta.replaceFirst("0","");
+					}
+
+					contaBancaria.setNumeroconta(formatConta);
+
+				}
+
+				if(rsParceiroNegocio.getString("clienteTipoConta") != null)
+					meioPagamento.setNome(rsParceiroNegocio.getString("clienteTipoConta"));
+
+				parceiroInfoBanco.setContaBancaria(contaBancaria);
+				parceiroInfoBanco.setBanco(banco);
+				parceiroInfoBanco.setMeioPagamento(meioPagamento);
+				parceiroInfoBanco.setParceiroNegocio(parceiroNegocio);
+
+			}
+
+			this.conexao.closeConnection(conn);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return parceiroInfoBanco;
+
+	}
+	
+	public Collection<ParceiroContato> buscaParceiroContatos(ParceiroNegocio parceiroNegocio) {
+
+		String sql = " SELECT str_ddd,str_fone FROM tb_ent_fone AS contato WHERE contato.str_ativo = 'A' AND contato.id_ent = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<ParceiroContato> parceiroContatos = new ArrayList<ParceiroContato>();
+		TipoContato tipoContato = new TipoContato();
+
+		tipoContato.setTipoContato_id(1L);
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1,parceiroNegocio.getPn_id());
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				ParceiroContato parceiroContato = new ParceiroContato();
+
+				parceiroContato.setNome(rsParceiroNegocio.getString("str_fone"));
+				parceiroContato.setParceiroNegocio(parceiroNegocio);
+				parceiroContato.setTipoContato(tipoContato);
+
+				parceiroContatos.add(parceiroContato);
+
+			}
+
+			this.conexao.closeConnection(conn);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return parceiroContatos;
 
 	}
 	

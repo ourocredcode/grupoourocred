@@ -39,7 +39,7 @@ public class CidadeDao extends Dao<Cidade> {
 		try {
 
 			this.stmt = conn.prepareStatement(sqlCidades);			
-			this.stmt.setString(1,"%"+  nome + "%");			
+			this.stmt.setString(1,nome);			
 			this.rsCidade = this.stmt.executeQuery();
 			while (rsCidade.next()) {
 				cidade.setCidade_id(rsCidade.getLong("cidade_id"));				
