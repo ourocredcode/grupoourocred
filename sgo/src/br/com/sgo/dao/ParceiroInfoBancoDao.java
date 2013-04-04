@@ -23,7 +23,7 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 	private ResultSet rsParceiroInfoBanco;
 	
 	private final String sqlParceiroInfoBancos = "SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.nome, PARCEIROINFOBANCO.empresa_id, PARCEIROINFOBANCO.organizacao_id," +
-			"PARCEIROINFOBANCO.parceironegocio_id, PARCEIROINFOBANCO.banco_id, PARCEIROINFOBANCO.agencia_id, PARCEIROINFOBANCO.contabancaria_id, PARCEIROINFOBANCO.isactive FROM PARCEIROINFOBANCO (NOLOCK)";  
+			"PARCEIROINFOBANCO.parceironegocio_id, PARCEIROINFOBANCO.banco_id, PARCEIROINFOBANCO.agencia_id, PARCEIROINFOBANCO.contabancaria_id, PARCEIROINFOBANCO.meiopagamento_id, PARCEIROINFOBANCO.isactive FROM PARCEIROINFOBANCO (NOLOCK)";  
 	
 	public ParceiroInfoBancoDao(Session session, ConnJDBC conexao) {
 		super(session, ParceiroInfoBanco.class);
