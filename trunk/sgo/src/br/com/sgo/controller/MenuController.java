@@ -32,6 +32,12 @@ public class MenuController {
 		this.validator = validator;
 
 	}
+	
+	@Get
+	@Path("/menu/inicio") 
+	public void inicio() {
+
+	}
 
 	@Post
 	@Path("/menu/inicio") 

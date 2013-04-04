@@ -5,84 +5,113 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib uri="/WEB-INF/lib/formattag.jar" prefix="f" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<title>OUROCRED - Solicitação Digital</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<title>SGO - SISTEMA GRUPO OURO CRED</title>
+		<meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="<c:url value="/css/bootstrap.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/bootstrap-responsive.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/colorpicker.css"/>" />
+        <link rel="stylesheet" href="<c:url value="/css/datepicker.css"/>" />
+        <link rel="stylesheet" href="<c:url value="/css/select2.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/uniform.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />		
+		<link rel="stylesheet" href="<c:url value="/css/jquery.gritter.css"/>" />	
+		<link rel="stylesheet" href="<c:url value="/css/jquery.ui.ie.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/jquery-ui.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/unicorn.main.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/unicorn.grey.css"/>" class="skin-color" />
 
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/bootstrap.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/bootstrap-datepicker.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/excanvas.js"/>"></script>	
+        <script type="text/javascript" src="<c:url value="/js/fullcalendar.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/bootstrap-colorpicker.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/jquery.gritter.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/jquery.masonry.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/jquery.peity.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/jquery.uniform.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/jquery.validate.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.wizard.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.dataTables.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.flot.min.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.flot.pie.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.flot.resize.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/unicorn.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/unicorn.interface.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/unicorn.form_validation.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/unicorn.wizard.js"/>"></script>
 
-		<link href="<c:url value="/css/redmond/jquery-ui-1.10.1.custom.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/bootstrap/bootstrap.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/bootstrap/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/bootstrap/docs.css"/>" rel="stylesheet" type="text/css" media="screen" />
-		<link href="<c:url value="/css/bootstrap/datepicker.css"/>" rel="stylesheet" type="text/css" media="screen" />
-
-
-		<script type="text/javascript" src="<c:url value="/javascripts/jquery-1.9.1.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/jquery-ui-1.10.1.custom.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/bootstrap.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/javascripts/bootstrap-datepicker.js"/>"></script>
-
-		<fmt:setLocale value="pt_br"/>
 	</head>
+	<body>
 
-<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true">
+		<div id="header">
+			<h1><a href="<c:url value="/menu/inicio"/>">OuroCred </a></h1>		
+		</div>
 
+		<div id="search">
+			<input type="text" placeholder="Search here..."/><button type="submit" class="tip-right" title="Search"><i class="icon-search icon-white"></i></button>
+		</div>
 
-		<c:if test="${not empty notice}">
-			<div class="alert alert-error">
-	 			 <button type="button" class="close" data-dismiss="alert">&times;</button> <strong>${notice }</strong> 
-			</div>
-		</c:if>
+		<div id="user-nav" class="navbar navbar-inverse">
+            <ul class="nav btn-group">
+                <li class="btn btn-inverse" ><a title="" href="#"><i class="icon icon-user"></i> <span class="text">Profile</span></a></li>
+       
+                <li class="btn btn-inverse dropdown" id="menu-messages"><a href="#" data-toggle="dropdown" data-target="#menu-messages" class="dropdown-toggle"><i class="icon icon-envelope"></i> <span class="text">Messages</span> <span class="label label-important">5</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="sAdd" title="" href="#">new message</a></li>
+                        <li><a class="sInbox" title="" href="#">inbox</a></li>
+                        <li><a class="sOutbox" title="" href="#">outbox</a></li>
+                        <li><a class="sTrash" title="" href="#">trash</a></li>
+                    </ul>
+                </li>
+                <li class="btn btn-inverse"><a title="" href="#"><i class="icon icon-cog"></i> <span class="text">Settings</span></a></li>
+           
+                <li class="btn btn-inverse"><a title="" href="<c:url value="/home/logout"/>"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
+            </ul>
+        </div>
+            
+		<div id="sidebar">
+			<a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
+			<ul>
+				<li class="active"><a href="<c:url value="/menu/inicio"/>"><i class="icon icon-home"></i> <span>Dashboard</span></a></li>
+				<li class="submenu">
+					<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros Usuários</span> <span class="label">2</span></a>
+					<ul>
+						<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
+						<li><a href="<c:url value="/perfil/cadastro"/>">Perfil</a></li>
+					</ul>
+				</li>
+				<li><a href="buttons.html"><i class="icon icon-tint"></i> <span>Buttons &amp; icons</span></a></li>
+				<li><a href="interface.html"><i class="icon icon-pencil"></i> <span>Interface elements</span></a></li>
+				<li><a href="tables.html"><i class="icon icon-th"></i> <span>Tables</span></a></li>
+				<li><a href="grid.html"><i class="icon icon-th-list"></i> <span>Grid Layout</span></a></li>
+				<li class="submenu">
+					<a href="#"><i class="icon icon-file"></i> <span>Sample pages</span> <span class="label">4</span></a>
+					<ul>
+						<li><a href="invoice.html">Invoice</a></li>
+						<li><a href="chat.html">Support chat</a></li>
+						<li><a href="calendar.html">Calendar</a></li>
+						<li><a href="gallery.html">Gallery</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="charts.html"><i class="icon icon-signal"></i> <span>Charts &amp; graphs</span></a>
+				</li>
+				<li>
+					<a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a>
+				</li>
+			</ul>
+		
+		</div>
+		
+		<div id="content">
 
-		<div>
-			<div>
+		
 
-          <c:if test="${not empty usuarioInfo.usuario}">
-	            <div id="navbar" class="navbar navbar-fixed-top">
-	              <div class="navbar-inner">
-	                <div class="container" style="width: auto;">
-	                  <a class="brand" href="#">${usuarioInfo.usuario.organizacao.nome }</a>
-	                  <ul class="nav" role="navigation">
-	                    <li class="dropdown">
-	                      <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">CADASTROS <b class="caret"></b></a>
-	                      <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/parceironegocio/cadastro"/>">Parceiros Negócio</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/banco/cadastro"/>">Bancos</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/produto/cadastro"/>">Produtos</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/produtobanco/cadastro"/>">Produto Banco</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/tabela/cadastro"/>">Tabelas</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/usuario/cadastro"/>">Usuários</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/perfil/cadastro"/>">Perfil</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-	                      </ul>
-	                    </li>
-	                    <li class="dropdown">
-	                      <a href="#" id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">CONSULTAS<b class="caret"></b></a>
-	                      <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-	                        <li role="presentation" class="divider"></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-	                      </ul>
-	                    </li>
-	                  </ul>
-	                  <ul class="nav pull-right">
-	                    <li id="fat-menu" class="dropdown">
-	                      <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Meu Cadastro <b class="caret"></b></a>
-	                      <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-	                        <li role="presentation" class="divider"></li>
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/home/logout"/>">Logout</a></li>
-	                      </ul>
-	                    </li>
-	                  </ul>
-	                </div>
-	              </div>
-	            </div>
-          </c:if>

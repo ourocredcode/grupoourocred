@@ -1,67 +1,81 @@
-<%@ include file="/header.jspf"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>   
 
-<script type="text/javascript">
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
-jQuery(function($){
-	
-	$('#loginForm').submit(function() {
-		$.ajax({
-			data: $(this).serialize()
-			, type: $(this).attr('method')
-			, url: $(this).attr('action')
-			, success: function(response) {
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Unicorn Admin</title>
+		<meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/bootstrap-responsive.min.css"/>" />
+        <link rel="stylesheet" href="<c:url value="/css/unicorn.login.css"/>" />
+        <script src="<c:url value="/js/jquery.js"/>"></script>  
+        <script src="<c:url value="/js/unicorn.login.js"/>"></script> 
+		<script type="text/javascript">
+		
+		
+		jQuery(function($){
+			
+			$('#loginForm').submit(function() {
+				$.ajax({
+					data: $(this).serialize()
+					, type: $(this).attr('method')
+					, url: $(this).attr('action')
+					, success: function(response) {
+		
+						$("#login-li").removeClass("active");					
+						$("#login-li").addClass("disabled");				
+						$("#login-li-a").attr('href',"#");
+			
+						$("#perfil-li").removeClass("disabled");
+						$("#perfil-li").addClass("active");
+						$("#perfil-li-a").attr('href',"#perfil-div");
+			
+						$("#login-div").removeClass("tab-pane fade active in");
+						$("#login-div").addClass("tab-pane fade");
+						
+						$("#perfil-div").removeClass("tab-pane fade");
+						$("#perfil-div").addClass("tab-pane fade active in");
+		
+						$("#usuarioPerfil").html(response);
+		
+					}
+		
+				});
+				return false;
+			});
+			
+			$('#usuarioPerfil').change(function() {
+				var perfil_id = $("#usuarioPerfil").val();
+				$("#usuarioPerfilEmpresa").load('<c:url value="/home/empresas" />',{'perfil_id': perfil_id});
+			});
+			
+			$('#usuarioPerfilEmpresa').change(function() {
+		
+				var empresa_id = $("#usuarioPerfilEmpresa").val();
+				var perfil_id = $("#usuarioPerfil").val();
+		
+				$("#usuarioPerfilOrganizacao").load('<c:url value="/home/organizacoes" />',{'perfil_id': perfil_id, 'empresa_id':empresa_id});
+			});
+		
+			$('#btnSair').click(function() {
+				window.location.href = '<c:url value="/home/logout" />';
+			});
+		
+		}); 
+		
+		</script>
+    </head>
+    <body>
+        <div id="logo">
+           <img src="<c:url value="../img/logo1.png"/>" alt="" />
+        </div>
+        <div id="loginbox">
 
-				$("#login-li").removeClass("active");					
-				$("#login-li").addClass("disabled");				
-				$("#login-li-a").attr('href',"#");
-	
-				$("#perfil-li").removeClass("disabled");
-				$("#perfil-li").addClass("active");
-				$("#perfil-li-a").attr('href',"#perfil-div");
-	
-				$("#login-div").removeClass("tab-pane fade active in");
-				$("#login-div").addClass("tab-pane fade");
-				
-				$("#perfil-div").removeClass("tab-pane fade");
-				$("#perfil-div").addClass("tab-pane fade active in");
-
-				$("#usuarioPerfil").html(response);
-
-			}
-
-		});
-		return false;
-	});
-	
-	$('#usuarioPerfil').change(function() {
-		var perfil_id = $("#usuarioPerfil").val();
-		$("#usuarioPerfilEmpresa").load('<c:url value="/home/empresas" />',{'perfil_id': perfil_id});
-	});
-	
-	$('#usuarioPerfilEmpresa').change(function() {
-
-		var empresa_id = $("#usuarioPerfilEmpresa").val();
-		var perfil_id = $("#usuarioPerfil").val();
-
-		$("#usuarioPerfilOrganizacao").load('<c:url value="/home/organizacoes" />',{'perfil_id': perfil_id, 'empresa_id':empresa_id});
-	});
-
-	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/home/logout" />';
-	});
-
-}); 
-
-</script>
-
-<div class="span9">
-
-	<section id="tabs">
-		<div class="row-fluid">
-			<div class="span6">
-	
-				<ul id="myTab" class="nav nav-tabs">
+            	<ul id="myTab" class="nav nav-tabs">
 					<li class="active" id="login-li"><a href="#login-div" data-toggle="tab" id="login-li-a">Login</a></li>
 					<li class="disabled" id="perfil-li"><a href="#" data-toggle="tab" id="perfil-li-a">Perfil</a></li>	
 				</ul>
@@ -137,22 +151,8 @@ jQuery(function($){
 	
 					</div>
 				</div>
-			</div>
-			<div class="span6"> 
+        </div>
+        
 
-				<div class="hero-unit">
-					<h1>SISTEMA GRUPO OUROCRED</h1>
-					<p>SGO - Tecnologia da Informação </p>
-					<p>
-				    	<a class="btn btn-primary btn-large">
-				      		Veja Mais
-				    	</a>
-				  	</p>
-				</div>
-					
-			</div>
-		</div>
-	</section>
-</div>
-
-<%@ include file="/footer.jspf"%>
+    </body>
+</html>

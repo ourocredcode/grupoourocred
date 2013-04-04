@@ -4,11 +4,11 @@
 
 	<div class="control-group"></div>
 	<div class="page-header">
-		<h1><small>Endereço</small></h1>
+		<h2><small>Endereço</small></h2>
 	</div>
 	
 	<div class="input-append">
-		<input class="span2" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
+		<input  class="span10" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
 		<span class="add-on"><i class="icon-search"></i></span>
 	</div>
 

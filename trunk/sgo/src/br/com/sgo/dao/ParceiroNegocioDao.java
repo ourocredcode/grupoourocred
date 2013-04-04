@@ -75,7 +75,7 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			sql += 	" AND ORGANIZACAO.organizacao_id = ? AND (PARCEIRONEGOCIO.cpf like ? OR PARCEIRONEGOCIO.rg like ?)";
 
 		this.conn = this.conexao.getConexao();
-		ParceiroNegocio parceiro = new ParceiroNegocio();
+		ParceiroNegocio parceiro = null;
 
 		try {
 
@@ -88,6 +88,8 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			this.rsParceiroNegocio = this.stmt.executeQuery();
 
 			while (rsParceiroNegocio.next()) {
+
+				parceiro = new ParceiroNegocio();
 
 				parceiro.setParceiroNegocio_id(rsParceiroNegocio.getLong("parceironegocio_id"));				
 				parceiro.setNome(rsParceiroNegocio.getString("nome"));
