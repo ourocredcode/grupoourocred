@@ -120,66 +120,61 @@ public class ParceironegocioController {
 
 	}
 
-	@Get
-	@Path("/parceironegocio/cadastro/{parceironegocio_id}")
-	public void cadastro(Long parceironegocio_id){
-
-		result.include("departamentos", this.departamentoDao.buscaDepartamentos(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
-					usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
-
-		result.include("funcoes", this.funcaoDao.buscaFuncoes(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
-				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
-
-		result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceironegocio_id));
-		result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceironegocio_id));
-		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
-		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
-
-		result.include("sexos", this.sexoDao.buscaSexos());
-		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
-		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
-		result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceironegocio_id));
-		result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceironegocio_id));
-
-	}
-
 	@Post
 	@Path("/parceironegocio/cadastro")
 	public void cadastro(String doc){
 
-		ParceiroNegocio parceiroNegocio = this.pnDao.buscaParceiroNegocio(doc);
-		ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
-		
-		Localidade l = parceiroLocalidade.getLocalidade();
+		ParceiroNegocio parceiroNegocio;
 
-		restfulie = Restfulie.custom();
-		addressFinder = new BrazilianAddressFinder(restfulie);
-		String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
+		parceiroNegocio = this.parceiroNegocioDao.buscaParceiroNegocioDocumento(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), doc);
 
-		l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
-		l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
-		l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
-		l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-		l.setEndereco(resultado[1]);
-		l.setBairro(resultado[2]);
+		if(parceiroNegocio == null) {
 
-		result.include("parceiroLocalidade",parceiroLocalidade);
-		result.include("localidade",parceiroLocalidade.getLocalidade());
-		result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
-		result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
-		result.include("parceiroInfoBanco",this.pnDao.buscaParceiroInfoBanco(parceiroNegocio));
+			parceiroNegocio = this.pnDao.buscaParceiroNegocio(doc);
+			ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
+			
+			Localidade l = parceiroLocalidade.getLocalidade();
 
+			restfulie = Restfulie.custom();
+			addressFinder = new BrazilianAddressFinder(restfulie);
+			String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
+
+			l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
+			l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+			l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+			l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+			l.setEndereco(resultado[1]);
+			l.setBairro(resultado[2]);
+
+			result.include("parceiroLocalidade",parceiroLocalidade);
+			result.include("localidade",parceiroLocalidade.getLocalidade());
+			result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
+			result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
+			result.include("parceiroInfoBanco",this.pnDao.buscaParceiroInfoBanco(parceiroNegocio));
+
+			TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Pessoa Física");
+
+			parceiroNegocio.setTipoParceiro(tipoParceiro);
+			parceiroNegocio.setIsCliente(true);
+
+		} else {
+
+			result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id()));
+
+		}
+
+		result.include("departamentos", this.departamentoDao.buscaDepartamentos(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
+				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
+		result.include("funcoes", this.funcaoDao.buscaFuncoes(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
+				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
 		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
+		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
-		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
-
-		TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Pessoa Física");
-
-		parceiroNegocio.setTipoParceiro(tipoParceiro);
-		parceiroNegocio.setIsCliente(true);
-
 		result.include("parceiroNegocio",parceiroNegocio);
 
 	}
@@ -386,15 +381,6 @@ public class ParceironegocioController {
 	}
 
 	@Post
-	@Path("/parceironegocio/busca.funcionario")
-	public void buscaFuncionario(String doc){
-
-		result.redirectTo(this).cadastro(this.parceiroNegocioDao.buscaParceiroNegocioDocumento(
-				usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), doc).getParceiroNegocio_id());
-
-	}
-
-	@Post
 	@Path("/parceironegocio/excluiLocalidade")
 	public void excluiLocalidade(ParceiroLocalidade parceiroLocalidade){
 
@@ -433,7 +419,6 @@ public class ParceironegocioController {
 		localidade.setIsActive(true);
 
 		String mensagem = "";
-
 		
 		if(localidade.getLocalidade_id() == null)	{
 		
@@ -458,8 +443,9 @@ public class ParceironegocioController {
 			}
 		
 		}
-		
+
 		Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
+		ParceiroNegocio parceiroNegocio = this.parceiroNegocioDao.load(parceiroLocalidade.getParceiroNegocio().getParceiroNegocio_id());
 
 		for(TipoEndereco tipoEndereco : tiposEndereco){
 
@@ -467,7 +453,7 @@ public class ParceironegocioController {
 
 			pl.setEmpresa(usuarioInfo.getEmpresa());
 			pl.setOrganizacao(usuarioInfo.getOrganizacao());
-			pl.setParceiroNegocio(parceiroLocalidade.getParceiroNegocio());
+			pl.setParceiroNegocio(parceiroNegocio);
 			pl.setLocalidade(localidade);
 			pl.setTipoEndereco(tipoEndereco);
 			pl.setNumero(parceiroLocalidade.getNumero());
@@ -475,23 +461,23 @@ public class ParceironegocioController {
 			pl.setPontoReferencia(parceiroLocalidade.getPontoReferencia());
 			pl.setIsActive(true);
 
-			try{
-				
-				this.parceiroLocalidadeDao.beginTransaction();
-				this.parceiroLocalidadeDao.adiciona(pl);
-				this.parceiroLocalidadeDao.commit();
-				
-			} catch(Exception e) {
+			if(this.parceiroLocalidadeDao.buscaParceiroLocalidadeNum(parceiroNegocio.getEmpresa().getEmpresa_id(),parceiroNegocio.getOrganizacao().getOrganizacao_id(), 
+					parceiroNegocio.getParceiroNegocio_id(),localidade.getLocalidade_id(), tipoEndereco.getTipoEndereco_id(),pl.getNumero()) == null){
 
-				this.parceiroLocalidadeDao.rollback();
+				try{
 
-				if (e.getCause().toString().indexOf("PK__PARCEIROLOCALIDADE") != -1){
-					mensagem = "Erro: Parceiro Localidade " + parceiroLocalidade.getLocalidade().getCep() + " já existente.";
-				} else {
+					this.parceiroLocalidadeDao.beginTransaction();
+					this.parceiroLocalidadeDao.adiciona(pl);
+					this.parceiroLocalidadeDao.commit();
+
+				} catch(Exception e) {
+
+					this.parceiroLocalidadeDao.rollback();
 					mensagem = "Erro ao adicionar Parceiro Localidade :";
+
+					result.include("msg",mensagem).redirectTo(this).msg();
+
 				}
-				
-				result.include("msg",mensagem).redirectTo(this).msg();
 
 			}
 
@@ -540,6 +526,7 @@ public class ParceironegocioController {
 	public void alteraParceiroLocalidade(ParceiroLocalidade parceiroLocalidade){
 
 		ParceiroLocalidade pl = this.parceiroLocalidadeDao.load(parceiroLocalidade.getParceiroLocalidade_id());
+		ParceiroNegocio parceiroNegocio = this.parceiroNegocioDao.load(parceiroLocalidade.getParceiroNegocio().getParceiroNegocio_id());
 
 		if(parceiroLocalidade.getNumero() != null)
 			pl.setNumero(parceiroLocalidade.getNumero());
@@ -548,7 +535,9 @@ public class ParceironegocioController {
 		if(parceiroLocalidade.getTipoEndereco() != null)
 			pl.setTipoEndereco(this.tipoEnderecoDao.load(parceiroLocalidade.getTipoEndereco().getTipoEndereco_id()));
 
-		if(this.parceiroLocalidadeDao.buscaParceiroLocalidade(pl.getParceiroNegocio(), pl.getLocalidade(), pl.getTipoEndereco()) == null) {
+		if(this.parceiroLocalidadeDao.buscaParceiroLocalidadeNum(parceiroNegocio.getEmpresa().getEmpresa_id(),parceiroNegocio.getOrganizacao().getOrganizacao_id(), 
+				parceiroNegocio.getParceiroNegocio_id(),parceiroLocalidade.getLocalidade().getLocalidade_id(), parceiroLocalidade.getTipoEndereco().getTipoEndereco_id(),
+				pl.getNumero()) == null){
 
 			this.parceiroLocalidadeDao.beginTransaction();
 			this.parceiroLocalidadeDao.atualiza(pl);

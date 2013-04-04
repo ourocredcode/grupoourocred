@@ -13,11 +13,11 @@ import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Departamento;
 import br.com.sgo.modelo.Funcao;
 import br.com.sgo.modelo.Funcionario;
+import br.com.sgo.modelo.ParceiroNegocio;
 
 @Component
 public class FuncionarioDao extends Dao<Funcionario> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -25,7 +25,6 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 	public FuncionarioDao(Session session, ConnJDBC conexao) {
 		super(session, Funcionario.class);
-		this.session = session;
 		this.conexao = conexao;
 	}
 	
@@ -33,7 +32,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 		String sql = "SELECT FUNCIONARIO.empresa_id, " +
 				"				EMPRESA.nome, FUNCIONARIO.organizacao_id, ORGANIZACAO.nome, PARCEIRONEGOCIO.parceironegocio_id, " +
-				"				PARCEIRONEGOCIO.nome, FUNCIONARIO.funcao_id, FUNCAO.nome as funcao_nome, FUNCIONARIO.departamento_id, FUNCIONARIO.funcionario_id," +
+				"				PARCEIRONEGOCIO.nome as parceironegocio_nome, FUNCIONARIO.funcao_id, FUNCAO.nome as funcao_nome, FUNCIONARIO.departamento_id, FUNCIONARIO.funcionario_id," +
 				"				DEPARTAMENTO.nome as departamento_nome FROM " +
 				"				(((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) INNER JOIN PARCEIRONEGOCIO (NOLOCK)  " +
 				"					ON EMPRESA.empresa_id = PARCEIRONEGOCIO.empresa_id) " +
@@ -55,19 +54,25 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 			while (rsFuncionario.next()) {
 
+				ParceiroNegocio parceiro = new ParceiroNegocio();
 				Departamento d = new Departamento();
 				Funcao f = new Funcao();
+
+				parceiro.setParceiroNegocio_id(rsFuncionario.getLong("parceironegocio_id"));
+				parceiro.setNome(rsFuncionario.getString("parceironegocio_nome"));
+				parceiro.setIsFuncionario(true);
 				
 				d.setDepartamento_id(rsFuncionario.getLong("departamento_id"));
 				d.setNome(rsFuncionario.getString("departamento_nome"));
 
 				f.setFuncao_id(rsFuncionario.getLong("funcao_id"));
 				f.setNome(rsFuncionario.getString("funcao_nome"));
-				
+
 				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
 				funcionario.setFuncao(f);
 				funcionario.setDepartamento(d);
-				
+				funcionario.setParceiroNegocio(parceiro);
+
 			}
 
 		} catch (SQLException e) {
