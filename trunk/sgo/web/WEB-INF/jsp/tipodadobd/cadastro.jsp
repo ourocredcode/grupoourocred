@@ -159,8 +159,26 @@ jQuery(function($){
 	}
 </script>
 
-<div class="container-fluid" id="tipodadobd-div">
-	<section id="tabs">
+<div id="content-header">
+		<h1>Cadastro Perfil</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+	
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+		<a href="#" class="current">Perfil</a>
+	</div>
+
+<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+			
+			
 		<ul id="myTab" class="nav nav-tabs">
 			<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
 			<li class="" id="perfilorgacesso-li"><a href="#perfilorgacesso-div" data-toggle="tab" id="perfilorgacesso-li-a">Perfil Organização</a></li>
@@ -190,21 +208,21 @@ jQuery(function($){
 
 					<form id="tipoDadoBdForm" name="tipoDadoBdForm" action="<c:url value="/tipodadobd/salva"/>" method="POST">												
 						<div class="row-fluid">
-							<div class="span2">
+							<div class="span10">
 								<label class="control-label" for="tipoDadoBdEmpresa">Empresa</label>
 		      					<input id="tipoDadoBdEmpresa" name="tipoDadoBd.empresa.nome" type="text" required onChange="limpaForm();">
 		      					<input id="tipoDadoBdEmpresaId" name="tipoDadoBd.empresa.empresa_id" type="hidden">
 							</div>
-							<div class="span2">
+							<div class="span10">
 								<label class="control-label" for="tipoDadoBdOrganizacao">Organização</label>							
 	      						<input id="tipoDadoBdOrganizacao" name="tipoDadoBd.organizacao.nome" type="text" required onChange="limpaForm();">
 	      						<input id="tipoDadoBdOrganizacaoId" name="tipoDadoBd.organizacao.organizacao_id" type="hidden">
 							</div>
-							<div class="span2">						
+							<div class="span10">						
 								<label class="control-label" for="tipoDadoBdNome">Nome Tipo Dado BD</label>							
 								<input type="text" id="tipoDadoBdNome" name="tipoDadoBd.nome" placeholder="Nome do tipo de dado BD" required>							
 							</div>						
-							<div class="span2">						
+							<div class="span10">						
 								<label class="control-label" for="tipoDadoBdChave">Chave Tipo Dado BD</label>
 								<input type="text" id="tipoDadoBdChave" name="tipoDadoBd.chave" placeholder="Chave do tipo de dado BD" required>
 							</div>	
@@ -242,8 +260,9 @@ jQuery(function($){
 						</c:forEach>
 					</tbody>
 				</table>
-			</div>			
-		</section>
+			</div>
+		</div>			
 	</div>
+</div>
 
 <%@ include file="/footer.jspf"%>

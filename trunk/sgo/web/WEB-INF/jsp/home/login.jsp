@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Unicorn Admin</title>
+        <title>SGO - SISTEMA GRUPO OURO CRED</title>
 		<meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" />

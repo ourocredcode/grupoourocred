@@ -202,8 +202,24 @@ function limpaForm(){
 
 </script>
 
-<div class="container-fluid" id="tipodadobd-div">
-	<section id="tabs">
+<div id="content-header">
+		<h1>Cadastro Perfil</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+	
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+		<a href="#" class="current">Perfil</a>
+	</div>
+
+<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
@@ -233,23 +249,23 @@ function limpaForm(){
 
 					<form id="elementoBdForm" name="elementoBdForm" action="<c:url value="/elementobd/salva"/>" method="POST">
 						<div class="row-fluid">						
-							<div class="span2">
+							<div class="span10">
 								<p>
 									<label class="control-label" for="elementoBdEmpresa">Empresa</label>
 		      						<input id="elementoBdEmpresa" name="elementoBd.empresa.nome" type="text" required onChange="limpaForm();">
 		      						<input id="elementoBdEmpresaId" name="elementoBd.empresa.empresa_id" type="text">
 	      						</p>
 							</div>
-							<div class="span2">
+							<div class="span10">
 								<label class="control-label" for="elementoBdOrganizacao">Organização</label>
 	      						<input id="elementoBdOrganizacao" name="elementoBd.organizacao.nome" type="text" required readonly onChange="limpaForm();">
 								<input id="elementoBdOrganizacaoId" name="elementoBd.organizacao.organizacao_id" type="text">
 							</div>
-							<div class="span2">
+							<div class="span10">
 								<label class="control-label" for="elementoBdNomeColunaBd">Nome Coluna BD</label>								
 								<input type="text" id="elementoBdNomeColunaBd" name="elementoBd.nomeColunaBd" placeholder="Nome da coluna BD" required readonly>
 							</div>
-							<div class="span2">
+							<div class="span10">
 								<label class="control-label" for="elementoBd.nome">Nome</label>								
 								<input type="text" id="elementoBd.nome" name="elementoBd.nome" placeholder="Nome" required>
 							</div>
@@ -291,8 +307,10 @@ function limpaForm(){
 
 				<div class="tab-pane fade" id="tipodadobd-div"></div>							
 
-			</div>			
-	</section>
+			</div>	
+			
+		</div>			
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>

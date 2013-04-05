@@ -11,6 +11,9 @@
 		<title>SGO - SISTEMA GRUPO OURO CRED</title>
 		<meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<link rel="stylesheet" href="<c:url value="/css/jquery-ui.css"/>" />
+		<link rel="stylesheet" href="<c:url value="/css/jquery.ui.ie.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap-responsive.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />
@@ -20,10 +23,9 @@
 		<link rel="stylesheet" href="<c:url value="/css/uniform.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />		
 		<link rel="stylesheet" href="<c:url value="/css/jquery.gritter.css"/>" />	
-		<link rel="stylesheet" href="<c:url value="/css/jquery.ui.ie.css"/>" />
-		<link rel="stylesheet" href="<c:url value="/css/jquery-ui.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.main.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.grey.css"/>" class="skin-color" />
+
 
 		<script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
@@ -42,15 +44,14 @@
 		<script type="text/javascript" src="<c:url value="/js/jquery.flot.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.flot.pie.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.flot.resize.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.maskedinput-1.2.2.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/unicorn.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/unicorn.interface.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/unicorn.form_validation.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/unicorn.wizard.js"/>"></script>
-
 	</head>
 	<body>
-
 		<div id="header">
 			<h1><a href="<c:url value="/menu/inicio"/>">OuroCred </a></h1>		
 		</div>
@@ -78,20 +79,31 @@
         </div>
             
 		<div id="sidebar">
+
 			<a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
+
 			<ul>
+
 				<li class="active"><a href="<c:url value="/menu/inicio"/>"><i class="icon icon-home"></i> <span>Dashboard</span></a></li>
+
 				<li class="submenu">
-					<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros Usuários</span> <span class="label">2</span></a>
-					<ul>
+
+					<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span> <span class="label">2</span></a>
+
+					<ul class="cadastro">
 						<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
 						<li><a href="<c:url value="/perfil/cadastro"/>">Perfil</a></li>
 					</ul>
 				</li>
+
 				<li><a href="buttons.html"><i class="icon icon-tint"></i> <span>Buttons &amp; icons</span></a></li>
+
 				<li><a href="interface.html"><i class="icon icon-pencil"></i> <span>Interface elements</span></a></li>
+
 				<li><a href="tables.html"><i class="icon icon-th"></i> <span>Tables</span></a></li>
+
 				<li><a href="grid.html"><i class="icon icon-th-list"></i> <span>Grid Layout</span></a></li>
+
 				<li class="submenu">
 					<a href="#"><i class="icon icon-file"></i> <span>Sample pages</span> <span class="label">4</span></a>
 					<ul>
@@ -101,12 +113,15 @@
 						<li><a href="gallery.html">Gallery</a></li>
 					</ul>
 				</li>
+				
 				<li>
 					<a href="charts.html"><i class="icon icon-signal"></i> <span>Charts &amp; graphs</span></a>
 				</li>
+				
 				<li>
 					<a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a>
 				</li>
+				
 			</ul>
 		
 		</div>

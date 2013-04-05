@@ -229,10 +229,24 @@ function limpaForm(){
 
 </script>
 
-<div class="span9">
+<div id="content-header">
+		<h1>Cadastro Perfil</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+	
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+		<a href="#" class="current">Perfil</a>
+	</div>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
@@ -283,8 +297,8 @@ function limpaForm(){
 							<label class="control-label" for="colunaBdEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdEmpresa" name="colunaBd.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="colunaBdEmpresaId" name="colunaBd.empresa.empresa_id" type="hidden">
+	      						<input class="span10" id="colunaBdEmpresa" name="colunaBd.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="colunaBdEmpresaId" name="colunaBd.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						
@@ -292,8 +306,8 @@ function limpaForm(){
 							<label class="control-label" for="colunaBdOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdOrganizacao" name="colunaBd.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="colunaBdOrganizacaoId" name="colunaBd.organizacao.organizacao_id" type="hidden">
+	      						<input class="span10" id="colunaBdOrganizacao" name="colunaBd.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="colunaBdOrganizacaoId" name="colunaBd.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						
@@ -301,8 +315,8 @@ function limpaForm(){
 							<label class="control-label" for="colunaBdTabelaBd">Tabela BD</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdTabelaBd" name="colunaBd.tabelaBd.nomeTabelaBd" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="colunaBdTabelaBdId" name="colunaBd.tabelaBd.tabelaBd_id" type="hidden">
+	      						<input class="span10" id="colunaBdTabelaBd" name="colunaBd.tabelaBd.nomeTabelaBd" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="colunaBdTabelaBdId" name="colunaBd.tabelaBd.tabelaBd_id" type="hidden">
 	    					</div>
 						</div>
 
@@ -310,8 +324,8 @@ function limpaForm(){
 							<label class="control-label" for="colunaBdElementoBd">Elemento BD</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdElementoBd" name="colunaBd.elementoBd.nomecolunabd" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="colunaBdElementoBdId" name="colunaBd.elementoBd.elementoBd_id" type="hidden">
+	      						<input class="span10" id="colunaBdElementoBd" name="colunaBd.elementoBd.nomecolunabd" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="colunaBdElementoBdId" name="colunaBd.elementoBd.elementoBd_id" type="hidden">
 	    					</div>
 						</div>
 
@@ -319,8 +333,8 @@ function limpaForm(){
 							<label class="control-label" for="colunaBdTipoDadoBd">Tipo Dado BD</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="colunaBdTipoDadoBd" name="colunaBd.tipodadoBd.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="colunaBdTipoDadoBdId" name="colunaBd.tipoDadoBd.tipoDadoBd_id" type="hidden">
+	      						<input class="span10" id="colunaBdTipoDadoBd" name="colunaBd.tipodadoBd.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="colunaBdTipoDadoBdId" name="colunaBd.tipoDadoBd.tipoDadoBd_id" type="hidden">
 	    					</div>
 						</div>
 
@@ -357,7 +371,7 @@ function limpaForm(){
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>

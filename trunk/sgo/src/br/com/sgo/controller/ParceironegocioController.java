@@ -131,36 +131,49 @@ public class ParceironegocioController {
 		if(parceiroNegocio == null) {
 
 			parceiroNegocio = this.pnDao.buscaParceiroNegocio(doc);
-			ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
 			
-			Localidade l = parceiroLocalidade.getLocalidade();
+			if(parceiroNegocio != null){
+				
+				ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
+				
+				Localidade l = parceiroLocalidade.getLocalidade();
 
-			restfulie = Restfulie.custom();
-			addressFinder = new BrazilianAddressFinder(restfulie);
-			String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
+				restfulie = Restfulie.custom();
+				addressFinder = new BrazilianAddressFinder(restfulie);
+				String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
 
-			l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
-			l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
-			l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
-			l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-			l.setEndereco(resultado[1]);
-			l.setBairro(resultado[2]);
+				l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
+				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+				l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+				l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+				l.setEndereco(resultado[1]);
+				l.setBairro(resultado[2]);
 
-			result.include("parceiroLocalidade",parceiroLocalidade);
-			result.include("localidade",parceiroLocalidade.getLocalidade());
-			result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
-			result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
-			result.include("parceiroInfoBanco",this.pnDao.buscaParceiroInfoBanco(parceiroNegocio));
+				result.include("parceiroLocalidade",parceiroLocalidade);
+				result.include("localidade",parceiroLocalidade.getLocalidade());
+				result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
+				result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
+				result.include("parceiroInfoBanco",this.pnDao.buscaParceiroInfoBanco(parceiroNegocio));
 
-			TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Pessoa Física");
+				TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Pessoa Física");
 
-			parceiroNegocio.setTipoParceiro(tipoParceiro);
-			parceiroNegocio.setIsCliente(true);
+				parceiroNegocio.setTipoParceiro(tipoParceiro);
+				parceiroNegocio.setIsCliente(true);
+				
+			} else {
+
+				result.include("notice","Erro: Parceiro Negócio não encontrado. ");
+
+			}
+			
 
 		} else {
 
+			parceiroNegocio = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
+
 			result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id()));
 
@@ -469,6 +482,8 @@ public class ParceironegocioController {
 					this.parceiroLocalidadeDao.beginTransaction();
 					this.parceiroLocalidadeDao.adiciona(pl);
 					this.parceiroLocalidadeDao.commit();
+					
+					mensagem = " Localidade adicionado com sucesso. ";
 
 				} catch(Exception e) {
 
@@ -479,10 +494,14 @@ public class ParceironegocioController {
 
 				}
 
+			} else {
+				
+				mensagem = "Erro : Localidade do tipo " + pl.getTipoEndereco().getNome() + " já existente. ";
 			}
 
 		}
 
+		result.include("notice",mensagem);
 		result.redirectTo(this).parceiroLocalidades(parceiroLocalidade.getParceiroNegocio().getParceiroNegocio_id());
 
 	}
