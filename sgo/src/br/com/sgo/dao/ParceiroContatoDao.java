@@ -99,6 +99,32 @@ public class ParceiroContatoDao extends Dao<ParceiroContato> {
 		this.conexao.closeConnection(rsParceiroContato, stmt, conn);
 		return parceiroCont;
 	}
+	
+	public ParceiroContato buscaParceiroContatoByTcNo(Long tipocontato_id, String nome){
+		
+		String sql = sqlParceiroContatoAll;
+		
+		if(tipocontato_id != null)
+			sql += 	" AND PARCEIROCONTATO.tipocontato_id = ?";
+		if(nome != null)
+			sql +=	" AND PARCEIROCONTATO.nome like ? ";
+		
+		this.conn = this.conexao.getConexao();
+		ParceiroContato parceiroCont = new ParceiroContato();
+		try {
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, tipocontato_id);
+			this.stmt.setString(2,"%"+  nome + "%");			
+			this.rsParceiroContato = this.stmt.executeQuery();
+			while (rsParceiroContato.next()) {
+				parceiroCont.setParceiroContato_id(rsParceiroContato.getLong("parceirocontato_id"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		this.conexao.closeConnection(rsParceiroContato, stmt, conn);
+		return parceiroCont;
+	}
 
 	public ParceiroContato buscaParceiroContatoAll(){				
 		this.conn = this.conexao.getConexao();
