@@ -26,7 +26,7 @@ a:hover {
 #header h1 {
     background: url("../img/logo.png") no-repeat scroll 0 0 transparent;
     height: 91px;
-    left: 45px;
+    left: 25px;
     line-height: 600px;
     overflow: hidden;
     position: relative;
@@ -131,7 +131,7 @@ a:hover {
     display: block;
     float: left;
     position: relative;
-    width: 220px;
+    width: 180px;
     z-index: 16;
 }
 
@@ -140,7 +140,7 @@ a:hover {
 	margin: 10px 0 0;
 	padding: 0;
 	position: absolute;
-	width: 220px;
+	width: 180px;
 }
 #sidebar > ul > li {
 	display: block;	
@@ -199,7 +199,7 @@ a:hover {
 /* Content */
 #content {
     background: none repeat scroll 0 0 #eeeeee;
-    margin-left: 220px;
+    margin-left: 180px;
     margin-right: 0;
     padding-bottom: 25px;
     position: relative;

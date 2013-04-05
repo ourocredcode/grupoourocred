@@ -114,10 +114,24 @@ function limpaForm(){
 
 </script>
 
-<div class="span9">
+<div id="content-header">
+		<h1>Cadastro Perfil</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+	
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+		<a href="#" class="current">Perfil</a>
+	</div>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
@@ -164,16 +178,16 @@ function limpaForm(){
 							<label class="control-label" for="tabelaBdEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdEmpresa" name="tabelaBd.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="tabelaBdEmpresaId" name="tabelaBd.empresa.empresa_id" type="hidden">
+	      						<input class="span10" id="tabelaBdEmpresa" name="tabelaBd.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="tabelaBdEmpresaId" name="tabelaBd.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="tabelaBdOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="tabelaBdOrganizacaoId" name="tabelaBd.organizacao.organizacao_id" type="hidden">
+	      						<input class="span10" id="tabelaBdOrganizacao" name="tabelaBd.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="tabelaBdOrganizacaoId" name="tabelaBd.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -208,7 +222,7 @@ function limpaForm(){
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>

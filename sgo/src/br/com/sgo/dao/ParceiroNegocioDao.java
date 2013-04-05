@@ -82,8 +82,8 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			this.stmt = conn.prepareStatement(sql);			
 			this.stmt.setLong(1, empresa_id);			
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,"%"+  doc + "%");		
-			this.stmt.setString(4,"%"+  doc + "%");	
+			this.stmt.setString(3,doc);		
+			this.stmt.setString(4,doc);	
 
 			this.rsParceiroNegocio = this.stmt.executeQuery();
 

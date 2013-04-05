@@ -2,6 +2,10 @@
 
 	<script type="text/javascript">
 	jQuery(function($){
+
+		   $("#localidadeCep").mask("99999999");
+		   $("#parceiroNegocioCpf").mask("99999999999");
+		   $("#parceiroNegocioDataNascimento").mask("99/99/9999");
 	
 		   $('#parceiroNegocioDataNascimento').datepicker();
 	
@@ -112,7 +116,7 @@
 		var parceiroContatoTipoContatoId = $("#parceiroContatoTipoContatoNovo").val();
 		var parceiroContatoNome = $("#parceiroContatoNomeNovo").val();
 	
-		if (window.confirm("Deseja salvar o endereço?"))
+		if (window.confirm("Deseja salvar o contato?"))
 			$.post('<c:url value='/parceironegocio/salvaContato' />',{
 					'parceiroContato.tipoContato.tipoContato_id' : parceiroContatoTipoContatoId ,
 					'parceiroContato.nome' : parceiroContatoNome,
@@ -270,12 +274,31 @@
 			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
 	</div>
+	
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
 		<a href="#" class="current">Parceiro Négocio</a>
 	</div>
 	
-	<div id="buscaParceiroDiv" style="float: right;margin-top: 20px;margin-left: 655px;position: absolute;">
+
+	<c:if test="${not empty notice}">
+		<c:choose>
+			<c:when test="${fn:contains(notice,'Erro:')}">
+					<div class="alert alert-error">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:when>
+			<c:otherwise>
+					<div class="alert alert-success">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
+
+	<div id="buscaParceiroDiv" style="float: right;margin-top: 20px;margin-left: 760px;position: absolute;">
 		<form id="buscaParceiroForm" class="form-search" action="<c:url value="/parceironegocio/cadastro" />" method="POST">
 			<div class="input-append">
 				<input type="text" class="input-medium" id="doc" name="doc" placeholder="Escolha o tipo de busca"/>
@@ -287,7 +310,6 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
-			
 
 					<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
 				
@@ -307,6 +329,8 @@
 							</label>
 							</div>
 						</div>
+						
+						<br/>
 				
 						<div class="row-fluid">
 							<div class="span2">
@@ -346,6 +370,8 @@
 								</c:forEach>
 							</select>
 						</div>
+						
+						<div class="control-group"></div>
 				
 						<div class="controls controls-row">
 							<label for="parceiroNegocioNome">Nome</label>
@@ -354,8 +380,8 @@
 						</div>
 						
 						<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" 
-								<c:if test="${parceiroNegocio.isFuncionario || parceiroNegocio.isCliente }">style="display: block;"</c:if>
-								<c:if test="${parceiroNegocio.isFornecedor || empty parceiroNegocio}">style="display: none;"</c:if>>
+								<c:if test="${parceiroNegocio.isFuncionario || parceiroNegocio.isCliente || empty parceiroNegocio }">style="display: block;"</c:if>
+								<c:if test="${parceiroNegocio.isFornecedor}">style="display: none;"</c:if>>
 
 								<div class="span2">
 									<label for="parceiroNegocioCpf">CPF</label>

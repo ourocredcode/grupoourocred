@@ -51,10 +51,6 @@ public class ParceiroNegocio implements Serializable {
 	private CategoriaParceiro categoriaParceiro;
 
 	@ManyToOne
-	@JoinColumn(name="banco_id",updatable = true, nullable = true) 
-	private Banco banco;
-	
-	@ManyToOne
 	@JoinColumn(name="estadocivil_id",updatable = true, nullable = true) 
 	private EstadoCivil estadoCivil;
 	
@@ -162,14 +158,6 @@ public class ParceiroNegocio implements Serializable {
 
 	public void setCategoriaParceiro(CategoriaParceiro categoriaParceiro) {
 		this.categoriaParceiro = categoriaParceiro;
-	}
-
-	public Banco getBanco() {
-		return banco;
-	}
-
-	public void setBanco(Banco banco) {
-		this.banco = banco;
 	}
 
 	public EstadoCivil getEstadoCivil() {
