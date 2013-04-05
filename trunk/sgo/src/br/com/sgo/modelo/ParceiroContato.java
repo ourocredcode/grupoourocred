@@ -34,11 +34,11 @@ public class ParceiroContato implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = true) 
+	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = false) 
 	private ParceiroNegocio parceiroNegocio; 
 	
 	@ManyToOne
-	@JoinColumn(name="tipocontato_id",updatable = true, nullable = true) 
+	@JoinColumn(name="tipocontato_id",updatable = true, nullable = false) 
 	private TipoContato tipoContato; 
 
 	@Column(name="chave")
