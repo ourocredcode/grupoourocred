@@ -584,7 +584,7 @@ public class ParceironegocioController {
 		if(parceiroContato.getTipoContato() != null)
 			pc.setTipoContato(this.tipoContatoDao.load(parceiroContato.getTipoContato().getTipoContato_id()));
 
-		if(this.parceiroContatoDao.buscaParceiroContato(pc.getTipoContato().getTipoContato_id(),pc.getNome()) == null) {
+		if(this.parceiroContatoDao.buscaParceiroContatoByTcNo(pc.getTipoContato().getTipoContato_id(),pc.getNome()) == null) {
 
 			this.parceiroContatoDao.beginTransaction();
 			this.parceiroContatoDao.atualiza(pc);
