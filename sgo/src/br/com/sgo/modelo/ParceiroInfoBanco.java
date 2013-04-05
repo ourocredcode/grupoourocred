@@ -34,7 +34,7 @@ public class ParceiroInfoBanco implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = true) 
+	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = false) 
 	private ParceiroNegocio parceiroNegocio;
 
 	@ManyToOne
@@ -50,7 +50,7 @@ public class ParceiroInfoBanco implements Serializable {
 	private ContaBancaria contaBancaria;	
 	
 	@ManyToOne
-	@JoinColumn(name="meiopagamento_id",updatable = true, nullable = false) 
+	@JoinColumn(name="meiopagamento_id",updatable = true, nullable = true) 
 	private MeioPagamento meioPagamento;
 
 	@Column(name="isactive")
