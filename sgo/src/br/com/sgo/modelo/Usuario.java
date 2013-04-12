@@ -13,48 +13,47 @@ import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
 
-
 @Entity
 @Component
-@Table(name="USUARIO")
+@Table(name = "USUARIO")
 public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "usuario_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)	
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long usuario_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
+
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
+
 	@ManyToOne
-	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
 
 	@ManyToOne
-	@JoinColumn(name="supervisor_usuario_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "supervisor_usuario_id", updatable = true, nullable = true)
 	private Usuario supervisorUsuario;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="chave")
+
+	@Column(name = "chave")
 	private String chave;
 
-	@Column(name="descricao")
+	@Column(name = "descricao")
 	private String descricao;
-	
-	@Column(name="senha")
+
+	@Column(name = "senha")
 	private String senha;
-	
-	@Column(name="email")
+
+	@Column(name = "email")
 	private String email;
 
 	public Boolean getIsActive() {
@@ -65,10 +64,10 @@ public class Usuario implements Serializable {
 		this.isActive = isActive;
 	}
 
-	@Column(name="telefone")
+	@Column(name = "telefone")
 	private String telefone;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getUsuario_id() {

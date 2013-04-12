@@ -17,22 +17,23 @@ import br.com.sgo.modelo.GrupoProduto;
 @Component
 public class GrupoProdutoDao extends Dao<GrupoProduto> {
 
-	private Session session;	
+	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsGrupoProdutos;
 
-	public GrupoProdutoDao(Session session , ConnJDBC conexao) {
+	public GrupoProdutoDao(Session session, ConnJDBC conexao) {
 		super(session, GrupoProduto.class);
 		this.session = session;
-		this.conexao =conexao;
+		this.conexao = conexao;
 	}
-	
-	public Collection<GrupoProduto> buscaGrupoProdutos(Long empresa_id, Long organizacao_id, String nome){
 
-		String sql = "select GRUPOPRODUTO.grupoproduto_id, GRUPOPRODUTO.nome from GRUPOPRODUTO (NOLOCK) " +
-				"	WHERE GRUPOPRODUTO.empresa_id = ? AND GRUPOPRODUTO.organizacao_id = ? AND GRUPOPRODUTO.nome like ?";
+	public Collection<GrupoProduto> buscaGrupoProdutos(Long empresa_id,
+			Long organizacao_id, String nome) {
+
+		String sql = "select GRUPOPRODUTO.grupoproduto_id, GRUPOPRODUTO.nome from GRUPOPRODUTO (NOLOCK) "
+				+ "	WHERE GRUPOPRODUTO.empresa_id = ? AND GRUPOPRODUTO.organizacao_id = ? AND GRUPOPRODUTO.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -40,19 +41,20 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,"%"+  nome + "%");			
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsGrupoProdutos = this.stmt.executeQuery();
 
 			while (rsGrupoProdutos.next()) {
 				GrupoProduto grupoProduto = new GrupoProduto();
 
-				grupoProduto.setGrupoProduto_id(rsGrupoProdutos.getLong("grupoproduto_id"));				
+				grupoProduto.setGrupoProduto_id(rsGrupoProdutos
+						.getLong("grupoproduto_id"));
 				grupoProduto.setNome(rsGrupoProdutos.getString("nome"));
 
-				grupoProdutos.add(grupoProduto);				
+				grupoProdutos.add(grupoProduto);
 			}
 
 		} catch (SQLException e) {
@@ -64,30 +66,32 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 		return grupoProdutos;
 
 	}
-	
-	public Collection<GrupoProduto> buscaGrupoProdutos(Long empresa_id, Long organizacao_id){
 
-		String sql = "select GRUPOPRODUTO.grupoproduto_id, GRUPOPRODUTO.nome from GRUPOPRODUTO (NOLOCK) " +
-				"	WHERE GRUPOPRODUTO.empresa_id = ? AND GRUPOPRODUTO.organizacao_id = ?";
+	public Collection<GrupoProduto> buscaGrupoProdutos(Long empresa_id,
+			Long organizacao_id) {
+
+		String sql = "select GRUPOPRODUTO.grupoproduto_id, GRUPOPRODUTO.nome from GRUPOPRODUTO (NOLOCK) "
+				+ "	WHERE GRUPOPRODUTO.empresa_id = ? AND GRUPOPRODUTO.organizacao_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
 		Collection<GrupoProduto> grupoProdutos = new ArrayList<GrupoProduto>();
 
 		try {
-			
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
-			this.stmt.setLong(2, organizacao_id);					
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
 			this.rsGrupoProdutos = this.stmt.executeQuery();
 
 			while (rsGrupoProdutos.next()) {
 				GrupoProduto grupoProduto = new GrupoProduto();
-				
-				grupoProduto.setGrupoProduto_id(rsGrupoProdutos.getLong("grupoproduto_id"));				
+
+				grupoProduto.setGrupoProduto_id(rsGrupoProdutos
+						.getLong("grupoproduto_id"));
 				grupoProduto.setNome(rsGrupoProdutos.getString("nome"));
 
-				grupoProdutos.add(grupoProduto);				
+				grupoProdutos.add(grupoProduto);
 			}
 
 		} catch (SQLException e) {

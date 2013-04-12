@@ -16,34 +16,34 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="IMAGEM")
+@Table(name = "IMAGEM")
 public class Imagem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "imagem_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "imagem_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long imagem_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
+
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Organizacao organizacao;	
-	
-	@Column(name="nome")
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
+	private Organizacao organizacao;
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="descricao")
+
+	@Column(name = "descricao")
 	private String descricao;
-	
-	@Column(name="imagem")
+
+	@Column(name = "imagem")
 	private Image imagem;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getImagem_id() {

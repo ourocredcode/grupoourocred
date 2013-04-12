@@ -13,29 +13,29 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="ELEMENTOBD")
+@Table(name = "ELEMENTOBD")
 public class ElementoBd {
 
-	@Id	
-	@Column(name = "elementobd_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)	
+	@Id
+	@Column(name = "elementobd_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long elementoBd_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Organizacao organizacao;	
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
+	private Organizacao organizacao;
 
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
 
-	@Column(name="descricao")
+	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name="nomecolunabd")
+	@Column(name = "nomecolunabd")
 	private String nomeColunaBd;
 
 	public Long getElementoBd_id() {

@@ -17,18 +17,17 @@ import br.com.sgo.modelo.TipoEndereco;
 @Component
 public class TipoEnderecoDao extends Dao<TipoEndereco> {
 
-
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsTipoEndereco;
-	
-	public TipoEnderecoDao(Session session,ConnJDBC conexao) {
+
+	public TipoEnderecoDao(Session session, ConnJDBC conexao) {
 		super(session, TipoEndereco.class);
 		this.conexao = conexao;
 	}
 
-	public Collection<TipoEndereco> buscaTiposEnderecoToLocalidades(){
+	public Collection<TipoEndereco> buscaTiposEnderecoToLocalidades() {
 
 		/* BUSCA TIPOS DE ENDERECO RESIDENCIAL E ASSINATURA */
 
@@ -40,18 +39,19 @@ public class TipoEnderecoDao extends Dao<TipoEndereco> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			
+			this.stmt = conn.prepareStatement(sql);
+
 			this.rsTipoEndereco = this.stmt.executeQuery();
 
 			while (rsTipoEndereco.next()) {
-				
+
 				TipoEndereco tipoEndereco = new TipoEndereco();
-				tipoEndereco.setTipoEndereco_id(rsTipoEndereco.getLong("tipoendereco_id"));
+				tipoEndereco.setTipoEndereco_id(rsTipoEndereco
+						.getLong("tipoendereco_id"));
 				tipoEndereco.setNome(rsTipoEndereco.getString("nome"));
 
 				tiposEndereco.add(tipoEndereco);
-				
+
 			}
 
 		} catch (SQLException e) {

@@ -21,25 +21,26 @@ public class TipoOrganizacaoDao extends Dao<TipoOrganizacao> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsTipoOrganizacao;
-	
-	private final String sqlTipoOrganizacao= "SELECT TIPOORGANIZACAO.tipoorganizacao_id, TIPOORGANIZACAO.nome, TIPOORGANIZACAO.empresa_id" +
-			", TIPOORGANIZACAO.organizacao_id FROM TIPOORGANIZACAO (NOLOCK)";  
-	
+
+	private final String sqlTipoOrganizacao = "SELECT TIPOORGANIZACAO.tipoorganizacao_id, TIPOORGANIZACAO.nome, TIPOORGANIZACAO.empresa_id"
+			+ ", TIPOORGANIZACAO.organizacao_id FROM TIPOORGANIZACAO (NOLOCK)";
+
 	public TipoOrganizacaoDao(Session session, ConnJDBC conexao) {
 		super(session, TipoOrganizacao.class);
 		this.conexao = conexao;
 	}
 
-	public Collection<TipoOrganizacao> buscaAllTipoOrganizacao(){
+	public Collection<TipoOrganizacao> buscaAllTipoOrganizacao() {
 		String sql = sqlTipoOrganizacao;
 		this.conn = this.conexao.getConexao();
 		Collection<TipoOrganizacao> tiposOrganizacao = new ArrayList<TipoOrganizacao>();
 		try {
 			this.stmt = conn.prepareStatement(sql);
 			this.rsTipoOrganizacao = this.stmt.executeQuery();
-			while (rsTipoOrganizacao.next()) {				
+			while (rsTipoOrganizacao.next()) {
 				TipoOrganizacao tipoOrganizacao = new TipoOrganizacao();
-				tipoOrganizacao.setTipoOrganizacao_id(rsTipoOrganizacao.getLong("tipoorganizacao_id"));
+				tipoOrganizacao.setTipoOrganizacao_id(rsTipoOrganizacao
+						.getLong("tipoorganizacao_id"));
 				tipoOrganizacao.setNome(rsTipoOrganizacao.getString("nome"));
 				tiposOrganizacao.add(tipoOrganizacao);
 			}
@@ -50,19 +51,20 @@ public class TipoOrganizacaoDao extends Dao<TipoOrganizacao> {
 		return tiposOrganizacao;
 	}
 
-	public Collection<TipoOrganizacao> buscaTipoOrganizacaoByNome(String nome){
+	public Collection<TipoOrganizacao> buscaTipoOrganizacaoByNome(String nome) {
 		String sql = sqlTipoOrganizacao;
-		if(nome != null)
-			sql += 	" WHERE TIPOORGANIZACAO.nome like ?";
+		if (nome != null)
+			sql += " WHERE TIPOORGANIZACAO.nome like ?";
 		this.conn = this.conexao.getConexao();
 		Collection<TipoOrganizacao> tiposOrganizacao = new ArrayList<TipoOrganizacao>();
 		try {
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setString(1,"%"+  nome + "%");
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setString(1, "%" + nome + "%");
 			this.rsTipoOrganizacao = this.stmt.executeQuery();
 			TipoOrganizacao tipoOrganizacao = new TipoOrganizacao();
 			while (rsTipoOrganizacao.next()) {
-				tipoOrganizacao.setTipoOrganizacao_id(rsTipoOrganizacao.getLong("tipoorganizacao_id"));
+				tipoOrganizacao.setTipoOrganizacao_id(rsTipoOrganizacao
+						.getLong("tipoorganizacao_id"));
 				tipoOrganizacao.setNome(rsTipoOrganizacao.getString("nome"));
 			}
 		} catch (SQLException e) {
@@ -71,26 +73,28 @@ public class TipoOrganizacaoDao extends Dao<TipoOrganizacao> {
 		this.conexao.closeConnection(rsTipoOrganizacao, stmt, conn);
 		return tiposOrganizacao;
 	}
-	
-	public TipoOrganizacao buscaTipoOrganizacaoByEmOrNo(Long empresa, Long organizacao, String nome){
+
+	public TipoOrganizacao buscaTipoOrganizacaoByEmOrNo(Long empresa,
+			Long organizacao, String nome) {
 		String sql = sqlTipoOrganizacao;
-		if(empresa != null)
-			sql += 	" AND TIPOORGANIZACAO.empresa_id = ?";
-		if(organizacao != null)
-			sql += 	" AND TIPOORGANIZACAO.organizacao_id = ?";		
-		if(nome != null)
-			sql += 	" AND (TIPOORGANIZACAO.nome like ?)";
-		this.conn = this.conexao.getConexao();		
-		TipoOrganizacao tipoOrganizacao = null;		
+		if (empresa != null)
+			sql += " AND TIPOORGANIZACAO.empresa_id = ?";
+		if (organizacao != null)
+			sql += " AND TIPOORGANIZACAO.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND (TIPOORGANIZACAO.nome like ?)";
+		this.conn = this.conexao.getConexao();
+		TipoOrganizacao tipoOrganizacao = null;
 		try {
-			this.stmt = conn.prepareStatement(sql);			
+			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, empresa);
 			this.stmt.setLong(2, organizacao);
-			this.stmt.setString(3,"%"+  nome + "%");
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsTipoOrganizacao = this.stmt.executeQuery();
 			while (rsTipoOrganizacao.next()) {
 				tipoOrganizacao = new TipoOrganizacao();
-				tipoOrganizacao.setTipoOrganizacao_id(rsTipoOrganizacao.getLong("tipoorganizacao_id"));
+				tipoOrganizacao.setTipoOrganizacao_id(rsTipoOrganizacao
+						.getLong("tipoorganizacao_id"));
 				tipoOrganizacao.setNome(rsTipoOrganizacao.getString("nome"));
 			}
 		} catch (SQLException e) {

@@ -15,35 +15,35 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="TABELACOEFICIENTE")
+@Table(name = "TABELACOEFICIENTE")
 public class TabelaCoeficiente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "tabelacoeficiente_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "tabelacoeficiente_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long tabelaCoeficiente_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="tabela_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "tabela_id", updatable = true, nullable = false)
 	private Tabela tabela;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
 
-	@Column(name="descricao")
+	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name="isactive")
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getTabelaCoeficiente_id() {

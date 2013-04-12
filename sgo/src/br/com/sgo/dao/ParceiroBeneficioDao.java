@@ -21,16 +21,16 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsParceiroBeneficio;
-	
-	private final String sqlParceiroBeneficio= "SELECT PARCEIROBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numeroBeneficio, PARCEIROBENEFICIO.empresa_id" +
-			", PARCEIROBENEFICIO.organizacao_id FROM PARCEIROBENEFICIO (NOLOCK)";  
-	
+
+	private final String sqlParceiroBeneficio = "SELECT PARCEIROBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numeroBeneficio, PARCEIROBENEFICIO.empresa_id"
+			+ ", PARCEIROBENEFICIO.organizacao_id FROM PARCEIROBENEFICIO (NOLOCK)";
+
 	public ParceiroBeneficioDao(Session session, ConnJDBC conexao) {
 		super(session, ParceiroBeneficio.class);
 		this.conexao = conexao;
 	}
 
-	public Collection<ParceiroBeneficio> buscaAllParceiroBeneficio(){
+	public Collection<ParceiroBeneficio> buscaAllParceiroBeneficio() {
 
 		String sql = sqlParceiroBeneficio;
 		this.conn = this.conexao.getConexao();
@@ -38,10 +38,12 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 		try {
 			this.stmt = conn.prepareStatement(sql);
 			this.rsParceiroBeneficio = this.stmt.executeQuery();
-			while (rsParceiroBeneficio.next()) {				
+			while (rsParceiroBeneficio.next()) {
 				ParceiroBeneficio beneficio = new ParceiroBeneficio();
-				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
-				beneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
+				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio
+						.getLong("parceirobeneficio_id"));
+				beneficio.setNumeroBeneficio(rsParceiroBeneficio
+						.getString("numeroBeneficio"));
 				beneficios.add(beneficio);
 			}
 		} catch (SQLException e) {
@@ -52,13 +54,14 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 		return beneficios;
 
 	}
-	
-	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByParceiroNegocio(Long parceironegocio_id){
+
+	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByParceiroNegocio(
+			Long parceironegocio_id) {
 
 		String sql = sqlParceiroBeneficio;
 
-		if(parceironegocio_id != null)
-			sql += 	" WHERE PARCEIROBENEFICIO.parceironegocio_id = ?";
+		if (parceironegocio_id != null)
+			sql += " WHERE PARCEIROBENEFICIO.parceironegocio_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -66,16 +69,18 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1,parceironegocio_id);
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, parceironegocio_id);
 			this.rsParceiroBeneficio = this.stmt.executeQuery();
 
 			while (rsParceiroBeneficio.next()) {
 
 				ParceiroBeneficio beneficio = new ParceiroBeneficio();
 
-				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
-				beneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
+				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio
+						.getLong("parceirobeneficio_id"));
+				beneficio.setNumeroBeneficio(rsParceiroBeneficio
+						.getString("numeroBeneficio"));
 
 				beneficios.add(beneficio);
 
@@ -93,20 +98,23 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 	}
 
-	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByNome(String nome){
+	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByNome(
+			String nome) {
 		String sql = sqlParceiroBeneficio;
-		if(nome != null)
-			sql += 	" WHERE PARCEIROBENEFICIO.nome like ?";
+		if (nome != null)
+			sql += " WHERE PARCEIROBENEFICIO.nome like ?";
 		this.conn = this.conexao.getConexao();
 		Collection<ParceiroBeneficio> beneficios = new ArrayList<ParceiroBeneficio>();
 		try {
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setString(1,"%"+  nome + "%");
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setString(1, "%" + nome + "%");
 			this.rsParceiroBeneficio = this.stmt.executeQuery();
 			ParceiroBeneficio beneficio = new ParceiroBeneficio();
 			while (rsParceiroBeneficio.next()) {
-				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
-				beneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
+				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio
+						.getLong("parceirobeneficio_id"));
+				beneficio.setNumeroBeneficio(rsParceiroBeneficio
+						.getString("numeroBeneficio"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -114,34 +122,37 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 		this.conexao.closeConnection(rsParceiroBeneficio, stmt, conn);
 		return beneficios;
 	}
-	
-	public ParceiroBeneficio buscaParceiroBeneficioByEmOrNo(Long empresa, Long organizacao, String nome){
+
+	public ParceiroBeneficio buscaParceiroBeneficioByEmOrNo(Long empresa,
+			Long organizacao, String nome) {
 
 		String sql = sqlParceiroBeneficio;
 
-		if(empresa != null)
-			sql += 	" AND PARCEIROBENEFICIO.empresa_id = ?";
-		if(organizacao != null)
-			sql += 	" AND PARCEIROBENEFICIO.organizacao_id = ?";		
-		if(nome != null)
-			sql += 	" AND (PARCEIROBENEFICIO.nome like ?)";
+		if (empresa != null)
+			sql += " AND PARCEIROBENEFICIO.empresa_id = ?";
+		if (organizacao != null)
+			sql += " AND PARCEIROBENEFICIO.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND (PARCEIROBENEFICIO.nome like ?)";
 
-		this.conn = this.conexao.getConexao();		
+		this.conn = this.conexao.getConexao();
 
-		ParceiroBeneficio beneficio = null;		
+		ParceiroBeneficio beneficio = null;
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
+			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, empresa);
 			this.stmt.setLong(2, organizacao);
-			this.stmt.setString(3,"%"+  nome + "%");
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsParceiroBeneficio = this.stmt.executeQuery();
-			
+
 			while (rsParceiroBeneficio.next()) {
 				beneficio = new ParceiroBeneficio();
-				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
-				beneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
+				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio
+						.getLong("parceirobeneficio_id"));
+				beneficio.setNumeroBeneficio(rsParceiroBeneficio
+						.getString("numeroBeneficio"));
 			}
 
 		} catch (SQLException e) {

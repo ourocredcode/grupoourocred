@@ -15,52 +15,52 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="PARCEIROLOCALIDADE")
+@Table(name = "PARCEIROLOCALIDADE")
 public class ParceiroLocalidade implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "parceirolocalidade_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)  
+	@Column(name = "parceirolocalidade_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long parceiroLocalidade_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = false) 
-	private ParceiroNegocio parceiroNegocio; 
-	
+	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
+	private ParceiroNegocio parceiroNegocio;
+
 	@ManyToOne
-	@JoinColumn(name="localidade_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "localidade_id", updatable = true, nullable = false)
 	private Localidade localidade;
 
 	@ManyToOne
-	@JoinColumn(name="tipoendereco_id",updatable = true, nullable = false)
+	@JoinColumn(name = "tipoendereco_id", updatable = true, nullable = false)
 	private TipoEndereco tipoEndereco;
 
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
 
-	@Column(name="descricao")
+	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name="isactive")
+	@Column(name = "isactive")
 	private Boolean isActive;
-	
-	@Column(name="numero")
+
+	@Column(name = "numero")
 	private String numero;
-	
-	@Column(name="complemento")
+
+	@Column(name = "complemento")
 	private String complemento;
-	
-	@Column(name="pontoreferencia")
+
+	@Column(name = "pontoreferencia")
 	private String pontoReferencia;
 
 	public Long getParceiroLocalidade_id() {

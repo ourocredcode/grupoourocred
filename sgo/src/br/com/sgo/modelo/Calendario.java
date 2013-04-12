@@ -15,31 +15,31 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="CALENDARIO")
+@Table(name = "CALENDARIO")
 public class Calendario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "calendario_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "calendario_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long calendario_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Organizacao organizacao;	
-	
-	@Column(name="nome")
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
+	private Organizacao organizacao;
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="descricao")
+
+	@Column(name = "descricao")
 	private String descricao;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getCalendario_id() {
@@ -90,5 +90,4 @@ public class Calendario implements Serializable {
 		this.isActive = isActive;
 	}
 
-	
 }

@@ -15,31 +15,31 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="ESTADOCIVIL")
+@Table(name = "ESTADOCIVIL")
 public class EstadoCivil implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "estadocivil_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "estadocivil_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long estadoCivil_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="descricao")
+
+	@Column(name = "descricao")
 	private String descricao;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Empresa getEmpresa() {

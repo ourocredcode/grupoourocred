@@ -13,37 +13,37 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="CAMPOFORMULARIO")
+@Table(name = "CAMPOFORMULARIO")
 public class CampoFormulario {
 
-	@Id	
+	@Id
 	@Column(name = "campo_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)	
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long campo_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="formulariosJanela_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "formulariosJanela_id", updatable = true, nullable = false)
 	private FormulariosJanela formulariosJanela;
 
 	@ManyToOne
-	@JoinColumn(name="colunabd_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "colunabd_id", updatable = true, nullable = false)
 	private ColunaBd colunaBd;
 
 	@Column(name = "chave")
 	private String chave;
 
 	@Column(name = "nome")
-	private String nome;	
-	
-	@Column(name="isactive")
+	private String nome;
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	@Column(name = "ismostrado")

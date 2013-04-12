@@ -11,56 +11,60 @@ import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
 
-
 @Entity
 @Component
-@Table(name="MENU")
+@Table(name = "MENU")
 public class Menu {
 
 	@Id
-	@Column(name = "menu_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)  
+	@Column(name = "menu_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long menu_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
+
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="janela_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "janela_id", updatable = true, nullable = false)
 	private Janela janela;
 
-	/*@ManyToOne
-	@JoinColumn(name="workflow_id",updatable = true, nullable = false) 
-	private Workflow workflow;
+	/*
+	 * @ManyToOne
+	 * 
+	 * @JoinColumn(name="workflow_id",updatable = true, nullable = false)
+	 * private Workflow workflow;
+	 * 
+	 * @ManyToOne
+	 * 
+	 * @JoinColumn(name="formulario_id",updatable = true, nullable = false)
+	 * private Formulario formulario_id;
+	 * 
+	 * @ManyToOne
+	 * 
+	 * @JoinColumn(name="organizacao_id",updatable = true, nullable = false)
+	 * private Processo processo;
+	 */
 
-	@ManyToOne
-	@JoinColumn(name="formulario_id",updatable = true, nullable = false) 
-	private Formulario formulario_id;
-
-	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Processo processo;*/
-
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="descricao")
+
+	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name="acao")
+	@Column(name = "acao")
 	private Boolean acao;
-    
-    @Column(name="issomenteleitura")
+
+	@Column(name = "issomenteleitura")
 	private Boolean isSomenteLeitura;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
-	
+
 	public Long getMenu_id() {
 		return menu_id;
 	}
@@ -132,7 +136,5 @@ public class Menu {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
-	
 
 }

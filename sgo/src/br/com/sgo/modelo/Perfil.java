@@ -13,33 +13,33 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="PERFIL")
+@Table(name = "PERFIL")
 public class Perfil {
 
 	@Id
-	@Column(name = "perfil_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)  
+	@Column(name = "perfil_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long perfil_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
+
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
+
 	@ManyToOne
-	@JoinColumn(name="supervisor_perfil_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "supervisor_perfil_id", updatable = true, nullable = false)
 	private Usuario usuario;
 
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="chave")
+
+	@Column(name = "chave")
 	private String chave;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Boolean getIsActive() {

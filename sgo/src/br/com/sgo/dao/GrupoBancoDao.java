@@ -22,19 +22,20 @@ public class GrupoBancoDao extends Dao<GrupoBanco> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsGrupoParceiro;
-	
-	public GrupoBancoDao(Session session,ConnJDBC conexao) {
+
+	public GrupoBancoDao(Session session, ConnJDBC conexao) {
 		super(session, GrupoBanco.class);
 		this.session = session;
 		this.conexao = conexao;
 	}
-	
-	public Collection<GrupoBanco> buscaGrupoBanco(Long empresa_id, Long organizacao_id, String nome){
 
-		String sql = "select GRUPOBANCO.grupobanco_id , GRUPOBANCO.nome from GRUPOBANCO (NOLOCK) " +
-				"			WHERE GRUPOBANCO.empresa_id = ? " +
-				"		AND GRUPOBANCO.organizacao_id = ? " +
-				"		AND GRUPOBANCO.nome like ?";
+	public Collection<GrupoBanco> buscaGrupoBanco(Long empresa_id,
+			Long organizacao_id, String nome) {
+
+		String sql = "select GRUPOBANCO.grupobanco_id , GRUPOBANCO.nome from GRUPOBANCO (NOLOCK) "
+				+ "			WHERE GRUPOBANCO.empresa_id = ? "
+				+ "		AND GRUPOBANCO.organizacao_id = ? "
+				+ "		AND GRUPOBANCO.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -42,17 +43,18 @@ public class GrupoBancoDao extends Dao<GrupoBanco> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,"%"+  nome + "%");			
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsGrupoParceiro = this.stmt.executeQuery();
 
 			while (rsGrupoParceiro.next()) {
 
 				GrupoBanco grupoBanco = new GrupoBanco();
 
-				grupoBanco.setGrupoBanco_id(rsGrupoParceiro.getLong("grupobanco_id"));				
+				grupoBanco.setGrupoBanco_id(rsGrupoParceiro
+						.getLong("grupobanco_id"));
 				grupoBanco.setNome(rsGrupoParceiro.getString("nome"));
 
 				gruposBanco.add(grupoBanco);

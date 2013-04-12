@@ -17,22 +17,23 @@ import br.com.sgo.modelo.Departamento;
 @Component
 public class DepartamentoDao extends Dao<Departamento> {
 
-	private Session session;	
+	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsDepartamentos;
 
-	public DepartamentoDao(Session session , ConnJDBC conexao) {
+	public DepartamentoDao(Session session, ConnJDBC conexao) {
 		super(session, Departamento.class);
 		this.session = session;
-		this.conexao =conexao;
+		this.conexao = conexao;
 	}
-	
-	public Collection<Departamento> buscaDepartamentos(Long empresa_id, Long organizacao_id, String nome){
 
-		String sql = "select DEPARTAMENTO.departamento_id, DEPARTAMENTO.nome from DEPARTAMENTO (NOLOCK) " +
-				"	WHERE DEPARTAMENTO.empresa_id = ? AND DEPARTAMENTO.organizacao_id = ? AND DEPARTAMENTO.nome like ?";
+	public Collection<Departamento> buscaDepartamentos(Long empresa_id,
+			Long organizacao_id, String nome) {
+
+		String sql = "select DEPARTAMENTO.departamento_id, DEPARTAMENTO.nome from DEPARTAMENTO (NOLOCK) "
+				+ "	WHERE DEPARTAMENTO.empresa_id = ? AND DEPARTAMENTO.organizacao_id = ? AND DEPARTAMENTO.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -40,19 +41,20 @@ public class DepartamentoDao extends Dao<Departamento> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,"%"+  nome + "%");			
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsDepartamentos = this.stmt.executeQuery();
 
 			while (rsDepartamentos.next()) {
 				Departamento departamento = new Departamento();
 
-				departamento.setDepartamento_id(rsDepartamentos.getLong("departamento_id"));				
+				departamento.setDepartamento_id(rsDepartamentos
+						.getLong("departamento_id"));
 				departamento.setNome(rsDepartamentos.getString("nome"));
 
-				departamentos.add(departamento);				
+				departamentos.add(departamento);
 			}
 
 		} catch (SQLException e) {
@@ -64,11 +66,12 @@ public class DepartamentoDao extends Dao<Departamento> {
 		return departamentos;
 
 	}
-	
-	public Collection<Departamento> buscaDepartamentos(Long empresa_id, Long organizacao_id){
 
-		String sql = "select DEPARTAMENTO.departamento_id, DEPARTAMENTO.nome from DEPARTAMENTO (NOLOCK) " +
-				"	WHERE DEPARTAMENTO.empresa_id = ? AND DEPARTAMENTO.organizacao_id = ? ";
+	public Collection<Departamento> buscaDepartamentos(Long empresa_id,
+			Long organizacao_id) {
+
+		String sql = "select DEPARTAMENTO.departamento_id, DEPARTAMENTO.nome from DEPARTAMENTO (NOLOCK) "
+				+ "	WHERE DEPARTAMENTO.empresa_id = ? AND DEPARTAMENTO.organizacao_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -76,8 +79,8 @@ public class DepartamentoDao extends Dao<Departamento> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 
 			this.rsDepartamentos = this.stmt.executeQuery();
@@ -85,7 +88,8 @@ public class DepartamentoDao extends Dao<Departamento> {
 			while (rsDepartamentos.next()) {
 				Departamento departamento = new Departamento();
 
-				departamento.setDepartamento_id(rsDepartamentos.getLong("departamento_id"));
+				departamento.setDepartamento_id(rsDepartamentos
+						.getLong("departamento_id"));
 				departamento.setNome(rsDepartamentos.getString("nome"));
 
 				detapartamentos.add(departamento);

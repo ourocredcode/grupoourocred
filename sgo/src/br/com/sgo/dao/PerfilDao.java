@@ -28,29 +28,30 @@ public class PerfilDao extends Dao<Perfil> {
 		this.session = session;
 		this.conexao = conexao;
 	}
-	
-	public Collection<Perfil> buscaPerfis(Long empresa_id, Long organizacao_id, String nome){
 
-		String sql = "select PERFIL.perfil_id, PERFIL.nome from PERFIL (NOLOCK) " +
-				"	WHERE PERFIL.empresa_id = ? AND PERFIL.organizacao_id = ? AND PERFIL.nome like ? ";
+	public Collection<Perfil> buscaPerfis(Long empresa_id, Long organizacao_id,
+			String nome) {
+
+		String sql = "select PERFIL.perfil_id, PERFIL.nome from PERFIL (NOLOCK) "
+				+ "	WHERE PERFIL.empresa_id = ? AND PERFIL.organizacao_id = ? AND PERFIL.nome like ? ";
 		this.conn = this.conexao.getConexao();
 
 		Collection<Perfil> perfis = new ArrayList<Perfil>();
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3, "%" +  nome + "%");			
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsPerfil = this.stmt.executeQuery();
 
 			while (rsPerfil.next()) {
 				Perfil perfil = new Perfil();
 
-				perfil.setPerfil_id(rsPerfil.getLong("perfil_id"));				
+				perfil.setPerfil_id(rsPerfil.getLong("perfil_id"));
 				perfil.setNome(rsPerfil.getString("nome"));
 
-				perfis.add(perfil);				
+				perfis.add(perfil);
 			}
 
 		} catch (SQLException e) {

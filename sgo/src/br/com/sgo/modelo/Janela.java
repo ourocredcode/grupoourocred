@@ -11,32 +11,31 @@ import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
 
-
 @Entity
 @Component
-@Table(name="JANELA")
+@Table(name = "JANELA")
 public class Janela {
 
 	@Id
-	@Column(name = "janela_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)  
+	@Column(name = "janela_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long janela_id;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="chave")
+
+	@Column(name = "chave")
 	private String chave;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
+
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public String getChave() {
@@ -85,6 +84,6 @@ public class Janela {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}	
+	}
 
 }

@@ -22,14 +22,15 @@ public class CategoriaParceiroDao extends Dao<CategoriaParceiro> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsCategoriaParceiro;
-	
-	public CategoriaParceiroDao(Session session,ConnJDBC conexao) {
+
+	public CategoriaParceiroDao(Session session, ConnJDBC conexao) {
 		super(session, CategoriaParceiro.class);
 		this.session = session;
 		this.conexao = conexao;
 	}
-	
-	public Collection<CategoriaParceiro> buscaCategoriaParceiro(Long empresa_id, Long organizacao_id, String nome){
+
+	public Collection<CategoriaParceiro> buscaCategoriaParceiro(
+			Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = "select CATEGORIAPARCEIRO.categoriaparceiro_id, CATEGORIAPARCEIRO.nome from CATEGORIAPARCEIRO (NOLOCK) WHERE CATEGORIAPARCEIRO.empresa_id = ? AND CATEGORIAPARCEIRO.organizacao_id = ? AND CATEGORIAPARCEIRO.nome like ?";
 
@@ -39,19 +40,21 @@ public class CategoriaParceiroDao extends Dao<CategoriaParceiro> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,"%"+  nome + "%");			
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsCategoriaParceiro = this.stmt.executeQuery();
 
 			while (rsCategoriaParceiro.next()) {
 				CategoriaParceiro categoriaparceiro = new CategoriaParceiro();
 
-				categoriaparceiro.setCategoriaParceiro_id(rsCategoriaParceiro.getLong("categoriaparceiro_id"));				
-				categoriaparceiro.setNome(rsCategoriaParceiro.getString("nome"));
+				categoriaparceiro.setCategoriaParceiro_id(rsCategoriaParceiro
+						.getLong("categoriaparceiro_id"));
+				categoriaparceiro
+						.setNome(rsCategoriaParceiro.getString("nome"));
 
-				categoriasparceiro.add(categoriaparceiro);				
+				categoriasparceiro.add(categoriaparceiro);
 			}
 
 		} catch (SQLException e) {

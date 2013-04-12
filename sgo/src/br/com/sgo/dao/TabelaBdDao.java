@@ -17,7 +17,7 @@ import br.com.sgo.modelo.TabelaBd;
 @Component
 public class TabelaBdDao extends Dao<TabelaBd> {
 
-	private Session session;	
+	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -28,29 +28,30 @@ public class TabelaBdDao extends Dao<TabelaBd> {
 		this.session = session;
 		this.conexao = conexao;
 	}
-	
-	public Collection<TabelaBd> buscaTabelas(Long empresa_id, Long organizacao_id, String nometabelabd){
 
-		String sql = "select TABELABD.tabelabd_id, TABELABD.nometabelabd from TABELABD (NOLOCK) " +
-				"	WHERE TABELABD.empresa_id = ? AND TABELABD.organizacao_id = ? AND TABELABD.nometabelabd like ? ";
+	public Collection<TabelaBd> buscaTabelas(Long empresa_id,
+			Long organizacao_id, String nometabelabd) {
+
+		String sql = "select TABELABD.tabelabd_id, TABELABD.nometabelabd from TABELABD (NOLOCK) "
+				+ "	WHERE TABELABD.empresa_id = ? AND TABELABD.organizacao_id = ? AND TABELABD.nometabelabd like ? ";
 		this.conn = this.conexao.getConexao();
 
 		Collection<TabelaBd> tabelas = new ArrayList<TabelaBd>();
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,"%"+  nometabelabd + "%");			
+			this.stmt.setString(3, "%" + nometabelabd + "%");
 			this.rsTabelas = this.stmt.executeQuery();
 
 			while (rsTabelas.next()) {
 				TabelaBd tabela = new TabelaBd();
 
-				tabela.setTabelaBd_id(rsTabelas.getLong("tabelabd_id"));				
+				tabela.setTabelaBd_id(rsTabelas.getLong("tabelabd_id"));
 				tabela.setNomeTabelaBd(rsTabelas.getString("nometabelabd"));
 
-				tabelas.add(tabela);				
+				tabelas.add(tabela);
 			}
 
 		} catch (SQLException e) {

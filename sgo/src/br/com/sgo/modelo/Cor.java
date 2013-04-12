@@ -15,38 +15,38 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="COR")
+@Table(name = "COR")
 public class Cor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "cor_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "cor_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cor_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
+
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="imagem_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "imagem_id", updatable = true, nullable = false)
 	private Imagem imagem;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="descricao")
+
+	@Column(name = "descricao")
 	private String descricao;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
-	@Column(name="ispadrao")
+	@Column(name = "ispadrao")
 	private Boolean isPadrao;
 
 	public Long getCor_id() {

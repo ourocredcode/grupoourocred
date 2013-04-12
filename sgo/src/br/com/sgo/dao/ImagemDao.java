@@ -21,23 +21,23 @@ public class ImagemDao extends Dao<Imagem> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsImagem;
-	
-	private final String sqlImagem= "SELECT IMAGEM.imagem_id, IMAGEM.nome, IMAGEM.empresa_id" +
-			", IMAGEM.organizacao_id FROM IMAGEM (NOLOCK)";  
-	
+
+	private final String sqlImagem = "SELECT IMAGEM.imagem_id, IMAGEM.nome, IMAGEM.empresa_id"
+			+ ", IMAGEM.organizacao_id FROM IMAGEM (NOLOCK)";
+
 	public ImagemDao(Session session, ConnJDBC conexao) {
 		super(session, Imagem.class);
 		this.conexao = conexao;
 	}
 
-	public Collection<Imagem> buscaAllImagem(){
+	public Collection<Imagem> buscaAllImagem() {
 		String sql = sqlImagem;
 		this.conn = this.conexao.getConexao();
 		Collection<Imagem> imgs = new ArrayList<Imagem>();
 		try {
 			this.stmt = conn.prepareStatement(sql);
 			this.rsImagem = this.stmt.executeQuery();
-			while (rsImagem.next()) {				
+			while (rsImagem.next()) {
 				Imagem img = new Imagem();
 				img.setImagem_id(rsImagem.getLong("imagem_id"));
 				img.setNome(rsImagem.getString("nome"));
@@ -50,15 +50,15 @@ public class ImagemDao extends Dao<Imagem> {
 		return imgs;
 	}
 
-	public Collection<Imagem> buscaImagemByNome(String nome){
+	public Collection<Imagem> buscaImagemByNome(String nome) {
 		String sql = sqlImagem;
-		if(nome != null)
-			sql += 	" WHERE IMAGEM.nome like ?";
+		if (nome != null)
+			sql += " WHERE IMAGEM.nome like ?";
 		this.conn = this.conexao.getConexao();
 		Collection<Imagem> imgs = new ArrayList<Imagem>();
 		try {
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setString(1,"%"+  nome + "%");
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setString(1, "%" + nome + "%");
 			this.rsImagem = this.stmt.executeQuery();
 			Imagem img = new Imagem();
 			while (rsImagem.next()) {
@@ -71,22 +71,23 @@ public class ImagemDao extends Dao<Imagem> {
 		this.conexao.closeConnection(rsImagem, stmt, conn);
 		return imgs;
 	}
-	
-	public Imagem buscaImagemByEmOrNo(Long empresa, Long organizacao, String nome){
+
+	public Imagem buscaImagemByEmOrNo(Long empresa, Long organizacao,
+			String nome) {
 		String sql = sqlImagem;
-		if(empresa != null)
-			sql += 	" AND IMAGEM.empresa_id = ?";
-		if(organizacao != null)
-			sql += 	" AND IMAGEM.organizacao_id = ?";		
-		if(nome != null)
-			sql += 	" AND (IMAGEM.nome like ?)";
-		this.conn = this.conexao.getConexao();		
-		Imagem img = null;		
+		if (empresa != null)
+			sql += " AND IMAGEM.empresa_id = ?";
+		if (organizacao != null)
+			sql += " AND IMAGEM.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND (IMAGEM.nome like ?)";
+		this.conn = this.conexao.getConexao();
+		Imagem img = null;
 		try {
-			this.stmt = conn.prepareStatement(sql);			
+			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, empresa);
 			this.stmt.setLong(2, organizacao);
-			this.stmt.setString(3,"%"+  nome + "%");
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsImagem = this.stmt.executeQuery();
 			while (rsImagem.next()) {
 				img = new Imagem();

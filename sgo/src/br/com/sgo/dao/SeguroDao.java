@@ -21,23 +21,23 @@ public class SeguroDao extends Dao<Seguro> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsSeguro;
-	
-	private final String sqlSeguro= "SELECT SEGURO.seguro_id, SEGURO.nome, SEGURO.empresa_id" +
-			", SEGURO.organizacao_id FROM SEGURO (NOLOCK)";  
-	
+
+	private final String sqlSeguro = "SELECT SEGURO.seguro_id, SEGURO.nome, SEGURO.empresa_id"
+			+ ", SEGURO.organizacao_id FROM SEGURO (NOLOCK)";
+
 	public SeguroDao(Session session, ConnJDBC conexao) {
 		super(session, Seguro.class);
 		this.conexao = conexao;
 	}
 
-	public Collection<Seguro> buscaAllSeguro(){
+	public Collection<Seguro> buscaAllSeguro() {
 		String sql = sqlSeguro;
 		this.conn = this.conexao.getConexao();
 		Collection<Seguro> seguros = new ArrayList<Seguro>();
 		try {
 			this.stmt = conn.prepareStatement(sql);
 			this.rsSeguro = this.stmt.executeQuery();
-			while (rsSeguro.next()) {				
+			while (rsSeguro.next()) {
 				Seguro seguro = new Seguro();
 				seguro.setSeguro_id(rsSeguro.getLong("seguro_id"));
 				seguro.setNome(rsSeguro.getString("nome"));
@@ -50,15 +50,15 @@ public class SeguroDao extends Dao<Seguro> {
 		return seguros;
 	}
 
-	public Collection<Seguro> buscaSeguroByNome(String nome){
+	public Collection<Seguro> buscaSeguroByNome(String nome) {
 		String sql = sqlSeguro;
-		if(nome != null)
-			sql += 	" WHERE SEGURO.nome like ?";
+		if (nome != null)
+			sql += " WHERE SEGURO.nome like ?";
 		this.conn = this.conexao.getConexao();
 		Collection<Seguro> seguros = new ArrayList<Seguro>();
 		try {
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setString(1,"%"+  nome + "%");
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setString(1, "%" + nome + "%");
 			this.rsSeguro = this.stmt.executeQuery();
 			Seguro seguro = new Seguro();
 			while (rsSeguro.next()) {
@@ -71,22 +71,23 @@ public class SeguroDao extends Dao<Seguro> {
 		this.conexao.closeConnection(rsSeguro, stmt, conn);
 		return seguros;
 	}
-	
-	public Seguro buscaSeguroByEmOrNo(Long empresa, Long organizacao, String nome){
+
+	public Seguro buscaSeguroByEmOrNo(Long empresa, Long organizacao,
+			String nome) {
 		String sql = sqlSeguro;
-		if(empresa != null)
-			sql += 	" AND SEGURO.empresa_id = ?";
-		if(organizacao != null)
-			sql += 	" AND SEGURO.organizacao_id = ?";		
-		if(nome != null)
-			sql += 	" AND (SEGURO.nome like ?)";
-		this.conn = this.conexao.getConexao();		
-		Seguro seguro = null;		
+		if (empresa != null)
+			sql += " AND SEGURO.empresa_id = ?";
+		if (organizacao != null)
+			sql += " AND SEGURO.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND (SEGURO.nome like ?)";
+		this.conn = this.conexao.getConexao();
+		Seguro seguro = null;
 		try {
-			this.stmt = conn.prepareStatement(sql);			
+			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, empresa);
 			this.stmt.setLong(2, organizacao);
-			this.stmt.setString(3,"%"+  nome + "%");
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsSeguro = this.stmt.executeQuery();
 			while (rsSeguro.next()) {
 				seguro = new Seguro();

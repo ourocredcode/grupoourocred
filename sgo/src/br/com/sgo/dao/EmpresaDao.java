@@ -15,7 +15,7 @@ import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Empresa;
 
 @Component
-public class EmpresaDao  extends Dao<Empresa> {
+public class EmpresaDao extends Dao<Empresa> {
 
 	private Session session;
 	private ConnJDBC conexao;
@@ -29,7 +29,7 @@ public class EmpresaDao  extends Dao<Empresa> {
 		this.conexao = conexao;
 	}
 
-	public Collection<Empresa> buscaEmpresas(String nome){
+	public Collection<Empresa> buscaEmpresas(String nome) {
 
 		String sql = "select empresa_id, nome from EMPRESA (NOLOCK) WHERE nome like ? ";
 
@@ -41,8 +41,8 @@ public class EmpresaDao  extends Dao<Empresa> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setString(1,"%"+  nome + "%");
-			this.rsEmpresas = this.stmt.executeQuery();		
+			this.stmt.setString(1, "%" + nome + "%");
+			this.rsEmpresas = this.stmt.executeQuery();
 
 			while (rsEmpresas.next()) {
 
