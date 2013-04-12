@@ -68,6 +68,8 @@
 		<mapping class="br.com.sgo.modelo.ParceiroLocalidade" />
 		<mapping class="br.com.sgo.modelo.ParceiroContato" />
 		<mapping class="br.com.sgo.modelo.ParceiroBeneficio" />
+		<mapping class="br.com.sgo.modelo.HisconBeneficio" />
+		<mapping class="br.com.sgo.modelo.HistoricoHiscon" />
 
 		<mapping class="br.com.sgo.modelo.Departamento" />
 		<mapping class="br.com.sgo.modelo.Funcao" />
@@ -82,6 +84,12 @@
 		<mapping class="br.com.sgo.modelo.Sexo" />
 		<mapping class="br.com.sgo.modelo.EstadoCivil" />
 		<mapping class="br.com.sgo.modelo.Calendario" />
+		
+		<mapping class="br.com.sgo.modelo.Workflow" />
+		<mapping class="br.com.sgo.modelo.WorkflowEtapa" />
+		<mapping class="br.com.sgo.modelo.WorkflowPerfilAcesso" />
+		<mapping class="br.com.sgo.modelo.WorkflowTransicao" />
+		<mapping class="br.com.sgo.modelo.TipoWorkflow" />
 		
 
 	</session-factory>

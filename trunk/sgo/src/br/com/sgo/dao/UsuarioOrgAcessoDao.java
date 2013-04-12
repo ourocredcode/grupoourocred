@@ -19,19 +19,17 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 	private PreparedStatement stmt;
 	private Connection conn;
 
-	public UsuarioOrgAcessoDao(Session session,ConnJDBC conexao) {
+	public UsuarioOrgAcessoDao(Session session, ConnJDBC conexao) {
 		super(session, UsuarioOrgAcesso.class);
 		this.session = session;
 		this.conexao = conexao;
 	}
-	
+
 	public void insert(UsuarioOrgAcesso usuarioOrgAcesso) throws SQLException {
 
-		String sql = "INSERT INTO USUARIOORGACESSO " +
-				"	(usuario_id, " +				
-				"	 empresa_id ," +
-				"	 organizacao_id) " +
-				"    VALUES (?,?,?)";
+		String sql = "INSERT INTO USUARIOORGACESSO " + "	(usuario_id, "
+				+ "	 empresa_id ," + "	 organizacao_id) "
+				+ "    VALUES (?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
@@ -40,16 +38,17 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 			this.conn.setAutoCommit(false);
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1,usuarioOrgAcesso.getUsuario().getUsuario_id());			
-			this.stmt.setLong(2,usuarioOrgAcesso.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(3,usuarioOrgAcesso.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(1, usuarioOrgAcesso.getUsuario().getUsuario_id());
+			this.stmt.setLong(2, usuarioOrgAcesso.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(3, usuarioOrgAcesso.getOrganizacao()
+					.getOrganizacao_id());
 
 			this.stmt.executeUpdate();
 
 			this.conn.commit();
 
-		}  catch (SQLException e) {			
-			
+		} catch (SQLException e) {
+
 			this.conn.rollback();
 			throw e;
 
@@ -58,7 +57,7 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 			this.conn.setAutoCommit(true);
 
 		}
-			this.conexao.closeConnection(stmt, conn);
+		this.conexao.closeConnection(stmt, conn);
 	}
 
 }

@@ -22,14 +22,15 @@ public class ClassificacaoParceiroDao extends Dao<ClassificacaoParceiro> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsClassificacaoParceiro;
-	
-	public ClassificacaoParceiroDao(Session session,ConnJDBC conexao) {
+
+	public ClassificacaoParceiroDao(Session session, ConnJDBC conexao) {
 		super(session, ClassificacaoParceiro.class);
 		this.session = session;
 		this.conexao = conexao;
 	}
-	
-	public Collection<ClassificacaoParceiro> buscaClassificacaoParceiro(Long empresa_id, Long organizacao_id, String nome){
+
+	public Collection<ClassificacaoParceiro> buscaClassificacaoParceiro(
+			Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = "select CLASSIFICACAOPARCEIRO.classificacaoparceiro_id, CLASSIFICACAOPARCEIRO.nome from CLASSIFICACAOPARCEIRO (NOLOCK) WHERE CLASSIFICACAOPARCEIRO.empresa_id = ? AND CLASSIFICACAOPARCEIRO.organizacao_id = ? AND CLASSIFICACAOPARCEIRO.nome like ?";
 
@@ -39,19 +40,22 @@ public class ClassificacaoParceiroDao extends Dao<ClassificacaoParceiro> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,"%"+  nome + "%");			
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsClassificacaoParceiro = this.stmt.executeQuery();
 
 			while (rsClassificacaoParceiro.next()) {
 				ClassificacaoParceiro classificacaoparceiro = new ClassificacaoParceiro();
 
-				classificacaoparceiro.setClassificacaoParceiro_id(rsClassificacaoParceiro.getLong("classificacaoparceiro_id"));				
-				classificacaoparceiro.setNome(rsClassificacaoParceiro.getString("nome"));
+				classificacaoparceiro
+						.setClassificacaoParceiro_id(rsClassificacaoParceiro
+								.getLong("classificacaoparceiro_id"));
+				classificacaoparceiro.setNome(rsClassificacaoParceiro
+						.getString("nome"));
 
-				classificacoesparceiro.add(classificacaoparceiro);				
+				classificacoesparceiro.add(classificacaoparceiro);
 			}
 
 		} catch (SQLException e) {

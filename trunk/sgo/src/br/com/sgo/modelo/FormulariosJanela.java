@@ -13,40 +13,40 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="FORMULARIOSJANELA")
+@Table(name = "FORMULARIOSJANELA")
 public class FormulariosJanela {
 
 	@Id
-	@Column(name = "formulariosjanela_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)  
+	@Column(name = "formulariosjanela_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long formulariosjanela_id;
 
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
+
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
+
 	@ManyToOne
-	@JoinColumn(name="janela_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "janela_id", updatable = true, nullable = false)
 	private Janela janela;
-	
+
 	@ManyToOne
-	@JoinColumn(name="tabelabd_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "tabelabd_id", updatable = true, nullable = false)
 	private TabelaBd tabelaBd;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
-	
-	@Column(name="ismostrado")
+
+	@Column(name = "ismostrado")
 	private Boolean isMostrado;
-	
-	@Column(name="issomenteleitura")
+
+	@Column(name = "issomenteleitura")
 	private Boolean isSomenteLeitura;
 
 	public Long getFormulariosjanela_id() {

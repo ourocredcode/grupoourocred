@@ -15,37 +15,36 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="SUBGRUPOPRODUTO")
+@Table(name = "SUBGRUPOPRODUTO")
 public class SubGrupoProduto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "subgrupoproduto_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "subgrupoproduto_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long subGrupoProduto_id;
-	
-	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
-	private Empresa empresa;
-		
-	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name="grupoproduto_id",updatable = true, nullable = true) 
-	private GrupoProduto grupoProduto;
-	
-	@Column(name="nome")
-	private String nome;
-	
-	@Column(name="descricao")
-	private String descricao;
-	
-	@Column(name="isactive")
-	private Boolean isActive;
 
+	@ManyToOne
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
+	private Empresa empresa;
+
+	@ManyToOne
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
+	private Organizacao organizacao;
+
+	@ManyToOne
+	@JoinColumn(name = "grupoproduto_id", updatable = true, nullable = true)
+	private GrupoProduto grupoProduto;
+
+	@Column(name = "nome")
+	private String nome;
+
+	@Column(name = "descricao")
+	private String descricao;
+
+	@Column(name = "isactive")
+	private Boolean isActive;
 
 	public GrupoProduto getGrupoProduto() {
 		return grupoProduto;
@@ -78,7 +77,7 @@ public class SubGrupoProduto implements Serializable {
 	public Long getSubGrupoProduto_id() {
 		return subGrupoProduto_id;
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}

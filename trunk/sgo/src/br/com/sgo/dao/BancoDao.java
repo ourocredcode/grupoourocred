@@ -22,14 +22,15 @@ public class BancoDao extends Dao<Banco> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsBanco;
-	
-	public BancoDao(Session session,ConnJDBC conexao) {
+
+	public BancoDao(Session session, ConnJDBC conexao) {
 		super(session, Banco.class);
 		this.session = session;
 		this.conexao = conexao;
 	}
-	
-	public Collection<Banco> buscaBancos(Long empresa_id, Long organizacao_id, String nome){
+
+	public Collection<Banco> buscaBancos(Long empresa_id, Long organizacao_id,
+			String nome) {
 
 		String sql = "select BANCO.banco_id, BANCO.nome from BANCO (NOLOCK) WHERE BANCO.empresa_id = ? AND BANCO.organizacao_id = ? AND BANCO.nome like ?";
 
@@ -39,19 +40,19 @@ public class BancoDao extends Dao<Banco> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sql);			
-			this.stmt.setLong(1, empresa_id);			
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,"%"+  nome + "%");			
+			this.stmt.setString(3, "%" + nome + "%");
 			this.rsBanco = this.stmt.executeQuery();
 
 			while (rsBanco.next()) {
 				Banco banco = new Banco();
 
-				banco.setBanco_id(rsBanco.getLong("banco_id"));				
+				banco.setBanco_id(rsBanco.getLong("banco_id"));
 				banco.setNome(rsBanco.getString("nome"));
 
-				bancos.add(banco);				
+				bancos.add(banco);
 			}
 
 		} catch (SQLException e) {

@@ -15,72 +15,72 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="ORGANIZACAOINFO")
+@Table(name = "ORGANIZACAOINFO")
 public class OrganizacaoInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "organizacao_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "organizacao_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long organizacao_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="tipoorganizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "tipoorganizacao_id", updatable = true, nullable = false)
 	private TipoOrganizacao tipoOrganizacao;
-	
+
 	@ManyToOne
-	@JoinColumn(name="localidade_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "localidade_id", updatable = true, nullable = false)
 	private Localidade localidade;
 
 	@ManyToOne
-	@JoinColumn(name="calendario_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "calendario_id", updatable = true, nullable = false)
 	private Calendario calendario;
 
 	@ManyToOne
-	@JoinColumn(name="pai_org_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "pai_org_id", updatable = true, nullable = false)
 	private Organizacao paiOrg;
 
 	@ManyToOne
-	@JoinColumn(name="supervisor_user_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "supervisor_user_id", updatable = true, nullable = false)
 	private Usuario supervisorUser;
 
 	@ManyToOne
-	@JoinColumn(name="logo_imagem_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "logo_imagem_id", updatable = true, nullable = false)
 	private Imagem logoImagem;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="descricao")
+
+	@Column(name = "descricao")
 	private String descricao;
-	
-	@Column(name="telefone1")
+
+	@Column(name = "telefone1")
 	private String telefone1;
 
-	@Column(name="telefone2")
+	@Column(name = "telefone2")
 	private String telefone2;
 
-	@Column(name="fax")
+	@Column(name = "fax")
 	private String fax;
-	
-	@Column(name="email")
+
+	@Column(name = "email")
 	private String email;
 
-	@Column(name="cnpj")
+	@Column(name = "cnpj")
 	private String cnpj;
 
-	@Column(name="ie")
+	@Column(name = "ie")
 	private String ie;
 
-	@Column(name="contato")
+	@Column(name = "contato")
 	private String contato;
-	
-	@Column(name="nomefantasia")
+
+	@Column(name = "nomefantasia")
 	private String nomeFantasia;
 
 	public Long getOrganizacao_id() {

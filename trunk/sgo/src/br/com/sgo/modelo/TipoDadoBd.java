@@ -11,31 +11,29 @@ import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
 
-
 @Entity
 @Component
-@Table(name="TIPODADOBD")
+@Table(name = "TIPODADOBD")
 public class TipoDadoBd {
 
 	@Id
 	@Column(name = "tipodadobd_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)	
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long tipoDadoBd_id;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="chave")
+
+	@Column(name = "chave")
 	private String chave;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
 
 	public String getChave() {
 		return chave;

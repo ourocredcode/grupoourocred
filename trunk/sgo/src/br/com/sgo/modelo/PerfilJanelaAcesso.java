@@ -8,26 +8,26 @@ import javax.persistence.Table;
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
-@Table(name="PERFILJANELAACESSO")
+@Table(name = "PERFILJANELAACESSO")
 public class PerfilJanelaAcesso {
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
-	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
-	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name = "perfil_id",updatable = true, nullable = false)  
-	private Perfil perfil;  
 
 	@ManyToOne
-	@JoinColumn(name = "janela_id",updatable = true, nullable = false)  
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
+	private Organizacao organizacao;
+
+	@ManyToOne
+	@JoinColumn(name = "perfil_id", updatable = true, nullable = false)
+	private Perfil perfil;
+
+	@ManyToOne
+	@JoinColumn(name = "janela_id", updatable = true, nullable = false)
 	private Janela janela;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Perfil getPerfil() {

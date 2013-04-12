@@ -10,22 +10,22 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 @Embeddable
-@Table(name="USUARIOORGACESSO")
+@Table(name = "USUARIOORGACESSO")
 public class UsuarioOrgAcesso {
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id") 
+	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name = "usuario_id",updatable = true, nullable = false)  
-	private Usuario usuario;  
 
-	@Column(name="isactive")
+	@ManyToOne
+	@JoinColumn(name = "usuario_id", updatable = true, nullable = false)
+	private Usuario usuario;
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Empresa getEmpresa() {

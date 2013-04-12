@@ -16,41 +16,41 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="COLUNABD")
+@Table(name = "COLUNABD")
 public class ColunaBd implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id	
+	@Id
 	@Column(name = "colunabd_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)	
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long colunabd_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="tabelabd_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "tabelabd_id", updatable = true, nullable = false)
 	private TabelaBd tabelaBd;
-	
+
 	@OneToOne
-	@JoinColumn(name="tipodadobd_id",updatable = true, nullable = false)
+	@JoinColumn(name = "tipodadobd_id", updatable = true, nullable = false)
 	private TipoDadoBd tipoDadoBd;
-	
+
 	@ManyToOne
-	@JoinColumn(name="elementobd_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "elementobd_id", updatable = true, nullable = false)
 	private ElementoBd elementoBd;
 
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
 
-	@Column(name="nomecolunabd")
-	private String nomeColunaBd;	
+	@Column(name = "nomecolunabd")
+	private String nomeColunaBd;
 
 	public String getNomeColunaBd() {
 		return nomeColunaBd;

@@ -15,45 +15,45 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="PARCEIROINFOBANCO")
+@Table(name = "PARCEIROINFOBANCO")
 public class ParceiroInfoBanco implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "parceiroinfobanco_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "parceiroinfobanco_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long parceiroInfoBanco_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
 
 	@ManyToOne
-	@JoinColumn(name="banco_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "banco_id", updatable = true, nullable = true)
 	private Banco banco;
 
 	@ManyToOne
-	@JoinColumn(name="agencia_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "agencia_id", updatable = true, nullable = true)
 	private Agencia agencia;
 
 	@ManyToOne
-	@JoinColumn(name="contabancaria_id",updatable = true, nullable = true) 
-	private ContaBancaria contaBancaria;	
-	
+	@JoinColumn(name = "contabancaria_id", updatable = true, nullable = true)
+	private ContaBancaria contaBancaria;
+
 	@ManyToOne
-	@JoinColumn(name="meiopagamento_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "meiopagamento_id", updatable = true, nullable = true)
 	private MeioPagamento meioPagamento;
 
-	@Column(name="isactive")
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getParceiroInfoBanco_id() {

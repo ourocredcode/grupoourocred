@@ -15,42 +15,42 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="PARCEIROCONTATO")
+@Table(name = "PARCEIROCONTATO")
 public class ParceiroContato implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "parceirocontato_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)  
+	@Column(name = "parceirocontato_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long parceiroContato_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = false) 
-	private ParceiroNegocio parceiroNegocio; 
-	
-	@ManyToOne
-	@JoinColumn(name="tipocontato_id",updatable = true, nullable = false) 
-	private TipoContato tipoContato; 
+	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
+	private ParceiroNegocio parceiroNegocio;
 
-	@Column(name="chave")
+	@ManyToOne
+	@JoinColumn(name = "tipocontato_id", updatable = true, nullable = false)
+	private TipoContato tipoContato;
+
+	@Column(name = "chave")
 	private String chave;
 
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
 
-	@Column(name="descricao")
+	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name="isactive")
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getParceiroContato_id() {

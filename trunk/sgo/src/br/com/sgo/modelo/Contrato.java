@@ -15,105 +15,105 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="CONTRATO")
+@Table(name = "CONTRATO")
 public class Contrato implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "contrato_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)  
+	@Column(name = "contrato_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long contrato_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="tabelacoeficiente_id",updatable = true, nullable = true) 
-	private TabelaCoeficiente tabelaCoeficiente; 
+	@JoinColumn(name = "tabelacoeficiente_id", updatable = true, nullable = true)
+	private TabelaCoeficiente tabelaCoeficiente;
 
 	@ManyToOne
-	@JoinColumn(name="produto_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "produto_id", updatable = true, nullable = true)
 	private Produto produto;
 
 	@ManyToOne
-	@JoinColumn(name="tabela_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "tabela_id", updatable = true, nullable = true)
 	private Tabela tabela;
 
 	@ManyToOne
-	@JoinColumn(name="banco_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "banco_id", updatable = true, nullable = true)
 	private Banco banco;
 
 	@ManyToOne
-	@JoinColumn(name="seguro_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "seguro_id", updatable = true, nullable = true)
 	private Seguro seguro;
 
 	@ManyToOne
-	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = true)
 	private ParceiroNegocio parceiroNegocio;
 
 	@ManyToOne
-	@JoinColumn(name="naturezaprofissional_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "naturezaprofissional_id", updatable = true, nullable = true)
 	private NaturezaProfissional naturezaProfissional;
 
 	@ManyToOne
-	@JoinColumn(name="recompra_banco_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "recompra_banco_id", updatable = true, nullable = true)
 	private Banco recompraBanco;
 
 	@ManyToOne
-	@JoinColumn(name="modalidade_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "modalidade_id", updatable = true, nullable = true)
 	private Modalidade modalidade;
 
 	@ManyToOne
-	@JoinColumn(name="convenio_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "convenio_id", updatable = true, nullable = true)
 	private Convenio convenio;
 
 	@ManyToOne
-	@JoinColumn(name="workflow_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "workflow_id", updatable = true, nullable = true)
 	private Workflow workflow;
 
-	@Column(name="chave")
+	@Column(name = "chave")
 	private String chave;
 
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
 
-	@Column(name="descricao")
+	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name="prazo")
+	@Column(name = "prazo")
 	private Integer prazo;
 
-	@Column(name="qtdparcelasaberto")
+	@Column(name = "qtdparcelasaberto")
 	private Integer qtdParcelasAberto;
 
-	@Column(name="valorseguro")
+	@Column(name = "valorseguro")
 	private Float valorSeguro;
 
-	@Column(name="desconto")
+	@Column(name = "desconto")
 	private Float desconto;
 
-	@Column(name="valorcontrato")
+	@Column(name = "valorcontrato")
 	private Float valorContrato;
 
-	@Column(name="valordivida")
+	@Column(name = "valordivida")
 	private Float valorDivida;
 
-	@Column(name="valorliquido")
+	@Column(name = "valorliquido")
 	private Float valorLiquido;
 
-	@Column(name="valorparcela")
+	@Column(name = "valorparcela")
 	private Float valorParcela;
 
-	@Column(name="valormeta")
+	@Column(name = "valormeta")
 	private Float valorMeta;
 
-	@Column(name="isactive")
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getContrato_id() {
@@ -192,7 +192,8 @@ public class Contrato implements Serializable {
 		return naturezaProfissional;
 	}
 
-	public void setNaturezaProfissional(NaturezaProfissional naturezaProfissional) {
+	public void setNaturezaProfissional(
+			NaturezaProfissional naturezaProfissional) {
 		this.naturezaProfissional = naturezaProfissional;
 	}
 

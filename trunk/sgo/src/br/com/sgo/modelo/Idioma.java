@@ -15,33 +15,33 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="IDIOMA")
+@Table(name = "IDIOMA")
 public class Idioma implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "idioma_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "idioma_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long idioma_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
-		
+
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
-	
-	@Column(name="descricao")
+
+	@Column(name = "descricao")
 	private String descricao;
-	
-	@Column(name="codigoisoidioma")
+
+	@Column(name = "codigoisoidioma")
 	private String codigoIsoIdioma;
-	
+
 	public Long getIdioma_id() {
 		return idioma_id;
 	}
@@ -106,10 +106,10 @@ public class Idioma implements Serializable {
 		this.isActive = isActive;
 	}
 
-	@Column(name="siglapais")
+	@Column(name = "siglapais")
 	private String siglaPais;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 }

@@ -28,22 +28,22 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 	private ResultSet rsEmpresaPerfil;
 	private ResultSet rsOrganizacaoPerfil;
 
-	public UsuarioPerfilDao(Session session,ConnJDBC conexao) {
+	public UsuarioPerfilDao(Session session, ConnJDBC conexao) {
 		super(session, UsuarioPerfil.class);
 		this.conexao = conexao;
 	}
 
-	public Collection<Perfil> buscaUsuarioPerfilAcesso(Usuario u){
+	public Collection<Perfil> buscaUsuarioPerfilAcesso(Usuario u) {
 
-		String sql = "SELECT PERFIL.perfil_id ,PERFIL.nome  FROM (ORGANIZACAO (NOLOCK) " +
-				"INNER JOIN (USUARIO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) " +	
-				"INNER JOIN USUARIOPERFIL (NOLOCK)  " +
-					"ON EMPRESA.empresa_id = USUARIOPERFIL.empresa_id) " +
-					"ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) " +
-					"ON ORGANIZACAO.organizacao_id = USUARIOPERFIL.organizacao_id) " +
-				"INNER JOIN PERFIL (NOLOCK) " +
-					"ON USUARIOPERFIL.perfil_id = PERFIL.perfil_id " +
-				"WHERE USUARIOPERFIL.isactive=1 and USUARIOPERFIL.usuario_id = ?";
+		String sql = "SELECT PERFIL.perfil_id ,PERFIL.nome  FROM (ORGANIZACAO (NOLOCK) "
+				+ "INNER JOIN (USUARIO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "
+				+ "INNER JOIN USUARIOPERFIL (NOLOCK)  "
+				+ "ON EMPRESA.empresa_id = USUARIOPERFIL.empresa_id) "
+				+ "ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) "
+				+ "ON ORGANIZACAO.organizacao_id = USUARIOPERFIL.organizacao_id) "
+				+ "INNER JOIN PERFIL (NOLOCK) "
+				+ "ON USUARIOPERFIL.perfil_id = PERFIL.perfil_id "
+				+ "WHERE USUARIOPERFIL.isactive=1 and USUARIOPERFIL.usuario_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -54,7 +54,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			this.stmt = conn.prepareStatement(sql);
 
 			this.stmt.setLong(1, u.getUsuario_id());
-			this.rsUsuarioPerfil = this.stmt.executeQuery();		
+			this.rsUsuarioPerfil = this.stmt.executeQuery();
 
 			while (rsUsuarioPerfil.next()) {
 
@@ -71,28 +71,29 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(rsUsuarioPerfil,stmt,conn);
+		this.conexao.closeConnection(rsUsuarioPerfil, stmt, conn);
 
 		return perfis;
 	}
-	
-	public Collection<Empresa> buscaEmpresaPerfilAcesso(Long perfil_id, Long usuario_id){
 
-		String sql = "SELECT DISTINCT(EMPRESA.empresa_id), EMPRESA.nome " +
-				" FROM (ORGANIZACAO (NOLOCK) " +
-				" INNER JOIN (((USUARIO (NOLOCK) " +
-				" INNER JOIN (EMPRESA (NOLOCK) " +
-				" INNER JOIN USUARIOPERFIL (NOLOCK) ON EMPRESA.empresa_id = USUARIOPERFIL.empresa_id) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) " +
-				" INNER JOIN PERFIL (NOLOCK) ON USUARIOPERFIL.perfil_id = PERFIL.perfil_id) " +
-				" INNER JOIN PERFILORGACESSO (NOLOCK) ON (PERFILORGACESSO.perfil_id = PERFIL.perfil_id) " +
-				" 	AND (USUARIOPERFIL.perfil_id = PERFILORGACESSO.perfil_id)) ON ORGANIZACAO.organizacao_id = PERFILORGACESSO.organizacao_id) " +
-				" INNER JOIN USUARIOORGACESSO ON (USUARIOORGACESSO.organizacao_id = ORGANIZACAO.organizacao_id) AND (USUARIO.usuario_id = USUARIOORGACESSO.usuario_id) " +
-				" WHERE USUARIO.isactive=1 " +
-				"	AND USUARIOPERFIL.isactive=1 " +
-				"	AND PERFILORGACESSO.isactive=1 " +
-				"	AND USUARIOORGACESSO.isactive=1 " +
-				"	AND PERFIL.perfil_id = ? " +
-				"   AND USUARIO.usuario_id = ? ";
+	public Collection<Empresa> buscaEmpresaPerfilAcesso(Long perfil_id,
+			Long usuario_id) {
+
+		String sql = "SELECT DISTINCT(EMPRESA.empresa_id), EMPRESA.nome "
+				+ " FROM (ORGANIZACAO (NOLOCK) "
+				+ " INNER JOIN (((USUARIO (NOLOCK) "
+				+ " INNER JOIN (EMPRESA (NOLOCK) "
+				+ " INNER JOIN USUARIOPERFIL (NOLOCK) ON EMPRESA.empresa_id = USUARIOPERFIL.empresa_id) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) "
+				+ " INNER JOIN PERFIL (NOLOCK) ON USUARIOPERFIL.perfil_id = PERFIL.perfil_id) "
+				+ " INNER JOIN PERFILORGACESSO (NOLOCK) ON (PERFILORGACESSO.perfil_id = PERFIL.perfil_id) "
+				+ " 	AND (USUARIOPERFIL.perfil_id = PERFILORGACESSO.perfil_id)) ON ORGANIZACAO.organizacao_id = PERFILORGACESSO.organizacao_id) "
+				+ " INNER JOIN USUARIOORGACESSO ON (USUARIOORGACESSO.organizacao_id = ORGANIZACAO.organizacao_id) AND (USUARIO.usuario_id = USUARIOORGACESSO.usuario_id) "
+				+ " WHERE USUARIO.isactive=1 "
+				+ "	AND USUARIOPERFIL.isactive=1 "
+				+ "	AND PERFILORGACESSO.isactive=1 "
+				+ "	AND USUARIOORGACESSO.isactive=1 "
+				+ "	AND PERFIL.perfil_id = ? "
+				+ "   AND USUARIO.usuario_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -102,10 +103,10 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1,perfil_id);
-			this.stmt.setLong(2,usuario_id);
+			this.stmt.setLong(1, perfil_id);
+			this.stmt.setLong(2, usuario_id);
 
-			this.rsEmpresaPerfil = this.stmt.executeQuery();		
+			this.rsEmpresaPerfil = this.stmt.executeQuery();
 
 			while (rsEmpresaPerfil.next()) {
 
@@ -122,30 +123,31 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(rsEmpresaPerfil,stmt,conn);
+		this.conexao.closeConnection(rsEmpresaPerfil, stmt, conn);
 
 		return empresas;
 
 	}
-	
-	public Collection<Organizacao> buscaOrganizacaoPerfilAcesso(Long perfil_id, Long empresa_id,Long usuario_id){
 
-		String sql = "SELECT ORGANIZACAO.organizacao_id, ORGANIZACAO.nome " +
-				" FROM (ORGANIZACAO (NOLOCK) " +
-				" INNER JOIN (((USUARIO (NOLOCK) " +
-				" INNER JOIN (EMPRESA (NOLOCK) " +
-				" INNER JOIN USUARIOPERFIL (NOLOCK) ON EMPRESA.empresa_id = USUARIOPERFIL.empresa_id) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) " +
-				" INNER JOIN PERFIL (NOLOCK) ON USUARIOPERFIL.perfil_id = PERFIL.perfil_id) " +
-				" INNER JOIN PERFILORGACESSO (NOLOCK) ON (PERFILORGACESSO.perfil_id = PERFIL.perfil_id) " +
-				" 	AND (USUARIOPERFIL.perfil_id = PERFILORGACESSO.perfil_id)) ON ORGANIZACAO.organizacao_id = PERFILORGACESSO.organizacao_id) " +
-				" INNER JOIN USUARIOORGACESSO ON (USUARIOORGACESSO.organizacao_id = ORGANIZACAO.organizacao_id) AND (USUARIO.usuario_id = USUARIOORGACESSO.usuario_id) " +
-				" WHERE USUARIO.isactive=1 " +
-				"	AND USUARIOPERFIL.isactive=1 " +
-				"	AND PERFILORGACESSO.isactive=1 " +
-				"	AND USUARIOORGACESSO.isactive=1 " +
-				"	AND PERFIL.perfil_id = ? " +
-				"   AND USUARIO.usuario_id = ? " +
-				"   AND EMPRESA.empresa_id = ? ";
+	public Collection<Organizacao> buscaOrganizacaoPerfilAcesso(Long perfil_id,
+			Long empresa_id, Long usuario_id) {
+
+		String sql = "SELECT ORGANIZACAO.organizacao_id, ORGANIZACAO.nome "
+				+ " FROM (ORGANIZACAO (NOLOCK) "
+				+ " INNER JOIN (((USUARIO (NOLOCK) "
+				+ " INNER JOIN (EMPRESA (NOLOCK) "
+				+ " INNER JOIN USUARIOPERFIL (NOLOCK) ON EMPRESA.empresa_id = USUARIOPERFIL.empresa_id) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) "
+				+ " INNER JOIN PERFIL (NOLOCK) ON USUARIOPERFIL.perfil_id = PERFIL.perfil_id) "
+				+ " INNER JOIN PERFILORGACESSO (NOLOCK) ON (PERFILORGACESSO.perfil_id = PERFIL.perfil_id) "
+				+ " 	AND (USUARIOPERFIL.perfil_id = PERFILORGACESSO.perfil_id)) ON ORGANIZACAO.organizacao_id = PERFILORGACESSO.organizacao_id) "
+				+ " INNER JOIN USUARIOORGACESSO ON (USUARIOORGACESSO.organizacao_id = ORGANIZACAO.organizacao_id) AND (USUARIO.usuario_id = USUARIOORGACESSO.usuario_id) "
+				+ " WHERE USUARIO.isactive=1 "
+				+ "	AND USUARIOPERFIL.isactive=1 "
+				+ "	AND PERFILORGACESSO.isactive=1 "
+				+ "	AND USUARIOORGACESSO.isactive=1 "
+				+ "	AND PERFIL.perfil_id = ? "
+				+ "   AND USUARIO.usuario_id = ? "
+				+ "   AND EMPRESA.empresa_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -155,17 +157,18 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1,perfil_id);
-			this.stmt.setLong(2,usuario_id);
-			this.stmt.setLong(3,empresa_id);
+			this.stmt.setLong(1, perfil_id);
+			this.stmt.setLong(2, usuario_id);
+			this.stmt.setLong(3, empresa_id);
 
-			this.rsOrganizacaoPerfil = this.stmt.executeQuery();		
+			this.rsOrganizacaoPerfil = this.stmt.executeQuery();
 
 			while (rsOrganizacaoPerfil.next()) {
 
 				Organizacao organizacao = new Organizacao();
 
-				organizacao.setOrganizacao_id(rsOrganizacaoPerfil.getLong("organizacao_id"));
+				organizacao.setOrganizacao_id(rsOrganizacaoPerfil
+						.getLong("organizacao_id"));
 				organizacao.setNome(rsOrganizacaoPerfil.getString("nome"));
 
 				organizacoes.add(organizacao);
@@ -176,20 +179,17 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			e.printStackTrace();
 		}
 
-		this.conexao.closeConnection(rsOrganizacaoPerfil,stmt,conn);
+		this.conexao.closeConnection(rsOrganizacaoPerfil, stmt, conn);
 
 		return organizacoes;
 
 	}
-	
+
 	public void insert(UsuarioPerfil usuarioPerfil) throws SQLException {
 
-		String sql = "INSERT INTO USUARIOPERFIL " +
-				"	(usuario_id, " +				
-				"	 perfil_id ," +
-				"	 empresa_id ," +
-				"	 organizacao_id) " +
-				"    VALUES (?,?,?,?)";
+		String sql = "INSERT INTO USUARIOPERFIL " + "	(usuario_id, "
+				+ "	 perfil_id ," + "	 empresa_id ," + "	 organizacao_id) "
+				+ "    VALUES (?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
@@ -198,17 +198,18 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			this.conn.setAutoCommit(false);
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1,usuarioPerfil.getUsuario().getUsuario_id());			
-			this.stmt.setLong(2,usuarioPerfil.getPerfil().getPerfil_id());
-			this.stmt.setLong(3,usuarioPerfil.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(4,usuarioPerfil.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(1, usuarioPerfil.getUsuario().getUsuario_id());
+			this.stmt.setLong(2, usuarioPerfil.getPerfil().getPerfil_id());
+			this.stmt.setLong(3, usuarioPerfil.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(4, usuarioPerfil.getOrganizacao()
+					.getOrganizacao_id());
 
 			this.stmt.executeUpdate();
 
 			this.conn.commit();
 
-		}  catch (SQLException e) {			
-			
+		} catch (SQLException e) {
+
 			this.conn.rollback();
 			throw e;
 
@@ -217,7 +218,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			this.conn.setAutoCommit(true);
 
 		}
-			this.conexao.closeConnection(stmt, conn);
+		this.conexao.closeConnection(stmt, conn);
 	}
 
 }

@@ -15,40 +15,40 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="FUNCIONARIO")
+@Table(name = "FUNCIONARIO")
 public class Funcionario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "funcionario_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Column(name = "funcionario_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long funcionario_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
+
 	@ManyToOne
-	@JoinColumn(name="departamento_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "departamento_id", updatable = true, nullable = false)
 	private Departamento departamento;
-	
+
 	@ManyToOne
-	@JoinColumn(name="parceironegocio_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
-	
+
 	@ManyToOne
-	@JoinColumn(name="funcao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "funcao_id", updatable = true, nullable = false)
 	private Funcao funcao;
 
-	@Column(name="apelido")
+	@Column(name = "apelido")
 	private String apelido;
-	
-	@Column(name="isactive")
+
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getFuncionario_id() {

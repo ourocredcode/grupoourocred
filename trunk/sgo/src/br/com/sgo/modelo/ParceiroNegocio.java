@@ -16,92 +16,92 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name="PARCEIRONEGOCIO")
+@Table(name = "PARCEIRONEGOCIO")
 public class ParceiroNegocio implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "parceironegocio_id")  
-	@GeneratedValue(strategy = GenerationType.AUTO)  
+	@Column(name = "parceironegocio_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long parceiroNegocio_id;
 
 	@ManyToOne
-	@JoinColumn(name="empresa_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name="organizacao_id",updatable = true, nullable = false) 
+	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name="classificacaoparceiro_id",updatable = true, nullable = true) 
-	private ClassificacaoParceiro classificacaoParceiro; 
+	@JoinColumn(name = "classificacaoparceiro_id", updatable = true, nullable = true)
+	private ClassificacaoParceiro classificacaoParceiro;
 
 	@ManyToOne
-	@JoinColumn(name="tipoparceiro_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "tipoparceiro_id", updatable = true, nullable = true)
 	private TipoParceiro tipoParceiro;
 
 	@ManyToOne
-	@JoinColumn(name="grupoparceiro_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "grupoparceiro_id", updatable = true, nullable = true)
 	private GrupoParceiro grupoParceiro;
 
 	@ManyToOne
-	@JoinColumn(name="categoriaparceiro_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "categoriaparceiro_id", updatable = true, nullable = true)
 	private CategoriaParceiro categoriaParceiro;
 
 	@ManyToOne
-	@JoinColumn(name="estadocivil_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "estadocivil_id", updatable = true, nullable = true)
 	private EstadoCivil estadoCivil;
-	
+
 	@ManyToOne
-	@JoinColumn(name="sexo_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "sexo_id", updatable = true, nullable = true)
 	private Sexo sexo;
 
-	@Column(name = "pn_id")  
+	@Column(name = "pn_id")
 	private Long pn_id;
 
 	@ManyToOne
-	@JoinColumn(name="idioma_id",updatable = true, nullable = true) 
+	@JoinColumn(name = "idioma_id", updatable = true, nullable = true)
 	private Idioma idioma;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String nome;
 
-	@Column(name="descricao")
+	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name="nomefantasia")
+	@Column(name = "nomefantasia")
 	private String nomeFantasia;
 
-	@Column(name="cpf")
+	@Column(name = "cpf")
 	private String cpf;
-	
-	@Column(name="cnpj")
+
+	@Column(name = "cnpj")
 	private String cnpj;
-	
-	@Column(name="ie")
+
+	@Column(name = "ie")
 	private String ie;
 
-	@Column(name="rg")
+	@Column(name = "rg")
 	private String rg;
-	
-	@Column(name="ccm")
+
+	@Column(name = "ccm")
 	private String ccm;
 
-	@Column(name="datanascimento")
+	@Column(name = "datanascimento")
 	private Calendar dataNascimento;
 
-	@Column(name="iscliente")
+	@Column(name = "iscliente")
 	private Boolean isCliente;
 
-	@Column(name="isfornecedor")
+	@Column(name = "isfornecedor")
 	private Boolean isFornecedor;
-	
-	@Column(name="isfuncionario")
+
+	@Column(name = "isfuncionario")
 	private Boolean isFuncionario;
 
-	@Column(name="isactive")
+	@Column(name = "isactive")
 	private Boolean isActive;
 
 	public Long getParceiroNegocio_id() {
@@ -132,7 +132,8 @@ public class ParceiroNegocio implements Serializable {
 		return classificacaoParceiro;
 	}
 
-	public void setClassificacaoParceiro(ClassificacaoParceiro classificacaoParceiro) {
+	public void setClassificacaoParceiro(
+			ClassificacaoParceiro classificacaoParceiro) {
 		this.classificacaoParceiro = classificacaoParceiro;
 	}
 
@@ -257,7 +258,7 @@ public class ParceiroNegocio implements Serializable {
 	}
 
 	public Boolean getIsCliente() {
-		return isCliente  == null? false : true ;
+		return isCliente == null ? false : true;
 	}
 
 	public void setIsCliente(Boolean isCliente) {
@@ -265,7 +266,7 @@ public class ParceiroNegocio implements Serializable {
 	}
 
 	public Boolean getIsFornecedor() {
-		return isFornecedor  == null? false : true;
+		return isFornecedor == null ? false : true;
 	}
 
 	public void setIsFornecedor(Boolean isFornecedor) {
@@ -273,7 +274,7 @@ public class ParceiroNegocio implements Serializable {
 	}
 
 	public Boolean getIsFuncionario() {
-		return isFuncionario == null? false : true;
+		return isFuncionario == null ? false : true;
 	}
 
 	public void setIsFuncionario(Boolean isFuncionario) {
@@ -294,5 +295,5 @@ public class ParceiroNegocio implements Serializable {
 
 	public void setPn_id(Long pn_id) {
 		this.pn_id = pn_id;
-	}	
+	}
 }

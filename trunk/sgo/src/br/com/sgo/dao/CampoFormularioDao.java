@@ -10,7 +10,7 @@ import br.com.sgo.modelo.CampoFormulario;
 @Component
 public class CampoFormularioDao extends Dao<CampoFormulario> {
 
-	private Session session;	
+	private Session session;
 	private ConnJDBC conexao;
 
 	public CampoFormularioDao(Session session, ConnJDBC conexao) {
@@ -18,6 +18,5 @@ public class CampoFormularioDao extends Dao<CampoFormulario> {
 		this.session = session;
 		this.conexao = conexao;
 	}
-
 
 }
