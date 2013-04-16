@@ -31,6 +31,7 @@
 		<mapping class="br.com.sgo.modelo.Empresa" />
 		<mapping class="br.com.sgo.modelo.Organizacao" />
 		<mapping class="br.com.sgo.modelo.Banco" />
+		<mapping class="br.com.sgo.modelo.Coeficiente" />
 		<mapping class="br.com.sgo.modelo.ElementoBd" />
 		<mapping class="br.com.sgo.modelo.CampoFormulario" />
 		<mapping class="br.com.sgo.modelo.CategoriaParceiro" />

@@ -52,7 +52,8 @@ jQuery(function($){
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#tabelaEmpresaId').val() == '' ? '0' :  $('#tabelaEmpresaId').val(), org_nome : $('#tabelaOrganizacao').val()},
+	          data : {empresa_id: $('#tabelaEmpresaId').val() == '' ? '0' :  $('#tabelaEmpresaId').val(), 
+	        		  org_nome : $('#tabelaOrganizacao').val()},
               success : function(data) {  
 
             	  if (!data || data.length == 0) {
@@ -76,6 +77,41 @@ jQuery(function($){
          select: function( event, ui ) {
              $('#tabelaOrganizacao').val(ui.item.label);
              $('#tabelaOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#tabelaBanco').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/banco/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#tabelaEmpresaId').val() == '' ? '0' :  $('#tabelaEmpresaId').val(), 
+	        		  organizacao_id: $('#tabelaOrganizacaoId').val() == '' ? '0' :  $('#tabelaOrganizacaoId').val(),
+	        		  nome : $('#tabelaBanco').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#tabelaBanco').val('');
+         	           $('#tabelaBancoId').val('');
+         	        }
+
+            	  response($.map(data, function(banco) {  
+            		  return {
+            			  label: banco.nome,
+            			  value: banco.banco_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#tabelaBanco').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#tabelaBanco').val(ui.item.label);
+             $('#tabelaBancoId').val(ui.item.value);
              return false;
          }
     });
@@ -137,10 +173,24 @@ function limpaForm() {
 }
 </script>
 
-<div class="span9">
+<div id="content-header">
+		<h1>Cadastro Tabela</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+	
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+		<a href="#" class="current">Tabela</a>
+	</div>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">								
 				<li class="" id="tipotabela-li"><a href="#tipotabela-div" data-toggle="tab" id="tipotabela-li-a">Tipo de Tabela</a></li>
@@ -161,16 +211,24 @@ function limpaForm() {
 										<label class="control-label" for="tabelaEmpresa">Empresa</label>
 										<div class="input-prepend">
 											<span class="add-on"><i class="icon-plus-sign"></i></span>
-				      						<input class="span2" id="tabelaEmpresa" name="tabela.empresa.nome" type="text" required onChange="limpaForm();">
-				      						<input class="span2" id="tabelaEmpresaId" name="tabela.empresa.empresa_id" type="hidden">
+				      						<input class="span10" id="tabelaEmpresa" name="tabela.empresa.nome" type="text" required onChange="limpaForm();">
+				      						<input class="span10" id="tabelaEmpresaId" name="tabela.empresa.empresa_id" type="hidden">
 				    					</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label" for="tabelaOrganizacao">Organização</label>
 										<div class="input-prepend">
 											<span class="add-on"><i class="icon-plus-sign"></i></span>
-				      						<input class="span2" id="tabelaOrganizacao" name="tabela.organizacao.nome" type="text" required onChange="limpaForm();">
-				      						<input class="span2" id="tabelaOrganizacaoId" name="tabela.organizacao.organizacao_id" type="hidden">
+				      						<input class="span10" id="tabelaOrganizacao" name="tabela.organizacao.nome" type="text" required onChange="limpaForm();">
+				      						<input class="span10" id="tabelaOrganizacaoId" name="tabela.organizacao.organizacao_id" type="hidden">
+				    					</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="tabelaBanco">Banco</label>
+										<div class="input-prepend">
+											<span class="add-on"><i class="icon-plus-sign"></i></span>
+				      						<input class="span10" id="tabelaBanco" name="tabela.banco.nome" type="text" required onChange="limpaForm();">
+				      						<input class="span10" id="tabelaBancoId" name="tabela.banco.banco_id" type="hidden">
 				    					</div>
 									</div>
 									<div class="control-group">
@@ -209,8 +267,8 @@ function limpaForm() {
 									<label class="control-label" for="tabelaTipoTabela">Tipo Tabela</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="tabelaTipoTabela" name="tabela.tipoTabela.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="tabelaTipoTabelaId" name="tabela.tipoTabela.tipoTabela_id" type="hidden">
+			      						<input class="span10" id="tabelaTipoTabela" name="tabela.tipoTabela.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span10" id="tabelaTipoTabelaId" name="tabela.tipoTabela.tipoTabela_id" type="hidden">
 			    					</div>
 								</div>
 	
@@ -224,7 +282,7 @@ function limpaForm() {
 
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>

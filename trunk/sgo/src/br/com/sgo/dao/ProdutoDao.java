@@ -17,7 +17,6 @@ import br.com.sgo.modelo.Produto;
 @Component
 public class ProdutoDao extends Dao<Produto> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -25,7 +24,6 @@ public class ProdutoDao extends Dao<Produto> {
 
 	public ProdutoDao(Session session, ConnJDBC conexao) {
 		super(session, Produto.class);
-		this.session = session;
 		this.conexao = conexao;
 	}
 
@@ -64,5 +62,42 @@ public class ProdutoDao extends Dao<Produto> {
 		return produtos;
 
 	}
+	
+	public Collection<Produto> buscaProdutosByBanco(Long banco_id) {
 
+		String sql = "SELECT DISTINCT PRODUTOBANCO.produto_id, PRODUTO.nome, PRODUTOBANCO.banco_id, BANCO.nome " +
+				" FROM (PRODUTOBANCO (NOLOCK) INNER JOIN PRODUTO (NOLOCK) ON PRODUTOBANCO.produto_id = PRODUTO.produto_id) " +
+				"	INNER JOIN BANCO (NOLOCK) ON PRODUTOBANCO.banco_id = BANCO.banco_id WHERE BANCO.banco_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Produto> produtos = new ArrayList<Produto>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, banco_id);
+
+			this.rsProdutos = this.stmt.executeQuery();
+
+			while (rsProdutos.next()) {
+
+				Produto produto = new Produto();
+
+				produto.setProduto_id(rsProdutos.getLong("produto_id"));
+				produto.setNome(rsProdutos.getString("nome"));
+
+				produtos.add(produto);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsProdutos, stmt, conn);
+
+		return produtos;
+
+	}
 }

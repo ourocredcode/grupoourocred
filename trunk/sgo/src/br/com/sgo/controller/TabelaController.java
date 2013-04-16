@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Collection;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -15,6 +17,7 @@ public class TabelaController {
 
 	private final Result result;
 	private final TabelaDao tabelaDao;
+	private Collection<Tabela> tabelas;
 
 	public TabelaController(Result result,TabelaDao tabelaDao){
 
@@ -61,6 +64,15 @@ public class TabelaController {
 
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
+
+	}
+	
+	@Post
+	@Path("/tabela/tabelas")
+	public void tabelas(Long bancoId) {
+
+		tabelas = tabelaDao.buscaTabelasByBanco(bancoId);
+		result.include("tabelas",tabelas);
 
 	}
 	

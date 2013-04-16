@@ -32,6 +32,10 @@ public class Tabela implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
+	
+	@ManyToOne
+	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
+	private Banco banco;
 
 	@ManyToOne
 	@JoinColumn(name = "tipotabela_id", updatable = true, nullable = false)
@@ -101,4 +105,13 @@ public class Tabela implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
+
+	public Banco getBanco() {
+		return banco;
+	}
+
+	public void setBanco(Banco banco) {
+		this.banco = banco;
+	}
+
 }
