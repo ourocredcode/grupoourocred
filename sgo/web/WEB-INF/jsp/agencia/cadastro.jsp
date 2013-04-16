@@ -48,7 +48,8 @@ jQuery(function($){
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#agenciaEmpresaId').val() == '' ? '0' :  $('#agenciaEmpresaId').val(), organizacao_id : $('#agenciaOrganizacao').val()},
+	          data : {empresa_id: $('#agenciaEmpresaId').val() == '' ? '0' :  $('#agenciaEmpresaId').val(), 
+	        		  org_nome : $('#agenciaOrganizacao').val()},
               success : function(data) {  
 
             	  if (!data || data.length == 0) {
@@ -160,7 +161,7 @@ function limpaForm() {
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
 			      						<input class="span2" id="agenciaOrganizacao" name="agencia.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="agenciaOrganizacaoId" name="agencia.organizacao.organizacao_id" type="text">
+			      						<input class="span2" id="agenciaOrganizacaoId" name="agencia.organizacao.organizacao_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
@@ -168,7 +169,7 @@ function limpaForm() {
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
 			      						<input class="span2" id="agenciaBanco" name="agencia.banco.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="agenciaBancoId" name="agencia.banco.banco_id" type="text">
+			      						<input class="span2" id="agenciaBancoId" name="agencia.banco.banco_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">

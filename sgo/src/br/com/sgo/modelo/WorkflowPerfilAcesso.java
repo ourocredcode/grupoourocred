@@ -3,14 +3,12 @@ package br.com.sgo.modelo;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
 
-@Entity
 @Component
 @Table(name = "WORKFLOWPERFILACESSO")
 public class WorkflowPerfilAcesso implements Serializable {

@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Collection;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -15,11 +17,13 @@ public class ProdutoController {
 
 	private final Result result;
 	private final ProdutoDao produtoDao;
-
+	private Collection<Produto> produtos;
 
 	public ProdutoController(Result result,ProdutoDao produtoDao){
+
 		this.produtoDao = produtoDao;
 		this.result = result;
+
 	}	
 
 	@Get
@@ -61,6 +65,15 @@ public class ProdutoController {
 
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
+
+	}
+	
+	@Post
+	@Path("/produto/produtos")
+	public void produtos(Long bancoId) {
+
+		produtos = produtoDao.buscaProdutosByBanco(bancoId);
+		result.include("produtos",produtos);
 
 	}
 	

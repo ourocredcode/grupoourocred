@@ -14,7 +14,6 @@ import br.com.sgo.modelo.ProdutoBanco;
 @Component
 public class ProdutoBancoDao extends Dao<ProdutoBanco> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -22,7 +21,6 @@ public class ProdutoBancoDao extends Dao<ProdutoBanco> {
 	public ProdutoBancoDao(Session session, ConnJDBC conexao) {
 
 		super(session, ProdutoBanco.class);
-		this.session = session;
 		this.conexao = conexao;
 
 	}
@@ -44,8 +42,7 @@ public class ProdutoBancoDao extends Dao<ProdutoBanco> {
 			this.stmt.setLong(1, produtoBanco.getProduto().getProduto_id());
 			this.stmt.setLong(2, produtoBanco.getBanco().getBanco_id());
 			this.stmt.setLong(3, produtoBanco.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(4, produtoBanco.getOrganizacao()
-					.getOrganizacao_id());
+			this.stmt.setLong(4, produtoBanco.getOrganizacao().getOrganizacao_id());
 			this.stmt.setLong(5, produtoBanco.getTabela().getTabela_id());
 			this.stmt.setBoolean(6, produtoBanco.getIsActive());
 
@@ -66,5 +63,4 @@ public class ProdutoBancoDao extends Dao<ProdutoBanco> {
 		this.conexao.closeConnection(stmt, conn);
 
 	}
-
 }

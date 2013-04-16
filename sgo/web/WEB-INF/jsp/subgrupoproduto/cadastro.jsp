@@ -139,10 +139,24 @@ function limpaForm() {
 }
 </script>
 
-<div class="span9">
+<div id="content-header">
+		<h1>Cadastro Produto</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+	
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+		<a href="#" class="current">Produto</a>
+	</div>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="grupoproduto-li"><a href="#grupoproduto-div" data-toggle="tab" id="grupoproduto-li-a">Grupo de Produtos</a></li>
@@ -162,24 +176,24 @@ function limpaForm() {
 									<label class="control-label" for="subGrupoProdutoEmpresa">Empresa</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="subGrupoProdutoEmpresa" name="subGrupoProduto.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="subGrupoProdutoEmpresaId" name="subGrupoProduto.empresa.empresa_id" type="hidden">
+			      						<input class="span10" id="subGrupoProdutoEmpresa" name="subGrupoProduto.empresa.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span10" id="subGrupoProdutoEmpresaId" name="subGrupoProduto.empresa.empresa_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="subGrupoProdutoOrganizacao">Organização</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="subGrupoProdutoOrganizacao" name="subGrupoProduto.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="subGrupoProdutoOrganizacaoId" name="subGrupoProduto.organizacao.organizacao_id" type="hidden">
+			      						<input class="span10" id="subGrupoProdutoOrganizacao" name="subGrupoProduto.organizacao.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span10" id="subGrupoProdutoOrganizacaoId" name="subGrupoProduto.organizacao.organizacao_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="subGrupoProdutoGrupoProduto">Grupo Produto</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="subGrupoProdutoGrupoProduto" name="subGrupoProduto.grupoProduto.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="subGrupoProdutoGrupoProdutoId" name="subGrupoProduto.grupoProduto.grupoproduto_id" type="hidden">
+			      						<input class="span10" id="subGrupoProdutoGrupoProduto" name="subGrupoProduto.grupoProduto.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span10" id="subGrupoProdutoGrupoProdutoId" name="subGrupoProduto.grupoProduto.grupoproduto_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
@@ -218,7 +232,7 @@ function limpaForm() {
 				<div class="tab-pane fade" id="produto-div"></div>
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>
