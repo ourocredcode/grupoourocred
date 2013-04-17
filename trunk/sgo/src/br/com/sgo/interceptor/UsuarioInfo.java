@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Usuario;
 
 
@@ -18,6 +19,7 @@ public class UsuarioInfo implements Serializable {
 	private Usuario usuario;
 	private Empresa empresa;
 	private Organizacao organizacao;
+	private Perfil perfil;
 	private String mail;
 
     public Usuario getUsuario() {
@@ -50,5 +52,17 @@ public class UsuarioInfo implements Serializable {
 
 	public Organizacao getOrganizacao() {
 		return organizacao;
+	}
+
+
+
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 }
