@@ -26,6 +26,7 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.sgo.controller.HomeController;
+import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.UsuarioDao;
 
 @Intercepts
@@ -34,11 +35,13 @@ public class AuthorizationInterceptor implements Interceptor {
 
 	private final UsuarioInfo info;
 	private final UsuarioDao usuarioDao;
+	private final PerfilDao perfilDao;
 	private final Result result;
 
-	public AuthorizationInterceptor(UsuarioInfo info, UsuarioDao usuarioDao, Result result) {
+	public AuthorizationInterceptor(UsuarioInfo info, UsuarioDao usuarioDao,PerfilDao perfilDao, Result result) {
 		this.info = info;
 		this.usuarioDao = usuarioDao;
+		this.perfilDao = perfilDao;
 		this.result = result;
 	}
 
@@ -55,8 +58,14 @@ public class AuthorizationInterceptor implements Interceptor {
     		result.include("errors", Arrays.asList(new ValidationMessage("usuário não logado", "user")));
     		result.redirectTo(HomeController.class).login();
     	} else {
+
     		usuarioDao.refresh(info.getUsuario());
-	    	// continues execution
+
+    		if(info.getPerfil() != null)
+    			perfilDao.refresh(info.getPerfil());
+
+    		// continues execution
+    		
 	    	stack.next(method, resourceInstance);
     	}
     }

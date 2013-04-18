@@ -32,10 +32,14 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
+	
+	@ManyToOne
+	@JoinColumn(name = "formulario_id", updatable = true, nullable = false)
+	private Formulario formulario;
 
 	@ManyToOne
-	@JoinColumn(name = "tabelacoeficiente_id", updatable = true, nullable = true)
-	private TabelaCoeficiente tabelaCoeficiente;
+	@JoinColumn(name = "coeficiente_id", updatable = true, nullable = true)
+	private Coeficiente coeficiente;
 
 	@ManyToOne
 	@JoinColumn(name = "produto_id", updatable = true, nullable = true)
@@ -52,10 +56,6 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "seguro_id", updatable = true, nullable = true)
 	private Seguro seguro;
-
-	@ManyToOne
-	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = true)
-	private ParceiroNegocio parceiroNegocio;
 
 	@ManyToOne
 	@JoinColumn(name = "naturezaprofissional_id", updatable = true, nullable = true)
@@ -76,6 +76,14 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "workflow_id", updatable = true, nullable = true)
 	private Workflow workflow;
+	
+	@ManyToOne
+	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = true)
+	private WorkflowEtapa workflowEtapa;
+
+	@ManyToOne
+	@JoinColumn(name = "usuario_id", updatable = true, nullable = true)
+	private Usuario usuario;
 
 	@Column(name = "chave")
 	private String chave;
@@ -93,28 +101,31 @@ public class Contrato implements Serializable {
 	private Integer qtdParcelasAberto;
 
 	@Column(name = "valorseguro")
-	private Float valorSeguro;
+	private Double valorSeguro;
 
 	@Column(name = "desconto")
-	private Float desconto;
+	private Double desconto;
 
 	@Column(name = "valorcontrato")
-	private Float valorContrato;
+	private Double valorContrato;
 
 	@Column(name = "valordivida")
-	private Float valorDivida;
+	private Double valorDivida;
 
 	@Column(name = "valorliquido")
-	private Float valorLiquido;
+	private Double valorLiquido;
 
 	@Column(name = "valorparcela")
-	private Float valorParcela;
+	private Double valorParcela;
 
 	@Column(name = "valormeta")
-	private Float valorMeta;
+	private Double valorMeta;
 
 	@Column(name = "isactive")
 	private Boolean isActive;
+
+	@Column(name = "numerobeneficio")
+	private String numeroBeneficio;
 
 	public Long getContrato_id() {
 		return contrato_id;
@@ -138,14 +149,6 @@ public class Contrato implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public TabelaCoeficiente getTabelaCoeficiente() {
-		return tabelaCoeficiente;
-	}
-
-	public void setTabelaCoeficiente(TabelaCoeficiente tabelaCoeficiente) {
-		this.tabelaCoeficiente = tabelaCoeficiente;
 	}
 
 	public Produto getProduto() {
@@ -178,14 +181,6 @@ public class Contrato implements Serializable {
 
 	public void setSeguro(Seguro seguro) {
 		this.seguro = seguro;
-	}
-
-	public ParceiroNegocio getParceiroNegocio() {
-		return parceiroNegocio;
-	}
-
-	public void setParceiroNegocio(ParceiroNegocio parceiroNegocio) {
-		this.parceiroNegocio = parceiroNegocio;
 	}
 
 	public NaturezaProfissional getNaturezaProfissional() {
@@ -269,59 +264,91 @@ public class Contrato implements Serializable {
 		this.qtdParcelasAberto = qtdParcelasAberto;
 	}
 
-	public Float getValorSeguro() {
+	public Formulario getFormulario() {
+		return formulario;
+	}
+
+	public void setFormulario(Formulario formulario) {
+		this.formulario = formulario;
+	}
+
+	public Coeficiente getCoeficiente() {
+		return coeficiente;
+	}
+
+	public void setCoeficiente(Coeficiente coeficiente) {
+		this.coeficiente = coeficiente;
+	}
+
+	public WorkflowEtapa getWorkflowEtapa() {
+		return workflowEtapa;
+	}
+
+	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
+		this.workflowEtapa = workflowEtapa;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public Double getValorSeguro() {
 		return valorSeguro;
 	}
 
-	public void setValorSeguro(Float valorSeguro) {
+	public void setValorSeguro(Double valorSeguro) {
 		this.valorSeguro = valorSeguro;
 	}
 
-	public Float getDesconto() {
+	public Double getDesconto() {
 		return desconto;
 	}
 
-	public void setDesconto(Float desconto) {
+	public void setDesconto(Double desconto) {
 		this.desconto = desconto;
 	}
 
-	public Float getValorContrato() {
+	public Double getValorContrato() {
 		return valorContrato;
 	}
 
-	public void setValorContrato(Float valorContrato) {
+	public void setValorContrato(Double valorContrato) {
 		this.valorContrato = valorContrato;
 	}
 
-	public Float getValorDivida() {
+	public Double getValorDivida() {
 		return valorDivida;
 	}
 
-	public void setValorDivida(Float valorDivida) {
+	public void setValorDivida(Double valorDivida) {
 		this.valorDivida = valorDivida;
 	}
 
-	public Float getValorLiquido() {
+	public Double getValorLiquido() {
 		return valorLiquido;
 	}
 
-	public void setValorLiquido(Float valorLiquido) {
+	public void setValorLiquido(Double valorLiquido) {
 		this.valorLiquido = valorLiquido;
 	}
 
-	public Float getValorParcela() {
+	public Double getValorParcela() {
 		return valorParcela;
 	}
 
-	public void setValorParcela(Float valorParcela) {
+	public void setValorParcela(Double valorParcela) {
 		this.valorParcela = valorParcela;
 	}
 
-	public Float getValorMeta() {
+	public Double getValorMeta() {
 		return valorMeta;
 	}
 
-	public void setValorMeta(Float valorMeta) {
+	public void setValorMeta(Double valorMeta) {
 		this.valorMeta = valorMeta;
 	}
 
@@ -333,4 +360,11 @@ public class Contrato implements Serializable {
 		this.isActive = isActive;
 	}
 
+	public String getNumeroBeneficio() {
+		return numeroBeneficio;
+	}
+
+	public void setNumeroBeneficio(String numeroBeneficio) {
+		this.numeroBeneficio = numeroBeneficio;
+	}
 }

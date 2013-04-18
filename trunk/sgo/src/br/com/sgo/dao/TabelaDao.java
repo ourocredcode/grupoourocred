@@ -132,10 +132,14 @@ public class TabelaDao extends Dao<Tabela> {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		this.conexao.closeConnection(rsTabelas, stmt, conn);
+			e.printStackTrace();
+
+		} finally {
+
+			this.conexao.closeConnection(rsTabelas, stmt, conn);
+
+		}
 
 		return tabelas;
 
