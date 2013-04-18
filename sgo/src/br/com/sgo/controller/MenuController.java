@@ -11,8 +11,8 @@ import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Menu;
-import br.com.sgo.modelo.UsuarioPerfil;
 
 @Resource
 public class MenuController {
@@ -23,13 +23,16 @@ public class MenuController {
 	private final OrganizacaoDao organizacaoDao;
 	private final MenuDao menuDao;
 
-	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao){
+	private UsuarioInfo usuarioInfo;
+
+	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo){
 
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;
 		this.menuDao = menuDao;
 		this.result = result;
 		this.validator = validator;
+		this.usuarioInfo = usuarioInfo;
 
 	}
 	
@@ -37,16 +40,11 @@ public class MenuController {
 	@Path("/menu/inicio") 
 	public void inicio() {
 
-	}
-
-	@Post
-	@Path("/menu/inicio") 
-	public void inicio(UsuarioPerfil usuarioPerfil) {
-
-		
+		System.out.println(usuarioInfo.getUsuario().getNome());
+		System.out.println(usuarioInfo.getPerfil().getNome());
 
 	}
-	
+
 	@Get
 	@Public
 	@Path("/menu/cadastro")

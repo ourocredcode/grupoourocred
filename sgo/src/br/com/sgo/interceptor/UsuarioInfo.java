@@ -9,7 +9,6 @@ import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Usuario;
 
-
 @Component
 @SessionScoped
 public class UsuarioInfo implements Serializable {
@@ -22,10 +21,6 @@ public class UsuarioInfo implements Serializable {
 	private Perfil perfil;
 	private String mail;
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
     public void login(Usuario usuario) {
         this.usuario = usuario;
         this.empresa = usuario.getEmpresa();
@@ -36,6 +31,11 @@ public class UsuarioInfo implements Serializable {
         this.usuario = null;
         this.empresa = null;
         this.organizacao = null;
+        this.perfil = null;
+    }
+
+	public Usuario getUsuario() {
+        return usuario;
     }
 
 	public String getMail() {
@@ -54,13 +54,9 @@ public class UsuarioInfo implements Serializable {
 		return organizacao;
 	}
 
-
-
 	public Perfil getPerfil() {
 		return perfil;
 	}
-
-
 
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;

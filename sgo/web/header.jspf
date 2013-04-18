@@ -94,11 +94,12 @@
 						<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
 						<li><a href="<c:url value="/perfil/cadastro"/>">Perfil</a></li>
 					</ul>
+
 				</li>
 				
 				<li class="submenu">
 
-					<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span> <span class="label">3</span></a>
+					<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span> <span class="label">4</span></a>
 
 					<ul class="cadastro">
 						<li><a href="<c:url value="/banco/cadastro"/>">Banco</a></li>
@@ -106,6 +107,16 @@
 						<li><a href="<c:url value="/tabela/cadastro"/>">Tabela</a></li>
 						<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
 					</ul>
+				</li>
+				
+				<li class="submenu">
+
+					<a href="#"><i class="icon icon-pencil"></i> <span>Consultores</span> <span class="label">1</span></a>
+
+					<ul class="consultor">
+						<li><a href="<c:url value="/formulario/cadastro"/>">Formulário</a></li>
+					</ul>
+
 				</li>
 
 				<li><a href="buttons.html"><i class="icon icon-tint"></i> <span>Buttons &amp; icons</span></a></li>

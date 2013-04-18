@@ -112,7 +112,7 @@
 					<div class="tab-pane fade"  id="perfil-div">
 	
 						<p></p>
-						<form id="usuarioPerfilForm" action="<c:url value="/menu/inicio"/>" method="POST">
+						<form id="usuarioPerfilForm" action="<c:url value="/home/perfil"/>" method="POST">
 							<input type="hidden" id="usuarioPerfilUsuarioId" name="usuarioPerfil.usuario.usuario_id" />
 							<div class="control-group">
 								<label class="control-label" for="usuarioPerfil">Perfil</label>

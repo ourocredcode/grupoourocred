@@ -81,13 +81,16 @@ jQuery(function($){
 
 	$("#banco").change(function() {   
 
-		var bancoId = $("#banco").val();     
-
-		$("#tabela").load('<c:url value="/tabela/tabelas" />',   
-		        {'bancoId': bancoId});  
+		var bancoId = $("#banco").val();
 
 		$("#lista").load('<c:url value="/coeficiente/listaporbancos" />',   
-		        {'bancoId': bancoId});
+	        {'bancoId': bancoId}, function() {  
+
+        	$("#tabela").load('<c:url value="/tabela/tabelas" />',   
+	    		        {'bancoId': bancoId});
+
+	     });
+
 	});
 	
 	$("#tabela").change(function() {   

@@ -12,12 +12,14 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.validator.Validations;
+import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.UsuarioPerfilDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Usuario;
+import br.com.sgo.modelo.UsuarioPerfil;
 
 @Resource
 public class HomeController {
@@ -25,13 +27,15 @@ public class HomeController {
 	private final Result result;
 	private final UsuarioDao usuarioDao;
 	private final UsuarioPerfilDao usuarioPerfilDao;
+	private final PerfilDao perfilDao;
 	private final UsuarioInfo usuarioInfo;
 	private final Validator validator;
 
-	public HomeController(Result result, UsuarioDao usuarioDao, UsuarioInfo usuarioInfo, Validator validator, UsuarioPerfilDao usuarioPerfilDao) {
+	public HomeController(Result result, UsuarioDao usuarioDao, UsuarioInfo usuarioInfo, Validator validator, UsuarioPerfilDao usuarioPerfilDao,PerfilDao perfilDao) {
 		this.result = result;
 		this.usuarioDao = usuarioDao;
 		this.usuarioPerfilDao = usuarioPerfilDao;
+		this.perfilDao = perfilDao;
 		this.usuarioInfo = usuarioInfo;
 		this.validator = validator;
 	}
@@ -71,6 +75,15 @@ public class HomeController {
 	@Get
 	public void perfis(Collection<Perfil> perfis){
 		result.include("perfis",perfis);
+	}
+	
+	@Post
+	@Path("/home/perfil") 
+	public void perfil(UsuarioPerfil usuarioPerfil) {
+
+		usuarioInfo.setPerfil(perfilDao.load(usuarioPerfil.getPerfil().getPerfil_id()));
+		result.redirectTo(MenuController.class).inicio();
+
 	}
 
 	public void logout() {

@@ -211,14 +211,19 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 			}
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
+		} finally {
+
+			this.conexao.closeConnection(rsCoeficiente, stmt, conn);
+
 		}
 
-		this.conexao.closeConnection(rsCoeficiente, stmt, conn);
 		return coeficientes;
 
 	}
-	
+
 	public Collection<Coeficiente> buscaCoeficientesByTabela(Long tabelaId) {
 
 		String sql = sqlCoeficiente;
@@ -334,7 +339,6 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
 				coeficiente.setValor(rsCoeficiente.getDouble("valor"));
 				coeficiente.setPercentualMeta(rsCoeficiente.getDouble("percentualmeta"));
-				
 
 				Calendar created = new GregorianCalendar();
 				created.setTime(rsCoeficiente.getDate("created"));
