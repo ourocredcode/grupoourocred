@@ -43,9 +43,6 @@ public class Workflow implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name = "etapainicial")
-	private Integer etapaInicial;
-
 	@Column(name = "ispadrao")
 	private Boolean isPadrao;
 
@@ -98,14 +95,6 @@ public class Workflow implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public Integer getEtapaInicial() {
-		return etapaInicial;
-	}
-
-	public void setEtapaInicial(Integer etapaInicial) {
-		this.etapaInicial = etapaInicial;
 	}
 
 	public Boolean getIsPadrao() {

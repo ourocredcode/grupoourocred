@@ -144,5 +144,44 @@ public class TabelaDao extends Dao<Tabela> {
 		return tabelas;
 
 	}
+	
+	public Tabela buscaTabelasByCoeficiente(Long coeficiente_id) {
+
+		String sql = " SELECT " +
+				"			COEFICIENTE.coeficiente_id, COEFICIENTE.tabela_id, TABELA.nome as tabela_nome, TABELA.prazo " +
+				"	FROM COEFICIENTE INNER JOIN TABELA ON COEFICIENTE.tabela_id = TABELA.tabela_id WHERE COEFICIENTE.coeficiente_id = ? ";
+		
+		this.conn = this.conexao.getConexao();
+
+		Tabela tabela = new Tabela();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, coeficiente_id);
+
+			this.rsTabelas = this.stmt.executeQuery();
+
+			while (rsTabelas.next()) {
+
+				tabela.setTabela_id(rsTabelas.getLong("tabela_id"));
+				tabela.setNome(rsTabelas.getString("tabela_nome"));
+				tabela.setPrazo(rsTabelas.getInt("prazo"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			this.conexao.closeConnection(rsTabelas, stmt, conn);
+
+		}
+
+		return tabela;
+
+	}
 
 }

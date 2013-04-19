@@ -213,7 +213,7 @@ public class CoeficienteController {
 	@Path("/coeficiente/listaporprodutos")
 	public void listaporprodutos(Long bancoId,Long produtoId) {
 
-		coeficientes = coeficienteDao.buscaCoeficientes(bancoId,produtoId);
+		coeficientes = coeficienteDao.buscaCoeficientesByBancoProduto(bancoId,produtoId);
 		result.include("coeficientes",coeficientes).redirectTo(this).lista();
 
 	}
@@ -222,7 +222,7 @@ public class CoeficienteController {
 	@Path("/coeficiente/listaportabelas")
 	public void listaportabelas(Long bancoId,Long tabelaId) {
 
-		coeficientes = coeficienteDao.buscaCoeficientes(bancoId,tabelaId);
+		coeficientes = coeficienteDao.buscaCoeficientesByBancoTabela(bancoId,tabelaId);
 		result.include("coeficientes",coeficientes).redirectTo(this).lista();
 
 	}
