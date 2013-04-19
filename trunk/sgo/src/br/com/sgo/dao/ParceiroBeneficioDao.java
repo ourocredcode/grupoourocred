@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.ParceiroBeneficio;
+import br.com.sgo.modelo.ParceiroNegocio;
 
 @Component
 public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
@@ -60,8 +61,7 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 	}
 
-	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByParceiroNegocio(
-			Long parceironegocio_id) {
+	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByParceiroNegocio(Long parceironegocio_id) {
 
 		String sql = sqlParceiroBeneficio;
 
@@ -103,42 +103,52 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 	}
 
-	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByNome(
-			String nome) {
-		String sql = sqlParceiroBeneficio;
-		if (nome != null)
-			sql += " WHERE PARCEIROBENEFICIO.nome like ?";
-		this.conn = this.conexao.getConexao();
-		Collection<ParceiroBeneficio> beneficios = new ArrayList<ParceiroBeneficio>();
-		try {
-			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setString(1, "%" + nome + "%");
-			this.rsParceiroBeneficio = this.stmt.executeQuery();
-			ParceiroBeneficio beneficio = new ParceiroBeneficio();
-			while (rsParceiroBeneficio.next()) {
-				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio
-						.getLong("parceirobeneficio_id"));
-				beneficio.setNumeroBeneficio(rsParceiroBeneficio
-						.getString("numeroBeneficio"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		this.conexao.closeConnection(rsParceiroBeneficio, stmt, conn);
-		return beneficios;
-	}
-	
-	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByNumeroBeneficio(
-			String numeroBeneficio) {
+	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByNome(String nome) {
 
 		String sql = sqlParceiroBeneficio;
+
+		if (nome != null)
+			sql += " WHERE PARCEIROBENEFICIO.nome like ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<ParceiroBeneficio> beneficios = new ArrayList<ParceiroBeneficio>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setString(1, "%" + nome + "%");
+
+			this.rsParceiroBeneficio = this.stmt.executeQuery();
+
+			ParceiroBeneficio beneficio = new ParceiroBeneficio();
+
+			while (rsParceiroBeneficio.next()) {
+				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
+				beneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsParceiroBeneficio, stmt, conn);
+
+		return beneficios;
+
+	}
+	
+	public ParceiroBeneficio buscaParceiroBeneficioByNumeroBeneficio(String numeroBeneficio) {
+
+		String sql = sqlParceiroBeneficio;
+		ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
 
 		if (numeroBeneficio != null)
 			sql += " WHERE PARCEIROBENEFICIO.numerobeneficio = ?";
 
 		this.conn = this.conexao.getConexao();
-
-		Collection<ParceiroBeneficio> beneficios = new ArrayList<ParceiroBeneficio>();
 
 		try {
 
@@ -146,13 +156,19 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 			this.stmt.setString(1,numeroBeneficio);
 			this.rsParceiroBeneficio = this.stmt.executeQuery();
 
-			ParceiroBeneficio beneficio = new ParceiroBeneficio();
-
 			while (rsParceiroBeneficio.next()) {
-				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio
+
+				ParceiroNegocio parceiroNegocio = new ParceiroNegocio();
+
+				parceiroNegocio.setParceiroNegocio_id(rsParceiroBeneficio.getLong("parceironegocio_id"));
+
+				parceiroBeneficio.setParceiroBeneficio_id(rsParceiroBeneficio
 						.getLong("parceirobeneficio_id"));
-				beneficio.setNumeroBeneficio(rsParceiroBeneficio
+				parceiroBeneficio.setNumeroBeneficio(rsParceiroBeneficio
 						.getString("numeroBeneficio"));
+				
+				parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
+
 			}
 
 		} catch (SQLException e) {
@@ -160,7 +176,8 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 		}
 
 		this.conexao.closeConnection(rsParceiroBeneficio, stmt, conn);
-		return beneficios;
+		
+		return parceiroBeneficio;
 
 	}
 

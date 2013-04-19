@@ -88,6 +88,9 @@ public class Contrato implements Serializable {
 	@Column(name = "chave")
 	private String chave;
 
+	@Column(name = "observacao")
+	private String observacao;
+
 	@Column(name = "nome")
 	private String nome;
 
@@ -366,5 +369,13 @@ public class Contrato implements Serializable {
 
 	public void setNumeroBeneficio(String numeroBeneficio) {
 		this.numeroBeneficio = numeroBeneficio;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 }

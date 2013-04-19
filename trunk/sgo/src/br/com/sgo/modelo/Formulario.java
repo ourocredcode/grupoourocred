@@ -1,6 +1,8 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,11 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.SessionScoped;
 
 @Entity
 @Component
+@SessionScoped
 @Table(name = "FORMULARIO")
 public class Formulario implements Serializable {
 
@@ -39,6 +44,9 @@ public class Formulario implements Serializable {
 
 	@Column(name = "isactive")
 	private Boolean isActive;
+
+	@Transient
+	private Collection<Contrato> contratos = new ArrayList<Contrato>();
 
 	public Long getFormulario_id() {
 		return formulario_id;
@@ -78,5 +86,17 @@ public class Formulario implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Collection<Contrato> getContratos() {
+		return contratos;
+	}
+
+	public void setContratos(Collection<Contrato> contratos) {
+		this.contratos = contratos;
+	}
+	
+	public void adicionaContrato(Contrato contrato) {
+		this.contratos.add(contrato);
 	}
 }

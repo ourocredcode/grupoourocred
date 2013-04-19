@@ -43,6 +43,9 @@ public class Tabela implements Serializable {
 
 	@Column(name = "nome")
 	private String nome;
+	
+	@Column(name="prazo")
+	private Integer prazo;
 
 	@Column(name = "descricao")
 	private String descricao;
@@ -114,4 +117,11 @@ public class Tabela implements Serializable {
 		this.banco = banco;
 	}
 
+	public Integer getPrazo() {
+		return prazo;
+	}
+
+	public void setPrazo(Integer prazo) {
+		this.prazo = prazo;
+	}
 }

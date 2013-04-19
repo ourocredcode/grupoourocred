@@ -40,9 +40,6 @@ public class MenuController {
 	@Path("/menu/inicio") 
 	public void inicio() {
 
-		System.out.println(usuarioInfo.getUsuario().getNome());
-		System.out.println(usuarioInfo.getPerfil().getNome());
-
 	}
 
 	@Get

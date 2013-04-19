@@ -37,10 +37,6 @@ public class WorkflowEtapa implements Serializable {
 	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
 	private Workflow workflow;
 
-	@ManyToOne
-	@JoinColumn(name = "perfil_id", updatable = true, nullable = false)
-	private Perfil perfil;
-
 	@Column(name = "nome")
 	private String nome;
 
@@ -86,14 +82,6 @@ public class WorkflowEtapa implements Serializable {
 
 	public void setWorkflow(Workflow workflow) {
 		this.workflow = workflow;
-	}
-
-	public Perfil getPerfil() {
-		return perfil;
-	}
-
-	public void setPerfil(Perfil perfil) {
-		this.perfil = perfil;
 	}
 
 	public String getNome() {

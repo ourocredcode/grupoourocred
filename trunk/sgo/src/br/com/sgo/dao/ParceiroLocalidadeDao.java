@@ -71,31 +71,22 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 
 				Localidade localidade = new Localidade();
 				localidade.setCep(rsParceiroLocalidade.getString("cep"));
-				localidade.setLocalidade_id(rsParceiroLocalidade
-						.getLong("localidade_id"));
+				localidade.setLocalidade_id(rsParceiroLocalidade.getLong("localidade_id"));
 				localidade.setBairro(rsParceiroLocalidade.getString("bairro"));
-				localidade.setEndereco(rsParceiroLocalidade
-						.getString("endereco"));
+				localidade.setEndereco(rsParceiroLocalidade.getString("endereco"));
 
 				localidade.setCidade(c);
 
 				TipoEndereco tipoEndereco = new TipoEndereco();
-				tipoEndereco.setTipoEndereco_id(rsParceiroLocalidade
-						.getLong("tipoendereco_id"));
-				tipoEndereco.setNome(rsParceiroLocalidade
-						.getString("tipoendereco_nome"));
+				tipoEndereco.setTipoEndereco_id(rsParceiroLocalidade.getLong("tipoendereco_id"));
+				tipoEndereco.setNome(rsParceiroLocalidade.getString("tipoendereco_nome"));
 
 				ParceiroLocalidade parceiroLocalidade = new ParceiroLocalidade();
-				parceiroLocalidade
-						.setParceiroLocalidade_id(rsParceiroLocalidade
-								.getLong("parceirolocalidade_id"));
+				parceiroLocalidade.setParceiroLocalidade_id(rsParceiroLocalidade.getLong("parceirolocalidade_id"));
 
-				parceiroLocalidade.setNumero(rsParceiroLocalidade
-						.getString("numero"));
-				parceiroLocalidade.setComplemento(rsParceiroLocalidade
-						.getString("complemento"));
-				parceiroLocalidade.setPontoReferencia(rsParceiroLocalidade
-						.getString("pontoreferencia"));
+				parceiroLocalidade.setNumero(rsParceiroLocalidade.getString("numero"));
+				parceiroLocalidade.setComplemento(rsParceiroLocalidade.getString("complemento"));
+				parceiroLocalidade.setPontoReferencia(rsParceiroLocalidade.getString("pontoreferencia"));
 
 				parceiroLocalidade.setLocalidade(localidade);
 				parceiroLocalidade.setTipoEndereco(tipoEndereco);

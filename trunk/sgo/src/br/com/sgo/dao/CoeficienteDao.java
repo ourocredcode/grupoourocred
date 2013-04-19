@@ -32,7 +32,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 	private String sqlCoeficiente = "SELECT " +
 			"COEFICIENTE.empresa_id, EMPRESA.nome as empresa_nome, " +
 			"COEFICIENTE.organizacao_id, ORGANIZACAO.nome as organizacao_nome, " + 
-			"COEFICIENTE.tabela_id, TABELA.nome as tabela_nome, COEFICIENTE.created, " +
+			"COEFICIENTE.tabela_id, TABELA.nome as tabela_nome,TABELA.prazo as prazo, COEFICIENTE.created, " +
 			"PRODUTOBANCO.produto_id, PRODUTO.nome as produto_nome , " + 
 			"PRODUTOBANCO.banco_id, BANCO.nome as banco_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta " +
 		"FROM (((((COEFICIENTE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id) " + 
@@ -111,7 +111,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 	}
 
-	public Collection<Coeficiente> buscaCoeficientes(String bancoNome,String produtoNome) {
+	public Collection<Coeficiente> buscaCoeficientesByBancoProduto(Long banco_id,Long produto_id) {
 		
 		String sql = sqlCoeficiente;
 		this.conn = this.conexao.getConexao();
@@ -123,22 +123,30 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				" AND BANCO.isactive = 1 " +
 				" AND PRODUTO.isactive = 1 " +
 				" AND TABELA.isactive = 1 " +
-				" AND PRODUTO.nome = ? AND BANCO.nome = ? " +
+				" AND PRODUTO.produto_id = ? AND BANCO.banco_id = ? " +
 				" ORDER BY BANCO.nome, PRODUTO.nome, TABELA.nome ";
 
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setString(1,produtoNome);
-			this.stmt.setString(2,bancoNome);
+			this.stmt.setLong(1,produto_id);
+			this.stmt.setLong(2,banco_id);
 			this.rsCoeficiente = this.stmt.executeQuery();
 			while (rsCoeficiente.next()) {
+
+				Tabela tabela = new Tabela();
+				tabela.setTabela_id(rsCoeficiente.getLong("tabela_id"));
+				tabela.setNome(rsCoeficiente.getString("tabela_nome"));
+				tabela.setPrazo(rsCoeficiente.getInt("prazo"));
 
 				Coeficiente coeficiente = new Coeficiente();
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
 				coeficiente.setValor(rsCoeficiente.getDouble("valor"));
 				coeficiente.setPercentualMeta(rsCoeficiente.getDouble("percentualmeta"));
+				coeficiente.setTabela(tabela);
+
+				coeficientes.add(coeficiente);
 
 			}
 		} catch (SQLException e) {
@@ -293,7 +301,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 	}
 
-	public Collection<Coeficiente> buscaCoeficientes(Long bancoId,Long tabelaId) {
+	public Collection<Coeficiente> buscaCoeficientesByBancoTabela(Long bancoId,Long tabelaId) {
 
 		String sql = sqlCoeficiente;
 		this.conn = this.conexao.getConexao();
