@@ -447,6 +447,38 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 	}
 	
+	public Coeficiente buscaCoeficienteById(Long produto_id) {
+
+		String sql = "select COEFICIENTE.coeficiente_id, COEFICIENTE.valor from COEFICIENTE (NOLOCK) WHERE COEFICIENTE.coeficiente_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Coeficiente coeficiente = new Coeficiente();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, produto_id);
+
+			this.rsCoeficiente = this.stmt.executeQuery();
+
+			while (rsCoeficiente.next()) {
+
+				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
+				coeficiente.setValor(rsCoeficiente.getDouble("valor"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsCoeficiente, stmt, conn);
+
+		return coeficiente;
+
+	}
+	
 	/* 
 	
 

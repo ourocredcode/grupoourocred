@@ -64,5 +64,73 @@ public class BancoDao extends Dao<Banco> {
 		return bancos;
 
 	}
+	
+	public Banco buscaBancoById(Long banco_id) {
+
+		String sql = "select BANCO.banco_id, BANCO.nome from BANCO (NOLOCK) WHERE BANCO.banco_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Banco banco = new Banco();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, banco_id);
+
+			this.rsBanco = this.stmt.executeQuery();
+
+			while (rsBanco.next()) {
+
+				banco.setBanco_id(rsBanco.getLong("banco_id"));
+				banco.setNome(rsBanco.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsBanco, stmt, conn);
+
+		return banco;
+
+	}
+	
+	public Collection<Banco> buscaBancoByGrupo(String grupo){
+		
+		String sql = "SELECT BANCO.banco_id, BANCO.nome FROM GRUPOBANCO INNER JOIN BANCO ON GRUPOBANCO.grupobanco_id = BANCO.grupobanco_id WHERE GRUPOBANCO.nome = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Banco> bancos = new ArrayList<Banco>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setString(1, grupo);
+
+			this.rsBanco = this.stmt.executeQuery();
+
+			while (rsBanco.next()) {
+
+				Banco banco = new Banco();
+
+				banco.setBanco_id(rsBanco.getLong("banco_id"));
+				banco.setNome(rsBanco.getString("nome"));
+
+				bancos.add(banco);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsBanco, stmt, conn);
+
+		return bancos;
+
+	}
 
 }

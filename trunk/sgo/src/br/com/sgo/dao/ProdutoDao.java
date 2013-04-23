@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
+import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Produto;
 
 @Component
@@ -65,7 +66,7 @@ public class ProdutoDao extends Dao<Produto> {
 	
 	public Collection<Produto> buscaProdutosByBanco(Long banco_id) {
 
-		String sql = "SELECT DISTINCT PRODUTOBANCO.produto_id, PRODUTO.nome, PRODUTOBANCO.banco_id, BANCO.nome " +
+		String sql = "SELECT DISTINCT PRODUTOBANCO.produto_id, PRODUTO.nome as produto_nome, PRODUTOBANCO.banco_id, BANCO.nome as banco_nome " +
 				" FROM (PRODUTOBANCO (NOLOCK) INNER JOIN PRODUTO (NOLOCK) ON PRODUTOBANCO.produto_id = PRODUTO.produto_id) " +
 				"	INNER JOIN BANCO (NOLOCK) ON PRODUTOBANCO.banco_id = BANCO.banco_id WHERE BANCO.banco_id = ? ";
 
@@ -85,7 +86,7 @@ public class ProdutoDao extends Dao<Produto> {
 				Produto produto = new Produto();
 
 				produto.setProduto_id(rsProdutos.getLong("produto_id"));
-				produto.setNome(rsProdutos.getString("nome"));
+				produto.setNome(rsProdutos.getString("produto_nome"));
 
 				produtos.add(produto);
 
@@ -98,6 +99,38 @@ public class ProdutoDao extends Dao<Produto> {
 		this.conexao.closeConnection(rsProdutos, stmt, conn);
 
 		return produtos;
+
+	}
+	
+	public Produto buscaProdutoById(Long produto_id) {
+
+		String sql = "select PRODUTO.produto_id, PRODUTO.nome from PRODUTO (NOLOCK) WHERE PRODUTO.produto_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Produto produto = new Produto();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, produto_id);
+
+			this.rsProdutos = this.stmt.executeQuery();
+
+			while (rsProdutos.next()) {
+
+				produto.setProduto_id(rsProdutos.getLong("produto_id"));
+				produto.setNome(rsProdutos.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsProdutos, stmt, conn);
+
+		return produto;
 
 	}
 }
