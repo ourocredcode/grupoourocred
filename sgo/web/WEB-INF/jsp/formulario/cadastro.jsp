@@ -221,11 +221,13 @@
 				<div class="row-fluid">
 					<div class="span3">
 						<div class="btn-group">
-							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+							<form id="salvaForm" action="<c:url value="/formulario/salva"/>" method="POST">
+								<button type="submit" class="btn btn-primary" id="btnNovo" onclick="return confirm('Deseja encerrar o cadastro de contratos?');" >Salvar</button>
+							</form>
 						</div>
 						<div class="btn-group">
 							<form action="<c:url value="/formulario/limpar"/>" method="POST" >
-								<input type="submit" value="Limpar" class="form_button"/>
+								<input type="submit" value="Limpar" class="btn"/>
 							</form>
 						</div>
 					</div>

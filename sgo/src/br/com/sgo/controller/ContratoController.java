@@ -83,5 +83,12 @@ public class ContratoController {
 		result.include("contrato",contrato);
 
 	}
+	
+	@Post
+	@Path("/contrato/salva")
+	public void salva(Formulario formulario) {
+		
+		
+	}
 
 }

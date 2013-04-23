@@ -4,8 +4,12 @@
 
 <script type="text/javascript">
 
+$(document).ready(function() {
 
-$(document).ready(function() { 
+	var contratoProduto = $("#contratoProduto").val();
+
+	if (contratoProduto != '')
+		$(verificaProduto());
 	
 	$("#contratoBanco").change(function() {
 
@@ -21,6 +25,8 @@ $(document).ready(function() {
 		var banco_id = $("#contratoBanco").val();
 
 		$("#auxCoeficiente").load('<c:url value="/contrato/coeficientes" />',{'banco_id': banco_id,'produto_id': produto_id}); 
+		
+		verificaProduto();
 
 	});
 	
@@ -58,8 +64,13 @@ function calculaContrato() {
 	var valorMeta = document.getElementById("valorMeta");
 	var valorDivida = document.getElementById("valorDivida");
 	var valorSeguro = document.getElementById("valorSeguro");
+	
 	var contratoProduto = document.getElementById("contratoProduto");
+	var contratoProdutoNome = contratoProduto.options[contratoProduto.selectedIndex].text;
+
 	var contratoBanco = document.getElementById("contratoBanco");
+	var contratoBancoNome = contratoBanco.options[contratoBanco.selectedIndex].text;
+
 	var desconto = document.getElementById("desconto");
 	var parcelasAberto = document.getElementById("parcelasAberto");
 	var auxCoeficiente = document.getElementById("auxCoeficiente");	
@@ -106,14 +117,14 @@ function calculaContrato() {
 
 		}
 
-		if(contratoProduto.value != 'REFINANCIAMENTO' && contratoProduto.value != 'RETENÇÃO' && contratoProduto.value != 'REFIN C.E.F'){
+		if(contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' && contratoProdutoNome != 'REFIN C.E.F'){
 
 			var metaValue = valorContrato.value * arrayCoeficiente[1];
 			valorMeta.value = metaValue.toFixed(2); 
 
 		} else {
 
-			switch(contratoBanco.value) {
+			switch(contratoBancoNome) {
 
 				case 'BRADESCO':
 					var metaValue = valorLiquido.value * arrayCoeficiente[1];
@@ -210,12 +221,15 @@ function verificaProduto() {
 	var bancoComprado = document.getElementById("bancoComprado");
 	var valorDivida = document.getElementById("valorDivida");
 	var valorSeguro = document.getElementById("valorSeguro");
+	
 	var contratoProduto = document.getElementById("contratoProduto");
+	var contratoProdutoNome = contratoProduto.options[contratoProduto.selectedIndex].text;
+	
 	var contratoBanco = document.getElementById("contratoBanco");
 	var observacao = document.getElementById("observacao");
 	var prazo = document.getElementById("prazo");
 
-	switch (contratoProduto.value) {
+	switch (contratoProdutoNome) {
 
 		case 'MARGEM LIMPA':
 			desabilita(bancoComprado);
@@ -382,18 +396,22 @@ function calculaValorLiquido() {
 }
 
 function desabilita(campo){   
-	
+
 	if(!campo == 'valorContrato' || campo == 'valorLiquido')
 		campo.value = '';
 
-	campo.disabled = 1;
-	campo.className = 'label_txt';
+	campo.disabled = true;
+	campo.required = false;
+	campo.className = 'span10';
+
 }
 
 function habilita(campo){   
-	
-	campo.disabled = 0;
-	campo.className = 'required';
+
+	campo.disabled = false;
+	campo.required = true;
+	campo.className = 'span10';
+
 }
 
 function validaForm(form) {
@@ -414,6 +432,12 @@ function preencheZero(campo) {
 	}
 }
 
+function fechar() {
+
+	$("#contrato").empty();
+
+}
+
 </script>
 
 <c:if test="${contrato == null }">
@@ -424,124 +448,129 @@ function preencheZero(campo) {
 </c:if>
 
 <div id="contrato">
-<form id="contratoForm" name="contratoForm" action="<c:url value='/formulario/adicionaContrato'/>" method="POST">
-<input type="hidden" id="contrato.contrato_id" name="contrato.contrato_id" value="${contrato.contrato_id }" />
-<input type="hidden" id="contrato.empresa.empresa_id" name="contrato.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" />
-<input type="hidden" id="contrato.organizacao.organizacao_id" name="contrato.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" />
 
-	<div class="row-fluid">
-		<div class="span2">CONTRATO ${usuarioInfo.empresa.empresa_id } ${usuarioInfo.organizacao.organizacao_id } </div>
-	</div>	
+	<div class="widget-box">
+		<div class="widget-title"><span class="icon"><i class="icon-file"></i></span><h5>Novo Contrato</h5></div>
+			<div class="widget-content padding">
 
-	<div class="row-fluid">
+				<form id="contratoForm" name="contratoForm" action="<c:url value='/formulario/adicionaContrato'/>" method="POST">
+				<input type="hidden" id="contrato.contrato_id" name="contrato.contrato_id" value="${contrato.contrato_id }" />
 
-		<div class="span2">
+					<div class="row-fluid">
+				
+						<div class="span2">
 
-			<label for="contratoBanco" class="label_txt">Banco:</label>
-			<select class="span10" id="contratoBanco" name="contrato.banco.banco_id" required>
-				<option value="">Escolha um banco</option>
-				<c:forEach items="${bancos}" var="banco">
-					<option value="${banco.banco_id}">${banco.nome}</option>
-				</c:forEach>
-			</select>
+							<label for="contratoBanco">Banco:</label>
+							<select id="contratoBanco" name="contrato.banco.banco_id" class="span10" required>
+								<option value="">Escolha um banco</option>
+								<c:forEach items="${bancos}" var="banco">
+									<option value="${banco.banco_id}">${banco.nome}</option>
+								</c:forEach>
+							</select>
 
-		</div>
-		
-		<div class="span2">
+						</div>
+						
+						<div class="span2">
 
-			<label for="contratoProduto" class="label_txt">Produto:</label>
-			<select class="span10" id="contratoProduto" name="contrato.produto.produto_id" required>
-				<option value="">Escolha um produto</option>
-			</select>
+							<label for="contratoProduto">Produto:</label>
+							<select id="contratoProduto" name="contrato.produto.produto_id" class="span10" required>
+								<option value="">Escolha um produto</option>
+							</select>
 
-		</div>
-		
-		<div class="span2">
+						</div>
 
-			<label for="auxCoeficiente" class="label_txt">Coeficiente Cadastro:</label>
-			<select class="span10" id="auxCoeficiente" name="contratoCoeficiente" onChange="calculaContrato();" required>
-				<c:if test="${usuarioInfo.perfil.chave == 'C'}">
-					<option value="">Selecione um produto...</option>
-				</c:if>
-			</select>
-			<input id="coeficiente" type="hidden" name="contrato.coeficiente.coeficiente_id" value="${contrato.coeficiente.coeficiente_id}" />
+						<div class="span2">
 
-		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span2">
+							<label for="auxCoeficiente">Coeficiente Cadastro:</label>
+							<select class="span10" id="auxCoeficiente" name="contratoCoeficiente" onChange="calculaContrato();" required>
+								<c:if test="${usuarioInfo.perfil.chave == 'C'}">
+									<option value="">Selecione um produto...</option>
+								</c:if>
+							</select>
+							<input id="coeficiente" type="hidden" name="contrato.coeficiente.coeficiente_id" value="${contrato.coeficiente.coeficiente_id}" />
 
-			<label for="contratoBanco" class="label_txt">Banco Comprado:</label>
-			<select class="span10" id="contratoBanco" name="contrato.banco" disabled="disabled" required>
-				<option value="">Escolha um banco</option>
-				<c:forEach items="${bancos}" var="banco">
-					<option value="${banco.nome}">${banco.nome}</option>
-				</c:forEach>
-			</select>
+						</div>
+					</div>
+					<div class="row-fluid">
+						<div class="span2">
 
-		</div>
+							<label for="bancoComprado">Banco Comprado:</label>
+							<select id="bancoComprado" class="span10"  name="contrato.recompraBanco.banco_id">
+								<option value="">Escolha um banco</option>
+								<c:forEach items="${bancosRecompra}" var="bancoRecompra">
+									<option value="${bancoRecompra.banco_id}">${bancoRecompra.nome}</option>
+								</c:forEach>
+							</select>
 
-		<div class="span2">
-			<label for="parcelasaberto">Parcelas Aberto</label>
-			<input type="text" class="input-medium" id="parcelasaberto" name="contrato.parcelasaberto" disabled="disabled" onblur="calculaValorLiquido();" />	
-		</div>
+						</div>
+				
+						<div class="span2">
+							<label for="parcelasAberto">Parcelas Aberto</label>
+							<input id="parcelasAberto" name="contrato.qtdParcelasAberto" disabled="disabled" type="text" class="span10" onblur="calculaValorLiquido();" />	
+						</div>
+							
+				
+					
+					</div>
+					<div class="row-fluid">
+						<div class="span2">
+							<label for="valorContrato">Valor Contrato</label>
+							<input id="valorContrato" type="text" class="span10"  name="contrato.valorContrato" disabled="disabled" onblur="calculaContrato();" required/>	
+						</div>
+						<div class="span2">
+							<label for="valorParcela">Valor Parcela</label>
+							<input id="valorParcela" type="text" class="span10"  name="contrato.valorParcela" onblur="calculaContrato();" required />	
+						</div>
+						<div class="span2">
+							<label for="valorDivida">Valor Divida</label>
+							<input id="valorDivida" type="text" class="span10"  name="contrato.valorDivida" disabled="disabled" onblur="calculaValorLiquido();" />	
+						</div>
+						<div class="span2">
+							<label for="valorSeguro">Valor Seguro</label>
+							<input id="valorSeguro" type="text" class="span10"  name="contrato.valorSeguro" disabled="disabled" onblur="calculaValorLiquido();preencheZero(this);"/>	
+						</div>
+					</div>
+					<div class="row-fluid">
+						<div class="span2">
+							<div id="div-prazo">
+								<label for="prazo" class="label_txt">Prazo:</label>
+								<input id="prazo" class="span10"  type="text" name="contrato.prazo" value="${contrato.prazo}" disabled="disabled" required />
+							</div>
+						</div>
+						<div class="span2">
+							<label for="desconto">Desconto</label>
+							<input id="desconto" type="text" class="span10"  name="contrato.desconto" disabled="disabled" onblur="calculaContrato();" />	
+						</div>
+						<div class="span2">
+							<label for="valorLiquido">Valor Liquido</label>
+							<input id="valorLiquido" type="text" class="span10"  name="contrato.valorLiquido" disabled="disabled" required />	
+						</div>
+						<div class="span2">
+							<label for="valorMeta">Valor Meta</label>
+							<input id="valorMeta" type="text" class="span10" name="contrato.valorMeta" disabled="disabled" />	
+						</div>
+					</div>
+					<div class="row-fluid">
+						<div class="span2">
+							<label for="observacao">Observacao</label>
+							<textarea id="observacao" name="contrato.observacao" rows="4" cols="10" maxlength="255" >
+								<c:out value="${contrato.observacao}"></c:out>
+							</textarea>	
+						</div>
+					</div>
+					
+					<div class="row-fluid">
+						<div class="span1" style="float: left;">
+							<input value="Salvar" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoForm');">
+						</div>
+						<div style="float: left;">
+							<input value="Cancelar" type="button" class="btn" onclick="fechar();" />
+						</div>
+					</div>
+				</form>
 			
-
-	
-	</div>
-	<div class="row-fluid">
-		<div class="span2">
-			<label for="valorContrato">Valor Contrato</label>
-			<input type="text" class="input-medium" id="valorContrato" name="contrato.valorContrato" disabled="disabled" onblur="calculaContrato();" />	
-		</div>
-		<div class="span2">
-			<label for="valorParcela">Valor Parcela</label>
-			<input type="text" class="input-medium" id="valorParcela" name="contrato.valorParcela" onblur="calculaContrato();" />	
-		</div>
-		<div class="span2">
-			<label for="valorDivida">Valor Divida</label>
-			<input type="text" class="input-medium" id="valorDivida" name="contrato.valorDivida" disabled="disabled" onblur="calculaValorLiquido();" />	
-		</div>
-		<div class="span2">
-			<label for="valorSeguro">Valor Seguro</label>
-			<input type="text" class="input-medium" id="valorSeguro" name="contrato.valorSeguro" disabled="disabled" onblur="calculaValorLiquido();preencheZero(this);"/>	
 		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="span2">
-			<div id="div-prazo">
-				<label for="prazo" class="label_txt">Prazo:</label>
-				<input class="span10" id="prazo" type="text" name="contrato.prazo" value="${contrato.prazo}" disabled="disabled" required />
-			</div>
-		</div>
-		<div class="span2">
-			<label for="desconto">Desconto</label>
-			<input type="text" class="input-medium" id="desconto" name="contrato.desconto" disabled="disabled" onblur="calculaContrato();" />	
-		</div>
-		<div class="span2">
-			<label for="valorLiquido">Valor Liquido</label>
-			<input type="text" class="input-medium" id="valorDivida" name="contrato.valorLiquido" disabled="disabled" />	
-		</div>
-		<div class="span2">
-			<label for="valorMeta">Valor Meta</label>
-			<input type="text" class="input-medium" id="valorMeta" name="contrato.valorMeta" disabled="disabled" />	
-		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span2">
-			<label for="observacao">Observacao</label>
-			<textarea id="observacao" class="label_txt" name="contrato.observacao" cols="85" rows="2" maxlength="255" >
-				<c:out value="${contrato.observacao}"></c:out>
-			</textarea>	
-		</div>
-	</div>
-	
-	<div class="row-fluid">
-		<div class="span2">
-			<input value="Salvar" type="button" class="form_button" onclick="javascript:validaForm('#contratoForm');" style="width:100px;">
-		</div>
-	</div>
-</form>
 </div>
 
 <div id="cadastroAux" style="float: left;margin-left: 10px;"></div>
