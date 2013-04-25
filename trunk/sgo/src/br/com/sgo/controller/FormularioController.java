@@ -1,6 +1,7 @@
 package br.com.sgo.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -85,6 +86,7 @@ public class FormularioController {
 		this.formulario.setEmpresa(usuarioInfo.getEmpresa());
 		this.formulario.setOrganizacao(usuarioInfo.getOrganizacao());
 		this.formulario.setIsActive(true);
+		this.formulario.setCreated(Calendar.getInstance());
 
 		result.include("bancos",bancos);
 		result.include("bancosRecompra",bancosRecompra);
@@ -151,9 +153,12 @@ public class FormularioController {
 		contrato.setProduto(this.produtoDao.buscaProdutoById(contrato.getProduto().getProduto_id()));
 		contrato.setCoeficiente(this.coeficienteDao.buscaCoeficienteById(contrato.getCoeficiente().getCoeficiente_id()));
 		contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
+		
 
-		if(contrato.getRecompraBanco().getBanco_id() != null)
+		if(contrato.getRecompraBanco().getBanco_id() != null){
 			contrato.setRecompraBanco(this.bancoDao.buscaBancoById(contrato.getRecompraBanco().getBanco_id()));
+			System.out.println(contrato.getRecompraBanco().getNome());
+		}
 
 		contrato.setIsActive(true);
 
@@ -173,9 +178,10 @@ public class FormularioController {
 		for(Contrato c : this.formulario.getContratos()){
 
 			c.setFormulario(this.formulario);
+			c.setRecompraBanco(c.getRecompraBanco().getBanco_id() == null ? null : c.getRecompraBanco());
 
 			this.contratoDao.beginTransaction();
-			this.contratoDao.adiciona(c);
+			this.contratoDao.atualiza(c);
 			this.contratoDao.commit();
 
 		}

@@ -49,10 +49,14 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "tabela_id", updatable = true, nullable = true)
 	private Tabela tabela;
-
-	@ManyToOne(fetch=FetchType.LAZY)
+	
+	@ManyToOne
 	@JoinColumn(name = "banco_id", updatable = true, nullable = true)
 	private Banco banco;
+
+	@ManyToOne
+	@JoinColumn(name = "recompra_banco_id", updatable = true, nullable = true)
+	private Banco recompraBanco;
 
 	@ManyToOne
 	@JoinColumn(name = "seguro_id", updatable = true, nullable = true)
@@ -61,10 +65,6 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "naturezaprofissional_id", updatable = true, nullable = true)
 	private NaturezaProfissional naturezaProfissional;
-
-	@ManyToOne
-	@JoinColumn(name = "recompra_banco_id", updatable = true, nullable = true)
-	private Banco recompraBanco;
 
 	@ManyToOne
 	@JoinColumn(name = "modalidade_id", updatable = true, nullable = true)

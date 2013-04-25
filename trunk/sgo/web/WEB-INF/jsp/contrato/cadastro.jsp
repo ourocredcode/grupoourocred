@@ -5,6 +5,12 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
+	
+	$("#valorContrato").maskMoney({symbol:"",decimal:".",thousands:""});
+	$("#valorParcela").maskMoney({symbol:"",decimal:".",thousands:""});
+	$("#valorDivida").maskMoney({symbol:"",decimal:".",thousands:""});
+	$("#valorSeguro").maskMoney({symbol:"",decimal:".",thousands:""});
+	$("#valorLiquido").maskMoney({symbol:"",decimal:".",thousands:""});
 
 	var contratoProduto = $("#contratoProduto").val();
 
@@ -295,7 +301,7 @@ function verificaProduto() {
 
 			bancoComprado.value = contratoBanco.value;
 
-			desabilita(bancoComprado);
+			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
 			desabilita(valorSeguro);
@@ -406,7 +412,9 @@ function desabilita(campo){
 
 }
 
-function habilita(campo){   
+
+
+function habilita(campo){
 
 	campo.disabled = false;
 	campo.required = true;
@@ -490,12 +498,11 @@ function fechar() {
 							<input id="coeficiente" type="hidden" name="contrato.coeficiente.coeficiente_id" value="${contrato.coeficiente.coeficiente_id}" />
 
 						</div>
-					</div>
-					<div class="row-fluid">
+						
 						<div class="span2">
 
 							<label for="bancoComprado">Banco Comprado:</label>
-							<select id="bancoComprado" class="span10"  name="contrato.recompraBanco.banco_id">
+							<select id="bancoComprado" class="span10"  name="contrato.recompraBanco.banco_id" disabled>
 								<option value="">Escolha um banco</option>
 								<c:forEach items="${bancosRecompra}" var="bancoRecompra">
 									<option value="${bancoRecompra.banco_id}">${bancoRecompra.nome}</option>
@@ -503,15 +510,8 @@ function fechar() {
 							</select>
 
 						</div>
-				
-						<div class="span2">
-							<label for="parcelasAberto">Parcelas Aberto</label>
-							<input id="parcelasAberto" name="contrato.qtdParcelasAberto" disabled="disabled" type="text" class="span10" onblur="calculaValorLiquido();" />	
-						</div>
-							
-				
-					
 					</div>
+
 					<div class="row-fluid">
 						<div class="span2">
 							<label for="valorContrato">Valor Contrato</label>
@@ -522,18 +522,21 @@ function fechar() {
 							<input id="valorParcela" type="text" class="span10"  name="contrato.valorParcela" onblur="calculaContrato();" required />	
 						</div>
 						<div class="span2">
+							<label for="parcelasAberto">Parcelas Aberto</label>
+							<input id="parcelasAberto" name="contrato.qtdParcelasAberto" disabled="disabled" type="text" class="span10" onblur="calculaValorLiquido();" />	
+						</div>
+						<div class="span2">
 							<label for="valorDivida">Valor Divida</label>
 							<input id="valorDivida" type="text" class="span10"  name="contrato.valorDivida" disabled="disabled" onblur="calculaValorLiquido();" />	
 						</div>
 						<div class="span2">
-							<label for="valorSeguro">Valor Seguro</label>
-							<input id="valorSeguro" type="text" class="span10"  name="contrato.valorSeguro" disabled="disabled" onblur="calculaValorLiquido();preencheZero(this);"/>	
+							<input id="valorSeguro" type="hidden" class="span10"  name="contrato.valorSeguro" disabled="disabled" onblur="calculaValorLiquido();preencheZero(this);"/>	
 						</div>
 					</div>
 					<div class="row-fluid">
 						<div class="span2">
 							<div id="div-prazo">
-								<label for="prazo" class="label_txt">Prazo:</label>
+								<label for="prazo">Prazo:</label>
 								<input id="prazo" class="span10"  type="text" name="contrato.prazo" value="${contrato.prazo}" disabled="disabled" required />
 							</div>
 						</div>
@@ -559,6 +562,8 @@ function fechar() {
 						</div>
 					</div>
 					
+				
+					
 					<div class="row-fluid">
 						<div class="span1" style="float: left;">
 							<input value="Salvar" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoForm');">
@@ -568,7 +573,6 @@ function fechar() {
 						</div>
 					</div>
 				</form>
-			
 		</div>
 	</div>
 </div>

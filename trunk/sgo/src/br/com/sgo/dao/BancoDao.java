@@ -71,7 +71,7 @@ public class BancoDao extends Dao<Banco> {
 
 		this.conn = this.conexao.getConexao();
 
-		Banco banco = new Banco();
+		Banco banco = null;
 
 		try {
 
@@ -81,6 +81,8 @@ public class BancoDao extends Dao<Banco> {
 			this.rsBanco = this.stmt.executeQuery();
 
 			while (rsBanco.next()) {
+				
+				banco = new Banco();
 
 				banco.setBanco_id(rsBanco.getLong("banco_id"));
 				banco.setNome(rsBanco.getString("nome"));

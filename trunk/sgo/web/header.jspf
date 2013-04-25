@@ -19,19 +19,17 @@
 		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/colorpicker.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/datepicker.css"/>" />
-        <link rel="stylesheet" href="<c:url value="/css/select2.css"/>" />
+ 
 		<link rel="stylesheet" href="<c:url value="/css/uniform.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />		
 		<link rel="stylesheet" href="<c:url value="/css/jquery.gritter.css"/>" />	
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.main.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.grey.css"/>" class="skin-color" />
 
-
 		<script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/bootstrap.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/bootstrap-datepicker.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/js/excanvas.js"/>"></script>	
         <script type="text/javascript" src="<c:url value="/js/fullcalendar.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/js/bootstrap-colorpicker.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/js/jquery.gritter.js"/>"></script>
@@ -45,11 +43,9 @@
 		<script type="text/javascript" src="<c:url value="/js/jquery.flot.pie.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.flot.resize.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.maskedinput-1.2.2.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.maskMoney.0.2.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/unicorn.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/unicorn.interface.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/unicorn.form_validation.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/unicorn.wizard.js"/>"></script>
+
 	</head>
 	<body>
 		<div id="header">

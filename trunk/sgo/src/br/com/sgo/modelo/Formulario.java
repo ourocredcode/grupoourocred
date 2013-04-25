@@ -2,6 +2,7 @@ package br.com.sgo.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -41,6 +42,9 @@ public class Formulario implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
+	
+	@Column(name="created")
+	private Calendar created;
 
 	@Column(name = "isactive")
 	private Boolean isActive;
@@ -79,6 +83,14 @@ public class Formulario implements Serializable {
 	public void setParceiroNegocio(ParceiroNegocio parceiroNegocio) {
 		this.parceiroNegocio = parceiroNegocio;
 	}
+	
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
 
 	public Boolean getIsActive() {
 		return isActive;
@@ -99,4 +111,6 @@ public class Formulario implements Serializable {
 	public void adicionaContrato(Contrato contrato) {
 		this.contratos.add(contrato);
 	}
+
+
 }
