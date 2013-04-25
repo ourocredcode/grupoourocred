@@ -35,19 +35,19 @@ public class HistoricoHiscon implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = false)
+	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = true)
 	private WorkflowEtapa workflowEtapa;
 
 	@ManyToOne
-	@JoinColumn(name = "hisconbeneficio_id", updatable = true, nullable = false)
+	@JoinColumn(name = "hisconbeneficio_id", updatable = true, nullable = true)
 	private HisconBeneficio hisconBeneficio;
 
 	@ManyToOne
-	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
 	@ManyToOne
-	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
 	private Usuario updatedBy;
 
 	@Column(name = "created")

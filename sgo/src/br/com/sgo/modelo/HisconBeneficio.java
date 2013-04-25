@@ -13,9 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.SessionScoped;
 
 @Entity
 @Component
+@SessionScoped
 @Table(name = "HISCONBENEFICIO")
 public class HisconBeneficio implements Serializable {
 
@@ -167,14 +169,6 @@ public class HisconBeneficio implements Serializable {
 		this.updated = updated;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	public Calendar getDataAdm() {
 		return dataAdm;
 	}
@@ -189,6 +183,14 @@ public class HisconBeneficio implements Serializable {
 
 	public void setDataEnvio(Calendar dataEnvio) {
 		this.dataEnvio = dataEnvio;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getCaminhoArquivo() {
