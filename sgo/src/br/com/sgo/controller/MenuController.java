@@ -1,5 +1,8 @@
 package br.com.sgo.controller;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -7,11 +10,13 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Menu;
 
 @Resource
@@ -22,10 +27,13 @@ public class MenuController {
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
 	private final MenuDao menuDao;
+	private final ContratoDao contratoDao;
+	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
+	
 
 	private UsuarioInfo usuarioInfo;
 
-	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo){
+	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,ContratoDao contratoDao){
 
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;
@@ -33,12 +41,17 @@ public class MenuController {
 		this.result = result;
 		this.validator = validator;
 		this.usuarioInfo = usuarioInfo;
+		this.contratoDao = contratoDao;
 
 	}
 	
 	@Get
 	@Path("/menu/inicio") 
 	public void inicio() {
+
+		contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
+
+		result.include("contratos", contratos);
 
 	}
 
