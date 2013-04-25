@@ -18,7 +18,6 @@ public class HistoricoHisconDao extends Dao<HistoricoHiscon> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsHistoricoHiscon;
-	
 
 	public HistoricoHisconDao(Session session, ConnJDBC conexao) {
 		super(session, HistoricoHiscon.class);
