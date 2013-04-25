@@ -12,11 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
 
 @Entity
 @Component
-@SessionScoped
 @Table(name = "PARCEIROBENEFICIO")
 public class ParceiroBeneficio implements Serializable {
 
@@ -38,12 +36,6 @@ public class ParceiroBeneficio implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
-
-	@Column(name = "nome")
-	private String nome;
-
-	@Column(name = "descricao")
-	private String descricao;
 
 	@Column(name = "numerobeneficio")
 	private String numeroBeneficio;
@@ -81,22 +73,6 @@ public class ParceiroBeneficio implements Serializable {
 
 	public void setParceiroNegocio(ParceiroNegocio parceiroNegocio) {
 		this.parceiroNegocio = parceiroNegocio;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 
 	public String getNumeroBeneficio() {
