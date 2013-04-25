@@ -44,9 +44,6 @@ public class WorkflowTransicao implements Serializable {
 	@Column(name = "nome")
 	private String nome;
 
-	@Column(name = "descricao")
-	private String descricao;
-
 	@Column(name = "sequencia")
 	private Integer sequencia;
 
@@ -104,14 +101,6 @@ public class WorkflowTransicao implements Serializable {
 		this.nome = nome;
 	}
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
 	public Integer getSequencia() {
 		return sequencia;
 	}
@@ -135,5 +124,4 @@ public class WorkflowTransicao implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
 }

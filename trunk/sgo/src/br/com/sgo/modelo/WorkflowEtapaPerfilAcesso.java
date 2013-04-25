@@ -3,27 +3,25 @@ package br.com.sgo.modelo;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
 
-@Entity
 @Component
-@Table(name = "TIPOWORKFLOW")
-public class TipoWorkflow implements Serializable {
+@Table(name = "WORKFLOWETAPAPERFILACESSO")
+public class WorkflowEtapaPerfilAcesso implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "tipoworkflow_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long tipoWorkflow_id;
+	@ManyToOne
+	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = false)
+	private WorkflowEtapa workflowEtapa;
+
+	@ManyToOne
+	@JoinColumn(name = "perfil_id", updatable = true, nullable = false)
+	private Perfil perfil;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
@@ -33,21 +31,26 @@ public class TipoWorkflow implements Serializable {
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
-	@Column(name = "nome")
-	private String nome;
-
-	@Column(name = "ispadrao")
-	private Boolean isPadrao;
-
+	@Column(name = "isleituraescrita")
+	private Boolean isLeituraEscrita;
+	
 	@Column(name = "isactive")
 	private Boolean isActive;
 
-	public Long getTipoWorkflow_id() {
-		return tipoWorkflow_id;
+	public WorkflowEtapa getWorkflowEtapa() {
+		return workflowEtapa;
 	}
 
-	public void setTipoWorkflow_id(Long tipoWorkflow_id) {
-		this.tipoWorkflow_id = tipoWorkflow_id;
+	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
+		this.workflowEtapa = workflowEtapa;
+	}
+
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 
 	public Empresa getEmpresa() {
@@ -66,20 +69,12 @@ public class TipoWorkflow implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public String getNome() {
-		return nome;
+	public Boolean getIsLeituraEscrita() {
+		return isLeituraEscrita;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Boolean getIsPadrao() {
-		return isPadrao;
-	}
-
-	public void setIsPadrao(Boolean isPadrao) {
-		this.isPadrao = isPadrao;
+	public void setIsLeituraEscrita(Boolean isLeituraEscrita) {
+		this.isLeituraEscrita = isLeituraEscrita;
 	}
 
 	public Boolean getIsActive() {
@@ -89,5 +84,4 @@ public class TipoWorkflow implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
 }
