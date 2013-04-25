@@ -40,9 +40,6 @@ public class WorkflowEtapa implements Serializable {
 	@Column(name = "nome")
 	private String nome;
 
-	@Column(name = "descricao")
-	private String descricao;
-
 	@Column(name = "ordemetapa")
 	private Integer ordemEtapa;
 
@@ -90,14 +87,6 @@ public class WorkflowEtapa implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 
 	public Integer getOrdemEtapa() {
