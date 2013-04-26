@@ -19,6 +19,7 @@ import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.HisconBeneficio;
 import br.com.sgo.modelo.ParceiroBeneficio;
+import br.com.sgo.modelo.ParceiroLocalidade;
 
 @Resource
 public class HisconbeneficioController {
@@ -36,11 +37,8 @@ public class HisconbeneficioController {
 	private final UsuarioPerfilDao usuarioPerfilDao;
 	private HisconBeneficio hisconBeneficio;
 
-	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo,
-			HisconBeneficioDao hisconBeneficioDao, EmpresaDao empresaDao,
-			OrganizacaoDao organizacaoDao,
-			ParceiroBeneficioDao parceiroBeneficioDao, UsuarioDao usuarioDao,
-			WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,
+	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo, HisconBeneficioDao hisconBeneficioDao, EmpresaDao empresaDao,
+			OrganizacaoDao organizacaoDao, ParceiroBeneficioDao parceiroBeneficioDao, UsuarioDao usuarioDao, WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,
 			UsuarioPerfilDao usuarioPerfilDao, PerfilDao perfilDao, HisconBeneficio hisconBeneficio) {
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -54,14 +52,17 @@ public class HisconbeneficioController {
 		this.usuarioPerfilDao = usuarioPerfilDao;
 		this.perfilDao = perfilDao;
 		this.hisconBeneficio = hisconBeneficio;
+
 	}
 
 	@Get
 	@Path("/hisconbeneficio/cadastro")
 	public void cadastro() {
+
 		result.include("hisconsBeneficio", this.hisconBeneficioDao.mostraHisconBeneficiosPorUsuarioPerfil(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(),usuarioInfo.getPerfil().getPerfil_id(), usuarioInfo.getUsuario().getUsuario_id()));		
+
 	}
-	
+
 	@Post
 	@Path("/hisconbeneficio/cadastro")
 	public void cadastro(Long empresa_id, Long organizacao_id, String numeroBeneficio) {
@@ -77,6 +78,7 @@ public class HisconbeneficioController {
 				this.hisconBeneficio.setEmpresa(pb.getEmpresa());
 				this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
 				this.hisconBeneficio.setParceiroBeneficio(pb);
+				this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
 
 				result.include("hisconBeneficio", hisconBeneficio);
 
@@ -100,15 +102,36 @@ public class HisconbeneficioController {
 
 	@Post
 	@Path("/hisconbeneficio/salva")
-	public void salva(HisconBeneficio hisconBeneficio) {
+	public void salva() {
 
-		/*String mensagem = "";
+		String mensagem = "";
 
-		try {
+		hisconBeneficio.setIsActive(true);
+
+		try{
+			
+			this.hisconBeneficioDao.beginTransaction();
+			this.hisconBeneficioDao.adiciona(hisconBeneficio);
+			this.hisconBeneficioDao.commit();
+
+		} catch (Exception e) {
+
+			mensagem = "Erro ao adicionar o workflow.";
+
+		} finally{
+
+			this.hisconBeneficioDao.clear();
+			this.hisconBeneficioDao.close();
+
+		}
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+
+		/*try {
 
 			if (this.hisconBeneficioDao.validaHisconBeneficioPorParceiroBeneficio(workflow.getEmpresa().getEmpresa_id(),workflow.getOrganizacao().getOrganizacao_id(),
 					workflow.getTipoWorkflow().getTipoWorkflow_id(), workflow.getNome()) == null) {				
-
+	
 				this.workflowDao.beginTransaction();
 				this.workflowDao.adiciona(workflow);
 				this.workflowDao.commit();
@@ -133,8 +156,9 @@ public class HisconbeneficioController {
 		}
 
 		result.include("notice", mensagem);			
-		result.redirectTo(this).cadastro();*/
-
+		result.redirectTo(this).cadastro();
+		*/
+		
 	}
 
 	@Get
