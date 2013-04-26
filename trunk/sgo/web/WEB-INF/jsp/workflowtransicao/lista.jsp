@@ -9,7 +9,8 @@
 			<th>Empresa</th>
 			<th>Organização</th>
 			<th>Worklflow Etapa</th>
-			<th>Worklflow Próxima</th>			
+			<th>Worklflow Próxima</th>
+			<th>Perfil</th>			
 			<th>Sequência</th>
 			<th>Padrão</th>
 			<th>Ativo</th>
@@ -22,6 +23,7 @@
 				<td>${workflowTransicao.organizacao.nome }</td>
 				<td>${workflowTransicao.workflowEtapa.nome }</td>
 				<td>${workflowTransicao.workflowEtapaProximo.nome }</td>
+				<td>${workflowTransicao.perfil.nome }</td>
 				<td>${workflowTransicao.sequencia }</td>
 				<td>${workflowTransicao.isPadrao }</td>
 				<td>${workflowTransicao.isActive }</td>

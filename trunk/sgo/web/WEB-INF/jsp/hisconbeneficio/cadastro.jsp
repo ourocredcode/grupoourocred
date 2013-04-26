@@ -73,51 +73,57 @@ function limpaForm() {
 
 	<div id="buscaHisconBeneficioDiv">
 		<form id="buscaHisconBeneficioForm" class="form-search" action="<c:url value="/hisconbeneficio/cadastro" />" method="POST">
-			<div class="input-append">
 			
-				<input type="text" id="hisconBeneficioEmpresaId" name="empresa_id" value="${usuarioInfo.empresa.empresa_id }" />
-				<input type="text" id="hisconBeneficioOrganizacaoId" name="organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" />
+					<div class="row-fluid">
+						<div class="span2">
+							<label for="hisconBeneficioEmpresa">Empresa</label>
+							<input class="input-medium" id="hisconBeneficioEmpresa" name="hisconBeneficio.empresa.nome" value="${hisconBeneficio.empresa.nome }" type="text" />
+							<input class="input-medium" id="hisconBeneficioEmpresaId" name="hisconBeneficio.empresa.empresa_id" value="${hisconBeneficio.empresa.empresa_id }" type="hidden" />
+						</div>
+
+						<div class="span2">
+							<label for="hisconBeneficioOrganizacao">Organização</label>
+							<input  class="input-medium" id="hisconBeneficioOrganizacao" name="hisconBeneficio.organizacao.nome" value="${hisconBeneficio.organizacao.nome }" type="text" />
+							<input  class="input-medium" id="hisconBeneficioOrganizacaoId" name="hisconBeneficio.organizacao.organizacao_id"  value="${hisconBeneficio.organizacao.organizacao_id }" type="hidden" />
+						</div>
+					</div>
+					
+			<div class="input-append">
+				<input type="hidden" id="hisconBeneficioEmpresaId" name="empresa_id" value="${usuarioInfo.empresa.empresa_id }" />
+				<input type="hidden" id="hisconBeneficioOrganizacaoId" name="organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" />
 				<input type="text" class="input-medium" id="numeroBeneficio" name="numeroBeneficio" placeholder="Benefício"/>
 				<button class="add-on" onclick="submit();"><i class="icon-search"></i></button>
-
 			</div>
+
 		</form>
 	</div>
 
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">			
-				<form id="hisconBeneficioForm" name="hisconBeneficioForm" action="<c:url value="/hisconbeneficio/salva"/>" method="POST">				
+				<form id="hisconBeneficioForm" name="hisconBeneficioForm" action="<c:url value="/hisconbeneficio/salva"/>" method="POST">
+
 					<div class="row-fluid">
-						<div class="span2">
-							<label for="hisconBeneficioEmpresa">Empresa</label>
-							<input class="input-medium" id="hisconBeneficioEmpresa" name="hisconBeneficio.empresa.nome" value="${hisconBeneficio.empresa.nome }" type="text" required />
-							<input class="input-medium" id="hisconBeneficioEmpresaId" name="hisconBeneficio.empresa.empresa_id" type="hidden" value="${hisconBeneficio.empresa.empresa_id }" />
+						<div class="controls controls-row">
+							<label for="hisconBeneficioCpf">Cpf</label>
+							<input  class="input-medium" id="hisconBeneficioCpf" name="hisconBeneficio.parceiroBeneficio.parceiroNegocio.cpf" type="text" placeholder="Cpf" value="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.cpf }">
 						</div>
-
-						<div class="span2">
-							<label for="hisconBeneficioOrganizacao">Organização</label>
-							<input  class="input-medium" id="hisconBeneficioOrganizacao" name="hisconBeneficio.organizacao.nome" value="${hisconBeneficio.organizacao.nome }" type="text" required />
-							<input  class="input-medium" id="hisconBeneficioOrganizacaoId" name="hisconBeneficio.organizacao.organizacao_id"  value="${hisconBeneficio.organizacao.organizacao_id }" type="hidden" />
-						</div>
-
 						<div class="span2">
 							<label for="hisconBeneficioParceiroNegocio">Parceiro de Negócios</label>
 							<input  class="input-medium" id="hisconBeneficioParceiroNegocio" name="hisconBeneficio.parceiroBeneficio.parceiroNegocio.nome" type="text" placeholder="Parceiro de Negócios" value="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.nome }">
 							<input  class="input-medium" id="hisconBeneficioParceiroNegocioId" name="hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id" type="hidden" value="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id }">
+							<input  class="input-medium" id="hisconBeneficioParceiroNegocioId" name="hisconBeneficio.parceiroBeneficio.parceiroBeneficio_id" type="hidden" value="${hisconBeneficio.parceiroBeneficio.parceiroBeneficio_id }">
 						</div>
 
-						<div class="controls controls-row">
-							<label for="hisconBeneficioNumeroBeneficio">Número Beneficio</label>
-							<input  class="input-medium" id="hisconBeneficioNumeroBeneficio" name="hisconBeneficio.parceiroBeneficio.numeroBeneficio" type="text" placeholder="Numero do Beneficio" value="${hisconBeneficio.parceiroBeneficio.numeroBeneficio }">
-						</div>
 					</div>
+					
 					<div class="control-group">
 						<label class="control-label" for="hisconBeneficioIsActive">Ativo</label>
 						<div class="controls">
 							<input type="checkbox" id="hisconBeneficioIsActive" name="hisconBeneficio.isActive" checked="checked" value="1" >							
 						</div>
 					</div>
+					
 				 	<div class="btn-group">
 						<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
 					</div>
