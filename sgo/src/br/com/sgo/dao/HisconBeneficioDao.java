@@ -55,9 +55,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		this.conexao = conexao;
 	}
 
-	public HisconBeneficio validaHisconBeneficioPorParceiroBeneficioUsuarioWorkflow(
-			Long empresa_id, Long organizacao_id, Long parceirobeneficio_id,
-			Long usuario_id, Long workflow_id) {
+	public HisconBeneficio validaHisconBeneficioPorParceiroBeneficioUsuarioWorkflow(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id, Long usuario_id, Long workflow_id) {
 
 		String sql = sqlHisconBeneficio;
 
@@ -105,16 +103,16 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 				}
 			} catch (Exception e) {
+
 				e.printStackTrace();
+
 			}
 		}
 
 		return hisconbeneficio;
 	}
 
-	public HisconBeneficio validaHisconBeneficioPorParceiroBeneficioUsuario(
-			Long empresa_id, Long organizacao_id, Long parceirobeneficio_id,
-			Long usuario_id) {
+	public HisconBeneficio validaHisconBeneficioPorParceiroBeneficioUsuario(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id, Long usuario_id) {
 
 		String sql = sqlHisconBeneficio;
 
@@ -159,6 +157,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				e.printStackTrace();
 			}
 		}
+
 		return hisconbeneficio;
 	}
 
@@ -376,7 +375,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				hisconBeneficio.setWorkflowEtapa(workflowEtapa);
 
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-				
+
 				sdf.format(rsHisconBeneficio.getDate("created"));				
 				hisconBeneficio.setCreated(sdf.getCalendar());
 
