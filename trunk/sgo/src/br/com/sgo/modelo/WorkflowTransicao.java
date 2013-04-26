@@ -41,6 +41,10 @@ public class WorkflowTransicao implements Serializable {
 	@JoinColumn(name = "workflowetapaproximo_id", updatable = true, nullable = false)
 	private WorkflowEtapa workflowEtapaProximo;
 
+	@ManyToOne
+	@JoinColumn(name = "perfil_id", updatable = true, nullable = true)
+	private Perfil perfil;
+
 	@Column(name = "nome")
 	private String nome;
 
@@ -123,5 +127,13 @@ public class WorkflowTransicao implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 }
