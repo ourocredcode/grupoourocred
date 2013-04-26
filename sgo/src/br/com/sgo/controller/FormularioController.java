@@ -1,10 +1,20 @@
 package br.com.sgo.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -17,9 +27,11 @@ import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
+import br.com.sgo.dao.PnDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.jasper.FormularioDataSource;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Formulario;
@@ -42,7 +54,9 @@ public class FormularioController {
 	private final FormularioDao formularioDao;
 	private final ContratoDao contratoDao;
 	private final CoeficienteDao coeficienteDao;
+	private final PnDao pnDao;
 
+	private HttpServletResponse response;
 	private Formulario formulario;
 	private ParceiroNegocio parceiroNegocio;
 	private ParceiroLocalidade parceiroLocalidade;
@@ -51,12 +65,13 @@ public class FormularioController {
 	private List<Contrato> contratos;
 
 	public FormularioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,FormularioDao formularioDao,ContratoDao contratoDao,
-			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,
+			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
+		this.response = response;
 		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.parceiroBeneficio = parceiroBeneficio;
 		this.parceiroBeneficioDao =  parceiroBeneficioDao;
@@ -68,6 +83,7 @@ public class FormularioController {
 		this.formularioDao = formularioDao;
 		this.tabelaDao = tabelaDao;
 		this.contratoDao = contratoDao;
+		this.pnDao = pnDao;
 		this.parceiroNegocio = parceiroNegocio;
 		this.parceiroLocalidade = parceiroLocalidade;
 		this.parceiroInfoBanco = parceiroInfoBanco;
@@ -112,14 +128,17 @@ public class FormularioController {
 
 		for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
 
-			if(pl.getTipoEndereco().getNome().equals("Assinatura"))
-				parceiroLocalidade.setLocalidade(pl.getLocalidade());
-				parceiroLocalidade.setNumero(pl.getNumero());
+			if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+				parceiroLocalidade = pl;
+			}
 
 		}
 
 		parceiroLocalidade.setParceiroNegocio(parceiroNegocio);
 		formulario.setParceiroNegocio(parceiroNegocio);
+		formulario.setParceiroBeneficio(parceiroBeneficio);
+		formulario.setParceiroLocalidade(parceiroLocalidade);
+		formulario.setParceiroInfoBanco(parceiroInfoBanco);
 
 		result.redirectTo(this).cadastro();
 
@@ -153,7 +172,7 @@ public class FormularioController {
 		contrato.setProduto(this.produtoDao.buscaProdutoById(contrato.getProduto().getProduto_id()));
 		contrato.setCoeficiente(this.coeficienteDao.buscaCoeficienteById(contrato.getCoeficiente().getCoeficiente_id()));
 		contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
-		
+		contrato.setNumeroBeneficio(this.formulario.getParceiroBeneficio().getNumeroBeneficio());
 
 		if(contrato.getRecompraBanco().getBanco_id() != null){
 			contrato.setRecompraBanco(this.bancoDao.buscaBancoById(contrato.getRecompraBanco().getBanco_id()));
@@ -188,6 +207,123 @@ public class FormularioController {
 
 		result.redirectTo(this).cadastro();
 
+	}
+
+	@Get
+ 	@Path("/formulario/impressao/{id}")
+	public void impressao(Long id) {
+
+		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
+		String jasper = caminhoJasper + "solicitacao.jasper";
+
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("caminhoJasperSolicitacao", jasper);
+
+		JasperPrint impressao = null;
+
+		List<Formulario> forms = new ArrayList<Formulario>();
+		Formulario f = this.formularioDao.load(id);
+
+		Collection<Contrato> contratos = this.contratoDao.buscaContratoByFormulario(f.getFormulario_id());
+
+		ParceiroNegocio parceiro =  f.getParceiroNegocio();
+		Calendar formularioData = f.getCreated();
+		Integer countContratos = new Integer(0);
+		Integer countRecompraINSS = new Integer(0);
+		Integer countMargemLimpa = new Integer(0);
+		Integer countRecompraRMC = new Integer(0);
+		Integer countRefinanciamento = new Integer(0);
+		String cc = "";
+
+		for (Iterator<Contrato> it  = contratos.iterator(); it.hasNext();) {
+
+			Formulario formulario = new Formulario();
+			Contrato c = (Contrato) it.next();
+
+			cc = pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente() == null ? "0" : pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente();
+
+			formulario.setCreated(formularioData);
+			formulario.setParceiroNegocio(parceiro);
+			formulario.setContratos(separaContrato(c));
+			
+			ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(c.getNumeroBeneficio());
+
+			parceiroBeneficio.setParceiroBeneficio_id(pb.getParceiroBeneficio_id());
+			parceiroBeneficio.setNumeroBeneficio(pb.getNumeroBeneficio());
+			parceiroBeneficio.setParceiroNegocio(pb.getParceiroNegocio());
+
+			parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
+
+			for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
+
+				if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+					parceiroLocalidade = pl;
+				}
+
+			}
+			
+			formulario.setParceiroBeneficio(parceiroBeneficio);
+			formulario.setParceiroLocalidade(parceiroLocalidade);
+			formulario.setParceiroLocalidade(parceiroLocalidade);
+			formulario.setParceiroInfoBanco(parceiroInfoBanco);
+
+			forms.add(formulario);
+			
+			countContratos +=1;
+
+			if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("AUMENTO"))
+				countMargemLimpa += 1;
+			if(c.getProduto().equals("RECOMPRA INSS"))
+				countRecompraINSS += 1;
+			if(c.getProduto().equals("RECOMPRA RMC"))
+				countRecompraRMC += 1;
+			if(c.getProduto().equals("REFINANCIAMENTO"))
+				countRefinanciamento += 1;
+
+		}
+		
+		parametros.put("countContratos", countContratos);
+		parametros.put("countMargemLimpa", countMargemLimpa);
+		parametros.put("countRecompraINSS", countRecompraINSS);
+		parametros.put("countRecompraRMC", countRecompraRMC);
+		parametros.put("countRefinanciamento", countRefinanciamento);
+		parametros.put("detalhamentoCC", cc);
+		
+		try{
+			response.setHeader("Cache-Control", "no-store");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentType("application/pdf");
+	
+			ServletOutputStream responseOutputStream = response.getOutputStream();
+	
+			FormularioDataSource formularioDataSource;
+			formularioDataSource = new FormularioDataSource(forms);
+	
+			impressao = JasperFillManager.fillReport(jasper, parametros , formularioDataSource);
+
+			JasperExportManager.exportReportToPdfStream(impressao, responseOutputStream);
+	
+			responseOutputStream.flush();
+			responseOutputStream.close();
+
+		} catch(IOException e) {
+			System.out.println("Erro:" + e);
+		} catch(JRException e) {
+			e.printStackTrace();
+			System.out.println("Erro:" + e.getMessage());
+		}
+
+		result.nothing();
+
+	}
+	
+	public static Collection<Contrato> separaContrato(Contrato contrato) {
+
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
+		contratos.add(contrato);
+
+		return contratos;
 	}
 
 }

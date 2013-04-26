@@ -2,12 +2,15 @@ package br.com.sgo.controller;
 
 import java.util.Collection;
 
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CoeficienteDao;
+import br.com.sgo.dao.ContratoDao;
+import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.ProdutoBancoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
@@ -27,6 +30,8 @@ public class ContratoController {
 	private final ProdutoDao produtoDao;
 	private final CoeficienteDao coeficienteDao;
 	private final TabelaDao tabelaDao;
+	private final ContratoDao contratoDao;
+	private final FormularioDao formularioDao;
 
 	private Contrato contrato;
 	private Formulario formulario;
@@ -35,15 +40,17 @@ public class ContratoController {
 	private Collection<Coeficiente> coeficientes;
 
 	public ContratoController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
-			Formulario formulario,TabelaDao tabelaDao){		
+			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao){		
 
 		this.result = result;
 		this.contrato = contrato;
 		this.formulario = formulario;
 		this.bancoDao = bancoDao;
+		this.contratoDao = contratoDao;
 		this.produtoBancoDao = produtoBancoDao;
 		this.produtoDao = produtoDao;
 		this.coeficienteDao = coeficienteDao;
+		this.formularioDao = formularioDao;
 		this.tabelaDao = tabelaDao;
 
 	}
@@ -51,6 +58,17 @@ public class ContratoController {
 	@Post
 	@Path("/contrato/cadastro")
 	public void cadastro(Long id){
+
+	}
+	
+	@Get
+ 	@Path("/contrato/status/{id}")
+	public void status(Long id){
+
+		formulario = formularioDao.load(id);
+		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario.getFormulario_id()));
+
+		result.include("formulario",formulario);
 
 	}
 	
@@ -86,9 +104,8 @@ public class ContratoController {
 	
 	@Post
 	@Path("/contrato/salva")
-	public void salva(Formulario formulario) {
-		
-		
+	public void salva(Formulario formulario) {	
+
 	}
 
 }
