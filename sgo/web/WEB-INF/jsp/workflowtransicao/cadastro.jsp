@@ -89,43 +89,43 @@ jQuery(function($){
 	     }
 	});
 
-	$('#workflowTransicaoWorkflow').autocomplete({
+	$('#workflowTransicaoPerfil').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
-	          url: "<c:url value='/workflow/busca.json' />",
+	          url: "<c:url value='/perfil/busca.json' />",
 	          dataType: "json",
 	          data : {empresa_id: $('#workflowTransicaoEmpresaId').val() == '' ? '0' :  $('#workflowTransicaoEmpresaId').val(), 
 	        		  organizacao_id: $('#workflowTransicaoOrganizacaoId').val() == '' ? '0' :  $('#workflowTransicaoOrganizacaoId').val(),
-	        		  nome : $('#workflowTransicaoWorkflow').val()},
-	          success : function(data) {  
+	        		  nome : $('#workflowTransicaoPerfil').val()},
 
+	          success : function(data) {
 	        	  if (!data || data.length == 0) {
-	     	            $('#workflowTransicaoWorkflow').val('');
-	     	           $('#workflowTransicaoWorkflowId').val('');
+	     	            $('#workflowTransicaoPerfil').val('');
+	     	           	$('#workflowTransicaoPerfilId').val('');
 	     	        }
 
-	        	  response($.map(data, function(workflow) {  
+	        	  response($.map(data, function(perfil) {  
 	        		  return {
-	        			  label: workflow.nome,
-	        			  value: workflow.workflow_id
+	        			  label: perfil.nome,
+	        			  value: perfil.perfil_id
 	                  };
 	              }));  
 	           }
 	        });
 	     },
 	     focus: function( event, ui ) {
-	      	 $('#workflowTransicaoWorkflow').val(ui.item.label);
+	      	 $('#workflowTransicaoPerfil').val(ui.item.label);
 	           return false;
 	       } ,
 	     select: function( event, ui ) {
-	         $('#workflowTransicaoWorkflow').val(ui.item.label);
-	         $('#workflowTransicaoWorkflowId').val(ui.item.value);
+	         $('#workflowTransicaoPerfil').val(ui.item.label);
+	         $('#workflowTransicaoPerfilId').val(ui.item.value);
 	         return false;
 	     }
 	});
 	
 	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/workflowetapa/cadastro" />';
+		window.location.href = '<c:url value="/workflowtransicao/cadastro" />';
 	});
 	
 	$('#btnNovo').click(function() {
@@ -158,7 +158,7 @@ function limpaForm(){
 	
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current">Workflow Etapa</a>
+		<a href="#" class="current">Workflow Transição</a>
 	</div>
 	
 	<c:if test="${not empty notice}">
@@ -235,6 +235,15 @@ function limpaForm(){
 								</c:forEach>
 							</select>
 						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="workflowTransicaoPerfil">Perfil</label>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-plus-sign"></i></span>
+	      						<input class="span10" id="workflowTransicaoPerfil" name="workflowTransicao.perfil.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="workflowTransicaoPerfilId" name="workflowTransicao.perfil.perfil_id" type="hidden">
+	    					</div>
+						</div>
 
 						<div class="control-group">
 							<label class="control-label" for="workflowTransicaoIsActive">Ativo</label>
@@ -263,7 +272,8 @@ function limpaForm(){
 							<th>Empresa</th>
 							<th>Organização</th>
 							<th>Worklflow Etapa</th>
-							<th>Worklflow Próxima</th>			
+							<th>Worklflow Próxima</th>
+							<th>Perfil</th>
 							<th>Sequência</th>
 							<th>Padrão</th>
 							<th>Ativo</th>								
@@ -276,6 +286,7 @@ function limpaForm(){
 								<td>${workflowTransicao.organizacao.nome }</td>
 								<td>${workflowTransicao.workflowEtapa.nome }</td>
 								<td>${workflowTransicao.workflowEtapaProximo.nome }</td>
+								<td>${workflowTransicao.perfil.nome }</td>
 								<td>${workflowTransicao.sequencia }</td>
 								<td>${workflowTransicao.isPadrao }</td>
 								<td>${workflowTransicao.isActive }</td>									
