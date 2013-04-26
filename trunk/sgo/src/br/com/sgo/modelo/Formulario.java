@@ -52,6 +52,18 @@ public class Formulario implements Serializable {
 	@Transient
 	private Collection<Contrato> contratos = new ArrayList<Contrato>();
 
+	@Transient
+	private ParceiroLocalidade parceiroLocalidade;
+	
+	@Transient
+	private ParceiroInfoBanco parceiroInfoBanco;
+	
+	@Transient
+	private ParceiroBeneficio parceiroBeneficio;
+
+	@Transient
+	private Collection<ParceiroContato> parceiroContatos = new ArrayList<ParceiroContato>();
+
 	public Long getFormulario_id() {
 		return formulario_id;
 	}
@@ -112,5 +124,35 @@ public class Formulario implements Serializable {
 		this.contratos.add(contrato);
 	}
 
+	public ParceiroLocalidade getParceiroLocalidade() {
+		return parceiroLocalidade;
+	}
 
+	public void setParceiroLocalidade(ParceiroLocalidade parceiroLocalidade) {
+		this.parceiroLocalidade = parceiroLocalidade;
+	}
+
+	public ParceiroInfoBanco getParceiroInfoBanco() {
+		return parceiroInfoBanco;
+	}
+
+	public void setParceiroInfoBanco(ParceiroInfoBanco parceiroInfoBanco) {
+		this.parceiroInfoBanco = parceiroInfoBanco;
+	}
+
+	public Collection<ParceiroContato> getParceiroContatos() {
+		return parceiroContatos;
+	}
+
+	public void setParceiroContatos(Collection<ParceiroContato> parceiroContatos) {
+		this.parceiroContatos = parceiroContatos;
+	}
+
+	public ParceiroBeneficio getParceiroBeneficio() {
+		return parceiroBeneficio;
+	}
+
+	public void setParceiroBeneficio(ParceiroBeneficio parceiroBeneficio) {
+		this.parceiroBeneficio = parceiroBeneficio;
+	}
 }
