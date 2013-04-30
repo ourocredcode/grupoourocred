@@ -114,6 +114,17 @@ public class FormularioController {
 		
 	}
 	
+	@Get
+ 	@Path("/formulario/visualiza/{id}")
+	public void visualiza(Long id){
+
+		formulario = formularioDao.load(id);
+		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario.getFormulario_id()));
+
+		result.include("formulario",formulario);
+
+	}
+	
 	@Post
 	@Path("/formulario/cliente")
 	public void cliente(String numeroBeneficio){

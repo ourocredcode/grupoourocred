@@ -65,12 +65,15 @@ public class ContratoController {
  	@Path("/contrato/status/{id}")
 	public void status(Long id){
 
-		formulario = formularioDao.load(id);
-		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario.getFormulario_id()));
+		contrato = contratoDao.load(id);
+		formulario = formularioDao.buscaFormularioByContrato(id);
 
 		result.include("formulario",formulario);
+		result.include("contrato",contrato);
 
 	}
+	
+
 	
 	@Post
 	@Path("/contrato/produtos")
