@@ -43,6 +43,10 @@ public class HistoricoHiscon implements Serializable {
 	private HisconBeneficio hisconBeneficio;
 
 	@ManyToOne
+	@JoinColumn(name = "perfil_id", updatable = true, nullable = true)
+	private Perfil perfil;
+
+	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
@@ -105,6 +109,14 @@ public class HistoricoHiscon implements Serializable {
 		this.hisconBeneficio = hisconBeneficio;
 	}
 
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
+	}
+
 	public Usuario getCreatedBy() {
 		return createdBy;
 	}
@@ -160,5 +172,4 @@ public class HistoricoHiscon implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
 }

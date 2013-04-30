@@ -19,9 +19,9 @@ public class WorkflowtransicaoController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
-	private final WorkflowTransicaoDao workflowTransicaoDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
+	private final WorkflowTransicaoDao workflowTransicaoDao;
 	private final WorkflowEtapaDao workflowEtapaDao;
 
 	public WorkflowtransicaoController(Result result,  UsuarioInfo usuarioInfo, WorkflowTransicaoDao workflowTransicaoDao, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, WorkflowEtapaDao workflowEtapaDao) {
@@ -35,9 +35,8 @@ public class WorkflowtransicaoController {
 
 	}
 
-	@Get
+	@Get @Path("/workflowtransicao/cadastro")
 	@Public
-	@Path("/workflowtransicao/cadastro")
 	public void cadastro() {
 
 		result.include("workflowEtapas", this.workflowEtapaDao.buscaTodosWorkflowEtapa());
@@ -45,9 +44,8 @@ public class WorkflowtransicaoController {
 
 	}
 
-	@Post
+	@Post @Path("/workflowtransicao/salva")
 	@Public
-	@Path("/workflowtransicao/salva")
 	public void salva(WorkflowTransicao workflowTransicao) {
 
 		String mensagem = "";
@@ -56,7 +54,7 @@ public class WorkflowtransicaoController {
 
 			if (this.workflowTransicaoDao.buscaWorkflowTransicaoPorEmpresaOrganizacaoWorkflowEtapaProximo(workflowTransicao.getEmpresa().getEmpresa_id(),workflowTransicao.getOrganizacao().getOrganizacao_id(),
 					workflowTransicao.getWorkflowEtapa().getWorkflowEtapa_id(), workflowTransicao.getWorkflowEtapaProximo().getWorkflowEtapa_id(), workflowTransicao.getPerfil().getPerfil_id()) == null) {				
-				
+
 				this.workflowTransicaoDao.beginTransaction();
 				this.workflowTransicaoDao.adiciona(workflowTransicao);
 				this.workflowTransicaoDao.commit();

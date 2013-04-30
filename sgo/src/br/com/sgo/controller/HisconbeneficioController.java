@@ -1,10 +1,13 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.HisconBeneficioDao;
@@ -19,28 +22,31 @@ import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.HisconBeneficio;
 import br.com.sgo.modelo.ParceiroBeneficio;
-import br.com.sgo.modelo.ParceiroLocalidade;
 
 @Resource
 public class HisconbeneficioController {
 
 	private final Result result;
+	private final Validator validator;
 	private final UsuarioInfo usuarioInfo;
-	private final PerfilDao perfilDao;
-	private final HisconBeneficioDao hisconBeneficioDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
+	private final PerfilDao perfilDao;
+	private final HisconBeneficioDao hisconBeneficioDao;
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final UsuarioDao usuarioDao;
 	private final WorkflowDao workflowDao;
 	private final WorkflowEtapaDao workflowEtapaDao;
 	private final UsuarioPerfilDao usuarioPerfilDao;
 	private HisconBeneficio hisconBeneficio;
+	private Calendar dataAtual = Calendar.getInstance();
 
-	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo, HisconBeneficioDao hisconBeneficioDao, EmpresaDao empresaDao,
+	public HisconbeneficioController(Result result, Validator validator, UsuarioInfo usuarioInfo, HisconBeneficioDao hisconBeneficioDao, EmpresaDao empresaDao,
 			OrganizacaoDao organizacaoDao, ParceiroBeneficioDao parceiroBeneficioDao, UsuarioDao usuarioDao, WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,
 			UsuarioPerfilDao usuarioPerfilDao, PerfilDao perfilDao, HisconBeneficio hisconBeneficio) {
+
 		this.result = result;
+		this.validator = validator;
 		this.usuarioInfo = usuarioInfo;
 		this.hisconBeneficioDao = hisconBeneficioDao;
 		this.empresaDao = empresaDao;
@@ -106,10 +112,27 @@ public class HisconbeneficioController {
 
 		String mensagem = "";
 
-		hisconBeneficio.setIsActive(true);
+		this.hisconBeneficio.setCreated(dataAtual);
+		this.hisconBeneficio.setUpdated(dataAtual);
 
-		try{
-			
+		this.hisconBeneficio.setCreatedBy(usuarioInfo.getUsuario());
+		this.hisconBeneficio.setUpdatedBy(usuarioInfo.getUsuario());
+		this.hisconBeneficio.setPerfil(usuarioInfo.getPerfil());
+
+		this.hisconBeneficio.setIsActive(true);
+		this.hisconBeneficio.setIsWorkflow(true);
+		this.hisconBeneficio.setIsEnviado(false);
+		this.hisconBeneficio.setIsImportado(false);
+		this.hisconBeneficio.setIsPadrao(false);
+
+		this.hisconBeneficio.setWorkflow(this.workflowDao.load(1L));
+		this.hisconBeneficio.setWorkflowEtapa(this.workflowEtapaDao.load(1L));
+
+		this.hisconBeneficio.setWorkflowPosicao(this.workflowDao.load(3L));
+		this.hisconBeneficio.setWorkflowPosicaoEtapa(this.workflowEtapaDao.load(7L));
+
+		try {
+
 			this.hisconBeneficioDao.beginTransaction();
 			this.hisconBeneficioDao.adiciona(hisconBeneficio);
 			this.hisconBeneficioDao.commit();
@@ -124,6 +147,7 @@ public class HisconbeneficioController {
 			this.hisconBeneficioDao.close();
 
 		}
+
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
@@ -161,6 +185,50 @@ public class HisconbeneficioController {
 		
 	}
 
+	
+	@Post
+	@Path("/hisconbeneficio/altera")
+	public void altera(HisconBeneficio hisconBeneficio) {
+
+		HisconBeneficio hiscon = this.hisconBeneficioDao.load(hisconBeneficio.getHisconBeneficio_id());
+		
+		String mensagem = "";
+	
+		this.hisconBeneficio.setUpdated(dataAtual);
+		this.hisconBeneficio.setUpdatedBy(usuarioInfo.getUsuario());
+		
+		//this.hisconBeneficio.setIsActive(true);
+		//this.hisconBeneficio.setIsWorkflow(true);
+		//this.hisconBeneficio.setIsEnviado(false);
+		//this.hisconBeneficio.setIsImportado(false);
+		//this.hisconBeneficio.setIsPadrao(false);
+
+		//this.hisconBeneficio.setWorkflow(this.workflowDao.load(1L));
+		//this.hisconBeneficio.setWorkflowEtapa(this.workflowEtapaDao.load(1L));
+
+		try{
+
+			this.hisconBeneficioDao.beginTransaction();
+			this.hisconBeneficioDao.atualiza(hiscon);
+			this.hisconBeneficioDao.commit();
+
+		} catch (Exception e) {
+
+			mensagem = "Erro ao adicionar o workflow.";
+
+		} finally{
+
+			this.hisconBeneficioDao.clear();
+			this.hisconBeneficioDao.close();
+
+		}
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+			
+	}
+	
+	
 	@Get
 	public void msg() {
 
@@ -170,63 +238,71 @@ public class HisconbeneficioController {
 	@Path("/hisconbeneficio/busca.json")
 	@Public
 	public void hisconbeneficio(Long empresa_id, Long organizacao_id) {
-		// result.use(Results.json()).withoutRoot().from(agenciaDao.buscaAgenciaByEmOrBaCa(empresa_id,
-		// organizacao_id, banco_id, codigoagencia)).serialize();
+		// result.use(Results.json()).withoutRoot().from(agenciaDao.buscaAgenciaByEmOrBaCa(empresa_id, organizacao_id, banco_id, codigoagencia)).serialize();
 	}
 
 	@Post
 	@Path("/uploadHiscon")
-	public void uploadHiscon(UploadedFile zip) {
-		/*
-		 * validator.validate(zip); validator.onErrorUsePageOf(this).consulta();
-		 * 
-		 * Date now = new Date(); String hora = new
-		 * SimpleDateFormat("ddMMyyyyHHmm").format(now);
-		 * 
-		 * Collection<File> files = new ArrayList<File>();
-		 * 
-		 * if ( zip != null ) {
-		 * 
-		 * String diretorio = "////localhost//sistemas//_repositorio//hiscon//";
-		 * String nomeFile = diretorio + zip.getFileName();
-		 * 
-		 * try {
-		 * 
-		 * IOUtils.copy(zip.getFile(), new FileOutputStream(new
-		 * File(nomeFile))); CustomFileUtil.extraiZip(new File(nomeFile),new
-		 * File(diretorio));
-		 * 
-		 * hiscons = this.HisconDao.buscaHisconsAdm();
-		 * 
-		 * for (Hiscon h : hiscons){
-		 * 
-		 * System.gc();
-		 * 
-		 * File f = new File(diretorio + h.getCliente().getBeneficio() +
-		 * ".pdf");
-		 * 
-		 * if( f.exists() ) {
-		 * 
-		 * String caminhoImagemAux = diretorio + h.getCliente().getBeneficio() +
-		 * "_" + hora + ".pdf"; File caminhoImagem = new File(caminhoImagemAux);
-		 * 
-		 * FileUtils.copyFile(f, caminhoImagem);
-		 * 
-		 * h.setStatus("Enviado");
-		 * 
-		 * h.setImagem(true); h.setCaminhoImagem(caminhoImagem.getName());
-		 * 
-		 * altera(h); files.add(f); } }
-		 * 
-		 * } catch (FileNotFoundException e) { e.printStackTrace(); } catch
-		 * (IOException e) { e.printStackTrace(); } finally {
-		 * 
-		 * for(File f : files){ CustomFileUtil.deleteFile(f); }
-		 * 
-		 * } }
-		 * 
-		 * result.redirectTo(this).consulta();
-		 */
+	public void uploadHiscon(UploadedFile zip) {		
+			
+		/*validator.validate(zip);			
+		validator.onErrorUsePageOf(this).consulta();
+
+		Date now = new Date();
+		String hora = new SimpleDateFormat("ddMMyyyyHHmm").format(now);
+		
+		Collection<File> files = new ArrayList<File>();
+
+		if ( zip != null ) {
+
+			String diretorio = "////localhost//sistemas//_repositorio//hiscon//";
+			String nomeFile = diretorio + zip.getFileName();
+
+			try {
+
+				IOUtils.copy(zip.getFile(), new FileOutputStream(new File(nomeFile)));
+				CustomFileUtil.extraiZip(new File(nomeFile),new File(diretorio));
+
+				hiscons = this.hisconDao.buscaHisconsAdm();
+
+				for (Hiscon h : hiscons){
+
+					System.gc();
+
+					File f = new File(diretorio + h.getCliente().getBeneficio() + ".pdf");
+
+					if( f.exists() ) {
+
+						String caminhoImagemAux = diretorio + h.getCliente().getBeneficio() + "_" + hora + ".pdf";
+						File caminhoImagem = new File(caminhoImagemAux);
+
+						FileUtils.copyFile(f, caminhoImagem);
+
+						h.setStatus("Enviado");
+
+						h.setImagem(true);
+						h.setCaminhoImagem(caminhoImagem.getName());
+
+						altera(h);
+						files.add(f);
+					}
+				}
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+
+				for(File f : files){
+					CustomFileUtil.deleteFile(f);
+				}
+
+			}
+		}
+
+		result.redirectTo(this).consulta();
+		*/
 	}
 
 	@Post

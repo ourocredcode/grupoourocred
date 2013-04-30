@@ -50,6 +50,21 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			+ " INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON PERFIL.perfil_id = USUARIOPERFIL.perfil_id) "
 			+ " INNER JOIN WORKFLOWETAPA (NOLOCK) ON (HISCONBENEFICIO.workflowetapa_id = WORKFLOWETAPA.workflowetapa_id) AND (HISCONBENEFICIO.workflow_id = WORKFLOWETAPA.workflow_id)";
 
+	private String sqlHisconsExibe = "SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, EMPRESA.nome as empresa_nome " + 
+			 ", HISCONBENEFICIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, HISCONBENEFICIO.parceirobeneficio_id , PARCEIROBENEFICIO.numerobeneficio " + 
+			 ", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,PERFIL.perfil_id, PERFIL.nome " +
+			 ", HISCONBENEFICIO.workflow_id, PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.cpf " +
+			 ", PARCEIRONEGOCIO.nome as parceironegocio_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " + 
+			 ", HISCONBENEFICIO.dataadm, HISCONBENEFICIO.dataenvio, HISCONBENEFICIO.caminhoarquivo " +
+			 ", HISCONBENEFICIO.isworkflow, HISCONBENEFICIO.isenviado, HISCONBENEFICIO.isimportado, HISCONBENEFICIO.ispadrao " +
+				" FROM ((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) " +
+				" INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) " + 
+				" INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " + 
+				" INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id) " +
+				" INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id) AND (PERFIL.perfil_id = USUARIOPERFIL.perfil_id)) " + 
+				" INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) " +
+				" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id";
+
 	public HisconBeneficioDao(Session session, ConnJDBC conexao) {
 		super(session, HisconBeneficio.class);
 		this.conexao = conexao;
@@ -307,7 +322,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 	public Collection<HisconBeneficio> mostraHisconBeneficiosPorUsuarioPerfil(Long empresa_id, Long organizacao_id, Long perfil_id,Long usuario_id) {
 
-		String sql = sqlHisconsBeneficio;
+		String sql = sqlHisconsExibe;
 
 		if (empresa_id != null)
 			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
@@ -328,6 +343,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, perfil_id);
@@ -376,17 +392,25 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-				sdf.format(rsHisconBeneficio.getDate("created"));				
-				hisconBeneficio.setCreated(sdf.getCalendar());
+				if (rsHisconBeneficio.getDate("created") != null) {
+					sdf.format(rsHisconBeneficio.getDate("created"));				
+					hisconBeneficio.setCreated(sdf.getCalendar());
+				}
 
-				sdf.format(rsHisconBeneficio.getDate("updated"));
-				hisconBeneficio.setUpdated(sdf.getCalendar());
+				if (rsHisconBeneficio.getDate("updated") != null){
+					sdf.format(rsHisconBeneficio.getDate("updated"));
+					hisconBeneficio.setUpdated(sdf.getCalendar());
+				}
 
-				sdf.format(rsHisconBeneficio.getDate("dataadm")); 
-				hisconBeneficio.setDataAdm(sdf.getCalendar());
+				if (rsHisconBeneficio.getDate("dataadm") != null){
+					sdf.format(rsHisconBeneficio.getDate("dataadm")); 
+					hisconBeneficio.setDataAdm(sdf.getCalendar());
+				}
 
-				sdf.format(rsHisconBeneficio.getDate("dataenvio"));
-				hisconBeneficio.setDataEnvio(sdf.getCalendar());		
+				if(rsHisconBeneficio.getDate("dataenvio")!=null){
+					sdf.format(rsHisconBeneficio.getDate("dataenvio"));
+					hisconBeneficio.setDataEnvio(sdf.getCalendar());		
+				}
 
 				if (rsHisconBeneficio.getString("caminhoarquivo") != null) {
 					hisconBeneficio.setCaminhoArquivo(rsHisconBeneficio.getString("caminhoarquivo"));
