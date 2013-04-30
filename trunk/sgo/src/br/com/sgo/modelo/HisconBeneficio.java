@@ -43,18 +43,34 @@ public class HisconBeneficio implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", updatable = true, nullable = false)
 	private Usuario usuario;
-
+	
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = false)
-	private WorkflowEtapa workflowEtapa;
+	@JoinColumn(name = "perfil_id", updatable = true, nullable = false)
+	private Perfil perfil;
 
 	@ManyToOne
 	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
 	private Workflow workflow;
 
 	@ManyToOne
+	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = false)
+	private WorkflowEtapa workflowEtapa;
+
+	@ManyToOne
 	@JoinColumn(name = "workflowposicao_id", updatable = true, nullable = false)
 	private Workflow workflowPosicao;
+
+	@ManyToOne
+	@JoinColumn(name = "workflowposicaoetapa_id", updatable = true, nullable = false)
+	private WorkflowEtapa workflowPosicaoEtapa;
+	
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	private Usuario createdBy;
+	
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	private Usuario updatedBy;
 
 	@Column(name = "created")
 	private Calendar created;
@@ -129,12 +145,12 @@ public class HisconBeneficio implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
+	public Perfil getPerfil() {
+		return perfil;
 	}
 
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 
 	public Workflow getWorkflow() {
@@ -145,12 +161,44 @@ public class HisconBeneficio implements Serializable {
 		this.workflow = workflow;
 	}
 
+	public WorkflowEtapa getWorkflowEtapa() {
+		return workflowEtapa;
+	}
+
+	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
+		this.workflowEtapa = workflowEtapa;
+	}
+
 	public Workflow getWorkflowPosicao() {
 		return workflowPosicao;
 	}
 
 	public void setWorkflowPosicao(Workflow workflowPosicao) {
 		this.workflowPosicao = workflowPosicao;
+	}
+
+	public WorkflowEtapa getWorkflowPosicaoEtapa() {
+		return workflowPosicaoEtapa;
+	}
+
+	public void setWorkflowPosicaoEtapa(WorkflowEtapa workflowPosicaoEtapa) {
+		this.workflowPosicaoEtapa = workflowPosicaoEtapa;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 	public Calendar getCreated() {
@@ -240,5 +288,4 @@ public class HisconBeneficio implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
 }

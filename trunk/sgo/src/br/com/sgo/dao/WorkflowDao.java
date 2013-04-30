@@ -114,7 +114,7 @@ public class WorkflowDao extends Dao<Workflow> {
 	}
 
 	public Workflow buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(Long empresa_id, Long organizacao_id, Long tipoworkflow_id, String nome ) {
-		
+
 		String sql = sqlWorkflow;
 
 		if (empresa_id != null)
@@ -127,28 +127,38 @@ public class WorkflowDao extends Dao<Workflow> {
 			sql += " AND WORKFLOW.nome like ?";
 
 		this.conn = this.conexao.getConexao();
-		
+
 		Workflow workflow = null;
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
-			
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, tipoworkflow_id);
 			this.stmt.setString(4, "%" + nome + "%");
-			
+
 			this.rsWorkflow = this.stmt.executeQuery();
-			
+
 			while (rsWorkflow.next()) {
+
 				workflow = new Workflow();
 				workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
 				workflow.setNome(rsWorkflow.getString("nome"));
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsWorkflow, stmt, conn);
+
 		return workflow;
+
 	}
 	
 	public Collection<Workflow> buscaWorkflowsPorNome(Long empresa_id, Long organizacao_id, String nome) {
@@ -169,19 +179,19 @@ public class WorkflowDao extends Dao<Workflow> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			
-			if (empresa_id != null)
-				this.stmt.setLong(1, empresa_id);
-			if (organizacao_id != null)
-				this.stmt.setLong(2, organizacao_id);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, "%" + nome + "%");
+
 			if (!nome.equals(""))
-				this.stmt.setString(3, "%" + nome + "%");
 
 			this.rsWorkflow = this.stmt.executeQuery();
 
 			while (rsWorkflow.next()) {
 				
 				Workflow workflow = new Workflow();				
+
 				Empresa e = new Empresa();
 				Organizacao o = new Organizacao();
 
@@ -196,13 +206,15 @@ public class WorkflowDao extends Dao<Workflow> {
 
 				workflow.setEmpresa(e);
 				workflow.setOrganizacao(o);
-				workflows.add(workflow);
 
 				workflows.add(workflow);
+
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsWorkflow, stmt, conn);
@@ -212,41 +224,48 @@ public class WorkflowDao extends Dao<Workflow> {
 	}
 
 	public Workflow buscaWorkflowPorNome(Long empresa, Long organizacao, String nome) {
-		
+
 		String sql = sqlWorkflow;
-		
+
 		if (empresa != null)
 			sql += " WHERE WORKFLOW.empresa_id = ?";
 		if (organizacao != null)
 			sql += " AND WORKFLOW.organizacao_id = ?";
 		if (nome != null)
 			sql += " AND WORKFLOW.nome like ?";
-		
+
 		this.conn = this.conexao.getConexao();
-		
+
 		Workflow workflow = null;
-		
+
 		try {
-			
+
 			this.stmt = conn.prepareStatement(sql);
-			
+
 			this.stmt.setLong(1, empresa);
 			this.stmt.setLong(2, organizacao);
 			this.stmt.setString(3, "%" + nome + "%");
-			
+
 			this.rsWorkflow = this.stmt.executeQuery();
-			
+
 			while (rsWorkflow.next()) {
+
 				workflow = new Workflow();
 				workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
 				workflow.setNome(rsWorkflow.getString("nome"));
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsWorkflow, stmt, conn);
-		
+
 		return workflow;
+
 	}
 
 }
