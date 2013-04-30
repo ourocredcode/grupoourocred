@@ -16,7 +16,7 @@
 	
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current">Status</a>
+		<a href="#" class="current">Formulário</a>
 	</div>
 
 	<c:if test="${not empty notice}">
@@ -96,7 +96,7 @@
 				<div id="div-contratos" style="float: none;clear:both;">
 
 					<table class="table table-striped table-bordered">
-						<c:if test="${not empty contrato}">
+						<c:if test="${not empty formulario.contratos}">
 						<thead>	
 							<tr>
 								<th colspan="13">
@@ -149,52 +149,54 @@
 							</tr>
 						</thead>
 						<tbody>		
-							<tr>
-								<td>
-									${contrato.banco.nome }
-								</td>
-								<td>
-									${contrato.produto.nome }
-								</td>
-								<td>
-									${contrato.recompraBanco.nome }
-								</td>
-								<td>
-									${contrato.qtdParcelasAberto }
-								</td>
-								<td>
-									${contrato.valorContrato }
-								</td>
-								<td>
-									${contrato.valorParcela }
-								</td>
-								<td>
-									${contrato.prazo }
-								</td>
-								<td>
-									${contrato.valorDivida }
-								</td>
-								<td>
-									${contrato.valorSeguro }
-								</td>
-								<td>
-									${contrato.desconto }
-								</td>
-								<td>
-									${contrato.valorLiquido }
-								</td>
-								<td>
-									<fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" />
-								</td>
-								<td class="label_txt" style="text-align: center">
-									<c:if test="${not empty contrato.observacao}">
-										<a href="#" onclick="return showObs('${contrato.observacao}');" style="border: 0"><img src="../img/lupa.gif" border="0"/></a>
-									</c:if>
-								</td>
-								<td>
-									Status
-								</td>
-							</tr>
+							<c:forEach items="${formulario.contratos}" var="contrato">
+								<tr>
+									<td>
+										${contrato.banco.nome }
+									</td>
+									<td>
+										${contrato.produto.nome }
+									</td>
+									<td>
+										${contrato.recompraBanco.nome }
+									</td>
+									<td>
+										${contrato.qtdParcelasAberto }
+									</td>
+									<td>
+										${contrato.valorContrato }
+									</td>
+									<td>
+										${contrato.valorParcela }
+									</td>
+									<td>
+										${contrato.prazo }
+									</td>
+									<td>
+										${contrato.valorDivida }
+									</td>
+									<td>
+										${contrato.valorSeguro }
+									</td>
+									<td>
+										${contrato.desconto }
+									</td>
+									<td>
+										${contrato.valorLiquido }
+									</td>
+									<td>
+										<fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" />
+									</td>
+									<td class="label_txt" style="text-align: center">
+										<c:if test="${not empty contrato.observacao}">
+											<a href="#" onclick="return showObs('${contrato.observacao}');" style="border: 0"><img src="../img/lupa.gif" border="0"/></a>
+										</c:if>
+									</td>
+									<td>
+										Status
+									</td>
+								</tr>
+							</c:forEach>
 						</tbody>	
 						</c:if>
 					</table>
@@ -205,9 +207,9 @@
 						<input value="Voltar" type="button" class="btn" onclick="javascript:window.location='/sgo/menu/inicio'">
 					</div>
 					<div class="span1" style="float: left;">
-						<input value="Formulário" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'">
+						<input value="Imprimir" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/impressao/${formulario.formulario_id}'">
 					</div>
-
+  
 				</div>
 
 			</div>

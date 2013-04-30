@@ -150,7 +150,7 @@
 													${contrato.valorMeta }
 												</td>
 												<td class="label_txt">
-													<a href="<c:url value="/contrato/status/${contrato.formulario.formulario_id}"/>">STATUS</a>
+													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">STATUS</a>
 												</td>
 												<td class="label_txt">
 													PÓS VENDA
