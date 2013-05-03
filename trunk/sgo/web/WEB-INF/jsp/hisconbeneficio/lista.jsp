@@ -12,19 +12,21 @@
 			<th>Cpf</th>
 			<th>Número Benefício</th>
 			<th>Status Atual</th>
+			<th>Quantidade</th>
 		</tr>
 	</thead>
 	<tbody>	
 		<c:forEach items="${hisconsBeneficio}" var="hiscon">
 			<tr>
 				<td>${hiscon.caminhoArquivo }</td>
-				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="time" value="${hiscon.created.time}" /></td>
-				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="time" value="${hiscon.dataAdm.time}" /></td>			
+				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
+				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>			
 				<td>${hiscon.usuario.nome }</td>									
 				<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
 				<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 				<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>				
 				<td>${hiscon.workflowEtapa.nome }</td>
+				<td>${hiscon.countHiscons }</td>
 			</tr>
 		</c:forEach>
 	</tbody>
