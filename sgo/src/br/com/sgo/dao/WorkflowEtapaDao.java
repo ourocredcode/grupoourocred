@@ -245,5 +245,45 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 		return workflowsEtapa;
 
 	}
+	
+	public Collection<WorkflowEtapa> buscaWorKFlowEtapaByContratoPerfil(Long contrato_id, Long perfil_id) {
+
+		String sql = "SELECT " +
+				"		WORKFLOWTRANSICAO.workflowetapaproximo_id, WORKFLOWETAPA.nome FROM " +
+				"	(CONTRATO INNER JOIN (WORKFLOWETAPA INNER JOIN WORKFLOWTRANSICAO ON WORKFLOWETAPA.workflowetapa_id = WORKFLOWTRANSICAO.workflowetapaproximo_id) " +
+				"		ON CONTRATO.workflowetapa_id = WORKFLOWTRANSICAO.workflowetapa_id) " +
+				"	 INNER JOIN PERFIL ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id WHERE CONTRATO.contrato_id = ? AND PERFIL.perfil_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<WorkflowEtapa> workflowsEtapa = new ArrayList<WorkflowEtapa>();
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, contrato_id);
+			this.stmt.setLong(2, perfil_id);
+
+			this.rsWorkflowEtapa = this.stmt.executeQuery();
+
+			while (rsWorkflowEtapa.next()) {
+
+				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+
+				workflowEtapa.setWorkflowEtapa_id(rsWorkflowEtapa.getLong("workflowetapaproximo_id"));
+				workflowEtapa.setNome(rsWorkflowEtapa.getString("nome"));
+
+				workflowsEtapa.add(workflowEtapa);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsWorkflowEtapa, stmt, conn);
+
+		return workflowsEtapa;
+
+	}
 
 }

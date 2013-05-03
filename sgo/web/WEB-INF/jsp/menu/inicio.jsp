@@ -22,7 +22,7 @@
 			<div class="span12">
 
 				<div class="alert alert-info">
-					Welcome in the <strong>Unicorn Admin Theme</strong>. Don't forget to check all the pages!
+					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas !
 					<a href="#" data-dismiss="alert" class="close">×</a>
 				</div>
 
@@ -150,7 +150,7 @@
 													${contrato.valorMeta }
 												</td>
 												<td class="label_txt">
-													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">STATUS</a>
+													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.workflowEtapa.nome }</a>
 												</td>
 												<td class="label_txt">
 													PÓS VENDA

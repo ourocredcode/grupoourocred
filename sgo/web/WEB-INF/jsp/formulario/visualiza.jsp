@@ -99,7 +99,7 @@
 						<c:if test="${not empty formulario.contratos}">
 						<thead>	
 							<tr>
-								<th colspan="13">
+								<th colspan="14">
 									Total de contratos 
 								</th>
 							</tr>
@@ -143,7 +143,7 @@
 								<th scope="col">
 									Observação
 								</th>
-								<th scope="col">
+									<th scope="col">
 									Status
 								</th>
 							</tr>
@@ -193,7 +193,7 @@
 										</c:if>
 									</td>
 									<td>
-										Status
+										<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.workflowEtapa.nome }</a>
 									</td>
 								</tr>
 							</c:forEach>

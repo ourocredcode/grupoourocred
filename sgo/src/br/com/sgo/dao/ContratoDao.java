@@ -21,6 +21,7 @@ import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.Usuario;
+import br.com.sgo.modelo.WorkflowEtapa;
 
 @Component
 public class ContratoDao extends Dao<Contrato> {
@@ -39,7 +40,7 @@ public class ContratoDao extends Dao<Contrato> {
 			"					CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, " +
 			"					CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, " +
 			"					B1.nome as banco_nome, B2.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, " +
-			"					PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf " +
+			"					PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, CONTRATO.workflowetapa_id, WORKFLOWETAPA.nome as workflowetapa_nome  " +
 			"					FROM " +
 			"		((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) " +
 			"						 INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) " +
@@ -49,7 +50,8 @@ public class ContratoDao extends Dao<Contrato> {
 			"						 INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) " +
 			"						 INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) " +
 			"						 INNER JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) " +
-			"						 INNER JOIN BANCO AS B1 (NOLOCK) ON CONTRATO.banco_id = B1.banco_id" +
+			"						 INNER JOIN BANCO AS B1 (NOLOCK) ON CONTRATO.banco_id = B1.banco_id " +
+			"						 INNER JOIN WORKFLOWETAPA (NOLOCK) ON CONTRATO.workflowetapa_id = WORKFLOWETAPA.workflowetapa_id " +
 			"						 LEFT JOIN BANCO AS B2 (NOLOCK) ON CONTRATO.recompra_banco_id = B2.banco_id ";
 
 	public ContratoDao(Session session, ConnJDBC conexao) {
@@ -114,6 +116,36 @@ public class ContratoDao extends Dao<Contrato> {
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contratos;
 	}
+	
+	public Contrato buscaContratoById(Long contrato_id) {
+
+		String sql = sqlContrato;
+		
+		if(contrato_id != null)
+			sql += " WHERE CONTRATO.contrato_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Contrato contrato = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, contrato_id);
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+				contrato = new Contrato();
+				getFormulario(contrato);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contrato;
+	}
 
 	private void getFormulario(Collection<Contrato> contratos)
 			throws SQLException {
@@ -125,6 +157,7 @@ public class ContratoDao extends Dao<Contrato> {
 		ParceiroNegocio parceiro = new ParceiroNegocio();
 		Coeficiente coeficiente = new Coeficiente();
 		Produto produto = new Produto();
+		WorkflowEtapa workflowEtapa = new WorkflowEtapa();
 		
 		Banco b1 = new Banco();
 		Banco b2 = new Banco();
@@ -153,6 +186,9 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		b2.setBanco_id(rsContrato.getLong("recompra_banco_id"));
 		b2.setNome(rsContrato.getString("bancoRecompra_nome"));
+		
+		workflowEtapa.setWorkflowEtapa_id(rsContrato.getLong("workflowetapa_id"));
+		workflowEtapa.setNome(rsContrato.getString("workflowetapa_nome"));
 
 		formulario.setParceiroNegocio(parceiro);
 		contrato.setFormulario(formulario);
@@ -161,6 +197,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setUsuario(usuario);
 		contrato.setBanco(b1);
 		contrato.setRecompraBanco(b2);
+		contrato.setWorkflowEtapa(workflowEtapa);
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
 		contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
 		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
@@ -172,6 +209,68 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
 
 		contratos.add(contrato);
+	}
+	
+	private void getFormulario(Contrato contrato)
+			throws SQLException {
+		
+		Calendar created = new GregorianCalendar();
+		Formulario formulario = new Formulario();
+		Usuario usuario = new Usuario();
+		ParceiroNegocio parceiro = new ParceiroNegocio();
+		Coeficiente coeficiente = new Coeficiente();
+		Produto produto = new Produto();
+		WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+		
+		Banco b1 = new Banco();
+		Banco b2 = new Banco();
+
+		usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
+		usuario.setNome(rsContrato.getString("usuario_nome"));
+
+		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
+		created.setTime(rsContrato.getDate("created"));
+		formulario.setCreated(created);
+
+		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
+		
+		parceiro.setParceiroNegocio_id(rsContrato.getLong("parceironegocio_id"));
+		parceiro.setNome(rsContrato.getString("parceiro_nome"));
+		parceiro.setCpf(rsContrato.getString("parceiro_cpf"));
+		
+		coeficiente.setCoeficiente_id(rsContrato.getLong("coeficiente_id"));
+		coeficiente.setValor(rsContrato.getDouble("valor"));
+		
+		produto.setProduto_id(rsContrato.getLong("produto_id"));
+		produto.setNome(rsContrato.getString("produto_nome"));
+		
+		b1.setBanco_id(rsContrato.getLong("banco_id"));
+		b1.setNome(rsContrato.getString("banco_nome"));
+		
+		b2.setBanco_id(rsContrato.getLong("recompra_banco_id"));
+		b2.setNome(rsContrato.getString("bancoRecompra_nome"));
+		
+		workflowEtapa.setWorkflowEtapa_id(rsContrato.getLong("workflowetapa_id"));
+		workflowEtapa.setNome(rsContrato.getString("workflowetapa_nome"));
+
+		formulario.setParceiroNegocio(parceiro);
+		contrato.setFormulario(formulario);
+		contrato.setCoeficiente(coeficiente);
+		contrato.setProduto(produto);
+		contrato.setUsuario(usuario);
+		contrato.setBanco(b1);
+		contrato.setRecompraBanco(b2);
+		contrato.setWorkflowEtapa(workflowEtapa);
+		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
+		contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
+		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
+		contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
+		contrato.setValorMeta(rsContrato.getDouble("valormeta"));
+		contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
+		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
+		contrato.setPrazo(rsContrato.getInt("prazo"));
+		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
+
 	}
 
 }
