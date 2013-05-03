@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,7 +23,6 @@ import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
-import br.com.sgo.modelo.WorkflowEtapa;
 
 @Component
 public class HisconBeneficioDao extends Dao<HisconBeneficio> {
@@ -64,6 +64,25 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				" INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id) AND (PERFIL.perfil_id = USUARIOPERFIL.perfil_id)) " + 
 				" INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) " +
 				" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id";
+	
+	private String sqlCountHiscons = "SELECT COUNT(HISCONBENEFICIO.parceirobeneficio_id) AS quantidade_beneficio , PARCEIROBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numerobeneficio, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id "+
+			" FROM ((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) "+
+			" INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) "+ 
+			" INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) "+
+			" INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id) "+
+			" INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id) AND (PERFIL.perfil_id = USUARIOPERFIL.perfil_id)) "+ 
+			" INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) "+
+			" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id ";
+			
+	private String sqlHisconsToUpload = " SELECT HISCONBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numerobeneficio " +
+			", HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, HISCONBENEFICIO.hisconbeneficio_id "+
+			" FROM ((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) "+
+			" INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) "+ 
+			" INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) "+
+			" INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id) "+
+			" INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id) AND (PERFIL.perfil_id = USUARIOPERFIL.perfil_id)) "+ 
+			" INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) "+
+			" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id ";
 
 	public HisconBeneficioDao(Session session, ConnJDBC conexao) {
 		super(session, HisconBeneficio.class);
@@ -228,6 +247,60 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		return hisconbeneficio;
 	}
 
+	public HisconBeneficio mostraHisconBeneficios(ParceiroBeneficio parceiroBeneficio) {
+
+		String sql = sqlHisconsBeneficio;
+
+		if (parceiroBeneficio.getEmpresa().getEmpresa_id() != null)
+			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
+		if (parceiroBeneficio.getOrganizacao().getOrganizacao_id() != null)
+			sql += " AND HISCONBENEFICIO.organizacao_id = ? ";
+		if (parceiroBeneficio.getParceiroBeneficio_id() != null)
+			sql += " AND HISCONBENEFICIO.parceirobeneficio_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		HisconBeneficio hisconBeneficio = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, parceiroBeneficio.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(2, parceiroBeneficio.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(3, parceiroBeneficio.getParceiroBeneficio_id());
+
+			this.rsHisconBeneficio = this.stmt.executeQuery();
+
+			while (rsHisconBeneficio.next()) {
+
+				hisconBeneficio = new HisconBeneficio();
+				parceiroBeneficio.setParceiroBeneficio_id(rsHisconBeneficio.getLong("parceirobeneficio_id"));				
+				hisconBeneficio.setParceiroBeneficio(parceiroBeneficio);
+				Usuario usuario = new Usuario();
+				usuario.setUsuario_id(rsHisconBeneficio.getLong("usuario_id"));
+				usuario.setNome(rsHisconBeneficio.getString("usuario_nome"));
+				hisconBeneficio.setUsuario(usuario);
+
+				hisconBeneficio.setIsEnviado(rsHisconBeneficio.getBoolean("isenviado"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rsHisconBeneficio != null || stmt != null || conn != null) {
+					this.conexao.closeConnection(rsHisconBeneficio, stmt, conn);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return hisconBeneficio;
+	}
+	
 	public Collection<HisconBeneficio> mostraHisconBeneficios(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id) {
 
 		String sql = sqlHisconsBeneficio;
@@ -377,9 +450,9 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				usuario.setUsuario_id(rsHisconBeneficio.getLong("usuario_id"));
 				usuario.setNome(rsHisconBeneficio.getString("usuario_nome"));
 
-				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
-				workflowEtapa.setWorkflowEtapa_id(rsHisconBeneficio.getLong("workflow_id"));
-				workflowEtapa.setNome(rsHisconBeneficio.getString("workflowetapa_nome"));
+				//WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+				//workflowEtapa.setWorkflowEtapa_id(rsHisconBeneficio.getLong("workflow_id"));
+				//workflowEtapa.setNome(rsHisconBeneficio.getString("workflowetapa_nome"));
 
 				HisconBeneficio hisconBeneficio = new HisconBeneficio();
 
@@ -388,33 +461,42 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				hisconBeneficio.setParceiroBeneficio(parceiroBeneficio);
 
 				hisconBeneficio.setUsuario(usuario);
-				hisconBeneficio.setWorkflowEtapa(workflowEtapa);
+				//hisconBeneficio.setWorkflowEtapa(workflowEtapa);
 
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-				if (rsHisconBeneficio.getDate("created") != null) {
-					sdf.format(rsHisconBeneficio.getDate("created"));				
-					hisconBeneficio.setCreated(sdf.getCalendar());
+				Calendar created = new GregorianCalendar();
+				
+				try {
+					
+					if (rsHisconBeneficio.getDate("created") != null) {
+						created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("created").toString()));
+						hisconBeneficio.setCreated(created);
+					}
+
+					if (rsHisconBeneficio.getDate("updated") != null){
+						created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("updated").toString()));
+						hisconBeneficio.setUpdated(sdf.getCalendar());
+					}
+
+					if (rsHisconBeneficio.getDate("dataadm") != null){
+						created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataadm").toString())); 
+						hisconBeneficio.setDataAdm(sdf.getCalendar());
+					}
+
+					if(rsHisconBeneficio.getDate("dataenvio")!=null){
+						created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataenvio").toString()));
+						hisconBeneficio.setDataEnvio(sdf.getCalendar());		
+					}
+
+					if (rsHisconBeneficio.getString("caminhoarquivo") != null) {
+						hisconBeneficio.setCaminhoArquivo(rsHisconBeneficio.getString("caminhoarquivo"));
+					}
+					
+				} catch (ParseException e) {
+					e.printStackTrace();
 				}
-
-				if (rsHisconBeneficio.getDate("updated") != null){
-					sdf.format(rsHisconBeneficio.getDate("updated"));
-					hisconBeneficio.setUpdated(sdf.getCalendar());
-				}
-
-				if (rsHisconBeneficio.getDate("dataadm") != null){
-					sdf.format(rsHisconBeneficio.getDate("dataadm")); 
-					hisconBeneficio.setDataAdm(sdf.getCalendar());
-				}
-
-				if(rsHisconBeneficio.getDate("dataenvio")!=null){
-					sdf.format(rsHisconBeneficio.getDate("dataenvio"));
-					hisconBeneficio.setDataEnvio(sdf.getCalendar());		
-				}
-
-				if (rsHisconBeneficio.getString("caminhoarquivo") != null) {
-					hisconBeneficio.setCaminhoArquivo(rsHisconBeneficio.getString("caminhoarquivo"));
-				}
+				
 
 				hisconsBeneficio.add(hisconBeneficio);
 
@@ -434,9 +516,64 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 		return hisconsBeneficio;
 	}
-	
+
+	public Integer mostraCountHisconsBeneficios(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id) {
+
+		String sql = sqlCountHiscons;
+
+		if (empresa_id != null)
+			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
+
+		if (organizacao_id != null)
+			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.created BETWEEN getDate() -20 and getDate() "+
+					" AND HISCONBENEFICIO.parceirobeneficio_id = ? GROUP BY PARCEIROBENEFICIO.numerobeneficio, PARCEIROBENEFICIO.parceirobeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id ";
+
+		this.conn = this.conexao.getConexao();
+
+		Integer count = 0;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, parceirobeneficio_id);
+
+			this.rsHisconBeneficio = this.stmt.executeQuery();
+
+			while (rsHisconBeneficio.next()) {
+
+				 count = rsHisconBeneficio.getInt("quantidade_beneficio");
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+				if (rsHisconBeneficio != null || stmt != null || conn != null) {
+
+					this.conexao.closeConnection(rsHisconBeneficio, stmt, conn);
+
+				}
+
+			} catch (Exception e) {
+
+				e.printStackTrace();
+
+			}
+		}
+
+		return count;
+
+	}
+
 	public Collection<HisconBeneficio> mostraHisconBeneficiosPorPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
-		
+
 		String sql = sqlHisconsBeneficio;
 
 		if (empresa_id != null)
@@ -447,11 +584,13 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			sql += " AND PERFIL.perfil_id = ? ";
 
 		this.conn = this.conexao.getConexao();
+
 		Collection<HisconBeneficio> hisconsBeneficio = new ArrayList<HisconBeneficio>();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, perfil_id);
@@ -495,8 +634,11 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				hisconbeneficio.setWorkflow(workflow);
 
 				Calendar cal = new GregorianCalendar();
+				SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+				formater.format(rsHisconBeneficio.getDate("created").getTime());
+
 				cal.setTime(rsHisconBeneficio.getDate("created"));
-				//hisconbeneficio.setCreated(cal);
+				hisconbeneficio.setCreated(cal);
 
 				cal.setTime(rsHisconBeneficio.getDate("updated"));
 				hisconbeneficio.setUpdated(cal);
@@ -507,8 +649,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				cal.setTime(rsHisconBeneficio.getDate("dataenvio"));
 				hisconbeneficio.setDataEnvio(cal);
 
-				hisconbeneficio.setCaminhoArquivo(rsHisconBeneficio
-						.getString("caminhoarquivo"));
+				hisconbeneficio.setCaminhoArquivo(rsHisconBeneficio.getString("caminhoarquivo"));
 
 				hisconsBeneficio.add(hisconbeneficio);
 
@@ -527,6 +668,69 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		}
 
 		return hisconsBeneficio;
+
 	}
 
+	public Collection<HisconBeneficio> mostraHisconsToUpload(Long empresa_id, Long organizacao_id) {
+
+		String sql = sqlHisconsToUpload;
+
+		if (empresa_id != null)
+			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
+		if (organizacao_id != null)
+			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.workflowetapa_id = 2";
+		
+		this.conn = this.conexao.getConexao();
+
+		Collection<HisconBeneficio> hisconsBeneficio = new ArrayList<HisconBeneficio>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);			
+
+			this.rsHisconBeneficio = this.stmt.executeQuery();
+
+			while (rsHisconBeneficio.next()) {
+
+				Empresa empresa = new Empresa();
+				empresa.setEmpresa_id(rsHisconBeneficio.getLong("empresa_id"));
+
+				Organizacao organizacao = new Organizacao();
+				organizacao.setOrganizacao_id(rsHisconBeneficio.getLong("organizacao_id"));
+
+				ParceiroBeneficio parceirobeneficio = new ParceiroBeneficio();
+				parceirobeneficio.setParceiroBeneficio_id(rsHisconBeneficio.getLong("parceirobeneficio_id"));
+				parceirobeneficio.setNumeroBeneficio(rsHisconBeneficio.getString("numerobeneficio"));
+
+				HisconBeneficio hisconbeneficio = new HisconBeneficio();
+				hisconbeneficio.setEmpresa(empresa);
+				hisconbeneficio.setOrganizacao(organizacao);
+				hisconbeneficio.setParceiroBeneficio(parceirobeneficio);
+				hisconbeneficio.setHisconBeneficio_id(rsHisconBeneficio.getLong("hisconbeneficio_id"));
+
+				hisconsBeneficio.add(hisconbeneficio);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rsHisconBeneficio != null || stmt != null || conn != null) {
+					this.conexao.closeConnection(rsHisconBeneficio, stmt, conn);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return hisconsBeneficio;
+
+	}
+	
+	
+	
 }

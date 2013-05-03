@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.SessionScoped;
@@ -105,6 +106,9 @@ public class HisconBeneficio implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
+	@Transient
+	private Integer countHiscons;
+	
 	public Long getHisconBeneficio_id() {
 		return hisconBeneficio_id;
 	}
@@ -287,5 +291,13 @@ public class HisconBeneficio implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Integer getCountHiscons() {
+		return countHiscons;
+	}
+
+	public void setCountHiscons(Integer countHiscons) {
+		this.countHiscons = countHiscons;
 	}
 }

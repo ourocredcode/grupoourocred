@@ -195,7 +195,7 @@ public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganiz
 
 	public void insert(WorkflowEtapaPerfilAcesso workflowEtapaPerfilAcesso) throws SQLException {
 
-		String sql = "INSERT INTO WORKFLOWETAPAPERFILACESSO (empresa_id, organizacao_id, workflowetapa_id, perfil_id, isactive,isleituraescrita) VALUES (?,?,?,?,?,?)";
+		String sql = "INSERT INTO WORKFLOWETAPAPERFILACESSO (empresa_id, organizacao_id, workflowetapa_id, perfil_id, isactive,isleituraescrita,isupload) VALUES (?,?,?,?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
@@ -210,7 +210,8 @@ public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganiz
 			this.stmt.setLong(4, workflowEtapaPerfilAcesso.getPerfil().getPerfil_id());
 			this.stmt.setBoolean(5, workflowEtapaPerfilAcesso.getIsActive());
 			this.stmt.setBoolean(6, workflowEtapaPerfilAcesso.getIsLeituraEscrita());
-			
+			this.stmt.setBoolean(7, workflowEtapaPerfilAcesso.getIsUpload());
+
 			this.stmt.executeUpdate();
 			this.conn.commit();
 

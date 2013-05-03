@@ -34,6 +34,9 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 	@Column(name = "isleituraescrita")
 	private Boolean isLeituraEscrita;
 	
+	@Column(name = "isupload")
+	private Boolean isUpload;
+
 	@Column(name = "isactive")
 	private Boolean isActive;
 
@@ -75,6 +78,14 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 
 	public void setIsLeituraEscrita(Boolean isLeituraEscrita) {
 		this.isLeituraEscrita = isLeituraEscrita;
+	}
+
+	public Boolean getIsUpload() {
+		return isUpload;
+	}
+
+	public void setIsUpload(Boolean isUpload) {
+		this.isUpload = isUpload;
 	}
 
 	public Boolean getIsActive() {

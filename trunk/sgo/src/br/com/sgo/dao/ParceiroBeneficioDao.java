@@ -155,29 +155,43 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 	}
 
-	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByNome(
-			String nome) {
+	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByNome(String nome) {
+
 		String sql = sqlParceiroBeneficio;
+
 		if (nome != null)
 			sql += " WHERE PARCEIROBENEFICIO.nome like ?";
+
 		this.conn = this.conexao.getConexao();
+
 		Collection<ParceiroBeneficio> beneficios = new ArrayList<ParceiroBeneficio>();
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setString(1, "%" + nome + "%");
+
 			this.rsParceiroBeneficio = this.stmt.executeQuery();
+
 			ParceiroBeneficio beneficio = new ParceiroBeneficio();
+
 			while (rsParceiroBeneficio.next()) {
-				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio
-						.getLong("parceirobeneficio_id"));
-				beneficio.setNumeroBeneficio(rsParceiroBeneficio
-						.getString("numeroBeneficio"));
+				
+				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
+				beneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsParceiroBeneficio, stmt, conn);
 		return beneficios;
+
 	}
 
 	public ParceiroBeneficio buscaParceiroBeneficioPorNumeroBeneficio(Long empresa_id, Long organizacao_id, String numeroBeneficio) {
