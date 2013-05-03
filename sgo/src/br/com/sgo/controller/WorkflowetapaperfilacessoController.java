@@ -60,9 +60,10 @@ public class WorkflowetapaperfilacessoController {
 				workflowEtapaPerfilAcesso.setOrganizacao(this.organizacaoDao.load(usuarioInfo.getOrganizacao().getOrganizacao_id()));				
 				workflowEtapaPerfilAcesso.setWorkflowEtapa(this.workflowEtapaDao.load(workflowEtapaPerfilAcesso.getWorkflowEtapa().getWorkflowEtapa_id()));
 				workflowEtapaPerfilAcesso.setPerfil(this.perfilDao.load(workflowEtapaPerfilAcesso.getPerfil().getPerfil_id()));
-				
-				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null ? false: true);
-				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null ? false: true);				
+
+				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null ? false : true);
+				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null ? false : true);
+				workflowEtapaPerfilAcesso.setIsUpload(workflowEtapaPerfilAcesso.getIsUpload() == null ? false : true);
 
 				this.workflowEtapaPerfilAcessoDao.insert(workflowEtapaPerfilAcesso);
 
@@ -70,13 +71,13 @@ public class WorkflowetapaperfilacessoController {
 				
 			} else {
 				
-				mensagem = "Perfil " + workflowEtapaPerfilAcesso.getPerfil().getNome() +" já cadastrado para a etapa " + workflowEtapaPerfilAcesso.getWorkflowEtapa().getNome();
+				mensagem = "Erro: Perfil " + workflowEtapaPerfilAcesso.getPerfil().getNome() +" já cadastrado para a etapa " + workflowEtapaPerfilAcesso.getWorkflowEtapa().getNome();
 				
 			} 
 
 		} catch (Exception e) {
 
-			mensagem = "Erro ao adicionar o Perfil para o Workflow :" + workflowEtapaPerfilAcesso.getPerfil().getNome();
+			mensagem = "Erro: Falha ao adicionar o Perfil para o Workflow :" + workflowEtapaPerfilAcesso.getPerfil().getNome();
 
 		}finally{
 

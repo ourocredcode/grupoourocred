@@ -63,13 +63,13 @@ public class WorkflowtransicaoController {
 
 			} else {
 
-				mensagem = "Workflow transição já cadastrado.";
+				mensagem = "Erro: Workflow transição já cadastrado.";
 
 			}
 
 		} catch (Exception e) {
 
-				mensagem = "Erro ao adicionar Workflow :";
+				mensagem = "Erro: falha ao adicionar Workflow :";
 
 		} finally{
 

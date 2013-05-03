@@ -71,13 +71,13 @@ public class WorkflowperfilacessoController {
 
 			} else {
 				
-				mensagem = "Perfil " + workflowPerfilAcesso.getPerfil().getNome() + " já cadastrado para o Workflow " + workflowPerfilAcesso.getWorkflow().getNome();
+				mensagem = "Erro: Perfil " + workflowPerfilAcesso.getPerfil().getNome() + " já cadastrado para o Workflow " + workflowPerfilAcesso.getWorkflow().getNome();
 				
 			} 
 
 		} catch (Exception e) {
 
-			mensagem = "Erro ao adicionar o Perfil Workflow :";
+			mensagem = "Erro: ao adicionar o Perfil Workflow :";
 
 		} finally{
 

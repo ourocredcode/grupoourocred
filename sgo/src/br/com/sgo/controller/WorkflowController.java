@@ -59,12 +59,12 @@ public class WorkflowController {
 				mensagem = "Workflow " + workflow.getNome() + " adicionado com sucesso.";
 				
 			} else {
-				mensagem = "Workflow " + workflow.getNome() + " já cadastrado.";
+				mensagem = "Erro: Workflow " + workflow.getNome() + " já cadastrado.";
 			} 
 
 		} catch (Exception e) {
 
-			mensagem = "Erro ao adicionar o workflow " + workflow.getNome() + ".";
+			mensagem = "Erro: Falha ao adicionar o workflow " + workflow.getNome() + ".";
 
 		}finally{
 
