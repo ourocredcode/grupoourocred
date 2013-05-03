@@ -29,8 +29,24 @@ jQuery(function($){
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/hisconbeneficio/cadastro" />';
 	});
+	
+	
 
 });
+
+function altera(atributo, id, valor) {
+
+	var atributo = "hiscon." + atributo;
+
+	var temp = "$.post( ";
+	temp += "	'<c:url value='/hiscon/altera' />', ";
+	temp += "	{ '" + atributo + "' : valor, 'hiscon.id' : id }, ";
+	temp += "	function(resposta) { }";
+	temp += ");";
+
+	eval(temp);
+
+}
 
 function limpaForm() {
 	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
@@ -72,7 +88,7 @@ function limpaForm() {
 	</c:if>
 
 	<div id="buscaHisconBeneficioDiv" style="float: left; margin-top: 10px; margin-left: 20px;position: absolute;">
-		<form id="buscaHisconBeneficioDiv" class="form-search" action="<c:url value="/hisconbeneficio/cadastro" />" method="POST">
+		<form id="buscaHisconBeneficioDiv" class="form-search" action="<c:url value="/hisconbeneficio/cadastroteste" />" method="POST">
 			<div class="input-append">
 				<input type="hidden" id="hisconBeneficioEmpresaId" name="empresa_id" value="${usuarioInfo.empresa.empresa_id }" />
 				<input type="hidden" id="hisconBeneficioOrganizacaoId" name="organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" />
@@ -114,18 +130,7 @@ function limpaForm() {
 						</div>
 					</div>
 					<br>
-					<table>
-						<c:if test="${empty hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id}">
-							<td style="width: 120px;"></td>
-						</c:if>
-						<c:if test="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id != null}">
-							<td style="width: 200px;">
-								<form action="<c:url value="/hisconbeneficio/salva"/>" method="POST">
-									<button type="submit" class="btn btn-primary" id="btnSalvar" value="Solicitar Hiscon">Solicitar Hiscon</button>									
-								</form>
-							</td>
-						</c:if>
-					</table>
+
 					<br>
 				 	<div class="btn-group">
 						<input type="button" value="Voltar" id="btnSalvar" onClick="history.go(-1)" class="btn btn-primary" style="width: 100px;">
@@ -137,34 +142,69 @@ function limpaForm() {
 						<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 					</div>
 					<br><br>		
-					<table class="table table-striped table-bordered" id="lista">
-						<thead>
-							<tr>
-								<th>Imagem</th>
-								<th>Data solicitação</th>
-								<th>Data solicitação Adm</th>
-								<th>Consultor</th>
-								<th>Cliente</th>
-								<th>Cpf</th>
-								<th>Número Benefício</th>
-								<th>Status Atual</th>								
-							</tr>
-						</thead>
-						<tbody>	
-							<c:forEach items="${hisconsBeneficio}" var="hiscon">
-								<tr>
-									<td>${hiscon.caminhoArquivo }</td>
-									<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="time" value="${hiscon.created.time}" /></td>
-									<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="time" value="${hiscon.dataAdm.time}" /></td>
-									<td>${hiscon.usuario.nome }</td>									
-									<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
-									<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
-									<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>				
+									
 				</form>
+				
+				<c:if test="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id == null}">
+				<form action="<c:url value="/uploadHiscon"/>" enctype="multipart/form-data" method="post">	
+					<table id="myform">
+						<tr>
+							<td>
+								Carregar Hiscon:
+							</td>
+							<td>
+								<input type="file" name="zip" class="span10"/>
+							</td>
+							<td>
+								<input type="submit" class="form_button_vertical" value="Carregar"/>	
+							</td>
+						</tr>
+					</table>
+				</form>	
+				</c:if>
+
+				<c:if test="${empty hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id}">
+					<td style="width: 120px;"></td>
+				</c:if>
+				<c:if test="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id != null}">
+					<td style="width: 200px;">
+						<form action="<c:url value="/hisconbeneficio/salva"/>" method="POST">
+							<button type="submit" class="btn btn-primary" id="btnSalvar" value="Solicitar Hiscon">Solicitar Hiscon</button>									
+						</form>
+					</td>
+				</c:if>
+				<br><br>
+				<table class="table table-striped table-bordered" id="lista">
+					<thead>
+						<tr>
+							<th>Imagem</th>
+							<th>Data solicitação</th>
+							<th>Data solicitação Adm</th>
+							<th>Consultor</th>
+							<th>Cliente</th>
+							<th>Cpf</th>
+							<th>Número Benefício</th>
+							<th>Status Atual</th>
+							<th>Quantidade</th>
+						</tr>
+					</thead>
+					<tbody>	
+						<c:forEach items="${hiscons}" var="hiscon">
+							<tr>
+								<td>${hiscon.caminhoArquivo }</td>
+								<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
+								<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>
+								<td>${hiscon.usuario.nome }</td>									
+								<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
+								<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
+								<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
+								<td>status</td>
+								<td>${hiscon.countHiscons }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+
 			</div>						
 		</div>
 	</div>

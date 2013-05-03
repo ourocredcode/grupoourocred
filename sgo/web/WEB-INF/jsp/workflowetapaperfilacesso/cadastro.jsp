@@ -175,6 +175,10 @@ jQuery(function($){
 		$(this).val( $("#workflowEtapaPerfilAcessoIsLeituraEscrita:checked").length > 0 ? "1" : "0");
 	});
 
+	$("#workflowEtapaPerfilAcessoIsUpload").change(function(e){
+		$(this).val( $("#workflowEtapaPerfilAcessoIsUpload").length > 0 ? "1" : "0");
+	});
+	
 });
 
 function limpaForm(){
@@ -283,6 +287,14 @@ function limpaForm(){
 								<input type="checkbox" id="workflowEtapaPerfilAcessoIsLeituraEscrita" name="workflowEtapaPerfilAcesso.isLeituraEscrita" checked="checked" value="1" >							
 							</div>							
 						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="workflowEtapaPerfilAcessoIsUpload">Upload</label>
+							<div class="controls">
+								<input type="checkbox" id="workflowEtapaPerfilAcessoIsUpload" name="workflowEtapaPerfilAcesso.isUpload" value="0" >							
+							</div>							
+						</div>
+
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
