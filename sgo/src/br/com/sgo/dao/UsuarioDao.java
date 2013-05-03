@@ -106,7 +106,7 @@ public class UsuarioDao extends Dao<Usuario> {
 				+ "AND USUARIO.empresa_id = ? AND USUARIO.organizacao_id = ? AND USUARIO.chave like ? ";
 		this.conn = this.conexao.getConexao();
 
-		Usuario usuario = new Usuario();
+		Usuario usuario = null;
 		try {
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, empresa_id);
@@ -115,7 +115,11 @@ public class UsuarioDao extends Dao<Usuario> {
 			this.rsUsuarios = this.stmt.executeQuery();
 
 			while (rsUsuarios.next()) {
+
+				usuario = new Usuario();
+
 				usuario.setUsuario_id(rsUsuarios.getLong("usuario_id"));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
