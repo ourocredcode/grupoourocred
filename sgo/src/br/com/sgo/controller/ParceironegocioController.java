@@ -264,16 +264,13 @@ public class ParceironegocioController {
 
 				Usuario u = new Usuario();
 
+				u.setChave(parceiroNegocio.getCpf());
 				u.setEmpresa(parceiroNegocio.getEmpresa());
 				u.setOrganizacao(parceiroNegocio.getOrganizacao());
 				u.setParceiroNegocio(parceiroNegocio);
-				u.setChave(parceiroNegocio.getCpf());
 				u.setSenha("123456");
 				u.setNome(parceiroNegocio.getNome());
 				u.setIsActive(true);
-
-				u.setUsuario_id(this.usuarioDao.buscaUsuario(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), u.getChave())
-						.getUsuario_id());
 
 				if(u.getUsuario_id() == null) {
 					this.usuarioDao.beginTransaction();
