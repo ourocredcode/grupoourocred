@@ -129,10 +129,24 @@ function limpaForm(){
 
 </script>
 
-<div class="span9">
-
-	<section id="tabs">
-		<div class="bs-docs-example">
+<div id="content-header">
+		<h1>Cadastro Usuário</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+	
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+		<a href="#" class="current">Usuário</a>
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="usuario-li"><a href="#usuario-div" data-toggle="tab" id="usuario-li-a">Usuário</a></li>
@@ -158,24 +172,24 @@ function limpaForm(){
 							<label class="control-label" for="usuarioOrgAcessoEmpresa">Empresa</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="usuarioOrgAcessoEmpresa" name="usuarioOrgAcesso.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="usuarioOrgAcessoEmpresaId" name="usuarioOrgAcesso.empresa.empresa_id" type="hidden">
+	      						<input class="span10" id="usuarioOrgAcessoEmpresa" name="usuarioOrgAcesso.empresa.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="usuarioOrgAcessoEmpresaId" name="usuarioOrgAcesso.empresa.empresa_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="usuarioOrgAcessoOrganizacao">Organização</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="usuarioOrgAcessoOrganizacao" name="usuarioOrgAcesso.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="usuarioOrgAcessoOrganizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" type="hidden">
+	      						<input class="span10" id="usuarioOrgAcessoOrganizacao" name="usuarioOrgAcesso.organizacao.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="usuarioOrgAcessoOrganizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="usuarioOrgAcessoUsuario">Usuário</label>
 							<div class="input-prepend">
 								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="usuarioOrgAcessoUsuario" name="usuarioOrgAcesso.usuario.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="usuarioOrgAcessoUsuarioId" name="usuarioOrgAcesso.usuario.usuario_id" type="hidden">
+	      						<input class="span10" id="usuarioOrgAcessoUsuario" name="usuarioOrgAcesso.usuario.nome" type="text" required onChange="limpaForm();">
+	      						<input class="span10" id="usuarioOrgAcessoUsuarioId" name="usuarioOrgAcesso.usuario.usuario_id" type="hidden">
 	    					</div>
 						</div>
 						<div class="control-group">
@@ -202,7 +216,7 @@ function limpaForm(){
 
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>
