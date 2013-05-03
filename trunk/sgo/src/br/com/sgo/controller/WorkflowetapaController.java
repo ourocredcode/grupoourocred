@@ -61,13 +61,13 @@ public class WorkflowetapaController {
 
 			} else {
 				
-				mensagem = "Etapa " + workflowEtapa.getNome() + " já cadastrado para o workflow " + workflowEtapa.getWorkflow().getNome();
+				mensagem = "Erro: Etapa " + workflowEtapa.getNome() + " já cadastrado para o workflow " + workflowEtapa.getWorkflow().getNome();
 				
 			} 
 
 		} catch (Exception e) {
 
-			mensagem = "Erro ao adicionar a Etapa do Workflow " + workflowEtapa.getWorkflow().getNome();			
+			mensagem = "Erro: Falha ao adicionar a Etapa do Workflow " + workflowEtapa.getWorkflow().getNome();			
 
 			} finally{
 				this.workflowEtapaDao.clear();
