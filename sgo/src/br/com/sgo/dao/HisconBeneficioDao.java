@@ -23,6 +23,7 @@ import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
+import br.com.sgo.modelo.WorkflowEtapa;
 
 @Component
 public class HisconBeneficioDao extends Dao<HisconBeneficio> {
@@ -74,8 +75,8 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			" INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) "+
 			" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id ";
 			
-	private String sqlHisconsToUpload = " SELECT HISCONBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numerobeneficio " +
-			", HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, HISCONBENEFICIO.hisconbeneficio_id "+
+	private String sqlHisconsToUpload = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numerobeneficio " +
+			", HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id "+
 			" FROM ((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) "+
 			" INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) "+ 
 			" INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) "+
@@ -450,10 +451,6 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				usuario.setUsuario_id(rsHisconBeneficio.getLong("usuario_id"));
 				usuario.setNome(rsHisconBeneficio.getString("usuario_nome"));
 
-				//WorkflowEtapa workflowEtapa = new WorkflowEtapa();
-				//workflowEtapa.setWorkflowEtapa_id(rsHisconBeneficio.getLong("workflow_id"));
-				//workflowEtapa.setNome(rsHisconBeneficio.getString("workflowetapa_nome"));
-
 				HisconBeneficio hisconBeneficio = new HisconBeneficio();
 
 				hisconBeneficio.setEmpresa(empresa);
@@ -461,14 +458,13 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				hisconBeneficio.setParceiroBeneficio(parceiroBeneficio);
 
 				hisconBeneficio.setUsuario(usuario);
-				//hisconBeneficio.setWorkflowEtapa(workflowEtapa);
 
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 				Calendar created = new GregorianCalendar();
-				
+
 				try {
-					
+
 					if (rsHisconBeneficio.getDate("created") != null) {
 						created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("created").toString()));
 						hisconBeneficio.setCreated(created);
@@ -731,6 +727,59 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 	}
 	
-	
-	
+	//public Collection<WorkflowEtapa> buscaWorKFlowEtapaByHisconBeneficioPerfil(Long hisconbeneficio_id, Long perfil_id) {
+	public Collection<WorkflowEtapa> buscaWorKFlowEtapaByHisconBeneficioPerfil() {
+
+		String sql = " SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , EMPRESA.nome as empresa_nome "+
+				", WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.workflowetapa_id "+
+				", WT1.nome as workflowetapa_nome, WORKFLOWTRANSICAO.workflowetapaproximo_id, WT2.nome as workflowetapaproximo_nome "+
+				", PERFIL.perfil_id, PERFIL.nome as PERFIL_nome "+
+				", WORKFLOWTRANSICAO.sequencia, WORKFLOWTRANSICAO.ispadrao, WORKFLOWTRANSICAO.isactive "+ 
+				" FROM (((WORKFLOWTRANSICAO (NOLOCK) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) "+ 
+				" INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWTRANSICAO.empresa_id = EMPRESA.empresa_id) " +
+				" INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWTRANSICAO.organizacao_id = ORGANIZACAO.organizacao_id) " +
+				" INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT1 ON (WORKFLOWTRANSICAO.workflowetapa_id = WT1.workflowetapa_id) "+ 
+				" INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.workflowetapa_id) "+
+				"	WHERE WORKFLOWTRANSICAO.empresa_id=1 AND WORKFLOWTRANSICAO.organizacao_id=1 "+
+				" AND PERFIL.perfil_id=1 AND WT1.workflow_id=1 AND WORKFLOWTRANSICAO.workflowetapa_id=1 ";
+
+/*		String sql = "SELECT " +
+				"		WORKFLOWTRANSICAO.workflowetapaproximo_id, WORKFLOWETAPA.nome FROM " +
+				"	(HISCONBENEFICIO INNER JOIN (WORKFLOWETAPA INNER JOIN WORKFLOWTRANSICAO ON WORKFLOWETAPA.workflowetapa_id = WORKFLOWTRANSICAO.workflowetapaproximo_id) " +
+				"		ON HISCONBENEFICIO.workflowetapa_id = WORKFLOWTRANSICAO.workflowetapa_id) " +
+				"	 INNER JOIN PERFIL ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id WHERE HISCONBENEFICIO.hisconbeneficio_id = ? AND PERFIL.perfil_id = ? ";
+*/
+		this.conn = this.conexao.getConexao();
+
+		Collection<WorkflowEtapa> workflowsEtapa = new ArrayList<WorkflowEtapa>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			//this.stmt.setLong(1, hisconbeneficio_id);
+			//this.stmt.setLong(2, perfil_id);
+
+			this.rsHisconBeneficio= this.stmt.executeQuery();
+
+			while (rsHisconBeneficio.next()) {
+
+				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+
+				workflowEtapa.setWorkflowEtapa_id(rsHisconBeneficio.getLong("workflowetapaproximo_id"));
+				workflowEtapa.setNome(rsHisconBeneficio.getString("nome"));
+
+				workflowsEtapa.add(workflowEtapa);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsHisconBeneficio, stmt, conn);
+
+		return workflowsEtapa;
+
+	}	
+
 }
