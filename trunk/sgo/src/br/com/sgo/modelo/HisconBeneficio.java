@@ -1,7 +1,9 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -72,7 +74,10 @@ public class HisconBeneficio implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
 	private Usuario updatedBy;
-
+	
+	@Transient
+	private Collection<WorkflowEtapa> workflowEtapas = new ArrayList<WorkflowEtapa>();
+	
 	@Column(name = "created")
 	private Calendar created;
 
@@ -268,7 +273,7 @@ public class HisconBeneficio implements Serializable {
 	public void setIsEnviado(Boolean isEnviado) {
 		this.isEnviado = isEnviado;
 	}
-
+	
 	public Boolean getIsImportado() {
 		return isImportado;
 	}
@@ -299,5 +304,13 @@ public class HisconBeneficio implements Serializable {
 
 	public void setCountHiscons(Integer countHiscons) {
 		this.countHiscons = countHiscons;
+	}
+
+	public Collection<WorkflowEtapa> getWorkflowEtapas() {
+		return workflowEtapas;
+	}
+
+	public void setWorkflowEtapas(Collection<WorkflowEtapa> workflowEtapas) {
+		this.workflowEtapas = workflowEtapas;
 	}
 }

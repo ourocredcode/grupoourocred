@@ -40,7 +40,6 @@ public class ContratoController {
 	private final FormularioDao formularioDao;
 	private final WorkflowEtapaDao workFlowetapaDao;
 	
-
 	private Contrato contrato;
 	private Formulario formulario;
 	private Collection<Banco> bancos;
@@ -78,6 +77,7 @@ public class ContratoController {
 
 		contrato = contratoDao.load(id);
 		formulario = formularioDao.buscaFormularioByContrato(id);
+
 		etapas = workFlowetapaDao.buscaWorKFlowEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
 		etapas.add(contrato.getWorkflowEtapa());
 

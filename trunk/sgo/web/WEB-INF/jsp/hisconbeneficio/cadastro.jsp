@@ -18,8 +18,8 @@ jQuery(function($){
        });
 	});
 
-	 $("#hisconBeneficioIsActive").change(function(e){
-			$(this).val( $("#hisconBeneficioIsActive:checked").length > 0 ? "1" : "0");
+	$("#hisconBeneficioIsActive").change(function(e){
+		$(this).val( $("#hisconBeneficioIsActive:checked").length > 0 ? "1" : "0");
 	});
 
 	$('#btnNovo').click(function() {		
@@ -29,8 +29,6 @@ jQuery(function($){
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/hisconbeneficio/cadastro" />';
 	});
-	
-	
 
 });
 
@@ -198,7 +196,14 @@ function limpaForm() {
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 								<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
-								<td>status</td>
+								<td>
+									<select id="hisconBeneficioStatus" class="input-medium" >
+										<c:forEach var="etapa" items="${etapas }">
+											<option value="${etapa.workflowEtapa_id}" 
+											<c:if test="${etapa.workflowEtapa_id == hisconBeneficio.workflowEtapa.workflowEtapa_id}">selected</c:if>>${etapa.nome }</option>
+										</c:forEach>
+									</select>
+								</td>
 								<td>${hiscon.countHiscons }</td>
 							</tr>
 						</c:forEach>
