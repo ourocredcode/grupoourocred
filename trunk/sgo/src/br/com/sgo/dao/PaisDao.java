@@ -25,12 +25,9 @@ public class PaisDao extends Dao<Pais> {
 		this.conexao = conexao;
 	}
 
-	public Pais buscaPais(Long empresa_id, Long organizacao_id, String nome) {
+	public Pais buscaPais(String nome) {
 
-		String sql = "select PAIS.pais_id,PAIS.nome from PAIS (NOLOCK) "
-				+ "		  WHERE PAIS.empresa_id = ? AND"
-				+ "		  	    PAIS.organizacao_id = ? AND"
-				+ "		 	    PAIS.nome like ? ";
+		String sql = "select PAIS.pais_id,PAIS.nome from PAIS (NOLOCK) WHERE PAIS.nome like ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -40,9 +37,7 @@ public class PaisDao extends Dao<Pais> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3, "%" + nome + "%");
+			this.stmt.setString(1, "%" + nome + "%");
 
 			this.rsPaises = this.stmt.executeQuery();
 

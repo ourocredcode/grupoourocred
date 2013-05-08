@@ -1,10 +1,10 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,6 +33,10 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
+
+	@ManyToOne
+	@JoinColumn(name = "organizacaodigitacao_id", updatable = true, nullable = true)
+	private Organizacao organizacaoDigitacao;
 	
 	@ManyToOne
 	@JoinColumn(name = "formulario_id", updatable = true, nullable = false)
@@ -77,10 +81,18 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "workflow_id", updatable = true, nullable = true)
 	private Workflow workflow;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = true)
 	private WorkflowEtapa workflowEtapa;
+
+	@ManyToOne
+	@JoinColumn(name = "workflowpendencia_id", updatable = true, nullable = true)
+	private Workflow workflowpendencia;
+
+	@ManyToOne
+	@JoinColumn(name = "workflowetapapendencia_id", updatable = true, nullable = true)
+	private WorkflowEtapa workflowEtapaPendencia;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", updatable = true, nullable = true)
@@ -130,6 +142,30 @@ public class Contrato implements Serializable {
 
 	@Column(name = "numerobeneficio")
 	private String numeroBeneficio;
+	
+	@Column(name="dataagendado")
+	private Calendar dataAgendado;
+	
+	@Column(name = "valorquitacao")
+	private Double valorQuitacao;
+	
+	@Column(name="dataquitacao")
+	private Calendar dataQuitacao;
+	
+	@Column(name="datadigitacao")
+	private Calendar dataDigitacao;
+	
+	@Column(name="contratobanco",length=100)
+	private String contratoBanco;
+	
+	@Column(name="propostabanco",length=100)
+	private String propostaBanco;
+
+	@Column(name="dataconclusao")
+	private Calendar dataConcluido;
+	
+	@Column(name="datastatusfinal")
+	private Calendar dataStatusFinal;
 
 	public Long getContrato_id() {
 		return contrato_id;
@@ -153,6 +189,30 @@ public class Contrato implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
+	}
+
+	public Organizacao getOrganizacaoDigitacao() {
+		return organizacaoDigitacao;
+	}
+
+	public void setOrganizacaoDigitacao(Organizacao organizacaoDigitacao) {
+		this.organizacaoDigitacao = organizacaoDigitacao;
+	}
+
+	public Formulario getFormulario() {
+		return formulario;
+	}
+
+	public void setFormulario(Formulario formulario) {
+		this.formulario = formulario;
+	}
+
+	public Coeficiente getCoeficiente() {
+		return coeficiente;
+	}
+
+	public void setCoeficiente(Coeficiente coeficiente) {
+		this.coeficiente = coeficiente;
 	}
 
 	public Produto getProduto() {
@@ -179,6 +239,14 @@ public class Contrato implements Serializable {
 		this.banco = banco;
 	}
 
+	public Banco getRecompraBanco() {
+		return recompraBanco;
+	}
+
+	public void setRecompraBanco(Banco recompraBanco) {
+		this.recompraBanco = recompraBanco;
+	}
+
 	public Seguro getSeguro() {
 		return seguro;
 	}
@@ -191,17 +259,8 @@ public class Contrato implements Serializable {
 		return naturezaProfissional;
 	}
 
-	public void setNaturezaProfissional(
-			NaturezaProfissional naturezaProfissional) {
+	public void setNaturezaProfissional(NaturezaProfissional naturezaProfissional) {
 		this.naturezaProfissional = naturezaProfissional;
-	}
-
-	public Banco getRecompraBanco() {
-		return recompraBanco;
-	}
-
-	public void setRecompraBanco(Banco recompraBanco) {
-		this.recompraBanco = recompraBanco;
 	}
 
 	public Modalidade getModalidade() {
@@ -228,12 +287,36 @@ public class Contrato implements Serializable {
 		this.workflow = workflow;
 	}
 
+	public WorkflowEtapa getWorkflowEtapa() {
+		return workflowEtapa;
+	}
+
+	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
+		this.workflowEtapa = workflowEtapa;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	public String getChave() {
 		return chave;
 	}
 
 	public void setChave(String chave) {
 		this.chave = chave;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 	public String getNome() {
@@ -266,38 +349,6 @@ public class Contrato implements Serializable {
 
 	public void setQtdParcelasAberto(Integer qtdParcelasAberto) {
 		this.qtdParcelasAberto = qtdParcelasAberto;
-	}
-
-	public Formulario getFormulario() {
-		return formulario;
-	}
-
-	public void setFormulario(Formulario formulario) {
-		this.formulario = formulario;
-	}
-
-	public Coeficiente getCoeficiente() {
-		return coeficiente;
-	}
-
-	public void setCoeficiente(Coeficiente coeficiente) {
-		this.coeficiente = coeficiente;
-	}
-
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
-	}
-
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	public Double getValorSeguro() {
@@ -356,6 +407,14 @@ public class Contrato implements Serializable {
 		this.valorMeta = valorMeta;
 	}
 
+	public Double getValorQuitacao() {
+		return valorQuitacao;
+	}
+
+	public void setValorQuitacao(Double valorQuitacao) {
+		this.valorQuitacao = valorQuitacao;
+	}
+
 	public Boolean getIsActive() {
 		return isActive;
 	}
@@ -372,11 +431,75 @@ public class Contrato implements Serializable {
 		this.numeroBeneficio = numeroBeneficio;
 	}
 
-	public String getObservacao() {
-		return observacao;
+	public Calendar getDataDigitacao() {
+		return dataDigitacao;
 	}
 
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
+	public void setDataDigitacao(Calendar dataDigitacao) {
+		this.dataDigitacao = dataDigitacao;
 	}
+
+	public Calendar getDataConcluido() {
+		return dataConcluido;
+	}
+
+	public void setDataConcluido(Calendar dataConcluido) {
+		this.dataConcluido = dataConcluido;
+	}
+
+	public Calendar getDataQuitacao() {
+		return dataQuitacao;
+	}
+
+	public void setDataQuitacao(Calendar dataQuitacao) {
+		this.dataQuitacao = dataQuitacao;
+	}
+
+	public Calendar getDataStatusFinal() {
+		return dataStatusFinal;
+	}
+
+	public void setDataStatusFinal(Calendar dataStatusFinal) {
+		this.dataStatusFinal = dataStatusFinal;
+	}
+
+	public String getPropostaBanco() {
+		return propostaBanco;
+	}
+
+	public void setPropostaBanco(String propostaBanco) {
+		this.propostaBanco = propostaBanco;
+	}
+
+	public String getContratoBanco() {
+		return contratoBanco;
+	}
+
+	public void setContratoBanco(String contratoBanco) {
+		this.contratoBanco = contratoBanco;
+	}
+
+	public Calendar getDataAgendado() {
+		return dataAgendado;
+	}
+
+	public void setDataAgendado(Calendar dataAgendado) {
+		this.dataAgendado = dataAgendado;
+	}
+
+	public Workflow getWorkflowpendencia() {
+		return workflowpendencia;
+	}
+
+	public void setWorkflowpendencia(Workflow workflowpendencia) {
+		this.workflowpendencia = workflowpendencia;
+	}
+
+	public WorkflowEtapa getWorkflowEtapaPendencia() {
+		return workflowEtapaPendencia;
+	}
+
+	public void setWorkflowEtapaPendencia(WorkflowEtapa workflowEtapaPendencia) {
+		this.workflowEtapaPendencia = workflowEtapaPendencia;
+	} 
 }

@@ -81,6 +81,7 @@
 		<mapping class="br.com.sgo.modelo.HisconBeneficio" />
 		<mapping class="br.com.sgo.modelo.HistoricoHiscon" />
 		<mapping class="br.com.sgo.modelo.HistoricoControle" />
+		<mapping class="br.com.sgo.modelo.HistoricoContrato" />
 
 		<mapping class="br.com.sgo.modelo.Departamento" />
 		<mapping class="br.com.sgo.modelo.Funcao" />

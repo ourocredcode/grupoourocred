@@ -22,7 +22,7 @@
 			<div class="span12">
 
 				<div class="alert alert-info">
-					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas !
+					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas ! Perfil : ${usuarioInfo.perfil.chave }
 					<a href="#" data-dismiss="alert" class="close">×</a>
 				</div>
 

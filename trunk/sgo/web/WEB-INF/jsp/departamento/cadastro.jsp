@@ -97,10 +97,42 @@ function limpaForm() {
 }
 </script>
 
-<div class="span9">
+<div id="content-header">
+		<h1>Cadastro Departamento</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+	
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+		<a href="#" class="current">Departamento</a>
+	</div>
+	
+	<c:if test="${not empty notice}">
+		<c:choose>
+			<c:when test="${fn:contains(notice,'Erro:')}">
+					<div class="alert alert-error">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:when>
+			<c:otherwise>
+					<div class="alert alert-success">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="departamento-li"><a href="#departamento-div" data-toggle="tab" id="departamento-li-a">Cadastro de Departamentos</a></li>				
@@ -116,28 +148,28 @@ function limpaForm() {
 									<label class="control-label" for="departamentoEmpresa">Empresa</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="departamentoEmpresa" name="departamento.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="departamentoEmpresaId" name="departamento.empresa.empresa_id" type="hidden">
+			      						<input class="span10" id="departamentoEmpresa" name="departamento.empresa.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span10" id="departamentoEmpresaId" name="departamento.empresa.empresa_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="departamentoOrganizacao">Organização</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="departamentoOrganizacao" name="departamento.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="departamentoOrganizacaoId" name="departamento.organizacao.organizacao_id" type="hidden">
+			      						<input class="span10" id="departamentoOrganizacao" name="departamento.organizacao.nome" type="text" required onChange="limpaForm();">
+			      						<input class="span10" id="departamentoOrganizacaoId" name="departamento.organizacao.organizacao_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="departamentoNome">Nome</label>
 									<div class="controls">
-										<input type="text" id="departamentoNome" name="departamento.nome" placeholder="Nome" required>
+										<input class="span10" type="text" id="departamentoNome" name="departamento.nome" placeholder="Nome" required>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="departamentoDescricao">Descrição</label>
 									<div class="controls">
-										<input type="text" id="departamentoDescricao" name="departamento.descricao" placeholder="Descrição" required>
+										<input class="span10" type="text" id="departamentoDescricao" name="departamento.descricao" placeholder="Descrição" required>
 									</div>
 								</div>
 								<div class="control-group">
@@ -162,7 +194,7 @@ function limpaForm() {
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>

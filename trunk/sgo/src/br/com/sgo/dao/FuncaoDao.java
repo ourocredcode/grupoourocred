@@ -65,8 +65,7 @@ public class FuncaoDao extends Dao<Funcao> {
 
 	}
 
-	public Collection<Funcao> buscaFuncoes(Long empresa_id,
-			Long organizacao_id, String nome) {
+	public Collection<Funcao> buscaFuncoes(Long empresa_id,Long organizacao_id, String nome) {
 
 		String sql = "select FUNCAO.funcao_id, FUNCAO.nome from FUNCAO (NOLOCK) WHERE FUNCAO.empresa_id = ? AND FUNCAO.organizacao_id = ? AND FUNCAO.nome like ?";
 
@@ -98,6 +97,39 @@ public class FuncaoDao extends Dao<Funcao> {
 		this.conexao.closeConnection(rsFuncoes, stmt, conn);
 
 		return funcoes;
+
+	}
+	
+	public Funcao buscaFuncaoById(Long funcao_id) {
+
+		String sql = "select FUNCAO.funcao_id, FUNCAO.nome from FUNCAO (NOLOCK) WHERE FUNCAO.funcao_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Funcao funcao = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, funcao_id);
+
+			this.rsFuncoes = this.stmt.executeQuery();
+
+			while (rsFuncoes.next()) {
+				funcao = new Funcao();
+
+				funcao.setFuncao_id(rsFuncoes.getLong("funcao_id"));
+				funcao.setNome(rsFuncoes.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsFuncoes, stmt, conn);
+
+		return funcao;
 
 	}
 

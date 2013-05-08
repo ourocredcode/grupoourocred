@@ -33,6 +33,7 @@ import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Funcao;
 import br.com.sgo.modelo.Funcionario;
 import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.ParceiroBeneficio;
@@ -142,7 +143,7 @@ public class ParceironegocioController {
 				addressFinder = new BrazilianAddressFinder(restfulie);
 				String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
 
-				l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
+				l.setPais(this.paisDao.buscaPais("Brasil"));
 				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
 				l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
 				l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
@@ -211,8 +212,8 @@ public class ParceironegocioController {
 	public void salva(ParceiroNegocio parceiroNegocio,Funcionario funcionario, ParceiroLocalidade parceiroLocalidade,Collection<ParceiroContato> parceiroContatos,
 			Collection<ParceiroBeneficio> parceiroBeneficios,Localidade localidade){
 
-		
 		String mensagem = "";
+		Funcao funcao = this.funcaoDao.buscaFuncaoById(funcionario.getFuncao().getFuncao_id());
 		
 			try {
 
@@ -235,6 +236,10 @@ public class ParceironegocioController {
 			if(parceiroNegocio.getIsFuncionario()){
 
 				Funcionario f = new Funcionario();
+
+				if(funcao.getNome().equals("Consultor")){
+					f.setSupervisor(this.parceiroNegocioDao.buscaParceiroNegocioById(usuarioInfo.getUsuario().getParceiroNegocio().getParceiroNegocio_id()));
+				}
 
 				f.setEmpresa(parceiroNegocio.getEmpresa());
 				f.setOrganizacao(parceiroNegocio.getOrganizacao());
@@ -263,6 +268,10 @@ public class ParceironegocioController {
 				}
 
 				Usuario u = new Usuario();
+
+				if(funcao.getNome().equals("Consultor")){
+					u.setSupervisorUsuario(usuarioInfo.getUsuario());
+				}
 
 				u.setChave(parceiroNegocio.getCpf());
 				u.setEmpresa(parceiroNegocio.getEmpresa());
@@ -427,6 +436,8 @@ public class ParceironegocioController {
 	public void salvaLocalidade(Localidade localidade, ParceiroLocalidade parceiroLocalidade){
 
 		localidade.setIsActive(true);
+		localidade.setEmpresa(usuarioInfo.getEmpresa());
+		localidade.setOrganizacao(usuarioInfo.getOrganizacao());
 
 		String mensagem = "";
 		

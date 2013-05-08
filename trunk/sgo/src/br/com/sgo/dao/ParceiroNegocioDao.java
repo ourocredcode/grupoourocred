@@ -107,4 +107,40 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 		return parceiro;
 	}
 
+	public ParceiroNegocio buscaParceiroNegocioById(Long parceiro_id) {
+
+		String sql = sqlParceiroNegocio;
+
+		if (parceiro_id != null)
+			sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ?";
+
+		this.conn = this.conexao.getConexao();
+		ParceiroNegocio parceiro = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, parceiro_id);
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				parceiro = new ParceiroNegocio();
+
+				parceiro.setParceiroNegocio_id(rsParceiroNegocio.getLong("parceironegocio_id"));
+				parceiro.setNome(rsParceiroNegocio.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsParceiroNegocio, stmt, conn);
+
+		return parceiro;
+
+	}
+
 }

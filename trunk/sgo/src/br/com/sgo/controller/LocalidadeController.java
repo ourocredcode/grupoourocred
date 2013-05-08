@@ -43,13 +43,6 @@ public class LocalidadeController {
 
 	}
 
-	@Get
-	@Path("/localidade/cadastro")
-	public void cadastro(){
-
-	}
-
-	
 	@Post
 	@Public
 	@Path("/localidade/salva")
@@ -73,13 +66,16 @@ public class LocalidadeController {
 
 			if(resultado[0].equals("")) {
 
-				result.include("notice","ERRO").redirectTo(this).cadastro();
+				result.nothing();
 
 			} else {
 
 				l = new Localidade();
 
-				l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
+				l.setEmpresa(usuarioInfo.getEmpresa());
+				l.setOrganizacao(usuarioInfo.getOrganizacao());
+				l.setIsActive(true);
+				l.setPais(this.paisDao.buscaPais("Brasil"));
 				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
 				l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
 				l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
@@ -97,45 +93,5 @@ public class LocalidadeController {
 
 		}
 	}
-	
-	@Get
-	@Public
-	@Path("/localidade/busca.localidade")
-	public void buscalocalidadeTeste(String enderecoCEP) {
 
-		restfulie = Restfulie.custom();
-		addressFinder = new BrazilianAddressFinder(restfulie);
-
-		Localidade l = this.localidadeDao.buscaLocalidade(enderecoCEP);
-
-		if(l.getLocalidade_id() == null) {
-
-			String[] resultado = addressFinder.findAddressByZipCode(enderecoCEP).asAddressArray();
-
-			if(resultado[0].equals("")) {
-
-				result.include("notice","ERRO").redirectTo(this).cadastro();
-
-			} else {
-
-				l = new Localidade();
-
-				l.setPais(this.paisDao.buscaPais(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Brasil"));
-				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
-				l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
-				l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-				l.setEndereco(resultado[1]);
-				l.setBairro(resultado[2]);
-				l.setCep(enderecoCEP);
-
-				result.include("localidade",l);
-
-			}
-
-		} else {				
-
-				result.include("localidade",l);
-
-		}
-	}
 }

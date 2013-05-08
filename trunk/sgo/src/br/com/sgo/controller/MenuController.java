@@ -14,6 +14,8 @@ import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
+import br.com.sgo.dao.PerfilDao;
+import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
@@ -28,19 +30,22 @@ public class MenuController {
 	private final OrganizacaoDao organizacaoDao;
 	private final MenuDao menuDao;
 	private final ContratoDao contratoDao;
+	private final UsuarioDao usuarioDao;
+	private final PerfilDao perfilDao;
+	private final UsuarioInfo usuarioInfo;
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
-	
 
-	private UsuarioInfo usuarioInfo;
-
-	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,ContratoDao contratoDao){
+	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,
+			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao){
 
 		this.empresaDao = empresaDao;
+		this.usuarioDao = usuarioDao;
+		this.perfilDao = perfilDao;
+		this.usuarioInfo = usuarioInfo;
 		this.organizacaoDao = organizacaoDao;
 		this.menuDao = menuDao;
 		this.result = result;
 		this.validator = validator;
-		this.usuarioInfo = usuarioInfo;
 		this.contratoDao = contratoDao;
 
 	}
@@ -48,6 +53,9 @@ public class MenuController {
 	@Get
 	@Path("/menu/inicio") 
 	public void inicio() {
+
+		usuarioDao.refresh(usuarioInfo.getUsuario());
+		perfilDao.refresh(usuarioInfo.getPerfil());
 
 		contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
 

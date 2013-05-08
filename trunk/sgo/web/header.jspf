@@ -84,10 +84,12 @@
 
 				<li class="submenu">
 
-					<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span> <span class="label">3</span></a>
+					<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
 
 					<ul class="cadastro">
 						<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
+						<li><a href="<c:url value="/funcao/cadastro"/>">Função</a></li>
+						<li><a href="<c:url value="/departamento/cadastro"/>">Departamento</a></li>
 						<li><a href="<c:url value="/perfil/cadastro"/>">Perfil</a></li>
 						<li><a href="<c:url value="/usuario/cadastro"/>">Usuário</a></li>
 					</ul>
