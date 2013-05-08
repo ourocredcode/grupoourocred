@@ -84,8 +84,8 @@ public class TipoworkflowController {
 	@Get
 	@Path("/tipoworkflow/busca.json")
 	@Public
-	public void tipoworkflow(Long empresa_id, Long organizacao_id, String nome) {	
-		result.use(Results.json()).withoutRoot().from(tipoWorkflowDao.buscaTipoWorkflowPorNome(empresa_id,organizacao_id, nome)).serialize();
+	public void tipoworkflow(String nome) {	
+		result.use(Results.json()).withoutRoot().from(tipoWorkflowDao.buscaTipoWorkflowPorNome(nome)).serialize();
 	}
 
 	/*
@@ -101,7 +101,7 @@ public class TipoworkflowController {
 	@Path("/tipoworkflow/lista")
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
-		result.include("tiposWorkflow", this.tipoWorkflowDao.buscaTipoWorkflowPorNome(empresa_id, organizacao_id, nome));
+		result.include("tiposWorkflow", this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
 	}
 
 }

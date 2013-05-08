@@ -61,7 +61,14 @@ jQuery(function($){
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#workflowEmpresaId').val() == '' ? '0' :  $('#workflowEmpresaId').val(), org_nome : $('#workflowOrganizacao').val()},
+	          
+	          //data : {empresa_id: $('#workflowEmpresaId').val() == '' ? '0' :  $('#workflowEmpresaId').val(), 
+	        		 // org_nome: $('#workflowOrganizacao').val() == '' ? '0' :  $('#workflowOrganizacao').val(),
+	        		  //nometabelabd : $('#colunaBdTabelaBd').val()},
+
+	          data : {empresa_id: $('#workflowEmpresaId').val() == '' ? '0' :  $('#workflowEmpresaId').val(),
+	        		  org_nome : $('#workflowOrganizacao').val()},
+
 	          success : function(data) {  
 
 	        	  if (!data || data.length == 0) {
@@ -123,58 +130,15 @@ jQuery(function($){
 	         return false;
 	     }
 	});
-	
-	$("#workflowEmpresa").blur(function() {
-		var empresa_id = $("#workflowEmpresaId").val();
-		var organizacao_id = $("#workflowOrganizacaoId").val();
-		var nome = $("#workflowNome").val();
-		
-		$('#lista').load('<c:url value="/workflow/lista" />', {
-			'empresa_id' : empresa_id,
-			'organizacao_id' : organizacao_id,
-			'nome' : nome
-		});
-	});
 
-	$("#workflowOrganizacao").blur(function() {
-		var empresa_id = $("#workflowEmpresaId").val();
-		var organizacao_id = $("#workflowOrganizacaoId").val();
-		var nome = $("#workflowNome").val();
-		
-		$('#lista').load('<c:url value="/workflow/lista" />', {
-			'empresa_id' : empresa_id,
-			'organizacao_id' : organizacao_id,
-			'nome' : nome
-		});
-	});
-	
-
-	$("#workflowNome").blur(function() {
-		var empresa_id = $("#workflowEmpresaId").val();
-		var organizacao_id = $("#workflowOrganizacaoId").val();
-		var nome = $("#workflowNome").val();
-		if($('#workflowEmpresaId').val() == ''){
-			alert("Empresa não preenchida");
-			$('#eworkflowNome').val('');
-			$('#workflowEmpresa').focus();				
-			return false;
-		}	
-		$('#lista').load('<c:url value="/workflow/lista" />', {
-			'empresa_id' : empresa_id,
-			'organizacao_id' : organizacao_id,
-			'nome' : nome
-		});
-	});
-	
-	
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/workflow/cadastro" />';
 	});
-	
+
 	$('#btnNovo').click(function() {
 		document.workflowForm.reset();
 	});
-	
+
 	$("#workflowIsActive").change(function(e){
 		$(this).val( $("#workflowIsActive:checked").length > 0 ? "1" : "0");
 	});

@@ -167,8 +167,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 
 				Organizacao organizacao = new Organizacao();
 
-				organizacao.setOrganizacao_id(rsOrganizacaoPerfil
-						.getLong("organizacao_id"));
+				organizacao.setOrganizacao_id(rsOrganizacaoPerfil.getLong("organizacao_id"));
 				organizacao.setNome(rsOrganizacaoPerfil.getString("nome"));
 
 				organizacoes.add(organizacao);
@@ -176,7 +175,9 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsOrganizacaoPerfil, stmt, conn);
@@ -201,8 +202,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			this.stmt.setLong(1, usuarioPerfil.getUsuario().getUsuario_id());
 			this.stmt.setLong(2, usuarioPerfil.getPerfil().getPerfil_id());
 			this.stmt.setLong(3, usuarioPerfil.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(4, usuarioPerfil.getOrganizacao()
-					.getOrganizacao_id());
+			this.stmt.setLong(4, usuarioPerfil.getOrganizacao().getOrganizacao_id());
 
 			this.stmt.executeUpdate();
 

@@ -32,13 +32,8 @@ import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.infra.CustomFileUtil;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
-import br.com.sgo.modelo.Banco;
-import br.com.sgo.modelo.Coeficiente;
-import br.com.sgo.modelo.Contrato;
-import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HisconBeneficio;
 import br.com.sgo.modelo.ParceiroBeneficio;
-import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.WorkflowEtapa;
 
 @Resource
@@ -92,15 +87,19 @@ public class HisconbeneficioController {
 
 		for (HisconBeneficio h : hisconsAuxiliar){
 
-			h.setCountHiscons( this.hisconBeneficioDao.mostraCountHisconsBeneficios(
-						usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
-						usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(),
-						h.getParceiroBeneficio().getParceiroBeneficio_id()));
-			
-			//hisconBeneficio = hisconBeneficioDao.load(hisconBeneficio.getHisconBeneficio_id());
-			
-			etapas = workflowEtapaDao.buscaWorKFlowEtapaByHisconBeneficioPerfil();
+			h.setCountHiscons(this.hisconBeneficioDao.mostraCountHisconsBeneficios(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
 
+			hisconBeneficio = hisconBeneficioDao.load(h.getHisconBeneficio_id());
+
+			System.out.println("h.getHisconBeneficio_id() " + h.getHisconBeneficio_id());
+
+			//hiscons = workflowEtapaDao.buscaTodosWorkflowEtapa();
+
+			//hiscons = hisconBeneficioDao.
+
+			etapas = workflowEtapaDao.buscaWorKFlowEtapaByHisconBeneficioPerfil(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(),usuarioInfo.getPerfil().getPerfil_id());
+
+			//etapas = hisconsAuxiliar;
 			etapas.add(hisconBeneficio.getWorkflowEtapa());
 			
 			hiscons.add(h);

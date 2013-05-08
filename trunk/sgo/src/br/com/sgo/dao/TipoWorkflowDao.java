@@ -30,26 +30,42 @@ public class TipoWorkflowDao extends Dao<TipoWorkflow> {
 	}
 
 	public Collection<TipoWorkflow> buscaTodosTipoWorkflow() {
+
 		String sql = sqlTipoWorkflow;
+
 		this.conn = this.conexao.getConexao();
+
 		Collection<TipoWorkflow> tiposworkflow = new ArrayList<TipoWorkflow>();
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
 			this.rsTipoWorkflow = this.stmt.executeQuery();
+
 			while (rsTipoWorkflow.next()) {
+
 				TipoWorkflow tipoworkflow = new TipoWorkflow();
+
 				tipoworkflow.setTipoWorkflow_id(rsTipoWorkflow.getLong("tipoworkflow_id"));
 				tipoworkflow.setNome(rsTipoWorkflow.getString("nome"));
+
 				tiposworkflow.add(tipoworkflow);
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsTipoWorkflow, stmt, conn);
 		return tiposworkflow;
 	}
 
 	public TipoWorkflow buscaTipoWorkflowPorEmpresaOrganizacaoTipoworflow(Long empresa_id, Long organizacao_id, Long tipoworkflow_id) {
+
 		String sql = sqlTipoWorkflow;
 
 		if (empresa_id != null)
@@ -79,7 +95,46 @@ public class TipoWorkflowDao extends Dao<TipoWorkflow> {
 		return tipoworkflow;
 	}
 	
-	public Collection<TipoWorkflow> buscaTipoWorkflowPorNome(Long empresa_id, Long organizacao_id, String nome) {
+	public Collection<TipoWorkflow> buscaTipoWorkflowPorNome(String nome) {
+
+		String sql = sqlTipoWorkflow;
+
+		if (nome != null)
+			sql += " WHERE TIPOWORKFLOW.nome like ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<TipoWorkflow> tipoWorkflows = new ArrayList<TipoWorkflow>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1, "%" + nome + "%");
+
+			this.rsTipoWorkflow = this.stmt.executeQuery();
+
+			while (rsTipoWorkflow.next()) {
+
+				TipoWorkflow tipoWorkflow = new TipoWorkflow();
+				tipoWorkflow.setTipoWorkflow_id(rsTipoWorkflow.getLong("tipoworkflow_id"));
+				tipoWorkflow.setNome(rsTipoWorkflow.getString("nome"));
+				tipoWorkflows.add(tipoWorkflow);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsTipoWorkflow, stmt, conn);
+		return tipoWorkflows;
+
+	}
+
+	public Collection<TipoWorkflow> buscaTipoWorkflowPorEmpresaOrganizacaoNome(Long empresa_id, Long organizacao_id, String nome) {
 		
 		String sql = sqlTipoWorkflow;
 		
@@ -120,41 +175,5 @@ public class TipoWorkflowDao extends Dao<TipoWorkflow> {
 		return tipoWorkflows;
 
 	}
-
-	/*public TipoWorkflow buscaTipoWorkflowPorNome(Long empresa_id,Long organizacao_id, String nome) {
-		
-		String sql = sqlTipoWorkflow;
-		
-		if (empresa_id != null)
-			sql += " WHERE TIPOWORKFLOW.empresa_id = ?";
-		if (organizacao_id != null)
-			sql += " AND TIPOWORKFLOW.organizacao_id = ?";
-		if (nome != null)
-			sql += " AND (TIPOWORKFLOW.nome like ?)";
-		
-		this.conn = this.conexao.getConexao();
-		
-		TipoWorkflow tipoworkflow = null;
-		
-		try {
-			this.stmt = conn.prepareStatement(sql);
-			
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);			
-			this.stmt.setString(3, "%" + nome + "%");
-			
-			this.rsTipoWorkflow = this.stmt.executeQuery();
-			while (rsTipoWorkflow.next()) {
-				tipoworkflow = new TipoWorkflow();
-				tipoworkflow.setTipoWorkflow_id(rsTipoWorkflow.getLong("tipoworkflow_id"));
-				tipoworkflow.setNome(rsTipoWorkflow.getString("nome"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		this.conexao.closeConnection(rsTipoWorkflow, stmt, conn);
-		return tipoworkflow;
-	}
-	*/
 
 }

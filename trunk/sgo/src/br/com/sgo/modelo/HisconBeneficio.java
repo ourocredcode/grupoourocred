@@ -75,9 +75,6 @@ public class HisconBeneficio implements Serializable {
 	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
 	private Usuario updatedBy;
 	
-	@Transient
-	private Collection<WorkflowEtapa> workflowEtapas = new ArrayList<WorkflowEtapa>();
-	
 	@Column(name = "created")
 	private Calendar created;
 
@@ -110,6 +107,9 @@ public class HisconBeneficio implements Serializable {
 
 	@Column(name = "isactive")
 	private Boolean isActive;
+
+	@Transient
+	private Collection<WorkflowEtapa> workflowEtapas = new ArrayList<WorkflowEtapa>();
 
 	@Transient
 	private Integer countHiscons;
