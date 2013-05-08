@@ -40,6 +40,7 @@ public class ContratoController {
 	private final FormularioDao formularioDao;
 	private final WorkflowEtapaDao workFlowetapaDao;
 	
+
 	private Contrato contrato;
 	private Formulario formulario;
 	private Collection<Banco> bancos;
@@ -77,7 +78,6 @@ public class ContratoController {
 
 		contrato = contratoDao.load(id);
 		formulario = formularioDao.buscaFormularioByContrato(id);
-
 		etapas = workFlowetapaDao.buscaWorKFlowEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
 		etapas.add(contrato.getWorkflowEtapa());
 
@@ -164,6 +164,11 @@ public class ContratoController {
 				log.add("Valor Desconto alterado de : " + this.contrato.getDesconto() + " para : " + contrato.getDesconto());
 				this.contrato.setDesconto(contrato.getDesconto() == null ? null : contrato.getDesconto());
 			}
+		}
+		
+		if(!(this.contrato.getWorkflowEtapa() == contrato.getWorkflowEtapa())){
+			log.add("Status alterado de : " + this.contrato.getWorkflowEtapa().getNome() + " para : " + contrato.getWorkflowEtapa().getNome());
+			this.contrato.setWorkflowEtapa(contrato.getWorkflowEtapa() == null ? null : contrato.getWorkflowEtapa());
 		}
 
 		this.contratoDao.atualiza(this.contrato);
