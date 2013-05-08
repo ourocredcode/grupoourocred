@@ -49,17 +49,33 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 	public Collection<Coeficiente> buscaCoeficientes() {
 
-		String sql = sqlCoeficiente;
 		this.conn = this.conexao.getConexao();
 
 		Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
 
-		sql += " WHERE " +
-				" COEFICIENTE.updated is null " +
-				" AND BANCO.isactive = 1 " +
-				" AND PRODUTO.isactive = 1 " +
-				" AND TABELA.isactive = 1 " +
-				" ORDER BY BANCO.nome, PRODUTO.nome, TABELA.nome ";
+		String sql = " SELECT  " +
+				"		DISTINCT COEFICIENTE.empresa_id, EMPRESA.nome as empresa_nome,   " +
+				"		COEFICIENTE.organizacao_id, ORGANIZACAO.nome as organizacao_nome,   " +
+				"		COEFICIENTE.tabela_id, TABELA.nome as tabela_nome,TABELA.prazo as prazo, COEFICIENTE.created,    " +
+				"		PRODUTOBANCO.banco_id, BANCO.nome as banco_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta   " +
+				"		FROM (((((COEFICIENTE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id)    " +
+				"		INNER JOIN ORGANIZACAO (NOLOCK) ON COEFICIENTE.organizacao_id = ORGANIZACAO.organizacao_id)    " +
+				"		INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id)   " +
+				"		INNER JOIN PRODUTOBANCO (NOLOCK) ON TABELA.tabela_id = PRODUTOBANCO.tabela_id)   " +
+				"		INNER JOIN PRODUTO (NOLOCK) ON PRODUTOBANCO.produto_id = PRODUTO.produto_id)   " +
+				"		INNER JOIN BANCO (NOLOCK) ON PRODUTOBANCO.banco_id = BANCO.banco_id " +
+				" WHERE  COEFICIENTE.updated is null   " +
+				"	AND BANCO.isactive = 1   " +
+				"	AND PRODUTO.isactive = 1   " +
+				"	AND TABELA.isactive = 1  " +
+				"GROUP BY " +
+				"	COEFICIENTE.empresa_id, " +
+				"	EMPRESA.nome,   " +
+				"	COEFICIENTE.organizacao_id, " +
+				"	ORGANIZACAO.nome,    " +
+				"	COEFICIENTE.tabela_id, " +
+				"	TABELA.nome,TABELA.prazo, COEFICIENTE.created,     " +
+				"	PRODUTOBANCO.banco_id, BANCO.nome,  COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta  ORDER BY BANCO.nome, TABELA.nome ";
 
 		try {
 

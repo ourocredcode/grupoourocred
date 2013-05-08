@@ -30,6 +30,8 @@ import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PnDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
+import br.com.sgo.dao.WorkflowDao;
+import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.jasper.FormularioDataSource;
 import br.com.sgo.modelo.Banco;
@@ -54,6 +56,8 @@ public class FormularioController {
 	private final FormularioDao formularioDao;
 	private final ContratoDao contratoDao;
 	private final CoeficienteDao coeficienteDao;
+	private final WorkflowDao workflowDao;
+	private final WorkflowEtapaDao workflowEtapaDao;
 	private final PnDao pnDao;
 
 	private HttpServletResponse response;
@@ -67,7 +71,8 @@ public class FormularioController {
 	public FormularioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,FormularioDao formularioDao,ContratoDao contratoDao,
 			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
-			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos){		
+			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
+			WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -83,6 +88,8 @@ public class FormularioController {
 		this.formularioDao = formularioDao;
 		this.tabelaDao = tabelaDao;
 		this.contratoDao = contratoDao;
+		this.workflowDao = workflowDao;
+		this.workflowEtapaDao = workflowEtapaDao;
 		this.pnDao = pnDao;
 		this.parceiroNegocio = parceiroNegocio;
 		this.parceiroLocalidade = parceiroLocalidade;
@@ -96,8 +103,8 @@ public class FormularioController {
 	@Path("/formulario/cadastro")
 	public void cadastro(){
 
-		Collection<Banco> bancos = this.bancoDao.buscaBancoByGrupo("TOMADORES");
-		Collection<Banco> bancosRecompra = this.bancoDao.buscaBancoByGrupo("COMPRADOS");
+		Collection<Banco> bancos = this.bancoDao.buscaBancoByGrupo("Tomadores");
+		Collection<Banco> bancosRecompra = this.bancoDao.buscaBancoByGrupo("Comprados");
 
 		this.formulario.setEmpresa(usuarioInfo.getEmpresa());
 		this.formulario.setOrganizacao(usuarioInfo.getOrganizacao());
@@ -185,9 +192,13 @@ public class FormularioController {
 		contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
 		contrato.setNumeroBeneficio(this.formulario.getParceiroBeneficio().getNumeroBeneficio());
 
+		contrato.setWorkflow(this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(usuarioInfo.getEmpresa().getEmpresa_id(),
+				usuarioInfo.getOrganizacao().getOrganizacao_id(),1L,"Status Contrato"));
+		contrato.setWorkflowEtapa(this.workflowEtapaDao.buscaWorkflowEtapaPorNome(usuarioInfo.getEmpresa().getEmpresa_id(),
+				usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Status"));
+
 		if(contrato.getRecompraBanco().getBanco_id() != null){
 			contrato.setRecompraBanco(this.bancoDao.buscaBancoById(contrato.getRecompraBanco().getBanco_id()));
-			System.out.println(contrato.getRecompraBanco().getNome());
 		}
 
 		contrato.setIsActive(true);
