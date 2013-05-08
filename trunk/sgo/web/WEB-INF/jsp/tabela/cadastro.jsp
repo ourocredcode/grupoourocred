@@ -234,13 +234,19 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="tabelaNome">Nome</label>
 										<div class="controls">
-											<input type="text" id="tabelaNome" name="tabela.nome" placeholder="Nome" required>
+											<input  class="span10" type="text" id="tabelaNome" name="tabela.nome" placeholder="Nome" required>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label" for="tabelaDescricao">Descrição</label>
 										<div class="controls">
-											<input type="text" id="tabelaDescricao" name="tabela.descricao" placeholder="Descrição" required>
+											<input  class="span10" type="text" id="tabelaDescricao" name="tabela.descricao" placeholder="Descrição" required>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="tabelaPrazo">Prazo</label>
+										<div class="controls">
+											<input  class="span10" type="text" id="tabelaPrazo" name="tabela.prazo" placeholder="Prazo" required>
 										</div>
 									</div>
 									<div class="control-group">

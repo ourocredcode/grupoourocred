@@ -193,7 +193,7 @@ function limpaForm() {
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
 			      						<input class="span10" id="subGrupoProdutoGrupoProduto" name="subGrupoProduto.grupoProduto.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="subGrupoProdutoGrupoProdutoId" name="subGrupoProduto.grupoProduto.grupoproduto_id" type="hidden">
+			      						<input class="span10" id="subGrupoProdutoGrupoProdutoId" name="subGrupoProduto.grupoProduto.grupoProduto_id" type="hidden">
 			    					</div>
 								</div>
 								<div class="control-group">
