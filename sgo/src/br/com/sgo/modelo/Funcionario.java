@@ -38,8 +38,13 @@ public class Funcionario implements Serializable {
 	private Departamento departamento;
 
 	@ManyToOne
+	@JoinColumn(name = "supervisor_funcionario_id", updatable = true, nullable = false)
+	private ParceiroNegocio supervisor;
+
+	@ManyToOne
 	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "funcao_id", updatable = true, nullable = false)
@@ -113,5 +118,13 @@ public class Funcionario implements Serializable {
 
 	public void setParceiroNegocio(ParceiroNegocio parceiroNegocio) {
 		this.parceiroNegocio = parceiroNegocio;
+	}
+
+	public ParceiroNegocio getSupervisor() {
+		return supervisor;
+	}
+
+	public void setSupervisor(ParceiroNegocio supervisor) {
+		this.supervisor = supervisor;
 	}
 }

@@ -12,6 +12,8 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Usuario;
 
 @Component
@@ -36,8 +38,11 @@ public class UsuarioDao extends Dao<Usuario> {
 
 	public Usuario find(String login, String senha) {
 
-		String sql = "SELECT USUARIO.usuario_id FROM USUARIO (NOLOCK) "
-				+ "		WHERE USUARIO.chave = ? AND USUARIO.senha = ? ";
+		String sql = " SELECT USUARIO.usuario_id, USUARIO.empresa_id, EMPRESA.nome as empresa_nome , USUARIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome " +
+				"		FROM (USUARIO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id) " +
+				"							   INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id " +
+				"		WHERE USUARIO.chave = ? AND USUARIO.senha = ? ";
+ 
 
 		Usuario usuario = new Usuario();
 
@@ -51,7 +56,18 @@ public class UsuarioDao extends Dao<Usuario> {
 			this.rsUsuarios = this.stmt.executeQuery();
 
 			while (rsUsuarios.next()) {
+				
+				Empresa empresa = new Empresa();
+				Organizacao organizacao = new Organizacao();
+				
+				empresa.setEmpresa_id(rsUsuarios.getLong("empresa_id"));
+				empresa.setNome(rsUsuarios.getString("empresa_nome"));
+				
+				organizacao.setOrganizacao_id(rsUsuarios.getLong("organizacao_id"));
+				organizacao.setNome(rsUsuarios.getString("organizacao_nome"));
 
+				usuario.setEmpresa(empresa);
+				usuario.setOrganizacao(organizacao);
 				usuario.setUsuario_id(rsUsuarios.getLong("usuario_id"));
 
 			}
@@ -66,18 +82,21 @@ public class UsuarioDao extends Dao<Usuario> {
 
 	}
 
-	public Collection<Usuario> buscaUsuarios(Long empresa_id,
-			Long organizacao_id, String nome) {
-		String sql = "SELECT USUARIO.usuario_id, USUARIO.nome FROM ((USUARIO (NOLOCK) "
+	public Collection<Usuario> buscaUsuarios(Long empresa_id, Long organizacao_id, String nome) {
+
+		String sql = " SELECT USUARIO.usuario_id, USUARIO.nome FROM ((USUARIO (NOLOCK) "
 				+ "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON USUARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) "
 				+ "INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id) "
 				+ "INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id	"
 				+ "WHERE USUARIO.isactive=1 AND PARCEIRONEGOCIO.isactive=1 AND PARCEIRONEGOCIO.isfuncionario=1"
 				+ "AND USUARIO.empresa_id = ? AND USUARIO.organizacao_id = ? AND USUARIO.nome like ? ";
+
 		this.conn = this.conexao.getConexao();
 
 		Collection<Usuario> usuarios = new ArrayList<Usuario>();
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);

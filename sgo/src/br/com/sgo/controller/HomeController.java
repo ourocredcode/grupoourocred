@@ -12,6 +12,8 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.validator.Validations;
+import br.com.sgo.dao.EmpresaDao;
+import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.UsuarioPerfilDao;
@@ -30,14 +32,22 @@ public class HomeController {
 	private final PerfilDao perfilDao;
 	private final UsuarioInfo usuarioInfo;
 	private final Validator validator;
+	private final EmpresaDao empresaDao;
+	private final OrganizacaoDao organizacaoDao;
 
-	public HomeController(Result result, UsuarioDao usuarioDao, UsuarioInfo usuarioInfo, Validator validator, UsuarioPerfilDao usuarioPerfilDao,PerfilDao perfilDao) {
+	private Usuario usuario;
+
+	public HomeController(Result result, UsuarioDao usuarioDao, UsuarioInfo usuarioInfo, Validator validator, UsuarioPerfilDao usuarioPerfilDao,PerfilDao perfilDao,Usuario usuario,
+			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao) {
 		this.result = result;
 		this.usuarioDao = usuarioDao;
 		this.usuarioPerfilDao = usuarioPerfilDao;
 		this.perfilDao = perfilDao;
 		this.usuarioInfo = usuarioInfo;
 		this.validator = validator;
+		this.usuario = usuario;
+		this.empresaDao = empresaDao;
+		this.organizacaoDao = organizacaoDao;
 	}
 
 	@Get
@@ -58,7 +68,27 @@ public class HomeController {
 
 		Long usuario_id = usuarioDao.find(login, password).getUsuario_id();
 
-		final Usuario currentUsuario = usuarioDao.load(usuario_id);
+		usuario.setUsuario_id(usuario_id);
+
+		result.redirectTo(this).perfis(this.usuarioPerfilDao.buscaUsuarioPerfilAcesso(usuario));
+
+	}
+
+	@Get
+	@Public
+	public void perfis(Collection<Perfil> perfis){
+		result.include("perfis",perfis);
+	}
+
+	@Post
+	@Public
+	@Path("/home/perfil") 
+	public void perfil(UsuarioPerfil usuarioPerfil) {
+
+		final Usuario currentUsuario = this.usuarioDao.load(usuario.getUsuario_id());
+
+		currentUsuario.setEmpresa(empresaDao.load(usuarioPerfil.getEmpresa().getEmpresa_id()));
+		currentUsuario.setOrganizacao(organizacaoDao.load(usuarioPerfil.getOrganizacao().getOrganizacao_id()));
 
 		validator.checking(new Validations() {{
 			that(currentUsuario, is(notNullValue()), "login", "invalid_login_or_password");
@@ -67,19 +97,6 @@ public class HomeController {
 		validator.onErrorUsePageOf(this).login();
 
 		usuarioInfo.login(currentUsuario);
-
-		result.redirectTo(this).perfis(this.usuarioPerfilDao.buscaUsuarioPerfilAcesso(usuarioInfo.getUsuario()));
-
-	}
-
-	@Get
-	public void perfis(Collection<Perfil> perfis){
-		result.include("perfis",perfis);
-	}
-	
-	@Post
-	@Path("/home/perfil") 
-	public void perfil(UsuarioPerfil usuarioPerfil) {
 
 		usuarioInfo.setPerfil(perfilDao.load(usuarioPerfil.getPerfil().getPerfil_id()));
 		result.redirectTo(MenuController.class).inicio();
@@ -97,18 +114,20 @@ public class HomeController {
 	}
 	
 	@Post
+	@Public
 	@Path("/home/empresas")
 	public void empresas(Long perfil_id){
 
-		result.include("empresas",this.usuarioPerfilDao.buscaEmpresaPerfilAcesso(perfil_id,usuarioInfo.getUsuario().getUsuario_id()) );
+		result.include("empresas",this.usuarioPerfilDao.buscaEmpresaPerfilAcesso(perfil_id,usuario.getUsuario_id()));
 
 	}
 	
 	@Post
+	@Public
 	@Path("/home/organizacoes")
-	public void organizacoes(Long perfil_id,Long empresa_id){
+	public void organizacoes(Long perfil_id,Long empresa_id, Long usuario_id){
 
-		result.include("organizacoes",this.usuarioPerfilDao.buscaOrganizacaoPerfilAcesso(perfil_id, empresa_id, usuarioInfo.getUsuario().getUsuario_id()));
+		result.include("organizacoes",this.usuarioPerfilDao.buscaOrganizacaoPerfilAcesso(perfil_id, empresa_id, usuario.getUsuario_id()));
 
 	}
 

@@ -49,16 +49,19 @@
 			});
 			
 			$('#usuarioPerfil').change(function() {
+				
 				var perfil_id = $("#usuarioPerfil").val();
 				$("#usuarioPerfilEmpresa").load('<c:url value="/home/empresas" />',{'perfil_id': perfil_id});
+
 			});
 			
 			$('#usuarioPerfilEmpresa').change(function() {
 		
 				var empresa_id = $("#usuarioPerfilEmpresa").val();
 				var perfil_id = $("#usuarioPerfil").val();
-		
+
 				$("#usuarioPerfilOrganizacao").load('<c:url value="/home/organizacoes" />',{'perfil_id': perfil_id, 'empresa_id':empresa_id});
+
 			});
 		
 			$('#btnSair').click(function() {
@@ -113,9 +116,9 @@
 	
 						<p></p>
 						<form id="usuarioPerfilForm" action="<c:url value="/home/perfil"/>" method="POST">
-							<input type="hidden" id="usuarioPerfilUsuarioId" name="usuarioPerfil.usuario.usuario_id" />
+
 							<div class="control-group">
-								<label class="control-label" for="usuarioPerfil">Perfil</label>
+								<label class="control-label" for="usuarioPerfil">Perfil ${usuario.usuario_id }</label>
 								<select id="usuarioPerfil" name="usuarioPerfil.perfil.perfil_id">	
 									<option value="">Selecione o perfil</option>
 								</select>

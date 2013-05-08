@@ -89,7 +89,9 @@ public class UsuarioController {
 	@Get @Path("/usuarios/busca.json")
 	@Public
 	public void usuarios(Long empresa_id, Long organizacao_id, String nome){
+		
 		result.use(Results.json()).withoutRoot().from(usuarioDao.buscaUsuarios(empresa_id, organizacao_id, nome)).serialize();
+
 	}	
 	
 	@Get

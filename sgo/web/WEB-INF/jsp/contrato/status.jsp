@@ -3,7 +3,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
-	$("#dataAssinatura").mask("99/99/9999");
 	$("#dataStatusFinal").mask("99/99/9999");
 	$("#dataConcluido").mask("99/99/9999");
 	$("#dataDigitacao").mask("99/99/9999");
@@ -14,17 +13,11 @@ $(document).ready(function() {
 	$("#valorQuitacao").maskMoney({symbol:"",decimal:".",thousands:""});
 
 	var justificativa = document.getElementById("justificativa");
-	var logistica = document.getElementById("logistica");
-	var dataAssinatura = document.getElementById("dataAssinatura");
-	var periodoAssinatura = document.getElementById("periodoAssinatura");
-	var tipoPagamento = document.getElementById("tipoPagamento");
-	var informacaoSaque = document.getElementById("informacaoSaque");
 	var dataQuitacao = document.getElementById("dataQuitacao");
 	var dataDigitacao = document.getElementById("dataDigitacao");
 	var dataAgendado = document.getElementById("dataAgendado");
 	var dataStatusFinal = document.getElementById("dataStatusFinal");
 	var dataConcluido = document.getElementById("dataConcluido");
-	var recusaBanco = document.getElementById("recusaBanco");
 	var propostaBanco = document.getElementById("propostaBanco");
 	var contratoBanco = document.getElementById("contratoBanco");
 	var empresa = document.getElementById("empresa");
@@ -54,21 +47,6 @@ $(document).ready(function() {
 			desabilita(numero);
 	}
 
-	if(logistica != undefined) {
-		if( logistica.value == "")
-			desabilita(logistica);
-	}
-	
-	if(dataAssinatura != undefined) {
-		if( dataAssinatura.value == "")
-			desabilita(dataAssinatura);
-	}
-	
-	if(periodoAssinatura != undefined) {
-		if( periodoAssinatura.value == "")
-			desabilita(periodoAssinatura);
-	}
-	
 	if(dataStatusFinal != undefined) {
 		if( dataStatusFinal.value == "")
 			desabilita(dataStatusFinal);
@@ -93,11 +71,6 @@ $(document).ready(function() {
 		if( dataAgendado.value == "")
 			desabilita(dataAgendado);
 	}
-	
-	if(recusaBanco != undefined) {
-		if( recusaBanco.value == "")
-			desabilita(recusaBanco);
-	}
 
 	if(justificativa != undefined) {
 		if(justificativa.value == "")
@@ -119,30 +92,12 @@ $(document).ready(function() {
 			desabilita(empresa);	
 	}
 
-	if(tipoPagamento != undefined) {
-		if(tipoPagamento.value == "")
-			desabilita(tipoPagamento);	
-	}
-
-	if(informacaoSaque != undefined) {
-		if(informacaoSaque.value == "")
-			desabilita(informacaoSaque);	
-	}
-
 	if(valorQuitacao != undefined) {
 		if(valorQuitacao.value == "" || valorQuitacao.value == 0.0){
 			valorQuitacao.value = '';
 			desabilita(valorQuitacao);
 		}
 	}
-
-	$("#logistica").change(function () {
-
-		var dataAssinatura = document.getElementById("dataAssinatura");
-
-		habilita(dataAssinatura);
-
-	});
 
     $("#contratoStatusForm").submit(function() {
     	$("input", this).prop("readonly", true);
@@ -176,14 +131,6 @@ $(document).ready(function() {
 		if(length == 0){
 			btt.style.display = "none";
 		};
-	});
-	
-	$('#dataAssinatura').focus( function() {
-		$(this).calendario({
-			target:'#dataAssinatura',
-			top:0,
-			left:100
-		});
 	});
 
 	$('#dataDigitacao').focus( function() {
@@ -238,16 +185,12 @@ function verificaStatus() {
 	var status = contratoStatus.options[contratoStatus.selectedIndex].text;
 
 	var justificativa = document.getElementById("justificativa");
-	var logistica = document.getElementById("logistica");
-	var dataAssinatura = document.getElementById("dataAssinatura");
-	var periodoAssinatura = document.getElementById("periodoAssinatura");
 	var dataAgendado = document.getElementById("dataAgendado");
 	var dataStatusFinal = document.getElementById("dataStatusFinal");
 	var dataConcluido = document.getElementById("dataConcluido");
-	var tipoPagamento = document.getElementById("tipoPagamento");
 	var dataQuitacao = document.getElementById("dataQuitacao");
 	var dataDigitacao = document.getElementById("dataDigitacao");
-	var recusaBanco = document.getElementById("recusaBanco");
+
 	var propostaBanco = document.getElementById("propostaBanco");
 	var contratoBanco = document.getElementById("contratoBanco");
 	var empresa = document.getElementById("empresa");
@@ -261,7 +204,6 @@ function verificaStatus() {
 	if(status == 'Aprovado') {
 		habilita(dataStatusFinal);
 		$("#dataStatusFinal").val(getCurrentDate());
-		habilita(tipoPagamento);
 	}
 	
 	if(status == 'Concluído') {
@@ -279,7 +221,6 @@ function verificaStatus() {
 	if(status != 'Aprovado' && status != 'Recusado' && status != 'Concluído') {
 		desabilita(dataStatusFinal);
 		$("#dataStatusFinal").val("");
-		desabilita(tipoPagamento);
 	}
 
 	if(status != 'Recusado')
@@ -287,33 +228,15 @@ function verificaStatus() {
 
 	if(status == 'Enviado DataPrev' || status == 'Quitado'){
 
-		$("#recusaBanco").val('');
-
 		if(contratoProduto == 'MARGEM LIMPA' || contratoProduto == 'REFINANCIAMENTO' || contratoProduto == 'RETENÇÃO')
 			desabilita(dataQuitacao);
 		else
 			habilita(dataQuitacao);
-
-		desabilita(recusaBanco);
-
 	}
 
 	if(status == 'Pendente Banco'){
 		$("#dataQuitacao").val('');
 		desabilita(dataQuitacao);
-		habilita(recusaBanco);
-	}
-	
-	if(status == 'Pendente Administrativo'){
-		habilita(recusaBanco);
-	}
-
-	if(status == 'Pendente Agendamento'){
-		habilita(recusaBanco);
-	}
-
-	if(status == 'Pendente Coeficiente'){
-		habilita(recusaBanco);
 	}
 
 	if(status == 'Agendado') {
@@ -363,15 +286,6 @@ function verificaStatus() {
 
 	if(status == 'Contrato Fora Planilha'){
 
-		logistica.value = '';
-		desabilita(logistica);
-
-		dataAssinatura.value='';
-		desabilita(dataAssinatura);
-
-		periodoAssinatura.value='';
-		desabilita(periodoAssinatura);
-
 		if(bairro.value == '')
 			desabilita(bairro);
 
@@ -387,27 +301,10 @@ function verificaStatus() {
 	}
 
 	if(status == 'Aguardando Qualidade'){
-		habilita(logistica);
-		habilita(dataAssinatura);
-		habilita(periodoAssinatura);
 		habilita(bairro);
 		habilita(cidade);
 		habilita(endereco);
 		habilita(numero);
-	}
-
-}
-
-function verificaPagamento() {
-
-	var tipoPagamento = document.getElementById("tipoPagamento");
-	var informacaoSaque = document.getElementById("informacaoSaque");
-
-	if(tipoPagamento.value == "OP"){
-		habilita(informacaoSaque);
-	} else {
-		desabilita(informacaoSaque);
-		informacaoSaque.value = "";
 	}
 
 }
@@ -807,124 +704,51 @@ function openPopup(url) {
 						<h5>Status</h5>
 					</div>
 					<div class="widget-content padding">
+
+						<div class="row-fluid"> 
+	
+							<div class="span2">
+								<label for="dataAgendado">Data Agendado</label>
+								<input id="dataAgendado" type="text" name="contratoStatus.dataAgendado" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataAgendado.time}" />" class="input-medium"/>
+							</div>
+							
+							<div class="span2">
+								<label for="valorQuitacao">Valor Quitação</label>
+								<input id="valorQuitacao" type="text" name="contratoStatus.valorQuitacao" value="${contratoStatus.valorQuitacao}" class="input-medium" />
+							</div>
+							
+							<div class="span2">
+								<label for="dataQuitacao">Data Quitação</label>
+								<input id="dataQuitacao" type="text" name="contratoStatus.dataQuitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataQuitacao.time}" />" class="input-medium"/>
+							</div>
+						</div>
+						
 						<div class="row-fluid">
-							<div class="row-fluid"> 
-
-						<div class="span2">
-							<label for="logistica">Logística</label>
-							<select id="logistica" name="contratoStatus.logistica" class="input-medium">
-								<option value="" selected="selected">Selecione</option>
-								<option value="Correios" <c:if test="${contratoStatus.logistica == 'Correios'}">selected</c:if>>Correios</option>
-								<option value="Motoboy" <c:if test="${contratoStatus.logistica == 'Motoboy'}">selected</c:if>>Motoboy</option>
-								<option value="Pessoalmente" <c:if test="${contratoStatus.logistica == 'Pessoalmente'}">selected</c:if>>Pessoalmente</option>
-								<option value="Nipoflex" <c:if test="${contratoStatus.logistica == 'Nipoflex'}">selected</c:if>>Nipoflex</option>
-							</select>
+	
+							<div class="span2">
+								<label for="dataDigitacao">Data Digitacao</label>
+								<input id="dataDigitacao" type="text" name="contratoStatus.dataDigitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataDigitacao.time}" />" class="input-medium" />
+							</div>
+							<div class="span2">	
+								<label for="contratoBanco">Contrato Banco</label>	
+								<input id="contratoBanco" type="text" name="contratoStatus.contratoBanco" value="${contratoStatus.contratoBanco}" class="input-medium" />
+							</div>
+							<div class="span2">	
+								<label for="propostaBanco">Proposta Banco</label>	
+								<input id="propostaBanco" type="text" name="contratoStatus.propostaBanco" value="${contratoStatus.propostaBanco}" class="input-medium" />
+							</div>
+							<div class="span2">	
+								<label for="empresa">Empresa</label>	
+								<select id="empresa" name="contratoStatus.empresa" class="input-medium" >
+									<option value="">Selecione</option>
+									<option value="ATGGOLD" <c:if test="${contratoStatus.empresa == 'ATGGOLD'}">selected</c:if>>ATGGOLD</option>
+									<option value="GOCX" <c:if test="${contratoStatus.empresa == 'GOCX'}">selected</c:if>>GOCX</option>
+									<option value="GRGOLD" <c:if test="${contratoStatus.empresa == 'GRGOLD'}">selected</c:if>>GRGOLD</option>
+									<option value="OUROCRED" <c:if test="${contratoStatus.empresa == 'OUROCRED'}">selected</c:if>>OUROCRED</option>
+								</select>
+							</div>
+	
 						</div>
-
-						<div class="span2">
-							<label for="dataAssinatura">Data Assinatura</label>
-							<input id="dataAssinatura" class="input-medium" type="text" name="contratoStatus.dataAssinatura" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${contratoStatus.dataAssinatura.time}"/>" />
-						</div>
-
-						<div class="span2">
-							<label for="periodoAssinatura">Período Assinatura</label>
-							<select id="periodoAssinatura" name="contratoStatus.periodoAssinatura" class="input-medium">
-								<option value="" selected="selected">Selecione</option>
-								<option value="Manhã" <c:if test="${contratoStatus.periodoAssinatura == 'Manhã'}">selected</c:if>>Manhã</option>
-								<option value="Tarde" <c:if test="${contratoStatus.periodoAssinatura == 'Tarde'}">selected</c:if>>Tarde</option>
-								<option value="Comercial" <c:if test="${contratoStatus.periodoAssinatura == 'Comercial'}">selected</c:if>>Comercial</option>
-							</select>
-						</div>
-
-						<div class="span2">
-							<label>Representante</label>
-							${logistica.representante }
-						</div>
-
-					</div>
-					
-					<div class="row-fluid"> 
-
-						<div class="span2">
-							<label for="tipoPagamento">TipoPagamento</label>
-							<select id="tipoPagamento" name="contratoStatus.tipoPagamento" class="input-medium" onchange="verificaPagamento();">
-								<option value="">Selecione</option>
-								<option value="OP" <c:if test="${contratoStatus.tipoPagamento == 'OP'}">selected</c:if>>OP</option>
-								<option value="TED" <c:if test="${contratoStatus.tipoPagamento == 'TED'}">selected</c:if>>TED</option>
-							</select>
-						</div>
-						<div class="span2">
-							<label for="informacaoSaque">Informação Saque</label>
-							<select id="informacaoSaque" name="contratoStatus.informacaoSaque" class="input-medium">
-								<option value="">Selecione</option>
-								<option value="Aguardando Saque" <c:if test="${contratoStatus.informacaoSaque == 'Aguardando Saque'}">selected</c:if>>Aguardando Saque</option>
-								<option value="Saque Efetuado" <c:if test="${contratoStatus.informacaoSaque == 'Saque Efetuado'}">selected</c:if>>Saque Efetuado</option>
-							</select>
-						</div>
-						
-						<div class="span2">
-							<label for="dataAgendado">Data Agendado</label>
-							<input id="dataAgendado" type="text" name="contratoStatus.dataAgendado" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataAgendado.time}" />" class="input-medium"/>
-						</div>
-						
-						<div class="span2">
-							<label for="valorQuitacao">Valor Quitação</label>
-							<input id="valorQuitacao" type="text" name="contratoStatus.valorQuitacao" value="${contratoStatus.valorQuitacao}" class="input-medium" />
-						</div>
-						
-						<div class="span2">
-							<label for="dataQuitacao">Data Quitação</label>
-							<input id="dataQuitacao" type="text" name="contratoStatus.dataQuitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataQuitacao.time}" />" class="input-medium"/>
-						</div>
-						
-						<div class="span2">
-							<label for="recusaBanco">Recusa Banco</label>
-							<select id="recusaBanco" name="contratoStatus.recusaBanco" class="input-medium">
-								<option value="">Selecione</option>
-								<option value="Agencia/Conta Inválida" <c:if test="${contratoStatus.recusaBanco == 'Agencia/Conta Inválida'}">selected</c:if>>Agencia/Conta Inválida</option>
-								<option value="Cliente Cancelou Agendamento" <c:if test="${contratoStatus.recusaBanco == 'Cliente Cancelou Agendamento'}">selected</c:if>>Cliente Cancelou Agendamento</option>
-								<option value="Cliente Inadimplente" <c:if test="${contratoStatus.recusaBanco == 'Cliente Inadimplente'}">selected</c:if>>Cliente Inadimplente</option>
-								<option value="Dívida Maior que o Estimado" <c:if test="${contratoStatus.recusaBanco == 'Dívida Maior que o Estimado'}">selected</c:if>>Dívida Maior que o Estimado</option>
-								<option value="Parcelas Abaixo do Mínimo Exigido" <c:if test="${contratoStatus.recusaBanco == 'Parcelas Abaixo do Mínimo Exigido'}">selected</c:if>>Parcelas Abaixo do Mínimo Exigido</option>
-								<option value="Fora da Política de Idade" <c:if test="${contratoStatus.recusaBanco == 'Fora da Política de Idade'}">selected</c:if>>Fora da Política de Idade</option>
-								<option value="Margem Excedida" <c:if test="${contratoStatus.recusaBanco == 'Margem Excedida'}">selected</c:if>>Margem Excedida</option>
-								<option value="Parcelas Abaixo do Mínimo Exigido" <c:if test="${contratoStatus.recusaBanco == 'Parcelas Abaixo do Mínimo Exigido'}">selected</c:if>>Parcelas Abaixo do Mínimo Exigido</option>
-								<option value="Operação Abaixo do Mínimo Exigido" <c:if test="${contratoStatus.recusaBanco == 'Operação Abaixo do Mínimo Exigido'}">selected</c:if>>Operação Abaixo do Mínimo Exigido</option>
-								<option value="Operação Acima do Máximo Exigido" <c:if test="${contratoStatus.recusaBanco == 'Operação Acima do Máximo Exigido'}">selected</c:if>>Operação Acima do Máximo Exigido</option>
-								<option value="Quantidade de Contratos Excedida" <c:if test="${contratoStatus.recusaBanco == 'Quantidade de Contratos Excedida'}">selected</c:if>>Quantidade de Contratos Excedida</option>
-								<option value="Recusado Banco" <c:if test="${contratoStatus.recusaBanco == 'Recusado Banco'}">selected</c:if>>Recusado Banco</option>
-								<option value="Risco de Fraude" <c:if test="${contratoStatus.recusaBanco == 'Risco de Fraude'}">selected</c:if>>Risco de Fraude</option>
-								<option value="Solicitado Supervisor" <c:if test="${contratoStatus.recusaBanco == 'Solicitado Supervisor'}">selected</c:if>>Solicitado Supervisor</option>
-							</select>
-						</div>
-
-					</div>
-					
-					<div class="row-fluid">
-
-						<div class="span2">
-							<label for="dataDigitacao">Data Digitacao</label>
-							<input id="dataDigitacao" type="text" name="contratoStatus.dataDigitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataDigitacao.time}" />" class="input-medium" />
-						</div>
-						<div class="span2">	
-							<label for="contratoBanco">Contrato Banco</label>	
-							<input id="contratoBanco" type="text" name="contratoStatus.contratoBanco" value="${contratoStatus.contratoBanco}" class="input-medium" />
-						</div>
-						<div class="span2">	
-							<label for="propostaBanco">Proposta Banco</label>	
-							<input id="propostaBanco" type="text" name="contratoStatus.propostaBanco" value="${contratoStatus.propostaBanco}" class="input-medium" />
-						</div>
-						<div class="span2">	
-							<label for="empresa">Empresa</label>	
-							<select id="empresa" name="contratoStatus.empresa" class="input-medium" >
-								<option value="">Selecione</option>
-								<option value="ATGGOLD" <c:if test="${contratoStatus.empresa == 'ATGGOLD'}">selected</c:if>>ATGGOLD</option>
-								<option value="GOCX" <c:if test="${contratoStatus.empresa == 'GOCX'}">selected</c:if>>GOCX</option>
-								<option value="GRGOLD" <c:if test="${contratoStatus.empresa == 'GRGOLD'}">selected</c:if>>GRGOLD</option>
-								<option value="OUROCRED" <c:if test="${contratoStatus.empresa == 'OUROCRED'}">selected</c:if>>OUROCRED</option>
-							</select>
-						</div>
-
 					</div>
 
 				</div>
@@ -940,8 +764,8 @@ function openPopup(url) {
 						<div class="row-fluid">
 
 						<div class="span2">
-							<label for="contratoStatus">status</label>
-							<select id="contratoStatus" class="input-medium" onchange="verificaStatus();">
+							<label for="contratoStatus">Status Contrato</label>
+							<select id="contratoStatus" name="contrato.workflowEtapa.workflowEtapa_id" class="input-medium" onchange="verificaStatus();">
 								<c:forEach var="etapa" items="${etapas }">
 									<option value="${etapa.workflowEtapa_id}" 
 									<c:if test="${etapa.workflowEtapa_id == contrato.workflowEtapa.workflowEtapa_id}">selected</c:if>>${etapa.nome }</option>
@@ -950,17 +774,17 @@ function openPopup(url) {
 						</div>
 
 						<div class="span2">
-							<label for="dataStatusFinal">dataStatusFinal</label>
+							<label for="dataStatusFinal">Data Aprovado/Recusado</label>
 							<input id="dataStatusFinal" type="text" name="contratoStatus.dataStatusFinal" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataStatusFinal.time}" />" class="input-medium"/>
 						</div>
 						
 						<div class="span2">
-							<label for="dataConcluido">dataConcluido</label>
+							<label for="dataConcluido">Data Conclusão</label>
 							<input id="dataConcluido" type="text" name="contratoStatus.dataConcluido" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataConcluido.time}" />" class="input-medium"/>
 						</div>
 
 						<div class="span2">
-							<label for="justificativa">justificativa</label>
+							<label for="justificativa">Justificativa</label>
 							<select id="justificativa" name="contratoStatus.justificativa" class="input-medium">
 
 								<option value="" selected="selected">Selecione</option>

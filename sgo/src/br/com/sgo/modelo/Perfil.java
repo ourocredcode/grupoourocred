@@ -34,7 +34,7 @@ public class Perfil implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "supervisor_perfil_id", updatable = true, nullable = false)
+	@JoinColumn(name = "supervisor_perfil_id", updatable = true, nullable = true)
 	private Usuario usuario;
 
 	@Column(name = "nome")

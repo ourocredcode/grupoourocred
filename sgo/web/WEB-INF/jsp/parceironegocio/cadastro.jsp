@@ -335,13 +335,13 @@
 						<div class="row-fluid">
 							<div class="span2">
 								<label for="parceiroNegocioEmpresa">Empresa</label>
-								<input class="input-medium" id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.usuario.empresa.nome }" type="text" required />
-								<input class="input-medium" id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden" value="${usuarioInfo.usuario.empresa.empresa_id }" />
+								<input class="input-medium" id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required />
+								<input class="input-medium" id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" />
 							</div>
 							<div class="span2">
 								<label for="parceiroNegocioOrganizacao">Organização</label>
-								<input  class="input-medium" id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" value="${usuarioInfo.usuario.organizacao.nome }" type="text" required />
-								<input  class="input-medium" id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.usuario.organizacao.organizacao_id }" type="hidden" />
+								<input  class="input-medium" id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required />
+								<input  class="input-medium" id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.organizacao.organizacao_id }" type="hidden" />
 							</div>
 							<div class="span2">
 								<label for="parceiroNegocioCategoriaParceiro">Categoria</label>

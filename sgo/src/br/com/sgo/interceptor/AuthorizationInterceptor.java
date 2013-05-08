@@ -61,8 +61,9 @@ public class AuthorizationInterceptor implements Interceptor {
 
     		usuarioDao.refresh(info.getUsuario());
 
-    		if(info.getPerfil() != null)
+    		if(info.getPerfil() != null){
     			perfilDao.refresh(info.getPerfil());
+    		}
 
     		// continues execution
     		
