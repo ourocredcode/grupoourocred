@@ -86,7 +86,7 @@ function limpaForm() {
 	</c:if>
 
 	<div id="buscaHisconBeneficioDiv" style="float: left; margin-top: 10px; margin-left: 20px;position: absolute;">
-		<form id="buscaHisconBeneficioDiv" class="form-search" action="<c:url value="/hisconbeneficio/cadastroteste" />" method="POST">
+		<form id="buscaHisconBeneficioDiv" class="form-search" action="<c:url value="/hisconbeneficio/cadastro" />" method="POST">
 			<div class="input-append">
 				<input type="hidden" id="hisconBeneficioEmpresaId" name="empresa_id" value="${usuarioInfo.empresa.empresa_id }" />
 				<input type="hidden" id="hisconBeneficioOrganizacaoId" name="organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" />
@@ -196,15 +196,22 @@ function limpaForm() {
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 								<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
+								
 								<td>
-									<select id="hisconBeneficioStatus" class="input-medium" >
-										<c:forEach var="etapa" items="${hiscon.workflowEtapas }">
+									<select id="hisconBeneficioStatus" class="input-medium" >										
+										<c:forEach var="etapa" items="${etapas }">
 											<option value="${etapa.workflowEtapa_id}" <c:if test="${etapa.workflowEtapa_id == hiscon.workflowEtapa.workflowEtapa_id}">selected</c:if>>${etapa.nome }</option>
+										</c:forEach>
+										<c:forEach var="etapaHiscon" items="${etapasHiscon }">
+											<option value="${etapaHiscon.workflowEtapa_id}">${etapaHiscon.workflowEtapa.nome }</option>
 										</c:forEach>
 									</select>
 								</td>
+
 								<td>${hiscon.countHiscons }</td>
+
 							</tr>
+
 						</c:forEach>
 					</tbody>
 				</table>

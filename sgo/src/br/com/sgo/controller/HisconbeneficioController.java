@@ -56,6 +56,7 @@ public class HisconbeneficioController {
 	private Calendar dataAtual = Calendar.getInstance();
 	private Collection<HisconBeneficio> hiscons;
 	private Collection<WorkflowEtapa> etapas;
+	private Collection<WorkflowEtapa> etapasHiscon;
 	
 	public HisconbeneficioController(Result result, Validator validator, UsuarioInfo usuarioInfo, HisconBeneficioDao hisconBeneficioDao, EmpresaDao empresaDao,
 			OrganizacaoDao organizacaoDao, ParceiroBeneficioDao parceiroBeneficioDao, UsuarioDao usuarioDao, WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,
@@ -85,30 +86,25 @@ public class HisconbeneficioController {
 
 		hiscons  = new ArrayList<HisconBeneficio>();
 
+		//etapasHiscon = workflowEtapaDao.buscaWorKFlowEtapaByPerfil(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(), usuarioInfo.getPerfil().getPerfil_id());
+		
 		for (HisconBeneficio h : hisconsAuxiliar){
 
 			h.setCountHiscons(this.hisconBeneficioDao.mostraCountHisconsBeneficios(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
 
-			hisconBeneficio = hisconBeneficioDao.load(h.getHisconBeneficio_id());
-
-			System.out.println("h.getHisconBeneficio_id() " + h.getHisconBeneficio_id());
-
-			//hiscons = workflowEtapaDao.buscaTodosWorkflowEtapa();
-
-			//hiscons = hisconBeneficioDao.
-
-			etapas = workflowEtapaDao.buscaWorKFlowEtapaByHisconBeneficioPerfil(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(),usuarioInfo.getPerfil().getPerfil_id());
-
-			//etapas = hisconsAuxiliar;
-			etapas.add(hisconBeneficio.getWorkflowEtapa());
+			etapas = workflowEtapaDao.buscaWorKFlowEtapaByHisconPerfil(h.getHisconBeneficio_id(), usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(), usuarioInfo.getPerfil().getPerfil_id());
 			
+			etapasHiscon = workflowEtapaDao.buscaWorKFlowEtapaByPerfil(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(), usuarioInfo.getPerfil().getPerfil_id());
+
+			etapas.add(h.getWorkflowEtapa());
 			hiscons.add(h);
 
 		} 
 
+		//result.include("hisconBeneficio",hisconBeneficio);
 		result.include("hiscons", hiscons);
+		result.include("etapasHiscon",etapasHiscon);
 		result.include("etapas",etapas);
-
 	}
 
 	@Post
@@ -117,38 +113,54 @@ public class HisconbeneficioController {
 
 		String mensagem = "";
 
-		try {
-
-			ParceiroBeneficio pb = this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa_id, organizacao_id, numeroBeneficio);
+		ParceiroBeneficio pb = this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa_id, organizacao_id, numeroBeneficio);
 
 			if (pb != null){
 
-				this.hisconBeneficio.setEmpresa(pb.getEmpresa());
-				this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
-				this.hisconBeneficio.setParceiroBeneficio(pb);
-				this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
+				HisconBeneficio hb = this.hisconBeneficioDao.mostraHisconBeneficios(pb);
 
-				result.include("hisconBeneficio", hisconBeneficio);
+				if (hb != null){
+
+					if (hb.getIsEnviado()){
+
+						this.hisconBeneficio.setEmpresa(pb.getEmpresa());
+						this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
+						this.hisconBeneficio.setParceiroBeneficio(pb);
+						this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
+	
+						result.include("hisconBeneficio", hisconBeneficio);
+
+					} else {
+
+						mensagem = "Erro: Hiscon em aberto solicitado por " + hb.getUsuario().getNome() + " em ";
+						result.include("notice", mensagem);
+
+					}
+
+				}else {
+
+					this.hisconBeneficio.setEmpresa(pb.getEmpresa());
+					this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
+					this.hisconBeneficio.setParceiroBeneficio(pb);
+					this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
+
+					result.include("hisconBeneficio", hisconBeneficio);
+
+				}
 
 			} else {
 
 				mensagem = "Erro: Beneficio não cadastrado.";
-				result.include("notice", mensagem).redirectTo(ParceironegocioController.class).cadastro();
+				//result.include("notice", mensagem).redirectTo(ParceironegocioController.class).cadastro();
 
 			}
-
-		} catch (Exception e) {
-
-			mensagem = "Erro: falha ao pesquisar o número do beneficio";
-
-		}
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
 	}
 
-	@Post
+	/*@Post
 	@Path("/hisconbeneficio/cadastroteste")
 	public void cadastroTeste(Long empresa_id, Long organizacao_id, String numeroBeneficio) {
 
@@ -198,7 +210,7 @@ public class HisconbeneficioController {
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
-	}
+	}*/
 
 	@Post
 	@Path("/hisconbeneficio/salva")
@@ -219,11 +231,11 @@ public class HisconbeneficioController {
 		this.hisconBeneficio.setIsImportado(false);
 		this.hisconBeneficio.setIsPadrao(false);
 
-		this.hisconBeneficio.setWorkflow(this.workflowDao.load(1L));
-		this.hisconBeneficio.setWorkflowEtapa(this.workflowEtapaDao.load(1L));
+		this.hisconBeneficio.setWorkflow(this.workflowDao.load(2L));
+		this.hisconBeneficio.setWorkflowEtapa(this.workflowEtapaDao.load(22L));
 
 		this.hisconBeneficio.setWorkflowPosicao(this.workflowDao.load(3L));
-		this.hisconBeneficio.setWorkflowPosicaoEtapa(this.workflowEtapaDao.load(7L));
+		this.hisconBeneficio.setWorkflowPosicaoEtapa(this.workflowEtapaDao.load(27L));
 
 		try {
 
