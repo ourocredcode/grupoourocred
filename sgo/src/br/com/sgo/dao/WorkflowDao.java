@@ -56,34 +56,22 @@ public class WorkflowDao extends Dao<Workflow> {
 			
 			while (rsWorkflow.next()) {
 
-				Workflow workflow = new Workflow();				
-				Empresa e = new Empresa();
-				Organizacao o = new Organizacao();
-
-				e.setEmpresa_id(rsWorkflow.getLong("empresa_id"));
-				e.setNome(rsWorkflow.getString("empresa_nome"));
-
-				o.setOrganizacao_id(rsWorkflow.getLong("organizacao_id"));
-				o.setNome(rsWorkflow.getString("organizacao_nome"));
-
-				workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
-				workflow.setNome(rsWorkflow.getString("workflow_nome"));
-
-				workflow.setEmpresa(e);
-				workflow.setOrganizacao(o);
-				
-				workflows.add(workflow);
+				getWorkflows(workflows);
 
 			}
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsWorkflow, stmt, conn);
 		return workflows;
+
 	}
 
 	public Workflow buscaWorkflowPorEmpresaOrganizacaoTipoworflow(Long empresa_id, Long organizacao_id, Long tipoworkflow_id) {
-		
+
 		String sql = sqlWorkflow;
 
 		if (empresa_id != null)
@@ -94,23 +82,36 @@ public class WorkflowDao extends Dao<Workflow> {
 			sql += " AND (WORKFLOW.tipoworkflow_id = ?)";
 
 		this.conn = this.conexao.getConexao();
+
 		Workflow workflow = null;
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, tipoworkflow_id);
+
 			this.rsWorkflow = this.stmt.executeQuery();
+
 			while (rsWorkflow.next()) {
+
 				workflow = new Workflow();
 				workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
 				workflow.setNome(rsWorkflow.getString("nome"));
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsWorkflow, stmt, conn);
 		return workflow;
+
 	}
 
 	public Workflow buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(Long empresa_id, Long organizacao_id, Long tipoworkflow_id, String nome ) {
@@ -160,7 +161,7 @@ public class WorkflowDao extends Dao<Workflow> {
 		return workflow;
 
 	}
-	
+
 	public Collection<Workflow> buscaWorkflowsPorNome(Long empresa_id, Long organizacao_id, String nome) {
 		
 		String sql = sqlWorkflows;
@@ -175,52 +176,35 @@ public class WorkflowDao extends Dao<Workflow> {
 		this.conn = this.conexao.getConexao();
 
 		Collection<Workflow> workflows = new ArrayList<Workflow>();
-		
-		try {
 
-			this.stmt = conn.prepareStatement(sql);
+		if (workflows!=null){
 
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3, "%" + nome + "%");
+			try {
 
-			if (!nome.equals(""))
+				this.stmt = conn.prepareStatement(sql);
 
-			this.rsWorkflow = this.stmt.executeQuery();
+				this.stmt.setLong(1, empresa_id);				
+				this.stmt.setLong(2, organizacao_id);				
+				this.stmt.setString(3, "%" + nome + "%");
 
-			while (rsWorkflow.next()) {
-				
-				Workflow workflow = new Workflow();				
+				this.rsWorkflow = this.stmt.executeQuery();
 
-				Empresa e = new Empresa();
-				Organizacao o = new Organizacao();
+				while (rsWorkflow.next()) {
 
-				e.setEmpresa_id(rsWorkflow.getLong("empresa_id"));
-				e.setNome(rsWorkflow.getString("empresa_nome"));
+					getWorkflows(workflows);
 
-				o.setOrganizacao_id(rsWorkflow.getLong("organizacao_id"));
-				o.setNome(rsWorkflow.getString("organizacao_nome"));
+				}
 
-				workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
-				workflow.setNome(rsWorkflow.getString("workflow_nome"));
+			} catch (SQLException e) {
 
-				workflow.setEmpresa(e);
-				workflow.setOrganizacao(o);
-
-				workflows.add(workflow);
+				e.printStackTrace();
 
 			}
 
-		} catch (SQLException e) {
-
-			e.printStackTrace();
+			this.conexao.closeConnection(rsWorkflow, stmt, conn);
 
 		}
-
-		this.conexao.closeConnection(rsWorkflow, stmt, conn);
-
 		return workflows;
-
 	}
 
 	public Workflow buscaWorkflowPorNome(Long empresa, Long organizacao, String nome) {
@@ -267,5 +251,26 @@ public class WorkflowDao extends Dao<Workflow> {
 		return workflow;
 
 	}
+	
+	private void getWorkflows(Collection<Workflow> workflows) throws SQLException {
 
+		Workflow workflow = new Workflow();
+		Empresa e = new Empresa();
+		Organizacao o = new Organizacao();
+
+		e.setEmpresa_id(rsWorkflow.getLong("empresa_id"));
+		e.setNome(rsWorkflow.getString("empresa_nome"));
+
+		o.setOrganizacao_id(rsWorkflow.getLong("organizacao_id"));
+		o.setNome(rsWorkflow.getString("organizacao_nome"));
+
+		workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
+		workflow.setNome(rsWorkflow.getString("workflow_nome"));
+
+		workflow.setEmpresa(e);
+		workflow.setOrganizacao(o);
+
+		workflows.add(workflow);
+
+	}
 }

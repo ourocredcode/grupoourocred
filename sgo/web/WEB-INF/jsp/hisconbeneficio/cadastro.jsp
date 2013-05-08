@@ -198,9 +198,8 @@ function limpaForm() {
 								<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
 								<td>
 									<select id="hisconBeneficioStatus" class="input-medium" >
-										<c:forEach var="etapa" items="${etapas }">
-											<option value="${etapa.workflowEtapa_id}" 
-											<c:if test="${etapa.workflowEtapa_id == hisconBeneficio.workflowEtapa.workflowEtapa_id}">selected</c:if>>${etapa.nome }</option>
+										<c:forEach var="etapa" items="${hiscon.workflowEtapas }">
+											<option value="${etapa.workflowEtapa_id}" <c:if test="${etapa.workflowEtapa_id == hiscon.workflowEtapa.workflowEtapa_id}">selected</c:if>>${etapa.nome }</option>
 										</c:forEach>
 									</select>
 								</td>

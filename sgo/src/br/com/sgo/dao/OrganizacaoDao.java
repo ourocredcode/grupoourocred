@@ -29,8 +29,7 @@ public class OrganizacaoDao extends Dao<Organizacao> {
 		this.conexao = conexao;
 	}
 
-	public Collection<Organizacao> buscaOrganizacoes(Long empresa_id,
-			String org_nome) {
+	public Collection<Organizacao> buscaOrganizacoes(Long empresa_id, String org_nome) {
 
 		String sql = "select ORGANIZACAO.organizacao_id, ORGANIZACAO.nome from ORGANIZACAO (NOLOCK) "
 				+ "	WHERE ORGANIZACAO.empresa_id = ? AND ORGANIZACAO.nome like ? ";
@@ -45,8 +44,7 @@ public class OrganizacaoDao extends Dao<Organizacao> {
 			while (rsOrganizacoes.next()) {
 				Organizacao organizacao = new Organizacao();
 
-				organizacao.setOrganizacao_id(rsOrganizacoes
-						.getLong("organizacao_id"));
+				organizacao.setOrganizacao_id(rsOrganizacoes.getLong("organizacao_id"));
 				organizacao.setNome(rsOrganizacoes.getString("nome"));
 
 				organizacoes.add(organizacao);

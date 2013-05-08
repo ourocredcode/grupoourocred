@@ -287,7 +287,7 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 
 	}
 	
-	public Collection<WorkflowEtapa> buscaWorKFlowEtapaByHisconBeneficioPerfil() {
+	public Collection<WorkflowEtapa> buscaWorKFlowEtapaByHisconBeneficioPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
 
 		String sql = " SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , EMPRESA.nome as empresa_nome "+
 				", WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.workflowetapa_id "+
@@ -299,15 +299,9 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 				" INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWTRANSICAO.organizacao_id = ORGANIZACAO.organizacao_id) " +
 				" INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT1 ON (WORKFLOWTRANSICAO.workflowetapa_id = WT1.workflowetapa_id) "+ 
 				" INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.workflowetapa_id) "+
-				"	WHERE WORKFLOWTRANSICAO.empresa_id=1 AND WORKFLOWTRANSICAO.organizacao_id=1 "+
-				" AND PERFIL.perfil_id=1 AND WT1.workflow_id=1 AND WORKFLOWTRANSICAO.workflowetapa_id=1 ";
+				"	WHERE WORKFLOWTRANSICAO.empresa_id = ? AND WORKFLOWTRANSICAO.organizacao_id = ? "+
+				" AND PERFIL.perfil_id = ? ";
 
-/*		String sql = "SELECT " +
-				"		WORKFLOWTRANSICAO.workflowetapaproximo_id, WORKFLOWETAPA.nome FROM " +
-				"	(HISCONBENEFICIO INNER JOIN (WORKFLOWETAPA INNER JOIN WORKFLOWTRANSICAO ON WORKFLOWETAPA.workflowetapa_id = WORKFLOWTRANSICAO.workflowetapaproximo_id) " +
-				"		ON HISCONBENEFICIO.workflowetapa_id = WORKFLOWTRANSICAO.workflowetapa_id) " +
-				"	 INNER JOIN PERFIL ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id WHERE HISCONBENEFICIO.hisconbeneficio_id = ? AND PERFIL.perfil_id = ? ";
-*/
 		this.conn = this.conexao.getConexao();
 
 		Collection<WorkflowEtapa> workflowsEtapa = new ArrayList<WorkflowEtapa>();
@@ -315,9 +309,10 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-
-			//this.stmt.setLong(1, hisconbeneficio_id);
-			//this.stmt.setLong(2, perfil_id);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, perfil_id);
+			//this.stmt.setLong(4, workflowetapa_id);
 
 			this.rsWorkflowEtapa = this.stmt.executeQuery();
 
@@ -326,7 +321,7 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
 
 				workflowEtapa.setWorkflowEtapa_id(rsWorkflowEtapa.getLong("workflowetapaproximo_id"));
-				workflowEtapa.setNome(rsWorkflowEtapa.getString("nome"));
+				workflowEtapa.setNome(rsWorkflowEtapa.getString("workflowetapaproximo_nome"));
 
 				workflowsEtapa.add(workflowEtapa);
 			}
