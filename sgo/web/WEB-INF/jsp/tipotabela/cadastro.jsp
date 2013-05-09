@@ -89,7 +89,7 @@ jQuery(function($){
 	});
 
 	$("#tipoTabelaIsActive").change(function(e){
-		$(this).val( $("#tipoTabelaIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#tipoTabelaIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -164,7 +164,7 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="tipoTabelaIsActive">Ativo</label>
 										<div class="controls">
-											<input type="checkbox" id="tipoTabelaIsActive" name="tipoTabela.isActive" checked="checked" value="1" >							
+											<input type="checkbox" id="tipoTabelaIsActive" name="tipoTabela.isActive" checked="checked" value="${tipoTabela.isActive }" >							
 										</div>
 									</div>
 								 	<div class="btn-group">

@@ -124,7 +124,7 @@ jQuery(function($){
 	});
 
 	$("#bancoIsActive").change(function(e){
-		$(this).val( $("#bancoIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#bancoIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -221,7 +221,7 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="bancoIsActive">Ativo</label>
 										<div class="controls">
-											<input type="checkbox" id="bancoIsActive" name="banco.isActive" checked="checked" value="1" >							
+											<input type="checkbox" id="bancoIsActive" name="banco.isActive" checked="checked" value="${banco.isActive }" >							
 										</div>
 									</div>
 								 	<div class="btn-group">

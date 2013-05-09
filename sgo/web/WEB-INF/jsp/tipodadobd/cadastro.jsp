@@ -147,6 +147,10 @@ jQuery(function($){
 				'nome' : nome
 			});
 		});
+		
+		$("#tipoDadoBdIsActive").change(function(e){
+			$(this).val( $("#tipoDadoBdIsActive:checked").length > 0 ? true : false);
+		});
 
 	});
 

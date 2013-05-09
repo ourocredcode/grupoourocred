@@ -136,7 +136,7 @@ jQuery(function($){
 	});
 
 	$("#workflowIsActive").change(function(e){
-		$(this).val( $("#workflowIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#workflowIsActive:checked").length > 0 ? true : false);
 	});
 
 });

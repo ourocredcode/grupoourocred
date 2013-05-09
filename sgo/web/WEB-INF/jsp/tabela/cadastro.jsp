@@ -160,9 +160,8 @@ jQuery(function($){
 	});
 
 	$("#tabelaIsActive").change(function(e){
-		$(this).val( $("#tabelaIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#tabelaIsActive:checked").length > 0 ? true : false);
 	});
-
 
 });
 
@@ -252,7 +251,7 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="tabelaIsActive">Ativo</label>
 										<div class="controls">
-											<input type="checkbox" id="tabelaIsActive" name="tabela.isActive" checked="checked" value="1" >							
+											<input type="checkbox" id="tabelaIsActive" name="tabela.isActive" checked="checked" value="${tabela.isActive }" >							
 										</div>
 									</div>
 								 	<div class="btn-group">

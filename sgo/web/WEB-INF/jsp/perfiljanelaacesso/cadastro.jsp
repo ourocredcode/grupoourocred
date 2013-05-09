@@ -181,7 +181,7 @@ jQuery(function($){
     });
 	
 	$("#perfilJanelaAcessoIsActive").change(function(e){
-		$(this).val( $("#perfilJanelaAcessoIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#perfilJanelaAcessoIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -281,7 +281,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="perfilJanelaAcessoIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="perfilJanelaAcessoIsActive" name="perfilJanelaAcesso.isActive" checked="checked" value="1">							
+								<input type="checkbox" id="perfilJanelaAcessoIsActive" name="perfilJanelaAcesso.isActive" checked="checked" value="${perfilJanelaAcesso.isActive }">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

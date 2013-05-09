@@ -181,6 +181,10 @@ jQuery(function($){
          }
     });
 
+	$("#produtoBancoIsActive").change(function(e){
+		$(this).val( $("#produtoBancoIsActive:checked").length > 0 ? true : false);
+	});
+
 });
 
 function limpaForm() {
@@ -281,7 +285,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="produtoBancoIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="produtoBancoIsActive" name="produtoBanco.isActive" checked="checked" value="1" >							
+										<input type="checkbox" id="produtoBancoIsActive" name="produtoBanco.isActive" checked="checked" value="${produtoBanco.isActive }" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

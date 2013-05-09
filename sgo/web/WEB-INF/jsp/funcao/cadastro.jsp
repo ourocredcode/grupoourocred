@@ -85,7 +85,7 @@ jQuery(function($){
 	});
 
 	$("#funcaoIsActive").change(function(e){
-		$(this).val( $("#funcaoIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#funcaoIsActive:checked").length > 0 ? true : false);
 	});
 
 });

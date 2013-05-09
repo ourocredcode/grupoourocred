@@ -36,7 +36,7 @@ public class DepartamentoController {
 	@Public
 	@Path("/departamento/cadastro")
 	public void cadastro(){
-		result.include("departamento",this.departamentoDao.listaTudo("ASC","nome"));
+		//result.include("departamento",this.departamentoDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
@@ -52,14 +52,15 @@ public class DepartamentoController {
 		try {
 
 			departamento.setEmpresa(this.empresaDao.load(departamento.getEmpresa().getEmpresa_id()));		
-			departamento.setOrganizacao(this.organizacaoDao.load(departamento.getOrganizacao().getOrganizacao_id()));
+			departamento.setOrganizacao(this.organizacaoDao.load(departamento.getOrganizacao().getOrganizacao_id()));			
+			departamento.setIsActive(departamento.getIsActive() == null ? false : true);
 
 			this.departamentoDao.beginTransaction();
 			this.departamentoDao.adiciona(departamento);
 			this.departamentoDao.commit();
 
 			mensagem = "Grupo de Parceiro " + departamento.getNome() + " adicionado com sucesso";			
-			
+
 		} catch(Exception e) {
 			
 			this.departamentoDao.rollback();

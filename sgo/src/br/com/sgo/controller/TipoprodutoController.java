@@ -45,7 +45,8 @@ public class TipoprodutoController {
 
 			tipoProduto.setEmpresa(this.empresaDao.load(tipoProduto.getEmpresa().getEmpresa_id()));		
 			tipoProduto.setOrganizacao(this.organizacaoDao.load(tipoProduto.getOrganizacao().getOrganizacao_id()));
-
+			tipoProduto.setIsActive(tipoProduto.getIsActive() == null ? false : true);
+			
 			this.tipoProdutoDao.beginTransaction();
 			this.tipoProdutoDao.adiciona(tipoProduto);
 			this.tipoProdutoDao.commit();

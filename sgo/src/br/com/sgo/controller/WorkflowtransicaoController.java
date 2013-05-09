@@ -55,6 +55,8 @@ public class WorkflowtransicaoController {
 			if (this.workflowTransicaoDao.buscaWorkflowTransicaoPorEmpresaOrganizacaoWorkflowEtapaProximo(workflowTransicao.getEmpresa().getEmpresa_id(),workflowTransicao.getOrganizacao().getOrganizacao_id(),
 					workflowTransicao.getWorkflowEtapa().getWorkflowEtapa_id(), workflowTransicao.getWorkflowEtapaProximo().getWorkflowEtapa_id(), workflowTransicao.getPerfil().getPerfil_id()) == null) {				
 
+				workflowTransicao.setIsActive(workflowTransicao.getIsActive() == null ? false : true);
+				
 				this.workflowTransicaoDao.beginTransaction();
 				this.workflowTransicaoDao.adiciona(workflowTransicao);
 				this.workflowTransicaoDao.commit();

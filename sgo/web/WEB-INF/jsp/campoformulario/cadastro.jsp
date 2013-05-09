@@ -186,15 +186,15 @@ jQuery(function($){
 	
 	
 	$("#campoFormularioIsMostrado").change(function(e){
-		$(this).val( $("#campoFormularioIsMostrado:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#campoFormularioIsMostrado:checked").length > 0 ? true : false);
 	});
 	
 	$("#campoFormularioIsSomenteLeitura").change(function(e){
-		$(this).val( $("#campoFormularioIsSomenteLeitura:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#campoFormularioIsSomenteLeitura:checked").length > 0 ? true : false);
 	});
 	
 	$("#campoFormularioIsActive").change(function(e){
-		$(this).val( $("#campoFormularioIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#campoFormularioIsActive:checked").length > 0 ? true : false);
 	});
 });
 
@@ -317,19 +317,19 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsMostrado">Mostrado</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado" checked="checked" value="1">							
+								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado" checked="checked" value="${campoFormulario.isMostrado }">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsSomenteLeitura">Somente Leitura</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.isSomenteLeitura" checked="checked" value="1">							
+								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.isSomenteLeitura" checked="checked" value="${campoFormulario.isSomenteLeitura }">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isActive" checked="checked" value="1">							
+								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isActive" checked="checked" value="${campoFormulario.isActive }">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

@@ -185,15 +185,15 @@ jQuery(function($){
     });
 	
 	$("#formulariosJanelaIsMostrado").change(function(e){
-		$(this).val( $("#formulariosJanelaIsMostrado:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#formulariosJanelaIsMostrado:checked").length > 0 ? true : false);
 	});
 	
 	$("#formulariosJanelaIsSomenteLeitura").change(function(e){
-		$(this).val( $("#formulariosJanelaIsSomenteLeitura:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#formulariosJanelaIsSomenteLeitura:checked").length > 0 ? true : false);
 	});
 	
 	$("#formulariosJanelaIsActive").change(function(e){
-		$(this).val( $("#formulariosJanelaIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#formulariosJanelaIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -313,19 +313,19 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="formulariosJanelaIsMostrado">Mostrado</label>
 							<div class="controls">
-								<input type="checkbox" id="formulariosJanelaIsMostrado" name="formulariosJanela.isMostrado" checked="checked" value="1">							
+								<input type="checkbox" id="formulariosJanelaIsMostrado" name="formulariosJanela.isMostrado" checked="checked" value="${formulariosJanela.isMostrado }">							
 							</div>							
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="formulariosJanelaIsSomenteLeitura">Somente Leitura</label>
+							<label class="control-label" for="formulariosJanelaIsSomenteLeitura">Leitura</label>
 							<div class="controls">
-								<input type="checkbox" id="formulariosJanelaIsSomenteLeitura" name="formulariosJanela.isSomenteLeitura" checked="checked" value="1">							
+								<input type="checkbox" id="formulariosJanelaIsSomenteLeitura" name="formulariosJanela.isSomenteLeitura" checked="checked" value="${formulariosJanela.isSomenteLeitura }">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="formulariosJanelaIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="formulariosJanelaIsActive" name="formulariosJanela.isActive" checked="checked" value="1">							
+								<input type="checkbox" id="formulariosJanelaIsActive" name="formulariosJanela.isActive" checked="checked" value="${formulariosJanela.isActive }">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">
