@@ -85,7 +85,7 @@ jQuery(function($){
 	});
 
 	$("#grupoParceiroIsActive").change(function(e){
-		$(this).val( $("#grupoParceiroIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#grupoParceiroIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -143,7 +143,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="grupoParceiroIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="grupoParceiroIsActive" name="grupoParceiro.isActive" checked="checked" value="1" >							
+										<input type="checkbox" id="grupoParceiroIsActive" name="grupoParceiro.isActive" checked="checked" value="${grupoParceiro.isActive }" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

@@ -85,7 +85,7 @@ jQuery(function($){
 	});
 
 	$("#departamentoIsActive").change(function(e){
-		$(this).val( $("#departamentoIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#departamentoIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -140,57 +140,47 @@ function limpaForm() {
 			<div id="myTabContent" class="tab-content">
 
 				<div class="tab-pane fade active in" id="departamento-div">
-				
-					<div class="row25MarginTop">
-						<div class="span3">
-							<form id="departamentoForm" name="departamentoForm" action="<c:url value="/departamento/salva"/>" method="POST">
-								<div class="control-group">
-									<label class="control-label" for="departamentoEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="departamentoEmpresa" name="departamento.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="departamentoEmpresaId" name="departamento.empresa.empresa_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="departamentoOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="departamentoOrganizacao" name="departamento.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="departamentoOrganizacaoId" name="departamento.organizacao.organizacao_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="departamentoNome">Nome</label>
-									<div class="controls">
-										<input class="span10" type="text" id="departamentoNome" name="departamento.nome" placeholder="Nome" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="departamentoDescricao">Descrição</label>
-									<div class="controls">
-										<input class="span10" type="text" id="departamentoDescricao" name="departamento.descricao" placeholder="Descrição" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="departamentoIsActive">Ativo</label>
-									<div class="controls">
-										<input type="checkbox" id="departamentoIsActive" name="departamento.isActive" checked="checked" value="1" >							
-									</div>
-								</div>
-							 	<div class="btn-group">
-									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-								</div>
-							</form>
+														
+					<form id="departamentoForm" name="departamentoForm" action="<c:url value="/departamento/salva"/>" method="POST">
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="departamentoEmpresa">Empresa</label>
+		      					<input class="input-xxlarge" id="departamentoEmpresa" name="departamento.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span1" id="departamentoEmpresaId" name="departamento.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+	    					</div>
+							<div class="span3">
+								<label for="departamentoOrganizacao">Organização</label>
+		      					<input class="input-xxlarge" id="departamentoOrganizacao" name="departamento.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span1" id="departamentoOrganizacaoId" name="departamento.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+							</div>
 						</div>
-						
-					</div>
+
+						<div class="row-fluid">
+							<div class="span5">
+								<label for="departamentoNome">Nome</label>
+								<input class="span10" type="text" id="departamentoNome" name="departamento.nome" value="${departamento.nome }" placeholder="Nome" required>
+							</div>
+							<div class="span5">
+								<label for="departamentoDescricao">Descrição</label>
+								<input class="span10" type="text" id="departamentoDescricao" name="departamento.descricao" value="${departamento.descricao }" placeholder="Descrição" required>
+							</div>
+							<div class="span1">
+								<label for="departamentoIsActive">Ativo</label>
+								<input type="checkbox" id="departamentoIsActive" name="departamento.isActive" checked="checked" value="${departamento.isActive }" >
+							</div>
+						</div>
+
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
+					</form>
+
 				</div>
 			</div>
 		</div>

@@ -133,7 +133,7 @@ jQuery(function($){
 	});
 	
 	$("#workflowEtapaIsActive").change(function(e){
-		$(this).val( $("#workflowEtapaIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#workflowEtapaIsActive:checked").length > 0 ? true : false);
 	});
 
 });

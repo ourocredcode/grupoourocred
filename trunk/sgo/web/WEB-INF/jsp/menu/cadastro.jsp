@@ -117,7 +117,7 @@ jQuery(function($){
 	});
 	
 	$("#menuIsActive").change(function(e){
-		$(this).val( $("#menuIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#menuIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -177,7 +177,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="menuIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="menuIsActive" name="menu.isActive" checked="checked" value="1" >							
+								<input type="checkbox" id="menuIsActive" name="menu.isActive" checked="checked" value="${menu.isActive }" >							
 							</div>							
 						</div>				
 						<div class="btn-toolbar">

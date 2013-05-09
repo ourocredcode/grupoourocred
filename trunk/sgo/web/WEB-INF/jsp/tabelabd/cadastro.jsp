@@ -105,6 +105,11 @@ jQuery(function($){
              return false;
          }
     });
+
+	$("#tabelaBdIsActive").change(function(e){
+		$(this).val( $("#tabelaBdIsActive:checked").length > 0 ? true : false);
+	});
+
 });
 
 function limpaForm(){

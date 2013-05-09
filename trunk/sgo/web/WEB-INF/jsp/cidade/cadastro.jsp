@@ -85,7 +85,7 @@ jQuery(function($){
 	});
 
 	$("#cidadeIsActive").change(function(e){
-		$(this).val( $("#cidadeIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#cidadeIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -145,7 +145,7 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="cidadeIsActive">Ativo</label>
 										<div class="controls">
-											<input type="checkbox" id="cidadeIsActive" name="cidade.isActive" checked="checked" value="1" >							
+											<input type="checkbox" id="cidadeIsActive" name="cidade.isActive" checked="checked" value="${cidade.isActive }" >							
 										</div>
 									</div>
 								 	<div class="btn-group">

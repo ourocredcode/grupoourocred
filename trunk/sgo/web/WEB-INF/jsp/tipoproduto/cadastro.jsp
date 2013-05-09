@@ -143,7 +143,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="tipoProdutoIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="tipoProdutoIsActive" name="tipoProduto.isActive" checked="checked" value="1" >							
+										<input type="checkbox" id="tipoProdutoIsActive" name="tipoProduto.isActive" checked="checked" value="${tipoProduto.isActive }" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

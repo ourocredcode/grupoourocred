@@ -53,6 +53,8 @@ public class WorkflowetapaController {
 			if (this.workflowEtapaDao.buscaWorkflowPorEmpresaOrganizacaoWorflowEtapaNome(workflowEtapa.getEmpresa().getEmpresa_id(), workflowEtapa.getOrganizacao().getOrganizacao_id()
 					, workflowEtapa.getWorkflow().getWorkflow_id(), workflowEtapa.getNome()) == null) {				
 
+				workflowEtapa.setIsActive(workflowEtapa.getIsActive() == null ? false : true);
+				
 				this.workflowEtapaDao.beginTransaction();
 				this.workflowEtapaDao.adiciona(workflowEtapa);
 				this.workflowEtapaDao.commit();

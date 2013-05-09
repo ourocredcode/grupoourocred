@@ -53,7 +53,8 @@ public class TipoparceiroController {
 
 			tipoParceiro.setEmpresa(this.empresaDao.load(tipoParceiro.getEmpresa().getEmpresa_id()));		
 			tipoParceiro.setOrganizacao(this.organizacaoDao.load(tipoParceiro.getOrganizacao().getOrganizacao_id()));
-
+			tipoParceiro.setIsActive(tipoParceiro.getIsActive() == null ? false : true);
+			
 			this.tipoParceiroDao.beginTransaction();
 			this.tipoParceiroDao.adiciona(tipoParceiro);
 			this.tipoParceiroDao.commit();

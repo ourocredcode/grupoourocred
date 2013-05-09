@@ -146,7 +146,7 @@ jQuery(function($){
     });
 	
 	$("#perfilOrgAcessoIsActive").change(function(e){
-		$(this).val( $("#perfilOrgAcessoIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#perfilOrgAcessoIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -230,7 +230,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="perfilOrgAcessoIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="perfilOrgAcessoIsActive" name="perfilOrgAcesso.isActive" checked="checked" value="1">							
+								<input type="checkbox" id="perfilOrgAcessoIsActive" name="perfilOrgAcesso.isActive" checked="checked" value="${perfilOrgAcesso.isActive }">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

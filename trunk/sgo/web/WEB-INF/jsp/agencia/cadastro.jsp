@@ -121,7 +121,7 @@ jQuery(function($){
 	});
 
 	$("#agenciaIsActive").change(function(e){
-		$(this).val( $("#agenciaIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#agenciaIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -187,7 +187,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="agenciaIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="1" >							
+										<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="${agencia.isActive }" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

@@ -168,11 +168,11 @@ jQuery(function($){
 	});
 	
 	$("#workflowPerfilAcessoIsActive").change(function(e){
-		$(this).val( $("#workflowPerfilAcessoIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#workflowPerfilAcessoIsActive:checked").length > 0 ? true : false);
 	});
 	
 	$("#workflowPerfilAcessoIsLeituraEscrita").change(function(e){
-		$(this).val( $("#workflowPerfilAcessoIsLeituraEscrita:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#workflowPerfilAcessoIsLeituraEscrita:checked").length > 0 ? true : false);
 	});
 
 });

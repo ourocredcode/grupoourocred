@@ -168,15 +168,15 @@ jQuery(function($){
 	});
 	
 	$("#workflowEtapaPerfilAcessoIsActive").change(function(e){
-		$(this).val( $("#workflowEtapaPerfilAcessoIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#workflowEtapaPerfilAcessoIsActive:checked").length > 0 ? true : false);
 	});
 	
 	$("#workflowEtapaPerfilAcessoIsLeituraEscrita").change(function(e){
-		$(this).val( $("#workflowEtapaPerfilAcessoIsLeituraEscrita:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#workflowEtapaPerfilAcessoIsLeituraEscrita:checked").length > 0 ? true : false);
 	});
 
 	$("#workflowEtapaPerfilAcessoIsUpload").change(function(e){
-		$(this).val( $("#workflowEtapaPerfilAcessoIsUpload").length > 0 ? "1" : "0");
+		$(this).val( $("#workflowEtapaPerfilAcessoIsUpload").length > 0 ? true : false);
 	});
 	
 });

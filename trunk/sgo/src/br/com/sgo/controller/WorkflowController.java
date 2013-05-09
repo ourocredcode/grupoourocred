@@ -52,6 +52,7 @@ public class WorkflowController {
 			if (this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(workflow.getEmpresa().getEmpresa_id(),workflow.getOrganizacao().getOrganizacao_id(),
 					workflow.getTipoWorkflow().getTipoWorkflow_id(), workflow.getNome()) == null) {				
 				
+				workflow.setIsActive(workflow.getIsActive() == null ? false : true);
 				
 				this.workflowDao.beginTransaction();
 				this.workflowDao.adiciona(workflow);
@@ -97,7 +98,6 @@ public class WorkflowController {
 	@Path("/workflow/lista")
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
-		System.out.println("lista workflow " + empresa_id + organizacao_id + nome);
 		result.include("workflows", this.workflowDao.buscaWorkflowsPorNome(empresa_id, organizacao_id, nome));
 	}
 

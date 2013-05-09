@@ -163,7 +163,7 @@ jQuery(function($){
 	});
 
 	$("#produtoIsActive").change(function(e){
-		$(this).val( $("#produtoIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#produtoIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -242,7 +242,7 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="produtoIsActive">Ativo</label>
 										<div class="controls">
-											<input type="checkbox" id="produtoIsActive" name="produto.isActive" checked="checked" value="1" >							
+											<input type="checkbox" id="produtoIsActive" name="produto.isActive" checked="checked" value="${produto.isActive }" >							
 										</div>
 									</div>
 								 	<div class="btn-group">

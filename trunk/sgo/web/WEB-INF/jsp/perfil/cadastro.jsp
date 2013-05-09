@@ -150,7 +150,7 @@ jQuery(function($){
 	});
 	
 	$("#perfilIsActive").change(function(e){
-		$(this).val( $("#perfilIsActive:checked").length > 0 ? "1" : "0");
+		$(this).val( $("#perfilIsActive:checked").length > 0 ? true : false);
 	});
 
 });
@@ -240,7 +240,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="perfilIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="perfilIsActive" name="perfil.isActive" checked="checked" value="1" >							
+								<input type="checkbox" id="perfilIsActive" name="perfil.isActive" checked="checked" value="${perfil.isActive }" >							
 							</div>							
 						</div>				
 						<div class="btn-toolbar">
