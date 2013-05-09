@@ -196,43 +196,38 @@ function limpaForm(){
 				<div class="tab-pane fade" id="workflowperfilacesso-div"></div>
 				
 				<div class="tab-pane fade active in" id="workflowetapa-div">
+					
 					<form id="workflowEtapaForm" name="workflowEtapaForm" action="<c:url value="/workflowetapa/salva"/>" method="POST">
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaWorkflow">Worflow</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowEtapaWorkflow" name="workflowEtapa.workflow.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowEtapaWorkflowId" name="workflowEtapa.workflow.workflow_id" type="hidden">
-	    					</div>
-						</div>						
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaNome">Nome</label>
-							<div class="controls">
-								<input type="text" id="workflowEtapaNome" name="workflowEtapa.nome" placeholder="Nome" required>
+					
+						<div class="row-fluid">
+							<div class="span5">
+								<label for="workflowEtapaEmpresa">Empresa</label>
+      							<input class="input-xxlarge" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+      							<input class="input-mini" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
+							</div>
+							<div class="span5">
+								<label for="workflowEtapaOrganizacao">Organização</label>	
+	      						<input class="input-xxlarge" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-mini" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaIsActive">Ativo</label>
-							<div class="controls">
-								<input type="checkbox" id="workflowEtapaIsActive" name="workflowEtapa.isActive" checked="checked" value="1" >							
-							</div>							
-						</div>				
+
+						<div class="row-fluid">
+							<div class="span3">						
+								<label for="workflowEtapaWorkflow">Worflow</label>
+								<input class="input-xlarge" id="workflowEtapaWorkflow" name="workflowEtapa.workflow.nome" value="${workflowEtapa.workflow.nome }" type="text" required onChange="limpaForm();">
+	      						<input class="input-mini" id="workflowEtapaWorkflowId" name="workflowEtapa.workflow.workflow_id" value="${workflowEtapa.workflow.workflow_id }" type="hidden">
+	    					</div>
+							<div class="span5">
+								<label for="workflowEtapaNome">Nome</label>
+								<input class="input-xxlarge" id="workflowEtapaNome" name="workflowEtapa.nome" value="${workflowEtapa.nome }" type="text" placeholder="Nome" required>								
+							</div>
+							<div class="span3">
+								<label for="workflowEtapaIsActive">Ativo</label>							
+								<input type="checkbox" id="workflowEtapaIsActive" name="workflowEtapa.isActive" value="${workflowEtapa.isActive }" checked="checked">
+							</div>
+						</div>
+
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>

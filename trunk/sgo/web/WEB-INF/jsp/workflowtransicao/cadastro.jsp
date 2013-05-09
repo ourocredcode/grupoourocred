@@ -198,60 +198,51 @@ function limpaForm(){
 				<div class="tab-pane fade" id="workflowetapaperfilacesso-div"></div>
 				
 				<div class="tab-pane fade active in" id="workflowtransicao-div">
+				
 					<form id="workflowTransicaoForm" name="workflowTransicaoForm" action="<c:url value="/workflowtransicao/salva"/>" method="POST">
-						<div class="control-group">
-							<label class="control-label" for="workflowTransicaoEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowTransicaoEmpresa" name="workflowTransicao.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowTransicaoEmpresaId" name="workflowTransicao.empresa.empresa_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowTransicaoOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowTransicaoOrganizacao" name="workflowTransicao.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowTransicaoOrganizacaoId" name="workflowTransicao.organizacao.organizacao_id" type="hidden">
-	    					</div>
+
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="workflowTransicaoEmpresa">Empresa</label>
+		      					<input class="input-xlarge" id="workflowTransicaoEmpresa" name="workflowTransicao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span1" id="workflowTransicaoEmpresaId" name="workflowTransicao.empresa.empresa_id"  value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+							</div>
+							<div class="span5">
+								<label for="workflowTransicaoOrganizacao">Organização</label>
+		      					<input class="input-xxlarge" id="workflowTransicaoOrganizacao" name="workflowTransicao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span1" id="workflowTransicaoOrganizacaoId" name="workflowTransicao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+							</div>
 						</div>
 
-						<div class="controls controls-row">
-							<label for="workflowTransicaoWorkflowEtapaId">Etapas</label>
-							<select id="workflowTransicaoWorkflowEtapaId" name="workflowTransicao.workflowEtapa.workflowEtapa_id" class="input-medium">
-								<c:forEach var="workflowEtapa" items="${workflowEtapas }">
-								 	<option value="${workflowEtapa.workflowEtapa_id }" selected="selected"> ${workflowEtapa.nome }
-								 	</option>
-								</c:forEach>
-							</select>
+						<div class="row-fluid">
+							<div class="span2">
+								<label class="control-label" for="workflowTransicaoPerfil">Perfil</label>
+								<input class="span10" id="workflowTransicaoPerfil" name="workflowTransicao.perfil.nome" type="text" required onChange="limpaForm();" >
+		      					<input class="span10" id="workflowTransicaoPerfilId" name="workflowTransicao.perfil.perfil_id" type="hidden" >
+							</div>
+							<div class="span2">
+								<label for="workflowTransicaoWorkflowEtapaId">Etapas</label>
+								<select id="workflowTransicaoWorkflowEtapaId" name="workflowTransicao.workflowEtapa.workflowEtapa_id" class="input-medium">
+									<c:forEach var="workflowEtapa" items="${workflowEtapas }">
+									 	<option value="${workflowEtapa.workflowEtapa_id }" selected="selected"> ${workflowEtapa.nome }
+									 	</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="span2">
+								<label for="workflowTransicaoWorkflowEtapaProximoId">Etapas Próximo</label>
+								<select id="workflowTransicaoWorkflowEtapaProximoId" name="workflowTransicao.workflowEtapaProximo.workflowEtapa_id" class="input-medium">
+									<c:forEach var="workflowEtapa" items="${workflowEtapas }">
+									 	<option value="${workflowEtapa.workflowEtapa_id }" selected="selected"> ${workflowEtapa.nome }
+									 	</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="workflowTransicaoIsActive">Ativo</label>
+								<input type="checkbox" id="workflowTransicaoIsActive" name="workflowTransicao.isActive" checked="checked" value="1" >
+							</div>
 						</div>
-
-						<div class="controls controls-row">
-							<label for="workflowTransicaoWorkflowEtapaProximoId">Etapas Próximo</label>
-							<select id="workflowTransicaoWorkflowEtapaProximoId" name="workflowTransicao.workflowEtapaProximo.workflowEtapa_id" class="input-medium">
-								<c:forEach var="workflowEtapa" items="${workflowEtapas }">
-								 	<option value="${workflowEtapa.workflowEtapa_id }" selected="selected"> ${workflowEtapa.nome }
-								 	</option>
-								</c:forEach>
-							</select>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label" for="workflowTransicaoPerfil">Perfil</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowTransicaoPerfil" name="workflowTransicao.perfil.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowTransicaoPerfilId" name="workflowTransicao.perfil.perfil_id" type="hidden">
-	    					</div>
-						</div>
-
-						<div class="control-group">
-							<label class="control-label" for="workflowTransicaoIsActive">Ativo</label>
-							<div class="controls">
-								<input type="checkbox" id="workflowTransicaoIsActive" name="workflowTransicao.isActive" checked="checked" value="1" >							
-							</div>							
-						</div>				
-
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
