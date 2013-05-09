@@ -7,17 +7,6 @@ jQuery(function($){
 		window.location.href = '<c:url value="/hisconbeneficio/cadastro" />';
 	});
 
-	$("#numeroBeneficio").click(function(){
-		 var numeroBeneficio = $("#numeroBeneficio").val();
-		$.ajax({
-           type: "POST",
-           url: "/sgo/hisconbeneficio/lista",           
-           success: function(result) {
-              $('#lista').html(result);
-           }
-       });
-	});
-
 	$("#hisconBeneficioIsActive").change(function(e){
 		$(this).val( $("#hisconBeneficioIsActive:checked").length > 0 ? "1" : "0");
 	});
@@ -34,11 +23,11 @@ jQuery(function($){
 
 function altera(atributo, id, valor) {
 
-	var atributo = "hiscon." + atributo;
+	var atributo = "hisconBeneficio." + atributo;
 
 	var temp = "$.post( ";
-	temp += "	'<c:url value='/hiscon/altera' />', ";
-	temp += "	{ '" + atributo + "' : valor, 'hiscon.id' : id }, ";
+	temp += "	'<c:url value='/hisconbeneficio/altera' />', ";
+	temp += "	{ '" + atributo + "' : valor, 'hisconBeneficio.hisconBeneficio_id' : id }, ";
 	temp += "	function(resposta) { }";
 	temp += ");";
 
@@ -91,7 +80,7 @@ function limpaForm() {
 				<input type="hidden" id="hisconBeneficioEmpresaId" name="empresa_id" value="${usuarioInfo.empresa.empresa_id }" />
 				<input type="hidden" id="hisconBeneficioOrganizacaoId" name="organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" />
 				<input type="text" class="input-medium" id="numeroBeneficio" name="numeroBeneficio" placeholder="Benefício"/>
-				<button type="submit" class="tip-right" title="" data-original-title="Search"><i class="icon-search icon-white"></i></button>
+				<span class="add-on" onclick="submit();"><i class="icon-search"></i></span>
 			</div>
 		</form>
 	</div>
@@ -136,34 +125,29 @@ function limpaForm() {
 					<div class="btn-group">
 						<button type="button" class="btn btn-primary" id="btnNovo" >Limpar</button>
 					</div>
-					<div class="btn-group">
-						<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-					</div>
+
 					<br><br>		
 									
 				</form>
-				
-				<c:if test="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id == null}">
-				<form action="<c:url value="/uploadHiscon"/>" enctype="multipart/form-data" method="post">	
-					<table id="myform">
-						<tr>
-							<td>
-								Carregar Hiscon:
-							</td>
-							<td>
-								<input type="file" name="zip" class="span10"/>
-							</td>
-							<td>
-								<input type="submit" class="form_button_vertical" value="Carregar"/>	
-							</td>
-						</tr>
-					</table>
-				</form>	
+
+				<c:if test="${usuarioInfo.perfil.chave == 'ADM'}">
+					<form action="<c:url value="/uploadHiscon"/>" enctype="multipart/form-data" method="post">	
+						<table id="myform">
+							<tr>
+								<td>
+									Carregar Hiscon:
+								</td>
+								<td>
+									<input type="file" name="zip" class="span10"/>
+								</td>
+								<td>
+									<input type="submit" class="form_button_vertical" value="Carregar"/>	
+								</td>
+							</tr>
+						</table>
+					</form>	
 				</c:if>
 
-				<c:if test="${empty hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id}">
-					<td style="width: 120px;"></td>
-				</c:if>
 				<c:if test="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id != null}">
 					<td style="width: 200px;">
 						<form action="<c:url value="/hisconbeneficio/salva"/>" method="POST">
@@ -171,6 +155,7 @@ function limpaForm() {
 						</form>
 					</td>
 				</c:if>
+				
 				<br><br>
 				<table class="table table-striped table-bordered" id="lista">
 					<thead>
@@ -189,27 +174,25 @@ function limpaForm() {
 					<tbody>	
 						<c:forEach items="${hiscons}" var="hiscon">
 							<tr>
-								<td>${hiscon.caminhoArquivo }</td>
+								<td>
+									<c:if test="${hiscon.isEnviado}">
+										<a href="<c:url value="/visualizaHiscon/${hiscon.hisconBeneficio_id}"/>"><img src="../img/pdf.gif" border="0"/></a>
+									</c:if>
+								</td>
 								<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
 								<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>
 								<td>${hiscon.usuario.nome }</td>									
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 								<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
-								
 								<td>
-									<select id="hisconBeneficioStatus" class="input-medium" >										
-										<c:forEach var="etapa" items="${etapas }">
+									<select id="hisconBeneficioStatus" class="input-medium" onchange="return altera('workflowEtapa.workflowEtapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+										<c:forEach var="etapa" items="${hiscon.workflowEtapas }">
 											<option value="${etapa.workflowEtapa_id}" <c:if test="${etapa.workflowEtapa_id == hiscon.workflowEtapa.workflowEtapa_id}">selected</c:if>>${etapa.nome }</option>
-										</c:forEach>
-										<c:forEach var="etapaHiscon" items="${etapasHiscon }">
-											<option value="${etapaHiscon.workflowEtapa_id}">${etapaHiscon.workflowEtapa.nome }</option>
 										</c:forEach>
 									</select>
 								</td>
-
 								<td>${hiscon.countHiscons }</td>
-
 							</tr>
 
 						</c:forEach>

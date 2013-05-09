@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -18,19 +22,12 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
-import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.HisconBeneficioDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
-import br.com.sgo.dao.PerfilDao;
-import br.com.sgo.dao.UsuarioDao;
-import br.com.sgo.dao.UsuarioPerfilDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.infra.CustomFileUtil;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.HisconBeneficio;
 import br.com.sgo.modelo.ParceiroBeneficio;
@@ -40,41 +37,28 @@ import br.com.sgo.modelo.WorkflowEtapa;
 public class HisconbeneficioController {
 
 	private final Result result;
-	private final Validator validator;
 	private final UsuarioInfo usuarioInfo;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
-	private final PerfilDao perfilDao;
 	private final HisconBeneficioDao hisconBeneficioDao;
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
-	private final UsuarioDao usuarioDao;
 	private final WorkflowDao workflowDao;
 	private final WorkflowEtapaDao workflowEtapaDao;
-	private final UsuarioPerfilDao usuarioPerfilDao;
 
 	private HisconBeneficio hisconBeneficio;
 	private Calendar dataAtual = Calendar.getInstance();
 	private Collection<HisconBeneficio> hiscons;
-	private Collection<WorkflowEtapa> etapas;
-	private Collection<WorkflowEtapa> etapasHiscon;
-	
-	public HisconbeneficioController(Result result, Validator validator, UsuarioInfo usuarioInfo, HisconBeneficioDao hisconBeneficioDao, EmpresaDao empresaDao,
-			OrganizacaoDao organizacaoDao, ParceiroBeneficioDao parceiroBeneficioDao, UsuarioDao usuarioDao, WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,
-			UsuarioPerfilDao usuarioPerfilDao, PerfilDao perfilDao, HisconBeneficio hisconBeneficio) {
+	private HttpServletResponse response;
+
+	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo, HisconBeneficioDao hisconBeneficioDao, 
+			ParceiroBeneficioDao parceiroBeneficioDao, WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,HisconBeneficio hisconBeneficio,HttpServletResponse response) {
 
 		this.result = result;
-		this.validator = validator;
 		this.usuarioInfo = usuarioInfo;
 		this.hisconBeneficioDao = hisconBeneficioDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
 		this.parceiroBeneficioDao = parceiroBeneficioDao;
-		this.usuarioDao = usuarioDao;
 		this.workflowDao = workflowDao;
 		this.workflowEtapaDao = workflowEtapaDao;
-		this.usuarioPerfilDao = usuarioPerfilDao;
-		this.perfilDao = perfilDao;
 		this.hisconBeneficio = hisconBeneficio;
+		this.response = response;
 
 	}
 
@@ -82,29 +66,52 @@ public class HisconbeneficioController {
 	@Path("/hisconbeneficio/cadastro")
 	public void cadastro() {
 
-		Collection<HisconBeneficio> hisconsAuxiliar = this.hisconBeneficioDao.mostraHisconBeneficiosPorUsuarioPerfil(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(),usuarioInfo.getPerfil().getPerfil_id(), usuarioInfo.getUsuario().getUsuario_id());
+		this.hisconBeneficio = new HisconBeneficio();
+
+		Collection<HisconBeneficio> hisconsAuxiliar = new ArrayList<HisconBeneficio>();
+
+		WorkflowEtapa etapaAguardandoAdm = this.workflowEtapaDao.buscaWorkflowEtapaByNome(
+				usuarioInfo.getEmpresa().getEmpresa_id(), 
+				usuarioInfo.getOrganizacao().getOrganizacao_id(), 
+				"Aguardando Adm");
+
+		if(usuarioInfo.getPerfil().getNome().equals("Administrativo")){
+
+			hisconsAuxiliar =
+					this.hisconBeneficioDao.buscaHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(), 
+							usuarioInfo.getOrganizacao().getOrganizacao_id(),etapaAguardandoAdm.getWorkflowEtapa_id());
+
+		} else {
+
+			hisconsAuxiliar = 
+					this.hisconBeneficioDao.buscaHisconBeneficiosByUsuarioPerfil(
+								usuarioInfo.getEmpresa(), 
+								usuarioInfo.getOrganizacao(),
+								usuarioInfo.getUsuario());
+			
+		}
+		
 
 		hiscons  = new ArrayList<HisconBeneficio>();
 
-		//etapasHiscon = workflowEtapaDao.buscaWorKFlowEtapaByPerfil(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(), usuarioInfo.getPerfil().getPerfil_id());
-		
 		for (HisconBeneficio h : hisconsAuxiliar){
 
-			h.setCountHiscons(this.hisconBeneficioDao.mostraCountHisconsBeneficios(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
+			h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
 
-			etapas = workflowEtapaDao.buscaWorKFlowEtapaByHisconPerfil(h.getHisconBeneficio_id(), usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(), usuarioInfo.getPerfil().getPerfil_id());
-			
-			etapasHiscon = workflowEtapaDao.buscaWorKFlowEtapaByPerfil(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(),usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id(), usuarioInfo.getPerfil().getPerfil_id());
+			h.setWorkflowEtapas(workflowEtapaDao.buscaWorKFlowEtapaByHisconPerfil(
+						usuarioInfo.getEmpresa().getEmpresa_id(),
+						usuarioInfo.getOrganizacao().getOrganizacao_id(),
+						usuarioInfo.getPerfil().getPerfil_id(),
+						h.getHisconBeneficio_id()));
 
-			etapas.add(h.getWorkflowEtapa());
+			h.getWorkflowEtapas().add(h.getWorkflowEtapa());
+
 			hiscons.add(h);
 
 		} 
 
-		//result.include("hisconBeneficio",hisconBeneficio);
 		result.include("hiscons", hiscons);
-		result.include("etapasHiscon",etapasHiscon);
-		result.include("etapas",etapas);
+
 	}
 
 	@Post
@@ -112,12 +119,13 @@ public class HisconbeneficioController {
 	public void cadastro(Long empresa_id, Long organizacao_id, String numeroBeneficio) {
 
 		String mensagem = "";
-
+		
 		ParceiroBeneficio pb = this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa_id, organizacao_id, numeroBeneficio);
 
 			if (pb != null){
 
-				HisconBeneficio hb = this.hisconBeneficioDao.mostraHisconBeneficios(pb);
+				HisconBeneficio hb = this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficio(pb.getEmpresa().getEmpresa_id(),
+						pb.getOrganizacao().getOrganizacao_id(),pb.getParceiroBeneficio_id());
 
 				if (hb != null){
 
@@ -151,7 +159,6 @@ public class HisconbeneficioController {
 			} else {
 
 				mensagem = "Erro: Beneficio não cadastrado.";
-				//result.include("notice", mensagem).redirectTo(ParceironegocioController.class).cadastro();
 
 			}
 
@@ -159,58 +166,6 @@ public class HisconbeneficioController {
 		result.redirectTo(this).cadastro();
 
 	}
-
-	/*@Post
-	@Path("/hisconbeneficio/cadastroteste")
-	public void cadastroTeste(Long empresa_id, Long organizacao_id, String numeroBeneficio) {
-
-		String mensagem = "";
-
-		ParceiroBeneficio pb = this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa_id, organizacao_id, numeroBeneficio);
-
-			if (pb != null){
-
-				HisconBeneficio hb = this.hisconBeneficioDao.mostraHisconBeneficios(pb);
-
-				if (hb != null){
-
-					if (hb.getIsEnviado()){
-
-						this.hisconBeneficio.setEmpresa(pb.getEmpresa());
-						this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
-						this.hisconBeneficio.setParceiroBeneficio(pb);
-						this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
-	
-						result.include("hisconBeneficio", hisconBeneficio);
-
-					} else {
-
-						mensagem = "Erro: Hiscon em aberto solicitado por " + hb.getUsuario().getNome() + " em ";
-						result.include("notice", mensagem);
-
-					}
-
-				}else {
-
-					this.hisconBeneficio.setEmpresa(pb.getEmpresa());
-					this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
-					this.hisconBeneficio.setParceiroBeneficio(pb);
-					this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
-
-					result.include("hisconBeneficio", hisconBeneficio);
-
-				}
-
-			} else {
-
-				mensagem = "Erro: Beneficio não cadastrado.";
-				result.include("notice", mensagem).redirectTo(ParceironegocioController.class).cadastro();
-
-			}
-
-		result.include("notice", mensagem);			
-		result.redirectTo(this).cadastro();
-	}*/
 
 	@Post
 	@Path("/hisconbeneficio/salva")
@@ -263,25 +218,47 @@ public class HisconbeneficioController {
 	@Path("/hisconbeneficio/altera")
 	public void altera(HisconBeneficio hisconBeneficio) {
 
-		this.hisconBeneficio = this.hisconBeneficioDao.load(hisconBeneficio.getHisconBeneficio_id());
+		this.hisconBeneficio = this.hisconBeneficioDao.buscaHisconBeneficioById(hisconBeneficio.getHisconBeneficio_id());
 
-		this.hisconBeneficioDao.mostraHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id());
+		if(hisconBeneficio.getWorkflowEtapa() != null){
 
-		Date now = new Date();
-		String hora = new SimpleDateFormat("ddMMyyyyHHmm").format(now);
+			hisconBeneficio.setWorkflowEtapa(this.workflowEtapaDao.buscaWorkflowEtapaById(hisconBeneficio.getWorkflowEtapa().getWorkflowEtapa_id()));
 
-		String diretorio = "////localhost//sistemas//_repositorio//hiscon//";
+			if(!this.hisconBeneficio.getWorkflowEtapa().getNome().equals("Aguardando Adm") && !this.hisconBeneficio.getWorkflowEtapa().getNome().equals("Enviado"))
+				this.hisconBeneficio.setDataAdm(hisconBeneficio.getWorkflowEtapa().getNome().equals("Aguardando Adm") ? GregorianCalendar.getInstance() : null);
 
-		String caminhoArquivo = diretorio + hisconBeneficio.getParceiroBeneficio().getNumeroBeneficio() + "_" + hora + ".pdf";
+			this.hisconBeneficio.setWorkflowEtapa(hisconBeneficio.getWorkflowEtapa());
+			this.hisconBeneficio.setIsEnviado(hisconBeneficio.getWorkflowEtapa().getNome().equals("Enviado") || hisconBeneficio.getWorkflowEtapa().getNome().equals("Desconsiderado") ? true : false);
 
-		this.hisconBeneficio.setCaminhoArquivo(caminhoArquivo);
-		this.hisconBeneficio.setDataAdm(dataAtual);
+		}
 
-		this.hisconBeneficio.setWorkflow(this.workflowDao.load(1L));
-		this.hisconBeneficio.setWorkflowEtapa(this.workflowEtapaDao.load(4L));		
+		if (hisconBeneficio.getWorkflowPosicaoEtapa() != null)
+			this.hisconBeneficio.setWorkflowPosicaoEtapa(hisconBeneficio.getWorkflowPosicaoEtapa() == null ? null : hisconBeneficio.getWorkflowPosicaoEtapa());
 
-		this.hisconBeneficio.setIsEnviado(true);
-		this.hisconBeneficio.setIsImportado(true);
+		if(hisconBeneficio.getUsuario() != null)
+			this.hisconBeneficio.setUsuario(hisconBeneficio.getUsuario());
+
+		if(this.hisconBeneficio.getDataEnvio() == null)
+			this.hisconBeneficio.setDataEnvio(this.hisconBeneficio.getIsEnviado() == false ? null :GregorianCalendar.getInstance());
+
+		if(hisconBeneficio.getCaminhoArquivo() != null){
+			this.hisconBeneficio.setCaminhoArquivo(hisconBeneficio.getCaminhoArquivo());
+		}
+		
+		if(hisconBeneficio.getIsEnviado()){
+
+			WorkflowEtapa etapaEnviado = this.workflowEtapaDao.buscaWorkflowEtapaByNome(
+					usuarioInfo.getEmpresa().getEmpresa_id(), 
+					usuarioInfo.getOrganizacao().getOrganizacao_id(), 
+					"Enviado");
+
+			this.hisconBeneficio.setWorkflowEtapa(etapaEnviado);
+
+			this.hisconBeneficio.setIsEnviado(true);
+
+		}
+
+		this.hisconBeneficio.setIsActive(true);
 
 		hisconBeneficioDao.beginTransaction();
 		hisconBeneficioDao.atualiza(this.hisconBeneficio);
@@ -294,13 +271,6 @@ public class HisconbeneficioController {
 	@Get
 	public void msg() {
 
-	}
-
-	@Get
-	@Path("/hisconbeneficio/busca.json")
-	@Public
-	public void hisconbeneficio(Long empresa_id, Long organizacao_id) {
-		// result.use(Results.json()).withoutRoot().from(agenciaDao.buscaAgenciaByEmOrBaCa(empresa_id, organizacao_id, banco_id, codigoagencia)).serialize();
 	}
 
 	@Post
@@ -324,7 +294,14 @@ public class HisconbeneficioController {
 
 				CustomFileUtil.extraiZip(new File(nomeFile),new File(diretorio));
 
-				hiscons = this.hisconBeneficioDao.mostraHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id());
+				WorkflowEtapa etapaAguardandoAdm = this.workflowEtapaDao.buscaWorkflowEtapaByNome(
+						usuarioInfo.getEmpresa().getEmpresa_id(), 
+						usuarioInfo.getOrganizacao().getOrganizacao_id(), 
+						"Aguardando Adm");
+
+				hiscons = this.hisconBeneficioDao.buscaHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(), 
+																		usuarioInfo.getOrganizacao().getOrganizacao_id(),
+																		etapaAguardandoAdm.getWorkflowEtapa_id());
 
 				for (HisconBeneficio h : hiscons){
 
@@ -341,6 +318,7 @@ public class HisconbeneficioController {
 						FileUtils.copyFile(f, caminhoImagem);
 
 						h.setCaminhoArquivo(caminhoImagem.getName());
+						h.setIsEnviado(true);
 
 						altera(h);
 						files.add(f);
@@ -370,14 +348,46 @@ public class HisconbeneficioController {
 		result.redirectTo(this).cadastro();
 
 	}
+	
+	@Get
+	@Path("/visualizaHiscon/{id}")
+	public void visualiza(Long id) {
 
-	@Post
-	@Path("/hisconbeneficio/lista")
-	@Public
-	public void lista(String cpf) {
+		hisconBeneficio = this.hisconBeneficioDao.buscaHisconBeneficioById(id);
 
-		// result.include("hisconsBeneficio",this.hisconBeneficioDao.mostraHisconBeneficiosPorUsuarioPerfil(usuarioInfo.getEmpresa().getEmpresa_id()
-		// usuarioInfo.getOrganizacao().getOrganizacao_id(), perfil_id,
-		// usuarioInfo.getUsuario().getUsuario_id());
+		String diretorio = "////localhost//sistemas//_repositorio//hiscon//";
+		String nomeFile = diretorio + hisconBeneficio.getCaminhoArquivo();
+
+		File pdf = new File(nomeFile);
+
+		try {
+
+            byte[] arquivo = null;
+
+            File dir = new File(pdf.getPath());
+
+            try {
+                arquivo = CustomFileUtil.fileToByte(dir);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            response.reset();
+            response.setContentType("application/pdf");
+            response.setDateHeader("Expires", 0);
+            response.setContentLength(arquivo.length);
+            response.getOutputStream().write(arquivo, 0, arquivo.length);
+
+            ServletOutputStream responseOutputStream = response.getOutputStream();
+
+            responseOutputStream.flush();
+			responseOutputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+		result.nothing();
 	}
+
 }

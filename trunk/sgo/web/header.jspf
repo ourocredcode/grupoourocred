@@ -114,6 +114,7 @@
 
 					<ul class="consultor">
 						<li><a href="<c:url value="/formulario/cadastro"/>">Formulário</a></li>
+						<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
 					</ul>
 
 				</li>
