@@ -52,6 +52,7 @@ public class WorkflowController {
 			if (this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(workflow.getEmpresa().getEmpresa_id(),workflow.getOrganizacao().getOrganizacao_id(),
 					workflow.getTipoWorkflow().getTipoWorkflow_id(), workflow.getNome()) == null) {				
 				
+				
 				this.workflowDao.beginTransaction();
 				this.workflowDao.adiciona(workflow);
 				this.workflowDao.commit();

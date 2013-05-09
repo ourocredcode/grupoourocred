@@ -36,7 +36,7 @@ public class FuncaoController {
 	@Public
 	@Path("/funcao/cadastro")
 	public void cadastro(){
-		result.include("funcao",this.funcaoDao.listaTudo("ASC","nome"));
+		//result.include("funcao",this.funcaoDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
@@ -53,7 +53,8 @@ public class FuncaoController {
 
 			funcao.setEmpresa(this.empresaDao.load(funcao.getEmpresa().getEmpresa_id()));		
 			funcao.setOrganizacao(this.organizacaoDao.load(funcao.getOrganizacao().getOrganizacao_id()));
-
+			funcao.setIsActive(funcao.getIsActive() == null ? false : true);
+			
 			this.funcaoDao.beginTransaction();
 			this.funcaoDao.adiciona(funcao);
 			this.funcaoDao.commit();

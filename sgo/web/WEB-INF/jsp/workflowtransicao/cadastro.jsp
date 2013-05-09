@@ -238,9 +238,9 @@ function limpaForm(){
 									</c:forEach>
 								</select>
 							</div>
-							<div class="control-group">
-								<label class="control-label" for="workflowTransicaoIsActive">Ativo</label>
-								<input type="checkbox" id="workflowTransicaoIsActive" name="workflowTransicao.isActive" checked="checked" value="1" >
+							<div class="span1">
+								<label for="workflowTransicaoIsActive">Ativo</label>
+								<input id="workflowTransicaoIsActive" name="workflowTransicao.isActive" type="checkbox" checked="checked" value="${workflowTransicao.isActive }" >
 							</div>
 						</div>
 						<div class="btn-toolbar">
