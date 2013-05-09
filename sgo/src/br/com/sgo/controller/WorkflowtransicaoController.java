@@ -97,7 +97,7 @@ public class WorkflowtransicaoController {
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
 
-		result.include("workflowsEtapa", this.workflowEtapaDao.buscaWorkflowsPorEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
+		result.include("workflowsEtapa", this.workflowEtapaDao.buscaWorkflowEtapaByNome(empresa_id, organizacao_id, nome));
 
 	}
 

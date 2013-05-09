@@ -194,7 +194,7 @@ public class FormularioController {
 
 		contrato.setWorkflow(this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(usuarioInfo.getEmpresa().getEmpresa_id(),
 				usuarioInfo.getOrganizacao().getOrganizacao_id(),1L,"Status Contrato"));
-		contrato.setWorkflowEtapa(this.workflowEtapaDao.buscaWorkflowEtapaPorNome(usuarioInfo.getEmpresa().getEmpresa_id(),
+		contrato.setWorkflowEtapa(this.workflowEtapaDao.buscaWorkflowEtapaByNome(usuarioInfo.getEmpresa().getEmpresa_id(),
 				usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Status"));
 
 		if(contrato.getRecompraBanco().getBanco_id() != null){

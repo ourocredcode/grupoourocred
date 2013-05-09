@@ -27,15 +27,16 @@
 				</div>
 
 				<div class="widget-box">
-					<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Vendas</h5><div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-refresh"></i> Update stats</a></div></div>
+					<div class="widget-title">
+						<span class="icon"><i class="icon-signal"></i>
+						</span><h5>Vendas</h5>
+						<div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-refresh"></i> Update stats</a></div>
+					</div>
 					<div class="widget-content">
 						<div class="row-fluid">
-						<div class="span4">
-
-						</div>
-						<div class="span8">
-
-						</div>	
+							<div class="span12">
+								Teste
+							</div>	
 						</div>							
 					</div>
 				</div>

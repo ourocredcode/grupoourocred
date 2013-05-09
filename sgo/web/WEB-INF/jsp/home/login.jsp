@@ -15,10 +15,9 @@
         <script src="<c:url value="/js/jquery.js"/>"></script>  
         <script src="<c:url value="/js/unicorn.login.js"/>"></script> 
 		<script type="text/javascript">
-		
-		
+
 		jQuery(function($){
-			
+
 			$('#loginForm').submit(function() {
 				$.ajax({
 					data: $(this).serialize()

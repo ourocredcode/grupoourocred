@@ -82,14 +82,14 @@ public class WorkflowetapaController {
 	@Path("/workflowetapa/busca.json")
 	@Public
 	public void workflowEtapa(Long empresa_id, Long organizacao_id, String nome) {	
-		result.use(Results.json()).withoutRoot().from(workflowEtapaDao.buscaWorkflowsPorEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome)).serialize();	
+		result.use(Results.json()).withoutRoot().from(workflowEtapaDao.buscaWorkflowEtapaByNome(empresa_id, organizacao_id, nome)).serialize();	
 	}
 
 	@Post
 	@Path("/workflowetapa/lista")
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
-		result.include("workflowEtapas", this.workflowEtapaDao.buscaWorkflowsPorEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
+		result.include("workflowEtapas", this.workflowEtapaDao.buscaWorkflowEtapaByNome(empresa_id, organizacao_id, nome));
 	}
 
 	@Get
