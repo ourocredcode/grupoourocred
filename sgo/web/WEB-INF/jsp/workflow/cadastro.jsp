@@ -61,10 +61,6 @@ jQuery(function($){
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
-	          
-	          //data : {empresa_id: $('#workflowEmpresaId').val() == '' ? '0' :  $('#workflowEmpresaId').val(), 
-	        		 // org_nome: $('#workflowOrganizacao').val() == '' ? '0' :  $('#workflowOrganizacao').val(),
-	        		  //nometabelabd : $('#colunaBdTabelaBd').val()},
 
 	          data : {empresa_id: $('#workflowEmpresaId').val() == '' ? '0' :  $('#workflowEmpresaId').val(),
 	        		  org_nome : $('#workflowOrganizacao').val()},
@@ -198,46 +194,43 @@ function limpaForm(){
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
-				
 				<div class="tab-pane fade active in" id="perfil-div">
+
 					<form id="workflowForm" name="workflowForm" action="<c:url value="/workflow/salva"/>" method="POST">
 
-						<div class="control-group">
-							<label class="control-label" for="workflowEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowEmpresa" name="workflow.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowEmpresaId" name="workflow.empresa.empresa_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowOrganizacao" name="workflow.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowOrganizacaoId" name="workflow.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowTipoWorkflow">Tipo de Worflow</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowTipoWorkflow" name="workflow.tipoWorkflow.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowTipoWorkflowId" name="workflow.tipoWorkflow.tipoWorkflow_id" type="hidden">
-	    					</div>
-						</div>						
-						<div class="control-group">
-							<label class="control-label" for="workflowNome">Nome</label>
-							<div class="controls">
-								<input type="text" id="workflowNome" name="workflow.nome" placeholder="Nome" required>
+						<div class="row-fluid">
+							<div class="span5">
+								<label for="workflowEmpresa">Empresa</label>							
+	      						<input class="input-xxlarge" id="workflowEmpresa" name="workflow.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-mini" id="workflowEmpresaId" name="workflow.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    					
+							</div>
+							<div class="span5">
+								<label for="workflowOrganizacao">Organização</label>
+	      						<input class="input-xxlarge" id="workflowOrganizacao" name="workflow.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-mini" id="workflowOrganizacaoId" name="workflow.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowIsActive">Ativo</label>
-							<div class="controls">
-								<input type="checkbox" id="workflowIsActive" name="workflow.isActive" checked="checked" value="1" >							
-							</div>							
-						</div>				
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="workflowTipoWorkflow">Tipo de Worflow</label>
+	      						<input class="span12" id="workflowTipoWorkflow" name="workflow.tipoWorkflow.nome" value="${workflow.tipoWorkflow.nome }" type="text" required onChange="limpaForm();">
+	      						<input class="span1" id="workflowTipoWorkflowId" name="workflow.tipoWorkflow.tipoWorkflow_id" value="${workflow.tipoWorkflow.tipoWorkflow_id }" type="hidden">	    					
+							</div>
+							<div class="span5">
+								<label for="workflowNome">Nome</label>							
+								<input class="input-xxlarge" id="workflowNome" name="workflow.nome" value="${workflow.nome }" type="text" placeholder="Nome" required>							
+							</div>
+							<div class="span1">
+								<label for="workflowIsActive">Ativo</label>							
+								<input id="workflowIsActive" name="workflow.isActive" type="checkbox" checked="checked" value="${workflow.isActive }" >
+							</div>
+						</div>
+						
+						<div class="row-fluid">
+							
+														
+						</div>
+						
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
@@ -275,7 +268,6 @@ function limpaForm(){
 				<div class="tab-pane fade" id="workflowetapa-div"></div>
 				<div class="tab-pane fade" id="workflowetapaperfilacesso-div"></div>
 				<div class="tab-pane fade" id="workflowtransicao-div"></div>
-
 			</div>
 		</div>
 	</div>

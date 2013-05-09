@@ -241,60 +241,51 @@ function limpaForm(){
 				<div class="tab-pane fade" id="workflowetapa-div"></div>
 				
 				<div class="tab-pane fade active in" id="workflowetapaperfilacesso-div">
+				
 					<form id="workflowEtapaPerfilAcessoForm" name="workflowEtapaPerfilAcessoForm" action="<c:url value="/workflowetapaperfilacesso/salva"/>" method="POST">
 
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaPerfilAcessoEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowEtapaPerfilAcessoEmpresa" name="workflowEtapaPerfilAcessoEmpresa.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowEtapaPerfilAcessoEmpresaId" name="workflowEtapaPerfilAcessoEmpresa.empresa.empresa_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaPerfilAcessoOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowEtapaPerfilAcessoOrganizacao" name="workflowEtapaPerfilAcessoOrganizacao.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowEtapaPerfilAcessoOrganizacaoId" name="workflowEtapaPerfilAcessoOrganizacao.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaPerfilAcessoWorkflowEtapa">WorkFlow Etapa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowEtapaPerfilAcessoWorkflowEtapa" name="workflowEtapaPerfilAcesso.workflowEtapa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowEtapaPerfilAcessoWorkflowEtapaId" name="workflowEtapaPerfilAcesso.workflowEtapa.workflowEtapa_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaPerfilAcessoPerfil">Perfil</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="workflowEtapaPerfilAcessoPerfil" name="workflowEtapaPerfilAcesso.perfil.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="workflowEtapaPerfilAcessoPerfilId" name="workflowEtapaPerfilAcesso.perfil.perfil_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaPerfilAcessoIsActive">Ativo</label>
-							<div class="controls">
-								<input type="checkbox" id="workflowEtapaPerfilAcessoIsActive" name="workflowEtapaPerfilAcesso.isActive" checked="checked" value="1" >							
-							</div>							
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaPerfilAcessoIsLeituraEscrita">Leitura e Escrita</label>
-							<div class="controls">
-								<input type="checkbox" id="workflowEtapaPerfilAcessoIsLeituraEscrita" name="workflowEtapaPerfilAcesso.isLeituraEscrita" checked="checked" value="1" >							
-							</div>							
+						<div class="row-fluid">
+
+							<div class="span3">
+								<label for="workflowEtapaPerfilAcessoEmpresa">Empresa</label>
+	      						<input class="input-xlarge" id="workflowEtapaPerfilAcessoEmpresa" name="workflowEtapaPerfilAcessoEmpresa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span1" id="workflowEtapaPerfilAcessoEmpresaId" name="workflowEtapaPerfilAcessoEmpresa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+							</div>
+							<div class="span5">
+								<label for="workflowEtapaPerfilAcessoOrganizacao">Organização</label>
+		      					<input class="input-xxlarge" id="workflowEtapaPerfilAcessoOrganizacao" name="workflowEtapaPerfilAcessoOrganizacao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span1" id="workflowEtapaPerfilAcessoOrganizacaoId" name="workflowEtapaPerfilAcessoOrganizacao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+							</div>
+
 						</div>
 
-						<div class="control-group">
-							<label class="control-label" for="workflowEtapaPerfilAcessoIsUpload">Upload</label>
-							<div class="controls">
-								<input type="checkbox" id="workflowEtapaPerfilAcessoIsUpload" name="workflowEtapaPerfilAcesso.isUpload" value="0" >							
-							</div>							
-						</div>
+						<div class="row-fluid">
 
+							<div class="span2">
+								<label for="workflowEtapaPerfilAcessoWorkflowEtapa">WorkFlow Etapa</label>
+	      						<input class="span12" id="workflowEtapaPerfilAcessoWorkflowEtapa" name="workflowEtapaPerfilAcesso.workflowEtapa.nome" value="${workflowEtapaPerfilAcesso.workflowEtapa.nome }" type="text" required onChange="limpaForm();">
+	      						<input class="span12" id="workflowEtapaPerfilAcessoWorkflowEtapaId" name="workflowEtapaPerfilAcesso.workflowEtapa.workflowEtapa_id" value="${workflowEtapaPerfilAcesso.workflowEtapa.workflowEtapa_id }" type="hidden">
+							</div>
+							<div class="span2">
+								<label for="workflowEtapaPerfilAcessoPerfil">Perfil</label>
+		      					<input class="span12" id="workflowEtapaPerfilAcessoPerfil" name="workflowEtapaPerfilAcesso.perfil.nome" value="${workflowEtapaPerfilAcesso.perfil.nome }" type="text" required onChange="limpaForm();">
+		      					<input class="span12" id="workflowEtapaPerfilAcessoPerfilId" name="workflowEtapaPerfilAcesso.perfil.perfil_id" value="${workflowEtapaPerfilAcesso.perfil.perfil_id }" type="hidden">
+							</div>
+
+							<div class="span1">
+								<label for="workflowEtapaPerfilAcessoIsActive">Ativo</label>
+								<input id="workflowEtapaPerfilAcessoIsActive" name="workflowEtapaPerfilAcesso.isActive" value="${workflowEtapaPerfilAcesso.isActive }"  type="checkbox" checked="checked">
+							</div>
+							<div class="span1">
+								<label for="workflowEtapaPerfilAcessoIsLeituraEscrita">Escrita</label>
+								<input id="workflowEtapaPerfilAcessoIsLeituraEscrita" name="workflowEtapaPerfilAcesso.isLeituraEscrita" value="${workflowEtapaPerfilAcesso.isLeituraEscrita }" type="checkbox" checked="checked" >
+							</div>
+							<div class="span1">
+								<label for="workflowEtapaPerfilAcessoIsUpload">Upload</label>
+								<input id="workflowEtapaPerfilAcessoIsUpload" name="workflowEtapaPerfilAcesso.isUpload" value="${workflowEtapaPerfilAcesso.isUpload }" type="checkbox" >
+							</div>
+
+						</div>
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
