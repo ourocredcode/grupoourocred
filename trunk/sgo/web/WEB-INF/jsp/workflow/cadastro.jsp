@@ -225,12 +225,7 @@ function limpaForm(){
 								<input id="workflowIsActive" name="workflow.isActive" type="checkbox" checked="checked" value="${workflow.isActive }" >
 							</div>
 						</div>
-						
-						<div class="row-fluid">
-							
-														
-						</div>
-						
+
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>

@@ -129,64 +129,57 @@ function limpaForm() {
 		</c:choose>
 	</c:if>
 
-<div class="container-fluid">
+	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="funcao-li"><a href="#funcao-div" data-toggle="tab" id="funcao-li-a">Cadastro de Função</a></li>				
 			</ul>
+			
 			<div id="myTabContent" class="tab-content">
 
 				<div class="tab-pane fade active in" id="funcao-div">
-				
-					<div class="row25MarginTop">
-						<div class="span3">
-							<form id="funcaoForm" name="funcaoForm" action="<c:url value="/funcao/salva"/>" method="POST">
-								<div class="control-group">
-									<label class="control-label" for="funcaoEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="funcaoEmpresa" name="funcao.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="funcaoEmpresaId" name="funcao.empresa.empresa_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="funcaoOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="funcaoOrganizacao" name="funcao.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="funcaoOrganizacaoId" name="funcao.organizacao.organizacao_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="funcaoNome">Nome</label>
-									<div class="controls">
-										<input class="span10"type="text" id="funcaoNome" name="funcao.nome" placeholder="Nome" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="funcaoDescricao">Descrição</label>
-									<div class="controls">
-										<input  class="span10" type="text" id="funcaoDescricao" name="funcao.descricao" placeholder="Descrição" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="funcaoIsActive">Ativo</label>
-									<div class="controls">
-										<input type="checkbox" id="funcaoIsActive" name="funcao.isActive" checked="checked" value="1" >							
-									</div>
-								</div>
-							 	<div class="btn-group">
-									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-								</div>
-							</form>
+
+					<form id="funcaoForm" name="funcaoForm" action="<c:url value="/funcao/salva"/>" method="POST">
+
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="funcaoEmpresa">Empresa</label>
+	      						<input class="input-xlarge" id="funcaoEmpresa" name="funcao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="funcaoEmpresaId" name="funcao.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+    						</div>						
+							<div class="span3">
+								<label for="funcaoOrganizacao">Organização</label>
+								<input class="input-xxlarge" id="funcaoOrganizacao" name="funcao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span1" id="funcaoOrganizacaoId" name="funcao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+							</div>
+						</div>						
+						
+						<div class="row-fluid">
+							<div class="span5">
+								<label for="funcaoNome">Nome</label>								
+								<input class="input-xxlarge"type="text" id="funcaoNome" name="funcao.nome" value="${funcao.nome }" placeholder="Nome" required>
+							</div>							
+							<div class="span5">
+								<label for="funcaoDescricao">Descrição</label>
+								<input class="input-xxlarge" type="text" id="funcaoDescricao" name="funcao.descricao" value="${funcao.descricao }" placeholder="Descrição" required >								
+							</div>
+							<div class="span1">
+								<label for="funcaoIsActive">Ativo</label>
+								<input type="checkbox" id="funcaoIsActive" name="funcao.isActive" checked="checked" value="${funcao.isActive }" >
+							</div>
+					 	</div>
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
+					</form>
 						</div>
 						
 					</div>
