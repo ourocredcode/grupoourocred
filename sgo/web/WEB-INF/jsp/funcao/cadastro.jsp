@@ -98,15 +98,15 @@ function limpaForm() {
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Função</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+	<h1>Cadastro Função</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
-	
+</div>
+
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
 		<a href="#" class="current">Função</a>
@@ -129,14 +129,14 @@ function limpaForm() {
 		</c:choose>
 	</c:if>
 
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="funcao-li"><a href="#funcao-div" data-toggle="tab" id="funcao-li-a">Cadastro de Função</a></li>				
 			</ul>
-			
+
 			<div id="myTabContent" class="tab-content">
 
 				<div class="tab-pane fade active in" id="funcao-div">
@@ -146,16 +146,16 @@ function limpaForm() {
 						<div class="row-fluid">
 							<div class="span3">
 								<label for="funcaoEmpresa">Empresa</label>
-	      						<input class="input-xlarge" id="funcaoEmpresa" name="funcao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span12" id="funcaoEmpresa" name="funcao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="funcaoEmpresaId" name="funcao.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
     						</div>						
 							<div class="span3">
 								<label for="funcaoOrganizacao">Organização</label>
-								<input class="input-xxlarge" id="funcaoOrganizacao" name="funcao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+								<input class="span12" id="funcaoOrganizacao" name="funcao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 		      					<input class="span1" id="funcaoOrganizacaoId" name="funcao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 						</div>						
-						
+
 						<div class="row-fluid">
 							<div class="span5">
 								<label for="funcaoNome">Nome</label>								
@@ -180,10 +180,7 @@ function limpaForm() {
 							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 						</div>
 					</form>
-						</div>
-						
-					</div>
-				</div>
+				</div>						
 			</div>
 		</div>
 	</div>
