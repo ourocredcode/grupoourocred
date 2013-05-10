@@ -34,10 +34,6 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 	private Connection conn;
 	private ResultSet rsHisconBeneficio;
 
-	private String sqlHisconBeneficio = "SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, HISCONBENEFICIO.parceirobeneficio_id"
-			+ ", HISCONBENEFICIO.usuario_id, HISCONBENEFICIO.workflowetapa_id, HISCONBENEFICIO.workflow_id, HISCONBENEFICIO.workflowposicao_id, HISCONBENEFICIO.isactive"
-			+ ", HISCONBENEFICIO.isworkflow, HISCONBENEFICIO.isenviado, HISCONBENEFICIO.isimportado, HISCONBENEFICIO.ispadrao FROM HISCONBENEFICIO(NOLOCK)";
-
 	private String sqlHisconsBeneficio = "SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, EMPRESA.nome as empresa_nome " + 
 			 ", HISCONBENEFICIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, HISCONBENEFICIO.parceirobeneficio_id , PARCEIROBENEFICIO.numerobeneficio " + 
 			 ", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,PERFIL.perfil_id, PERFIL.nome as perfil_nome " +
@@ -87,7 +83,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 	public HisconBeneficio validaHisconBeneficioPorParceiroBeneficioUsuarioWorkflow(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id, Long usuario_id, Long workflow_id) {
 
-		String sql = sqlHisconBeneficio;
+		String sql = sqlHisconsExibe;
 
 		if (empresa_id != null)
 			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
@@ -144,7 +140,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 	public HisconBeneficio validaHisconBeneficioPorParceiroBeneficioUsuario(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id, Long usuario_id) {
 
-		String sql = sqlHisconBeneficio;
+		String sql = sqlHisconsExibe;
 
 		if (empresa_id != null)
 			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
@@ -193,7 +189,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 	public HisconBeneficio buscaHisconBeneficioByParceiroBeneficio(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id) {
 
-		String sql = sqlHisconBeneficio;
+		String sql = sqlHisconsExibe;
 
 		if (empresa_id != null)
 			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
@@ -621,6 +617,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		hisconBeneficio.setWorkflowEtapa(workflowEtapa);
 		hisconBeneficio.setPerfil(perfil);
 		hisconBeneficio.setWorkflow(workflow);
+		hisconBeneficio.setIsEnviado(rsHisconBeneficio.getBoolean("isenviado"));
 
 		hisconBeneficio.setUsuario(usuario);
 

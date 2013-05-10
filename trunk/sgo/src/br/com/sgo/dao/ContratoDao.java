@@ -31,28 +31,35 @@ public class ContratoDao extends Dao<Contrato> {
 	private Connection conn;
 	private ResultSet rsContrato;
 
-	private static final String sqlContrato = " SELECT CONTRATO.empresa_id, EMPRESA.nome, CONTRATO.organizacao_id, ORGANIZACAO.nome, " +
-			"					FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, " +
-			"					CONTRATO.coeficiente_id, " +
-			"					CONTRATO.produto_id, CONTRATO.tabela_id, " +
-			"					CONTRATO.banco_id, CONTRATO.recompra_banco_id, CONTRATO.usuario_id, USUARIO.nome as usuario_nome, CONTRATO.prazo, " +
-			"					CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, " +
-			"					CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, " +
-			"					CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, " +
-			"					B1.nome as banco_nome, B2.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, " +
-			"					PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, CONTRATO.workflowetapa_id, WORKFLOWETAPA.nome as workflowetapa_nome  " +
-			"					FROM " +
-			"		((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) " +
-			"						 INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) " +
-			"						 INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
-			"						 INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id) " +
-			"						 INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +
-			"						 INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) " +
-			"						 INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) " +
-			"						 INNER JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) " +
-			"						 INNER JOIN BANCO AS B1 (NOLOCK) ON CONTRATO.banco_id = B1.banco_id " +
-			"						 INNER JOIN WORKFLOWETAPA (NOLOCK) ON CONTRATO.workflowetapa_id = WORKFLOWETAPA.workflowetapa_id " +
-			"						 LEFT JOIN BANCO AS B2 (NOLOCK) ON CONTRATO.recompra_banco_id = B2.banco_id ";
+	private static final String sqlContrato =  "SELECT CONTRATO.empresa_id, EMPRESA.nome, CONTRATO.organizacao_id, ORGANIZACAO.nome,   " +
+			"FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id,   " +
+			"CONTRATO.coeficiente_id,  " +
+			"CONTRATO.produto_id, CONTRATO.tabela_id,   " +
+			"CONTRATO.banco_id, CONTRATO.recompra_banco_id,  " +
+			"CONTRATO.usuario_id,  " +
+			"USUARIO.nome as usuario_nome,  " +
+			"SUPER.usuario_id as usuario_super_id, " +
+			"SUPER.nome as usuario_super,  " +
+			"CONTRATO.prazo,   " +
+			"CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato,   " +
+			"CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao,   " +
+			"CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio,   " +
+			"B1.nome as banco_nome, B2.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor,   " +
+			"PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf,  " +
+			"CONTRATO.workflowetapa_id, WORKFLOWETAPA.nome as workflowetapa_nome   " +
+			"FROM   " +
+"((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
+				 "INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id)   " +
+				 "INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id)   " +
+				 "INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)   " +
+				 "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)   " +
+				 "INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id)   " +
+				 "INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id)   " +
+				 "INNER JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id)   " +
+				 "INNER JOIN BANCO AS B1 (NOLOCK) ON CONTRATO.banco_id = B1.banco_id   " +
+				 "INNER JOIN WORKFLOWETAPA (NOLOCK) ON CONTRATO.workflowetapa_id = WORKFLOWETAPA.workflowetapa_id " +
+				 "INNER JOIN USUARIO as SUPER (NOLOCK) ON USUARIO.supervisor_usuario_id = SUPER.usuario_id   " +
+				 "LEFT JOIN BANCO AS B2 (NOLOCK) ON CONTRATO.recompra_banco_id = B2.banco_id ";
 
 	public ContratoDao(Session session, ConnJDBC conexao) {
 		super(session, Contrato.class);
@@ -153,6 +160,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Calendar created = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
+		Usuario supervisor = new Usuario();
 		Contrato contrato = new Contrato();
 		ParceiroNegocio parceiro = new ParceiroNegocio();
 		Coeficiente coeficiente = new Coeficiente();
@@ -164,6 +172,10 @@ public class ContratoDao extends Dao<Contrato> {
 
 		usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
 		usuario.setNome(rsContrato.getString("usuario_nome"));
+		supervisor.setUsuario_id(rsContrato.getLong("usuario_super_id"));
+		supervisor.setNome(rsContrato.getString("usuario_super"));
+		
+		usuario.setSupervisorUsuario(supervisor);
 
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
 		created.setTime(rsContrato.getDate("created"));

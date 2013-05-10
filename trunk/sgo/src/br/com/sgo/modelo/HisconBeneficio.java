@@ -267,7 +267,7 @@ public class HisconBeneficio implements Serializable {
 	}
 
 	public Boolean getIsEnviado() {
-		return isEnviado;
+		return isEnviado == null ? false : isEnviado;
 	}
 
 	public void setIsEnviado(Boolean isEnviado) {

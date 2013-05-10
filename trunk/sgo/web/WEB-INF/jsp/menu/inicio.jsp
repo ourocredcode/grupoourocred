@@ -11,12 +11,12 @@
 			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
 	</div>
-	
+
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
 		<a href="#" class="current">Dashboard</a>
 	</div>
-	
+
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
@@ -112,10 +112,10 @@
 													<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yyyy" />
 												</td>
 												<td class="label_txt">
-													SUPERVISOR
+													${contrato.usuario.supervisorUsuario.nome }
 												</td>
 												<td class="label_txt">
-													CONSULTOR
+													${contrato.usuario.nome }
 												</td>
 												<td class="label_txt">
 													${contrato.formulario.parceiroNegocio.nome }
