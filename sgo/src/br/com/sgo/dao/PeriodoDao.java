@@ -12,6 +12,8 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Periodo;
 
 @Component
@@ -22,7 +24,7 @@ public class PeriodoDao extends Dao<Periodo> {
 	private Connection conn;
 	private ResultSet rsPeriodos;
 
-	private final String sqlPeriodos = "SELECT PERIODOS.periodos_id, PERIODOS.nome, PERIODOS.empresa_id, PERIODOS.organizacao_id FROM PERIODOS (NOLOCK)";
+	private final String sqlPeriodos = "SELECT PERIODO.periodos_id, PERIODO.nome, PERIODO.empresa_id, PERIODO.organizacao_id FROM PERIODO (NOLOCK)";
 
 	public PeriodoDao(Session session, ConnJDBC conexao) {
 		super(session, Periodo.class);
@@ -62,16 +64,16 @@ public class PeriodoDao extends Dao<Periodo> {
 		return periodos;
 	}
 
-	public Periodo buscaPeriodosByEmOrBanNome(Long empresa_id, Long organizacao_id, String nome) {
+	public Periodo buscaPeriodosByEmOrBanNome(Empresa empresa, Organizacao organizacao, String nome) {
 
 		String sql = sqlPeriodos;
 
-		if (empresa_id != null)
-			sql += " WHERE PERIODOS.empresa_id = ?";
-		if (organizacao_id != null)
-			sql += " AND PERIODOS.organizacao_id = ?";
+		if (empresa != null)
+			sql += " WHERE PERIODO.empresa_id = ?";
+		if (organizacao != null)
+			sql += " AND PERIODO.organizacao_id = ?";
 		if (nome != null)
-			sql += " AND PERIODOS.nome like ?";
+			sql += " AND PERIODO.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -81,8 +83,8 @@ public class PeriodoDao extends Dao<Periodo> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);		
+			this.stmt.setLong(1, empresa.getEmpresa_id());
+			this.stmt.setLong(2, organizacao.getOrganizacao_id());		
 			this.stmt.setString(3, "%" + nome + "%");
 
 			this.rsPeriodos = this.stmt.executeQuery();
