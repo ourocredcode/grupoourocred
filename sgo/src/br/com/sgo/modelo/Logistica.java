@@ -69,9 +69,6 @@ public class Logistica implements Serializable {
 	@Column(name = "dataassinatura")
 	private Calendar dataAssinatura;
 
-	@Column(name = "dataenvio")
-	private Calendar dataEnvio;
-
 	@Column(name = "nome")
 	private String nome;
 
@@ -182,14 +179,6 @@ public class Logistica implements Serializable {
 
 	public void setDataAssinatura(Calendar dataAssinatura) {
 		this.dataAssinatura = dataAssinatura;
-	}
-
-	public Calendar getDataEnvio() {
-		return dataEnvio;
-	}
-
-	public void setDataEnvio(Calendar dataEnvio) {
-		this.dataEnvio = dataEnvio;
 	}
 
 	public String getNome() {
