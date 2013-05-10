@@ -23,7 +23,7 @@ public class TipoLogistica implements Serializable {
 	@Id
 	@Column(name = "tipologistica_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long tipologistica_id;
+	private Long tipoLogistica_id;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
@@ -42,12 +42,12 @@ public class TipoLogistica implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
-	public Long getTipologistica_id() {
-		return tipologistica_id;
+	public Long getTipoLogistica_id() {
+		return tipoLogistica_id;
 	}
 
-	public void setTipologistica_id(Long tipologistica_id) {
-		this.tipologistica_id = tipologistica_id;
+	public void setTipoLogistica_id(Long tipoLogistica_id) {
+		this.tipoLogistica_id = tipoLogistica_id;
 	}
 
 	public Empresa getEmpresa() {

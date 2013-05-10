@@ -23,7 +23,7 @@ public class TipoLogisticaPerfil {
 
 	@ManyToOne
 	@JoinColumn(name = "tipologistica_id", updatable = true, nullable = false)
-	private TipoLogistica tipologistica_id;
+	private TipoLogistica tipoLogistica;
 
 	@ManyToOne
 	@JoinColumn(name = "perfil_id", updatable = true, nullable = false)
@@ -48,12 +48,12 @@ public class TipoLogisticaPerfil {
 		this.organizacao = organizacao;
 	}
 
-	public TipoLogistica getTipologistica_id() {
-		return tipologistica_id;
+	public TipoLogistica getTipoLogistica() {
+		return tipoLogistica;
 	}
 
-	public void setTipologistica_id(TipoLogistica tipologistica_id) {
-		this.tipologistica_id = tipologistica_id;
+	public void setTipoLogistica(TipoLogistica tipoLogistica) {
+		this.tipoLogistica = tipoLogistica;
 	}
 
 	public Perfil getPerfil() {
@@ -71,4 +71,7 @@ public class TipoLogisticaPerfil {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
+
+	
+	
 }
