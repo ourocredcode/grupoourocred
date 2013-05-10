@@ -580,6 +580,61 @@ function openPopup(url) {
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Logística</h5>
+					</div>
+					<div class="widget-content padding">
+						<div class="row-fluid"> 
+
+							<a href="#myModal" role="button" class="btn" data-toggle="modal">Nova Logística</a>
+
+							<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							  <div class="modal-header">
+							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							    <h3 id="myModalLabel">Cadastro Logística</h3>
+							  </div>
+							  <div class="modal-body">
+							  		<form action="<c:url value='/logistica/salva'/>"  method="post">
+							  			<div class="control-group">
+											<label class="control-label">Data Assinatura :</label>
+											<div class="controls">
+												<input id="logisticaDataAssinatura" name="logistica.dataAssinatura" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${logistica.dataAssinatura.time }" />" class="input-medium" />
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Tipo Logística :</label>
+											<div class="controls">
+												<input id="logisticaTipoLogistica" name="logistica.tipoLogistica" value="${logistica.tipoLogistica }" class="input-medium" />
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Período : </label>
+											<div class="controls">
+												<input id="logisticaPeriodo" name="logistica.periodo" value="${logistica.periodo }" class="input-medium" />
+											</div>
+										</div>
+							  		</form>
+							  </div>
+							  <div class="modal-footer">
+							    <button class="btn" data-dismiss="modal" aria-hidden="true">Fecha</button>
+							    <button class="btn btn-primary">Salva</button>
+							  </div>
+							</div>
+		
+						</div>
+					</div>
+
+				</div>
+			</div>										
+		</div>
+	</div>					
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Boleto</h5>
 						<c:if test="${empty boleto.controle_id }">
@@ -774,7 +829,7 @@ function openPopup(url) {
 						</div>
 
 						<div class="span2">
-							<label for="dataStatusFinal">Data Aprovado/Recusado</label>
+							<label for="dataStatusFinal">Data Aprova/Recusa</label>
 							<input id="dataStatusFinal" type="text" name="contratoStatus.dataStatusFinal" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataStatusFinal.time}" />" class="input-medium"/>
 						</div>
 						
@@ -816,11 +871,9 @@ function openPopup(url) {
 							</div>
 						</div>				
 
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>	
 
 <%@ include file="/footer.jspf" %> 
