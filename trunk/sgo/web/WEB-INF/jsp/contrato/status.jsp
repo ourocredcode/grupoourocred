@@ -613,7 +613,11 @@ function openPopup(url) {
 										<div class="control-group">
 											<label class="control-label">Período : </label>
 											<div class="controls">
-												<input id="logisticaPeriodo" name="logistica.periodo" value="${logistica.periodo }" class="input-medium" />
+												<select id="logisticaPeriodo" name="logistica.periodo">
+													<c:forEach var="periodo" items="${periodos }">
+														<option value="${periodo.periodo_id }">${periodo.nome }</option>
+													</c:forEach>
+												</select>
 											</div>
 										</div>
 							  		</form>

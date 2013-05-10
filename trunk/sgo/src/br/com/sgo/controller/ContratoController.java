@@ -13,6 +13,7 @@ import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.FormularioDao;
+import br.com.sgo.dao.PeriodoDao;
 import br.com.sgo.dao.ProdutoBancoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
@@ -22,8 +23,10 @@ import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Formulario;
+import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.Tabela;
+import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.WorkflowEtapa;
 
 @Resource
@@ -39,7 +42,7 @@ public class ContratoController {
 	private final ContratoDao contratoDao;
 	private final FormularioDao formularioDao;
 	private final WorkflowEtapaDao workFlowetapaDao;
-	
+	private final PeriodoDao periodoDao;
 
 	private Contrato contrato;
 	private Formulario formulario;
@@ -47,9 +50,12 @@ public class ContratoController {
 	private Collection<Produto> produtos;
 	private Collection<Coeficiente> coeficientes;
 	private Collection<WorkflowEtapa> etapas;
+	private Collection<Periodo> periodos;
+	private Collection<TipoLogistica> tiposLogistica;
 
 	public ContratoController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
-			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo){		
+			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
+			PeriodoDao periodoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -62,6 +68,7 @@ public class ContratoController {
 		this.coeficienteDao = coeficienteDao;
 		this.formularioDao = formularioDao;
 		this.tabelaDao = tabelaDao;
+		this.periodoDao = periodoDao;
 		this.workFlowetapaDao = workFlowetapaDao;
 
 	}
@@ -79,11 +86,13 @@ public class ContratoController {
 		contrato = contratoDao.load(id);
 		formulario = formularioDao.buscaFormularioByContrato(id);
 		etapas = workFlowetapaDao.buscaWorKFlowEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
+		periodos = periodoDao.buscaAllPeriodos();
 		etapas.add(contrato.getWorkflowEtapa());
 
 		result.include("formulario",formulario);
 		result.include("contrato",contrato);
 		result.include("etapas",etapas);
+		result.include("periodos", periodos);
 
 	}
 	
