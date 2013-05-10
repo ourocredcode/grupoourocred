@@ -133,80 +133,97 @@ function limpaForm() {
 }
 </script>
 
-<div class="span9">
+<div id="content-header">
+	<h1>Cadastro Agência</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+	</div>
+</div>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+		<a href="#" class="current">Função</a>
+	</div>
+	
+	<c:if test="${not empty notice}">
+		<c:choose>
+			<c:when test="${fn:contains(notice,'Erro:')}">
+					<div class="alert alert-error">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:when>
+			<c:otherwise>
+					<div class="alert alert-success">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="" id="agencia-li"><a href="#agencia-div" data-toggle="tab" id="agencia-li-a">Cadastro de Banco</a></li>				
+				<li class="" id="agencia-li"><a href="#agencia-div" data-toggle="tab" id="agencia-li-a">Cadastro de Agência</a></li>				
 			</ul>
 			<div id="myTabContent" class="tab-content">
 
-				<div class="tab-pane fade active in" id="agencia-div">
-				
-					<div class="row25MarginTop">
-						<div class="span3">
-							<form id="agenciaForm" name="agenciaForm" action="<c:url value="/agencia/salva"/>" method="POST">
-								<div class="control-group">
-									<label class="control-label" for="agenciaEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="agenciaEmpresa" name="agencia.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="agenciaEmpresaId" name="agencia.empresa.empresa_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="agenciaOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="agenciaOrganizacao" name="agencia.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="agenciaOrganizacaoId" name="agencia.organizacao.organizacao_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="agenciaBanco">Banco</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="agenciaBanco" name="agencia.banco.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="agenciaBancoId" name="agencia.banco.banco_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="agenciaNome">Nome</label>
-									<div class="controls">
-										<input type="text" id="agenciaNome" name="agencia.nome" placeholder="Nome" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="agenciaDescricao">Descrição</label>
-									<div class="controls">
-										<input type="text" id="agenciaDescricao" name="agencia.descricao" placeholder="Descrição" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="agenciaIsActive">Ativo</label>
-									<div class="controls">
-										<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="${agencia.isActive }" >							
-									</div>
-								</div>
-							 	<div class="btn-group">
-									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-								</div>
-							</form>
+				<div class="tab-pane fade active in" id="agencia-div">				
+
+					<form id="agenciaForm" name="agenciaForm" action="<c:url value="/agencia/salva"/>" method="POST">
+
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="agenciaEmpresa">Empresa</label>
+	      						<input class="span12" id="agenciaEmpresa" name="agencia.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="agenciaEmpresaId" name="agencia.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">			    					
+							</div>
+							<div class="span3">
+								<label for="agenciaOrganizacao">Organização</label>										
+	      						<input class="span12" id="agenciaOrganizacao" name="agencia.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="agenciaOrganizacaoId" name="agencia.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+	    					</div>
 						</div>
-						
-					</div>
+
+						<div class="row-fluid">
+							<div class="span2">	
+								<label for="agenciaBanco">Banco</label>						
+	      						<input class="span12" id="agenciaBanco" name="agencia.banco.nome" value="${agencia.banco.nome }" type="text" required onChange="limpaForm();">
+	      						<input class="span1" id="agenciaBancoId" name="agencia.banco.banco_id" value="${agencia.banco.banco_id }" type="hidden">	    					
+							</div>
+							<div class="span3">
+								<label for="agenciaNome">Nome</label>
+								<input class="span12" type="text" id="agenciaNome" name="agencia.nome" placeholder="Nome" value="${agencia.nome }" required>
+							</div>
+							<div class="span3">
+								<label  for="agenciaDescricao">Descrição</label>
+								<input class="span12" type="text" id="agenciaDescricao" name="agencia.descricao" value="${agencia.descricao }" placeholder="Descrição" required>							
+							</div>
+							<div class="span1">
+								<label class="control-label" for="agenciaIsActive">Ativo</label>
+								<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="${agencia.isActive }" >
+							</div>
+						</div>
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>
