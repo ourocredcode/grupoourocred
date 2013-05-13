@@ -49,8 +49,8 @@ public class Logistica implements Serializable {
 	private TipoLogistica tipoLogistica;
 
 	@ManyToOne
-	@JoinColumn(name = "periodos_id", updatable = true, nullable = false)
-	private Periodo periodos;
+	@JoinColumn(name = "periodo_id", updatable = true, nullable = false)
+	private Periodo periodo;
 
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = false)
@@ -133,14 +133,6 @@ public class Logistica implements Serializable {
 		this.tipoLogistica = tipoLogistica;
 	}
 
-	public Periodo getPeriodos() {
-		return periodos;
-	}
-
-	public void setPeriodos(Periodo periodos) {
-		this.periodos = periodos;
-	}
-
 	public Usuario getCreatedBy() {
 		return createdBy;
 	}
@@ -219,5 +211,13 @@ public class Logistica implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Periodo getPeriodo() {
+		return periodo;
+	}
+
+	public void setPeriodo(Periodo periodo) {
+		this.periodo = periodo;
 	}
 }

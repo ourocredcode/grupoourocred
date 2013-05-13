@@ -596,36 +596,38 @@ function openPopup(url) {
 							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 							    <h3 id="myModalLabel">Cadastro Logística</h3>
 							  </div>
-							  <div class="modal-body">
-							  		<form action="<c:url value='/logistica/salva'/>"  method="post">
-							  			<div class="control-group">
-											<label class="control-label">Data Assinatura :</label>
-											<div class="controls">
-												<input id="logisticaDataAssinatura" name="logistica.dataAssinatura" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${logistica.dataAssinatura.time }" />" class="input-medium" />
+							  <form action="<c:url value='/logistica/salva'/>"  method="post">
+								  <div class="modal-body">
+								  		
+								  			<div class="control-group">
+												<label class="control-label">Data Assinatura :</label>
+												<div class="controls">
+													<input id="logisticaDataAssinatura" name="logistica.dataAssinatura" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${logistica.dataAssinatura.time }" />" class="input-medium" />
+												</div>
 											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label">Tipo Logística :</label>
-											<div class="controls">
-												<input id="logisticaTipoLogistica" name="logistica.tipoLogistica" value="${logistica.tipoLogistica }" class="input-medium" />
+											<div class="control-group">
+												<label class="control-label">Tipo Logística :</label>
+												<div class="controls">
+													<input id="logisticaTipoLogistica" name="logistica.tipoLogistica" value="${logistica.tipoLogistica }" class="input-medium" />
+												</div>
 											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label">Período : </label>
-											<div class="controls">
-												<select id="logisticaPeriodo" name="logistica.periodo">
-													<c:forEach var="periodo" items="${periodos }">
-														<option value="${periodo.periodo_id }">${periodo.nome }</option>
-													</c:forEach>
-												</select>
+											<div class="control-group">
+												<label class="control-label">Período : </label>
+												<div class="controls">
+													<select id="logisticaPeriodo" name="logistica.periodo">
+														<c:forEach var="periodo" items="${periodos }">
+															<option value="${periodo.periodo_id }">${periodo.nome }</option>
+														</c:forEach>
+													</select>
+												</div>
 											</div>
-										</div>
-							  		</form>
-							  </div>
-							  <div class="modal-footer">
-							    <button class="btn" data-dismiss="modal" aria-hidden="true">Fecha</button>
-							    <button class="btn btn-primary">Salva</button>
-							  </div>
+								  		
+								  </div>
+								  <div class="modal-footer">
+								    <button class="btn" data-dismiss="modal" aria-hidden="true">Fecha</button>
+								    <button class="btn btn-primary" type="submit">Salva</button>
+								  </div>
+							</form>
 							</div>
 		
 						</div>

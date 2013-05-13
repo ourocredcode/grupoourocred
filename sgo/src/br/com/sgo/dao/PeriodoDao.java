@@ -24,7 +24,7 @@ public class PeriodoDao extends Dao<Periodo> {
 	private Connection conn;
 	private ResultSet rsPeriodos;
 
-	private final String sqlPeriodos = "SELECT PERIODO.periodos_id, PERIODO.nome, PERIODO.empresa_id, PERIODO.organizacao_id FROM PERIODO (NOLOCK)";
+	private final String sqlPeriodos = " SELECT PERIODO.periodo_id, PERIODO.nome, PERIODO.empresa_id, PERIODO.organizacao_id FROM PERIODO (NOLOCK) ";
 
 	public PeriodoDao(Session session, ConnJDBC conexao) {
 		super(session, Periodo.class);
