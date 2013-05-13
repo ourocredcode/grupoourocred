@@ -79,14 +79,7 @@ public class WorkflowController {
 		result.redirectTo(this).cadastro();
 
 	}
-	/*
-	@Get
-	@Path("/workflow/busca.json")
-	@Public
-	public void workflow(Long empresa_id, Long organizacao_id, String nome) {	
-		result.use(Results.json()).withoutRoot().from(workflowDao.buscaWorkflowsPorNome(empresa_id, organizacao_id, nome)).serialize();
-	}
-*/
+
 	@Get
 	@Path("/workflow/busca.json")
 	@Public
