@@ -73,6 +73,10 @@ public class LogisticaController {
 	@Path("/logistica/salva")
 	public void salva(Logistica logistica) {
 
+		System.out.println(logistica.getDataAssinatura().getTime());
+		System.out.println(logistica.getTipoLogistica().getNome());
+		System.out.println(logistica.getPeriodo());
+
 	}
 
 }
