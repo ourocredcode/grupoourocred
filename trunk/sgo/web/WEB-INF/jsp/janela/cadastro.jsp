@@ -39,10 +39,6 @@ jQuery(function($){
 	$('#tipodadobd-li-a').click(function() {
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
 	});
-
-	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/colunabd/cadastro" />';
-	});
 	
 	$('#janelaEmpresa').autocomplete({
 		source: function( request, response ) {
@@ -110,8 +106,20 @@ jQuery(function($){
          }
     });
 
-	$("#menuIsActive").change(function(e){
-		$(this).val( $("#menuIsActive:checked").length > 0 ? true : false);
+	$("#janelaIsActive").change(function(e){
+		if(document.janelaForm.janelaIsActive.checked==true){
+			document.janelaForm.janelaIsActive.value=true;
+		}else{
+			document.janelaForm.janelaIsActive.value=false;
+		}
+	});
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/janela/cadastro" />';
+	});
+
+	$('#btnNovo').click(function() {
+		limpaForm();
 	});
 
 });
@@ -119,7 +127,7 @@ jQuery(function($){
 function limpaForm(){
 
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.colunaBdForm.reset();
+		document.janelaForm.reset();
 	}
 
 }
@@ -205,7 +213,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="janelaIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="janelaIsActive" name="janela.isActive" value="${janela.isActive }">							
+								<input type="checkbox" id="janelaIsActive" name="janela.isActive" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

@@ -212,7 +212,11 @@ jQuery(function($){
              return false;
          }
     });
-	
+
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/colunabd/cadastro" />';
 	});

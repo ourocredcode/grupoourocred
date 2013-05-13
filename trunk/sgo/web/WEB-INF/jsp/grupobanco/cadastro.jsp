@@ -85,24 +85,28 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		limpaForm();
 	});
 
 	$("#grupoBancoIsActive").change(function(e){
-		$(this).val( $("#grupoBancoIsActive:checked").length > 0 ? true : false);
+		if(document.grupoBancoForm.grupoBancoIsActive.checked==true){
+			document.grupoBancoForm.grupoBancoIsActive.value=true;
+		}else{
+			document.grupoBancoForm.grupoBancoIsActive.value=false;
+		}
 	});
 
 });
 
 function limpaForm() {
 	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
-		document.produtoForm.reset();
+		document.grupoBancoForm.reset();
 	}
 }
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Banco</h1>
+		<h1>Cadastro Grupo Banco</h1>
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
@@ -163,7 +167,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="grupoBancoIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="grupoBancoIsActive" name="grupoBanco.isActive" checked="checked" value="${grupoBanco.isActive }" >							
+										<input type="checkbox" id="grupoBancoIsActive" name="grupoBanco.isActive" checked="checked" value="1" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

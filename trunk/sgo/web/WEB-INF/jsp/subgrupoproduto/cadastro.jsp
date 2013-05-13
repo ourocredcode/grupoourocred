@@ -2,6 +2,7 @@
 
 <script type="text/javascript">
 jQuery(function($){
+
 	$('#grupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/grupoproduto/cadastro" />';
 	});
@@ -9,7 +10,7 @@ jQuery(function($){
 	$('#subgrupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/subgrupoproduto/cadastro" />';
 	});
-	
+
 	$('#produto-li-a').click(function() {
 		window.location.href = '<c:url value="/produto/cadastro" />';
 	});
@@ -82,7 +83,7 @@ jQuery(function($){
              return false;
          }
     });
-	
+
 	$('#subGrupoProdutoGrupoProduto').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -123,11 +124,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		limpaForm();
 	});
 
 	$("#subGrupoProdutoIsActive").change(function(e){
-		$(this).val( $("#subGrupoProdutoIsActive:checked").length > 0 ? true : false);
+		if(document.subGrupoProdutoForm.subGrupoProdutoIsActive.checked==true){
+			document.subGrupoProdutoForm.subGrupoProdutoIsActive.value=true;
+		}else{
+			document.subGrupoProdutoForm.subGrupoProdutoIsActive.value=false;
+		}
 	});
 
 });
@@ -211,7 +216,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="subGrupoProdutoIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="subGrupoProdutoIsActive" name="subGrupoProduto.isActive" checked="checked" value="${subGrupoProduto.isActive }" >							
+										<input type="checkbox" id="subGrupoProdutoIsActive" name="subGrupoProduto.isActive" checked="checked" value="1" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

@@ -81,11 +81,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		limpaForm();
 	});
 
-	$("#menuIsActive").change(function(e){
-		$(this).val( $("#menuIsActive:checked").length > 0 ? true : false);
+	$("#tipoParceiroIsActive").change(function(e){
+		if(document.tipoParceiroForm.tipoParceiroIsActive.checked==true){
+			document.tipoParceiroForm.tipoParceiroIsActive.value=true;
+		}else{
+			document.tipoParceiroForm.tipoParceiroIsActive.value=false;
+		}
 	});
 
 });
@@ -143,7 +147,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="tipoParceiroIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="tipoParceiroIsActive" name="tipoParceiro.isActive" checked="checked" value="${tipoParceiro.isActive }" >							
+										<input type="checkbox" id="tipoParceiroIsActive" name="tipoParceiro.isActive" checked="checked" value="1" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

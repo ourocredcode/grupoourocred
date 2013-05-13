@@ -81,11 +81,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		limpaForm();
 	});
 
 	$("#tipoProdutoIsActive").change(function(e){
-		$(this).val( $("#tipoProdutoIsActive:checked").length > 0 ? "1" : "0");
+		if(document.tipoProdutoForm.tipoProdutoIsActive.checked==true){
+			document.tipoProdutoForm.tipoProdutoIsActive.value=true;
+		}else{
+			document.tipoProdutoForm.tipoProdutoIsActive.value=false;
+		}
 	});
 
 });
@@ -143,7 +147,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="tipoProdutoIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="tipoProdutoIsActive" name="tipoProduto.isActive" checked="checked" value="${tipoProduto.isActive }" >							
+										<input type="checkbox" id="tipoProdutoIsActive" name="tipoProduto.isActive" checked="checked" value="1" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

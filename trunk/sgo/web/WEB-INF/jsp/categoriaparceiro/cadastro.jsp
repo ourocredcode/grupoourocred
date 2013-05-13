@@ -81,11 +81,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		document.categoriaParceiroForm.reset();
 	});
 
 	$("#categoriaParceiroIsActive").change(function(e){
-		$(this).val( $("#categoriaParceiroIsActive:checked").length > 0 ? true : false);
+		if(document.categoriaParceiroForm.categoriaParceiroIsActive.checked==true){
+			document.categoriaParceiroForm.categoriaParceiroIsActive.value=true;
+		}else{
+			document.categoriaParceiroForm.categoriaParceiroIsActive.value=false;
+		}
 	});
 
 });
@@ -143,7 +147,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="categoriaParceiroIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="categoriaParceiroIsActive" name="categoriaParceiro.isActive" checked="checked" value="${categoriaParceiro.isActive }" >							
+										<input type="checkbox" id="categoriaParceiroIsActive" name="categoriaParceiro.isActive" checked="checked" value="1" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

@@ -164,15 +164,23 @@ jQuery(function($){
 	});
 	
 	$('#btnNovo').click(function() {
-		document.workflowPerfilAcessoForm.reset();
+		limpaForm();
 	});
 	
 	$("#workflowPerfilAcessoIsActive").change(function(e){
-		$(this).val( $("#workflowPerfilAcessoIsActive:checked").length > 0 ? true : false);
+		if(document.workflowPerfilAcessoForm.workflowPerfilAcessoIsActive.checked==true){
+			document.workflowPerfilAcessoForm.workflowPerfilAcessoIsActive.value=true;
+		}else{
+			document.workflowPerfilAcessoForm.workflowPerfilAcessoIsActive.value=false;
+		}
 	});
 	
 	$("#workflowPerfilAcessoIsLeituraEscrita").change(function(e){
-		$(this).val( $("#workflowPerfilAcessoIsLeituraEscrita:checked").length > 0 ? true : false);
+		if(document.workflowPerfilAcessoForm.workflowPerfilAcessoIsLeituraEscrita.checked==true){
+			document.workflowPerfilAcessoForm.workflowPerfilAcessoIsLeituraEscrita.value=true;
+		}else{
+			document.workflowPerfilAcessoForm.workflowPerfilAcessoIsLeituraEscrita.value=false;
+		}
 	});
 
 });
@@ -263,11 +271,11 @@ function limpaForm(){
 							</div>
 							<div class="span1">
 								<label for="workflowPerfilAcessoIsActive">Ativo</label>
-								<input id="workflowPerfilAcessoIsActive" name="workflowPerfilAcesso.isActive" value="${workflowPerfilAcesso.isActive }" type="checkbox" checked="checked" >
+								<input id="workflowPerfilAcessoIsActive" name="workflowPerfilAcesso.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
 							<div class="span2">
 								<label for="workflowPerfilAcessoIsLeituraEscrita">Leitura e Escrita</label>
-								<input id="workflowPerfilAcessoIsLeituraEscrita" name="workflowPerfilAcesso.isLeituraEscrita" value="${workflowPerfilAcesso.isLeituraEscrita }" type="checkbox" checked="checked" >
+								<input id="workflowPerfilAcessoIsLeituraEscrita" name="workflowPerfilAcesso.isLeituraEscrita" type="checkbox" checked="checked" value="1" >
 							</div>
 						</div>	
 						<div class="btn-toolbar">

@@ -106,8 +106,20 @@ jQuery(function($){
          }
     });
 
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/tabelabd/cadastro" />';
+	});
+
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+
 	$("#tabelaBdIsActive").change(function(e){
-		$(this).val( $("#tabelaBdIsActive:checked").length > 0 ? true : false);
+		if(document.tabelaBdForm.tabelaBdIsActive.checked==true){
+			document.tabelaBdForm.tabelaBdIsActive.value=true;
+		}else{
+			document.tabelaBdForm.tabelaBdIsActive.value=false;
+		}
 	});
 
 });

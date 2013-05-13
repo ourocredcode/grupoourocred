@@ -8,7 +8,11 @@ jQuery(function($){
 	});
 
 	$("#hisconBeneficioIsActive").change(function(e){
-		$(this).val( $("#hisconBeneficioIsActive:checked").length > 0 ? "1" : "0");
+		if(document.hisconBeneficioForm.hisconBeneficioIsActive.checked==true){
+			document.hisconBeneficioForm.hisconBeneficioIsActive.value=true;
+		}else{
+			document.hisconBeneficioForm.hisconBeneficioIsActive.value=false;
+		}
 	});
 
 	$('#btnNovo').click(function() {		
@@ -93,14 +97,14 @@ function limpaForm() {
 					<div class="row-fluid">
 						<div class="span3">
 							<label for="hisconBeneficioEmpresa">Empresa</label>
-							<input class="input-medium" id="hisconBeneficioEmpresaId" name="hisconBeneficio.empresa.empresa_id" value="${hisconBeneficio.empresa.empresa_id }" type="hidden" />
-							<input class="input-xlarge" id="hisconBeneficioEmpresa" name="hisconBeneficio.empresa.nome" value="${hisconBeneficio.empresa.nome }" type="text" />
+							<input class="input-medium" id="hisconBeneficioEmpresaId" name="hisconBeneficio.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden" />
+							<input class="input-xlarge" id="hisconBeneficioEmpresa" name="hisconBeneficio.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" />
 						</div>
 		
 						<div class="span3">
 							<label for="hisconBeneficioOrganizacao">Organização</label>
-							<input  class="input-medium" id="hisconBeneficioOrganizacaoId" name="hisconBeneficio.organizacao.organizacao_id"  value="${hisconBeneficio.organizacao.organizacao_id }" type="hidden" />
-							<input  class="input-xlarge" id="hisconBeneficioOrganizacao" name="hisconBeneficio.organizacao.nome" value="${hisconBeneficio.organizacao.nome }" type="text" />							
+							<input  class="input-medium" id="hisconBeneficioOrganizacaoId" name="hisconBeneficio.organizacao.organizacao_id"  value="${usuarioInfo.organizacao.organizacao_id }" type="hidden" />
+							<input  class="input-xlarge" id="hisconBeneficioOrganizacao" name="hisconBeneficio.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" />							
 						</div>
 					</div>
 

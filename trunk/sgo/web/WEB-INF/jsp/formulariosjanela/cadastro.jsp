@@ -39,10 +39,6 @@ jQuery(function($){
 	$('#tipodadobd-li-a').click(function() {
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
 	});
-
-	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/colunabd/cadastro" />';
-	});
 	
 	$('#formulariosJanelaEmpresa').autocomplete({
 		source: function( request, response ) {
@@ -183,17 +179,37 @@ jQuery(function($){
              return false;
          }
     });
-	
+
 	$("#formulariosJanelaIsMostrado").change(function(e){
-		$(this).val( $("#formulariosJanelaIsMostrado:checked").length > 0 ? true : false);
+		if(document.formulariosJanelaForm.formulariosJanelaIsMostrado.checked==true){
+			document.formulariosJanelaForm.formulariosJanelaIsMostrado.value=true;
+		}else{
+			document.formulariosJanelaForm.formulariosJanelaIsMostrado.value=false;
+		}
 	});
 	
 	$("#formulariosJanelaIsSomenteLeitura").change(function(e){
-		$(this).val( $("#formulariosJanelaIsSomenteLeitura:checked").length > 0 ? true : false);
+		if(document.formulariosJanelaForm.formulariosJanelaIsSomenteLeitura.checked==true){
+			document.formulariosJanelaForm.formulariosJanelaIsSomenteLeitura.value=true;
+		}else{
+			document.formulariosJanelaForm.formulariosJanelaIsSomenteLeitura.value=false;
+		}
 	});
 	
 	$("#formulariosJanelaIsActive").change(function(e){
-		$(this).val( $("#formulariosJanelaIsActive:checked").length > 0 ? true : false);
+		if(document.formulariosJanelaForm.formulariosJanelaIsActive.checked==true){
+			document.formulariosJanelaForm.formulariosJanelaIsActive.value=true;
+		}else{
+			document.formulariosJanelaForm.formulariosJanelaIsActive.value=false;
+		}
+	});
+	
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/formulariosjanela/cadastro" />';
+	});
+
+	$('#btnNovo').click(function() {
+		limpaForm();
 	});
 
 });
@@ -201,11 +217,10 @@ jQuery(function($){
 function limpaForm(){
 
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.colunaBdForm.reset();
+		document.formulariosJanelaForm.reset();
 	}
 
 }
-
 
 </script>
 
@@ -313,19 +328,19 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="formulariosJanelaIsMostrado">Mostrado</label>
 							<div class="controls">
-								<input type="checkbox" id="formulariosJanelaIsMostrado" name="formulariosJanela.isMostrado" checked="checked" value="${formulariosJanela.isMostrado }">							
+								<input type="checkbox" id="formulariosJanelaIsMostrado" name="formulariosJanela.isMostrado" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="formulariosJanelaIsSomenteLeitura">Leitura</label>
 							<div class="controls">
-								<input type="checkbox" id="formulariosJanelaIsSomenteLeitura" name="formulariosJanela.isSomenteLeitura" checked="checked" value="${formulariosJanela.isSomenteLeitura }">							
+								<input type="checkbox" id="formulariosJanelaIsSomenteLeitura" name="formulariosJanela.isSomenteLeitura" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="formulariosJanelaIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="formulariosJanelaIsActive" name="formulariosJanela.isActive" checked="checked" value="${formulariosJanela.isActive }">							
+								<input type="checkbox" id="formulariosJanelaIsActive" name="formulariosJanela.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

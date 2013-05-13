@@ -188,14 +188,28 @@ jQuery(function($){
 		       });
 		});
 	   
-	   $('#bttNovo').click(function() {
+	   $('#btnSair').click(function() {
 			window.location.href = '<c:url value="/parceiroinfobanco/cadastro" />';
 		});
+
+		$('#btnNovo').click(function() {
+			limpaForm();
+		});
+
+		$("#parceiroInfoBancoIsActive").change(function(e){
+			if(document.parceiroInfoBancoForm.parceiroInfoBancoIsActive.checked==true){
+				document.parceiroInfoBancoForm.parceiroInfoBancoIsActive.value=true;
+			}else{
+				document.parceiroInfoBancoForm.parceiroInfoBancoIsActive.value=false;
+			}
+		});
+		
+	  
 });
 
 function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.usuarioForm.reset();
+		document.parceiroInfoBancoForm.reset();
 	}	
 }
 

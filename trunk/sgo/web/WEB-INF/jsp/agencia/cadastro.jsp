@@ -117,11 +117,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		document.agenciaForm.reset();
 	});
 
 	$("#agenciaIsActive").change(function(e){
-		$(this).val( $("#agenciaIsActive:checked").length > 0 ? true : false);
+		if(document.agenciaForm.agenciaIsActive.checked==true){
+			document.agenciaForm.agenciaIsActive.value=true;
+		}else{
+			document.agenciaForm.agenciaIsActive.value=false;
+		}
 	});
 
 });
@@ -199,7 +203,7 @@ function limpaForm() {
 							</div>
 							<div class="span3">
 								<label for="agenciaNome">Nome</label>
-								<input class="span12" type="text" id="agenciaNome" name="agencia.nome" placeholder="Nome" value="${agencia.nome }" required>
+								<input class="span12" type="text" id="agenciaNome" name="agencia.nome" placeholder="Nome" value="1" required>
 							</div>
 							<div class="span3">
 								<label  for="agenciaDescricao">Descrição</label>

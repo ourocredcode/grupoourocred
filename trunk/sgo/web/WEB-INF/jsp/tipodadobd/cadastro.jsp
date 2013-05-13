@@ -109,11 +109,6 @@ jQuery(function($){
 	         }
 	    });
 	
-		$('#btnSair').click(function() {
-			window.location.href = '<c:url value="/tipodadobd/cadastro" />';
-		});
-
-	
 		$("#tipoDadoBdEmpresa").change(function() {
 			var empresa_id = $("#tipoDadoBdEmpresaId").val();
 			var organizacao_id = $("#tipoDadoBdOrganizacaoId").val();
@@ -147,20 +142,32 @@ jQuery(function($){
 				'nome' : nome
 			});
 		});
-		
+
+		$('#btnNovo').click(function() {
+			limpaForm();
+		});
+
+		$('#btnSair').click(function() {
+			window.location.href = '<c:url value="/tipodadobd/cadastro" />';
+		});
+
 		$("#tipoDadoBdIsActive").change(function(e){
-			$(this).val( $("#tipoDadoBdIsActive:checked").length > 0 ? true : false);
+			if(document.tipoDadoBdForm.tipoDadoBdIsActive.checked==true){
+				document.tipoDadoBdForm.tipoDadoBdIsActive.value=true;
+			}else{
+				document.tipoDadoBdForm.tipoDadoBdIsActive.value=false;
+			}
 		});
 
 	});
 
-	function limpaForm() {
+function limpaForm() {
 
-		if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
-			document.colunaBdForm.reset();
-		}
-
+	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
+		document.tipoDadoBdForm.reset();
 	}
+
+}
 </script>
 
 <div id="content-header">

@@ -150,9 +150,21 @@ jQuery(function($){
              return false;
          }
     });
-	
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/usuarioperfil/cadastro" />';
+	});
+
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+
 	$("#usuarioPerfilIsActive").change(function(e){
-		$(this).val( $("#workflowIsActive:checked").length > 0 ? true : false);
+		if(document.usuarioPerfilForm.usuarioPerfilIsActive.checked==true){
+			document.usuarioPerfilForm.usuarioPerfilIsActive.value=true;
+		}else{
+			document.usuarioPerfilForm.usuarioPerfilIsActive.value=false;
+		}
 	});
 
 });
@@ -160,7 +172,7 @@ jQuery(function($){
 function limpaForm(){
 
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.elementoBdForm.reset();
+		document.usuarioPerfilForm.reset();
 	}
 
 }
@@ -204,7 +216,7 @@ function limpaForm(){
 
 				<div class="tab-pane fade  active in" id="usuarioperfil-div">					
 						
-						<form id="perfilJanelaAcessoForm" name="usuarioPerfilForm" action="<c:url value="/usuarioperfil/salva"/>" method="POST">
+						<form id="usuarioPerfilForm" name="usuarioPerfilForm" action="<c:url value="/usuarioperfil/salva"/>" method="POST">
 
 						<div class="control-group">
 							<label class="control-label" for="usuarioPerfilEmpresa">Empresa</label>
@@ -241,7 +253,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="usuarioPerfilIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="usuarioPerfilIsActive" name="usuarioPerfil.isActive" checked="checked" value="${usuarioPerfil.isActive }">							
+								<input type="checkbox" id="usuarioPerfilIsActive" name="usuarioPerfil.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

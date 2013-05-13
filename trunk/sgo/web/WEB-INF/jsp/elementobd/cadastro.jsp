@@ -173,7 +173,6 @@ jQuery(function($){
 			'nomeColunaBd' : nomeColunaBd
 		});
 	});
-	
 
 	$("#elementoBdNomeColunaBd").blur(function() {
 		var empresa_id = $("#elementoBdEmpresaId").val();
@@ -190,6 +189,22 @@ jQuery(function($){
 			'organizacao_id' : organizacao_id,
 			'nomeColunaBd' : nomeColunaBd
 		});
+	});
+
+	$("#elementoBdIsActive").change(function(e){
+		if(document.elementoBdForm.elementoBdIsActive.checked==true){
+			document.elementoBdForm.elementoBdIsActive.value=true;
+		}else{
+			document.elementoBdForm.elementoBdIsActive.value=false;
+		}
+	});
+
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/elementobd/cadastro" />';
 	});
 	
 });
