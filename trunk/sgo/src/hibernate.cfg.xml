@@ -96,6 +96,7 @@
 		<mapping class="br.com.sgo.modelo.Sexo" />
 		<mapping class="br.com.sgo.modelo.EstadoCivil" />
 		<mapping class="br.com.sgo.modelo.Calendario" />
+		<mapping class="br.com.sgo.modelo.Periodo" />
 		
 		<mapping class="br.com.sgo.modelo.Workflow" />
 		<mapping class="br.com.sgo.modelo.WorkflowEtapa" />
