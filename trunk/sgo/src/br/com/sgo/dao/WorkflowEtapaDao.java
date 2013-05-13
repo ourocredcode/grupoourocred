@@ -170,6 +170,46 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 		return workflowetapa;
 	}
 	
+	public Collection<WorkflowEtapa> buscaWorkflowEtapasByNome(Long empresa, Long organizacao, String nome) {
+		String sql = sqlWorkflowEtapa;
+		
+		if (empresa != null)
+			sql += " WHERE WORKFLOWETAPA.empresa_id = ?";
+		if (organizacao != null)
+			sql += " AND WORKFLOWETAPA.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND (WORKFLOWETAPA.nome like ?)";
+		
+		this.conn = this.conexao.getConexao();
+		
+		Collection<WorkflowEtapa> workflowEtapas =  new ArrayList<WorkflowEtapa>();
+
+		try {
+			
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa);
+			this.stmt.setLong(2, organizacao);
+			this.stmt.setString(3, "%" + nome + "%");
+			
+			this.rsWorkflowEtapa = this.stmt.executeQuery();
+			
+			while (rsWorkflowEtapa.next()) {
+
+				WorkflowEtapa workflowetapa = new WorkflowEtapa();
+				workflowetapa.setWorkflowEtapa_id(rsWorkflowEtapa.getLong("workflowetapa_id"));
+				workflowetapa.setNome(rsWorkflowEtapa.getString("nome"));
+				
+				workflowEtapas.add(workflowetapa);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsWorkflowEtapa, stmt, conn);
+		return workflowEtapas;
+	}
+	
 	public WorkflowEtapa buscaWorkflowEtapaById(Long workflowEtapa_id) {
 		String sql = sqlWorkflowEtapa;
 

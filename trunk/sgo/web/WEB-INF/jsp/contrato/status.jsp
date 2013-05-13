@@ -4,6 +4,9 @@
 $(document).ready(function() {
 
 	$("#dataStatusFinal").mask("99/99/9999");
+	
+	$("#logisticaDataAssinatura").mask("99/99/9999");
+
 	$("#dataConcluido").mask("99/99/9999");
 	$("#dataDigitacao").mask("99/99/9999");
 	$("#dataQuitacao").mask("99/99/9999");
@@ -589,7 +592,44 @@ function openPopup(url) {
 					<div class="widget-content padding">
 						<div class="row-fluid"> 
 
-							<a href="#myModal" role="button" class="btn" data-toggle="modal">Nova Logística</a>
+							<div id="logisticasDiv">
+
+								<c:if test="${not empty logisticas }">
+									<table class="table table-striped table-bordered" id="lista">
+										<thead>
+											<tr>
+												<th>Data Assinatura</th>
+												<th>Tipo Logística</th>
+												<th>Período</th>
+											</tr>
+										</thead>
+										<tbody>	
+											<c:forEach items="${logisticas}" var="logistica">
+												<tr>
+													<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${logistica.dataAssinatura.time }" /></td>
+													<td>${logistica.tipoLogistica.nome }</td>
+													<td>${logistica.periodo.nome }</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</c:if>
+							</div>
+
+							<div class="row-fluid"> 
+								<div class="span2">
+									<a href="#myModal" role="button" class="btn" data-toggle="modal">Nova Logística</a>
+								</div>
+								<div class="span1">
+									<form action="<c:url value="/checklist/${formulario.formulario_id}"/>">
+										<input type="submit" value="CheckList" class="btn"/>
+									</form>
+								</div>
+							</div>
+
+							
+
+							
 
 							<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 							  <div class="modal-header">
@@ -598,30 +638,46 @@ function openPopup(url) {
 							  </div>
 							  <form action="<c:url value='/logistica/salva'/>"  method="post">
 								  <div class="modal-body">
-								  		
-								  			<div class="control-group">
-												<label class="control-label">Data Assinatura :</label>
-												<div class="controls">
-													<input id="logisticaDataAssinatura" name="logistica.dataAssinatura" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${logistica.dataAssinatura.time }" />" class="input-medium" />
-												</div>
+									<div style="float: left;">
+							  			<div class="control-group">
+											<label class="control-label">Data Assinatura :</label>
+											<div class="controls">
+												<input id="logisticaDataAssinatura" name="logistica.dataAssinatura" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${logistica.dataAssinatura.time }" />" class="input-medium" />
 											</div>
-											<div class="control-group">
-												<label class="control-label">Tipo Logística :</label>
-												<div class="controls">
-													<input id="logisticaTipoLogistica" name="logistica.tipoLogistica" value="${logistica.tipoLogistica }" class="input-medium" />
-												</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Tipo Logística :</label>
+											<div class="controls">
+												<select id="logisticaTipoLogisticaId" name="logistica.tipoLogistica.tipoLogistica_id">
+													<c:forEach var="tipoLogistica" items="${tiposLogistica }">
+														<option value="${tipoLogistica.tipoLogistica_id }">${tipoLogistica.nome }</option>
+													</c:forEach>
+												</select>
 											</div>
-											<div class="control-group">
-												<label class="control-label">Período : </label>
-												<div class="controls">
-													<select id="logisticaPeriodo" name="logistica.periodo">
-														<c:forEach var="periodo" items="${periodos }">
-															<option value="${periodo.periodo_id }">${periodo.nome }</option>
-														</c:forEach>
-													</select>
-												</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Período : </label>
+											<div class="controls">
+												<select id="logisticaPeriodoId" name="logistica.periodo.periodo_id">
+													<c:forEach var="periodo" items="${periodos }">
+														<option value="${periodo.periodo_id }">${periodo.nome }</option>
+													</c:forEach>
+												</select>
 											</div>
-								  		
+										</div>
+									</div>	
+									<div style="float: left;margin-left: 10px;">
+										<div class="control-group">
+											<label class="control-label">Incluir Contratos do mesmo Formulário: </label>
+											<div class="controls">
+												<select id="contrato_ids[]" name="contrato_ids[]" multiple="multiple" style="width: 300px">
+													<c:forEach var="contrato" items="${contratos }">
+														<option value="${contrato.contrato_id }">${contrato.produto.nome } - ${contrato.workflowEtapa.nome }</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</div>
 								  </div>
 								  <div class="modal-footer">
 								    <button class="btn" data-dismiss="modal" aria-hidden="true">Fecha</button>

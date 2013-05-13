@@ -18,8 +18,11 @@ import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Formulario;
+import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.ParceiroNegocio;
+import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
+import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.WorkflowEtapa;
 
@@ -46,10 +49,14 @@ public class ContratoDao extends Dao<Contrato> {
 			"CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio,   " +
 			"B1.nome as banco_nome, B2.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor,   " +
 			"PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf,  " +
-			"CONTRATO.workflowetapa_id, WORKFLOWETAPA.nome as workflowetapa_nome   " +
+			"CONTRATO.workflowetapa_id, WORKFLOWETAPA.nome as workflowetapa_nome, LOGISTICA.dataassinatura, LOGISTICA.logistica_id ," +
+			" TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome as tipologistica_nome  , PERIODO.periodo_id, PERIODO.nome as periodo_nome " +
 			"FROM   " +
-"((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
+"(((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
 				 "INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id)   " +
+				 " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.contrato_id = CONTRATO.contrato_id) " +
+				 " LEFT JOIN TIPOLOGISTICA (NOLOCK) ON TIPOLOGISTICA.tipologistica_id = LOGISTICA.tipologistica_id " +
+				 " LEFT JOIN PERIODO (NOLOCK) ON PERIODO.periodo_id = LOGISTICA.periodo_id " +
 				 "INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id)   " +
 				 "INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)   " +
 				 "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)   " +
@@ -123,7 +130,7 @@ public class ContratoDao extends Dao<Contrato> {
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contratos;
 	}
-	
+
 	public Contrato buscaContratoById(Long contrato_id) {
 
 		String sql = sqlContrato;
@@ -158,6 +165,7 @@ public class ContratoDao extends Dao<Contrato> {
 			throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
+		Calendar dataAssinatura = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		Usuario supervisor = new Usuario();
@@ -166,6 +174,9 @@ public class ContratoDao extends Dao<Contrato> {
 		Coeficiente coeficiente = new Coeficiente();
 		Produto produto = new Produto();
 		WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+		Logistica logistica = new Logistica();
+		Periodo periodo = new Periodo();
+		TipoLogistica tipoLogistica = new TipoLogistica();
 		
 		Banco b1 = new Banco();
 		Banco b2 = new Banco();
@@ -202,6 +213,21 @@ public class ContratoDao extends Dao<Contrato> {
 		workflowEtapa.setWorkflowEtapa_id(rsContrato.getLong("workflowetapa_id"));
 		workflowEtapa.setNome(rsContrato.getString("workflowetapa_nome"));
 
+		periodo.setPeriodo_id(rsContrato.getLong("periodo_id"));
+		periodo.setNome(rsContrato.getString("periodo_nome"));
+
+		tipoLogistica.setTipoLogistica_id(rsContrato.getLong("tipologistica_id"));
+		tipoLogistica.setNome(rsContrato.getString("tipologistica_nome"));
+
+		logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
+		logistica.setPeriodo(periodo);
+		logistica.setTipoLogistica(tipoLogistica);
+
+		if(rsContrato.getDate("dataassinatura") != null){
+			dataAssinatura.setTime(rsContrato.getDate("dataassinatura"));
+			logistica.setDataAssinatura(dataAssinatura);
+		}
+
 		formulario.setParceiroNegocio(parceiro);
 		contrato.setFormulario(formulario);
 		contrato.setCoeficiente(coeficiente);
@@ -219,6 +245,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 		contrato.setPrazo(rsContrato.getInt("prazo"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
+		contrato.setLogistica(logistica);
 
 		contratos.add(contrato);
 	}
@@ -227,13 +254,17 @@ public class ContratoDao extends Dao<Contrato> {
 			throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
+		Calendar dataAssinatura = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		ParceiroNegocio parceiro = new ParceiroNegocio();
 		Coeficiente coeficiente = new Coeficiente();
 		Produto produto = new Produto();
 		WorkflowEtapa workflowEtapa = new WorkflowEtapa();
-		
+		Logistica logistica = new Logistica();
+		Periodo periodo = new Periodo();
+		TipoLogistica tipoLogistica = new TipoLogistica();
+
 		Banco b1 = new Banco();
 		Banco b2 = new Banco();
 
@@ -265,6 +296,27 @@ public class ContratoDao extends Dao<Contrato> {
 		workflowEtapa.setWorkflowEtapa_id(rsContrato.getLong("workflowetapa_id"));
 		workflowEtapa.setNome(rsContrato.getString("workflowetapa_nome"));
 
+		periodo.setPeriodo_id(rsContrato.getLong("periodo_id"));
+		periodo.setNome(rsContrato.getString("periodo_nome"));
+
+		tipoLogistica.setTipoLogistica_id(rsContrato.getLong("tipologistica_id"));
+		tipoLogistica.setNome(rsContrato.getString("tipologistica_nome"));
+
+		logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
+		logistica.setPeriodo(periodo);
+		logistica.setTipoLogistica(tipoLogistica);
+
+		
+		logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
+
+		if(rsContrato.getDate("dataassinatura") != null){
+			dataAssinatura.setTime(rsContrato.getDate("dataassinatura"));
+			logistica.setDataAssinatura(dataAssinatura);
+		}
+			
+
+		
+
 		formulario.setParceiroNegocio(parceiro);
 		contrato.setFormulario(formulario);
 		contrato.setCoeficiente(coeficiente);
@@ -282,6 +334,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 		contrato.setPrazo(rsContrato.getInt("prazo"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
+		contrato.setLogistica(logistica);
 
 	}
 

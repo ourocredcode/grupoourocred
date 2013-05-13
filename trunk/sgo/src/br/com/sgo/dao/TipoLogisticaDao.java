@@ -24,7 +24,7 @@ public class TipoLogisticaDao extends Dao<TipoLogistica> {
 	private Connection conn;
 	private ResultSet rsTipoLogistica;
 
-	private final String sqlTipoLogisticas = "SELECT TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome, TIPOLOGISTICA.empresa_id, TIPOLOGISTICA.organizacao_id FROM TIPOLOGISTICA (NOLOCK)";
+	private final String sqlTipoLogisticas = " SELECT TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome, TIPOLOGISTICA.empresa_id, TIPOLOGISTICA.organizacao_id FROM TIPOLOGISTICA (NOLOCK) ";
 
 	public TipoLogisticaDao(Session session, ConnJDBC conexao) {
 		super(session, TipoLogistica.class);
