@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.caelum.vraptor.ioc.Component;
 
@@ -166,6 +167,9 @@ public class Contrato implements Serializable {
 	
 	@Column(name="datastatusfinal")
 	private Calendar dataStatusFinal;
+
+	@Transient
+	private Logistica logistica;
 
 	public Long getContrato_id() {
 		return contrato_id;
@@ -501,5 +505,13 @@ public class Contrato implements Serializable {
 
 	public void setWorkflowEtapaPendencia(WorkflowEtapa workflowEtapaPendencia) {
 		this.workflowEtapaPendencia = workflowEtapaPendencia;
+	}
+
+	public Logistica getLogistica() {
+		return logistica;
+	}
+
+	public void setLogistica(Logistica logistica) {
+		this.logistica = logistica;
 	} 
 }

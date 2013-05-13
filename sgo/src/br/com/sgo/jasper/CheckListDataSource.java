@@ -34,35 +34,34 @@ public class CheckListDataSource implements JRDataSource {
 
 				Contrato c = (Contrato) it.next();
 
-				/*
 				if("consultorNome".equals(campo.getName())){
-					valor = formulario.getConsultor().getNome();
+					valor = c.getUsuario().getNome();
 				}else if("consultorSupervisor".equals(campo.getName())){
-					valor = formulario.getConsultor().getSupervisor();
+					valor = c.getUsuario().getSupervisorUsuario().getNome();
 				}else if("clienteNome".equals(campo.getName())){
-					valor = formulario.getCliente().getNome();
+					valor = formulario.getParceiroNegocio().getNome();
 				}else if("clienteCpf".equals(campo.getName())){
-					valor = formulario.getCliente().getCpf();
+					valor = formulario.getParceiroNegocio().getCpf();
 				}else if("clienteTelRes".equals(campo.getName())){
-					valor = formulario.getCliente().getTelefoneRes();
+					valor = "";
 				}else if("clienteTelCel".equals(campo.getName())){
-					valor = formulario.getCliente().getTelefoneCel();
+					valor = "";
 				}else if("dataAssinatura".equals(campo.getName())){
-					valor = new Timestamp(c.getStatus().getDataAssinatura().getTime().getTime());
+					valor = new Timestamp(c.getLogistica().getDataAssinatura().getTime().getTime());
 				}else if("clienteEndereco".equals(campo.getName())){
-					valor = formulario.getCliente().getEndereco();
+					valor = formulario.getParceiroLocalidade().getLocalidade().getEndereco();
 				}else if("clienteNumero".equals(campo.getName())){
-					valor = formulario.getCliente().getNumero();
+					valor = formulario.getParceiroLocalidade().getNumero();
 				}else if("clienteCep".equals(campo.getName())){
-					valor = formulario.getCliente().getCep();
+					valor = formulario.getParceiroLocalidade().getLocalidade().getCep();
 				}else if("clienteBairro".equals(campo.getName())){
-					valor = formulario.getCliente().getBairro();
+					valor = formulario.getParceiroLocalidade().getLocalidade().getBairro();
 				}else if("clienteCidade".equals(campo.getName())){
-					valor = formulario.getCliente().getCidade();
+					valor = formulario.getParceiroLocalidade().getLocalidade().getCidade().getNome();
 				}else if("periodoAssinatura".equals(campo.getName())){
-					valor = c.getStatus().getPeriodoAssinatura();
+					valor = c.getLogistica().getPeriodo().getNome();
 				}
-				*/
+
 		}
 
 		return valor;
