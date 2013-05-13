@@ -562,8 +562,6 @@ function fechar() {
 						</div>
 					</div>
 					
-				
-					
 					<div class="row-fluid">
 						<div class="span1" style="float: left;">
 							<input value="Salvar" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoForm');">

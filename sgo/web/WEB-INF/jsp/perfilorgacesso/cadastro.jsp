@@ -40,10 +40,6 @@ jQuery(function($){
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
 	});
 
-	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/colunabd/cadastro" />';
-	});
-	
 	$('#perfilOrgAcessoEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -146,7 +142,19 @@ jQuery(function($){
     });
 	
 	$("#perfilOrgAcessoIsActive").change(function(e){
-		$(this).val( $("#perfilOrgAcessoIsActive:checked").length > 0 ? true : false);
+		if(document.perfilOrgAcessoForm.perfilOrgAcessoIsActive.checked==true){
+			document.perfilOrgAcessoForm.perfilOrgAcessoIsActive.value=true;
+		}else{
+			document.perfilOrgAcessoForm.perfilOrgAcessoIsActive.value=false;
+		}
+	});
+	
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/perfilorgacessoz/cadastro" />';
 	});
 
 });
@@ -230,7 +238,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="perfilOrgAcessoIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="perfilOrgAcessoIsActive" name="perfilOrgAcesso.isActive" checked="checked" value="${perfilOrgAcesso.isActive }">							
+								<input type="checkbox" id="perfilOrgAcessoIsActive" name="perfilOrgAcesso.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

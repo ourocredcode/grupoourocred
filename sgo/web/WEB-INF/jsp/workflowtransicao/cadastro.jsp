@@ -129,11 +129,15 @@ jQuery(function($){
 	});
 	
 	$('#btnNovo').click(function() {
-		document.workflowTransicaoForm.reset();
+		limpaForm();
 	});
 	
 	$("#workflowTransicaoIsActive").change(function(e){
-		$(this).val( $("#workflowTransicaoIsActive:checked").length > 0 ? true : false);
+		if(document.workflowTransicaoForm.workflowTransicaoIsActive.checked==true){
+			document.workflowTransicaoForm.workflowTransicaoIsActive.value=true;
+		}else{
+			document.workflowTransicaoForm.workflowTransicaoIsActive.value=false;
+		}
 	});
 
 });
@@ -240,7 +244,7 @@ function limpaForm(){
 							</div>
 							<div class="span1">
 								<label for="workflowTransicaoIsActive">Ativo</label>
-								<input id="workflowTransicaoIsActive" name="workflowTransicao.isActive" type="checkbox" checked="checked" value="${workflowTransicao.isActive }" >
+								<input id="workflowTransicaoIsActive" name="workflowTransicao.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
 						</div>
 						<div class="btn-toolbar">

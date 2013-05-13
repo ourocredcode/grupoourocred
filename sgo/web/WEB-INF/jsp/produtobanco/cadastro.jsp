@@ -182,7 +182,19 @@ jQuery(function($){
     });
 
 	$("#produtoBancoIsActive").change(function(e){
-		$(this).val( $("#produtoBancoIsActive:checked").length > 0 ? true : false);
+		if(document.produtoBancoForm.produtoBancoIsActive.checked==true){
+			document.produtoBancoForm.produtoBancoIsActive.value=true;
+		}else{
+			document.produtoBancoForm.produtoBancoIsActive.value=false;
+		}
+	});
+
+	$('#btnNovo').click(function() {		
+		limpaForm();
+	});
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/produtobanco/cadastro" />';
 	});
 
 });
@@ -226,7 +238,7 @@ function limpaForm() {
 		</c:choose>
 	</c:if>
 
-<div class="container-fluid">
+	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
 
@@ -285,7 +297,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="produtoBancoIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="produtoBancoIsActive" name="produtoBanco.isActive" checked="checked" value="${produtoBanco.isActive }" >							
+										<input type="checkbox" id="produtoBancoIsActive" name="produtoBanco.isActive" checked="checked" value="1" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

@@ -132,11 +132,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.workflowForm.reset();
+		limpaForm();
 	});
 
 	$("#workflowIsActive").change(function(e){
-		$(this).val( $("#workflowIsActive:checked").length > 0 ? true : false);
+		if(document.workflowForm.workflowIsActive.checked==true){
+			document.workflowForm.workflowIsActive.value=true;
+		}else{
+			document.workflowForm.workflowIsActive.value=false;
+		}
 	});
 
 });

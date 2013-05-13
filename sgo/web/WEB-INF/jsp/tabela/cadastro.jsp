@@ -156,11 +156,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.tabelaForm.reset();
+		limpaForm();
 	});
 
 	$("#tabelaIsActive").change(function(e){
-		$(this).val( $("#tabelaIsActive:checked").length > 0 ? true : false);
+		if(document.tabelaForm.tabelaIsActive.checked==true){
+			document.tabelaForm.tabelaIsActive.value=true;
+		}else{
+			document.tabelaForm.tabelaIsActive.value=false;
+		}
 	});
 
 });
@@ -251,7 +255,7 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="tabelaIsActive">Ativo</label>
 										<div class="controls">
-											<input type="checkbox" id="tabelaIsActive" name="tabela.isActive" checked="checked" value="${tabela.isActive }" >							
+											<input type="checkbox" id="tabelaIsActive" name="tabela.isActive" checked="checked" value="1" >							
 										</div>
 									</div>
 								 	<div class="btn-group">

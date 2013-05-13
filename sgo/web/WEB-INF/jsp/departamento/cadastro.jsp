@@ -81,11 +81,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		limpaForm();
 	});
 
 	$("#departamentoIsActive").change(function(e){
-		$(this).val( $("#departamentoIsActive:checked").length > 0 ? true : false);
+		if(document.departamentoForm.departamentoIsActive.checked==true){
+			document.departamentoForm.departamentoIsActive.value=true;
+		}else{
+			document.departamentoForm.departamentoIsActive.value=false;
+		}
 	});
 
 });
@@ -166,7 +170,7 @@ function limpaForm() {
 							</div>
 							<div class="span1">
 								<label for="departamentoIsActive">Ativo</label>
-								<input type="checkbox" id="departamentoIsActive" name="departamento.isActive" checked="checked" value="${departamento.isActive }" >
+								<input type="checkbox" id="departamentoIsActive" name="departamento.isActive" checked="checked" value="1" >
 							</div>
 						</div>
 

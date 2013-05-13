@@ -87,8 +87,7 @@ jQuery(function($){
 	        {'bancoId': bancoId}, function() {  
 
         	$("#tabela").load('<c:url value="/tabela/tabelas" />',   
-	    		        {'bancoId': bancoId});
-
+				{'bancoId': bancoId});
 	     });
 
 	});
@@ -116,11 +115,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		document.coeficienteForm.reset();
 	});
 
 	$("#coeficienteIsActive").change(function(e){
-		$(this).val( $("#coeficienteIsActive:checked").length > 0 ? true : false);
+		if(document.coeficienteForm.coeficienteIsActive.checked==true){
+			document.coeficienteForm.coeficienteIsActive.value=true;
+		}else{
+			document.coeficienteForm.coeficienteIsActive.value=false;
+		}
 	});
 
 });

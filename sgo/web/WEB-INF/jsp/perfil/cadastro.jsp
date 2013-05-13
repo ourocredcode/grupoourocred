@@ -146,11 +146,15 @@ jQuery(function($){
 	});
 	
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		limpaForm();
 	});
 	
 	$("#perfilIsActive").change(function(e){
-		$(this).val( $("#perfilIsActive:checked").length > 0 ? true : false);
+		if(document.perfilForm.perfilIsActive.checked==true){
+			document.perfilForm.perfilIsActive.value=true;
+		}else{
+			document.perfilForm.perfilIsActive.value=false;
+		}
 	});
 
 });
@@ -240,7 +244,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="perfilIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="perfilIsActive" name="perfil.isActive" checked="checked" value="${perfil.isActive }" >							
+								<input type="checkbox" id="perfilIsActive" name="perfil.isActive" checked="checked" value="1" >							
 							</div>							
 						</div>				
 						<div class="btn-toolbar">

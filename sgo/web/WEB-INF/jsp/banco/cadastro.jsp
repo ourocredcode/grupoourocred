@@ -120,11 +120,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		document.bancoForm.reset();
 	});
 
 	$("#bancoIsActive").change(function(e){
-		$(this).val( $("#bancoIsActive:checked").length > 0 ? true : false);
+		if(document.bancoForm.bancoIsActive.checked==true){
+			document.bancoForm.bancoIsActive.value=true;
+		}else{
+			document.bancoForm.bancoIsActive.value=false;
+		}
 	});
 
 });
@@ -211,7 +215,7 @@ function limpaForm() {
 							</div>
 							<div class="span1">
 								<label class="control-label" for="agenciaIsActive">Ativo</label>
-								<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="${agencia.isActive }" >
+								<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="1" >
 							</div>
 						</div>
 						

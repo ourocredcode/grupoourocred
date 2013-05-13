@@ -85,18 +85,22 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		limpaForm();
 	});
 
 	$("#tipoTabelaIsActive").change(function(e){
-		$(this).val( $("#tipoTabelaIsActive:checked").length > 0 ? true : false);
+		if(document.tipoTabelaForm.tipoTabelaIsActive.checked==true){
+			document.tipoTabelaForm.tipoTabelaIsActive.value=true;
+		}else{
+			document.tipoTabelaForm.tipoTabelaIsActive.value=false;
+		}
 	});
 
 });
 
 function limpaForm() {
 	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
-		document.produtoForm.reset();
+		document.tipoTabelaForm.reset();
 	}
 }
 </script>
@@ -164,7 +168,7 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="tipoTabelaIsActive">Ativo</label>
 										<div class="controls">
-											<input type="checkbox" id="tipoTabelaIsActive" name="tipoTabela.isActive" checked="checked" value="${tipoTabela.isActive }" >							
+											<input type="checkbox" id="tipoTabelaIsActive" name="tipoTabela.isActive" checked="checked" value="1" >							
 										</div>
 									</div>
 								 	<div class="btn-group">

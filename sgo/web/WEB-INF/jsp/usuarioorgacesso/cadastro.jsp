@@ -116,8 +116,20 @@ jQuery(function($){
          }
     });
 	
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/usuarioorgacesso/cadastro" />';
+	});
+
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+	
 	$("#usuarioOrgAcessoIsActive").change(function(e){
-		$(this).val( $("#usuarioOrgAcessoIsActive:checked").length > 0 ? true : false);
+		if(document.usuarioOrgAcessoForm.usuarioOrgAcessoIsActive.checked==true){
+			document.usuarioOrgAcessoForm.usuarioOrgAcessoIsActive.value=true;
+		}else{
+			document.usuarioOrgAcessoForm.usuarioOrgAcessoIsActive.value=false;
+		}
 	});
 
 });
@@ -125,11 +137,10 @@ jQuery(function($){
 function limpaForm(){
 
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.elementoBdForm.reset();
+		document.usuarioOrgAcessoForm.reset();
 	}
 
 }
-
 
 </script>
 

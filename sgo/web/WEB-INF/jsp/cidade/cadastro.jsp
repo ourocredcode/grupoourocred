@@ -81,11 +81,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		document.cidadeForm.reset();
 	});
 
 	$("#cidadeIsActive").change(function(e){
-		$(this).val( $("#cidadeIsActive:checked").length > 0 ? true : false);
+		if(document.cidadeForm.cidadeIsActive.checked==true){
+			document.cidadeForm.cidadeIsActive.value=true;
+		}else{
+			document.cidadeForm.cidadeIsActive.value=false;
+		}
 	});
 
 });
@@ -145,7 +149,7 @@ function limpaForm() {
 									<div class="control-group">
 										<label class="control-label" for="cidadeIsActive">Ativo</label>
 										<div class="controls">
-											<input type="checkbox" id="cidadeIsActive" name="cidade.isActive" checked="checked" value="${cidade.isActive }" >							
+											<input type="checkbox" id="cidadeIsActive" name="cidade.isActive" checked="checked" value="1" >							
 										</div>
 									</div>
 								 	<div class="btn-group">

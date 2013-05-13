@@ -81,11 +81,15 @@ jQuery(function($){
 	});
 
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		limpaForm();
 	});
 
 	$("#tipoContaIsActive").change(function(e){
-		$(this).val( $("#tipoContaIsActive:checked").length > 0 ? true : false);
+		if(document.tipoContaForm.tipoContaIsActive.checked==true){
+			document.tipoContaForm.tipoContaIsActive.value=true;
+		}else{
+			document.tipoContaForm.tipoContaIsActive.value=false;
+		}
 	});
 
 });
@@ -143,7 +147,7 @@ function limpaForm() {
 								<div class="control-group">
 									<label class="control-label" for="tipoContaIsActive">Ativo</label>
 									<div class="controls">
-										<input type="checkbox" id="tipoContaIsActive" name="tipoConta.isActive" checked="checked" value="${tipoConta.isActive }" >							
+										<input type="checkbox" id="tipoContaIsActive" name="tipoConta.isActive" checked="checked" value="1" >							
 									</div>
 								</div>
 							 	<div class="btn-group">

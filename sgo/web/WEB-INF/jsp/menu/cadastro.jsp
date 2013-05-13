@@ -113,11 +113,15 @@ jQuery(function($){
 	});
 	
 	$('#btnNovo').click(function() {
-		document.perfilForm.reset();
+		document.menuForm.reset();
 	});
 	
 	$("#menuIsActive").change(function(e){
-		$(this).val( $("#menuIsActive:checked").length > 0 ? true : false);
+		if(document.menuForm.menuIsActive.checked==true){
+			document.menuForm.menuIsActive.value=true;
+		}else{
+			document.menuForm.menuIsActive.value=false;
+		}
 	});
 
 });
@@ -177,7 +181,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="menuIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="menuIsActive" name="menu.isActive" checked="checked" value="${menu.isActive }" >							
+								<input type="checkbox" id="menuIsActive" name="menu.isActive" checked="checked" value="1" >							
 							</div>							
 						</div>				
 						<div class="btn-toolbar">

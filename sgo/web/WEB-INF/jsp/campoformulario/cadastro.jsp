@@ -40,10 +40,6 @@ jQuery(function($){
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
 	});
 
-	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/colunabd/cadastro" />';
-	});
-	
 	$('#campoFormularioEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -183,25 +179,44 @@ jQuery(function($){
              return false;
          }
     });
-	
-	
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/campoformulario/cadastro" />';
+	});
+
+	$('#btnNovo').click(function() {
+		document.campoFormularioForm.reset();
+	});
+
 	$("#campoFormularioIsMostrado").change(function(e){
-		$(this).val( $("#campoFormularioIsMostrado:checked").length > 0 ? true : false);
+		if(document.campoFormularioForm.campoFormularioIsMostrado.checked==true){
+			document.campoFormularioForm.campoFormularioIsMostrado.value=true;
+		}else{
+			document.campoFormularioForm.campoFormularioIsMostrado.value=false;
+		}
 	});
 	
 	$("#campoFormularioIsSomenteLeitura").change(function(e){
-		$(this).val( $("#campoFormularioIsSomenteLeitura:checked").length > 0 ? true : false);
+		if(document.campoFormularioForm.campoFormularioIsSomenteLeitura.checked==true){
+			document.campoFormularioForm.campoFormularioIsSomenteLeitura.value=true;
+		}else{
+			document.campoFormularioForm.campoFormularioIsSomenteLeitura.value=false;
+		}
 	});
 	
 	$("#campoFormularioIsActive").change(function(e){
-		$(this).val( $("#campoFormularioIsActive:checked").length > 0 ? true : false);
+		if(document.campoFormularioForm.campoFormularioIsActive.checked==true){
+			document.campoFormularioForm.campoFormularioIsActive.value=true;
+		}else{
+			document.campoFormularioForm.campoFormularioIsActive.value=false;
+		}
 	});
 });
 
 function limpaForm(){
 
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.colunaBdForm.reset();
+		document.campoFormularioForm.reset();
 	}
 
 }
@@ -224,7 +239,7 @@ function limpaForm(){
 		<a href="#" class="current">Perfil</a>
 	</div>
 
-<div class="container-fluid">
+	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
 
@@ -317,19 +332,19 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsMostrado">Mostrado</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado" checked="checked" value="${campoFormulario.isMostrado }">							
+								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsSomenteLeitura">Somente Leitura</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.isSomenteLeitura" checked="checked" value="${campoFormulario.isSomenteLeitura }">							
+								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.isSomenteLeitura" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="campoFormularioIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isActive" checked="checked" value="${campoFormulario.isActive }">							
+								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

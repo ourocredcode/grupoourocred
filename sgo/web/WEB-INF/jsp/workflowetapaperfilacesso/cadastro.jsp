@@ -164,19 +164,31 @@ jQuery(function($){
 	});
 	
 	$('#btnNovo').click(function() {
-		document.workflowEtapaPerfilAcessoForm.reset();
+		limpaForm();
 	});
-	
+
 	$("#workflowEtapaPerfilAcessoIsActive").change(function(e){
-		$(this).val( $("#workflowEtapaPerfilAcessoIsActive:checked").length > 0 ? true : false);
+		if(document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsActive.checked==true){
+			document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsActive.value=true;
+		}else{
+			document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsActive.value=false;
+		}
 	});
-	
+
 	$("#workflowEtapaPerfilAcessoIsLeituraEscrita").change(function(e){
-		$(this).val( $("#workflowEtapaPerfilAcessoIsLeituraEscrita:checked").length > 0 ? true : false);
+		if(document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsLeituraEscrita.checked==true){
+			document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsLeituraEscrita.value=true;
+		}else{
+			document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsLeituraEscrita.value=false;
+		}
 	});
 
 	$("#workflowEtapaPerfilAcessoIsUpload").change(function(e){
-		$(this).val( $("#workflowEtapaPerfilAcessoIsUpload").length > 0 ? true : false);
+		if(document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsUpload.checked==true){
+			document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsUpload.value=true;
+		}else{
+			document.workflowEtapaPerfilAcessoForm.workflowEtapaPerfilAcessoIsUpload.value=false;
+		}
 	});
 	
 });
@@ -274,15 +286,15 @@ function limpaForm(){
 
 							<div class="span1">
 								<label for="workflowEtapaPerfilAcessoIsActive">Ativo</label>
-								<input id="workflowEtapaPerfilAcessoIsActive" name="workflowEtapaPerfilAcesso.isActive" value="${workflowEtapaPerfilAcesso.isActive }"  type="checkbox" checked="checked">
+								<input id="workflowEtapaPerfilAcessoIsActive" name="workflowEtapaPerfilAcesso.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
 							<div class="span1">
 								<label for="workflowEtapaPerfilAcessoIsLeituraEscrita">Escrita</label>
-								<input id="workflowEtapaPerfilAcessoIsLeituraEscrita" name="workflowEtapaPerfilAcesso.isLeituraEscrita" value="${workflowEtapaPerfilAcesso.isLeituraEscrita }" type="checkbox" checked="checked" >
+								<input id="workflowEtapaPerfilAcessoIsLeituraEscrita" name="workflowEtapaPerfilAcesso.isLeituraEscrita" type="checkbox" checked="checked" value="1" >
 							</div>
 							<div class="span1">
 								<label for="workflowEtapaPerfilAcessoIsUpload">Upload</label>
-								<input id="workflowEtapaPerfilAcessoIsUpload" name="workflowEtapaPerfilAcesso.isUpload" value="${workflowEtapaPerfilAcesso.isUpload }" type="checkbox" >
+								<input id="workflowEtapaPerfilAcessoIsUpload" name="workflowEtapaPerfilAcesso.isUpload" type="checkbox" value="0" >
 							</div>
 
 						</div>

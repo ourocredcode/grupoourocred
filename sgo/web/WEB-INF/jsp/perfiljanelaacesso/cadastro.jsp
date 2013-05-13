@@ -39,10 +39,6 @@ jQuery(function($){
 	$('#tipodadobd-li-a').click(function() {
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
 	});
-
-	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/colunabd/cadastro" />';
-	});
 	
 	$('#perfilJanelaAcessoEmpresa').autocomplete({
 		source: function( request, response ) {
@@ -179,9 +175,21 @@ jQuery(function($){
              return false;
          }
     });
-	
+
 	$("#perfilJanelaAcessoIsActive").change(function(e){
-		$(this).val( $("#perfilJanelaAcessoIsActive:checked").length > 0 ? true : false);
+		if(document.perfilJanelaAcessoForm.perfilJanelaAcessoIsActive.checked==true){
+			document.perfilJanelaAcessoForm.perfilJanelaAcessoIsActive.value=true;
+		}else{
+			document.perfilJanelaAcessoForm.perfilJanelaAcessoIsActive.value=false;
+		}
+	});
+
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+	
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/perfiljanelaacesso/cadastro" />';
 	});
 
 });
@@ -189,7 +197,7 @@ jQuery(function($){
 function limpaForm(){
 
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.colunaBdForm.reset();
+		document.perfilJanelaAcessoForm.reset();
 	}
 
 }
@@ -281,7 +289,7 @@ function limpaForm(){
 						<div class="control-group">
 							<label class="control-label" for="perfilJanelaAcessoIsActive">Ativo</label>
 							<div class="controls">
-								<input type="checkbox" id="perfilJanelaAcessoIsActive" name="perfilJanelaAcesso.isActive" checked="checked" value="${perfilJanelaAcesso.isActive }">							
+								<input type="checkbox" id="perfilJanelaAcessoIsActive" name="perfilJanelaAcesso.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">

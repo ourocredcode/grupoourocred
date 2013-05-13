@@ -152,12 +152,23 @@ jQuery(function($){
          }
     });
 	
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/usuario/cadastro" />';
+	});
+
+	$('#btnNovo').click(function() {
+		limpaForm();
+	});
+	
 	$("#usuarioIsActive").change(function(e){
-		$(this).val( $("#usuarioIsActive:checked").length > 0 ? true : false);
+		if(document.usuarioForm.usuarioIsActive.checked==true){
+			document.usuarioForm.usuarioIsActive.value=true;
+		}else{
+			document.usuarioForm.usuarioIsActive.value=false;
+		}
 	});
 
 });
-
 
 function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
