@@ -70,25 +70,34 @@ public class HisconBeneficio implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = false)
 	private Usuario createdBy;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
 	private Usuario updatedBy;
-	
+
 	@Column(name = "created")
 	private Calendar created;
 
 	@Column(name = "updated")
 	private Calendar updated;
 
+	@Column(name = "chave")
+	private String chave;
+	
+	@Column(name = "value")
+	private String value;
+
+	@Column(name = "nome")
+	private String nome;
+
+	@Column(name = "descricao")
+	private String descricao;
+
 	@Column(name = "dataadm")
 	private Calendar dataAdm;
 
 	@Column(name = "dataenvio")
 	private Calendar dataEnvio;
-
-	@Column(name = "nome")
-	private String nome;
 
 	@Column(name = "caminhoarquivo")
 	private String caminhoArquivo;
@@ -113,7 +122,7 @@ public class HisconBeneficio implements Serializable {
 
 	@Transient
 	private Integer countHiscons;
-	
+
 	public Long getHisconBeneficio_id() {
 		return hisconBeneficio_id;
 	}
@@ -312,5 +321,29 @@ public class HisconBeneficio implements Serializable {
 
 	public void setWorkflowEtapas(Collection<WorkflowEtapa> workflowEtapas) {
 		this.workflowEtapas = workflowEtapas;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 }

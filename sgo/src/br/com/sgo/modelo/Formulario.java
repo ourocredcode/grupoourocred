@@ -43,8 +43,31 @@ public class Formulario implements Serializable {
 	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
 	
-	@Column(name="created")
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	private Usuario createdBy;
+
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	private Usuario updatedBy;
+
+	@Column(name = "created")
 	private Calendar created;
+
+	@Column(name = "updated")
+	private Calendar updated;
+
+	@Column(name = "chave")
+	private String chave;
+	
+	@Column(name = "value")
+	private String value;
+
+	@Column(name = "nome")
+	private String nome;
+
+	@Column(name = "descricao")
+	private String descricao;
 
 	@Column(name = "isactive")
 	private Boolean isActive;
@@ -154,5 +177,61 @@ public class Formulario implements Serializable {
 
 	public void setParceiroBeneficio(ParceiroBeneficio parceiroBeneficio) {
 		this.parceiroBeneficio = parceiroBeneficio;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 }

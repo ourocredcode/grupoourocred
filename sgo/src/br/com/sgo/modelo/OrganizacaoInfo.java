@@ -1,6 +1,7 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,12 +54,6 @@ public class OrganizacaoInfo implements Serializable {
 	@JoinColumn(name = "logo_imagem_id", updatable = true, nullable = false)
 	private Imagem logoImagem;
 
-	@Column(name = "nome")
-	private String nome;
-
-	@Column(name = "descricao")
-	private String descricao;
-
 	@Column(name = "telefone1")
 	private String telefone1;
 
@@ -82,6 +77,35 @@ public class OrganizacaoInfo implements Serializable {
 
 	@Column(name = "nomefantasia")
 	private String nomeFantasia;
+	
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	private Usuario createdBy;
+
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	private Usuario updatedBy;
+
+	@Column(name = "created")
+	private Calendar created;
+
+	@Column(name = "updated")
+	private Calendar updated;
+
+	@Column(name = "chave")
+	private String chave;
+	
+	@Column(name = "value")
+	private String value;
+
+	@Column(name = "nome")
+	private String nome;
+
+	@Column(name = "descricao")
+	private String descricao;
+	
+	@Column(name = "isactive")
+	private Boolean isActive;
 
 	public Long getOrganizacao_id() {
 		return organizacao_id;
@@ -225,6 +249,62 @@ public class OrganizacaoInfo implements Serializable {
 
 	public void setNomeFantasia(String nomeFantasia) {
 		this.nomeFantasia = nomeFantasia;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

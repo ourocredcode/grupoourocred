@@ -1,6 +1,7 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +42,26 @@ public class Cidade implements Serializable {
 	@JoinColumn(name = "regiao_id", updatable = true, nullable = false)
 	private Regiao regiao;
 
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	private Usuario createdBy;
+
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	private Usuario updatedBy;
+
+	@Column(name = "created")
+	private Calendar created;
+
+	@Column(name = "updated")
+	private Calendar updated;
+
+	@Column(name = "chave")
+	private String chave;
+	
+	@Column(name = "value")
+	private String value;
+
 	@Column(name = "nome")
 	private String nome;
 
@@ -49,7 +70,7 @@ public class Cidade implements Serializable {
 
 	@Column(name = "isactive")
 	private Boolean isActive;
-
+	
 	public Long getCidade_id() {
 		return cidade_id;
 	}
@@ -112,5 +133,53 @@ public class Cidade implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

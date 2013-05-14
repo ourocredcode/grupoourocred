@@ -1,6 +1,7 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,7 +53,39 @@ public class ParceiroInfoBanco implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "meiopagamento_id", updatable = true, nullable = true)
 	private MeioPagamento meioPagamento;
+	
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	private Usuario createdBy;
 
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	private Usuario updatedBy;
+
+	@Column(name = "created")
+	private Calendar created;
+
+	@Column(name = "updated")
+	private Calendar updated;
+
+	@Column(name = "chave")
+	private String chave;
+	
+	@Column(name = "value")
+	private String value;
+
+	@Column(name = "nome")
+	private String nome;
+
+	@Column(name = "descricao")
+	private String descricao;
+
+	@Column(name = "agencianumero")
+	private String agencianumero;
+	
+	@Column(name = "contacorrente")
+	private String contacorrente;
+	
 	@Column(name = "isactive")
 	private Boolean isActive;
 
@@ -126,6 +159,86 @@ public class ParceiroInfoBanco implements Serializable {
 
 	public void setMeioPagamento(MeioPagamento meioPagamento) {
 		this.meioPagamento = meioPagamento;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public String getAgencianumero() {
+		return agencianumero;
+	}
+
+	public void setAgencianumero(String agencianumero) {
+		this.agencianumero = agencianumero;
+	}
+
+	public String getContacorrente() {
+		return contacorrente;
+	}
+
+	public void setContacorrente(String contacorrente) {
+		this.contacorrente = contacorrente;
 	}
 
 }

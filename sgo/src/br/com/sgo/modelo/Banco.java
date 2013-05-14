@@ -1,6 +1,7 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,12 +35,25 @@ public class Banco implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "localidade_id", updatable = true, nullable = true)
-	private Localidade localidade;
-
-	@ManyToOne
 	@JoinColumn(name = "grupobanco_id", updatable = true, nullable = true)
 	private GrupoBanco grupoBanco;
+	
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	private Usuario createdBy;
+
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	private Usuario updatedBy;
+
+	@Column(name = "created")
+	private Calendar created;
+
+	@Column(name = "updated")
+	private Calendar updated;
+
+	@Column(name = "value")
+	private String value;
 
 	@Column(name = "nome")
 	private String nome;
@@ -50,6 +64,7 @@ public class Banco implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
+	
 	public Long getBanco_id() {
 		return banco_id;
 	}
@@ -72,14 +87,6 @@ public class Banco implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public Localidade getLocalidade() {
-		return localidade;
-	}
-
-	public void setLocalidade(Localidade localidade) {
-		this.localidade = localidade;
 	}
 
 	public String getNome() {
@@ -112,5 +119,45 @@ public class Banco implements Serializable {
 
 	public void setGrupoBanco(GrupoBanco grupoBanco) {
 		this.grupoBanco = grupoBanco;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

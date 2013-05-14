@@ -47,11 +47,11 @@ public class HistoricoControle implements Serializable {
 	private Perfil perfil;
 
 	@ManyToOne
-	@JoinColumn(name = "createdby", updatable = true, nullable = true)
+	@JoinColumn(name = "createdby", updatable = true, nullable = false)
 	private Usuario createdBy;
 
 	@ManyToOne
-	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
 	private Usuario updatedBy;
 
 	@Column(name = "created")
@@ -59,6 +59,12 @@ public class HistoricoControle implements Serializable {
 
 	@Column(name = "updated")
 	private Calendar updated;
+
+	@Column(name = "chave")
+	private String chave;
+	
+	@Column(name = "value")
+	private String value;
 
 	@Column(name = "nome")
 	private String nome;
@@ -182,5 +188,21 @@ public class HistoricoControle implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

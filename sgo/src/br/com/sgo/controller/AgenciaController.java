@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -8,6 +10,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.AgenciaDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Agencia;
 
 @Resource
@@ -16,9 +19,13 @@ public class AgenciaController {
 	private final Result result;
 	private final AgenciaDao agenciaDao;
 
-	public AgenciaController(Result result, AgenciaDao agenciaDao){		
+	private final UsuarioInfo usuarioInfo;
+	private Calendar dataAtual = Calendar.getInstance();
+
+	public AgenciaController(Result result, AgenciaDao agenciaDao, UsuarioInfo usuarioInfo){		
 		this.result = result;
 		this.agenciaDao = agenciaDao;
+		this.usuarioInfo = usuarioInfo;
 	}
 
 	@Get
@@ -36,27 +43,41 @@ public class AgenciaController {
 		try {
 			if(this.agenciaDao.buscaAgenciaByEmOrBaCa(agencia.getEmpresa().getEmpresa_id(), agencia.getOrganizacao().getOrganizacao_id(), agencia.getBanco().getBanco_id(), agencia.getCodigoAgencia()) == null) {
 				
+				agencia.setCreated(dataAtual);
+				agencia.setUpdated(dataAtual);
+
+				agencia.setCreatedBy(usuarioInfo.getUsuario());
+				agencia.setUpdatedBy(usuarioInfo.getUsuario());
+
+				agencia.setValue(agencia.getNome());
+				agencia.setDescricao(agencia.getNome());
+
+				agencia.setIsActive(agencia.getIsActive() == null ? false : true);
+				
 				this.agenciaDao.beginTransaction();
 				this.agenciaDao.atualiza(agencia);
 				this.agenciaDao.commit();
 
-				result.include("msg","Agencia gravado com sucesso.").redirectTo(this).msg();
-			} else {
-				result.include("msg","Erro : Agencia já existente neste endereço.").redirectTo(this).msg();
-			}
-		}catch(Exception e) {
+				mensagem = "Agência adicionado com sucesso";
 
-			if (e.getCause().toString().indexOf("IX_AGENCIA_EMPORGBANCODAGENCIA") != -1){
-				mensagem = "Erro: Agência " + agencia.getNome() + " já existente.";
 			} else {
-				mensagem = "Erro ao adicionar Agência";
+
+				mensagem = "Erro : Agencia já cadastrada.";
+
 			}
-			result.include("notice", mensagem);
-			result.redirectTo(this).cadastro();
-		}finally{
+		} catch(Exception e) {
+
+			mensagem = "Erro: Falha ao adicionar a Agência.";
+
+		} finally{
+
 			this.agenciaDao.clear();
-			this.agenciaDao.close();			
+			this.agenciaDao.close();
+
 		}
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
 	}
 
 	@Get
