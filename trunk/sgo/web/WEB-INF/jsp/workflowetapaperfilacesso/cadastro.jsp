@@ -276,12 +276,12 @@ function limpaForm(){
 							<div class="span2">
 								<label for="workflowEtapaPerfilAcessoWorkflowEtapa">WorkFlow Etapa</label>
 	      						<input class="span12" id="workflowEtapaPerfilAcessoWorkflowEtapa" name="workflowEtapaPerfilAcesso.workflowEtapa.nome" value="${workflowEtapaPerfilAcesso.workflowEtapa.nome }" type="text" required onChange="limpaForm();">
-	      						<input class="span12" id="workflowEtapaPerfilAcessoWorkflowEtapaId" name="workflowEtapaPerfilAcesso.workflowEtapa.workflowEtapa_id" value="${workflowEtapaPerfilAcesso.workflowEtapa.workflowEtapa_id }" type="hidden">
+	      						<input class="span1" id="workflowEtapaPerfilAcessoWorkflowEtapaId" name="workflowEtapaPerfilAcesso.workflowEtapa.workflowEtapa_id" value="${workflowEtapaPerfilAcesso.workflowEtapa.workflowEtapa_id }" type="hidden">
 							</div>
 							<div class="span2">
 								<label for="workflowEtapaPerfilAcessoPerfil">Perfil</label>
 		      					<input class="span12" id="workflowEtapaPerfilAcessoPerfil" name="workflowEtapaPerfilAcesso.perfil.nome" value="${workflowEtapaPerfilAcesso.perfil.nome }" type="text" required onChange="limpaForm();">
-		      					<input class="span12" id="workflowEtapaPerfilAcessoPerfilId" name="workflowEtapaPerfilAcesso.perfil.perfil_id" value="${workflowEtapaPerfilAcesso.perfil.perfil_id }" type="hidden">
+		      					<input class="span1" id="workflowEtapaPerfilAcessoPerfilId" name="workflowEtapaPerfilAcesso.perfil.perfil_id" value="${workflowEtapaPerfilAcesso.perfil.perfil_id }" type="hidden">
 							</div>
 
 							<div class="span1">
