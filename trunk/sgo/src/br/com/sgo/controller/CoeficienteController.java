@@ -12,16 +12,19 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CoeficienteDao;
+import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.infra.CustomDateUtil;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
+import br.com.sgo.modelo.Produto;
 
 @Resource
 public class CoeficienteController {
 
 	private final Result result;
 	private final BancoDao bancoDao;
+	private final ProdutoDao produtoDao;
 	private final TabelaDao tabelaDao;
 	private final CoeficienteDao coeficienteDao;
 	private  Coeficiente coeficiente;
@@ -29,14 +32,14 @@ public class CoeficienteController {
 	private Collection<Banco> bancos;
 
 
-	public CoeficienteController(Result result,BancoDao bancoDao, CoeficienteDao coeficienteDao,TabelaDao tabelaDao, Coeficiente coeficiente){
+	public CoeficienteController(Result result,BancoDao bancoDao, CoeficienteDao coeficienteDao,TabelaDao tabelaDao, ProdutoDao produtoDao, Coeficiente coeficiente){
 
 		this.result = result;
 		this.coeficienteDao = coeficienteDao;
 		this.coeficiente = coeficiente;
 		this.tabelaDao = tabelaDao;
 		this.bancoDao = bancoDao;
-
+		this.produtoDao = produtoDao;
 
 	}
 
@@ -127,9 +130,9 @@ public class CoeficienteController {
 
 	@Post
 	@Path("/coeficiente/historico")
-	public void historico(String bancoNome, String produtoNome) {
+	public void historico(Long banco_id, Long produto_id) {
 
-		Collection<Calendar> datas = this.coeficienteDao.buscaDatasInclusao(bancoNome, produtoNome);
+		Collection<Calendar> datas = this.coeficienteDao.buscaDatasInclusao(banco_id, produto_id);
 		Collection<Integer> anos = new HashSet<Integer>();
 		Collection<Integer> meses = new HashSet<Integer>();
 
@@ -143,16 +146,16 @@ public class CoeficienteController {
 
 		result.include("anos",anos);
 		result.include("meses",meses);
-		result.include("bancoNome",bancoNome);
-		result.include("produtoNome",produtoNome);
+		result.include("bancoNome",this.bancoDao.load(banco_id).getNome());
+		result.include("produtoNome",this.produtoDao.load(produto_id).getNome());
 
 	}
 	
 	@Post
 	@Path("/coeficiente/cadastroAux")
-	public void cadastroAux(String bancoNome, String produtoNome) {
+	public void cadastroAux(Long banco_id, Long produto_id) {
 
-		Collection<Calendar> datas = this.coeficienteDao.buscaDatasInclusao(bancoNome, produtoNome);
+		Collection<Calendar> datas = this.coeficienteDao.buscaDatasInclusao(banco_id, produto_id);
 		Collection<Integer> anos = new HashSet<Integer>();
 		Collection<Integer> meses = new HashSet<Integer>();
 		//Collection<Tabela> tabelas = this.tabelaDao.buscaTabelasBanco(bancoNome, produtoNome);
@@ -167,8 +170,8 @@ public class CoeficienteController {
 
 		result.include("anos",anos);
 		result.include("meses",meses);
-		result.include("bancoNome",bancoNome);
-		result.include("produtoNome",produtoNome);
+		result.include("bancoNome",this.bancoDao.load(banco_id).getNome());
+		result.include("produtoNome",this.produtoDao.load(produto_id).getNome());
 		//result.include("tabelas",tabelas);
 
 	}

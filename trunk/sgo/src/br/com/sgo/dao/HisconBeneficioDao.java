@@ -258,9 +258,6 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 			this.stmt.setLong(1, hisconBeneficio_id);
 
-			System.out.println(sql);
-			System.out.println(hisconBeneficio_id);
-
 			this.rsHisconBeneficio = this.stmt.executeQuery();
 
 			while (rsHisconBeneficio.next()) {

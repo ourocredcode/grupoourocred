@@ -2,6 +2,7 @@ package br.com.sgo.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.caelum.vraptor.Get;
@@ -13,6 +14,7 @@ import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.FormularioDao;
+import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.LogisticaDao;
 import br.com.sgo.dao.PeriodoDao;
 import br.com.sgo.dao.ProdutoBancoDao;
@@ -24,12 +26,16 @@ import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
+import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Formulario;
+import br.com.sgo.modelo.HistoricoContrato;
 import br.com.sgo.modelo.Logistica;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.Tabela;
 import br.com.sgo.modelo.TipoLogistica;
+import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.WorkflowEtapa;
 
 @Resource
@@ -48,21 +54,27 @@ public class ContratoController {
 	private final PeriodoDao periodoDao;
 	private final TipoLogisticaDao tipoLogisticaDao;
 	private final LogisticaDao logisticaDao;
+	private final HistoricoContratoDao historicoContratoDao;
 
 	private Contrato contrato;
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 	private Formulario formulario;
 	private Collection<Banco> bancos;
 	private Collection<Produto> produtos;
-	private Collection<Coeficiente> coeficientes;
+	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();;
 	private Collection<WorkflowEtapa> etapas;
 	private Collection<Periodo> periodos;
 	private Collection<TipoLogistica> tiposLogistica;
 	private Collection<Logistica> logisticas;
 	private Collection<Contrato> contratos;
+	private Collection<HistoricoContrato> historico;
 
 	public ContratoController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
 			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
-			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao){		
+			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
+			HistoricoContratoDao historicoContratoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -79,12 +91,49 @@ public class ContratoController {
 		this.workFlowetapaDao = workFlowetapaDao;
 		this.tipoLogisticaDao = tipoLogisticaDao;
 		this.logisticaDao = logisticaDao;
+		this.historicoContratoDao = historicoContratoDao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = usuarioInfo.getUsuario();
 
 	}
 
 	@Post
 	@Path("/contrato/cadastro")
 	public void cadastro(Long id){
+
+		Collection<Banco> bancos = this.bancoDao.buscaBancoByGrupo("Tomadores");
+		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoByGrupo("Comprados");
+
+		bancos = bancoDao.listaTudo();
+		contrato = contratoDao.load(id);
+
+		Coeficiente coeficienteContrato = new Coeficiente();
+		coeficienteContrato.setValor(contrato.getCoeficiente().getValor());
+
+		coeficientes = coeficienteDao.buscaCoeficientesByBancoProduto(contrato.getBanco().getBanco_id(), contrato.getProduto().getProduto_id());
+
+		for(Coeficiente c : coeficientes){
+			if(c.getValor().compareTo(coeficienteContrato.getValor()) == 0) {
+				coeficienteContrato.setCoeficiente_id(c.getCoeficiente_id());
+				coeficienteContrato.setTabela(c.getTabela());
+				coeficienteContrato.setPercentualMeta(c.getPercentualMeta());
+			}
+		}
+
+		coeficientes.add(coeficienteContrato);
+
+		contrato = contratoDao.load(id);
+
+		Banco banco = bancoDao.buscaBancoById(contrato.getBanco().getBanco_id());
+		Collection<Produto> produtos = produtoDao.buscaProdutosByBanco(banco.getBanco_id());
+
+		result.include("bancos",bancos);
+		result.include("recompraBancos",recompraBancos);
+		result.include("contrato",contrato);
+		result.include("banco",banco);
+		result.include("produtos",produtos);
+		result.include("coeficientes",coeficientes);
 
 	}
 	
@@ -96,6 +145,7 @@ public class ContratoController {
 		formulario = formularioDao.buscaFormularioByContrato(id);
 		etapas = workFlowetapaDao.buscaWorKFlowEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
 		periodos = periodoDao.buscaAllPeriodos();
+		historico = historicoContratoDao.buscaHistoricoByContrato(id);
 		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
 		logisticas = logisticaDao.buscaLogisticaByContrato(id);
 		etapas.add(contrato.getWorkflowEtapa());
@@ -109,63 +159,60 @@ public class ContratoController {
 		result.include("tiposLogistica", tiposLogistica);
 		result.include("logisticas",logisticas);
 		result.include("contratos",contratos);
+		result.include("historico",historico);
 
 	}
 	
 	@Post
-	@Path("/alteraContrato")
-	public void alteraContrato(Contrato contrato) {
+	@Path("/contrato/altera")
+	public void altera(Contrato contrato) {
 
 		List<String> log = new ArrayList<String>();
 
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
+		contrato.setCoeficiente(coeficienteDao.load(contrato.getCoeficiente().getCoeficiente_id()));
 
-		if(!this.contrato.getBanco().equals(contrato.getBanco())){
-			log.add("Banco alterado de : " + this.contrato.getBanco() + " para: " + contrato.getBanco());
+		if(this.contrato.getBanco().getBanco_id() != contrato.getBanco().getBanco_id()){
+			log.add("Banco alterado de : " + this.contrato.getBanco().getNome() + " para: " + contrato.getBanco().getNome());
 			this.contrato.setBanco(contrato.getBanco() == null ? null : contrato.getBanco());
 		}
 
-		if(!this.contrato.getBanco().equals(contrato.getBanco())) {
-			log.add("Banco Comprado alterado de : " + this.contrato.getBanco().getNome() + " para: " + contrato.getBanco().getNome());
-			this.contrato.setBanco(contrato.getBanco() == null ? null : contrato.getBanco());
-		}
-
-		if(!this.contrato.getProduto().equals(contrato.getProduto())) {
-			log.add("Produto alterado: " + this.contrato.getProduto() + " para: " + contrato.getProduto());
+		if(this.contrato.getProduto().getProduto_id() != contrato.getProduto().getProduto_id()) {
+			log.add("Produto alterado: " + this.contrato.getProduto().getNome() + " para: " + contrato.getProduto().getNome());
 			this.contrato.setProduto(contrato.getProduto() == null ? null : contrato.getProduto());
 		}
 
-		if(!(this.contrato.getQtdParcelasAberto() == contrato.getQtdParcelasAberto())){
+		if(this.contrato.getQtdParcelasAberto() != contrato.getQtdParcelasAberto()){
 			log.add("Parcelas Aberto alterado: " + this.contrato.getQtdParcelasAberto() + " para : " + contrato.getQtdParcelasAberto());
 			this.contrato.setQtdParcelasAberto(contrato.getQtdParcelasAberto() == null ? null : contrato.getQtdParcelasAberto());
 		}
 
-		if(!(this.contrato.getPrazo() == contrato.getPrazo())) {
+		if(this.contrato.getPrazo() != contrato.getPrazo()) {
 			log.add("Prazo alterado de : " + this.contrato.getPrazo() + " para : " + contrato.getPrazo());
 			this.contrato.setPrazo(contrato.getPrazo() == null ? null : contrato.getPrazo());
 		}		
 
-		if(!(this.contrato.getCoeficiente() == contrato.getCoeficiente())){
-			log.add("Coeficiente alterado de : " + this.contrato.getCoeficiente() + " para : " + contrato.getCoeficiente());
+		if(this.contrato.getCoeficiente().getCoeficiente_id() != contrato.getCoeficiente().getCoeficiente_id()){
+			log.add("Coeficiente alterado de : " + this.contrato.getCoeficiente().getValor() + " para : " + contrato.getCoeficiente().getValor());
 			this.contrato.setCoeficiente(contrato.getCoeficiente() == null ? null : contrato.getCoeficiente());
 		}
 
-		if(!( this.contrato.getValorContrato().compareTo(contrato.getValorContrato()) == 0)){
+		if(this.contrato.getValorContrato().compareTo(contrato.getValorContrato()) != 0){
 			log.add("Valor contrato alterado de : " + this.contrato.getValorContrato() + " para : " + contrato.getValorContrato());
 			this.contrato.setValorContrato(contrato.getValorContrato() == null ? null : contrato.getValorContrato());
 		}
 
-		if(! (this.contrato.getValorLiquido().compareTo(contrato.getValorLiquido()) == 0)) {
+		if(this.contrato.getValorLiquido().compareTo(contrato.getValorLiquido()) != 0) {
 			log.add("Valor Liquido alterado de : " + this.contrato.getValorLiquido() + " para: " + contrato.getValorLiquido());
 			this.contrato.setValorLiquido(contrato.getValorLiquido() == null ? null : contrato.getValorLiquido());
 		}
 
-		if(! (this.contrato.getValorParcela().compareTo(contrato.getValorParcela()) == 0)) {
+		if(this.contrato.getValorParcela().compareTo(contrato.getValorParcela()) != 0) {
 			log.add("Valor Parcela alterado de : " + this.contrato.getValorParcela() + " para: " + contrato.getValorParcela());
 			this.contrato.setValorParcela(contrato.getValorParcela() == null ? null : contrato.getValorParcela());
 		}
 
-		if(! (this.contrato.getValorMeta().compareTo(contrato.getValorMeta()) == 0)) {
+		if(this.contrato.getValorMeta().compareTo(contrato.getValorMeta()) != 0) {
 			log.add("Valor Meta Alterado de : " + this.contrato.getValorMeta() + " para : " + contrato.getValorMeta());
 			this.contrato.setValorMeta(contrato.getValorMeta() == null ? null : contrato.getValorMeta());
 		}
@@ -190,13 +237,66 @@ public class ContratoController {
 				this.contrato.setDesconto(contrato.getDesconto() == null ? null : contrato.getDesconto());
 			}
 		}
+
+		this.contratoDao.beginTransaction();
+		this.contratoDao.atualiza(this.contrato);
+		this.contratoDao.commit();
 		
-		if(!(this.contrato.getWorkflowEtapa() == contrato.getWorkflowEtapa())){
+		for(String l : log){
+
+			HistoricoContrato historico = new HistoricoContrato();
+			historico.setEmpresa(empresa);
+			historico.setOrganizacao(organizacao);
+			historico.setIsActive(true);
+			historico.setCreatedBy(usuario);
+			historico.setCreated(GregorianCalendar.getInstance());
+			historico.setObservacao(l);
+			historico.setContrato(contrato);
+
+			this.historicoContratoDao.beginTransaction();
+			this.historicoContratoDao.adiciona(historico);
+			this.historicoContratoDao.commit();
+
+		}
+		
+		result.redirectTo(this).status(this.contrato.getContrato_id());
+
+	}
+	
+	@Post
+	@Path("/contrato/altera/status")
+	public void alteraStatus(Contrato contrato) {
+
+		List<String> log = new ArrayList<String>();
+
+		this.contrato = this.contratoDao.load(contrato.getContrato_id());
+
+		if(!(this.contrato.getWorkflowEtapa().getWorkflowEtapa_id() == contrato.getWorkflowEtapa().getWorkflowEtapa_id())){
 			log.add("Status alterado de : " + this.contrato.getWorkflowEtapa().getNome() + " para : " + contrato.getWorkflowEtapa().getNome());
 			this.contrato.setWorkflowEtapa(contrato.getWorkflowEtapa() == null ? null : contrato.getWorkflowEtapa());
 		}
 
+		this.contratoDao.beginTransaction();
 		this.contratoDao.atualiza(this.contrato);
+		this.contratoDao.commit();
+
+		for(String l : log){
+
+			HistoricoContrato historico = new HistoricoContrato();
+			historico.setEmpresa(empresa);
+			historico.setOrganizacao(organizacao);
+			historico.setIsActive(true);
+			historico.setCreatedBy(usuario);
+			historico.setCreated(GregorianCalendar.getInstance());
+			historico.setObservacao(l);
+			historico.setContrato(contrato);
+
+			this.historicoContratoDao.beginTransaction();
+			this.historicoContratoDao.adiciona(historico);
+			this.historicoContratoDao.commit();
+
+		}
+
 		result.redirectTo(this).status(this.contrato.getContrato_id());
 
 	}
@@ -234,6 +334,15 @@ public class ContratoController {
 	@Post
 	@Path("/contrato/salva")
 	public void salva(Formulario formulario) {	
+
+	}
+	
+	@Post
+ 	@Path("/contrato/coeficienteHistorico")
+	public void coeficientes(Long coeficienteId) {
+
+		coeficientes.add(coeficienteDao.load(coeficienteId));
+		result.include("coeficientes",coeficientes);
 
 	}
 
