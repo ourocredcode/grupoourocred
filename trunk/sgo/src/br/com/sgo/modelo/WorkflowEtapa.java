@@ -38,19 +38,20 @@ public class WorkflowEtapa implements Serializable {
 	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
 	private Workflow workflow;
 
-	@Column(name = "ordemetapa")
-	private Integer ordemEtapa;
-
-	@Column(name = "ispadrao")
-	private Boolean isPadrao;
-	
 	@ManyToOne
-	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
 	@ManyToOne
 	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
 	private Usuario updatedBy;
+
+	@Column(name = "ordemetapa")
+	private Integer ordemEtapa;
+
+	@Column(name = "ispadrao")
+	private Boolean isPadrao;
+
 
 	@Column(name = "created")
 	private Calendar created;

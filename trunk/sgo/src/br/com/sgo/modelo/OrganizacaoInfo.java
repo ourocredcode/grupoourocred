@@ -53,6 +53,14 @@ public class OrganizacaoInfo implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "logo_imagem_id", updatable = true, nullable = false)
 	private Imagem logoImagem;
+	
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = true)
+	private Usuario createdBy;
+
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
+	private Usuario updatedBy;
 
 	@Column(name = "telefone1")
 	private String telefone1;
@@ -77,14 +85,6 @@ public class OrganizacaoInfo implements Serializable {
 
 	@Column(name = "nomefantasia")
 	private String nomeFantasia;
-	
-	@ManyToOne
-	@JoinColumn(name = "createdby", updatable = true, nullable = false)
-	private Usuario createdBy;
-
-	@ManyToOne
-	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
-	private Usuario updatedBy;
 
 	@Column(name = "created")
 	private Calendar created;
