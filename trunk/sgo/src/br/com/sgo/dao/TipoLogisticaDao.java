@@ -62,6 +62,46 @@ public class TipoLogisticaDao extends Dao<TipoLogistica> {
 		return tiposLogistica;
 	}
 
+	public TipoLogistica buscaTipoLogisticaByNome(Long empresa_id, Long organizacao_id, String nome) {
+		
+		String sql = sqlTipoLogisticas;
+
+		if (empresa_id != null)
+			sql += " WHERE TIPOLOGISTICA.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND TIPOLOGISTICA.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND TIPOLOGISTICA.nome like ?";
+		
+		this.conn = this.conexao.getConexao();
+
+		TipoLogistica tipoLogistica = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, "%" + nome + "%");
+
+			this.rsTipoLogistica = this.stmt.executeQuery();
+
+			while (rsTipoLogistica.next()) {
+
+				tipoLogistica = new  TipoLogistica();
+				tipoLogistica.setTipoLogistica_id(rsTipoLogistica.getLong("tipologistica_id"));
+				tipoLogistica.setNome(rsTipoLogistica.getString("tipologistica_nome"));
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsTipoLogistica, stmt, conn);
+		
+		return tipoLogistica;
+	}
+
 	public Collection<TipoLogistica> buscaTipoLogisticaByEmOrgNome(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = sqlTipoLogisticas;
@@ -131,7 +171,7 @@ public class TipoLogisticaDao extends Dao<TipoLogistica> {
 
 				tipoLog = new TipoLogistica();
 				tipoLog.setTipoLogistica_id(rsTipoLogistica.getLong("tipologistica_id"));
-				tipoLog.setNome(rsTipoLogistica.getString("nome"));
+				tipoLog.setNome(rsTipoLogistica.getString("tipologistica_nome"));
 
 			}
 
