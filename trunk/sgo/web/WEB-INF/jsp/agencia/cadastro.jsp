@@ -201,9 +201,14 @@ function limpaForm() {
 	      						<input class="span12" id="agenciaBanco" name="agencia.banco.nome" value="${agencia.banco.nome }" type="text" required onChange="limpaForm();">
 	      						<input class="span1" id="agenciaBancoId" name="agencia.banco.banco_id" value="${agencia.banco.banco_id }" type="hidden">	    					
 							</div>
+							<div class="span2">	
+								<label for="agenciaLocalidade">Localidade</label>						
+	      						<input class="span12" id="agenciaLocalidade" name="agencia.localidade.nome" value="${agencia.localidade.nome }" type="text" required onChange="limpaForm();">
+	      						<input class="span1" id="agenciaLocalidadeId" name="agencia.localidade.localidade_id" value="${agencia.localidade.localidade_id }" type="hidden">	    					
+							</div>
 							<div class="span3">
 								<label for="agenciaNome">Nome</label>
-								<input class="span12" type="text" id="agenciaNome" name="agencia.nome" placeholder="Nome" value="1" required>
+								<input class="span12" type="text" id="agenciaNome" name="agencia.nome" placeholder="Nome" value="${agencia.nome }" required>
 							</div>
 							<div class="span3">
 								<label  for="agenciaDescricao">Descrição</label>
@@ -211,7 +216,7 @@ function limpaForm() {
 							</div>
 							<div class="span1">
 								<label class="control-label" for="agenciaIsActive">Ativo</label>
-								<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="${agencia.isActive }" >
+								<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="1" >
 							</div>
 						</div>
 					 	<div class="btn-group">

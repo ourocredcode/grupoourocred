@@ -173,8 +173,8 @@ function limpaForm() {
 	</c:if>
 
 <div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">								
 				<li class="" id="grupobanco-li"><a href="#grupobanco-div" data-toggle="tab" id="grupobanco-li-a">Grupo de Bancos</a></li>
@@ -185,66 +185,39 @@ function limpaForm() {
 
 				<div class="tab-pane fade" id="grupobanco-div"></div>
 				<div class="tab-pane fade active in" id="banco-div" >
-				<form id="bancoForm" name="bancoForm" action="<c:url value="/banco/salva"/>" method="POST">
-					<div class="row-fluid">
-						<div class="span3">
-							<label for="bancoEmpresa">Empresa</label>
-      						<input class="span12" id="bancoEmpresa" name="banco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-      						<input class="span1" id="bancoEmpresaId" name="banco.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
-						</div>
-						<div class="span3">
-							<label for="bancoOrganizacao">Organização</label>
-      						<input class="span12" id="bancoOrganizacao" name="banco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-      						<input class="span1" id="bancoOrganizacaoId" name="banco.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
-    					</div>
-					</div>
-					
+					<form id="bancoForm" name="bancoForm" action="<c:url value="/banco/salva"/>" method="POST">
+
 						<div class="row-fluid">
-							<div class="span2">	
-								<label for="agenciaBanco">Banco</label>						
-	      						<input class="span12" id="agenciaBanco" name="agencia.banco.nome" value="${agencia.banco.nome }" type="text" required onChange="limpaForm();">
-	      						<input class="span1" id="agenciaBancoId" name="agencia.banco.banco_id" value="${agencia.banco.banco_id }" type="hidden">	    					
+							<div class="span3">
+								<label for="bancoEmpresa">Empresa</label>
+	      						<input class="span12" id="bancoEmpresa" name="banco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="bancoEmpresaId" name="banco.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 							</div>
 							<div class="span3">
-								<label for="agenciaNome">Nome</label>
-								<input class="span12" type="text" id="agenciaNome" name="agencia.nome" placeholder="Nome" value="${agencia.nome }" required>
-							</div>
-							<div class="span3">
-								<label  for="agenciaDescricao">Descrição</label>
-								<input class="span12" type="text" id="agenciaDescricao" name="agencia.descricao" value="${agencia.descricao }" placeholder="Descrição" required>							
-							</div>
-							<div class="span1">
-								<label class="control-label" for="agenciaIsActive">Ativo</label>
-								<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="1" >
-							</div>
-						</div>
-						
+								<label for="bancoOrganizacao">Organização</label>
+	      						<input class="span12" id="bancoOrganizacao" name="banco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="bancoOrganizacaoId" name="banco.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+	    					</div>
+						</div>					
+
 						<div class="row-fluid">
 							<div class="span2">
 								<label for="bancoGrupoBanco">Grupo banco</label>
-	      						<input class="span10" id="bancoGrupoBanco" name="banco.grupoBanco.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="bancoGrupoBancoId" name="banco.grupoBanco.grupoBanco_id" type="hidden">
-	    					</div>
-								
+	      						<input class="span10" id="bancoGrupoBanco" name="banco.grupoBanco.nome" type="text" value="${banco.grupoBanco.nome }" required onChange="limpaForm();">
+	      						<input class="span1" id="bancoGrupoBancoId" name="banco.grupoBanco.grupoBanco_id" type="hidden" value="${banco.grupoBanco.grupoBanco_id }">
+	    					</div>								
 
+							<div class="span2">
+								<label for="bancoNome">Nome</label>
+								<input class="span12" type="text" id="bancoNome" name="banco.nome" placeholder="Nome" value="${banco.nome }" required>
 							</div>
-							<div class="control-group">
-								<label class="control-label" for="bancoNome">Nome</label>
-								<div class="controls">
-									<input type="text" id="bancoNome" name="banco.nome" placeholder="Nome" required>
-								</div>
+							<div class="span2">
+								<label for="bancoDescricao">Descrição</label>
+								<input type="text" id="bancoDescricao" name="banco.descricao" placeholder="Descrição" required>
 							</div>
-							<div class="control-group">
-								<label class="control-label" for="bancoDescricao">Descrição</label>
-								<div class="controls">
-									<input type="text" id="bancoDescricao" name="banco.descricao" placeholder="Descrição" required>
-								</div>
-							</div>
-							<div class="control-group">
+							<div class="span1">
 								<label class="control-label" for="bancoIsActive">Ativo</label>
-								<div class="controls">
-									<input type="checkbox" id="bancoIsActive" name="banco.isActive" checked="checked" value="${banco.isActive }" >							
-								</div>
+								<input type="checkbox" id="bancoIsActive" name="banco.isActive" checked="checked" value="1" >
 							</div>
 						 	<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
@@ -255,17 +228,9 @@ function limpaForm() {
 							<div class="btn-group">
 								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 							</div>
-						
-					</div>
-	
-							
-
-						</form>
-						
-					</div>
-					
+						</div>							
+					</form>
 				</div>
-	
 			</div>
 		</div>
 	</div>

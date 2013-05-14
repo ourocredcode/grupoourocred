@@ -66,11 +66,20 @@ public class Logistica implements Serializable {
 	@Column(name = "updated")
 	private Calendar updated;
 
-	@Column(name = "dataassinatura")
-	private Calendar dataAssinatura;
+	@Column(name = "chave")
+	private String chave;
+	
+	@Column(name = "value")
+	private String value;
 
 	@Column(name = "nome")
 	private String nome;
+
+	@Column(name = "descricao")
+	private String descricao;
+
+	@Column(name = "dataassinatura")
+	private Calendar dataAssinatura;
 
 	@Column(name = "isfechado")
 	private Boolean isFechado;
@@ -219,5 +228,29 @@ public class Logistica implements Serializable {
 
 	public void setPeriodo(Periodo periodo) {
 		this.periodo = periodo;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 }
