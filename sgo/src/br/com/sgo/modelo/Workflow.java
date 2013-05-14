@@ -39,11 +39,11 @@ public class Workflow implements Serializable {
 	private TipoWorkflow tipoWorkflow;
 
 	@ManyToOne
-	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
 	@ManyToOne
-	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
 	private Usuario updatedBy;
 
 	@Column(name = "created")

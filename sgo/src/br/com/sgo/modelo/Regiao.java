@@ -39,11 +39,11 @@ public class Regiao implements Serializable {
 	private Pais pais;
 
 	@ManyToOne
-	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
 	@ManyToOne
-	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
 	private Usuario updatedBy;
 
 	@Column(name = "created")

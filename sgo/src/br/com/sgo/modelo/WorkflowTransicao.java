@@ -45,20 +45,20 @@ public class WorkflowTransicao implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "perfil_id", updatable = true, nullable = true)
 	private Perfil perfil;
+	
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = true)
+	private Usuario createdBy;
+
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
+	private Usuario updatedBy;
 
 	@Column(name = "sequencia")
 	private Integer sequencia;
 
 	@Column(name = "ispadrao")
 	private Boolean isPadrao;
-	
-	@ManyToOne
-	@JoinColumn(name = "createdby", updatable = true, nullable = false)
-	private Usuario createdBy;
-
-	@ManyToOne
-	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
-	private Usuario updatedBy;
 
 	@Column(name = "created")
 	private Calendar created;
