@@ -413,7 +413,7 @@ function openPopup(url) {
 			</c:otherwise>
 		</c:choose>
 	</c:if>
-
+	
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
@@ -422,7 +422,7 @@ function openPopup(url) {
 						<span class="icon">
 							<i class="icon-align-justify"></i>									
 						</span>
-						<h5>Dados Contrato</h5>
+						<h5>Dados Cliente</h5>
 					</div>
 					<div class="widget-content padding">
 						<div class="row-fluid">
@@ -475,8 +475,27 @@ function openPopup(url) {
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>						
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Dados Contrato</h5>
+						<div class="buttons"><a href="#" class="btn btn-mini" onclick="mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
+					</div>
+					<div class="widget-content padding">
+
 						<div class="row-fluid">
-							<div id="div-contratos" style="float: none;clear:both;">
+							<div id="divContrato" style="float: none;clear:both;">
 	
 								<table class="table table-striped table-bordered">
 									<c:if test="${not empty contrato}">
@@ -821,22 +840,23 @@ function openPopup(url) {
 						<h5>Status</h5>
 					</div>
 					<div class="widget-content padding">
-
+					<form id="contratoStatusForm" name="contratoStatusForm" action="<c:url value="/contrato/altera/status"/>" method="POST">
+					<input id="contratoId" type="hidden" name="contrato.contrato_id" value="${contrato.contrato_id }" />	
 						<div class="row-fluid"> 
 	
 							<div class="span2">
 								<label for="dataAgendado">Data Agendado</label>
-								<input id="dataAgendado" type="text" name="contratoStatus.dataAgendado" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataAgendado.time}" />" class="input-medium"/>
+								<input id="dataAgendado" type="text" name="contrato.dataAgendado" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataAgendado.time}" />" class="input-medium"/>
 							</div>
 							
 							<div class="span2">
 								<label for="valorQuitacao">Valor Quitação</label>
-								<input id="valorQuitacao" type="text" name="contratoStatus.valorQuitacao" value="${contratoStatus.valorQuitacao}" class="input-medium" />
+								<input id="valorQuitacao" type="text" name="contrato.valorQuitacao" value="${contrato.valorQuitacao}" class="input-medium" />
 							</div>
 							
 							<div class="span2">
 								<label for="dataQuitacao">Data Quitação</label>
-								<input id="dataQuitacao" type="text" name="contratoStatus.dataQuitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataQuitacao.time}" />" class="input-medium"/>
+								<input id="dataQuitacao" type="text" name="contrato.dataQuitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataQuitacao.time}" />" class="input-medium"/>
 							</div>
 						</div>
 						
@@ -844,41 +864,30 @@ function openPopup(url) {
 	
 							<div class="span2">
 								<label for="dataDigitacao">Data Digitacao</label>
-								<input id="dataDigitacao" type="text" name="contratoStatus.dataDigitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataDigitacao.time}" />" class="input-medium" />
+								<input id="dataDigitacao" type="text" name="contrato.dataDigitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataDigitacao.time}" />" class="input-medium" />
 							</div>
 							<div class="span2">	
 								<label for="contratoBanco">Contrato Banco</label>	
-								<input id="contratoBanco" type="text" name="contratoStatus.contratoBanco" value="${contratoStatus.contratoBanco}" class="input-medium" />
+								<input id="contratoBanco" type="text" name="contrato.contratoBanco" value="${contrato.contratoBanco}" class="input-medium" />
 							</div>
 							<div class="span2">	
 								<label for="propostaBanco">Proposta Banco</label>	
-								<input id="propostaBanco" type="text" name="contratoStatus.propostaBanco" value="${contratoStatus.propostaBanco}" class="input-medium" />
+								<input id="propostaBanco" type="text" name="contrato.propostaBanco" value="${contrato.propostaBanco}" class="input-medium" />
 							</div>
 							<div class="span2">	
 								<label for="empresa">Empresa</label>	
-								<select id="empresa" name="contratoStatus.empresa" class="input-medium" >
+								<select id="empresa" name="contrato.empresa" class="input-medium" >
 									<option value="">Selecione</option>
-									<option value="ATGGOLD" <c:if test="${contratoStatus.empresa == 'ATGGOLD'}">selected</c:if>>ATGGOLD</option>
-									<option value="GOCX" <c:if test="${contratoStatus.empresa == 'GOCX'}">selected</c:if>>GOCX</option>
-									<option value="GRGOLD" <c:if test="${contratoStatus.empresa == 'GRGOLD'}">selected</c:if>>GRGOLD</option>
-									<option value="OUROCRED" <c:if test="${contratoStatus.empresa == 'OUROCRED'}">selected</c:if>>OUROCRED</option>
+									<option value="ATGGOLD" <c:if test="${contrato.empresa == 'ATGGOLD'}">selected</c:if>>ATGGOLD</option>
+									<option value="GOCX" <c:if test="${contrato.empresa == 'GOCX'}">selected</c:if>>GOCX</option>
+									<option value="GRGOLD" <c:if test="${contrato.empresa == 'GRGOLD'}">selected</c:if>>GRGOLD</option>
+									<option value="OUROCRED" <c:if test="${contrato.empresa == 'OUROCRED'}">selected</c:if>>OUROCRED</option>
 								</select>
 							</div>
 	
 						</div>
-					</div>
-
-				</div>
-			</div>										
-		</div>
-
-		<div class="navbar" style="clear: both;">
-			<div class="navbar-inner"  >
-				<div class="container">
-
-					<div class="control-group"></div>
-
-						<div class="row-fluid">
+					
+					<div class="row-fluid">
 
 						<div class="span2">
 							<label for="contratoStatus">Status Contrato</label>
@@ -889,53 +898,91 @@ function openPopup(url) {
 								</c:forEach>
 							</select>
 						</div>
-
+					
 						<div class="span2">
 							<label for="dataStatusFinal">Data Aprova/Recusa</label>
-							<input id="dataStatusFinal" type="text" name="contratoStatus.dataStatusFinal" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataStatusFinal.time}" />" class="input-medium"/>
+							<input id="dataStatusFinal" type="text" name="contrato.dataStatusFinal" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataStatusFinal.time}" />" class="input-medium"/>
 						</div>
-						
+					
 						<div class="span2">
 							<label for="dataConcluido">Data Conclusão</label>
-							<input id="dataConcluido" type="text" name="contratoStatus.dataConcluido" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contratoStatus.dataConcluido.time}" />" class="input-medium"/>
+							<input id="dataConcluido" type="text" name="contrato.dataConcluido" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataConcluido.time}" />" class="input-medium"/>
 						</div>
-
+					
 						<div class="span2">
 							<label for="justificativa">Justificativa</label>
-							<select id="justificativa" name="contratoStatus.justificativa" class="input-medium">
+							<select id="justificativa" name="contrato.workflowEtapaPendencia.workflowEtapa_id" class="input-medium">
 
 								<option value="" selected="selected">Selecione</option>
-								<option value="Cliente com pendência de documentos" <c:if test="${contratoStatus.justificativa == 'Cliente com pendência de documentos'}">selected</c:if>>Cliente com pendência de documentos</option>
-								<option value="Cliente fechou por outro banco" <c:if test="${contratoStatus.justificativa == 'Cliente fechou por outro banco'}">selected</c:if>>Cliente fechou por outro banco</option>
-								<option value="Cliente não assinou" <c:if test="${contratoStatus.justificativa == 'Cliente não assinou'}">selected</c:if>>Cliente não assinou</option>
-								<option value="Cliente não retirou o boleto" <c:if test="${contratoStatus.justificativa == 'Cliente não retirou o boleto'}">selected</c:if>>Cliente não retirou o boleto</option>
-								<option value="Cliente refinanciou" <c:if test="${contratoStatus.justificativa == 'Cliente refinanciou'}">selected</c:if>>Cliente refinanciou</option>
-								<option value="Dívida maior que o previsto" <c:if test="${contratoStatus.justificativa == 'Dívida maior que o previsto'}">selected</c:if>>Dívida maior que o previsto</option>
-								<option value="Erro de análise" <c:if test="${contratoStatus.justificativa == 'Erro de análise'}">selected</c:if>>Erro de análise</option>
-								<option value="Erro de preenchimento" <c:if test="${contratoStatus.justificativa == 'Erro de preenchimento'}">selected</c:if>>Erro de preenchimento</option>
-								<option value="Família não deixou" <c:if test="${contratoStatus.justificativa == 'Família não deixou'}">selected</c:if>>Família não deixou</option>
-								<option value="Junção de Parcelas" <c:if test="${contratoStatus.justificativa == 'Junção de Parcelas'}">selected</c:if>>Junção de Parcelas</option>
-								<option value="Operador trocou de equipe" <c:if test="${contratoStatus.justificativa == 'Operador trocou de equipe'}">selected</c:if>>Operador trocou de equipe</option>
-								<option value="Recusado Banco" <c:if test="${contratoStatus.justificativa == 'Recusado Banco'}">selected</c:if>>Recusado Banco</option>
-								<option value="Recusado Qualidade" <c:if test="${contratoStatus.justificativa == 'Recusado Qualidade'}">selected</c:if>>Recusado Qualidade</option>
-								<option value="Recusado Pós Venda" <c:if test="${contratoStatus.justificativa == 'Recusado Pós Venda'}">selected</c:if>>Recusado Pós Venda</option>
 
 							</select>
 						</div>
-
-						</div>	
-						<div class="form-actions">
-							<div class="span1" style="float: left;">
-								<input value="Voltar" type="button" class="btn" onclick="javascript:window.location='/sgo/menu/inicio'">
-							</div>
-							<div class="span1" style="float: left;">
-								<input value="Formulário" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'">
-							</div>
-						</div>				
-
 					</div>
+					
+					<div class="form-actions">
+						<div class="span1" style="float: left;">
+							<input value="Salva" type="submit" class="btn btn-primary" >
+						</div>
+						<div class="span1" style="float: left;">
+							<input value="Voltar" type="button" class="btn" onclick="javascript:window.location='/sgo/menu/inicio'">
+						</div>
+						<div class="span1" style="float: left;">
+							<input value="Formulário" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'">
+						</div>
+					</div>	
+				  </form>	
+				  </div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Histórico</h5>
+					</div>
+					<div class="widget-content padding">
+						<table class="table table-striped table-bordered">
+							<c:if test="${not empty historico}">
+							<thead>	
+								<tr>
+									<th scope="col">
+										Data
+									</th>
+									<th scope="col">
+										Usuario
+									</th>
+									<th scope="col">
+										Observacao
+									</th>
+								</tr>
+							</thead>
+							<tbody>		
+								<c:forEach var="historico" items="${historico }">
+									<tr>
+										<td>
+											<fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${historico.created.time }" />
+										</td>
+										<td>
+											${historico.createdBy.nome }
+										</td>
+										<td>
+											${historico.observacao }
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>	
+							</c:if>
+						</table>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>		
 
 <%@ include file="/footer.jspf" %> 
