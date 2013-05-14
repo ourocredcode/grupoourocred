@@ -1,6 +1,7 @@
 package br.com.sgo.modelo;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +34,23 @@ public class TipoLogistica implements Serializable {
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
+	@ManyToOne
+	@JoinColumn(name = "createdby", updatable = true, nullable = false)
+	private Usuario createdBy;
+
+	@ManyToOne
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
+	private Usuario updatedBy;
+
+	@Column(name = "created")
+	private Calendar created;
+
+	@Column(name = "updated")
+	private Calendar updated;
+
+	@Column(name = "value")
+	private String value;
+
 	@Column(name = "nome")
 	private String nome;
 
@@ -41,7 +59,7 @@ public class TipoLogistica implements Serializable {
 
 	@Column(name = "isactive")
 	private Boolean isActive;
-
+	
 	public Long getTipoLogistica_id() {
 		return tipoLogistica_id;
 	}
@@ -88,5 +106,45 @@ public class TipoLogistica implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
 	}
 }

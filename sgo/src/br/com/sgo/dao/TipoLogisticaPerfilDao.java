@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 
 import org.hibernate.Session;
@@ -25,6 +27,8 @@ public class TipoLogisticaPerfilDao extends Dao<TipoLogisticaPerfil> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsTipoLogisticaPerfil;
+
+	private Calendar dataAtual = Calendar.getInstance();
 
 	private final String sqlTipoLogisticaPerfil = "SELECT TIPOLOGISTICAPERFIL.tipologistica_id, TIPOLOGISTICA.nome AS tipologistica_nome, " +
 							" TIPOLOGISTICAPERFIL.perfil_id, PERFIL.nome AS perfil_nome, "+
@@ -73,15 +77,15 @@ public class TipoLogisticaPerfilDao extends Dao<TipoLogisticaPerfil> {
 		return tiposLogisticaPerfil;
 	}
 
-	public Collection<TipoLogisticaPerfil> buscaTipoLogisticaPerfilPorEmpresaOrganizacaoPerfil(Empresa empresa, Organizacao organizacao, TipoLogistica tipoLogistica) {
+	public Collection<TipoLogisticaPerfil> buscaTipoLogisticaPerfilPorEmpresaOrganizacaoPerfil(Long empresa_id, Long organizacao_id, Long tipoLogistica_id) {
 		
 		String sql = sqlTipoLogisticaPerfil;
 
-		if (empresa != null)
+		if (empresa_id != null)
 			sql += " WHERE TIPOLOGISTICAPERFIL.empresa_id = ?";
-		if (organizacao != null)
+		if (organizacao_id != null)
 			sql += " AND TIPOLOGISTICAPERFIL.organizacao_id = ?";
-		if (tipoLogistica != null)
+		if (tipoLogistica_id != null)
 			sql += " AND TIPOLOGISTICAPERFIL.tipologistica_id = ?";
 
 		this.conn = this.conexao.getConexao();
@@ -92,9 +96,9 @@ public class TipoLogisticaPerfilDao extends Dao<TipoLogisticaPerfil> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1, empresa.getEmpresa_id());
-			this.stmt.setLong(2, organizacao.getOrganizacao_id());
-			this.stmt.setLong(3, tipoLogistica.getTipoLogistica_id());
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, tipoLogistica_id);
 
 			this.rsTipoLogisticaPerfil = this.stmt.executeQuery();
 
@@ -113,42 +117,43 @@ public class TipoLogisticaPerfilDao extends Dao<TipoLogisticaPerfil> {
 		return tiposLogisticaPerfil;
 	}
 
-	public TipoLogisticaPerfil buscaTipoLogisticaPerfilPorEmpresaOrganizacaoWorkflowPerfil(Empresa empresa, Organizacao organizacao, TipoLogistica tipoLogistica, Perfil perfil) {
+	public TipoLogisticaPerfil buscaTipoLogisticaPerfilPorEmpresaOrganizacaoWorkflowPerfil(Long empresa_id, Long organizacao_id, Long tipoLogistica_id, Long perfil_id) {
 		
 		String sql = sqlTipoLogisticaPerfil;
 
-		if (empresa != null)
+		if (empresa_id != null)
 			sql += " WHERE TIPOLOGISTICAPERFIL.empresa_id = ?";
-		if (organizacao != null)
+		if (organizacao_id != null)
 			sql += " AND TIPOLOGISTICAPERFIL.organizacao_id = ?";
-		if (tipoLogistica != null)
+		if (tipoLogistica_id != null)
 			sql += " AND TIPOLOGISTICAPERFIL.tipologistica_id = ?";
-		if (perfil != null)
+		if (perfil_id != null)
 			sql += " AND TIPOLOGISTICAPERFIL.perfil_id = ?";
 
 		this.conn = this.conexao.getConexao();
-		
+
 		TipoLogisticaPerfil tipoLogisticaPerfil = null;
-		
+
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			
-			this.stmt.setLong(1, empresa.getEmpresa_id());
-			this.stmt.setLong(2, organizacao.getOrganizacao_id());
-			this.stmt.setLong(3, tipoLogistica.getTipoLogistica_id());
-			this.stmt.setLong(4, perfil.getPerfil_id());
-			
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, tipoLogistica_id);
+			this.stmt.setLong(4, perfil_id);
+
 			this.rsTipoLogisticaPerfil = this.stmt.executeQuery();
-			
+
 			while (rsTipoLogisticaPerfil.next()) {
 
-				tipoLogisticaPerfil = new TipoLogisticaPerfil();
-				
+				tipoLogisticaPerfil = new  TipoLogisticaPerfil();
+
+				Perfil perfil = new Perfil();
 				perfil.setPerfil_id(rsTipoLogisticaPerfil.getLong("perfil_id"));
-				
+
 				tipoLogisticaPerfil.setPerfil(perfil);
-				
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -161,7 +166,8 @@ public class TipoLogisticaPerfilDao extends Dao<TipoLogisticaPerfil> {
 
 	public void insert(TipoLogisticaPerfil tipoLogisticaPerfil) throws SQLException {
 
-		String sql = "INSERT INTO TIPOLOGISTICAPERFIL (empresa_id, organizacao_id, workflow_id, perfil_id, isactive) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO TIPOLOGISTICAPERFIL (empresa_id, organizacao_id, tipologistica_id, perfil_id, createdby, updatedby, created, updated, isleituraescrita, isactive) " +
+													 " VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
@@ -175,18 +181,29 @@ public class TipoLogisticaPerfilDao extends Dao<TipoLogisticaPerfil> {
 			this.stmt.setLong(2, tipoLogisticaPerfil.getOrganizacao().getOrganizacao_id());			
 			this.stmt.setLong(3, tipoLogisticaPerfil.getTipoLogistica().getTipoLogistica_id());
 			this.stmt.setLong(4, tipoLogisticaPerfil.getPerfil().getPerfil_id());
-			this.stmt.setBoolean(5, tipoLogisticaPerfil.getIsActive());
+			this.stmt.setLong(5, tipoLogisticaPerfil.getCreatedBy().getUsuario_id());
+			this.stmt.setLong(6, tipoLogisticaPerfil.getUpdatedBy().getUsuario_id());			
+			this.stmt.setTimestamp(7, new Timestamp(dataAtual.getTimeInMillis()));
+			this.stmt.setTimestamp(8, new Timestamp(dataAtual.getTimeInMillis()));
+			this.stmt.setBoolean(9, tipoLogisticaPerfil.getIsLeituraEscrita());
+			this.stmt.setBoolean(10, tipoLogisticaPerfil.getIsActive());
 
 			this.stmt.executeUpdate();
 			this.conn.commit();
 			
 		} catch (SQLException e) {
+
 			this.conn.rollback();
 			throw e;
+
 		} finally {
+
 			this.conn.setAutoCommit(true);
+
 		}
+
 		this.conexao.closeConnection(stmt, conn);
+
 	}
 
 	private void getTipoLogisticaPerfil(Collection<TipoLogisticaPerfil> tiposLogisticaPerfil) throws SQLException {
@@ -207,7 +224,7 @@ public class TipoLogisticaPerfilDao extends Dao<TipoLogisticaPerfil> {
 		tipoLogistica.setNome(rsTipoLogisticaPerfil.getString("tipologistica_nome"));
 
 		perfil.setPerfil_id(rsTipoLogisticaPerfil.getLong("perfil_id"));
-		perfil.setNome(rsTipoLogisticaPerfil.getString("tipologistica_nome"));
+		perfil.setNome(rsTipoLogisticaPerfil.getString("perfil_nome"));
 
 		tipoLogisticaPerfil.setEmpresa(empresa);
 		tipoLogisticaPerfil.setOrganizacao(organizacao);
