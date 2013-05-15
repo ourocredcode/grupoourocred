@@ -42,7 +42,7 @@ public class CidadeController {
 	@Public
 	@Path("/cidade/cadastro")
 	public void cadastro(){
-		result.include("cidades",this.cidadeDao.listaTudo("ASC","nome"));
+
 	}
 
 	@Post
