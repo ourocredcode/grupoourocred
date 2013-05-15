@@ -101,72 +101,90 @@ function limpaForm() {
 }
 </script>
 
-<div class="span9">
+<div id="content-header">
+	<h1>Cadastro Categoria Produto</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+	</div>
+</div>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+		<a href="#" class="current">Categoria Produto</a>
+	</div>
+	
+	<c:if test="${not empty notice}">
+		<c:choose>
+			<c:when test="${fn:contains(notice,'Erro:')}">
+					<div class="alert alert-error">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:when>
+			<c:otherwise>
+					<div class="alert alert-success">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="categoriaproduto-li"><a href="#categoriaproduto-div" data-toggle="tab" id="categoriaproduto-li-a">Categoria de Produtos</a></li>				
 			</ul>
+
 			<div id="myTabContent" class="tab-content">
 
 				<div class="tab-pane fade active in" id="categoriaproduto-div">
-				
-					<div class="row25MarginTop">
-						<div class="span3">
-							<form id="categoriaProdutoForm" name="categoriaProdutoForm" action="<c:url value="/categoriaproduto/salva"/>" method="POST">
-								<div class="control-group">
-									<label class="control-label" for="categoriaProdutoEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="categoriaProdutoEmpresa" name="categoriaProduto.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="categoriaProdutoEmpresaId" name="categoriaProduto.empresa.empresa_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="categoriaProdutoOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="categoriaProdutoOrganizacao" name="categoriaProduto.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="categoriaProdutoOrganizacaoId" name="categoriaProduto.organizacao.organizacao_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="categoriaProdutoNome">Nome</label>
-									<div class="controls">
-										<input type="text" id="categoriaProdutoNome" name="categoriaProduto.nome" placeholder="Nome" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="categoriaProdutoDescricao">Descrição</label>
-									<div class="controls">
-										<input type="text" id="categoriaProdutoDescricao" name="categoriaProduto.descricao" placeholder="Descrição" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="categoriaProdutoIsActive">Ativo</label>
-									<div class="controls">
-										<input type="checkbox" id="categoriaProdutoIsActive" name="categoriaProduto.isActive" checked="checked" value="1" >							
-									</div>
-								</div>
-							 	<div class="btn-group">
-									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-								</div>
-							</form>
+					<form id="categoriaProdutoForm" name="categoriaProdutoForm" action="<c:url value="/categoriaproduto/salva"/>" method="POST">
+					
+						<div class="row-fluid">							
+							<div class="span2">
+								<label for="categoriaProdutoEmpresa">Empresa</label>
+	      						<input class="span12" id="categoriaProdutoEmpresa" name="categoriaProduto.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="categoriaProdutoEmpresaId" name="categoriaProduto.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }">
+	    					</div>
+							<div class="span2">
+								<label for="categoriaProdutoOrganizacao">Organização</label>
+								<input class="span12" id="categoriaProdutoOrganizacao" name="categoriaProduto.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span1" id="categoriaProdutoOrganizacaoId" name="categoriaProduto.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }" >
+	    					</div>
+							<div class="span2">
+								<label for="categoriaProdutoNome">Nome</label>
+								<input class="span12" type="text" id="categoriaProdutoNome" name="categoriaProduto.nome" placeholder="Nome" value="${categoriaProduto.nome }" required>
+							</div>
+							<div class="span2">
+								<label for="categoriaProdutoDescricao">Descrição</label>
+								<input class="span12" type="text" id="categoriaProdutoDescricao" name="categoriaProduto.descricao" placeholder="Descrição" value="${categoriaProduto.descricao }" required>
+							</div>
+							<div class="span1">
+								<label for="categoriaProdutoIsActive">Ativo</label>
+								<input type="checkbox" id="categoriaProdutoIsActive" name="categoriaProduto.isActive" checked="checked" value="1" >
+							</div>
 						</div>
-						
-					</div>
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
+					</form>
 				</div>
+						
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>

@@ -101,72 +101,90 @@ function limpaForm() {
 }
 </script>
 
-<div class="span9">
+<div id="content-header">
+	<h1>Classificação Parceiro</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+	</div>
+</div>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Classificação Parceiro</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="classificacaoparceiro-li"><a href="#classificacaoparceiro-div" data-toggle="tab" id="classificacaoparceiro-li-a">Classificacao Parceiro</a></li>				
 			</ul>
+
 			<div id="myTabContent" class="tab-content">
 
-				<div class="tab-pane fade active in" id="classificacaoparceiro-div">
-				
-					<div class="row25MarginTop">
-						<div class="span3">
-							<form id="classificacaoParceiroForm" name="classificacaoParceiroForm" action="<c:url value="/classificacaoparceiro/salva"/>" method="POST">
-								<div class="control-group">
-									<label class="control-label" for="classificacaoParceiroEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="classificacaoParceiroEmpresa" name="classificacaoParceiro.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="classificacaoParceiroEmpresaId" name="classificacaoParceiro.empresa.empresa_id" type="hidden">
-			    					</div>
+				<div class="tab-pane fade active in" id="classificacaoparceiro-div">			
+
+						<form id="classificacaoParceiroForm" name="classificacaoParceiroForm" action="<c:url value="/classificacaoparceiro/salva"/>" method="POST">							
+
+							<div class="row-fluid">
+								<div class="span2">
+									<label for="classificacaoParceiroEmpresa">Empresa</label>								
+		      						<input class="span12" id="classificacaoParceiroEmpresa" name="classificacaoParceiro.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" required onChange="limpaForm();">
+		      						<input class="span1" id="classificacaoParceiroEmpresaId" name="classificacaoParceiro.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" >
+		    					</div>							
+								<div class="span2">
+									<label for="classificacaoParceiroOrganizacao">Organização</label>
+		      						<input class="span12" id="classificacaoParceiroOrganizacao" name="classificacaoParceiro.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" required onChange="limpaForm();">
+		      						<input class="span1" id="classificacaoParceiroOrganizacaoId" name="classificacaoParceiro.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }" >
+		    					</div>
+								<div class="span2">
+									<label for="classificacaoParceiroNome">Nome</label>
+									<input class="span12" type="text" id="classificacaoParceiroNome" name="classificacaoParceiro.nome" placeholder="Nome" value="${classificacaoParceiro.nome }" required>								
 								</div>
-								<div class="control-group">
-									<label class="control-label" for="classificacaoParceiroOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span2" id="classificacaoParceiroOrganizacao" name="classificacaoParceiro.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span2" id="classificacaoParceiroOrganizacaoId" name="classificacaoParceiro.organizacao.organizacao_id" type="hidden">
-			    					</div>
+								<div class="span2">
+									<label for="classificacaoParceiroDescricao">Descrição</label>
+									<input class="span12" type="text" id="classificacaoParceiroDescricao" name="classificacaoParceiro.descricao" placeholder="Descrição" value="${classificacaoParceiro.descricao }" required>
 								</div>
-								<div class="control-group">
-									<label class="control-label" for="classificacaoParceiroNome">Nome</label>
-									<div class="controls">
-										<input type="text" id="classificacaoParceiroNome" name="classificacaoParceiro.nome" placeholder="Nome" required>
-									</div>
+								<div class="span1">
+									<label for="classificacaoParceiroIsActive">Ativo</label>
+									<input type="checkbox" id="classificacaoParceiroIsActive" name="classificacaoParceiro.isActive" checked="checked" value="1" >							
 								</div>
-								<div class="control-group">
-									<label class="control-label" for="classificacaoParceiroDescricao">Descrição</label>
-									<div class="controls">
-										<input type="text" id="classificacaoParceiroDescricao" name="classificacaoParceiro.descricao" placeholder="Descrição" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="classificacaoParceiroIsActive">Ativo</label>
-									<div class="controls">
-										<input type="checkbox" id="classificacaoParceiroIsActive" name="classificacaoParceiro.isActive" checked="checked" value="1" >							
-									</div>
-								</div>
-							 	<div class="btn-group">
-									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-								</div>
-							</form>
-						</div>
-						
-					</div>
-				</div>
+							</div>
+						 	<div class="btn-group">
+								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+							</div>
+						</form>
+					</div>						
+				</div>				
 			</div>
 		</div>
-	</section>
 </div>
 
 <%@ include file="/footer.jspf"%>

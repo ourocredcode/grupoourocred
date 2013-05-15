@@ -102,36 +102,36 @@ function limpaForm() {
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Departamento</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+	<h1>Cadastro Departamento</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
-	
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
-		<a href="#" class="current">Departamento</a>
-	</div>
-	
-	<c:if test="${not empty notice}">
-		<c:choose>
-			<c:when test="${fn:contains(notice,'Erro:')}">
-					<div class="alert alert-error">
-						<strong>${notice }</strong>
-						<a href="#" data-dismiss="alert" class="close">×</a>
-					</div>
-			</c:when>
-			<c:otherwise>
-					<div class="alert alert-success">
-						<strong>${notice }</strong>
-						<a href="#" data-dismiss="alert" class="close">×</a>
-					</div>
-			</c:otherwise>
-		</c:choose>
-	</c:if>
+</div>
+
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Departamento</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <div class="container-fluid">
 		<div class="row-fluid">
@@ -147,26 +147,23 @@ function limpaForm() {
 														
 					<form id="departamentoForm" name="departamentoForm" action="<c:url value="/departamento/salva"/>" method="POST">
 						<div class="row-fluid">
-							<div class="span3">
+							<div class="span2">
 								<label for="departamentoEmpresa">Empresa</label>
-		      					<input class="input-xxlarge" id="departamentoEmpresa" name="departamento.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span12" id="departamentoEmpresa" name="departamento.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 		      					<input class="span1" id="departamentoEmpresaId" name="departamento.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 	    					</div>
-							<div class="span3">
+							<div class="span2">
 								<label for="departamentoOrganizacao">Organização</label>
-		      					<input class="input-xxlarge" id="departamentoOrganizacao" name="departamento.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span12" id="departamentoOrganizacao" name="departamento.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 		      					<input class="span1" id="departamentoOrganizacaoId" name="departamento.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
-						</div>
-
-						<div class="row-fluid">
-							<div class="span5">
+							<div class="span2">
 								<label for="departamentoNome">Nome</label>
-								<input class="span10" type="text" id="departamentoNome" name="departamento.nome" value="${departamento.nome }" placeholder="Nome" required>
+								<input class="span12" type="text" id="departamentoNome" name="departamento.nome" value="${departamento.nome }" placeholder="Nome" required>
 							</div>
-							<div class="span5">
+							<div class="span2">
 								<label for="departamentoDescricao">Descrição</label>
-								<input class="span10" type="text" id="departamentoDescricao" name="departamento.descricao" value="${departamento.descricao }" placeholder="Descrição" required>
+								<input class="span12" type="text" id="departamentoDescricao" name="departamento.descricao" value="${departamento.descricao }" placeholder="Descrição" required>
 							</div>
 							<div class="span1">
 								<label for="departamentoIsActive">Ativo</label>

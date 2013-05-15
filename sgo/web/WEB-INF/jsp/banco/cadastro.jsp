@@ -141,36 +141,36 @@ function limpaForm() {
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Banco</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+	<h1>Cadastro Banco</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
-	
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
-		<a href="#" class="current">Banco</a>
-	</div>
-	
-	<c:if test="${not empty notice}">
-		<c:choose>
-			<c:when test="${fn:contains(notice,'Erro:')}">
-					<div class="alert alert-error">
-						<strong>${notice }</strong>
-						<a href="#" data-dismiss="alert" class="close">×</a>
-					</div>
-			</c:when>
-			<c:otherwise>
-					<div class="alert alert-success">
-						<strong>${notice }</strong>
-						<a href="#" data-dismiss="alert" class="close">×</a>
-					</div>
-			</c:otherwise>
-		</c:choose>
-	</c:if>
+</div>
+
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Banco</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <div class="container-fluid">
 	<div class="row-fluid">
@@ -184,51 +184,48 @@ function limpaForm() {
 			<div id="myTabContent" class="tab-content">
 
 				<div class="tab-pane fade" id="grupobanco-div"></div>
+
 				<div class="tab-pane fade active in" id="banco-div" >
 					<form id="bancoForm" name="bancoForm" action="<c:url value="/banco/salva"/>" method="POST">
 
 						<div class="row-fluid">
-							<div class="span3">
+							<div class="span2">
 								<label for="bancoEmpresa">Empresa</label>
-	      						<input class="span12" id="bancoEmpresa" name="banco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span10" id="bancoEmpresa" name="banco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="bancoEmpresaId" name="banco.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 							</div>
-							<div class="span3">
+							<div class="span2">
 								<label for="bancoOrganizacao">Organização</label>
-	      						<input class="span12" id="bancoOrganizacao" name="banco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span10" id="bancoOrganizacao" name="banco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="bancoOrganizacaoId" name="banco.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 	    					</div>
-						</div>					
-
-						<div class="row-fluid">
 							<div class="span2">
 								<label for="bancoGrupoBanco">Grupo banco</label>
 	      						<input class="span10" id="bancoGrupoBanco" name="banco.grupoBanco.nome" type="text" value="${banco.grupoBanco.nome }" required onChange="limpaForm();">
 	      						<input class="span1" id="bancoGrupoBancoId" name="banco.grupoBanco.grupoBanco_id" type="hidden" value="${banco.grupoBanco.grupoBanco_id }">
 	    					</div>								
-
 							<div class="span2">
 								<label for="bancoNome">Nome</label>
-								<input class="span12" type="text" id="bancoNome" name="banco.nome" placeholder="Nome" value="${banco.nome }" required>
+								<input class="span10" type="text" id="bancoNome" name="banco.nome" placeholder="Nome" value="${banco.nome }" required>
 							</div>
 							<div class="span2">
 								<label for="bancoDescricao">Descrição</label>
-								<input type="text" id="bancoDescricao" name="banco.descricao" placeholder="Descrição" required>
+								<input class="span10" type="text" id="bancoDescricao" name="banco.descricao" placeholder="Descrição" value="${banco.descricao }" required>
 							</div>
 							<div class="span1">
-								<label class="control-label" for="bancoIsActive">Ativo</label>
+								<label for="bancoIsActive">Ativo</label>
 								<input type="checkbox" id="bancoIsActive" name="banco.isActive" checked="checked" value="1" >
 							</div>
-						 	<div class="btn-group">
-								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-							</div>
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-							</div>
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-							</div>
-						</div>							
+						</div>
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
 					</form>
 				</div>
 			</div>
