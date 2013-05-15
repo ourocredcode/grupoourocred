@@ -308,12 +308,6 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			this.stmt.setLong(2, organizacao.getOrganizacao_id());
 			this.stmt.setLong(3, usuario.getUsuario_id());
 			this.stmt.setLong(4, usuario.getUsuario_id());
-			
-			System.out.println(sql);
-			System.out.println(empresa.getEmpresa_id());
-			System.out.println(organizacao.getOrganizacao_id());
-			System.out.println(usuario.getUsuario_id());
-			System.out.println(usuario.getUsuario_id());
 
 			this.rsHisconBeneficio = this.stmt.executeQuery();
 
@@ -413,11 +407,6 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, etapa_id);	
-
-			System.out.println(sql);
-			System.out.println(empresa_id);
-			System.out.println(organizacao_id);
-			System.out.println(etapa_id);
 
 			this.rsHisconBeneficio = this.stmt.executeQuery();
 
