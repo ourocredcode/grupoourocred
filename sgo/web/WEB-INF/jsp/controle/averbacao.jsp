@@ -72,14 +72,15 @@ function buscaByCalendar(){
 }
 
 </script>	
+	
 
 <div style="float: left;clear: both;">
 
-	<form id="averbacaoForm" name="averbacaoForm" action="<c:url value="/averbacao/salva" />" method="post" class="form-horizontal">
+	<form id="averbacaoForm" name="averbacaoForm" action="<c:url value="/controle/averbacao/salva" />" method="post" class="form-horizontal">
 
 		<input type="hidden" id="tipoUser" name="tipoUser" value="${consultorInfo.consultor.tipo}" />
-		<input type="hidden" id="averbacao.id" name="averbacao.id" value="${averbacao.controle_id}" />
-		<input type="hidden" id="averbacao.contrato.id" name="averbacao.contrato.id" value="${contrato.contrato_id}" />
+		<input type="hidden" id="averbacao.controle_id" name="averbacao.controle_id" value="${averbacao.controle_id}" />
+		<input type="hidden" id="averbacao.contrato.contrato_id" name="averbacao.contrato.contrato_id" value="${averbacao.contrato.contrato_id}" />
 
 		<div class="control-group">
 			<label class="control-label">Última Atuação :</label>
