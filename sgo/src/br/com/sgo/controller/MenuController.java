@@ -19,7 +19,10 @@ import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
+import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Menu;
+import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class MenuController {
@@ -34,9 +37,13 @@ public class MenuController {
 	private final PerfilDao perfilDao;
 	private final UsuarioInfo usuarioInfo;
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
+	
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,
-			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao){
+			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
 		this.usuarioDao = usuarioDao;
@@ -47,17 +54,24 @@ public class MenuController {
 		this.result = result;
 		this.validator = validator;
 		this.contratoDao = contratoDao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = usuarioInfo.getUsuario();
 
 	}
 	
 	@Get
-	@Path("/menu/inicio") 
-	public void inicio() {
+	@Path("/menu/inicio/{tipo}") 
+	public void inicio(String tipo) {
 
 		usuarioDao.refresh(usuarioInfo.getUsuario());
 		perfilDao.refresh(usuarioInfo.getPerfil());
 
-		contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
+		if(tipo.equals("Supervisor") || tipo.equals("Consultor"))
+			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
+
+		if(tipo.equals("Administrativo"))
+			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 		result.include("contratos", contratos);
 

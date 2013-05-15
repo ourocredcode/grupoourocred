@@ -94,12 +94,12 @@ function validaForm(form) {
 
 <div style="float: left;clear: both;">
 
-	<form id="boletoForm" name="boletoForm" action="<c:url value="/boleto/salva" />" method="post" class="form-horizontal">
+	<form id="boletoForm" name="boletoForm" action="<c:url value="/controle/boleto/salva" />" method="post" class="form-horizontal">
 
 		<input type="hidden" id="tipoUser" name="tipoUser" value="${usuarioInfo.perfil.chave}" />
-		<input type="hidden" id="boleto.id" name="boleto.id" value="${boleto.controle_id}" />
-		<input type="hidden" id="boleto.contrato.id" name="boleto.contrato.id" value="${contrato.contrato_id}" />
-		
+		<input type="hidden" id="boleto.controle_id" name="boleto.controle_id" value="${boleto.controle_id}" />
+		<input type="hidden" id="boleto.contrato.contrato_id" name="boleto.contrato.contrato_id" value="${boleto.contrato.contrato_id}" />
+
 			<div class="control-group">
 				<label class="control-label">Última Atuação :</label>
 				<div class="controls">

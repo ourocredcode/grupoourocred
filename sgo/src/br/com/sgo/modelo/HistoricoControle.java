@@ -41,6 +41,10 @@ public class HistoricoControle implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "controle_id", updatable = true, nullable = true)
 	private Controle controle;
+	
+	@ManyToOne
+	@JoinColumn(name = "contrato_id", updatable = true, nullable = true)
+	private Contrato contrato;
 
 	@ManyToOne
 	@JoinColumn(name = "perfil_id", updatable = true, nullable = true)
@@ -204,5 +208,13 @@ public class HistoricoControle implements Serializable {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public Contrato getContrato() {
+		return contrato;
+	}
+
+	public void setContrato(Contrato contrato) {
+		this.contrato = contrato;
 	}
 }
