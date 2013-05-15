@@ -215,7 +215,7 @@ function limpaForm() {
 								<input class="span12" type="text" id="agenciaDescricao" name="agencia.descricao" value="${agencia.descricao }" placeholder="Descrição" required>							
 							</div>
 							<div class="span1">
-								<label class="control-label" for="agenciaIsActive">Ativo</label>
+								<label for="agenciaIsActive">Ativo</label>
 								<input type="checkbox" id="agenciaIsActive" name="agencia.isActive" checked="checked" value="1" >
 							</div>
 						</div>

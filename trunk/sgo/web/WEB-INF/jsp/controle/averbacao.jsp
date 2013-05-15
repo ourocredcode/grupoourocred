@@ -72,7 +72,6 @@ function buscaByCalendar(){
 }
 
 </script>	
-	
 
 <div style="float: left;clear: both;">
 

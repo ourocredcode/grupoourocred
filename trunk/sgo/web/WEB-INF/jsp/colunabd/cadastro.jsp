@@ -248,7 +248,24 @@ function limpaForm(){
 		<a href="#" class="current">Perfil</a>
 	</div>
 
-<div class="container-fluid">
+	<c:if test="${not empty notice}">
+		<c:choose>
+			<c:when test="${fn:contains(notice,'Erro:')}">
+					<div class="alert alert-error">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:when>
+			<c:otherwise>
+					<div class="alert alert-success">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
+
+	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
 
@@ -267,101 +284,68 @@ function limpaForm(){
 
 			<div id="myTabContent" class="tab-content">
 				
-				<div class="tab-pane fade" id="perfil-div">					
+				<div class="tab-pane fade" id="perfil-div"></div>
+				<div class="tab-pane fade" id="perfilorgacesso-div"></div>
+				<div class="tab-pane fade" id="janela-div"></div>
+				<div class="tab-pane fade" id="perfiljanelaacesso-div"></div>
+				<div class="tab-pane fade" id="formulariosjanela-div"></div>
+				<div class="tab-pane fade" id="campoformulario-div"></div>
+				<div class="tab-pane fade " id="tabelabd-div"></div>
 
-				</div>
-				
-				<div class="tab-pane fade" id="perfilorgacesso-div">					
-
-				</div>
-				
-				<div class="tab-pane fade" id="janela-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="perfiljanelaacesso-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="formulariosjanela-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="campoformulario-div">
-					
-				</div>
-
-				<div class="tab-pane fade " id="tabelabd-div">
-
-				</div>
 				<div class="tab-pane fade active in" id="colunabd-div">
 				
 					<form id="colunaBdForm" name="colunaBdForm" action="<c:url value="/colunabd/salva"/>" method="POST">
-						<div class="control-group">
-							<label class="control-label" for="colunaBdEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="colunaBdEmpresa" name="colunaBd.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="colunaBdEmpresaId" name="colunaBd.empresa.empresa_id" type="hidden">
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="colunaBdEmpresa">Empresa</label>
+	      						<input class="span10" id="colunaBdEmpresa" name="colunaBd.empresa.nome" type="text" required onChange="limpaForm();" value="${usuarioInfo.empresa.nome }" >
+	      						<input class="span1" id="colunaBdEmpresaId" name="colunaBd.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" >
 	    					</div>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label" for="colunaBdOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="colunaBdOrganizacao" name="colunaBd.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="colunaBdOrganizacaoId" name="colunaBd.organizacao.organizacao_id" type="hidden">
+							<div class="span2">
+								<label for="colunaBdOrganizacao">Organização</label>
+	      						<input class="span10" id="colunaBdOrganizacao" name="colunaBd.organizacao.nome" type="text" required onChange="limpaForm();" value="${usuarioInfo.organizacao.nome }" >
+	      						<input class="span1" id="colunaBdOrganizacaoId" name="colunaBd.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }" >
 	    					</div>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label" for="colunaBdTabelaBd">Tabela BD</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="colunaBdTabelaBd" name="colunaBd.tabelaBd.nomeTabelaBd" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="colunaBdTabelaBdId" name="colunaBd.tabelaBd.tabelaBd_id" type="hidden">
+							<div class="span2">
+								<label for="colunaBdTabelaBd">Tabela BD</label>
+								<input class="span10" id="colunaBdTabelaBd" name="colunaBd.tabelaBd.nomeTabelaBd" type="text" required onChange="limpaForm();" value="${colunaBd.tabelaBd.nomeTabelaBd }" >
+	      						<input class="span1" id="colunaBdTabelaBdId" name="colunaBd.tabelaBd.tabelaBd_id" type="hidden" value="${colunaBd.tabelaBd.tabelaBd_id }">
 	    					</div>
-						</div>
-
-						<div class="control-group">
-							<label class="control-label" for="colunaBdElementoBd">Elemento BD</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="colunaBdElementoBd" name="colunaBd.elementoBd.nomecolunabd" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="colunaBdElementoBdId" name="colunaBd.elementoBd.elementoBd_id" type="hidden">
+							<div class="span2">
+								<label for="colunaBdElementoBd">Elemento BD</label>	
+	      						<input class="span10" id="colunaBdElementoBd" name="colunaBd.elementoBd.nomecolunabd" type="text" required onChange="limpaForm();" value="${colunaBd.elementoBd.nomecolunabd }" >
+	      						<input class="span1" id="colunaBdElementoBdId" name="colunaBd.elementoBd.elementoBd_id" type="hidden" value="${colunaBd.elementoBd.elementoBd_id }">
 	    					</div>
+	    					<div class="span2">
+								<label for="colunaBdTipoDadoBd">Tipo Dado BD</label>
+	      						<input class="span10" id="colunaBdTipoDadoBd" name="colunaBd.tipodadoBd.nome" type="text" required onChange="limpaForm();" value="${colunaBd.tipodadoBd.nome }" >
+	      						<input class="span1" id="colunaBdTipoDadoBdId" name="colunaBd.tipoDadoBd.tipoDadoBd_id" type="hidden" value="${colunaBd.tipoDadoBd.tipoDadoBd_id }">
+		    				</div>
 						</div>
-
-						<div class="control-group">
-							<label class="control-label" for="colunaBdTipoDadoBd">Tipo Dado BD</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="colunaBdTipoDadoBd" name="colunaBd.tipodadoBd.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="colunaBdTipoDadoBdId" name="colunaBd.tipoDadoBd.tipoDadoBd_id" type="hidden">
-	    					</div>
-						</div>
-
-						<div class="control-group">
-							<label class="control-label" for="colunaBdNomeColunaBd">Nome Coluna BD</label>
-							<div class="controls">
-								<input type="text" id="colunaBdNomeColunaBd" name="colunaBd.nomeColunaBd" placeholder="Nome da coluna BD" required readonly="readonly">
+						<div class="row-fluid">
+							
+							<div class="span2">
+								<label for="colunaBdNomeColunaBd">Nome Coluna BD</label>
+								<input class="span12" type="text" id="colunaBdNomeColunaBd" name="colunaBd.nomeColunaBd" placeholder="Nome da coluna BD" value="${colunaBd.nomeColunaBd }" required readonly="readonly">
+							</div>
+							<div class="span2">
+								<label for="colunaBdNome">Nome</label>
+								<input class="span12" type="text" id="colunaBdNome" name="colunaBd.nome" placeholder="Nome" value="${colunaBd.nome }" required>
+							</div>
+							<div class="span1">
+								<label for="colunaBdIsActive">Ativo</label>
+								<input type="checkbox" id="colunaBdIsActive" name="colunaBd.isActive" checked="checked" value="1" >
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="colunaBdNome">Nome</label>
-							<div class="controls">
-								<input type="text" id="colunaBdNome" name="colunaBd.nome" placeholder="Nome" required>
-							</div>
-						</div>						
-						
-						<div class="btn-toolbar">
-							<div class="btn-group">
-								<button type="submit" class="btn btn-primary">Salvar</button>
-							</div>	
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="btnSair" >Novo</button>
-							</div>
+
+						<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 						</div>
 
 					</form>

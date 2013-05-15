@@ -225,23 +225,40 @@ function limpaForm(){
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Perfil</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+	<h1>Cadastro Campo Formulário</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
-	
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current">Perfil</a>
-	</div>
+</div>
 
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+	<a href="#" class="current">Campo Formulário</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
@@ -258,94 +275,58 @@ function limpaForm(){
 
 			<div id="myTabContent" class="tab-content">
 			
-				<div class="tab-pane fade" id="perfil-div">					
-
-				</div>
-				
-				<div class="tab-pane fade" id="perfilorgacesso-div">					
-
-				</div>
-			
-				<div class="tab-pane fade" id="janela-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="perfiljanelaacesso-div">
-					
-				</div>
-				
-				<div class="tab-pane fade" id="formulariosjanela-div">
-					
-				</div>
+				<div class="tab-pane fade" id="perfil-div"></div>
+				<div class="tab-pane fade" id="perfilorgacesso-div"></div>
+				<div class="tab-pane fade" id="janela-div"></div>
+				<div class="tab-pane fade" id="perfiljanelaacesso-div"></div>
+				<div class="tab-pane fade" id="formulariosjanela-div"></div>
 
 				<div class="tab-pane fade active in" id="campoformulario-div">
-
 					<form id="campoFormularioForm" name="campoFormularioForm" action="<c:url value="/campoformulario/salva"/>" method="POST">
 
-						<div class="control-group">
-							<label class="control-label" for="campoFormularioEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="campoFormularioEmpresa" name="campoFormulario.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="campoFormularioEmpresaId" name="campoFormulario.empresa.empresa_id" type="hidden">
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="campoFormularioEmpresa">Empresa</label>							
+	      						<input class="span10" id="campoFormularioEmpresa" name="campoFormulario.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="campoFormularioEmpresaId" name="campoFormulario.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }">
+	    					</div>					
+							<div class="span2">
+								<label for="campoFormularioOrganizacao">Organização</label>							
+	      						<input class="span10" id="campoFormularioOrganizacao" name="campoFormulario.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="campoFormularioOrganizacaoId" name="campoFormulario.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
 	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="campoFormularioOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="campoFormularioOrganizacao" name="campoFormulario.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="campoFormularioOrganizacaoId" name="campoFormulario.organizacao.organizacao_id" type="hidden">
+	    					<div class="span2">
+								<label for="campoFormularioFormulariosJanela">Fomulário</label>
+	      						<input class="span10" id="campoFormularioFormulariosJanela" name="campoFormulario.formulariosJanela.nome" type="text" value="${campoFormulario.formulariosJanela.nome }" required onChange="limpaForm();">
+	      						<input class="span1" id="campoFormularioFormulariosJanelaId" name="campoFormulario.formulariosJanela.formulariosjanela_id" type="hidden" value="${campoFormulario.formulariosJanela.formulariosjanela_id }">
 	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="campoFormularioFormulariosJanela">Fomulário</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="campoFormularioFormulariosJanela" name="campoFormulario.formulariosJanela.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="campoFormularioFormulariosJanelaId" name="campoFormulario.formulariosJanela.formulariosjanela_id" type="hidden">
+							<div class="span2">
+								<label for="campoFormularioColunaBd">Coluna Bd</label>
+	      						<input class="span10" id="campoFormularioColunaBd" name="campoFormulario.colunaBd.nomeColunaBb" type="text" value="${campoFormulario.colunaBd.nomeColunaBb }" required onChange="limpaForm();">
+	      						<input class="span1" id="campoFormularioColunaBdId" name="campoFormulario.colunaBd.colunabd_id" type="hidden" value="${campoFormulario.colunaBd.colunabd_id }" >
 	    					</div>
-						</div>
-
-						<div class="control-group">
-							<label class="control-label" for="campoFormularioColunaBd">Coluna Bd</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="campoFormularioColunaBd" name="campoFormulario.colunaBd.nomeColunaBb" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="campoFormularioColunaBdId" name="campoFormulario.colunaBd.colunabd_id" type="hidden">
-	    					</div>
-						</div>
-						 
-						 <div class="control-group">
-							<label class="control-label" for="campoFormularioChave">Chave</label>
-							<div class="controls">
-								<input type="text" id="campoFormularioChave" name="campoFormulario.chave" placeholder="Chave" required>
+    					</div>
+    					<div class="row-fluid">
+							 <div class="span2">
+								<label for="campoFormularioChave">Chave</label>
+								<input class="span12" type="text" id="campoFormularioChave" name="campoFormulario.chave" placeholder="Chave" value="${campoFormulario.chave }" required>
 							</div>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label" for="campoFormularioNome">Nome</label>
-							<div class="controls">
-								<input type="text" id="campoFormularioNome" name="campoFormulario.nome" placeholder="Nome" required readonly="readonly">
+							 <div class="span2">
+								<label for="campoFormularioNome">Nome</label>
+								<input class="span12" type="text" id="campoFormularioNome" name="campoFormulario.nome" placeholder="Nome" value="${campoFormulario.nome }" required readonly="readonly">
+							</div>						
+							<div class="span1">
+								<label for="campoFormularioIsMostrado">Mostrado</label>
+								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado" checked="checked" value="1">
 							</div>
-						</div>						
-						<div class="control-group">
-							<label class="control-label" for="campoFormularioIsMostrado">Mostrado</label>
-							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsMostrado" name="campoFormulario.isMostrado" checked="checked" value="1">							
-							</div>							
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="campoFormularioIsSomenteLeitura">Somente Leitura</label>
-							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.isSomenteLeitura" checked="checked" value="1">							
-							</div>							
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="campoFormularioIsActive">Ativo</label>
-							<div class="controls">
-								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isActive" checked="checked" value="1">							
-							</div>							
+							<div class="span1">
+								<label for="campoFormularioIsSomenteLeitura">Leitura</label>
+								<input type="checkbox" id="campoFormularioIsSomenteLeitura" name="campoFormulario.isSomenteLeitura" checked="checked" value="1">
+							</div>
+							<div class="span1">
+								<label for="campoFormularioIsActive">Ativo</label>
+								<input type="checkbox" id="campoFormularioIsActive" name="campoFormulario.isActive" checked="checked" value="1">
+							</div>
 						</div>
 						<div class="btn-toolbar">
 							<div class="btn-group">
@@ -358,24 +339,13 @@ function limpaForm(){
 								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 							</div>
 						</div>
-						
-					</form>
-
-
+					</form>				
 				</div>
 
-				<div class="tab-pane fade" id="tabelabd-div">
+				<div class="tab-pane fade" id="tabelabd-div"></div>
+				<div class="tab-pane fade" id="colunabd-div"></div>
+				<div class="tab-pane fade" id="tipodadobd-div"></div>
 
-				</div>
-				<div class="tab-pane fade" id="colunabd-div">
-
-				</div>
-				<div class="tab-pane fade" id="elementobd-div">
-
-				</div>
-				<div class="tab-pane fade" id="tipodadobd-div">
-
-				</div>
 			</div>
 		</div>
 	</div>
