@@ -102,6 +102,35 @@ public class ContratoDao extends Dao<Contrato> {
 		return contratos;
 	}
 	
+	public Collection<Contrato> buscaContratoByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
+
+		String sql = sqlContrato;
+
+		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+				getFormulario(contratos);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contratos;
+	}
+	
 	public Collection<Contrato> buscaContratoByFormulario(Long formulario_id) {
 
 		String sql = sqlContrato;

@@ -13,22 +13,27 @@ import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ContratoDao;
+import br.com.sgo.dao.ControleDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoContratoDao;
+import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.LogisticaDao;
 import br.com.sgo.dao.PeriodoDao;
 import br.com.sgo.dao.ProdutoBancoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
+import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoLogisticaDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
+import br.com.sgo.modelo.Controle;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoContrato;
+import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Periodo;
@@ -53,8 +58,11 @@ public class ContratoController {
 	private final WorkflowEtapaDao workFlowetapaDao;
 	private final PeriodoDao periodoDao;
 	private final TipoLogisticaDao tipoLogisticaDao;
+	private final TipoControleDao tipoControleDao;
 	private final LogisticaDao logisticaDao;
 	private final HistoricoContratoDao historicoContratoDao;
+	private final HistoricoControleDao historicoControleDao;
+	private final ControleDao controleDao;
 
 	private Contrato contrato;
 	private Empresa empresa;
@@ -62,6 +70,8 @@ public class ContratoController {
 	private Usuario usuario;
 	private Formulario formulario;
 	private Collection<Banco> bancos;
+	private Controle boleto;
+	private Controle averbacao;
 	private Collection<Produto> produtos;
 	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();;
 	private Collection<WorkflowEtapa> etapas;
@@ -70,11 +80,13 @@ public class ContratoController {
 	private Collection<Logistica> logisticas;
 	private Collection<Contrato> contratos;
 	private Collection<HistoricoContrato> historico;
+	private Collection<HistoricoControle> historicoControleBoleto;
+	private Collection<HistoricoControle> historicoControleAverbacao;
 
 	public ContratoController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
 			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
 			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
-			HistoricoContratoDao historicoContratoDao){		
+			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao,ControleDao controleDao,TipoControleDao tipoControleDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -88,13 +100,18 @@ public class ContratoController {
 		this.formularioDao = formularioDao;
 		this.tabelaDao = tabelaDao;
 		this.periodoDao = periodoDao;
+		this.tipoControleDao = tipoControleDao;
 		this.workFlowetapaDao = workFlowetapaDao;
 		this.tipoLogisticaDao = tipoLogisticaDao;
 		this.logisticaDao = logisticaDao;
 		this.historicoContratoDao = historicoContratoDao;
+		this.historicoControleDao = historicoControleDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
+		this.boleto = boleto;
+		this.averbacao = averbacao;
+		this.controleDao = controleDao;
 
 	}
 
@@ -146,11 +163,20 @@ public class ContratoController {
 		etapas = workFlowetapaDao.buscaWorKFlowEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
 		periodos = periodoDao.buscaAllPeriodos();
 		historico = historicoContratoDao.buscaHistoricoByContrato(id);
+		
 		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
 		logisticas = logisticaDao.buscaLogisticaByContrato(id);
 		etapas.add(contrato.getWorkflowEtapa());
+		boleto = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByNome("Boleto").getTipoControle_id());
+		averbacao = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByNome("Averbacao").getTipoControle_id());
 
 		contratos = contratoDao.buscaContratoByFormulario(formulario.getFormulario_id());
+
+		if(boleto != null)
+			historicoControleBoleto = this.historicoControleDao.buscaHistoricoByContratoControle(contrato.getContrato_id(), boleto.getControle_id());
+
+		if(averbacao != null)
+			historicoControleAverbacao = this.historicoControleDao.buscaHistoricoByContratoControle(contrato.getContrato_id(), averbacao.getControle_id());
 
 		result.include("formulario",formulario);
 		result.include("contrato",contrato);
@@ -160,6 +186,10 @@ public class ContratoController {
 		result.include("logisticas",logisticas);
 		result.include("contratos",contratos);
 		result.include("historico",historico);
+		result.include("boleto",boleto);
+		result.include("averbacao",averbacao);
+		result.include("historicoControleBoleto",historicoControleBoleto);
+		result.include("historicoControleAverbacao",historicoControleAverbacao);
 
 	}
 	

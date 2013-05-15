@@ -14,10 +14,16 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleDao;
+import br.com.sgo.dao.HistoricoControleDao;
+import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Controle;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.HistoricoControle;
+import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.WorkflowEtapa;
 
 @Resource
@@ -28,13 +34,19 @@ public class ControleController {
 	private final WorkflowEtapaDao workFlowetapaDao;
 	private final ContratoDao contratoDao;
 	private final ControleDao controleDao;
+	private final HistoricoControleDao historicoControleDao;
+	private final TipoControleDao tipoControleDao;
 
 	private Contrato contrato;
 	private Controle averbacao;
 	private Controle boleto;
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 	private Collection<WorkflowEtapa> etapas;
 
-	public ControleController(Result result,Contrato contrato, ContratoDao contratoDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,ControleDao controleDao){		
+	public ControleController(Result result,Contrato contrato, ContratoDao contratoDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,ControleDao controleDao
+			,Empresa empresa,Organizacao organizacao,Usuario usuario,HistoricoControleDao historicoControleDao,TipoControleDao tipoControleDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -42,6 +54,11 @@ public class ControleController {
 		this.contratoDao = contratoDao;
 		this.workFlowetapaDao = workFlowetapaDao;
 		this.controleDao = controleDao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = usuarioInfo.getUsuario();
+		this.historicoControleDao = historicoControleDao;
+		this.tipoControleDao = tipoControleDao;
 
 	}
 
@@ -49,7 +66,12 @@ public class ControleController {
 	@Path("/controle/boleto")
 	public void boleto(Long contrato_id){
 
-		Controle boleto = new Controle();
+		boleto = this.controleDao.buscaControleByContratoTipoControle(contrato_id, tipoControleDao.buscaTipoControleByNome("Boleto").getTipoControle_id());
+		
+		if(boleto == null){
+			boleto = new Controle();
+		}
+
 		boleto.setContrato(this.contratoDao.buscaContratoById(contrato_id));
 
 		result.include("boleto",boleto);
@@ -60,15 +82,20 @@ public class ControleController {
 	@Path("/controle/averbacao")
 	public void averbacao(Long contrato_id){
 
-		Controle averbacao = new Controle();
+		averbacao = this.controleDao.buscaControleByContratoTipoControle(contrato_id, tipoControleDao.buscaTipoControleByNome("Averbacao").getTipoControle_id());
+
+		if(averbacao == null){
+			averbacao = new Controle();
+		}
+		
 		averbacao.setContrato(this.contratoDao.buscaContratoById(contrato_id));
 
 		result.include("averbacao",averbacao);
 
 	}
-	
+
 	@Post
-	@Path("/controle/salva/averbacao")
+	@Path("/controle/averbacao/salva")
 	public void salva_averbacao(Controle averbacao, String observacao) {
 
 		List<String> log = new ArrayList<String>();
@@ -140,6 +167,24 @@ public class ControleController {
 			if(!observacao.equals("")){
 				log.add(observacao);
 			}
+			
+			for(String l : log){
+
+				HistoricoControle historico = new HistoricoControle();
+				historico.setEmpresa(empresa);
+				historico.setOrganizacao(organizacao);
+				historico.setIsActive(true);
+				historico.setCreatedBy(usuario);
+				historico.setCreated(GregorianCalendar.getInstance());
+				historico.setObservacao(l);
+				historico.setControle(this.averbacao);
+				historico.setContrato(this.averbacao.getContrato());
+
+				this.historicoControleDao.beginTransaction();
+				this.historicoControleDao.adiciona(historico);
+				this.historicoControleDao.commit();
+
+			}
 
 		} else {
 
@@ -147,6 +192,10 @@ public class ControleController {
 			averbacao.setDataAtuacao(GregorianCalendar.getInstance());
 			averbacao.setContrato(contratoDao.load(averbacao.getContrato().getContrato_id()));
 			averbacao.setUsuario(usuarioInfo.getUsuario());
+			averbacao.setEmpresa(empresa);
+			averbacao.setOrganizacao(organizacao);
+			averbacao.setIsActive(true);
+			averbacao.setTipoControle(tipoControleDao.buscaTipoControleByNome("Averbacao"));
 
 			controleDao.beginTransaction();
 			controleDao.adiciona(averbacao);
@@ -156,14 +205,34 @@ public class ControleController {
 				log.add(observacao);
 			}
 
+			for(String l : log){
+
+				HistoricoControle historico = new HistoricoControle();
+				historico.setEmpresa(empresa);
+				historico.setOrganizacao(organizacao);
+				historico.setIsActive(true);
+				historico.setCreatedBy(usuario);
+				historico.setCreated(GregorianCalendar.getInstance());
+				historico.setObservacao(l);
+				historico.setControle(averbacao);
+				historico.setContrato(averbacao.getContrato());
+
+				this.historicoControleDao.beginTransaction();
+				this.historicoControleDao.adiciona(historico);
+				this.historicoControleDao.commit();
+
+			}
+
 		}
+		
+		
 
 		result.include("msg","Controle averbacao preenchido com sucesso.").redirectTo(this).msg();
 
 	}
 	
 	@Post
-	@Path("/boleto/salva/boleto")
+	@Path("/controle/boleto/salva")
 	public void salva_boleto(Controle boleto, String observacao) {
 
 		List<String> log = new ArrayList<String>();
@@ -285,6 +354,24 @@ public class ControleController {
 			if(!observacao.equals("")){
 				log.add(observacao);
 			}
+			
+			for(String l : log){
+
+				HistoricoControle historico = new HistoricoControle();
+				historico.setEmpresa(empresa);
+				historico.setOrganizacao(organizacao);
+				historico.setIsActive(true);
+				historico.setCreatedBy(usuario);
+				historico.setCreated(GregorianCalendar.getInstance());
+				historico.setObservacao(l);
+				historico.setControle(this.boleto);
+				historico.setContrato(this.boleto.getContrato());
+
+				this.historicoControleDao.beginTransaction();
+				this.historicoControleDao.adiciona(historico);
+				this.historicoControleDao.commit();
+
+			}
 
 		} else {
 
@@ -292,6 +379,10 @@ public class ControleController {
 			boleto.setDataAtuacao(GregorianCalendar.getInstance());
 			boleto.setContrato(contratoDao.load(boleto.getContrato().getContrato_id()));
 			boleto.setUsuario(usuarioInfo.getUsuario());
+			boleto.setEmpresa(empresa);
+			boleto.setOrganizacao(organizacao);
+			boleto.setIsActive(true);
+			boleto.setTipoControle(tipoControleDao.buscaTipoControleByNome("Boleto"));
 
 			controleDao.beginTransaction();
 			controleDao.adiciona(boleto);
@@ -300,8 +391,28 @@ public class ControleController {
 			if(!observacao.equals("")){
 				log.add(observacao);
 			}
+			
+			for(String l : log){
+
+				HistoricoControle historico = new HistoricoControle();
+				historico.setEmpresa(empresa);
+				historico.setOrganizacao(organizacao);
+				historico.setIsActive(true);
+				historico.setCreatedBy(usuario);
+				historico.setCreated(GregorianCalendar.getInstance());
+				historico.setObservacao(l);
+				historico.setControle(boleto);
+				historico.setContrato(boleto.getContrato());
+
+				this.historicoControleDao.beginTransaction();
+				this.historicoControleDao.adiciona(historico);
+				this.historicoControleDao.commit();
+
+			}
 
 		}
+		
+		
 
 		result.include("msg","Controle Boleto preenchido com sucesso.").redirectTo(this).msg();
 

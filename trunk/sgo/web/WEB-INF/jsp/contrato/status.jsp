@@ -326,11 +326,11 @@ function conferencia(id){
 }
 
 function boleto(contrato_id){
-	$('#divBoleto').load('<c:url value="/controle/boleto"/>',{'contrato_id' : contrato_id});
+	$('#divBoleto').load('<c:url value="/controle/boleto"/>',{'contrato_id': contrato_id});
 }
 
 function averbacao(contrato_id){
-	$('#divAverbacao').load('<c:url value="/controle/averbacao"/>',{'contrato_id' : contrato_id});
+	$('#divAverbacao').load('<c:url value="/controle/averbacao"/>',{'contrato_id': contrato_id});
 }
 
 function desabilita(campo){   
@@ -646,10 +646,6 @@ function openPopup(url) {
 								</div>
 							</div>
 
-							
-
-							
-
 							<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 							  <div class="modal-header">
 							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -718,53 +714,74 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Boleto</h5>
-						<c:if test="${empty boleto.controle_id }">
-							<c:if test="${usuarioInfo.perfil.chave == 'Q' || usuarioInfo.perfil.chave == 'P' || usuarioInfo.perfil.chave == 'S'}">
-								<div class="buttons"><a href="#" class="btn btn-mini" onclick="boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
-							</c:if>	
-						</c:if>
-						<div id="divBoleto" style="float: left;margin-top: 10px;clear: both;" >	
-							<c:if test="${not empty boleto.controle_id }">
-								<div class="buttons"><a href="#" class="btn btn-mini" onclick="boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
-								<div class="control-group">
-									<label class="control-label">Última Atuação :</label>
-									<div class="controls">
-									<c:if test="${not empty boleto.controle_id }">
-										realizada por ${boleto.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
-									</c:if>
-									<c:if test="${empty boleto.controle_id }">
-										Ainda não realizado
-									</c:if> 
-									</div>
-								 </div>
-								<div class="control-group">
-									<label class="control-label">Previsão de Chegada :</label>
-									<div class="controls">
-										<input id="boletoDataPrevisao" name="boleto.dataPrevisao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataPrevisao.time }" />" class="input-medium" />
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label">Próxima Atuação :</label>
-									<div class="controls">
-										<input id="boletoDataProximaAtuacao" name="boleto.dataProximaAtuacao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataProximaAtuacao.time }" />" class="input-medium" />
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label">Data de Chegada : </label>
-									<div class="controls">
-										<input id="boletoDataChegada" name="boleto.dataChegada" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataChegada.time }" />" class="input-medium" />
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label">Data de Vencimento : </label>
-									<div class="controls">
-										<input id="boletoDataVencimento" name="boleto.dataVencimento" value="<fmt:formatDate pattern="dd/MM/yyyy"  value="${boleto.dataVencimento.time }" />"  class="input-medium" />
-									</div>
-								</div>	
-							</c:if>
-
-						</div>
+						<div class="buttons"><a href="#" class="btn btn-mini" onclick="boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
 					</div>	
+					<div class="widget-content padding">
+						<div class="row-fluid">
+							<div class="span6">
+								<div id="divBoleto" style="margin-left: 50px">	
+									<div class="control-group">
+										<label class="control-label">Última Atuação :</label>
+										<div class="controls">
+										<c:if test="${not empty boleto.controle_id }">
+											realizada por ${boleto.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
+										</c:if>
+										<c:if test="${empty boleto.controle_id }">
+											Ainda não realizado
+										</c:if> 
+										</div>
+									 </div>
+									<div class="control-group">
+										<label class="control-label">Previsão de Chegada :</label>
+										<div class="controls">
+											<input id="boletoDataPrevisao" name="boleto.dataPrevisao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataPrevisao.time }" />" class="input-medium" />
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Próxima Atuação :</label>
+										<div class="controls">
+											<input id="boletoDataProximaAtuacao" name="boleto.dataProximaAtuacao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataProximaAtuacao.time }" />" class="input-medium" />
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Data de Chegada : </label>
+										<div class="controls">
+											<input id="boletoDataChegada" name="boleto.dataChegada" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataChegada.time }" />" class="input-medium" />
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Data de Vencimento : </label>
+										<div class="controls">
+											<input id="boletoDataVencimento" name="boleto.dataVencimento" value="<fmt:formatDate pattern="dd/MM/yyyy"  value="${boleto.dataVencimento.time }" />"  class="input-medium" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="span6">
+								<c:if test="${not empty historicoControleBoleto }">
+									<table class="table table-striped table-bordered" id="lista">
+										<thead>
+											<tr>
+												<th>Data</th>
+												<th>Responsável</th>
+												<th>Observação</th>
+											</tr>
+										</thead>
+										<tbody>	
+											<c:forEach items="${historicoControleBoleto}" var="historico">
+												<tr>
+													<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${historico.created.time }" /></td>
+													<td>${historico.createdBy.nome }</td>
+													<td>${historico.observacao }</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</c:if>
+							</div>
+							
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -775,60 +792,66 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Averbacao</h5>
-						<c:if test="${empty averbacao.controle_id }">
-							<c:if test="${usuarioInfo.perfil.chave == 'Q' || usuarioInfo.perfil.chave == 'P' || usuarioInfo.perfil.chave == 'S'}">
-								<div class="buttons"><a href="#" class="btn btn-mini" onclick="averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
-							</c:if>	
-						</c:if>
-						<div id="divAverbacao" style="float: left;margin-top: 10px;clear: both;" >	
-							<c:if test="${not empty averbacao.controle_id }">
-								<div class="buttons"><a href="#" class="btn btn-mini" onclick="averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
-								
-								<div class="control-group">
-									<label class="control-label">Última Atuação :</label>
-									<div class="controls">
-									<c:if test="${not empty averbacao.controle_id }">
-										realizada por ${averbacao.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
-									</c:if>
-									<c:if test="${empty averbacao.controle_id }">
-										Ainda não realizado
-									</c:if> 
-									</div>
-								 </div>
-								<div class="control-group">
-									<label class="control-label">Próxima Atuação :</label>
-									<div class="controls">
-										<input id="averbacaoDataProximaAtuacao" name="averbacao.dataProximaAtuacao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataProximaAtuacao.time }" />" class="input-medium" />
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label">Previsão de Chegada :</label>
-									<div class="controls">
-										<input id="averbacaoDataPrevisao" name="averbacao.dataPrevisao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataPrevisao.time }" />" class="input-medium" />
-									</div>
-								</div>
-							
-								<div class="control-group">
-									<label class="control-label">Observacao : </label>
-									<div class="controls">
-										<textarea  style="width: 100%;" id="observacao" name="observacao" class="input-medium" rows="5" cols="120" maxlength="255"></textarea>
-									</div>
-								</div>
-								<div class="form-actions">
-									<input type="button" value="Salvar" class="btn btn-primary" onclick="javascript:validaForm('#averbacaoForm');">
-									<button type="button" value="Fecha" class="btn btn-primary" onclick="window.location.reload(true);">Fecha</button>
-								</div>
-								
-									
-							</c:if>
-
-						</div>
+						<div class="buttons"><a href="#" class="btn btn-mini" onclick="averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
 					</div>	
+					<div class="widget-content padding">
+						<div class="row-fluid">
+							<div class="span6">
+								<div id="divAverbacao" style="margin-left: 50px">	
+									<div class="control-group">
+										<label class="control-label">Última Atuação :</label>
+										<div class="controls">
+										<c:if test="${not empty averbacao.controle_id }">
+											realizada por ${averbacao.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
+										</c:if>
+										<c:if test="${empty averbacao.controle_id }">
+											Ainda não realizado
+										</c:if> 
+									</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Próxima Atuação :</label>
+										<div class="controls">
+											<input id="averbacaoDataProximaAtuacao" name="averbacao.dataProximaAtuacao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataProximaAtuacao.time }" />" class="input-medium" />
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Previsão de Chegada :</label>
+										<div class="controls">
+											<input id="averbacaoDataPrevisao" name="averbacao.dataPrevisao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataPrevisao.time }" />" class="input-medium" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="span6">
+								<c:if test="${not empty historicoControleAverbacao }">
+									<table class="table table-striped table-bordered" id="lista">
+										<thead>
+											<tr>
+												<th>Data</th>
+												<th>Responsável</th>
+												<th>Observação</th>
+											</tr>
+										</thead>
+										<tbody>	
+											<c:forEach items="${historicoControleAverbacao}" var="historico">
+												<tr>
+													<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${historico.created.time }" /></td>
+													<td>${historico.createdBy.nome }</td>
+													<td>${historico.observacao }</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</c:if>
+							</div>
+							
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>	
-	
+	</div>
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
@@ -985,4 +1008,4 @@ function openPopup(url) {
 		</div>
 	</div>		
 
-<%@ include file="/footer.jspf" %> 
+<%@ include file="/footer.jspf" %>

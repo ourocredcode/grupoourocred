@@ -99,7 +99,10 @@ public class HomeController {
 		usuarioInfo.login(currentUsuario);
 
 		usuarioInfo.setPerfil(perfilDao.load(usuarioPerfil.getPerfil().getPerfil_id()));
-		result.redirectTo(MenuController.class).inicio();
+
+		String tipo = usuarioInfo.getPerfil().getChave();
+
+		result.redirectTo(MenuController.class).inicio(tipo);
 
 	}
 
