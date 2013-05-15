@@ -42,6 +42,10 @@
 		<mapping class="br.com.sgo.modelo.Logistica" />
 		<mapping class="br.com.sgo.modelo.Periodo" />
 		<mapping class="br.com.sgo.modelo.TipoLogistica" />
+		
+		<mapping class="br.com.sgo.modelo.Conferencia" />		
+		<mapping class="br.com.sgo.modelo.ProcedimentoConferencia" />
+		<mapping class="br.com.sgo.modelo.TipoProcedimento" />
 
 		<mapping class="br.com.sgo.modelo.ElementoBd" />
 		<mapping class="br.com.sgo.modelo.CampoFormulario" />

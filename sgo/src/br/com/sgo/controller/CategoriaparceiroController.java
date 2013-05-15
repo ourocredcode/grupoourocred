@@ -36,7 +36,7 @@ public class CategoriaparceiroController {
 	@Public
 	@Path("/categoriaparceiro/cadastro")
 	public void cadastro(){
-		result.include("categoriaParceiro",this.categoriaParceiroDao.listaTudo("ASC","nome"));
+		//result.include("categoriaParceiro",this.categoriaParceiroDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
