@@ -321,8 +321,8 @@ function mostra(id){
 	$('#divContrato').load('<c:url value="/contrato/cadastro"/>',{'id' : id});
 }
 
-function conferencia(id){
-	$('#divContrato').load('<c:url value="/conferencia/analise"/>',{'id' : id});
+function conferencia(contrato_id){
+	$('#divConferencia').load('<c:url value="/conferencia/cadastro"/>',{'contrato_id' : contrato_id});
 }
 
 function boleto(contrato_id){
@@ -598,6 +598,28 @@ function openPopup(url) {
 			</div>
 		</div>
 	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Conferência Contrato</h5>
+						<div class="buttons"><a href="#" class="btn btn-mini" onclick="conferencia('${contrato.contrato_id}');"><i class="icon-refresh"></i> Conferencia</a></div>
+					</div>
+					<div class="widget-content padding">
+						<div class="row-fluid">
+							<div id="divConferencia" style="margin-left: 50px"></div> 
+						</div>
+					</div>	
+				</div>
+			</div>										
+		</div>
+	</div>	
+	
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
