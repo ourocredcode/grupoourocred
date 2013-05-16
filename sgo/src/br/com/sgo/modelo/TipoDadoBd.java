@@ -47,9 +47,6 @@ public class TipoDadoBd {
 
 	@Column(name = "chave")
 	private String chave;
-	
-	@Column(name = "value")
-	private String value;
 
 	@Column(name = "nome")
 	private String nome;
@@ -127,14 +124,6 @@ public class TipoDadoBd {
 
 	public void setUpdated(Calendar updated) {
 		this.updated = updated;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
 	}
 
 	public String getDescricao() {

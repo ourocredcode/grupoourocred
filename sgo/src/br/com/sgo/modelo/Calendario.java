@@ -48,8 +48,8 @@ public class Calendario implements Serializable {
 	@Column(name = "updated")
 	private Calendar updated;
 
-	@Column(name = "value")
-	private String value;
+	@Column(name = "chave")
+	private String chave;
 
 	@Column(name = "nome")
 	private String nome;
@@ -140,12 +140,12 @@ public class Calendario implements Serializable {
 		this.updated = updated;
 	}
 
-	public String getValue() {
-		return value;
+	public String getChave() {
+		return chave;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setChave(String chave) {
+		this.chave = chave;
 	}
 
 }

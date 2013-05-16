@@ -218,19 +218,36 @@ function limpaForm(){
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Perfil</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+	<h1>Cadastro - Elementos do banco</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
+</div>
+
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+	<a href="#" class="current">Elementos do banco</a>
+</div>
 	
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current">Perfil</a>
-	</div>
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <div class="container-fluid">
 		<div class="row-fluid">
@@ -264,29 +281,29 @@ function limpaForm(){
 
 					<form id="elementoBdForm" name="elementoBdForm" action="<c:url value="/elementobd/salva"/>" method="POST">
 						<div class="row-fluid">						
-							<div class="span10">
-								<p>
-									<label class="control-label" for="elementoBdEmpresa">Empresa</label>
-		      						<input id="elementoBdEmpresa" name="elementoBd.empresa.nome" type="text" required onChange="limpaForm();">
-		      						<input id="elementoBdEmpresaId" name="elementoBd.empresa.empresa_id" type="text">
-	      						</p>
+							<div class="span2">
+								<label for="elementoBdEmpresa">Empresa</label>
+	      						<input class="span12" id="elementoBdEmpresa" name="elementoBd.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="elementoBdEmpresaId" name="elementoBd.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }">
 							</div>
-							<div class="span10">
-								<label class="control-label" for="elementoBdOrganizacao">Organização</label>
-	      						<input id="elementoBdOrganizacao" name="elementoBd.organizacao.nome" type="text" required readonly onChange="limpaForm();">
-								<input id="elementoBdOrganizacaoId" name="elementoBd.organizacao.organizacao_id" type="text">
+							<div class="span2">
+								<label for="elementoBdOrganizacao">Organização</label>
+	      						<input class="span12" id="elementoBdOrganizacao" name="elementoBd.organizacao.nome" type="text" required readonly onChange="limpaForm();" value="${usuarioInfo.organizacao.nome }">
+								<input class="span1" id="elementoBdOrganizacaoId" name="elementoBd.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
 							</div>
-							<div class="span10">
-								<label class="control-label" for="elementoBdNomeColunaBd">Nome Coluna BD</label>								
-								<input type="text" id="elementoBdNomeColunaBd" name="elementoBd.nomeColunaBd" placeholder="Nome da coluna BD" required readonly>
+							<div class="span2">
+								<label for="elementoBdNomeColunaBd">Nome Coluna BD</label>								
+								<input class="span12" type="text" id="elementoBdNomeColunaBd" name="elementoBd.nomeColunaBd" placeholder="Nome da coluna BD" required readonly>
 							</div>
-							<div class="span10">
-								<label class="control-label" for="elementoBd.nome">Nome</label>								
-								<input type="text" id="elementoBd.nome" name="elementoBd.nome" placeholder="Nome" required>
+							<div class="span2">
+								<label for="elementoBd.nome">Nome</label>								
+								<input class="span12" type="text" id="elementoBd.nome" name="elementoBd.nome" placeholder="Nome" required>								
 							</div>
-						
-						</div>
-												
+							<div class="span1">
+								<label for="elementoBdIsActive">Ativo</label>
+								<input type="checkbox" id="elementoBdIsActive" name="elemento.isActive" checked="checked" value="1" >
+							</div>	
+						</div>												
 					 	<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>

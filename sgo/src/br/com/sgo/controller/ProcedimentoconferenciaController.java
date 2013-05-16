@@ -61,7 +61,7 @@ public class ProcedimentoconferenciaController {
 				procedimentoConferencia.setCreatedBy(usuarioInfo.getUsuario());
 				procedimentoConferencia.setUpdatedBy(usuarioInfo.getUsuario());
 
-				procedimentoConferencia.setValue(procedimentoConferencia.getNome());
+				procedimentoConferencia.setChave(procedimentoConferencia.getNome());
 				procedimentoConferencia.setDescricao(procedimentoConferencia.getNome());
 
 				procedimentoConferencia.setIsActive(procedimentoConferencia.getIsActive() == null ? false : true);

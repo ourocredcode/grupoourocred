@@ -56,8 +56,8 @@ public class Agencia implements Serializable {
 	@Column(name = "updated")
 	private Calendar updated;
 
-	@Column(name = "value")
-	private String value;
+	@Column(name = "chave")
+	private String chave;
 
 	@Column(name = "nome")
 	private String nome;
@@ -109,38 +109,6 @@ public class Agencia implements Serializable {
 		this.banco = banco;
 	}
 
-	public String getCodigoAgencia() {
-		return codigoAgencia;
-	}
-
-	public void setCodigoAgencia(String codigoAgencia) {
-		this.codigoAgencia = codigoAgencia;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
-
 	public Localidade getLocalidade() {
 		return localidade;
 	}
@@ -181,12 +149,28 @@ public class Agencia implements Serializable {
 		this.updated = updated;
 	}
 
-	public String getValue() {
-		return value;
+	public String getChave() {
+		return chave;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public String getNumeroendereco() {
@@ -205,4 +189,19 @@ public class Agencia implements Serializable {
 		this.complemento = complemento;
 	}
 
+	public String getCodigoAgencia() {
+		return codigoAgencia;
+	}
+
+	public void setCodigoAgencia(String codigoAgencia) {
+		this.codigoAgencia = codigoAgencia;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 }

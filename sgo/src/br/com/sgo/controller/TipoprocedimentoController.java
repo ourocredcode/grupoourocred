@@ -53,7 +53,7 @@ public class TipoprocedimentoController {
 				tipoProcedimento.setCreatedBy(usuarioInfo.getUsuario());
 				tipoProcedimento.setUpdatedBy(usuarioInfo.getUsuario());
 
-				tipoProcedimento.setValue(tipoProcedimento.getNome());
+				tipoProcedimento.setChave(tipoProcedimento.getNome());
 				tipoProcedimento.setDescricao(tipoProcedimento.getNome());
 				
 				tipoProcedimento.setIsActive(tipoProcedimento.getIsActive() == null ? false : true);

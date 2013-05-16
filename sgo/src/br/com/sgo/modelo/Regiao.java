@@ -54,9 +54,6 @@ public class Regiao implements Serializable {
 
 	@Column(name = "chave")
 	private String chave;
-	
-	@Column(name = "value")
-	private String value;
 
 	@Column(name = "nome")
 	private String nome;
@@ -163,11 +160,4 @@ public class Regiao implements Serializable {
 		this.updated = updated;
 	}
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
 }

@@ -49,7 +49,7 @@ public class AgenciaController {
 				agencia.setCreatedBy(usuarioInfo.getUsuario());
 				agencia.setUpdatedBy(usuarioInfo.getUsuario());
 
-				agencia.setValue(agencia.getNome());
+				agencia.setChave(agencia.getNome());
 				agencia.setDescricao(agencia.getNome());
 
 				agencia.setIsActive(agencia.getIsActive() == null ? false : true);

@@ -50,7 +50,7 @@ public class TipologisticaController {
 				tipoLogistica.setCreatedBy(usuarioInfo.getUsuario());
 				tipoLogistica.setUpdatedBy(usuarioInfo.getUsuario());
 
-				tipoLogistica.setValue(tipoLogistica.getNome());
+				tipoLogistica.setChave(tipoLogistica.getNome());
 				tipoLogistica.setDescricao(tipoLogistica.getNome());
 
 				tipoLogistica.setIsActive(tipoLogistica.getIsActive() == null ? false : true);
