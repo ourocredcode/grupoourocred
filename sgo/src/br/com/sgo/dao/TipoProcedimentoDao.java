@@ -74,7 +74,44 @@ public class TipoProcedimentoDao extends Dao<TipoProcedimento> {
 		return tipoProcedimentos;
 	}
 	
-	public Collection<TipoProcedimento> buscaTipoProcedimentosPorNome(String nome) {
+	public Collection<TipoProcedimento> buscaTiposProcedimentosByNome(String nome) {
+
+		String sql = sqlTipoProcedimento;
+
+		if (nome != null)
+			sql += " AND TIPOPROCEDIMENTO.nome like ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<TipoProcedimento> tipoProcedimentos = new ArrayList<TipoProcedimento>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setString(1, "%" + nome + "%");
+
+			this.rsTipoProcedimento= this.stmt.executeQuery();
+
+			while (rsTipoProcedimento.next()) {
+
+				getTipoProcedimentos(tipoProcedimentos);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsTipoProcedimento, stmt, conn);
+
+		
+		return tipoProcedimentos;
+	}
+	
+	public TipoProcedimento buscaTipoProcedimentoByNome(String nome) {
 		
 		String sql = sqlTipoProcedimento;
 	
@@ -83,34 +120,46 @@ public class TipoProcedimentoDao extends Dao<TipoProcedimento> {
 		
 		this.conn = this.conexao.getConexao();
 
-		Collection<TipoProcedimento> tipoProcedimentos = new ArrayList<TipoProcedimento>();
+		TipoProcedimento tipoProcedimento = null;
 
-		if (tipoProcedimentos!=null){
+		try {
 
-			try {
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setString(1, "%" + nome + "%");
 
-				this.stmt = conn.prepareStatement(sql);
-				
-				this.stmt.setString(1, "%" + nome + "%");
+			this.rsTipoProcedimento= this.stmt.executeQuery();
 
-				this.rsTipoProcedimento= this.stmt.executeQuery();
+			while (rsTipoProcedimento.next()) {
 
-				while (rsTipoProcedimento.next()) {
+				tipoProcedimento = new TipoProcedimento();
+				Empresa e = new Empresa();
+				Organizacao o = new Organizacao();
 
-					getTipoProcedimentos(tipoProcedimentos);
+				e.setEmpresa_id(rsTipoProcedimento.getLong("empresa_id"));
+				e.setNome(rsTipoProcedimento.getString("empresa_nome"));
 
-				}
+				o.setOrganizacao_id(rsTipoProcedimento.getLong("organizacao_id"));
+				o.setNome(rsTipoProcedimento.getString("organizacao_nome"));
 
-			} catch (SQLException e) {
+				tipoProcedimento.setTipoProcedimento_id(rsTipoProcedimento.getLong("tipoprocedimento_id"));
+				tipoProcedimento.setNome(rsTipoProcedimento.getString("tipoprocedimento_nome"));
 
-				e.printStackTrace();
+				tipoProcedimento.setEmpresa(e);
+				tipoProcedimento.setOrganizacao(o);
 
 			}
 
-			this.conexao.closeConnection(rsTipoProcedimento, stmt, conn);
+		} catch (SQLException e) {
+
+			e.printStackTrace();
 
 		}
-		return tipoProcedimentos;
+
+		this.conexao.closeConnection(rsTipoProcedimento, stmt, conn);
+
+		return tipoProcedimento;
+
 	}
 
 	public TipoProcedimento buscaTipoProcedimentosByEmOrNome(Long empresa_id, Long organizacao_id, String nome) {

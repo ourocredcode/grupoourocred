@@ -80,7 +80,7 @@
 
 			<ul>
 
-				<li class="active"><a href="<c:url value="/menu/inicio"/>"><i class="icon icon-home"></i> <span>Dashboard</span></a></li>
+				<li class="active"><a href="<c:url value="/menu/inicio/${usuarioInfo.perfil.chave }"/>"><i class="icon icon-home"></i> <span>Dashboard</span></a></li>
 
 				<li class="submenu">
 

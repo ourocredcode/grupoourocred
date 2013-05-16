@@ -26,7 +26,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 	private Connection conn;
 	private ResultSet rsConferencia;
 
-	private final String sqlConferencia = "SELECT CONFERENCIA.conferencia_id, CONFERENCIA.empresa_id, EMPRESA.nome AS empresa_nome, "+
+	private final String sqlConferencia = " SELECT CONFERENCIA.conferencia_id, CONFERENCIA.empresa_id, EMPRESA.nome AS empresa_nome, "+
 					" CONFERENCIA.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, "+
 					" CONFERENCIA.contrato_id, CONFERENCIA.procedimentoconferencia_id, PROCEDIMENTOCONFERENCIA.nome" +
 					", CONFERENCIA.tipoprocedimento_id, TIPOPROCEDIMENTO.nome "+
@@ -34,7 +34,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 					" INNER JOIN CONFERENCIA (NOLOCK) ON EMPRESA.empresa_id = CONFERENCIA.empresa_id) ON ORGANIZACAO.organizacao_id = CONFERENCIA.organizacao_id) "+
 					" INNER JOIN PROCEDIMENTOCONFERENCIA (NOLOCK) ON CONFERENCIA.procedimentoconferencia_id = PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id) " +
 					" INNER JOIN TIPOPROCEDIMENTO (NOLOCK) ON CONFERENCIA.tipoprocedimento_id = TIPOPROCEDIMENTO.tipoprocedimento_id) "+
-					" NNER JOIN CONTRATO (NOLOCK) ON CONFERENCIA.contrato_id = CONTRATO.contrato_id ";
+					" INNER JOIN CONTRATO (NOLOCK) ON CONFERENCIA.contrato_id = CONTRATO.contrato_id ";
 
 	public ConferenciaDao(Session session, ConnJDBC conexao) {
 
@@ -93,7 +93,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 
 		this.conn = this.conexao.getConexao();
 
-		Conferencia conferencia = null;
+		Conferencia conferencia = new Conferencia();
 
 		try {
 
@@ -108,7 +108,6 @@ public class ConferenciaDao extends Dao<Conferencia> {
 
 			while (rsConferencia.next()) {
 
-				conferencia = new Conferencia();
 				conferencia.setConferencia_id(rsConferencia.getLong("conferencia_id"));
 				conferencia.setNome(rsConferencia.getString("conferencia_nome"));
 

@@ -25,7 +25,8 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 	private Connection conn;
 	private ResultSet rsProcedimentoConferencia;
 
-	private final String sqlProcedimentoConferencia = "SELECT PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id, PROCEDIMENTOCONFERENCIA.nome AS procedimentoconferencia_nome, "+
+	private final String sqlProcedimentoConferencia = " SELECT PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id, " +
+							" PROCEDIMENTOCONFERENCIA.nome AS procedimentoconferencia_nome, PROCEDIMENTOCONFERENCIA.chave AS procedimentoconferencia_chave, "+
 							" PROCEDIMENTOCONFERENCIA.empresa_id, EMPRESA.nome AS empresa_nome, "+
 							" PROCEDIMENTOCONFERENCIA.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, "+
 							" PROCEDIMENTOCONFERENCIA.tipoprocedimento_id, TIPOPROCEDIMENTO.nome AS tipoprocedimento_nome, PROCEDIMENTOCONFERENCIA.isactive "+
@@ -186,6 +187,7 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 
 		procedimentoConferencia.setProcedimentoConferencia_id(rsProcedimentoConferencia.getLong("procedimentoconferencia_id"));
 		procedimentoConferencia.setNome(rsProcedimentoConferencia.getString("procedimentoconferencia_nome"));
+		procedimentoConferencia.setChave(rsProcedimentoConferencia.getString("procedimentoconferencia_chave"));
 		procedimentoConferencia.setIsActive(rsProcedimentoConferencia.getBoolean("isactive"));
 
 		procedimentoConferencia.setEmpresa(empresa);
