@@ -89,7 +89,7 @@ public class TipoprocedimentoController {
 	@Get @Path("/tipoprocedimento/busca.json")
 	@Public
 	public void tipoProcedimento(String nome){
-		result.use(Results.json()).withoutRoot().from(tipoProcedimentoDao.buscaTipoProcedimentosPorNome(nome)).serialize();
+		result.use(Results.json()).withoutRoot().from(tipoProcedimentoDao.buscaTiposProcedimentosByNome(nome)).serialize();
 	}
 
 }
