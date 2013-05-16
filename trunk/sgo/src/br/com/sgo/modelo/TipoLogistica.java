@@ -48,9 +48,9 @@ public class TipoLogistica implements Serializable {
 	@Column(name = "updated")
 	private Calendar updated;
 
-	@Column(name = "value")
-	private String value;
-
+	@Column(name = "chave")
+	private String chave;
+	
 	@Column(name = "nome")
 	private String nome;
 
@@ -108,14 +108,6 @@ public class TipoLogistica implements Serializable {
 		this.isActive = isActive;
 	}
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
 	public Usuario getCreatedBy() {
 		return createdBy;
 	}
@@ -146,5 +138,13 @@ public class TipoLogistica implements Serializable {
 
 	public void setUpdated(Calendar updated) {
 		this.updated = updated;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
 	}
 }

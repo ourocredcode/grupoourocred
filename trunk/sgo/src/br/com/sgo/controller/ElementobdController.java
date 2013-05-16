@@ -1,34 +1,33 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.ElementoBdDao;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.ElementoBd;
 
 @Resource
 public class ElementobdController {
 
 	private final Result result;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
 	private final ElementoBdDao elementoBdDao;
-	private final Validator validator;
 
-	public ElementobdController(Result result,Validator validator,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,ElementoBdDao elementoBdDao){
 
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
+	private final UsuarioInfo usuarioInfo;
+	private Calendar dataAtual = Calendar.getInstance();
+
+	public ElementobdController(Result result, ElementoBdDao elementoBdDao, UsuarioInfo usuarioInfo){
+
 		this.elementoBdDao = elementoBdDao;
 		this.result = result;
-		this.validator = validator;
+		this.usuarioInfo = usuarioInfo;
 
 	}	
 
@@ -44,38 +43,46 @@ public class ElementobdController {
 	@Path("/elementobd/salva")
 	public void salva(ElementoBd elementoBd){
 
-		validator.validate(elementoBd);
-		validator.onErrorUsePageOf(this).cadastro();
-
 		String mensagem = "";
 
 		try {
+			if(this.elementoBdDao.buscaValidaElementosByNomeColuna(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), elementoBd.getNomeColunaBd()) == null) {
+			
+				elementoBd.setCreated(dataAtual);
+				elementoBd.setUpdated(dataAtual);
+	
+				elementoBd.setCreatedBy(usuarioInfo.getUsuario());
+				elementoBd.setUpdatedBy(usuarioInfo.getUsuario());
+	
+				elementoBd.setChave(elementoBd.getNome());
+				elementoBd.setDescricao(elementoBd.getNome());
+	
+				elementoBd.setIsActive(elementoBd.getIsActive() == null ? false : true);
+	
+				this.elementoBdDao.beginTransaction();
+				this.elementoBdDao.adiciona(elementoBd);
+				this.elementoBdDao.commit();
+	
+				mensagem = "elemento " + elementoBd.getNome() + " adicionado com sucesso";
 
-			elementoBd.setEmpresa(this.empresaDao.load(elementoBd.getEmpresa().getEmpresa_id()));
-			elementoBd.setOrganizacao(this.organizacaoDao.load(elementoBd.getOrganizacao().getOrganizacao_id()));
+			} else {
 
-			this.elementoBdDao.beginTransaction();
-			this.elementoBdDao.adiciona(elementoBd);
-			this.elementoBdDao.commit();
+				mensagem = "elemento " + elementoBd.getNome() + " já cadastrado.";
 
-			mensagem = "Elemento BD " + elementoBd.getNome() + " adicionado com sucesso";
+			} 
 
 		} catch(Exception e) {
 
-			this.elementoBdDao.rollback();
+			mensagem = "Erro: Falha ao adicionar o elemento.";
 
-			if (e.getCause().toString().indexOf("IX_ELEMENTOBD_NOMECOLUNABD") != -1){
-				mensagem = "Erro: Elemento Bd " + elementoBd.getNome() + " já existente.";
-			} else {
-				mensagem = "Erro ao adicionar Tabela Bd:";
-			}
+		} finally{
+
+			this.elementoBdDao.clear();
+			this.elementoBdDao.close();
 
 		}
 
-		this.elementoBdDao.clear();
-		this.elementoBdDao.close();
-
-		result.include("notice",mensagem);
+		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
 	}

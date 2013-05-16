@@ -60,8 +60,8 @@ public class Conferencia implements Serializable {
 	@Column(name = "updated")
 	private Calendar updated;
 
-	@Column(name = "value")
-	private String value;
+	@Column(name = "chave")
+	private String chave;
 
 	@Column(name = "nome")
 	private String nome;
@@ -159,14 +159,6 @@ public class Conferencia implements Serializable {
 		this.updated = updated;
 	}
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
 	public String getNome() {
 		return nome;
 	}
@@ -205,5 +197,13 @@ public class Conferencia implements Serializable {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
 	}
 }

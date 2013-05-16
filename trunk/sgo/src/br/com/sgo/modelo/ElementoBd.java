@@ -47,9 +47,6 @@ public class ElementoBd {
 
 	@Column(name = "chave")
 	private String chave;
-	
-	@Column(name = "value")
-	private String value;
 
 	@Column(name = "nome")
 	private String nome;
@@ -60,6 +57,9 @@ public class ElementoBd {
 	@Column(name = "nomecolunabd")
 	private String nomeColunaBd;
 	
+	@Column(name = "isactive")
+	private Boolean isActive;
+
 	public Long getElementoBd_id() {
 		return elementoBd_id;
 	}
@@ -148,12 +148,12 @@ public class ElementoBd {
 		this.chave = chave;
 	}
 
-	public String getValue() {
-		return value;
+	public Boolean getIsActive() {
+		return isActive;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

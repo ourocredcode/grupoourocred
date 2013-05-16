@@ -33,19 +33,26 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 	}
 
 	public Collection<ElementoBd> buscaElementos() {
+
 		String sql = sqlElementosBd;
+
 		this.conn = this.conexao.getConexao();
+
 		Collection<ElementoBd> elementosbd = new ArrayList<ElementoBd>();
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
 			this.rsElementos = this.stmt.executeQuery();
+
 			while (rsElementos.next()) {
+
 				ElementoBd elementobd = new ElementoBd();
-				elementobd.setElementoBd_id(rsElementos
-						.getLong("elementobd_id"));
-				elementobd.setNomeColunaBd(rsElementos
-						.getString("nomecolunabd"));
+				elementobd.setElementoBd_id(rsElementos.getLong("elementobd_id"));
+				elementobd.setNomeColunaBd(rsElementos.getString("nomecolunabd"));
 				elementosbd.add(elementobd);
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,83 +61,101 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 		return elementosbd;
 	}
 
-	public Collection<ElementoBd> buscaElementosLista(Long empresa_id) {
-
+	public ElementoBd buscaValidaElementosByNomeColuna(Long empresa_id, Long organizacao_id, String nomeColunaBd) {
+		
 		String sql = sqlElementosBd;
 
 		if (empresa_id != null)
-			sql += " WHERE EMPRESA.empresa_id = ? ";
-
+			sql += " WHERE ELEMENTOBD.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND ELEMENTOBD.organizacao_id = ?";
+		if (nomeColunaBd != null)
+			sql += " AND ELEMENTOBD.nomecolunabd like ?";
+		
 		this.conn = this.conexao.getConexao();
-		Collection<ElementoBd> elementosBd = new ArrayList<ElementoBd>();
+
+		ElementoBd elementobd = null;
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
-			if (empresa_id != null)
-				this.stmt.setLong(1, empresa_id);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, "%" + nomeColunaBd + "%");
+
 			this.rsElementos = this.stmt.executeQuery();
+ 
 			while (rsElementos.next()) {
-				ElementoBd elementoBd = new ElementoBd();
-				Empresa e = new Empresa();
-				e.setEmpresa_id(rsElementos.getLong("empresa_id"));
-				e.setNome(rsElementos.getString("empresa_nome"));
-				elementoBd.setEmpresa(e);
-				elementosBd.add(elementoBd);
+
+				elementobd = new  ElementoBd();
+				elementobd.setElementoBd_id(rsElementos.getLong("elementobd_id"));
+				elementobd.setNome(rsElementos.getString("nomecolunabd"));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		this.conexao.closeConnection(rsElementos, stmt, conn);
-		return elementosBd;
+		
+		return elementobd;
 	}
+	public Collection<ElementoBd> buscaElementosLista(Long empresa_id, Long organizacao_id) {
 
-	public Collection<ElementoBd> buscaElementosLista(Long empresa_id,
-			Long organizacao_id) {
 		String sql = sqlElementosBd;
+
 		if (empresa_id != null)
 			sql += " WHERE EMPRESA.empresa_id = ? ";
 		if (organizacao_id != null)
 			sql += " AND ORGANIZACAO.organizacao_id = ?  ";
 
 		this.conn = this.conexao.getConexao();
+
 		Collection<ElementoBd> elementosBd = new ArrayList<ElementoBd>();
+
 		try {
 			this.stmt = conn.prepareStatement(sql);
+
 			if (empresa_id != null)
 				this.stmt.setLong(1, empresa_id);
 			if (organizacao_id != null)
 				this.stmt.setLong(2, organizacao_id);
+
 			this.rsElementos = this.stmt.executeQuery();
+
 			while (rsElementos.next()) {
-				ElementoBd elementoBd = new ElementoBd();
-				Empresa e = new Empresa();
-				Organizacao o = new Organizacao();
-				e.setEmpresa_id(rsElementos.getLong("empresa_id"));
-				e.setNome(rsElementos.getString("empresa_nome"));
-				o.setOrganizacao_id(rsElementos.getLong("organizacao_id"));
-				o.setNome(rsElementos.getString("organizacao_nome"));
-				elementoBd.setEmpresa(e);
-				elementoBd.setOrganizacao(o);
-				elementosBd.add(elementoBd);
+
+				getElementos(elementosBd);
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsElementos, stmt, conn);
 		return elementosBd;
 	}
 
-	public Collection<ElementoBd> buscaElementosLista(Long empresa_id,
-			Long organizacao_id, String nomeColunaBd) {
+	public Collection<ElementoBd> buscaElementosLista(Long empresa_id, Long organizacao_id, String nomeColunaBd) {
+
 		String sql = sqlElementosBd;
+
 		if (empresa_id != null)
 			sql += " WHERE EMPRESA.empresa_id = ? ";
 		if (organizacao_id != null)
 			sql += " AND ORGANIZACAO.organizacao_id = ?  ";
 		if (!nomeColunaBd.equals(""))
 			sql += " AND ELEMENTOBD.nomecolunabd like ?";
+
 		this.conn = this.conexao.getConexao();
+
 		Collection<ElementoBd> elementosBd = new ArrayList<ElementoBd>();
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
 
 			if (empresa_id != null)
@@ -142,25 +167,35 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 
 			this.rsElementos = this.stmt.executeQuery();
 			while (rsElementos.next()) {
-				ElementoBd elementoBd = new ElementoBd();
-				Empresa e = new Empresa();
-				Organizacao o = new Organizacao();
-				e.setEmpresa_id(rsElementos.getLong("empresa_id"));
-				e.setNome(rsElementos.getString("empresa_nome"));
-				o.setOrganizacao_id(rsElementos.getLong("organizacao_id"));
-				o.setNome(rsElementos.getString("organizacao_nome"));
-				elementoBd.setElementoBd_id(rsElementos
-						.getLong("elementobd_id"));
-				elementoBd.setNomeColunaBd(rsElementos
-						.getString("nomecolunabd"));
-				elementoBd.setEmpresa(e);
-				elementoBd.setOrganizacao(o);
-				elementosBd.add(elementoBd);
+				
+				getElementos(elementosBd);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		this.conexao.closeConnection(rsElementos, stmt, conn);
 		return elementosBd;
+	}
+
+	private void getElementos(Collection<ElementoBd> elementosBd) throws SQLException {
+
+		ElementoBd elementoBd = new ElementoBd();
+		Empresa e = new Empresa();
+		Organizacao o = new Organizacao();
+		
+		e.setEmpresa_id(rsElementos.getLong("empresa_id"));
+		e.setNome(rsElementos.getString("empresa_nome"));
+
+		o.setOrganizacao_id(rsElementos.getLong("organizacao_id"));
+		o.setNome(rsElementos.getString("organizacao_nome"));
+
+		elementoBd.setElementoBd_id(rsElementos.getLong("elementobd_id"));
+		elementoBd.setNomeColunaBd(rsElementos.getString("nomecolunabd"));
+
+		elementoBd.setEmpresa(e);
+		elementoBd.setOrganizacao(o);
+
+		elementosBd.add(elementoBd);
+
 	}
 }
