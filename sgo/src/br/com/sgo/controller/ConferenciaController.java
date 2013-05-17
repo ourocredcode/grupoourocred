@@ -1,7 +1,10 @@
 package br.com.sgo.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
@@ -33,7 +36,7 @@ public class ConferenciaController {
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
-	private Collection<ProcedimentoConferencia> procedimentos;
+	private Collection<Conferencia> conferencias = new ArrayList<Conferencia>();
 
 	public ConferenciaController(Result result,UsuarioInfo usuarioInfo,Contrato contrato,ContratoDao contratoDao,
 			ConferenciaDao conferenciaDao,Conferencia conferencia,Empresa empresa,TipoProcedimentoDao tipoProcedimentoDao,ProcedimentoConferenciaDao procedimentoConferenciaDao,
@@ -60,14 +63,57 @@ public class ConferenciaController {
 		Contrato contrato = this.contratoDao.load(contrato_id);
 		TipoProcedimento tipoProcedimento = this.tipoProcedimentoDao.buscaTipoProcedimentoByNome("Contrato");
 
-		conferencia = this.conferenciaDao.buscaConferenciaByEmOrTipoProcedimentoContrato(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
-																						  tipoProcedimento.getTipoProcedimento_id(), contrato_id);
-		procedimentos = this.procedimentoConferenciaDao.buscaAllProcedimentoConferencia(empresa.getEmpresa_id(), organizacao.getOrganizacao_id());
+		conferencias = this.conferenciaDao.buscaConferenciaByEmOrTipoProcedimentoContrato(
+				empresa.getEmpresa_id(), 
+				organizacao.getOrganizacao_id(), 
+				tipoProcedimento.getTipoProcedimento_id(), 
+				contrato_id);
+
+		if(conferencias.isEmpty()) {
+
+			conferencias = new ArrayList<Conferencia>();
+			
+			Collection<ProcedimentoConferencia >procedimentos = this.procedimentoConferenciaDao.buscaProcedimentoConferenciaTipoProcedimento(
+					empresa.getEmpresa_id(),
+					organizacao.getOrganizacao_id(), 
+					tipoProcedimento.getTipoProcedimento_id());
+
+			for(ProcedimentoConferencia procedimento : procedimentos){
+
+				Conferencia c = new Conferencia();
+				c.setProcedimentoConferencia(procedimento);
+				c.setContrato(contrato);
+				c.setTipoProcedimento(tipoProcedimento);
+				c.setEmpresa(empresa);
+				c.setOrganizacao(organizacao);
+				c.setCreatedBy(usuario);
+				c.setIsActive(true);
+
+				conferencias.add(c);
+
+			}
+			
+		}
 
 		result.include("contrato",contrato);
-		result.include("conferencia",conferencia);
-		result.include("procedimentos", procedimentos);
+		result.include("conferencias",conferencias);
 
 	}
 
+	@Post
+	@Path("/conferencia/salva")
+	public void salva(List<Conferencia> conferencias) {
+
+		this.conferenciaDao.beginTransaction();
+		this.conferenciaDao.atualiza(conferencias);
+		this.conferenciaDao.commit();
+		
+		result.include("msg","Check lista preenchido com sucesso.").redirectTo(this).msg();
+
+	}
+	
+	@Get
+	public void msg(){
+
+	}
 }

@@ -24,11 +24,13 @@ public class Dao <T>{
     }
 
     public void adiciona(List<T> o){
-        try {
+
+    	try {
             for(T item : o){
                 this.session.save(item);
             }
         }catch(Exception e){}
+
     }
 
     public void adicionar(List<T> o){

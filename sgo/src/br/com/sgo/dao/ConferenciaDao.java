@@ -17,6 +17,8 @@ import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ProcedimentoConferencia;
+import br.com.sgo.modelo.TipoProcedimento;
+import br.com.sgo.modelo.Usuario;
 
 @Component
 public class ConferenciaDao extends Dao<Conferencia> {
@@ -27,14 +29,15 @@ public class ConferenciaDao extends Dao<Conferencia> {
 	private ResultSet rsConferencia;
 
 	private final String sqlConferencia = " SELECT CONFERENCIA.conferencia_id, CONFERENCIA.empresa_id, EMPRESA.nome AS empresa_nome, "+
-					" CONFERENCIA.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, "+
-					" CONFERENCIA.contrato_id, CONFERENCIA.procedimentoconferencia_id, PROCEDIMENTOCONFERENCIA.nome" +
-					", CONFERENCIA.tipoprocedimento_id, TIPOPROCEDIMENTO.nome "+
-					" FROM (((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
+					" CONFERENCIA.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, CONFERENCIA.observacao,CONFERENCIA.isvalido, CONFERENCIA.isactive, "+
+					" CONFERENCIA.contrato_id, CONFERENCIA.procedimentoconferencia_id, PROCEDIMENTOCONFERENCIA.nome as procedimentoconferencia_nome" +
+					", CONFERENCIA.tipoprocedimento_id, TIPOPROCEDIMENTO.nome as tipoprocedimento_nome,USUARIO.usuario_id, USUARIO.nome as usuario_nome "+
+					" FROM ((((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
 					" INNER JOIN CONFERENCIA (NOLOCK) ON EMPRESA.empresa_id = CONFERENCIA.empresa_id) ON ORGANIZACAO.organizacao_id = CONFERENCIA.organizacao_id) "+
 					" INNER JOIN PROCEDIMENTOCONFERENCIA (NOLOCK) ON CONFERENCIA.procedimentoconferencia_id = PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id) " +
 					" INNER JOIN TIPOPROCEDIMENTO (NOLOCK) ON CONFERENCIA.tipoprocedimento_id = TIPOPROCEDIMENTO.tipoprocedimento_id) "+
-					" INNER JOIN CONTRATO (NOLOCK) ON CONFERENCIA.contrato_id = CONTRATO.contrato_id ";
+					" INNER JOIN CONTRATO (NOLOCK) ON CONFERENCIA.contrato_id = CONTRATO.contrato_id)" +
+					" INNER JOIN USUARIO (NOLOCK) ON USUARIO.usuario_id = CONFERENCIA.createdby ";
 
 	public ConferenciaDao(Session session, ConnJDBC conexao) {
 
@@ -78,7 +81,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 
 	}
 
-	public Conferencia buscaConferenciaByEmOrTipoProcedimentoContrato(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id, Long contrato_id) {
+	public Collection<Conferencia> buscaConferenciaByEmOrTipoProcedimentoContrato(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id, Long contrato_id) {
 
 		String sql = sqlConferencia;
 
@@ -89,11 +92,11 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		if (tipoProcedimento_id != null)
 			sql += " AND CONFERENCIA.tipoprocedimento_id = ?";
 		if (contrato_id != null)
-			sql += " AND (CONFERENCIA.contrato_id = ?)";
+			sql += " AND CONFERENCIA.contrato_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
-		Conferencia conferencia = new Conferencia();
+		Collection<Conferencia> conferencias = new ArrayList<Conferencia>();
 
 		try {
 
@@ -108,8 +111,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 
 			while (rsConferencia.next()) {
 
-				conferencia.setConferencia_id(rsConferencia.getLong("conferencia_id"));
-				conferencia.setNome(rsConferencia.getString("conferencia_nome"));
+				getConferencias(conferencias);
 
 			}
 
@@ -120,7 +122,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		}
 
 		this.conexao.closeConnection(rsConferencia, stmt, conn);
-		return conferencia;
+		return conferencias;
 	}
 
 	private void getConferencias(Collection<Conferencia> conferencias)	throws SQLException {
@@ -130,6 +132,8 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		Conferencia conferencia = new Conferencia();
 		Contrato contrato = new Contrato();
 		ProcedimentoConferencia procedimentoConferencia = new ProcedimentoConferencia();
+		TipoProcedimento tipoProcedimento = new TipoProcedimento();
+		Usuario usuario = new Usuario();
 		
 		empresa.setEmpresa_id(rsConferencia.getLong("empresa_id"));
 		empresa.setNome(rsConferencia.getString("empresa_nome"));
@@ -137,13 +141,18 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		organizacao.setOrganizacao_id(rsConferencia.getLong("organizacao_id"));
 		organizacao.setNome(rsConferencia.getString("organizacao_nome"));
 
+		usuario.setUsuario_id(rsConferencia.getLong("usuario_id"));
+		usuario.setNome(rsConferencia.getString("usuario_nome"));
+
 		contrato.setContrato_id(rsConferencia.getLong("contrato_id"));
 
 		procedimentoConferencia.setProcedimentoConferencia_id(rsConferencia.getLong("procedimentoconferencia_id"));
 		procedimentoConferencia.setNome(rsConferencia.getString("procedimentoconferencia_nome"));
 
+		tipoProcedimento.setTipoProcedimento_id(rsConferencia.getLong("tipoprocedimento_id"));
+		tipoProcedimento.setNome(rsConferencia.getString("tipoprocedimento_nome"));
+
 		conferencia.setConferencia_id(rsConferencia.getLong("conferencia_id"));
-		conferencia.setNome(rsConferencia.getString("conferencia_nome"));
 		conferencia.setObservacao(rsConferencia.getString("observacao"));
 		conferencia.setIsValido(rsConferencia.getBoolean("isvalido"));
 		conferencia.setIsActive(rsConferencia.getBoolean("isactive"));
@@ -152,6 +161,8 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		conferencia.setOrganizacao(organizacao);
 		conferencia.setContrato(contrato);
 		conferencia.setProcedimentoConferencia(procedimentoConferencia);
+		conferencia.setTipoProcedimento(tipoProcedimento);
+		conferencia.setCreatedBy(usuario);
 
 		conferencias.add(conferencia);
 
