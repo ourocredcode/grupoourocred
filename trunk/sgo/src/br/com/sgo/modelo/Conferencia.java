@@ -176,7 +176,7 @@ public class Conferencia implements Serializable {
 	}
 
 	public Boolean getIsValido() {
-		return isValido;
+		return isValido == null ? false : isValido;
 	}
 
 	public void setIsValido(Boolean isValido) {
