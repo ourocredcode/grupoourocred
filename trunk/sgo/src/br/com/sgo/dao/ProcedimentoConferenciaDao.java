@@ -79,6 +79,49 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 
 	}
 	
+	public Collection<ProcedimentoConferencia> buscaProcedimentoConferenciaByEmpOrgTipoProcedimento(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id) {
+
+		String sql = sqlProcedimentoConferencia;
+
+		if (empresa_id != null)
+			sql += " WHERE PROCEDIMENTOCONFERENCIA.empresa_id = ? ";
+		if (organizacao_id != null)
+			sql += " AND PROCEDIMENTOCONFERENCIA.organizacao_id = ? ";
+		if(tipoProcedimento_id != null)
+			sql += " AND PROCEDIMENTOCONFERENCIA.tipoprocedimento_id = ? ";
+
+		sql += " AND PROCEDIMENTOCONFERENCIA.isactive = 1 ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<ProcedimentoConferencia> procedimentosConferencia = new ArrayList<ProcedimentoConferencia>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, tipoProcedimento_id);
+
+			this.rsProcedimentoConferencia = this.stmt.executeQuery();
+
+			while (rsProcedimentoConferencia.next()) {
+
+				getProcedimentoConferencias(procedimentosConferencia);
+
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsProcedimentoConferencia, stmt, conn);
+		return procedimentosConferencia;
+
+	}
+	
 	public Collection<ProcedimentoConferencia> buscaProcedimentoConferenciaTipoProcedimentoNome(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id, String nome) {
 
 		String sql = sqlProcedimentoConferencia;
@@ -104,47 +147,6 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, tipoProcedimento_id);
 			this.stmt.setString(4, "%" + nome + "%");
-
-			this.rsProcedimentoConferencia = this.stmt.executeQuery();
-
-			while (rsProcedimentoConferencia.next()) {
-
-				getProcedimentoConferencias(procedimentosConferencia);
-
-			}
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-
-		}
-
-		this.conexao.closeConnection(rsProcedimentoConferencia, stmt, conn);
-		return procedimentosConferencia;
-
-	}
-	
-	public Collection<ProcedimentoConferencia> buscaProcedimentoConferenciaTipoProcedimento(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id) {
-
-		String sql = sqlProcedimentoConferencia;
-
-		if (empresa_id != null)
-			sql += " WHERE PROCEDIMENTOCONFERENCIA.empresa_id = ?";
-		if (organizacao_id != null)
-			sql += " AND PROCEDIMENTOCONFERENCIA.organizacao_id = ?";
-		if (tipoProcedimento_id != null)
-			sql += " AND PROCEDIMENTOCONFERENCIA.tipoprocedimento_id = ?";
-
-		this.conn = this.conexao.getConexao();
-
-		Collection<ProcedimentoConferencia> procedimentosConferencia = new ArrayList<ProcedimentoConferencia>();
-
-		try {
-
-			this.stmt = conn.prepareStatement(sql);
-
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, tipoProcedimento_id);
 
 			this.rsProcedimentoConferencia = this.stmt.executeQuery();
 
