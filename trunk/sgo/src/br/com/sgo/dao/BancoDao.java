@@ -17,7 +17,6 @@ import br.com.sgo.modelo.Banco;
 @Component
 public class BancoDao extends Dao<Banco> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -25,7 +24,6 @@ public class BancoDao extends Dao<Banco> {
 
 	public BancoDao(Session session, ConnJDBC conexao) {
 		super(session, Banco.class);
-		this.session = session;
 		this.conexao = conexao;
 	}
 
@@ -62,39 +60,6 @@ public class BancoDao extends Dao<Banco> {
 		this.conexao.closeConnection(rsBanco, stmt, conn);
 
 		return bancos;
-
-	}
-	
-	public Banco buscaBancoByNome(String nome) {
-
-		String sql = " SELECT BANCO.banco_id, BANCO.nome FROM BANCO (NOLOCK) WHERE  BANCO.nome like ?";
-
-		this.conn = this.conexao.getConexao();
-
-		Banco banco = null;
-
-		try {
-
-			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setString(1, "%" + nome + "%");
-			this.rsBanco = this.stmt.executeQuery();
-
-			while (rsBanco.next()) {
-
-				banco = new Banco();
-
-				banco.setBanco_id(rsBanco.getLong("banco_id"));
-				banco.setNome(rsBanco.getString("nome"));
-
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		this.conexao.closeConnection(rsBanco, stmt, conn);
-
-		return banco;
 
 	}
 	
@@ -144,6 +109,47 @@ public class BancoDao extends Dao<Banco> {
 
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setString(1, grupo);
+
+			this.rsBanco = this.stmt.executeQuery();
+
+			while (rsBanco.next()) {
+
+				Banco banco = new Banco();
+
+				banco.setBanco_id(rsBanco.getLong("banco_id"));
+				banco.setNome(rsBanco.getString("nome"));
+
+				bancos.add(banco);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsBanco, stmt, conn);
+
+		return bancos;
+
+	}
+	
+public Collection<Banco> buscaBancoByProcedimento(Long procedimento_id){
+		
+		String sql = "SELECT PROCEDIMENTOBANCO.banco_id, BANCO.nome FROM PROCEDIMENTOBANCO (NOLOCK) " +
+				" INNER JOIN BANCO (NOLOCK) ON PROCEDIMENTOBANCO.banco_id = BANCO.banco_id ";
+
+		if (procedimento_id != null)
+			sql += " WHERE PROCEDIMENTOBANCO.procedimento_id = ?";
+		
+		this.conn = this.conexao.getConexao();
+
+		
+		Collection<Banco> bancos = new ArrayList<Banco>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, procedimento_id);
 
 			this.rsBanco = this.stmt.executeQuery();
 
