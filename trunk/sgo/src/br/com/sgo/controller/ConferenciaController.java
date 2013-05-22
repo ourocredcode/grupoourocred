@@ -73,7 +73,7 @@ public class ConferenciaController {
 
 			conferencias = new ArrayList<Conferencia>();
 			
-			Collection<ProcedimentoConferencia >procedimentos = this.procedimentoConferenciaDao.buscaProcedimentoConferenciaTipoProcedimento(
+			Collection<ProcedimentoConferencia >procedimentos = this.procedimentoConferenciaDao.buscaProcedimentoConferenciaByEmpOrgTipoProcedimento(
 					empresa.getEmpresa_id(),
 					organizacao.getOrganizacao_id(), 
 					tipoProcedimento.getTipoProcedimento_id());
