@@ -5,7 +5,7 @@
 		<tr>
 			<th>Empresa</th>
 			<th>Organização</th>
-			<th>ColunaBd</th>
+			<th>Nome</th>
 		</tr>
 	</thead>
 	<tbody>	
