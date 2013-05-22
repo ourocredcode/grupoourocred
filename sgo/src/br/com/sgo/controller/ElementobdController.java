@@ -35,7 +35,7 @@ public class ElementobdController {
 	@Public
 	@Path("/elementobd/cadastro")
 	public void cadastro(){
-		result.include("elementosBd",this.elementoBdDao.listaTudo("ASC","nome"));
+		result.include("elementosBd",this.elementoBdDao.buscaAllElementos());
 	}
 
 	@Post
@@ -56,6 +56,7 @@ public class ElementobdController {
 	
 				elementoBd.setChave(elementoBd.getNome());
 				elementoBd.setDescricao(elementoBd.getNome());
+				elementoBd.setNomeColunaBd(elementoBd.getNome());
 	
 				elementoBd.setIsActive(elementoBd.getIsActive() == null ? false : true);
 	
