@@ -327,11 +327,11 @@ function limpaForm(){
 							</tr>
 						</thead>
 						<tbody>	
-							<c:forEach items="${elementosBd}" var="elementosBd">
+							<c:forEach items="${elementosBd}" var="elementoBd">
 								<tr>
-									<td>${elementosBd.empresa.nome }</td>
-									<td>${elementosBd.organizacao.nome }</td>
-									<td>${elementosBd.nomeColunaBd }</td>									
+									<td>${elementoBd.empresa.nome }</td>
+									<td>${elementoBd.organizacao.nome }</td>
+									<td>${elementoBd.nomeColunaBd }</td>									
 								</tr>
 							</c:forEach>
 						</tbody>
