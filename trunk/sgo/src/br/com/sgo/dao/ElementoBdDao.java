@@ -32,13 +32,13 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 		this.conexao = conexao;
 	}
 
-	public Collection<ElementoBd> buscaElementos() {
+	public Collection<ElementoBd> buscaAllElementos() {
 
 		String sql = sqlElementosBd;
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<ElementoBd> elementosbd = new ArrayList<ElementoBd>();
+		Collection<ElementoBd> elementosBd = new ArrayList<ElementoBd>();
 
 		try {
 
@@ -48,17 +48,18 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 
 			while (rsElementos.next()) {
 
-				ElementoBd elementobd = new ElementoBd();
-				elementobd.setElementoBd_id(rsElementos.getLong("elementobd_id"));
-				elementobd.setNomeColunaBd(rsElementos.getString("nomecolunabd"));
-				elementosbd.add(elementobd);
+				getElementos(elementosBd);
 
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsElementos, stmt, conn);
-		return elementosbd;
+		return elementosBd;
 	}
 
 	public ElementoBd buscaValidaElementosByNomeColuna(Long empresa_id, Long organizacao_id, String nomeColunaBd) {
@@ -74,7 +75,7 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 		
 		this.conn = this.conexao.getConexao();
 
-		ElementoBd elementobd = null;
+		ElementoBd elementoBd = null;
 
 		try {
 
@@ -88,9 +89,9 @@ public class ElementoBdDao extends Dao<ElementoBd> {
  
 			while (rsElementos.next()) {
 
-				elementobd = new  ElementoBd();
-				elementobd.setElementoBd_id(rsElementos.getLong("elementobd_id"));
-				elementobd.setNome(rsElementos.getString("nomecolunabd"));
+				elementoBd = new  ElementoBd();
+				elementoBd.setElementoBd_id(rsElementos.getLong("elementobd_id"));
+				elementoBd.setNome(rsElementos.getString("nomecolunabd"));
 
 			}
 		} catch (SQLException e) {
@@ -98,7 +99,7 @@ public class ElementoBdDao extends Dao<ElementoBd> {
 		}
 		this.conexao.closeConnection(rsElementos, stmt, conn);
 		
-		return elementobd;
+		return elementoBd;
 	}
 	public Collection<ElementoBd> buscaElementosLista(Long empresa_id, Long organizacao_id) {
 

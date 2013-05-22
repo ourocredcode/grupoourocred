@@ -16,8 +16,7 @@ import br.com.sgo.modelo.Departamento;
 
 @Component
 public class DepartamentoDao extends Dao<Departamento> {
-
-	private Session session;
+	
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -25,7 +24,6 @@ public class DepartamentoDao extends Dao<Departamento> {
 
 	public DepartamentoDao(Session session, ConnJDBC conexao) {
 		super(session, Departamento.class);
-		this.session = session;
 		this.conexao = conexao;
 	}
 
