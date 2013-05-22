@@ -2,7 +2,55 @@
 
 <script type="text/javascript">
 
-	</script>
+function showObs(value){
+	alert(value);
+	return false;
+}
+
+function altera(atributo, id, valor) {
+
+	var atributo = "formulario." + atributo;
+
+	var temp = "$.post( ";
+	temp += "	'<c:url value='/formulario/altera' />', ";
+	temp += "	{ '" + atributo + "' : valor, 'formulario.id' : id }, ";
+	temp += "	function(resposta) {  }";
+	temp += ");";
+
+	eval(temp);
+
+}
+
+$(document).ready(function() {
+
+	$("#supervisor").change(function() {   
+
+		var supervisor = $("#supervisor").val();
+
+		$("#consultor").load('<c:url value="/controle/consultores" />', {'supervisor': supervisor});
+
+	});
+	
+	
+	$("textarea[maxlength]").keyup(function(event){
+
+		var length = this.value.length;
+		var btt = document.getElementById("historicoBtt");
+
+		if(length > 0){
+			btt.style.display = "inline";
+		};
+		if(length == 0){
+			btt.style.display = "none";
+		};
+	});
+});
+
+function mostra(formulario_id){
+	$('#divPosVenda').load('<c:url value="/controleformulario/posvenda"/>',{'formulario_id' : formulario_id});
+}
+
+</script>
 
 	<div id="content-header">
 		<h1>Formulário</h1>
@@ -202,6 +250,88 @@
 					</table>
 				</div>
 
+				<div class="container-fluid">
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="widget-box">
+								<div class="widget-title">
+									<span class="icon">
+										<i class="icon-align-justify"></i>									
+									</span>
+									<h5>Pós Venda</h5>
+								</div>
+								<div class="widget-content padding">
+									<div class="row-fluid">
+										
+										<div id="divPosVenda">
+											<div class="row-fluid">
+												<div class="span8"></div>
+												<div class="span4">
+													
+													<table class="table table-striped table-bordered">
+														<thead>
+															<tr>
+																<th>Data</th>
+																<th>Responsável</th>
+																<th>Observação</th>
+															</tr>
+														</thead>
+														<tbody>
+															<c:forEach items="${historicos }" var="historico">
+															<tr>
+																<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${historico.created.time }" /></td>
+																<td>${historico.createdBy.nome }</td>
+																<td>${historico.observacao }</td>
+															</tr>
+															</c:forEach>
+														</tbody>
+													</table>
+												
+												</div>
+											</div>
+										
+										</div>
+											
+									</div>
+									
+									<div class="row-fluid">
+										<div style="float: left;clear: both;">
+			
+											<form id="posvendahistoricoform" name="posvendahistoricoform" action="<c:url value="/controleformulario/incluiComunicacao" />" method="post">
+											
+											<input type="hidden" id="historico.controleFormulario.controleFormulario_id" name="historico.controleFormulario.controleFormulario_id" value="${historico.controleFormulario.controleFormulario_id }" />
+											<input type="hidden" id="historico.formulario.formulario_id" name="historico.formulario.formulario_id" value="${historico.formulario.formulario_id }" />
+											<input type="hidden" id="historico.createdBy.usuario_id" name="historico.createdBy.usuario_id" value="${historico.createdBy.usuario_id }" />
+											<input type="hidden" id="historico.empresa.empresa_id" name="historico.empresa.empresa_id" value="${historico.empresa.empresa_id }" />	
+											<input type="hidden" id="historico.organizacao.organizacao_id" name="historico.organizacao.organizacao_id" value="${historico.organizacao.organizacao_id }" />
+											<input type="hidden" id="historico.perfil.perfil_id " name="historico.perfil.perfil_id" value="${historico.perfil.perfil_id }" />	
+											
+											<table id="myform" style="width: 650px;display: left;">
+												<tr>
+													<th style="text-align: right;">Incluir observação:</th>
+													<td> <textarea id="historico.observacao" name="historico.observacao" class="label_txt" rows="3" cols="65" maxlength="255"><c:out value="${historico.observacao}" /></textarea></td>
+												</tr>
+												<tr>
+													<td class="btt">
+														
+													</td>
+													<td class="btt">
+														<button id="historicoBtt" type="submit" class="form_button" style="display: none;float: left;">Salvar</button>
+														</td>
+													</tr>
+												</table>
+									
+											</form>
+								
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<div class="row-fluid">
 					<div class="span1" style="float: left;">
 						<input value="Voltar" type="button" class="btn" onclick="javascript:window.location='/sgo/menu/inicio'">
@@ -209,12 +339,15 @@
 					<div class="span1" style="float: left;">
 						<input value="Imprimir" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/impressao/${formulario.formulario_id}'">
 					</div>
-  
+					<div class="span1" style="float: left;">	
+						<input value="Pós Venda" type="button" class="btn" onclick="mostra('${formulario.formulario_id}');">
+					</div>
 				</div>
 
 			</div>
 		</div>	
 	</div>
+	
 
 
 <%@ include file="/footer.jspf" %> 

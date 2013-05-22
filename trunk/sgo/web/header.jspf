@@ -53,7 +53,9 @@
 		</div>
 
 		<div id="search">
-			<input type="text" placeholder="Search here..."/><button type="submit" class="tip-right" title="Search"><i class="icon-search icon-white"></i></button>
+			<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="POST">
+				<input id="doc" name="doc" type="text" placeholder="Busca Parceiro..."/><button type="submit"><i class="icon-search icon-white"></i></button>
+			</form>
 		</div>
 
 		<div id="user-nav" class="navbar navbar-inverse">

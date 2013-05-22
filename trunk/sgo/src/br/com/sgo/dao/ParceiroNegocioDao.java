@@ -67,8 +67,7 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 		return parceiros;
 	}
 
-	public ParceiroNegocio buscaParceiroNegocioDocumento(Long empresa_id,
-			Long organizacao_id, String doc) {
+	public ParceiroNegocio buscaParceiroNegocioByDocumento(Long empresa_id,Long organizacao_id, String doc) {
 
 		String sql = sqlParceiroNegocio;
 

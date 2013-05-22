@@ -23,24 +23,33 @@ import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ContratoDao;
+import br.com.sgo.dao.ControleFormularioDao;
 import br.com.sgo.dao.FormularioDao;
+import br.com.sgo.dao.HistoricoControleFormularioDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PnDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
+import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.jasper.FormularioDataSource;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Contrato;
+import br.com.sgo.modelo.ControleFormulario;
+import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Formulario;
+import br.com.sgo.modelo.HistoricoControleFormulario;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroInfoBanco;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
+import br.com.sgo.modelo.Perfil;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class FormularioController {
@@ -50,6 +59,9 @@ public class FormularioController {
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
+	private final ControleFormularioDao controleFormularioDao;
+	private final HistoricoControleFormularioDao historicoControleFormularioDao;
+	private final TipoControleDao tipoControleDao;
 	private final BancoDao bancoDao;
 	private final ProdutoDao produtoDao;
 	private final TabelaDao tabelaDao;
@@ -67,12 +79,17 @@ public class FormularioController {
 	private ParceiroInfoBanco parceiroInfoBanco;
 	private ParceiroBeneficio parceiroBeneficio;
 	private List<Contrato> contratos;
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
+	private Perfil perfil;
 
 	public FormularioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,FormularioDao formularioDao,ContratoDao contratoDao,
-			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,
+			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
-			WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao){		
+			WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
+			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -81,7 +98,10 @@ public class FormularioController {
 		this.parceiroBeneficio = parceiroBeneficio;
 		this.parceiroBeneficioDao =  parceiroBeneficioDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
+		this.controleFormularioDao = controleFormularioDao;
+		this.historicoControleFormularioDao = historicoControleFormularioDao;
 		this.coeficienteDao = coeficienteDao;
+		this.tipoControleDao = tipoControleDao;
 		this.bancoDao = bancoDao;
 		this.produtoDao = produtoDao;
 		this.formulario = formulario;
@@ -96,6 +116,10 @@ public class FormularioController {
 		this.parceiroInfoBanco = parceiroInfoBanco;
 		this.parceiroBeneficio = parceiroBeneficio;
 		this.contratos = contratos;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = usuarioInfo.getUsuario();
+		this.perfil = usuarioInfo.getPerfil();
 
 	}
 
@@ -128,7 +152,27 @@ public class FormularioController {
 		formulario = formularioDao.load(id);
 		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario.getFormulario_id()));
 
+		ControleFormulario posvenda = 
+				controleFormularioDao.buscaControleByContratoTipoControle(formulario.getFormulario_id(), 
+						 this.tipoControleDao.buscaTipoControleByNome("Pós Venda").getTipoControle_id());
+
+		HistoricoControleFormulario historico = new HistoricoControleFormulario();
+		Collection<HistoricoControleFormulario> historicos = new ArrayList<HistoricoControleFormulario>();
+
+		historicos.addAll(this.historicoControleFormularioDao.buscaHistoricoByFormularioControle(formulario.getFormulario_id(),posvenda.getControleFormulario_id()));
+
+		historico.setControleFormulario(posvenda);
+		historico.setCreatedBy(usuario);
+		historico.setEmpresa(empresa);
+		historico.setOrganizacao(organizacao);
+		historico.setPerfil(perfil);
+		historico.setFormulario(formulario);
+
+		System.out.println(historicos.size());
+
 		result.include("formulario",formulario);
+		result.include("historico",historico);
+		result.include("historicos",historicos);
 
 	}
 	
