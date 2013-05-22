@@ -24,6 +24,7 @@ public class LocalidadeDao extends Dao<Localidade> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsLocalidades;
+
 	private String sqlLocalidade = "SELECT LOCALIDADE.empresa_id, "
 			+ "			EMPRESA.nome as empresa_nome, LOCALIDADE.organizacao_id, ORGANIZACAO.nome as organizacao_nome, LOCALIDADE.pais_id, PAIS.nome as pais_nome, "
 			+ "			LOCALIDADE.cidade_id, CIDADE.nome as cidade_nome, LOCALIDADE.localidade_id, LOCALIDADE.regiao_id, REGIAO.chave as regiao_chave, LOCALIDADE.tipolocalidade_id, "
@@ -41,9 +42,11 @@ public class LocalidadeDao extends Dao<Localidade> {
 	}
 
 	public Localidade buscaLocalidade(String cep) {
+		
+		String sql = sqlLocalidade;
 
 		if (!cep.equals("")) {
-			sqlLocalidade += " WHERE LOCALIDADE.cep like ? ";
+			sql += " WHERE LOCALIDADE.cep like ? ";
 		}
 
 		this.conn = this.conexao.getConexao();
@@ -52,9 +55,12 @@ public class LocalidadeDao extends Dao<Localidade> {
 
 		try {
 
-			this.stmt = conn.prepareStatement(sqlLocalidade);
+			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setString(1, "%" + cep + "%");
+			this.stmt.setString(1,"%" + cep + "%");
+			
+			System.out.println(sql);
+			System.out.println(cep);
 
 			this.rsLocalidades = this.stmt.executeQuery();
 
@@ -65,10 +71,8 @@ public class LocalidadeDao extends Dao<Localidade> {
 				empresa.setNome(rsLocalidades.getString("empresa_nome"));
 
 				Organizacao organizacao = new Organizacao();
-				organizacao.setOrganizacao_id(rsLocalidades
-						.getLong("organizacao_id"));
-				organizacao
-						.setNome(rsLocalidades.getString("organizacao_nome"));
+				organizacao.setOrganizacao_id(rsLocalidades.getLong("organizacao_id"));
+				organizacao.setNome(rsLocalidades.getString("organizacao_nome"));
 
 				Pais pais = new Pais();
 				pais.setPais_id(rsLocalidades.getLong("pais_id"));
@@ -82,8 +86,7 @@ public class LocalidadeDao extends Dao<Localidade> {
 				cidade.setCidade_id(rsLocalidades.getLong("cidade_id"));
 				cidade.setNome(rsLocalidades.getString("cidade_nome"));
 
-				localidade.setLocalidade_id(rsLocalidades
-						.getLong("localidade_id"));
+				localidade.setLocalidade_id(rsLocalidades.getLong("localidade_id"));
 				localidade.setEndereco(rsLocalidades.getString("endereco"));
 				localidade.setBairro(rsLocalidades.getString("bairro"));
 				localidade.setCep(rsLocalidades.getString("cep"));

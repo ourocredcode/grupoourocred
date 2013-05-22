@@ -10,16 +10,17 @@
 		   $('#parceiroNegocioDataNascimento').datepicker();
 	
 		   $("#parceiroNegocioTipoParceiroId").change(function(evento){
-	
-			   var id = $("#parceiroNegocioTipoParceiroId").val();
-	
-			   if(id == 1){
+
+			   var tipoParceiroId = document.getElementById("parceiroNegocioTipoParceiroId");
+			   var tipoParceiroNome = tipoParceiroId.options[tipoParceiroId.selectedIndex].text;
+
+			   if(tipoParceiroNome == 'Pessoa Física'){
 				   $("#parceiroNegocioTipoPessoaFisica").css("display", "block");
 			   } else {
 				   $("#parceiroNegocioTipoPessoaFisica").css("display", "none");
 			   }
 			   
-			   if(id == 2){
+			   if(tipoParceiroNome == 'Pessoa Jurídica'){
 				   $("#parceiroNegocioTipoPessoaJuridica").css("display", "block");
 			   } else {
 				   $("#parceiroNegocioTipoPessoaJuridica").css("display", "none");
@@ -298,15 +299,6 @@
 		</c:choose>
 	</c:if>
 
-	<div id="buscaParceiroDiv" style="float: right;margin-top: 20px;margin-left: 760px;position: absolute;">
-		<form id="buscaParceiroForm" class="form-search" action="<c:url value="/parceironegocio/cadastro" />" method="POST">
-			<div class="input-append">
-				<input type="text" class="input-medium" id="doc" name="doc" placeholder="Escolha o tipo de busca"/>
-				<span class="add-on" onclick="submit();"><i class="icon-search"></i></span>
-			</div>
-		</form>
-	</div>
-
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
@@ -379,12 +371,13 @@
 						</div>
 						
 						<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" 
+
 								<c:if test="${parceiroNegocio.isFuncionario || parceiroNegocio.isCliente || empty parceiroNegocio }">style="display: block;"</c:if>
 								<c:if test="${parceiroNegocio.isFornecedor}">style="display: none;"</c:if>>
 
 								<div class="span2">
 									<label for="parceiroNegocioCpf">CPF</label>
-									<input  class="input-medium" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text" placeholder="Cpf" value="${parceiroNegocio.cpf }">
+									<input  class="input-medium" id="parceiroNegocioCpf" name="parceiroNegocio.cpf" type="text" placeholder="Cpf" value="${parceiroNegocio.cpf }" required>
 								</div>
 								<div class="span2">
 									<label for="parceiroNegocioRg">RG</label>
@@ -454,19 +447,55 @@
 						</div>
 				
 						<br/>
-						
-						<c:if test="${not empty parceiroContatos}">	
-							<div class="navbar" style="display: block;width: 350px;float: left">
-								
-								<div class="navbar-inner" >
-							
-									<div class="container">
+						<div class="row-fluid">
+							<c:if test="${not empty parceiroInfoBanco}">
+								<div class="navbar" style="float: left;">
 									
-										<div class="control-group">
-										</div>
-										
-											<div id="parceiroContatosDiv">	
+								<div class="navbar-inner" >
+								
+									<div class="container">
+										<div class="control-group"></div>
 												
+											<div id="parceiroBeneficiosDiv">	
+												<table class="table table-striped table-bordered" id="lista">
+													<thead>
+														<tr>
+															<th>Conta</th>
+															<th>Agencia</th>
+															<th>Meio Pagamento</th>
+														</tr>
+													</thead>
+													<tbody>	
+														<tr>
+															<td><input type="text" id="parceiroInfoBancoContacorrente" name="parceiroInfoBanco.contaCorrente" value="${parceiroInfoBanco.contaCorrente }" class="input-small" /></td>
+															<td><input type="text" id="parceiroInfoBancoAgenciaNumero" name="parceiroInfoBanco.agenciaNumero" value="${parceiroInfoBanco.agenciaNumero }" class="input-small" /></td>
+															<td>
+																<input type="text" id="parceiroInfoMeioPagamento" name="parceiroInfoBanco.meioPagamento.nome" value="${parceiroInfoBanco.meioPagamento.nome }" class="input-large" />
+																<input type="hidden" id="parceiroInfoMeioPagamentoId" name="parceiroInfoBanco.meioPagamento.meiopagamento_id" value="${parceiroInfoBanco.meioPagamento.meiopagamento_id }" />
+															</td>
+															
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+						</div>
+						<div class="row-fluid">
+							<c:if test="${not empty parceiroContatos}">	
+								<div class="navbar" style="width: 350px;float: left;">
+									
+									<div class="navbar-inner" >
+								
+										<div class="container">
+										
+											<div class="control-group">
+											</div>
+											
+											<div id="parceiroContatosDiv">	
+													
 												<table class="table table-striped table-bordered" id="lista">
 												<thead>
 													<tr>
@@ -510,56 +539,53 @@
 													</c:if>
 												</tbody>
 												</table>
-												
 											</div>
-										
-									</div>
-								</div>
-							
-							</div>
-						</c:if>
-						
-						<c:if test="${not empty parceiroBeneficios}">
-							<div class="navbar" style="display: block;width: 350px;float: left">
-								
-							<div class="navbar-inner" >
-							
-								<div class="container">
-									<div class="control-group"></div>
-											
-										<div id="parceiroBeneficiosDiv">	
-											<table class="table table-striped table-bordered" id="lista">
-												<thead>
-													<tr>
-														<th>Benefício</th>
-														<th>Excluir</th>
-													</tr>
-												</thead>
-												<tbody>	
-													<c:forEach items="${parceiroBeneficios}" var="parceiroBeneficio" varStatus="status">
-														<tr>
-															<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficio(this,'nome','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
-															<td style="text-align: center;">
-																<button type="button" class="btn btn-danger btn-mini" onClick="return excluiBeneficio(this,'${parceiroBeneficio.parceiroBeneficio_id}');">Excluir</button>
-															</td>
-														</tr>
-													</c:forEach>
-													<c:if test="${not empty parceiroNegocio.parceiroNegocio_id}">
-														<tr>
-															<td><input type="text" id="parceiroBeneficioNumeroNovo" value="${parceiroBeneficio.numeroBeneficio }" class="input-small"/></td>
-															<td style="text-align: center;">
-																<button type="button" class="btn btn-mini" id="bttParceiroBeneficioNovo" onClick="return salvaBeneficio();">Novo</button>
-															</td>
-														</tr>
-													</c:if>
-												</tbody>
-											</table>
 										</div>
 									</div>
 								</div>
-							</div>
-						</c:if>
-				
+							</c:if>
+	
+							<c:if test="${not empty parceiroBeneficios}">
+								<div class="navbar" style="width: 250px;float: left;">
+									
+								<div class="navbar-inner" >
+								
+									<div class="container">
+										<div class="control-group"></div>
+												
+											<div id="parceiroBeneficiosDiv">	
+												<table class="table table-striped table-bordered" id="lista">
+													<thead>
+														<tr>
+															<th>Benefício</th>
+															<th>Excluir</th>
+														</tr>
+													</thead>
+													<tbody>	
+														<c:forEach items="${parceiroBeneficios}" var="parceiroBeneficio" varStatus="status">
+															<tr>
+																<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficio(this,'nome','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
+																<td style="text-align: center;">
+																	<button type="button" class="btn btn-danger btn-mini" onClick="return excluiBeneficio(this,'${parceiroBeneficio.parceiroBeneficio_id}');">Excluir</button>
+																</td>
+															</tr>
+														</c:forEach>
+														<c:if test="${not empty parceiroNegocio.parceiroNegocio_id}">
+															<tr>
+																<td><input type="text" id="parceiroBeneficioNumeroNovo" value="${parceiroBeneficio.numeroBeneficio }" class="input-small"/></td>
+																<td style="text-align: center;">
+																	<button type="button" class="btn btn-mini" id="bttParceiroBeneficioNovo" onClick="return salvaBeneficio();">Novo</button>
+																</td>
+															</tr>
+														</c:if>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
+						</div>
 						<c:if test="${not empty parceiroLocalidades}">
 							<div class="navbar" style="clear: both;width: 900px;">
 				
@@ -664,23 +690,21 @@
 										</div>
 									</div>
 								</c:if>
-								
 							</div>
 						</div>
-				
 					</div>
-				
-					
-				
+
 					<div class="controls controls-row">
 						<label class="checkbox">
 							<input type="checkbox" id="parceiroNegocioIsActive" name="parceiroNegocio.isActive" checked="checked" value="1"> Ativo
 						</label>							
 					</div>
-				
+
 					<div class="btn-toolbar">
 						<div class="btn-group">
-							<button type="submit" class="btn btn-primary">Salvar</button>
+							<c:if test="${empty parceiroNegocio.parceiroNegocio_id }">
+								<button type="submit" class="btn btn-primary">Salvar</button>
+							</c:if>
 						</div>		
 						<div class="btn-group">
 							<button type="button" class="btn btn-primary" id="bttNovo">Novo</button>

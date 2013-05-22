@@ -151,23 +151,23 @@ function limpaForm() {
 							<div class="span3">
 								<label for="funcaoEmpresa">Empresa</label>
 	      						<input class="span12" id="funcaoEmpresa" name="funcao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="span1" id="funcaoEmpresaId" name="funcao.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+	      						<input id="funcaoEmpresaId" name="funcao.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
     						</div>						
 							<div class="span3">
 								<label for="funcaoOrganizacao">Organização</label>
 								<input class="span12" id="funcaoOrganizacao" name="funcao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-		      					<input class="span1" id="funcaoOrganizacaoId" name="funcao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+		      					<input id="funcaoOrganizacaoId" name="funcao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 						</div>						
 
 						<div class="row-fluid">
 							<div class="span5">
 								<label for="funcaoNome">Nome</label>								
-								<input class="input-xxlarge"type="text" id="funcaoNome" name="funcao.nome" value="${funcao.nome }" placeholder="Nome" required>
+								<input class="span12"type="text" id="funcaoNome" name="funcao.nome" value="${funcao.nome }" placeholder="Nome" required>
 							</div>							
 							<div class="span5">
 								<label for="funcaoDescricao">Descrição</label>
-								<input class="input-xxlarge" type="text" id="funcaoDescricao" name="funcao.descricao" value="${funcao.descricao }" placeholder="Descrição" required >								
+								<input class="span12" type="text" id="funcaoDescricao" name="funcao.descricao" value="${funcao.descricao }" placeholder="Descrição" required >								
 							</div>
 							<div class="span1">
 								<label for="funcaoIsActive">Ativo</label>

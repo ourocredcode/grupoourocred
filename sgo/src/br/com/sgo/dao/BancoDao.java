@@ -65,6 +65,39 @@ public class BancoDao extends Dao<Banco> {
 
 	}
 	
+	public Banco buscaBancoByNome(String nome) {
+
+		String sql = " SELECT BANCO.banco_id, BANCO.nome FROM BANCO (NOLOCK) WHERE  BANCO.nome like ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Banco banco = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setString(1, "%" + nome + "%");
+			this.rsBanco = this.stmt.executeQuery();
+
+			while (rsBanco.next()) {
+
+				banco = new Banco();
+
+				banco.setBanco_id(rsBanco.getLong("banco_id"));
+				banco.setNome(rsBanco.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsBanco, stmt, conn);
+
+		return banco;
+
+	}
+	
 	public Banco buscaBancoById(Long banco_id) {
 
 		String sql = "select BANCO.banco_id, BANCO.nome from BANCO (NOLOCK) WHERE BANCO.banco_id = ? ";

@@ -39,6 +39,7 @@
 		<mapping class="br.com.sgo.modelo.Seguro" />
 		<mapping class="br.com.sgo.modelo.Formulario" />
 		<mapping class="br.com.sgo.modelo.Controle" />
+		<mapping class="br.com.sgo.modelo.ControleFormulario" />
 		<mapping class="br.com.sgo.modelo.Logistica" />
 		<mapping class="br.com.sgo.modelo.Periodo" />
 		<mapping class="br.com.sgo.modelo.TipoLogistica" />
@@ -85,9 +86,12 @@
 		<mapping class="br.com.sgo.modelo.ParceiroLocalidade" />
 		<mapping class="br.com.sgo.modelo.ParceiroContato" />
 		<mapping class="br.com.sgo.modelo.ParceiroBeneficio" />
+		<mapping class="br.com.sgo.modelo.ParceiroInfoBanco" />
+		<mapping class="br.com.sgo.modelo.MeioPagamento" />
 		<mapping class="br.com.sgo.modelo.HisconBeneficio" />
 		<mapping class="br.com.sgo.modelo.HistoricoHiscon" />
 		<mapping class="br.com.sgo.modelo.HistoricoControle" />
+		<mapping class="br.com.sgo.modelo.HistoricoControleFormulario" />
 		<mapping class="br.com.sgo.modelo.HistoricoContrato" />
 
 		<mapping class="br.com.sgo.modelo.Departamento" />

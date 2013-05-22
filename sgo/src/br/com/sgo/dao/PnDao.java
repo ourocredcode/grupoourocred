@@ -17,7 +17,6 @@ import java.util.TreeMap;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConexaoPN;
 import br.com.sgo.modelo.Banco;
-import br.com.sgo.modelo.ContaBancaria;
 import br.com.sgo.modelo.Detalhamento;
 import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.MeioPagamento;
@@ -37,6 +36,7 @@ public class PnDao {
 	private Connection conn;
 	private ResultSet rsParceiroNegocio;
 	private ResultSet rsDetalhamento;
+
 	private String sqlPN = " SELECT ent.id_ent, doc.str_nrdocumento as cpf, "
 			+ "			ent.str_descricao as clienteNome,  ent.dt_nascimento as clienteNascimento, ent.str_nomebanco as clienteBanco, "
 			+ "			ent.str_nomeagencia as clienteAgencia, ent.str_contacorrenteliquidacao as clienteConta, ent.str_observacaobanco as clienteTipoConta, "
@@ -75,18 +75,14 @@ public class PnDao {
 				try {
 
 					Calendar cal = new GregorianCalendar();
-					SimpleDateFormat formater1 = new SimpleDateFormat(
-							"yyyy-MM-dd");
-					String data = formater1.format(rsParceiroNegocio
-							.getDate("clienteNascimento"));
+					SimpleDateFormat formater1 = new SimpleDateFormat("yyyy-MM-dd");
+					String data = formater1.format(rsParceiroNegocio.getDate("clienteNascimento"));
 					cal.setTime(new Date(formater1.parse(data).getTime()));
 
 					parceiroNegocio.setDataNascimento(cal);
-					parceiroNegocio.setNome(rsParceiroNegocio
-							.getString("clienteNome"));
+					parceiroNegocio.setNome(rsParceiroNegocio.getString("clienteNome"));
 					parceiroNegocio.setCpf(rsParceiroNegocio.getString("cpf"));
-					parceiroNegocio.setPn_id(rsParceiroNegocio
-							.getLong("id_ent"));
+					parceiroNegocio.setPn_id(rsParceiroNegocio.getLong("id_ent"));
 					parceiroNegocio.setIsCliente(true);
 
 				} catch (ParseException e) {
@@ -172,8 +168,7 @@ public class PnDao {
 
 	}
 
-	public ParceiroInfoBanco buscaParceiroInfoBanco(
-			ParceiroNegocio parceiroNegocio) {
+	public ParceiroInfoBanco buscaParceiroInfoBanco(ParceiroNegocio parceiroNegocio) {
 
 		String sql = sqlPN;
 
@@ -184,7 +179,6 @@ public class PnDao {
 
 		ParceiroInfoBanco parceiroInfoBanco = new ParceiroInfoBanco();
 		Banco banco = new Banco();
-		ContaBancaria contaBancaria = new ContaBancaria();
 		MeioPagamento meioPagamento = new MeioPagamento();
 
 		try {
@@ -197,27 +191,24 @@ public class PnDao {
 
 			while (rsParceiroNegocio.next()) {
 
-				if (rsParceiroNegocio.getString("clienteBanco") != null)
-					banco.setNome(rsParceiroNegocio.getString("clienteBanco"));
-
 				if (rsParceiroNegocio.getString("clienteConta") != null) {
 
-					String formatConta = rsParceiroNegocio
-							.getString("clienteConta");
+					String formatConta = rsParceiroNegocio.getString("clienteConta");
 
 					while (formatConta.startsWith("0")) {
 						formatConta = formatConta.replaceFirst("0", "");
 					}
 
-					contaBancaria.setNumeroconta(formatConta);
+					parceiroInfoBanco.setContaCorrente(formatConta);
 
 				}
 
 				if (rsParceiroNegocio.getString("clienteTipoConta") != null)
-					meioPagamento.setNome(rsParceiroNegocio
-							.getString("clienteTipoConta"));
+					meioPagamento.setNome(rsParceiroNegocio.getString("clienteTipoConta"));
 
-				parceiroInfoBanco.setContaBancaria(contaBancaria);
+				String[] aux = rsParceiroNegocio.getString("clienteAgencia").split("-");
+
+				parceiroInfoBanco.setAgenciaNumero(aux[0]);
 				parceiroInfoBanco.setBanco(banco);
 				parceiroInfoBanco.setMeioPagamento(meioPagamento);
 				parceiroInfoBanco.setParceiroNegocio(parceiroNegocio);

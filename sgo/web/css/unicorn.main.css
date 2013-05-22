@@ -68,6 +68,7 @@ a:hover {
 #search button:hover i, #search button:active i {
 	opacity: 0.9;
 }
+
 /* Top user navigation */
 #user-nav {
     position: absolute;

@@ -74,7 +74,9 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 	public ParceiroBeneficio buscaParceiroBeneficioByNumeroBeneficio(String numeroBeneficio) {
 
 		String sql = sqlParceiroBeneficio;
-		ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
+
+		ParceiroBeneficio parceiroBeneficio = null;
+		ParceiroNegocio parceiroNegocio = null;
 
 		if (numeroBeneficio != null)
 			sql += " WHERE PARCEIROBENEFICIO.numerobeneficio = ?";
@@ -89,15 +91,13 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 			while (rsParceiroBeneficio.next()) {
 
-				ParceiroNegocio parceiroNegocio = new ParceiroNegocio();
+				parceiroBeneficio = new ParceiroBeneficio();
+				parceiroNegocio = new ParceiroNegocio();
 
 				parceiroNegocio.setParceiroNegocio_id(rsParceiroBeneficio.getLong("parceironegocio_id"));
 
-				parceiroBeneficio.setParceiroBeneficio_id(rsParceiroBeneficio
-						.getLong("parceirobeneficio_id"));
-				parceiroBeneficio.setNumeroBeneficio(rsParceiroBeneficio
-						.getString("numeroBeneficio"));
-				
+				parceiroBeneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
+				parceiroBeneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
 				parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
 
 			}
@@ -253,44 +253,4 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 		return parceiroBeneficio;
 
 	}
-
-	public ParceiroBeneficio buscaParceiroBeneficioByEmOrNo(Long empresa, Long organizacao, String nome) {
-
-		String sql = sqlParceiroBeneficio;
-
-		if (empresa != null)
-			sql += " AND PARCEIROBENEFICIO.empresa_id = ?";
-		if (organizacao != null)
-			sql += " AND PARCEIROBENEFICIO.organizacao_id = ?";
-		if (nome != null)
-			sql += " AND (PARCEIROBENEFICIO.nome like ?)";
-
-		this.conn = this.conexao.getConexao();
-
-		ParceiroBeneficio beneficio = null;
-
-		try {
-
-			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setLong(1, empresa);
-			this.stmt.setLong(2, organizacao);
-			this.stmt.setString(3, "%" + nome + "%");
-			this.rsParceiroBeneficio = this.stmt.executeQuery();
-
-			while (rsParceiroBeneficio.next()) {
-				beneficio = new ParceiroBeneficio();
-				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
-				beneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		this.conexao.closeConnection(rsParceiroBeneficio, stmt, conn);
-
-		return beneficio;
-
-	}
-
 }

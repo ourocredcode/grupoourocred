@@ -78,10 +78,10 @@ public class ParceiroInfoBanco implements Serializable {
 	private String descricao;
 
 	@Column(name = "agencianumero")
-	private String agencianumero;
+	private String agenciaNumero;
 	
 	@Column(name = "contacorrente")
-	private String contacorrente;
+	private String contaCorrente;
 	
 	@Column(name = "isactive")
 	private Boolean isActive;
@@ -214,20 +214,19 @@ public class ParceiroInfoBanco implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public String getAgencianumero() {
-		return agencianumero;
+	public String getAgenciaNumero() {
+		return agenciaNumero;
 	}
 
-	public void setAgencianumero(String agencianumero) {
-		this.agencianumero = agencianumero;
+	public void setAgenciaNumero(String agenciaNumero) {
+		this.agenciaNumero = agenciaNumero;
 	}
 
-	public String getContacorrente() {
-		return contacorrente;
+	public String getContaCorrente() {
+		return contaCorrente;
 	}
 
-	public void setContacorrente(String contacorrente) {
-		this.contacorrente = contacorrente;
+	public void setContaCorrente(String contaCorrente) {
+		this.contaCorrente = contaCorrente;
 	}
-
 }

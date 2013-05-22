@@ -10,6 +10,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CidadeDao;
 import br.com.sgo.dao.DepartamentoDao;
 import br.com.sgo.dao.EmpresaDao;
@@ -17,10 +18,12 @@ import br.com.sgo.dao.EstadoCivilDao;
 import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.LocalidadeDao;
+import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroContatoDao;
+import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PnDao;
@@ -33,11 +36,14 @@ import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Funcao;
 import br.com.sgo.modelo.Funcionario;
 import br.com.sgo.modelo.Localidade;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroContato;
+import br.com.sgo.modelo.ParceiroInfoBanco;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.TipoEndereco;
@@ -55,10 +61,12 @@ public class ParceironegocioController {
 	private final FuncionarioDao funcionarioDao;
 	private final DepartamentoDao departamentoDao;
 	private final FuncaoDao funcaoDao;
+	private final BancoDao bancoDao;
 	private final LocalidadeDao localidadeDao;
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 	private final ParceiroContatoDao parceiroContatoDao;
+	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
 	private final SexoDao sexoDao;
@@ -66,6 +74,7 @@ public class ParceironegocioController {
 	private final TipoParceiroDao tipoParceiroDao;
 	private final TipoEnderecoDao tipoEnderecoDao;
 	private final TipoContatoDao tipoContatoDao;
+	private final MeioPagamentoDao meioPagamentoDao;
 	private final PaisDao paisDao;
 	private final RegiaoDao regiaoDao;
 	private final CidadeDao cidadeDao;
@@ -73,11 +82,15 @@ public class ParceironegocioController {
 	private final UsuarioDao usuarioDao;
 	private BrazilianAddressFinder addressFinder;
 	private RestClient restfulie;
+	private Empresa empresa;
+	private Organizacao organizacao;
+	
 
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
 			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,
-			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao) {
+			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao,MeioPagamentoDao meioPagamentoDao,
+			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao,BancoDao bancoDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -94,14 +107,19 @@ public class ParceironegocioController {
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
 		this.parceiroContatoDao = parceiroContatoDao;
 		this.parceiroBeneficioDao = parceiroBeneficioDao;
+		this.parceiroInfoBancoDao = parceiroInfoBancoDao;
 		this.tipoParceiroDao = tipoParceiroDao;
 		this.tipoEnderecoDao = tipoEnderecoDao;
 		this.tipoContatoDao = tipoContatoDao;
+		this.meioPagamentoDao = meioPagamentoDao;
 		this.paisDao = paisDao;
 		this.regiaoDao = regiaoDao;
 		this.cidadeDao = cidadeDao;
 		this.usuarioDao = usuarioDao;
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
+		this.bancoDao = bancoDao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
 
 	}
 
@@ -126,17 +144,26 @@ public class ParceironegocioController {
 	public void cadastro(String doc){
 
 		ParceiroNegocio parceiroNegocio;
+		ParceiroBeneficio parceiroBeneficio;
 
-		parceiroNegocio = this.parceiroNegocioDao.buscaParceiroNegocioDocumento(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), doc);
+		parceiroBeneficio = this.parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(doc);
+
+		if(parceiroBeneficio == null)
+			parceiroNegocio = this.parceiroNegocioDao.buscaParceiroNegocioByDocumento(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), doc);
+		else
+			parceiroNegocio = parceiroBeneficio.getParceiroNegocio();
 
 		if(parceiroNegocio == null) {
 
 			parceiroNegocio = this.pnDao.buscaParceiroNegocio(doc);
-			
+
 			if(parceiroNegocio != null){
-				
+
 				ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
-				
+				ParceiroInfoBanco infoBanco = this.pnDao.buscaParceiroInfoBanco(parceiroNegocio);
+
+				infoBanco.setMeioPagamento(this.meioPagamentoDao.buscaMeioPagamentoByNome(infoBanco.getMeioPagamento().getNome()));
+
 				Localidade l = parceiroLocalidade.getLocalidade();
 
 				restfulie = Restfulie.custom();
@@ -154,9 +181,11 @@ public class ParceironegocioController {
 				result.include("localidade",parceiroLocalidade.getLocalidade());
 				result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
 				result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
-				result.include("parceiroInfoBanco",this.pnDao.buscaParceiroInfoBanco(parceiroNegocio));
+				result.include("parceiroInfoBanco",infoBanco);
 
-				TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Pessoa Física");
+				TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(
+						usuarioInfo.getEmpresa().getEmpresa_id(), 
+						usuarioInfo.getOrganizacao().getOrganizacao_id(),"Pessoa Física");
 
 				parceiroNegocio.setTipoParceiro(tipoParceiro);
 				parceiroNegocio.setIsCliente(true);
@@ -173,6 +202,7 @@ public class ParceironegocioController {
 			parceiroNegocio = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
 
 			result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroInfoBanco",this.parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
@@ -180,10 +210,8 @@ public class ParceironegocioController {
 
 		}
 
-		result.include("departamentos", this.departamentoDao.buscaDepartamentos(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
-				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
-		result.include("funcoes", this.funcaoDao.buscaFuncoes(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
-				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
+		result.include("departamentos", this.departamentoDao.buscaDepartamentos(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("funcoes", this.funcaoDao.buscaFuncoes(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
@@ -210,91 +238,121 @@ public class ParceironegocioController {
 	@Public
 	@Path("/parceironegocio/salva")
 	public void salva(ParceiroNegocio parceiroNegocio,Funcionario funcionario, ParceiroLocalidade parceiroLocalidade,Collection<ParceiroContato> parceiroContatos,
-			Collection<ParceiroBeneficio> parceiroBeneficios,Localidade localidade){
+			Collection<ParceiroBeneficio> parceiroBeneficios,Localidade localidade, ParceiroInfoBanco parceiroInfoBanco){
 
 		String mensagem = "";
 		Funcao funcao = this.funcaoDao.buscaFuncaoById(funcionario.getFuncao().getFuncao_id());
-		
+
+		try {
+
+			this.parceiroNegocioDao.beginTransaction();
+			this.parceiroNegocioDao.adiciona(parceiroNegocio);
+			this.parceiroNegocioDao.commit();
+
+		} catch(Exception e) {
+
+			this.parceiroNegocioDao.rollback();
+
+			if (e.getCause().toString().indexOf("PK_PARCEIRONEGOCIO") != -1){
+				mensagem = "Erro: Parceiro Negócio " + parceiroNegocio.getNome() + " já existente.";
+			} else {
+				mensagem = "Erro ao adicionar Parceiro Negócio:";
+			}
+
+		}
+
+		if(parceiroNegocio.getIsFuncionario()){
+
+			Funcionario f = new Funcionario();
+
+			if(funcao.getNome().equals("Consultor")){
+				f.setSupervisor(this.parceiroNegocioDao.buscaParceiroNegocioById(usuarioInfo.getUsuario().getParceiroNegocio().getParceiroNegocio_id()));
+			}
+
+			f.setEmpresa(parceiroNegocio.getEmpresa());
+			f.setOrganizacao(parceiroNegocio.getOrganizacao());
+			f.setDepartamento(funcionario.getDepartamento());
+			f.setParceiroNegocio(parceiroNegocio);
+			f.setFuncao(funcionario.getFuncao());
+			f.setApelido(funcionario.getApelido());
+			f.setIsActive(parceiroNegocio.getIsActive());
+			
 			try {
 
-				this.parceiroNegocioDao.beginTransaction();
-				this.parceiroNegocioDao.adiciona(parceiroNegocio);
-				this.parceiroNegocioDao.commit();
-			
+				this.funcionarioDao.beginTransaction();
+				this.funcionarioDao.adiciona(f);
+				this.funcionarioDao.commit();
+
 			} catch(Exception e) {
 
-				this.parceiroNegocioDao.rollback();
+				this.funcionarioDao.rollback();
 
-				if (e.getCause().toString().indexOf("PK_PARCEIRONEGOCIO") != -1){
-					mensagem = "Erro: Parceiro Negócio " + parceiroNegocio.getNome() + " já existente.";
+				if (e.getCause().toString().indexOf("PK_FUNCIONARIO") != -1){
+					mensagem = "Erro: Funcionário " + funcionario.getApelido() + " já existente.";
 				} else {
-					mensagem = "Erro ao adicionar Parceiro Negócio:";
+					mensagem = "Erro ao adicionar Perfil:";
 				}
 
 			}
 
-			if(parceiroNegocio.getIsFuncionario()){
+			Usuario u = new Usuario();
 
-				Funcionario f = new Funcionario();
+			if(funcao.getNome().equals("Consultor")){
+				u.setSupervisorUsuario(usuarioInfo.getUsuario());
+			}
 
-				if(funcao.getNome().equals("Consultor")){
-					f.setSupervisor(this.parceiroNegocioDao.buscaParceiroNegocioById(usuarioInfo.getUsuario().getParceiroNegocio().getParceiroNegocio_id()));
-				}
+			u.setChave(parceiroNegocio.getCpf());
+			u.setEmpresa(parceiroNegocio.getEmpresa());
+			u.setOrganizacao(parceiroNegocio.getOrganizacao());
+			u.setParceiroNegocio(parceiroNegocio);
+			u.setSenha("123456");
+			u.setNome(parceiroNegocio.getNome());
+			u.setIsActive(true);
 
-				f.setEmpresa(parceiroNegocio.getEmpresa());
-				f.setOrganizacao(parceiroNegocio.getOrganizacao());
-				f.setDepartamento(funcionario.getDepartamento());
-				f.setParceiroNegocio(parceiroNegocio);
-				f.setFuncao(funcionario.getFuncao());
-				f.setApelido(funcionario.getApelido());
-				f.setIsActive(parceiroNegocio.getIsActive());
-				
-				try {
+			if(u.getUsuario_id() == null) {
+				this.usuarioDao.beginTransaction();
+				this.usuarioDao.adiciona(u);
+				this.usuarioDao.commit();
+			}
 
-					this.funcionarioDao.beginTransaction();
-					this.funcionarioDao.adiciona(f);
-					this.funcionarioDao.commit();
+		}
 
-				} catch(Exception e) {
+		if(parceiroContatos != null){
+			for(ParceiroContato parceiroContato : parceiroContatos){
 
-					this.funcionarioDao.rollback();
+				parceiroContato.setEmpresa(empresa);
+				parceiroContato.setOrganizacao(organizacao);
+				parceiroContato.setParceiroNegocio(parceiroNegocio);
+				parceiroContato.setIsActive(true);
+	
+				this.parceiroContatoDao.beginTransaction();
+				this.parceiroContatoDao.adiciona(parceiroContato);
+				this.parceiroContatoDao.commit();
+	
+			}
+		}
+		
+		if(parceiroBeneficios != null){
+			for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
 
-					if (e.getCause().toString().indexOf("PK_FUNCIONARIO") != -1){
-						mensagem = "Erro: Funcionário " + funcionario.getApelido() + " já existente.";
-					} else {
-						mensagem = "Erro ao adicionar Perfil:";
-					}
+				parceiroBeneficio.setEmpresa(empresa);
+				parceiroBeneficio.setOrganizacao(organizacao);
+				parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
+				parceiroBeneficio.setIsActive(true);
 
-				}
-
-				Usuario u = new Usuario();
-
-				if(funcao.getNome().equals("Consultor")){
-					u.setSupervisorUsuario(usuarioInfo.getUsuario());
-				}
-
-				u.setChave(parceiroNegocio.getCpf());
-				u.setEmpresa(parceiroNegocio.getEmpresa());
-				u.setOrganizacao(parceiroNegocio.getOrganizacao());
-				u.setParceiroNegocio(parceiroNegocio);
-				u.setSenha("123456");
-				u.setNome(parceiroNegocio.getNome());
-				u.setIsActive(true);
-
-				if(u.getUsuario_id() == null) {
-					this.usuarioDao.beginTransaction();
-					this.usuarioDao.adiciona(u);
-					this.usuarioDao.commit();
-				}
+				this.parceiroBeneficioDao.beginTransaction();
+				this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
+				this.parceiroBeneficioDao.commit();
 
 			}
+		}
 
 		localidade.setLocalidade_id(this.localidadeDao.buscaLocalidade(localidade.getCep()).getLocalidade_id());
 
 		if(localidade.getLocalidade_id() == null)	{
 
-			localidade.setEmpresa(this.empresaDao.load(1L));
-			localidade.setOrganizacao(this.organizacaoDao.load(1L));
+			localidade.setEmpresa(empresa);
+			localidade.setOrganizacao(organizacao);
 			localidade.setIsActive(true);
 
 			try {
@@ -316,36 +374,9 @@ public class ParceironegocioController {
 			}
 
 		}
-
-		if(parceiroContatos != null){
-			for(ParceiroContato parceiroContato : parceiroContatos){
-	
-				parceiroContato.setEmpresa(usuarioInfo.getEmpresa());
-				parceiroContato.setOrganizacao(usuarioInfo.getOrganizacao());
-				parceiroContato.setParceiroNegocio(parceiroNegocio);
-				parceiroContato.setIsActive(true);
-	
-				this.parceiroContatoDao.beginTransaction();
-				this.parceiroContatoDao.adiciona(parceiroContato);
-				this.parceiroContatoDao.commit();
-	
-			}
-		}
 		
-		if(parceiroBeneficios != null){
-			for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
-
-				parceiroBeneficio.setEmpresa(usuarioInfo.getEmpresa());
-				parceiroBeneficio.setOrganizacao(usuarioInfo.getOrganizacao());
-				parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
-				parceiroBeneficio.setIsActive(true);
-
-				this.parceiroBeneficioDao.beginTransaction();
-				this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
-				this.parceiroBeneficioDao.commit();
-
-			}
-		}
+		System.out.println(" 2 localidade id" + localidade.getLocalidade_id());
+		System.out.println(" 2 localidade  == null" + localidade.getLocalidade_id() == null);
 
 		Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
 
@@ -353,8 +384,8 @@ public class ParceironegocioController {
 
 			ParceiroLocalidade pl = new ParceiroLocalidade();
 
-			pl.setEmpresa(usuarioInfo.getEmpresa());
-			pl.setOrganizacao(usuarioInfo.getOrganizacao());
+			pl.setEmpresa(empresa);
+			pl.setOrganizacao(organizacao);
 			pl.setParceiroNegocio(parceiroNegocio);
 			pl.setLocalidade(localidade);
 			pl.setTipoEndereco(tipoEndereco);
@@ -381,6 +412,18 @@ public class ParceironegocioController {
 
 			}
 
+		}
+
+		if(parceiroInfoBanco != null){
+
+			parceiroInfoBanco.setEmpresa(empresa);
+			parceiroInfoBanco.setOrganizacao(organizacao);
+			parceiroInfoBanco.setIsActive(true);
+			parceiroInfoBanco.setParceiroNegocio(parceiroNegocio);
+
+			this.parceiroInfoBancoDao.beginTransaction();
+			this.parceiroInfoBancoDao.adiciona(parceiroInfoBanco);
+			this.parceiroInfoBancoDao.commit();
 		}
 
 		mensagem = "Parceiro de Negócios " + parceiroNegocio.getNome() + " adicionado com sucesso";			
@@ -436,8 +479,8 @@ public class ParceironegocioController {
 	public void salvaLocalidade(Localidade localidade, ParceiroLocalidade parceiroLocalidade){
 
 		localidade.setIsActive(true);
-		localidade.setEmpresa(usuarioInfo.getEmpresa());
-		localidade.setOrganizacao(usuarioInfo.getOrganizacao());
+		localidade.setEmpresa(empresa);
+		localidade.setOrganizacao(organizacao);
 
 		String mensagem = "";
 		
@@ -472,8 +515,8 @@ public class ParceironegocioController {
 
 			ParceiroLocalidade pl = new ParceiroLocalidade();
 
-			pl.setEmpresa(usuarioInfo.getEmpresa());
-			pl.setOrganizacao(usuarioInfo.getOrganizacao());
+			pl.setEmpresa(empresa);
+			pl.setOrganizacao(organizacao);
 			pl.setParceiroNegocio(parceiroNegocio);
 			pl.setLocalidade(localidade);
 			pl.setTipoEndereco(tipoEndereco);
@@ -519,8 +562,8 @@ public class ParceironegocioController {
 	public void salvaContato(ParceiroContato parceiroContato){
 
 		parceiroContato.setIsActive(true);
-		parceiroContato.setEmpresa(usuarioInfo.getEmpresa());
-		parceiroContato.setOrganizacao(usuarioInfo.getOrganizacao());
+		parceiroContato.setEmpresa(empresa);
+		parceiroContato.setOrganizacao(organizacao);
 
 		String mensagem = "";
 
@@ -592,7 +635,7 @@ public class ParceironegocioController {
 		if(parceiroContato.getTipoContato() != null)
 			pc.setTipoContato(this.tipoContatoDao.load(parceiroContato.getTipoContato().getTipoContato_id()));
 
-		if(this.parceiroContatoDao.buscaParceiroContatoByTcNo(pc.getTipoContato().getTipoContato_id(),pc.getNome()) == null) {
+		if(this.parceiroContatoDao.buscaParceiroContatoByTipoContatoNome(pc.getTipoContato().getTipoContato_id(),pc.getNome()) == null) {
 
 			this.parceiroContatoDao.beginTransaction();
 			this.parceiroContatoDao.atualiza(pc);

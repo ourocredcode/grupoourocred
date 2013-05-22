@@ -51,28 +51,30 @@ public class MeioPagamentoDao extends Dao<MeioPagamento> {
 		return meiospagamento;
 	}
 
-	public MeioPagamento buscaMeioPagamentoByEmpOrgAgeNum(Long empresa_id,
-			Long organizacao_id, String nome) {
+	public MeioPagamento buscaMeioPagamentoByNome(String nome) {
+
 		String sql = sqlMeioPagamento;
-		if (empresa_id != null)
-			sql += " WHERE MEIOPAGAMENTO.empresa_id = ?";
-		if (organizacao_id != null)
-			sql += " AND MEIOPAGAMENTO.organizacao_id = ?";
+
 		if (nome != null)
-			sql += " AND (MEIOPAGAMENTO.nome like ?)";
+			sql += " WHERE MEIOPAGAMENTO.nome like ? ";
+
 		this.conn = this.conexao.getConexao();
+
 		MeioPagamento meioPagamento = null;
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3, "%" + nome + "%");
+			this.stmt.setString(1, "%" + nome + "%");
+			
 			this.rsMeioPagamento = this.stmt.executeQuery();
 			while (rsMeioPagamento.next()) {
+
 				meioPagamento = new MeioPagamento();
-				meioPagamento.setMeiopagamento_id(rsMeioPagamento
-						.getLong("meiopagamento_id"));
+
+				meioPagamento.setMeiopagamento_id(rsMeioPagamento.getLong("meiopagamento_id"));
 				meioPagamento.setNome(rsMeioPagamento.getString("nome"));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
