@@ -100,6 +100,10 @@ public class Contrato implements Serializable {
 	private Usuario usuario;
 
 	@ManyToOne
+	@JoinColumn(name = "tiposaque_id", updatable = true, nullable = true)
+	private TipoSaque tipoSaque;
+
+	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
@@ -154,7 +158,10 @@ public class Contrato implements Serializable {
 
 	@Column(name = "isactive")
 	private Boolean isActive;
-
+	
+	@Column(name = "issaqueefetuado")
+	private Boolean isSaqueEfetuado;
+	
 	@Column(name = "numerobeneficio")
 	private String numeroBeneficio;
 	
@@ -559,6 +566,22 @@ public class Contrato implements Serializable {
 
 	public void setUpdated(Calendar updated) {
 		this.updated = updated;
+	}
+
+	public TipoSaque getTipoSaque() {
+		return tipoSaque;
+	}
+
+	public void setTipoSaque(TipoSaque tipoSaque) {
+		this.tipoSaque = tipoSaque;
+	}
+
+	public Boolean getIsSaqueEfetuado() {
+		return isSaqueEfetuado;
+	}
+
+	public void setIsSaqueEfetuado(Boolean isSaqueEfetuado) {
+		this.isSaqueEfetuado = isSaqueEfetuado;
 	}
 
 }
