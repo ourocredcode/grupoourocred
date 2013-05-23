@@ -72,6 +72,7 @@
 		<mapping class="br.com.sgo.modelo.TipoTabela" />
 		<mapping class="br.com.sgo.modelo.TipoContato" />
 		<mapping class="br.com.sgo.modelo.TipoControle" />
+		<mapping class="br.com.sgo.modelo.TipoSaque" />
 		
 		<mapping class="br.com.sgo.modelo.Agencia" />
 		<mapping class="br.com.sgo.modelo.TipoConta" />
