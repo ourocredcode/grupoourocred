@@ -48,19 +48,20 @@
 	                          	<table class="table table-striped table-bordered">
 									<thead>
 										<tr>
+											
 											<th>Ação</th>
-											<th>.</th>
-											<th>.</th>
+											<th></th>
+											<th></th>
 										</tr>
 									</thead>
 									<tbody>
 										<c:forEach items="${procedimentosDetalhes }" var="procedimentoDetalhe">
 											<tr>
-												<!-- td class="label_txt"-->
+											
 													<td>${procedimentoDetalhe.acao }</td>
 													<td>${procedimentoDetalhe.agente.nome }</td>
 													<td>${procedimentoDetalhe.detalheProcedimento }</td>													
-												<!-- /td-->
+											
 											</tr>
 										</c:forEach>
 									</tbody>

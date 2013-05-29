@@ -59,7 +59,7 @@ public class ProcedimentobancoController {
 	@Path("/procedimentobanco/detalhebanco/{id}")
 	public void detalhebanco(Long id){		
 		Collection<Banco> bancos = this.bancoDao.buscaBancoByProcedimento(id);
-		result.include("bancos", bancos);		
+		result.include("bancos", bancos);
 	}
 
 	@Get
