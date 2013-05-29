@@ -17,7 +17,6 @@ import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.infra.CustomDateUtil;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
-import br.com.sgo.modelo.Produto;
 
 @Resource
 public class CoeficienteController {

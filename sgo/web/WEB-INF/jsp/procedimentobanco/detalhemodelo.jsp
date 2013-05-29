@@ -49,16 +49,17 @@
 									<thead>
 										<tr>
 											<th>Nome</th>
-											<th>Descrição</th>
+											<!-- th>Descrição</th-->
 										</tr>
 									</thead>
 									<tbody>
 										<c:forEach items="${modelosProcedimento }" var="modeloProcedimento">
 											<tr>
 												<td class="label_txt">
+													
 													<a href="<c:url value="/procedimentobanco/detalheprocedimento/${modeloProcedimento.modeloProcedimento_id}/${banco.banco_id }"/>">${modeloProcedimento.nome }</a>													
 												</td>
-												<td>${modeloProcedimento.descricao}</td>
+												<!-- >td>${modeloProcedimento.descricao}</td-->
 											</tr>
 										</c:forEach>
 									</tbody>
