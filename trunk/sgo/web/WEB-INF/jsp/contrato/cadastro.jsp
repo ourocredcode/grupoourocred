@@ -6,6 +6,7 @@
 
 $(document).ready(function() {
 	
+	$('select').select2();
 	$("#valorContrato").maskMoney({symbol:"",decimal:".",thousands:""});
 	$("#valorParcela").maskMoney({symbol:"",decimal:".",thousands:""});
 	$("#valorDivida").maskMoney({symbol:"",decimal:".",thousands:""});
@@ -461,11 +462,11 @@ function historicoCoeficiente() {
 
 </script>
 
-<c:if test="${contrato == null }">
+<c:if test="${contrato.contrato_id  == null }">
 	<c:set var="url" value="/formulario/adicionaContrato"></c:set>
 	<c:set var="titulo" value="Novo Contrato"></c:set>
 </c:if>
-<c:if test="${contrato != null }">
+<c:if test="${contrato.contrato_id != null }">
 	<c:set var="url" value="/contrato/altera"></c:set>
 	<c:set var="titulo" value="Altera Contrato"></c:set>
 </c:if>

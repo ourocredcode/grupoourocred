@@ -149,13 +149,32 @@
 			this.fill();
 		},
 		
-		place: function(){
-			var offset = this.component ? this.component.offset() : this.element.offset();
-			this.picker.css({
-				top: offset.top + this.height,
-				left: offset.left
-			});
-		},
+		place : function() {
+            if (this.isInline) return;
+             //get the first parent z-index, then add 10...
+            var zIndex = parseInt(this.element.parents().filter(function() {
+                return $(this).css('z-index') != 'auto';
+            }).first().css('z-index')) + 10;
+            //calc offset and height for element/component...
+            var offset = this.component ? this.component.offset() : this.element.offset();
+            var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(true);
+            var isInModal = this.element.parents('.modal').length;
+            var top = offset.top + height;
+
+            //if the element is in a modal subtract 40 from position. why this?
+            //with this part the calendar showed covering part of the element.
+           // I'm guessing is because your calendar is positioned above the element,
+           // In my case its' positioned below the element. So I removed it and worked like charm!
+           // Maybe some check is needed here.
+            if(isInModal) {
+                top = top - 5;
+            }
+            this.picker.css({
+                top : top,
+                left : offset.left,
+                zIndex : zIndex
+            });
+        },
 		
 		update: function(newDate){
 			this.date = DPGlobal.parseDate(

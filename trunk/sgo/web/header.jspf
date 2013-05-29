@@ -16,10 +16,9 @@
 		<link rel="stylesheet" href="<c:url value="/css/jquery.ui.ie.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap-responsive.css"/>" />
-		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />
-		<link rel="stylesheet" href="<c:url value="/css/colorpicker.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/datepicker.css"/>" />
- 
+        <link rel="stylesheet" href="<c:url value="/css/select2.css"/>" />
+
 		<link rel="stylesheet" href="<c:url value="/css/uniform.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />		
 		<link rel="stylesheet" href="<c:url value="/css/jquery.gritter.css"/>" />	
@@ -29,21 +28,14 @@
 		<script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/bootstrap.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/bootstrap-datepicker.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/js/fullcalendar.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/js/bootstrap-colorpicker.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/js/jquery.gritter.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/js/jquery.masonry.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/js/jquery.peity.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/js/jquery.uniform.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/js/jquery.validate.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.wizard.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.dataTables.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.flot.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.flot.pie.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.flot.resize.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.dataTables.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.maskedinput-1.2.2.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.maskMoney.0.2.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/unicorn.js"/>"></script>
 
 	</head>
@@ -103,6 +95,7 @@
 					<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span> <span class="label">4</span></a>
 
 					<ul class="cadastro">
+						<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
 						<li><a href="<c:url value="/banco/cadastro"/>">Banco</a></li>
 						<li><a href="<c:url value="/produto/cadastro"/>">Produto</a></li>
 						<li><a href="<c:url value="/tabela/cadastro"/>">Tabela</a></li>

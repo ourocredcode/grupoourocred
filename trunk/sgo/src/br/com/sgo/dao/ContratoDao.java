@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -56,7 +57,7 @@ public class ContratoDao extends Dao<Contrato> {
 			"WORKFLOWETAPA.nome as workflowetapa_nome, LOGISTICA.dataassinatura, LOGISTICA.logistica_id ," +
 			" TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome as tipologistica_nome  , PERIODO.periodo_id, PERIODO.nome as periodo_nome " +
 			"FROM   " +
-"((((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
+"(((((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
 				 "INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id)" +
 				 "INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id )   " +
 				 " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.contrato_id = CONTRATO.contrato_id) " +
@@ -64,7 +65,8 @@ public class ContratoDao extends Dao<Contrato> {
 				 " LEFT JOIN PERIODO (NOLOCK) ON PERIODO.periodo_id = LOGISTICA.periodo_id " +
 				 "INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id)   " +
 				 "INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)   " +
-				 "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)   " +
+				 "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)" +
+				 "INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)   " +
 				 "INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id)   " +
 				 "INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id)   " +
 				 "INNER JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id)   " +
@@ -193,6 +195,184 @@ public class ContratoDao extends Dao<Contrato> {
 		}
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contrato;
+	}
+
+	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, String cliente, String documento,
+			Collection<String> status,Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados) {
+
+		String sql = sqlContrato;
+		String clause = "";
+		int x = 0;
+
+		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
+
+		if(!cliente.equals(""))
+			sql += " AND PARCEIRONEGOCIO.nome like ? ";
+
+		if(!documento.equals(""))
+			sql += " AND ( PARCEIRONEGOCIO.cpf like ? OR PARCEIROBENEFICIO.numerobeneficio like ? ) ";
+
+		sql += " AND ( 1=1 ";
+
+		for(String statusAux1 : status){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!statusAux1.equals("")){
+				sql += clause + " ( WORKFLOWETAPA.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(String produtosAux1 : produtos){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!produtosAux1.equals("")) {
+				sql += clause + " ( PRODUTO.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(String bancosAux1 : bancos){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!bancosAux1.equals("")){
+				sql += clause + " ( B1.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(String bancosCompradosAux1 : bancosComprados){
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!bancosCompradosAux1.equals("")) {
+				sql += clause + " ( B2.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+				
+
+		}
+		
+		sql += " ) ";
+
+		if(calInicio != null)
+			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
+
+		try {
+
+			System.out.println(sql);
+
+			this.stmt = conn.prepareStatement(sql);
+
+			int curr = 1;
+
+			if(empresa_id != null){
+				this.stmt.setLong(curr, empresa_id);
+				curr++;
+			}
+			
+			if(organizacao_id != null){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+			
+			if(!cliente.equals("")){
+				this.stmt.setString(curr, '%' + cliente + '%');
+				curr++;
+			}
+			
+			if(!documento.equals("")){
+				this.stmt.setString(curr, '%' + documento + '%');
+				curr++;
+				this.stmt.setString(curr, '%' + documento + '%');
+				curr++;
+			}
+
+			for(String statusAux2 : status){
+
+				if(!statusAux2.equals("")) {
+					this.stmt.setString(curr, '%' + statusAux2 + '%');
+					curr++;
+				}
+
+			}
+			
+			for(String produtosAux2 : produtos){
+
+				if(!produtosAux2.equals("")) {
+					this.stmt.setString(curr, '%' + produtosAux2 + '%');
+					curr++;
+				}
+
+			}
+
+			for(String bancosAux2 : bancos){
+
+				if(!bancosAux2.equals("")) {
+					this.stmt.setString(curr, '%' + bancosAux2 + '%');
+					curr++;
+				}
+
+			}
+
+			for(String bancosCompradosAux2 : bancosComprados){
+
+				if(!bancosCompradosAux2.equals("")) {
+					this.stmt.setString(curr, '%' + bancosCompradosAux2 + '%');
+					curr++;
+				}
+
+			}
+
+			if(calInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(calInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(calFim.getTimeInMillis()));
+				curr++;
+			} 
+
+
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+				getFormulario(contratos);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contratos;
+
 	}
 
 	private void getFormulario(Collection<Contrato> contratos)

@@ -1,6 +1,6 @@
 <%@ include file="/header.jspf"%>
 
-<script type="text/javascript" src="<c:url value="../js/unicorn.dashboard.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/js/unicorn.dashboard.js"/>"></script>
 
 	<div id="content-header">
 		<h1>DashBoard</h1>
@@ -13,8 +13,7 @@
 	</div>
 
 	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current">Dashboard</a>
+		<a href="#" title="Dashboard" class="current"><i class="icon-home"></i> Dashboard</a>
 	</div>
 
 	<div class="container-fluid">
@@ -22,149 +21,258 @@
 			<div class="span12">
 
 				<div class="alert alert-info">
-					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas ! Perfil : ${usuarioInfo.perfil.chave }
-					<a href="#" data-dismiss="alert" class="close">×</a>
+					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas ! Perfil : ${usuarioInfo.perfil.chave }<a href="#" data-dismiss="alert" class="close">×</a>
 				</div>
 
 				<div class="widget-box">
+
 					<div class="widget-title">
 						<span class="icon"><i class="icon-signal"></i>
 						</span><h5>Vendas</h5>
 						<div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-refresh"></i> Update stats</a></div>
 					</div>
+
 					<div class="widget-content">
 						<div class="row-fluid">
 							<div class="span12">
-								Teste
-							</div>	
-						</div>							
+								<div class="span12 center" style="text-align: center;">					
+									<ul class="stat-boxes">
+										
+										<li class="popover-visits">
+											<div class="left peity_bar_good"><span>1,3,10,2,1,4,${countContratos}</span>10%</div>
+											<div class="right">
+												<a href="#" onclick="javascript:window.location='/sgo/menu/contratos/${usuarioInfo.perfil.chave}'">
+													<strong>${countContratos}</strong>
+													Contratos
+												</a>
+											</div>
+										</li>
+										<li class="popover-users">
+											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,${countClientes }</span>0%</div>
+											<div class="right">
+												<strong>${countClientes }</strong>
+												Clientes
+											</div>
+										</li>
+										<li class="popover-orders">
+											<div class="left peity_bar_bad"><span>1030,480,200,5200,1200,250,${totalValorMeta }</span>0%</div>
+											<div class="right">
+												<strong>${totalValorMeta }</strong>
+												Meta
+											</div>
+										</li>
+										<li class="popover-tickets">
+											<div class="left peity_line_good"><span>0,0,0,0,0,0,0</span>0%</div>
+											<div class="right">
+												<strong>0</strong>
+												Pendentes
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span3">
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-tag"></i>
+						</span>
+						<h5>Contratos e Status</h5>
+					</div>
+					<div class="widget-content">
+
+							<h3>Status</h3>
+							<table class="table table-bordered table-striped">
+							<thead>
+							  <tr>
+								<th>Name</th>
+								<th>Example</th>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+								<td>
+								  Aguardando Status
+								</td>
+								<td>
+								  <span class="badge">1</span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Qualidade e Pós Venda
+								</td>
+								<td>
+								  <span class="badge badge-success">2</span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Em Assinatura
+								</td>
+								<td>
+								  <span class="badge badge-warning">4</span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Em Conferência
+								</td>
+								<td>
+								  <span class="badge badge-important">6</span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Em Análise
+								</td>
+								<td>
+								  <span class="badge badge-info">8</span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Pendentes
+								</td>
+								<td>
+								  <span class="badge badge-inverse">10</span>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+
+					</div>
+				</div>
+			
+			</div>
+			<div class="span3">
+			
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-tag"></i>
+						</span>
+						<h5>Produtos</h5>
+					</div>
+					<div class="widget-content">
+
+							<h3>Produtos</h3>
+							<table class="table table-bordered table-striped">
+							<thead>
+							  <tr>
+								<th>Name</th>
+								<th>Example</th>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+								<td>
+								  Margem Limpa
+								</td>
+								<td>
+								  <span class="badge">1</span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Recompra Inss
+								</td>
+								<td>
+								  <span class="badge badge-success">2</span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Recompra RMC
+								</td>
+								<td>
+								  <span class="badge badge-warning">4</span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Refinanciamento
+								</td>
+								<td>
+								  <span class="badge badge-important">6</span>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+
 					</div>
 				</div>
 
+			</div>
+			<div class="span3">
 				<div class="widget-box">
-					<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Contratos</h5></div>
-					<div class="widget-content">
-						<div class="row-fluid">
-						<div class="span12">
-							<c:if test="${not empty contratos}">
-								<table class="table table-striped table-bordered" style="font-size: 12px">
-									<thead>	
-										<tr>
-											<th colspan="13">
-												Total de contratos 
-											</th>
-										</tr>
-										<tr>
-											<th scope="col">
-												Data
-											</th>
-											<th scope="col">
-												Supervisor
-											</th>
-											<th scope="col">
-												Consultor
-											</th>
-											<th scope="col">
-												Cliente
-											</th>
-											<th scope="col">
-												Cpf
-											</th>
-											<th scope="col">
-												Banco:
-											</th>
-											<th scope="col">
-												Produto:
-											</th>
-											<th scope="col">
-												Banco Comprado:
-											</th>
-											<th scope="col">
-												Parcela
-											</th>
-											<th scope="col">
-												Coeficiente
-											</th>
-											<th scope="col">
-												Prazo
-											</th>
-											<th scope="col">
-												Dívida
-											</th>
-											<th scope="col">
-												Liquido
-											</th>
-											<th scope="col">
-												Meta
-											</th>
-											<th scope="col">
-												Status
-											</th>
-											<th scope="col">
-												Pós Venda
-											</th>
-										</tr>
-									</thead>
-									<tbody>		
-										<c:forEach items="${contratos}" var="contrato">
-											<tr>
-												<td class="label_txt">
-													<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yyyy" />
-												</td>
-												<td class="label_txt">
-													${contrato.usuario.supervisorUsuario.nome }
-												</td>
-												<td class="label_txt">
-													${contrato.usuario.nome }
-												</td>
-												<td class="label_txt">
-													${contrato.formulario.parceiroNegocio.nome }
-												</td>
-												<td class="label_txt">
-													${contrato.formulario.parceiroNegocio.cpf }
-												</td>
-												<td class="label_txt">
-													${contrato.banco.nome }
-												</td>
-												<td class="label_txt">
-													${contrato.produto.nome }
-												</td>
-												<td class="label_txt">
-													${contrato.recompraBanco.nome }
-												</td>
-												<td class="label_txt">
-													${contrato.valorParcela }
-												</td>
-												<td class="label_txt">
-													<fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" />
-												</td>
-												<td class="label_txt">
-													${contrato.prazo }
-												</td>
-												<td class="label_txt">
-													${contrato.valorDivida }
-												</td>
-												<td class="label_txt">
-													${contrato.valorLiquido }
-												</td>
-												<td class="label_txt">
-													${contrato.valorMeta }
-												</td>
-												<td class="label_txt">
-													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.workflowEtapa.nome }</a>
-												</td>
-												<td class="label_txt">
-													PÓS VENDA
-												</td>
-											</tr>
-										</c:forEach>
-									</tbody>	
-								</table>
-							</c:if>
-						</div>
-						</div>							
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-tag"></i>
+						</span>
+						<h5>Cliente</h5>
 					</div>
-				</div>
+
+					<div class="widget-content">
+					
+						<h3>Cliente</h3>
+
+						<div class="control-group">
+							<label class="control-label">Nome Cliente</label>
+							<div class="controls">
+								<input type="text" class="span12"/>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">Documento</label>
+							<div class="controls">
+								<input type="text" class="span12"/>
+							</div>
+						</div>
+
+					</div>
+
+				</div>	
+			</div>
+			<div class="span3">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-tag"></i>
+						</span>
+						<h5>Data</h5>
+					</div>
+
+					<div class="widget-content">
+					
+						<h3>Data</h3>
+
+						<div class="control-group">
+							<label class="control-label">Data Início</label>
+							<div class="controls">
+								<input type="text" class="span12"/>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">Data Fim</label>
+							<div class="controls">
+								<input type="text" class="span12"/>
+							</div>
+						</div>
+
+					</div>
+
+				</div>	
 			</div>
 		</div>
 	</div>
