@@ -1,13 +1,21 @@
 <%@ include file="/header.jspf"%>
 
+	 <link rel="stylesheet" href="<c:url value="/css/select2.css"/>" />
+	 <script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
+
 	<script type="text/javascript">
 	jQuery(function($){
 
+		   $('select').select2();
+		
 		   $("#localidadeCep").mask("99999999");
 		   $("#parceiroNegocioCpf").mask("99999999999");
 		   $("#parceiroNegocioDataNascimento").mask("99/99/9999");
 	
 		   $('#parceiroNegocioDataNascimento').datepicker();
+		   
+		   
+		   
 	
 		   $("#parceiroNegocioTipoParceiroId").change(function(evento){
 

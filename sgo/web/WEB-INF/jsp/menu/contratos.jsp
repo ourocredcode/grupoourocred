@@ -1,286 +1,474 @@
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@taglib uri="/WEB-INF/lib/formattag.jar" prefix="f" %>
+<%@ include file="/header.jspf"%>
 
-<c:if test="${empty contratos && empty formularios}">
-	<table id="mytable" style="width:580;">
-		<tr>
-			<th class="titulo">
-				Nenhum contrato encontrado
-			</th>
-		</tr>
-	</table>
-</c:if>
+	<script type="text/javascript">
+ 
+	 $(document).ready(function() {
+		 
+		 buscaContratos();
 
-<c:if test="${not empty contratos}">
-	<table id="mytable" style="width:1340px;">
-		<tr>
-			<th colspan="11" class="titulo">
-			</th>
-			<th class="titulo">
-				T. Contratos
-			</th>
-			<th class="titulo">
-				T. Dívida
-			</th>
-			<th class="titulo">
-				T. Seguro
-			</th>
-			<th class="titulo">
-				T. Líquido
-			</th>
-			<th class="titulo">
-				T. Meta
-			</th>
-			<th class="titulo" colspan="3">
-			</th>
-		</tr>
-		<tr>
-			<th colspan="11">
-			</th>
-			<td>
-				R$ <fmt:formatNumber type="NUMBER" value="${totalValorContratos}" minFractionDigits="2" />
-			</td>
-			<td>
-				R$ <fmt:formatNumber type="NUMBER" value="${totalValorDivida}" minFractionDigits="2" />
-			</td>
-			<td>
-				R$ <fmt:formatNumber type="NUMBER" value="${totalValorSeguro}" minFractionDigits="2" />
-			</td>
-			<td>
-				R$ <fmt:formatNumber type="NUMBER" value="${totalValorLiquido}" minFractionDigits="2" />
-			</td>
-			<td>
-				
-				R$ <fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" />
-			</td>
-			<th colspan="3">
-			</th>
-		</tr>
-		<tr>
-			<th class="titulo" colspan="19">
-				<c:choose>
-					<c:when test="${countContratos > 1}">Resultado Busca Contratos: ${countContratos} contratos encontrados.</c:when>
-					<c:otherwise>Resultado Busca Contratos: ${countContratos} contrato encontrado.</c:otherwise>
-				</c:choose>
-				Total de Clientes : ${countClientes }	
-			</th>
-		</tr>
-		<tr>
-			<th scope="col" style="width:70px">
-				Data
-			</th>
-			<th scope="col" style="width:55px">
-				Supervisor
-			</th>
-			<th scope="col" style="width:65px">
-				Consultor
-			</th>
-			<th scope="col" style="width:135px">
-				Cliente
-			</th>
-			<th scope="col" style="width:80px">
-				CPF
-			</th>
-			<th scope="col" style="width:75px">
-				Banco
-			</th>
-			<th scope="col" style="width:100px">
-				Produto
-			</th>
-			<th scope="col" style="width:70px">
-				Bc Comprado
-			</th>
-			<th scope="col" style="width:60px">
-				Parcela
-			</th>
-			<th scope="col" style="width:50px">
-				Coef.
-			</th>
-			<th scope="col" style="width:35px">
-				Prazo
-			</th>
-			<th scope="col" style="width:70px">
-				Contrato
-			</th>
-			<th scope="col" style="width:70px">
-				Dívida
-			</th>
-			<th scope="col" style="width:70px">
-				Seguro
-			</th>
-			<th scope="col" style="width:70px">
-				Valor Líquido
-			</th>
-			<th scope="col" style="width:60px">
-				Valor Meta
-			</th>
-			<th scope="col" style="width: 105px">
-				Status
-			</th>
-			<c:choose>
-				<c:when test="${buscaDataQuitacao == true && (buscaDtBoletoAtua == true || buscaDtAverbacaoAtua == true)}">
-					<th scope="col" style="width: 65px">Dt Quitação</th>
-					<th scope="col" style="width: 65px">Últ Atuação</th>
-				</c:when>
-				<c:when test="${buscaDataQuitacao == true}">
-					<th scope="col" style="width: 100px">Data Quitação</th>
-				</c:when>
-				<c:when test="${buscaDtBoletoAtua == true || buscaDtAverbacaoAtua == true}">
-					<th scope="col" style="width: 100px">Última Atuação</th>
-				</c:when>
-				<c:when test="${buscaDtBoletoPrevisao == true || buscaDtAverbacaoPrevisao == true }">
-					<th scope="col" style="width: 100px">Previsão</th>
-				</c:when>
-				<c:when test="${buscaDtBoletoChegada == true}">
-					<th scope="col" style="width: 100px">Chegada</th>
-				</c:when>
-				<c:when test="${buscaDtBoletoVencimento == true}">
-					<th scope="col" style="width: 100px">Vencimento</th>
-				</c:when>
-				<c:when test="${buscaDtBoletoProximaAtuacao == true || buscaDtAverbacaoProximaAtuacao == true}">
-					<th scope="col" style="width: 100px">Próx Atuacao</th>
-				</c:when>
-				<c:otherwise><th scope="col" style="width: 100px">PósVenda</th></c:otherwise>
-			</c:choose>
-		</tr>
-		<c:forEach items="${contratos}" var="contrato">
+		$("#busca_Data").mask("99/99/99");
+		$("#busca_DataFim").mask("99/99/99");
+		$("#busca_DataAprovadoInicio").mask("99/99/9999");
+		$("#busca_DataAprovadoFim").mask("99/99/9999");
+		$("#busca_DataConcluidoInicio").mask("99/99/9999");
+		$("#busca_DataConcluidoFim").mask("99/99/9999");
 
-			<c:set var="alert" value="label_txt"></c:set>
+		$('#busca_Data').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataFim').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		
+		$('.data-table').dataTable({
+			"bJQueryUI": true,
+			"sPaginationType": "full_numbers",
+			"sDom": '<""l>t<"F"fp>'
+		});
+		
+		$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+		
+		$('select').select2();
+		
+		$("span.icon input:checkbox, th input:checkbox").click(function() {
+			var checkedStatus = this.checked;
+			var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+			checkbox.each(function() {
+				this.checked = checkedStatus;
+				if (checkedStatus == this.checked) {
+					$(this).closest('.checker > span').removeClass('checked');
+				}
+				if (this.checked) {
+					$(this).closest('.checker > span').addClass('checked');
+				}
+			});
+		});
+ 
+	 });
+	 
+	 function buscaContratos(){
 
-			<c:if test="${contrato.formulario.posvenda.status == 'pendente'
-							|| contrato.status.status == 'Pendente Administrativo'
-							|| contrato.status.status == 'Pendente Agendamento'
-							|| contrato.status.status == 'Pendente Banco'
-							|| contrato.status.status == 'Pendente Coeficiente'
-							|| contrato.status.status == 'Pendente Conferência'
-							|| contrato.status.status == 'Recalcular'}">
-				<c:set var="alert" value="alert"></c:set>
-			</c:if>
+		var status = $("#busca_Status").val();
+		var tipoRecusado = $("#busca_TipoRecusado").val();
+		var justificativa = $("#busca_Justificativa").val();
+		var tipoPagamento = $("#busca_TipoPagamento").val();
+		var tipoAprovado = $("#busca_TipoAprovado").val();
+		var empresa = $("#busca_Empresa").val();
+		var informacaoSaque = $("#busca_InformacaoSaque").val();
+		var cliente = $("#busca_Cliente").val();
+		var documento = $("#busca_Documento").val();
+		var data = $("#busca_Data").val();
+		var dataFim = $("#busca_DataFim").val();
+		var dataAprovadoInicio = $("#busca_DataAprovadoInicio").val();
+		var dataAprovadoFim = $("#busca_DataAprovadoFim").val();
+ 		var dataConcluidoInicio = $("#busca_DataConcluidoInicio").val();
+		var dataConcluidoFim = $("#busca_DataConcluidoFim").val();
+		var dataRecusadoInicio = $("#busca_DataRecusadoInicio").val();
+		var dataRecusadoFim = $("#busca_DataRecusadoFim").val();
+		var bancos = $("#busca_Banco").val();
+		var produtos = $("#busca_Produto").val();
+		var bancosComprados = $("#busca_BancoComprado").val();
+		var motivoPendencia = $("#busca_Pendente").val();
+		
+		if(dataAprovadoInicio == undefined || dataAprovadoInicio == '__/__/____')
+			dataAprovadoInicio = "";
+		if(dataAprovadoFim == undefined || dataAprovadoFim == '__/__/____')
+			dataAprovadoFim = "";
+		if(dataConcluidoInicio == undefined || dataConcluidoInicio == '__/__/____')
+			dataConcluidoInicio = "";
+		if(dataConcluidoFim == undefined || dataConcluidoFim == '__/__/____')
+			dataConcluidoFim = "";
+		if(dataRecusadoInicio == undefined || dataRecusadoInicio == '__/__/____')
+			dataRecusadoInicio = "";
+		if(dataRecusadoFim == undefined || dataRecusadoFim == '__/__/____')
+			dataRecusadoFim = "";
+		
+		if(tipoRecusado == undefined)
+			tipoRecusado = "";
+		if(justificativa == undefined)
+			justificativa = "";
+		if(tipoPagamento == undefined)
+			tipoPagamento = "";
+		if(tipoAprovado == undefined)
+			tipoAprovado = "";
+		if(empresa == undefined)
+			empresa = "";
+		if(informacaoSaque == undefined)
+			informacaoSaque = "";
+		if(motivoPendencia == undefined)
+			motivoPendencia = "";
+		 
+		if(status == null){
+			status = new Array();
+			status[0] = "";
+		}
+		
+		if(produtos == null){
+			produtos = new Array();
+			produtos[0] = "";
+		}
+		
+		if(bancos == null){
+			bancos = new Array();
+			bancos[0] = "";
+		}
+		
+		if(bancosComprados == null){
+			bancosComprados = new Array();
+			bancosComprados[0] = "";
+		}
 
-			<tr>
-				<td class="${alert}">
-					<fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="time" value="${contrato.formulario.data.time }" />
-				</td>
-				<td class="${alert}"> 
-					${contrato.formulario.consultor.supervisor }
-				</td>
-				<td class="${alert}"> 
-					${contrato.formulario.consultor.nome }
-				</td>
-				<td class="${alert}">
-					${fn:substring(contrato.formulario.cliente.nome, 0, 18)} ...
-				</td>
-				<td class="${alert}">
-					<f:formatString pattern="###.###.###-##">${contrato.formulario.cliente.cpf}</f:formatString>
-				</td>
-				<td class="${alert}">
-					${fn:substring(contrato.banco, 0, 10)} ...
-				</td>
-				<td class="${alert}">
-					${contrato.produto }
-				</td>
-				<td class="${alert}">
-					${contrato.bancoComprado }
-				</td>
-				<td class="${alert}">
-					R$ <fmt:formatNumber type="NUMBER" value="${contrato.valorParcela }" minFractionDigits="2" />
-				</td>
-				<td class="${alert}">
-					${contrato.coeficiente }
-				</td>
-				<td class="${alert}">
-					${contrato.prazo }
-				</td>
-				<td class="${alert}">
-					R$ <fmt:formatNumber type="NUMBER" value="${contrato.valorContrato }" minFractionDigits="2" />
-				</td>
-				<td class="${alert}">
-					R$ <fmt:formatNumber type="NUMBER" value="${contrato.valorDivida }" minFractionDigits="2" />
-				</td>
-				<td class="${alert}">
-					R$ <fmt:formatNumber type="NUMBER" value="${contrato.valorSeguro }" minFractionDigits="2" />
-				</td>
-				<td class="${alert}">
-					R$ <fmt:formatNumber type="NUMBER" value="${contrato.valorLiquido }" minFractionDigits="2" />
-				</td>
-				<td class="${alert}">
-					R$ <fmt:formatNumber type="NUMBER" value="${contrato.valorMeta }" minFractionDigits="2" />
-				</td>
-				<td class="${alert}">
-					<a href="<c:url value="/cadastroStatus/${contrato.id}"/>">
-					<c:choose>
-						<c:when test="${contrato.status.status == '' || empty contrato.status || contrato.status.status == null}" >
-							<c:out value="Sem status" />
-						</c:when>
-						<c:otherwise>
-							<c:out value="${contrato.status.status }" />
-						</c:otherwise>
-					</c:choose>
-					</a>
-				</td>
-			
-				<c:choose>
-					<c:when test="${buscaDataQuitacao == true && buscaDtAverbacaoAtua == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.status.dataQuitacao.time }" />
-						</td>
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.averbacao.dataAtuacao.time }" />
-						</td>
-					</c:when>
-					<c:when test="${buscaDataQuitacao == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.status.dataQuitacao.time }" />
-						</td>
-					</c:when>
-					<c:when test="${buscaDtBoletoAtua == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.boleto.dataAtuacao.time }" />
-						</td>	
-					</c:when>
-					<c:when test="${buscaDtAverbacaoAtua == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.averbacao.dataAtuacao.time }" />
-						</td>	
-					</c:when>
-					<c:when test="${buscaDtBoletoPrevisao == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.boleto.dataPrevisao.time }" />
-						</td>	
-					</c:when>
-					<c:when test="${buscaDtAverbacaoPrevisao == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.averbacao.dataPrevisao.time }" />
-						</td>	
-					</c:when>
-					<c:when test="${buscaDtBoletoProximaAtuacao == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.boleto.dataProximaAtuacao.time }" />
-						</td>	
-					</c:when>
-					<c:when test="${buscaDtAverbacaoProximaAtuacao == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.averbacao.dataProximaAtuacao.time }" />
-						</td>	
-					</c:when>
-					<c:when test="${buscaDtBoletoChegada == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.boleto.dataChegada.time }" />
-						</td>							
-					</c:when>
-					<c:when test="${buscaDtBoletoVencimento == true}">
-						<td class="${alert}">
-							<fmt:formatDate pattern="dd/MM/yyyy" type="time" value="${contrato.boleto.dataVencimento.time }" />
-						</td>	
-					</c:when>
-					<c:otherwise>
-						<td class="${alert}">${contrato.formulario.posvenda.status }</td>
-					</c:otherwise>
-				</c:choose>
-				
-			</tr>
-		</c:forEach>
-	</table>
-</c:if>
+		 $("#resultado").load('<c:url value="/menu/busca" />',{'informacaoSaque': informacaoSaque,'tipoAprovado': tipoAprovado,'empresa':empresa,
+			 	'tipoPagamento': tipoPagamento ,'tipoRecusado': tipoRecusado,'justificativa': justificativa,'status': status, 
+				'cliente' : cliente , 'documento' : documento, 'data' : data, 'dataFim' : dataFim,
+				'dataAprovadoInicio' : dataAprovadoInicio, 'dataAprovadoFim' : dataAprovadoFim, 'dataConcluidoInicio' : dataConcluidoInicio, 'dataConcluidoFim' : dataConcluidoFim, 
+				'dataRecusadoInicio' : dataRecusadoInicio, 'dataRecusadoFim' : dataRecusadoFim, 'bancos' : bancos, 'produtos' : produtos, 'bancosComprados' : bancosComprados , 
+				'motivoPendencia' : motivoPendencia});
+
+	 }
+
+	 </script>
+
+	<div id="content-header">
+		<h1>DashBoard</h1>
+		<div class="btn-group">
+			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+		</div>
+	</div>
+
+	<div id="breadcrumb">
+		<a href="<c:url value="/menu/inicio/${usuarioInfo.perfil.chave}" />" title="Dashboard" class="tip-bottom"><i class="icon-home"></i> Dashboard</a>
+		<a href="#" class="current">Contratos</a>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+			<div class="widget-box">
+			<div class="widget-title"><span class="icon">
+				<i class="icon-signal"></i></span><h5>Filtros</h5>
+				<div class="buttons"><a href="javascript:buscaContratos();" class="btn btn-mini"><i class="icon-refresh"></i> Busca</a></div>
+			</div>
+			<div class="widget-content" style="padding: 8px;">
+				<div class="row-fluid">
+
+					<div class="span2">
+
+						<label for="busca_Status">Status</label>
+	  					<select id="busca_Status" name="busca_Status" class="input-medium" MULTIPLE >
+							<option value="">Todos...</option>
+							<c:forEach items="${etapas }" var="etapa">
+								<option value="${etapa.nome }">${etapa.nome }</option>
+							</c:forEach>
+						</select>
+						
+						<label for="busca_Produto">Produto</label>
+						<select id="busca_Produto" name="busca_Produto" class="input-medium" MULTIPLE >
+							<option value="Todos">Todos</option>
+							<c:forEach items="${produtos }" var="produto">
+								<option value="${produto.nome }">${produto.nome }</option>
+							</c:forEach>
+						</select>
+
+						<label for="busca_Empresa">Empresa</label>
+						<select id="busca_Empresa" name="busca_Empresa" class="input-medium" MULTIPLE>
+							<option value="Todos">Todos</option>
+							<option value="ATGGOLD">ATGGOLD</option>
+							<option value="GOCX">GOCX</option>
+							<option value="GRGOLD">GRGOLD</option>
+							<option value="OUROCRED">OUROCRED</option>
+						</select>
+
+						<label for="busca_Banco">Banco</label>
+						<select id="busca_Banco" name="busca_Banco"  class="input-medium" MULTIPLE>
+							<option value="">Selecione um banco</option>
+							<c:forEach items="${bancos }" var="banco">
+								<option value="${banco.nome }">${banco.nome }</option>
+							</c:forEach>
+						</select>
+						
+						<label for="busca_BancoComprado">Banco Comprado</label>
+						<select id="busca_BancoComprado" name="busca_BancoComprado"  class="input-medium" MULTIPLE>
+							<option value="">Selecione um banco</option>
+							<c:forEach items="${bancosComprados }" var="bancoComprado">
+								<option value="${bancoComprado.nome }">${bancoComprado.nome }</option>
+							</c:forEach>
+						</select>
+	  				</div>
+
+	 				<div class="span3">
+	
+						<label for="busca_Cliente">Cliente</label>
+						<input id="busca_Cliente" name="busca_Cliente" class="input-large" type="text" />
+		
+						<label for="busca_Documento">Documento</label>
+						<input id="busca_Documento" name="busca_Documento" class="input-large" type="text" />
+						
+						<div class="row-fluid">
+		
+							<div class="span5">								
+								<label for="busca_Data">Data Início</label>
+								<input id="busca_Data" name="busca_Data"  class="input-mini" type="text" />
+							</div>
+							<div class="span5">
+								<label for="busca_DataFim">Data Fim</label>
+								<input id="busca_DataFim" name="busca_DataFim" class="input-mini" type="text"  />
+							</div>
+		
+						</div>
+					
+					</div>
+					
+					<div class="span4">
+					
+						<div class="row-fluid">
+		
+							<div class="span4">								
+								<label for="busca_DataAprovadoInicio">Aprovado Inicio</label>
+								<input id="busca_DataAprovadoInicio" name="busca_DataAprovadoInicio"  class="input-mini" type="text" />
+							</div>
+							<div class="span4">
+								<label for="busca_DataAprovadoFim">Aprovado Fim</label>
+								<input id="busca_DataAprovadoFim" name="busca_DataAprovadoFim" class="input-mini" type="text"  />
+							</div>
+							<div class="span4">
+								<label for="busca_TipoAprovado">Tipo Aprovado</label>
+								<select id="busca_TipoAprovado" name="busca_TipoAprovado" class="input-small">
+									<option value="Todos">Todos</option>
+									<option value="Aprovado">Aprovado</option>
+									<option value="Concluído">Concluído</option>
+								</select>
+							</div>
+		
+						</div>
+						
+						<div class="row-fluid">
+		
+							<div class="span4">								
+								<label for="busca_DataConcluidoInicio">Concluído Início</label>
+								<input id="busca_DataConcluidoInicio" name="busca_DataConcluidoInicio"  class="input-mini" type="text" />
+							</div>
+							<div class="span4">
+								<label for="busca_DataConcluidoFim">Concluído Fim</label>
+								<input id="busca_DataConcluidoFim" name="busca_DataConcluidoFim" class="input-mini" type="text"  />
+							</div>
+		
+						</div>
+						
+						<div class="row-fluid">
+		
+							<div class="span4">								
+								
+								<label for="busca_TipoPagamento">Tipo Pagamento</label>
+								<select id="busca_TipoPagamento" name="busca_TipoPagamento"  onchange="buscaContratos();" style="width:100px" >
+									<option value="Todos">Todos</option>
+									<option value="OP">OP</option>
+									<option value="TED">TED</option>
+								</select>
+								
+							</div>
+							<div class="span4">
+								
+								<label for="busca_InformacaoSaque">Info Saque</label>
+								<select id="busca_InformacaoSaque" name="busca_InformacaoSaque"  onchange="buscaContratos();" style="width:100px" >
+									<option value="Todos">Todos</option>
+									<option value="Aguardando Saque">Aguardando Saque</option>
+									<option value="Saque Efetuado">Saque Efetuado</option>
+								</select>
+								
+							</div>
+		
+						</div>
+
+					</div>
+					
+					<div class="span3">
+					
+						<div class="row-fluid">
+		
+							<div class="span5">								
+								<label for="busca_DataRecusadoInicio">Recusado Início</label>
+								<input id="busca_DataRecusadoInicio" name="busca_DataRecusadoInicio"  class="input-mini" type="text" />
+							</div>
+							<div class="span5">
+								<label for="busca_DataRecusadoFim">Recusado Fim</label>
+								<input id="busca_DataRecusadoFim" name="busca_DataRecusadoFim" class="input-mini" type="text"  />
+							</div>
+		
+						</div>
+						
+						<div class="row-fluid">
+		
+							<div class="span5">
+								<label for="busca_TipoRecusado">Tipo Recusa</label>								
+								<select id="busca_TipoRecusado" name="busca_TipoRecusado" class="input-small" >
+									<option value="Todos">Todos</option>
+									<option value="false">Dentro da Planilha</option>
+									<option value="true">Fora da Planilha</option>
+								</select>
+							</div>
+							<div class="span5">
+								<label for="busca_Justificativa">Justificativa</label>
+								<select id="busca_Justificativa" name="busca_Justificativa" class="input-small">
+									<option value="Todos">Todos</option>
+									<option value="Cliente com pendência de documentos">Cliente com pendência de documentos</option>
+									<option value="Cliente desistiu">Cliente desistiu</option>
+									<option value="Cliente fechou por outro banco">Cliente fechou por outro banco</option>
+									<option value="Cliente inadimplente">Cliente inadimplente</option>
+									<option value="Cliente não assinou">Cliente não assinou</option>
+									<option value="Cliente não retirou o boleto">Cliente não retirou o boleto</option>
+									<option value="Cliente refinanciou">Cliente refinanciou</option>
+									<option value="Dívida maior que o previsto">Dívida maior que o previsto</option>
+									<option value="Erro de análise">Erro de análise</option>
+									<option value="Erro de preenchimento">Erro de preenchimento</option>
+									<option value="Família não deixou">Família não deixou</option>
+									<option value="Filho não deixou">Filho não deixou</option>
+									<option value="Junção de Parcelas">Junção de Parcelas</option>
+									<option value="Operador trocou de equipe">Operador trocou de equipe</option>
+									<option value="Recusado Banco">Recusado Banco</option>
+									<option value="Recusado Qualidade">Recusado Qualidade</option>
+									<option value="Recusado Pós Venda">Recusado Pós Venda</option>
+								</select>
+							</div>
+		
+						</div>
+
+					</div>
+					
+				</div>
+
+			</div>
+		</div>
+		</div>
+		</div>
+	</div>
+	
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+
+				<div class="widget-box">
+					<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Contratos</h5></div>
+					<div id="resultado" class="widget-content">
+						<c:if test="${not empty contratos}">
+							<table class="table table-bordered table-striped table-hover data-table" style="font-size: 12px">
+								<thead>	
+									<tr>
+										<th>
+											Data
+										</th>
+										<th>
+											Supervisor
+										</th>
+										<th>
+											Consultor
+										</th>
+										<th>
+											Cliente
+										</th>
+										<th>
+											Cpf
+										</th>
+										<th>
+											Banco:
+										</th>
+										<th>
+											Produto:
+										</th>
+										<th>
+											Banco Comprado:
+										</th>
+										<th>
+											Parcela
+										</th>
+										<th>
+											Coeficiente
+										</th>
+										<th>
+											Prazo
+										</th>
+										<th>
+											Dívida
+										</th>
+										<th>
+											Liquido
+										</th>
+										<th>
+											Meta
+										</th>
+										<th>
+											Status
+										</th>
+										<th>
+											Pós Venda
+										</th>
+									</tr>
+								</thead>
+								<tbody>		
+									<c:forEach items="${contratos}" var="contrato">
+										<tr>
+											<td>
+												<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yyyy" />
+											</td>
+											<td >
+												${contrato.usuario.supervisorUsuario.nome }
+											</td>
+											<td >
+												${contrato.usuario.nome }
+											</td>
+											<td >
+												${contrato.formulario.parceiroNegocio.nome }
+											</td>
+											<td >
+												${contrato.formulario.parceiroNegocio.cpf }
+											</td>
+											<td >
+												${contrato.banco.nome }
+											</td>
+											<td >
+												${contrato.produto.nome }
+											</td>
+											<td >
+												${contrato.recompraBanco.nome }
+											</td>
+											<td >
+												${contrato.valorParcela }
+											</td>
+											<td >
+												<fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" />
+											</td>
+											<td >
+												${contrato.prazo }
+											</td>
+											<td >
+												${contrato.valorDivida }
+											</td>
+											<td >
+												${contrato.valorLiquido }
+											</td>
+											<td >
+												${contrato.valorMeta }
+											</td>
+											<td >
+												<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.workflowEtapa.nome }</a>
+											</td>
+											<td >
+												PÓS VENDA
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>	
+							</table>
+						</c:if>							
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+
+
+<%@ include file="/footer.jspf"%>

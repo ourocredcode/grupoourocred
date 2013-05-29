@@ -393,7 +393,8 @@ function openPopup(url) {
 	</div>
 	
 	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+		<a href="<c:url value="/menu/inicio/${usuarioInfo.perfil.chave}" />" title="Dashboard" class="tip-bottom"><i class="icon-home"></i> Dashboard</a>
+		<a href="javascript:history.go(-1)">Contratos</a>
 		<a href="#" class="current">Status</a>
 	</div>
 
@@ -967,9 +968,6 @@ function openPopup(url) {
 					<div class="form-actions">
 						<div class="span1" style="float: left;">
 							<input value="Salva" type="submit" class="btn btn-primary" >
-						</div>
-						<div class="span1" style="float: left;">
-							<input value="Voltar" type="button" class="btn" onclick="javascript:window.location='/sgo/menu/inicio'">
 						</div>
 						<div class="span1" style="float: left;">
 							<input value="Formulário" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'">

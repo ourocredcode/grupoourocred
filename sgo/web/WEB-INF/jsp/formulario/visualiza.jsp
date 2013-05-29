@@ -334,7 +334,7 @@ function mostra(formulario_id){
 
 				<div class="row-fluid">
 					<div class="span1" style="float: left;">
-						<input value="Voltar" type="button" class="btn" onclick="javascript:window.location='/sgo/menu/inicio'">
+						<input value="Voltar" type="button" class="btn" onclick="javascript:window.location='/sgo/menu/inicio/${usuarioInfo.perfil.chave}'">
 					</div>
 					<div class="span1" style="float: left;">
 						<input value="Imprimir" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/impressao/${formulario.formulario_id}'">
