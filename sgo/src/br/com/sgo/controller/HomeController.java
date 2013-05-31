@@ -66,11 +66,19 @@ public class HomeController {
 	@Public
 	public void login(String login, String password) {
 
-		Long usuario_id = usuarioDao.find(login, password).getUsuario_id();
+		Usuario u = usuarioDao.find(login, password);
 
-		usuario.setUsuario_id(usuario_id);
+		if(u != null) {
 
-		result.redirectTo(this).perfis(this.usuarioPerfilDao.buscaUsuarioPerfilAcesso(usuario));
+			this.usuario.setUsuario_id(u.getUsuario_id());
+			result.redirectTo(this).perfis(this.usuarioPerfilDao.buscaUsuarioPerfilAcesso(usuario));
+
+		} else {
+
+			result.include("msg","Erro").redirectTo(this).msg();
+
+		}
+			
 
 	}
 
@@ -112,6 +120,7 @@ public class HomeController {
 	}
 
 	@Get
+	@Public
 	public void msg(){
 
 	}

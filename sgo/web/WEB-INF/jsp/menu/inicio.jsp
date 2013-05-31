@@ -3,13 +3,15 @@
 	<script type="text/javascript" src="<c:url value="/js/unicorn.dashboard.js"/>"></script>
 
 	<div id="content-header">
-		<h1>DashBoard</h1>
+		<h1>DashBoard - ${usuarioInfo.usuario.nome }</h1>
+		
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
 			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
+
 	</div>
 
 	<div id="breadcrumb">

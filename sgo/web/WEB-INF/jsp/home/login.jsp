@@ -24,23 +24,40 @@
 					, type: $(this).attr('method')
 					, url: $(this).attr('action')
 					, success: function(response) {
-		
-						$("#login-li").removeClass("active");					
-						$("#login-li").addClass("disabled");				
-						$("#login-li-a").attr('href',"#");
+
+						if(response.indexOf("Erro") == -1){
+
+							$("#login-li").removeClass("active");					
+							$("#login-li").addClass("disabled");				
+							$("#login-li-a").attr('href',"#");
+				
+							$("#perfil-li").removeClass("disabled");
+							$("#perfil-li").addClass("active");
+							$("#perfil-li-a").attr('href',"#perfil-div");
+				
+							$("#login-div").removeClass("tab-pane fade active in");
+							$("#login-div").addClass("tab-pane fade");
+							
+							$("#perfil-div").removeClass("tab-pane fade");
+							$("#perfil-div").addClass("tab-pane fade active in");
 			
-						$("#perfil-li").removeClass("disabled");
-						$("#perfil-li").addClass("active");
-						$("#perfil-li-a").attr('href',"#perfil-div");
-			
-						$("#login-div").removeClass("tab-pane fade active in");
-						$("#login-div").addClass("tab-pane fade");
-						
-						$("#perfil-div").removeClass("tab-pane fade");
-						$("#perfil-div").addClass("tab-pane fade active in");
-		
-						$("#usuarioPerfil").html(response);
-		
+							$("#usuarioPerfil").html(response);	
+
+						} else {
+
+							$("#login-li").removeClass("active");					
+							$("#login-li").addClass("disabled");				
+							$("#login-li-a").attr('href',"#");
+							
+							$("#login-div").removeClass("tab-pane fade active in");
+							$("#login-div").addClass("tab-pane fade");
+							
+							$("#erro-div").removeClass("tab-pane fade");
+							$("#erro-div").addClass("tab-pane fade active in");
+							
+							
+						}
+
 					}
 		
 				});
@@ -63,7 +80,7 @@
 
 			});
 		
-			$('#btnSair').click(function() {
+			$('.btn-danger').click(function() {
 				window.location.href = '<c:url value="/home/logout" />';
 			});
 		
@@ -145,12 +162,27 @@
 										<button type="submit" class="btn btn-primary">OK</button>
 									</div>	
 									<div class="btn-group">
-										<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+										<button type="button" class="btn btn-danger" id="btnSair" >Sair</button>
 									</div>
 								</div>					
 							</div>
 						</form>
 	
+					</div>
+					
+					<div class="tab-pane fade"  id="erro-div">
+
+						 <form id="usuarioPerfilForm" action="<c:url value="/home/perfil"/>" method="POST">
+							 <div class="control-group">
+							 	<label class="control-label">Usuário não encontrado.</label>
+							 </div>
+							 <div class="btn-toolbar">
+								<div class="btn-group">
+									<button type="button" class="btn btn-danger" id="btnSair" >Sair</button>
+								</div>
+							</div>
+						</form>
+					
 					</div>
 				</div>
         </div>

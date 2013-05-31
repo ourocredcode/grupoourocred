@@ -319,13 +319,16 @@
 						<div class="control-group">
 							<div class="controls controls-row">
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"
-									<c:if test="${parceiroNegocio.isFuncionario }">checked="checked"</c:if>> Funcionário
+									<c:if test="${parceiroNegocio.isFuncionario }">checked="checked"</c:if>
+									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">disabled="disabled"</c:if>>Funcionário
+									
 								</label>
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"
-									<c:if test="${parceiroNegocio.isCliente }">checked="checked"</c:if>> Cliente
+									<c:if test="${parceiroNegocio.isCliente || usuarioInfo.perfil.chave == 'Consultor' }">checked="checked"</c:if>> Cliente
 								</label>
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"
-									<c:if test="${parceiroNegocio.isFornecedor }">checked="checked"</c:if>> Fornecedor
+									<c:if test="${parceiroNegocio.isFornecedor }">checked="checked"</c:if>
+									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">disabled="disabled"</c:if>> Fornecedor
 							</label>
 							</div>
 						</div>
@@ -446,6 +449,15 @@
 									<select  id="funcionarioFuncaoId" name="funcionario.funcao.funcao_id" class="input-medium">
 										<c:forEach var="funcao" items="${funcoes }">
 											<option value="${funcao.funcao_id }" <c:if test="${funcionario.funcao.funcao_id eq funcao.funcao_id }"> selected="selected"</c:if>> ${funcao.nome }</option>
+										</c:forEach>
+									</select>
+								</div>
+								
+								<div class="span2">
+									<label for="funcionarioSupervisorId">Supervisor</label>
+									<select  id="funcionarioSupervisorId" name="funcionario.supervisor.parceiroNegocio_id" class="input-medium">
+										<c:forEach var="supervisor" items="${supervisores }">
+											<option value="${supervisor.parceiroNegocio_id }" <c:if test="${funcionario.supervisor.parceiroNegocio_id eq supervisor.parceiroNegocio_id }"> selected="selected"</c:if>> ${supervisor.nome }</option>
 										</c:forEach>
 									</select>
 								</div>
