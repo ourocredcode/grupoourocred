@@ -35,6 +35,10 @@ public class WorkflowTransicao implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
+	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
+	private Workflow workflow;
+	
+	@ManyToOne
 	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = false)
 	private WorkflowEtapa workflowEtapa;
 
@@ -204,5 +208,13 @@ public class WorkflowTransicao implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Workflow getWorkflow() {
+		return workflow;
+	}
+
+	public void setWorkflow(Workflow workflow) {
+		this.workflow = workflow;
 	}
 }

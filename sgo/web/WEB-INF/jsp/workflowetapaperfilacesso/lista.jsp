@@ -7,6 +7,7 @@
 			<th>Organização</th>
 			<th>Worklflow</th>
 			<th>Worklflow Etapa</th>
+			<th>Perfil</th>
 			<th>Leitura e Escrita</th>
 			<th>Ativo</th>
 		</tr>
@@ -16,6 +17,7 @@
 			<tr>
 				<td>${workflowEtapaPerfilAcesso.empresa.nome }</td>
 				<td>${workflowEtapaPerfilAcesso.organizacao.nome }</td>
+				<td>${workflowEtapaPerfilAcesso.workflow.nome }</td>
 				<td>${workflowEtapaPerfilAcesso.workflowEtapa.nome }</td>
 				<td>${workflowEtapaPerfilAcesso.perfil.nome }</td>								
 				<td>${workflowEtapaPerfilAcesso.isLeituraEscrita }</td>

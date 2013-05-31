@@ -185,16 +185,16 @@ function limpaForm() {
 									<label for="coeficienteEmpresa">Empresa</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="coeficienteEmpresa" name="coeficiente.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="coeficienteEmpresaId" name="coeficiente.empresa.empresa_id" type="hidden">
+			      						<input class="span10" id="coeficienteEmpresa" name="coeficiente.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" required onChange="limpaForm();">
+			      						<input class="span10" id="coeficienteEmpresaId" name="coeficiente.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }">
 			    					</div>
 								</div>
 								<div class="span2">
 									<label for="coeficienteOrganizacao">Organização</label>
 									<div class="input-prepend">
 										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="coeficienteOrganizacao" name="coeficiente.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="coeficienteOrganizacaoId" name="coeficiente.organizacao.organizacao_id" type="hidden">
+			      						<input class="span10" id="coeficienteOrganizacao" name="coeficiente.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" required onChange="limpaForm();">
+			      						<input class="span10" id="coeficienteOrganizacaoId" name="coeficiente.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
 			    					</div>
 								</div>
 								<div class="span2">

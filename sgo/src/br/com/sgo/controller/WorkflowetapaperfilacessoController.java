@@ -5,9 +5,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.dao.PerfilDao;
+import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.dao.WorkflowEtapaPerfilAcessoDao;
 import br.com.sgo.interceptor.Public;
@@ -20,28 +18,35 @@ public class WorkflowetapaperfilacessoController {
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
 	private final WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
 	private final WorkflowEtapaDao workflowEtapaDao;
-	private final PerfilDao perfilDao;
+	private final WorkflowDao workflowDao;
 	
-	
-	public WorkflowetapaperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao, EmpresaDao empresaDao
-			, OrganizacaoDao organizacaoDao, WorkflowEtapaDao workflowEtapaDao, PerfilDao perfilDao) {
+	public WorkflowetapaperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao, WorkflowEtapaDao workflowEtapaDao, WorkflowDao workflowDao) {
+
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.workflowEtapaPerfilAcessoDao =  workflowEtapaPerfilAcessoDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
 		this.workflowEtapaDao = workflowEtapaDao;
-		this.perfilDao = perfilDao;
+		this.workflowDao = workflowDao;
+
 	}
 
 	@Get
 	@Public
 	@Path("/workflowetapaperfilacesso/cadastro")
 	public void cadastro() {
+		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 		result.include("workflowEtapasPerfilAcesso", this.workflowEtapaPerfilAcessoDao.buscaTodosWorkflowEtapaPerfilAcesso());
+
+	}
+
+	@Post
+	@Public
+	@Path("/workflowetapaperfilacesso/workflowetapasperfil")
+	public void workflowetapasperfil(Long empresa_id, Long organizacao_id, Long workflow_id){
+
+		result.include("workflowEtapas",this.workflowEtapaDao.buscaWorkflowEtapasByEmpOrgWorkflow(empresa_id, organizacao_id, workflow_id));
+
 	}
 
 	@Post
@@ -56,11 +61,6 @@ public class WorkflowetapaperfilacessoController {
 			if (this.workflowEtapaPerfilAcessoDao.buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),
 					workflowEtapaPerfilAcesso.getWorkflowEtapa().getWorkflowEtapa_id(), workflowEtapaPerfilAcesso.getPerfil().getPerfil_id()) == null) {				
 
-				workflowEtapaPerfilAcesso.setEmpresa(this.empresaDao.load(usuarioInfo.getEmpresa().getEmpresa_id()));
-				workflowEtapaPerfilAcesso.setOrganizacao(this.organizacaoDao.load(usuarioInfo.getOrganizacao().getOrganizacao_id()));				
-				workflowEtapaPerfilAcesso.setWorkflowEtapa(this.workflowEtapaDao.load(workflowEtapaPerfilAcesso.getWorkflowEtapa().getWorkflowEtapa_id()));
-				workflowEtapaPerfilAcesso.setPerfil(this.perfilDao.load(workflowEtapaPerfilAcesso.getPerfil().getPerfil_id()));
-
 				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null ? false : true);
 				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null ? false : true);
 				workflowEtapaPerfilAcesso.setIsUpload(workflowEtapaPerfilAcesso.getIsUpload() == null ? false : true);
@@ -68,18 +68,18 @@ public class WorkflowetapaperfilacessoController {
 				this.workflowEtapaPerfilAcessoDao.insert(workflowEtapaPerfilAcesso);
 
 				mensagem = "Perfil " + workflowEtapaPerfilAcesso.getPerfil().getNome() + " adicionado com sucesso para etapa " + workflowEtapaPerfilAcesso.getWorkflowEtapa().getNome();
-				
+
 			} else {
-				
+
 				mensagem = "Erro: Perfil " + workflowEtapaPerfilAcesso.getPerfil().getNome() +" já cadastrado para a etapa " + workflowEtapaPerfilAcesso.getWorkflowEtapa().getNome();
-				
+
 			} 
 
 		} catch (Exception e) {
 
 			mensagem = "Erro: Falha ao adicionar o Perfil para o Workflow :" + workflowEtapaPerfilAcesso.getPerfil().getNome();
 
-		}finally{
+		} finally{
 
 			this.workflowEtapaDao.clear();
 			this.workflowEtapaDao.close();

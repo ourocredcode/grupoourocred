@@ -8,6 +8,7 @@
 		<tr>
 			<th>Empresa</th>
 			<th>Organização</th>
+			<th>Worklflow</th>
 			<th>Worklflow Etapa</th>
 			<th>Worklflow Próxima</th>
 			<th>Perfil</th>			
@@ -21,6 +22,7 @@
 			<tr>
 				<td>${workflowTransicao.empresa.nome }</td>
 				<td>${workflowTransicao.organizacao.nome }</td>
+				<td>${workflowTransicao.workflow.nome }</td>
 				<td>${workflowTransicao.workflowEtapa.nome }</td>
 				<td>${workflowTransicao.workflowEtapaProximo.nome }</td>
 				<td>${workflowTransicao.perfil.nome }</td>
