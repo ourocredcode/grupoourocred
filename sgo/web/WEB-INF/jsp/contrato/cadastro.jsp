@@ -60,6 +60,8 @@ $(document).ready(function() {
 		}
 
 	});
+	
+
 
 });
 
@@ -407,19 +409,24 @@ function desabilita(campo){
 	if(!campo == 'valorContrato' || campo == 'valorLiquido')
 		campo.value = '';
 
+	if(campo.id == 'bancoComprado')
+		$("#bancoComprado").select2("disable");
+	
 	campo.disabled = true;
 	campo.required = false;
-	campo.className = 'span10';
+	campo.className = 'span10';	
+	
 
 }
 
-
-
 function habilita(campo){
+	
+	if(campo.id == 'bancoComprado')
+		$("#bancoComprado").select2("enable");
 
 	campo.disabled = false;
 	campo.required = true;
-	campo.className = 'span10';
+	campo.className = 'span10';	
 
 }
 
@@ -530,7 +537,7 @@ function historicoCoeficiente() {
 						<div class="span3">
 
 							<label for="bancoComprado">Banco Comprado:</label>
-							<select id="bancoComprado" class="span10"  name="contrato.recompraBanco.banco_id" disabled>
+							<select id="bancoComprado" class="span10"  name="contrato.recompraBanco.banco_id">
 								<option value="">Escolha um banco</option>
 								<c:forEach items="${recompraBancos}" var="recompraBanco">
 									<option value="${recompraBanco.banco_id}" <c:if test="${contrato.recompraBanco.banco_id eq recompraBanco.banco_id}">SELECTED</c:if>>${recompraBanco.nome}</option>

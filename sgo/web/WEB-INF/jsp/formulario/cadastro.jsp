@@ -1,9 +1,5 @@
 <%@ include file="/header.jspf"%>
 
-	<script type="text/javascript">
-
-	</script>
-
 	<div id="content-header">
 		<h1>Formulário</h1>
 		<div class="btn-group">
@@ -63,7 +59,7 @@
 						</div>
 						<div class="span2">
 							<label for="parceiroBeneficioNumeroBeneficio">Beneficio</label>
-							<input type="text" class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" />
+							<input type="text" class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio" value="${formulario.parceiroBeneficio.numeroBeneficio }" />
 						</div>
 						<div class="span2">
 							<label for="formularioParceiroNegocioDataNascimento">Dt Nascimento</label>
@@ -72,7 +68,7 @@
 						</div>
 						<div class="span2">
 							<label for="parceiroLocalidadeLocalidadeCep">CEP</label>
-							<input  class="input-medium" id="parceiroLocalidadeLocalidadeCep" name="parceiroLocalidade.localidade.cep" type="text" value="${parceiroLocalidade.localidade.cep }" />
+							<input  class="input-medium" id="parceiroLocalidadeLocalidadeCep" name="parceiroLocalidade.localidade.cep" type="text" value="${formulario.parceiroLocalidade.localidade.cep }" />
 						</div>
 					</div>
 
@@ -82,23 +78,23 @@
 					<div class="row-fluid">
 						<div class="span2">
 							<label for="Banco">Banco</label>
-							<input type="text" class="input-medium" id="Banco" name="Banco" value="${parceiroInfoBanco.banco.nome }"/>	
+							<input type="text" class="input-medium" id="Banco" name="Banco" value="${formulario.parceiroInfoBanco.banco.nome }"/>	
 						</div>
 						<div class="span2">
 							<label for="Agencia">Agencia</label>
-							<input type="text" class="input-medium" id="Agencia" name="Agencia" value="${parceiroInfoBanco.agencia.nome }" />
+							<input type="text" class="input-medium" id="Agencia" name="Agencia" value="${formulario.parceiroInfoBanco.agenciaNumero }" />
 						</div>
 						<div class="span2">
 							<label for="Conta">Conta</label>
-							<input type="text" class="input-medium" id="Conta" name="Conta" value="${parceiroInfoBanco.contaBancaria }" />
+							<input type="text" class="input-medium" id="Conta" name="Conta" value="${formulario.parceiroInfoBanco.contaCorrente }" />
 						</div>
 						<div class="span2">
 							<label for="TipoConta">Tipo Conta</label>
-							<input type="text" class="input-medium" id="TipoConta" name="TipoConta" value="${parceiroInfoBanco.contaBancaria.tipoConta }" />
+							<input type="text" class="input-medium" id="TipoConta" name="TipoConta" value="${formulario.parceiroInfoBanco.contaBancaria.tipoConta }" />
 						</div>
 						<div class="span2">
 							<label for="TipoPagamento">Tipo Pagamento</label>
-							<input  class="input-medium" id="TipoPagamento" name="TipoPagamento" type="text" value="${parceiroInfoBanco.meioPagamento }" />
+							<input  class="input-medium" id="TipoPagamento" name="TipoPagamento" type="text" value="${formulario.parceiroInfoBanco.meioPagamento.nome }" />
 						</div>
 					</div>
 				</div>
