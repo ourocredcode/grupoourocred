@@ -27,6 +27,7 @@ import br.com.sgo.dao.ControleFormularioDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoControleFormularioDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
+import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PnDao;
@@ -59,6 +60,7 @@ public class FormularioController {
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
+	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
 	private final ControleFormularioDao controleFormularioDao;
 	private final HistoricoControleFormularioDao historicoControleFormularioDao;
 	private final TipoControleDao tipoControleDao;
@@ -85,7 +87,7 @@ public class FormularioController {
 	private Perfil perfil;
 
 	public FormularioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,FormularioDao formularioDao,ContratoDao contratoDao,
-			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,
+			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,ParceiroInfoBancoDao parceiroInfoBancoDao,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
 			WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
@@ -99,6 +101,7 @@ public class FormularioController {
 		this.parceiroBeneficioDao =  parceiroBeneficioDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
 		this.controleFormularioDao = controleFormularioDao;
+		this.parceiroInfoBancoDao = parceiroInfoBancoDao;
 		this.historicoControleFormularioDao = historicoControleFormularioDao;
 		this.coeficienteDao = coeficienteDao;
 		this.tipoControleDao = tipoControleDao;
@@ -168,8 +171,6 @@ public class FormularioController {
 		historico.setPerfil(perfil);
 		historico.setFormulario(formulario);
 
-		System.out.println(historicos.size());
-
 		result.include("formulario",formulario);
 		result.include("historico",historico);
 		result.include("historicos",historicos);
@@ -181,28 +182,39 @@ public class FormularioController {
 	public void cliente(String numeroBeneficio){
 
 		ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(numeroBeneficio);
+		
+		if(pb != null) {
+			
+			parceiroBeneficio.setParceiroBeneficio_id(pb.getParceiroBeneficio_id());
+			parceiroBeneficio.setNumeroBeneficio(pb.getNumeroBeneficio());
+			parceiroBeneficio.setParceiroNegocio(pb.getParceiroNegocio());
 
-		parceiroBeneficio.setParceiroBeneficio_id(pb.getParceiroBeneficio_id());
-		parceiroBeneficio.setNumeroBeneficio(pb.getNumeroBeneficio());
-		parceiroBeneficio.setParceiroNegocio(pb.getParceiroNegocio());
+			parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
+			parceiroInfoBanco = parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
 
-		parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
+			for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
 
-		for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
+				if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+					parceiroLocalidade = pl;
+				}
 
-			if(pl.getTipoEndereco().getNome().equals("Assinatura")){
-				parceiroLocalidade = pl;
 			}
+
+			parceiroLocalidade.setParceiroNegocio(parceiroNegocio);
+			formulario.setParceiroNegocio(parceiroNegocio);
+			formulario.setParceiroBeneficio(parceiroBeneficio);
+			formulario.setParceiroLocalidade(parceiroLocalidade);
+			formulario.setParceiroInfoBanco(parceiroInfoBanco);
+
+			result.redirectTo(this).cadastro();
+			
+		} else {
+
+			result.redirectTo(ParceironegocioController.class).cadastro();
 
 		}
 
-		parceiroLocalidade.setParceiroNegocio(parceiroNegocio);
-		formulario.setParceiroNegocio(parceiroNegocio);
-		formulario.setParceiroBeneficio(parceiroBeneficio);
-		formulario.setParceiroLocalidade(parceiroLocalidade);
-		formulario.setParceiroInfoBanco(parceiroInfoBanco);
-
-		result.redirectTo(this).cadastro();
+		
 
 	}
 	
