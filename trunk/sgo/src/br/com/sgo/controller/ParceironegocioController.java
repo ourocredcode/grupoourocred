@@ -10,16 +10,13 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CidadeDao;
 import br.com.sgo.dao.DepartamentoDao;
-import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.EstadoCivilDao;
 import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.MeioPagamentoDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroContatoDao;
@@ -37,7 +34,6 @@ import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
-import br.com.sgo.modelo.Funcao;
 import br.com.sgo.modelo.Funcionario;
 import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.Organizacao;
@@ -61,14 +57,11 @@ public class ParceironegocioController {
 	private final FuncionarioDao funcionarioDao;
 	private final DepartamentoDao departamentoDao;
 	private final FuncaoDao funcaoDao;
-	private final BancoDao bancoDao;
 	private final LocalidadeDao localidadeDao;
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 	private final ParceiroContatoDao parceiroContatoDao;
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
 	private final SexoDao sexoDao;
 	private final EstadoCivilDao estadoCivilDao;
 	private final TipoParceiroDao tipoParceiroDao;
@@ -88,9 +81,9 @@ public class ParceironegocioController {
 
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
-			EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,
+			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,
 			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao,MeioPagamentoDao meioPagamentoDao,
-			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao,BancoDao bancoDao) {
+			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -100,8 +93,6 @@ public class ParceironegocioController {
 		this.usuarioInfo = usuarioInfo;
 		this.funcionarioDao = funcionarioDao;
 		this.localidadeDao = localidadeDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
 		this.sexoDao = sexoDao;
 		this.estadoCivilDao = estadoCivilDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
@@ -117,7 +108,6 @@ public class ParceironegocioController {
 		this.cidadeDao = cidadeDao;
 		this.usuarioDao = usuarioDao;
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
-		this.bancoDao = bancoDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 
@@ -131,6 +121,8 @@ public class ParceironegocioController {
 					usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
 		result.include("funcoes", this.funcaoDao.buscaFuncoes(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
 				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
+
+		result.include("supervisores", this.parceiroNegocioDao.buscaParceiroNegocioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
@@ -212,6 +204,7 @@ public class ParceironegocioController {
 
 		result.include("departamentos", this.departamentoDao.buscaDepartamentos(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("funcoes", this.funcaoDao.buscaFuncoes(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("supervisores", this.parceiroNegocioDao.buscaParceiroNegocioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
@@ -241,7 +234,6 @@ public class ParceironegocioController {
 			Collection<ParceiroBeneficio> parceiroBeneficios,Localidade localidade, ParceiroInfoBanco parceiroInfoBanco){
 
 		String mensagem = "";
-		Funcao funcao = this.funcaoDao.buscaFuncaoById(funcionario.getFuncao().getFuncao_id());
 
 		try {
 
@@ -265,10 +257,7 @@ public class ParceironegocioController {
 
 			Funcionario f = new Funcionario();
 
-			if(funcao.getNome().equals("Consultor")){
-				f.setSupervisor(this.parceiroNegocioDao.buscaParceiroNegocioById(usuarioInfo.getUsuario().getParceiroNegocio().getParceiroNegocio_id()));
-			}
-
+			f.setSupervisor(this.parceiroNegocioDao.buscaParceiroNegocioById(funcionario.getSupervisor().getParceiroNegocio_id()));
 			f.setEmpresa(parceiroNegocio.getEmpresa());
 			f.setOrganizacao(parceiroNegocio.getOrganizacao());
 			f.setDepartamento(funcionario.getDepartamento());
@@ -297,10 +286,7 @@ public class ParceironegocioController {
 
 			Usuario u = new Usuario();
 
-			if(funcao.getNome().equals("Consultor")){
-				u.setSupervisorUsuario(usuarioInfo.getUsuario());
-			}
-
+			u.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),funcionario.getSupervisor().getParceiroNegocio_id()));
 			u.setChave(parceiroNegocio.getCpf());
 			u.setEmpresa(parceiroNegocio.getEmpresa());
 			u.setOrganizacao(parceiroNegocio.getOrganizacao());

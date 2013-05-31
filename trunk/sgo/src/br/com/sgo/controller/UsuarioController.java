@@ -12,31 +12,40 @@ import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class UsuarioController {
 
 	private final Result result;
+	private final UsuarioInfo usuarioInfo;
 	private final Validator validator;
 	private final UsuarioDao usuarioDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
 	private final ParceiroNegocioDao parceiroNegocioDao;
+	private Empresa empresa;
+	private Organizacao organizacao;
 
-	public UsuarioController(Result result,Validator validator, UsuarioDao usuarioDao,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao, ParceiroNegocioDao parceiroNegocioDao){
+	public UsuarioController(Result result,UsuarioInfo usuarioInfo,Validator validator, UsuarioDao usuarioDao,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao, ParceiroNegocioDao parceiroNegocioDao
+			,Empresa empresa,Organizacao organizacao){
 
 		this.result = result;
+		this.usuarioInfo = usuarioInfo;
 		this.validator = validator;
 		this.usuarioDao = usuarioDao;
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;
 		this.parceiroNegocioDao = parceiroNegocioDao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
 
 	}
 
 	@Get
-	@Public
 	@Path("/usuario/cadastro")
 	public void cadastro() {
 
