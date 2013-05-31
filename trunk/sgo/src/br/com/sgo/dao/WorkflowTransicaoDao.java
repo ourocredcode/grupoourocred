@@ -15,6 +15,7 @@ import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
+import br.com.sgo.modelo.Workflow;
 import br.com.sgo.modelo.WorkflowEtapa;
 import br.com.sgo.modelo.WorkflowTransicao;
 
@@ -39,15 +40,16 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 			" INNER JOIN WORKFLOWETAPA AS WT1 ON (WORKFLOWTRANSICAO.workflowetapa_id = WT1.workflowetapa_id) " + 
 			" INNER JOIN WORKFLOWETAPA AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.workflowetapa_id) "; 
 	*/
-	private final String sqlWorkflowTransicoes = "SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , EMPRESA.nome as empresa_nome "+
-	", WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.workflowetapa_id "+
-	", WT1.nome as workflowetapa_nome, WORKFLOWTRANSICAO.workflowetapaproximo_id, WT2.nome as workflowetapaproximo_nome, PERFIL.perfil_id, PERFIL.nome as PERFIL_nome "+  
-	", WORKFLOWTRANSICAO.sequencia, WORKFLOWTRANSICAO.ispadrao, WORKFLOWTRANSICAO.isactive "+
-	" FROM (((WORKFLOWTRANSICAO (NOLOCK) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) "+ 
-	" INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWTRANSICAO.empresa_id = EMPRESA.empresa_id) "+
-	" INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWTRANSICAO.organizacao_id = ORGANIZACAO.organizacao_id) "+
-	" INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT1 ON (WORKFLOWTRANSICAO.workflowetapa_id = WT1.workflowetapa_id) "+   
-	" INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.workflowetapa_id)";
+	private final String sqlWorkflowTransicoes = "SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , WORKFLOW.workflow_id, WORKFLOW.nome as workflow_nome, EMPRESA.nome as empresa_nome "+ 
+	 ", WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.workflowetapa_id "+
+	 ", WT1.nome as workflowetapa_nome, WORKFLOWTRANSICAO.workflowetapaproximo_id, WT2.nome as workflowetapaproximo_nome, PERFIL.perfil_id, PERFIL.nome as PERFIL_nome "+   
+	 ", WORKFLOWTRANSICAO.sequencia, WORKFLOWTRANSICAO.ispadrao, WORKFLOWTRANSICAO.isactive "+
+	 " FROM (((WORKFLOWTRANSICAO (NOLOCK) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) "+  
+	 " INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWTRANSICAO.empresa_id = EMPRESA.empresa_id) "+
+	 " INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWTRANSICAO.organizacao_id = ORGANIZACAO.organizacao_id) "+
+	 " INNER JOIN WORKFLOW (NOLOCK) ON (WORKFLOW.workflow_id = WORKFLOWTRANSICAO.workflow_id) "+
+	 " INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT1 ON (WORKFLOWTRANSICAO.workflowetapa_id = WT1.workflowetapa_id) "+    
+	 " INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.workflowetapa_id) ";
 	
 	public WorkflowTransicaoDao(Session session, ConnJDBC conexao) {
 		super(session, WorkflowTransicao.class);
@@ -75,6 +77,7 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 
 				Empresa e = new Empresa();
 				Organizacao o = new Organizacao();
+				Workflow workflow = new Workflow(); 
 				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
 				WorkflowEtapa workflowEtapaProximo = new WorkflowEtapa();
 				Perfil perfil = new Perfil();
@@ -85,6 +88,9 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 				o.setOrganizacao_id(rsWorkflowTransicao.getLong("organizacao_id"));
 				o.setNome(rsWorkflowTransicao.getString("organizacao_nome"));
 
+				workflow.setWorkflow_id(rsWorkflowTransicao.getLong("workflow_id"));
+				workflow.setNome(rsWorkflowTransicao.getString("workflow_nome"));
+				
 				workflowEtapa.setWorkflowEtapa_id(rsWorkflowTransicao.getLong("workflowetapa_id"));
 				workflowEtapa.setNome(rsWorkflowTransicao.getString("workflowetapa_nome"));
 
@@ -96,6 +102,7 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 				
 				workflowTransicao.setEmpresa(e);
 				workflowTransicao.setOrganizacao(o);
+				workflowTransicao.setWorkflow(workflow);
 				workflowTransicao.setWorkflowEtapa(workflowEtapa);
 				workflowTransicao.setWorkflowEtapaProximo(workflowEtapaProximo);
 				workflowTransicao.setPerfil(perfil);

@@ -204,29 +204,26 @@ function limpaForm(){
 					<form id="workflowEtapaForm" name="workflowEtapaForm" action="<c:url value="/workflowetapa/salva"/>" method="POST">
 					
 						<div class="row-fluid">
-							<div class="span5">
+							<div class="span2">
 								<label for="workflowEtapaEmpresa">Empresa</label>
-      							<input class="input-xxlarge" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-      							<input class="input-mini" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
+      							<input class="span12" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+      							<input class="span1" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
 							</div>
-							<div class="span5">
+							<div class="span2">
 								<label for="workflowEtapaOrganizacao">Organização</label>	
-	      						<input class="input-xxlarge" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="input-mini" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
-							</div>
-						</div>
-
-						<div class="row-fluid">
-							<div class="span3">						
+	      						<input class="span12" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+							</div>						
+							<div class="span2">						
 								<label for="workflowEtapaWorkflow">Worflow</label>
-								<input class="input-xlarge" id="workflowEtapaWorkflow" name="workflowEtapa.workflow.nome" value="${workflowEtapa.workflow.nome }" type="text" required onChange="limpaForm();">
-	      						<input class="input-mini" id="workflowEtapaWorkflowId" name="workflowEtapa.workflow.workflow_id" value="${workflowEtapa.workflow.workflow_id }" type="hidden">
+								<input class="span12" id="workflowEtapaWorkflow" name="workflowEtapa.workflow.nome" value="${workflowEtapa.workflow.nome }" type="text" required onChange="limpaForm();">
+	      						<input class="span1" id="workflowEtapaWorkflowId" name="workflowEtapa.workflow.workflow_id" value="${workflowEtapa.workflow.workflow_id }" type="hidden">
 	    					</div>
-							<div class="span5">
-								<label for="workflowEtapaNome">Nome</label>
-								<input class="input-xxlarge" id="workflowEtapaNome" name="workflowEtapa.nome" value="${workflowEtapa.nome }" type="text" placeholder="Nome" required>								
-							</div>
 							<div class="span3">
+								<label for="workflowEtapaNome">Nome</label>
+								<input class="span12" id="workflowEtapaNome" name="workflowEtapa.nome" value="${workflowEtapa.nome }" type="text" placeholder="Nome" required>								
+							</div>
+							<div class="span1">
 								<label for="workflowEtapaIsActive">Ativo</label>							
 								<input type="checkbox" id="workflowEtapaIsActive" name="workflowEtapa.isActive" checked="checked" value="1" >
 							</div>

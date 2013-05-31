@@ -29,19 +29,19 @@ jQuery(function($){
 	          url: "<c:url value='/empresa/busca.json' />",
 	          dataType: "json",
 	          data : {n: request.term},
-	          success : function(data) {  
+	          success : function(data) {
 
 	       		  if (!data || data.length == 0) {
 	       	            $('#workflowTransicaoEmpresa').val('');
 						$('#workflowTransicaoEmpresaId').val('');
 	       	        }
 
-	        	  response($.map(data, function(empresa) {  
+	        	  response($.map(data, function(empresa) {
 	        		  return {
 	                      label: empresa.nome,
 	                      value: empresa.empresa_id
 	                  };
-	              }));  
+	              }));
 	           }
 	        });
 	     } ,
@@ -62,19 +62,19 @@ jQuery(function($){
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
 	          data : {empresa_id: $('#workflowTransicaoEmpresaId').val() == '' ? '0' :  $('#workflowTransicaoEmpresaId').val(), org_nome : $('#workflowTransicaoOrganizacao').val()},
-	          success : function(data) {  
+	          success : function(data) {
 
 	        	  if (!data || data.length == 0) {
 	     	            $('#workflowTransicaoOrganizacao').val('');
 	     	           $('#workflowTransicaoOrganizacaoId').val('');
 	     	        }
 
-	        	  response($.map(data, function(organizacao) {  
+	        	  response($.map(data, function(organizacao) {
 	        		  return {
 	        			  label: organizacao.nome,
 	        			  value: organizacao.organizacao_id
 	                  };
-	              }));  
+	              }));
 	           }
 	        });
 	     },
@@ -89,12 +89,48 @@ jQuery(function($){
 	     }
 	});
 
+	$('#workflowTransicaoWorkflow').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/workflow/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#workflowTransicaoEmpresaId').val() == '' ? '0' :  $('#workflowTransicaoEmpresaId').val(),
+	        		  organizacao_id: $('#workflowTransicaoOrganizacaoId').val() == '' ? '0' :  $('#workflowTransicaoOrganizacaoId').val(),
+	        		  nome : $('#workflowTransicaoWorkflow').val()},
+	          success : function(data) {
+
+	        	  if (!data || data.length == 0) {
+	     	            $('#workflowTransicaoWorkflow').val('');
+	     	           $('#workflowTransicaoWorkflowId').val('');
+	     	        }
+
+	        	  response($.map(data, function(workflow) {
+	        		  return {
+	        			  label: workflow.nome,
+	        			  value: workflow.workflow_id
+	                  };
+	              }));
+	           }
+	        });
+	     },
+	     focus: function( event, ui ) {
+	      	 $('#workflowTransicaoWorkflow').val(ui.item.label);
+	           return false;
+	       } ,
+	     select: function( event, ui ) {
+	         $('#workflowTransicaoWorkflow').val(ui.item.label);
+	         $('#workflowTransicaoWorkflowId').val(ui.item.value);
+
+	         return false;
+	     }
+	});
+
 	$('#workflowTransicaoPerfil').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/perfil/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#workflowTransicaoEmpresaId').val() == '' ? '0' :  $('#workflowTransicaoEmpresaId').val(), 
+	          data : {empresa_id: $('#workflowTransicaoEmpresaId').val() == '' ? '0' :  $('#workflowTransicaoEmpresaId').val(),
 	        		  organizacao_id: $('#workflowTransicaoOrganizacaoId').val() == '' ? '0' :  $('#workflowTransicaoOrganizacaoId').val(),
 	        		  nome : $('#workflowTransicaoPerfil').val()},
 
@@ -104,12 +140,12 @@ jQuery(function($){
 	     	           	$('#workflowTransicaoPerfilId').val('');
 	     	        }
 
-	        	  response($.map(data, function(perfil) {  
+	        	  response($.map(data, function(perfil) {
 	        		  return {
 	        			  label: perfil.nome,
 	        			  value: perfil.perfil_id
 	                  };
-	              }));  
+	              }));
 	           }
 	        });
 	     },
@@ -120,18 +156,19 @@ jQuery(function($){
 	     select: function( event, ui ) {
 	         $('#workflowTransicaoPerfil').val(ui.item.label);
 	         $('#workflowTransicaoPerfilId').val(ui.item.value);
+
 	         return false;
 	     }
 	});
-	
+
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/workflowtransicao/cadastro" />';
 	});
-	
+
 	$('#btnNovo').click(function() {
 		limpaForm();
 	});
-	
+
 	$("#workflowTransicaoIsActive").change(function(e){
 		if(document.workflowTransicaoForm.workflowTransicaoIsActive.checked==true){
 			document.workflowTransicaoForm.workflowTransicaoIsActive.value=true;
@@ -148,6 +185,39 @@ function limpaForm(){
 	}
 }
 
+function buscaPerfisEtapa(){
+
+	var empresa_id = $('#workflowTransicaoEmpresaId').val();
+	var organizacao_id = $('#workflowTransicaoOrganizacaoId').val();
+	var workflow_id = $('#workflowTransicaoWorkflowId').val();
+
+	$("#workflowTransicaoPerfilId").load('<c:url value="/workflowtransicao/workflowperfil" />',
+			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'workflow_id' : workflow_id});
+
+}
+
+function buscaEtapasWorkflow(){
+
+	var empresa_id = $('#workflowTransicaoEmpresaId').val();
+	var organizacao_id = $('#workflowTransicaoOrganizacaoId').val();
+	var workflow_id = $('#workflowTransicaoWorkflowId').val();
+
+	$("#workflowTransicaoWorkflowEtapaId").load('<c:url value="/workflowtransicao/workflowtransicaoetapas" />',			
+			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'workflow_id' : workflow_id});
+
+}
+
+function buscaWorkflowEtapaTransicao(){
+
+	var empresa_id = $('#workflowTransicaoEmpresaId').val();
+	var organizacao_id = $('#workflowTransicaoOrganizacaoId').val();
+	var workflow_id = $('#workflowTransicaoWorkflowId').val();
+
+	$("#workflowTransicaoWorkflowEtapaProximoId").load('<c:url value="/workflowtransicao/workflowtransicaoetapas" />',			
+			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'workflow_id' : workflow_id});
+
+}
+
 </script>
 
 	<div id="content-header">
@@ -159,12 +229,12 @@ function limpaForm(){
 			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
 	</div>
-	
+
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
 		<a href="#" class="current">Workflow Transição</a>
 	</div>
-	
+
 	<c:if test="${not empty notice}">
 		<c:choose>
 			<c:when test="${fn:contains(notice,'Erro:')}">
@@ -191,49 +261,62 @@ function limpaForm(){
 				<li class="" id="workflowperfilacesso-li"><a href="#workflowperfilacesso-div" data-toggle="tab" id="workflowperfilacesso-li-a">Workflow Perfil Acesso</a></li>
 				<li class="" id="workflowetapa-li"><a href="#workflowetapa-div" data-toggle="tab" id="workflowetapa-li-a">Workflow Etapa</a></li>
 				<li class="" id="workflowetapaperfilacesso-li"><a href="#workflowetapaperfilacesso-div" data-toggle="tab" id="workflowetapaperfilacesso-li-a">Workflow Etapa Perfil Acesso</a></li>
-				<li class="active" id="workflowtransicao-li"><a href="#workflowtransicao-div" data-toggle="tab" id="workflowtransicao-li-a">Workflow Transicao</a></li>				
+				<li class="active" id="workflowtransicao-li"><a href="#workflowtransicao-div" data-toggle="tab" id="workflowtransicao-li-a">Workflow Transicao</a></li>
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
-				
+
 				<div class="tab-pane fade" id="perfil-div"></div>
 				<div class="tab-pane fade" id="workflowperfilacesso-div"></div>
 				<div class="tab-pane fade" id="workflowetapa-div"></div>
 				<div class="tab-pane fade" id="workflowetapaperfilacesso-div"></div>
-				
+
 				<div class="tab-pane fade active in" id="workflowtransicao-div">
-				
+
 					<form id="workflowTransicaoForm" name="workflowTransicaoForm" action="<c:url value="/workflowtransicao/salva"/>" method="POST">
 
 						<div class="row-fluid">
-							<div class="span3">
+							<div class="span2">
 								<label for="workflowTransicaoEmpresa">Empresa</label>
-		      					<input class="input-xlarge" id="workflowTransicaoEmpresa" name="workflowTransicao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span12" id="workflowTransicaoEmpresa" name="workflowTransicao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 		      					<input class="span1" id="workflowTransicaoEmpresaId" name="workflowTransicao.empresa.empresa_id"  value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 							</div>
-							<div class="span5">
+							<div class="span2">
 								<label for="workflowTransicaoOrganizacao">Organização</label>
-		      					<input class="input-xxlarge" id="workflowTransicaoOrganizacao" name="workflowTransicao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="span12" id="workflowTransicaoOrganizacao" name="workflowTransicao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 		      					<input class="span1" id="workflowTransicaoOrganizacaoId" name="workflowTransicao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
-						</div>
 
-						<div class="row-fluid">
 							<div class="span2">
-								<label class="control-label" for="workflowTransicaoPerfil">Perfil</label>
-								<input class="span10" id="workflowTransicaoPerfil" name="workflowTransicao.perfil.nome" type="text" required onChange="limpaForm();" >
-		      					<input class="span10" id="workflowTransicaoPerfilId" name="workflowTransicao.perfil.perfil_id" type="hidden" >
-							</div>
-							<div class="span2">
-								<label for="workflowTransicaoWorkflowEtapaId">Etapas</label>
-								<select id="workflowTransicaoWorkflowEtapaId" name="workflowTransicao.workflowEtapa.workflowEtapa_id" class="input-medium">
-									<c:forEach var="workflowEtapa" items="${workflowEtapas }">
-									 	<option value="${workflowEtapa.workflowEtapa_id }" selected="selected"> ${workflowEtapa.nome }
+								<label for="workflowTransicaoWorkflow">Workflow</label>
+								<select id="workflowTransicaoWorkflowId" name="workflowTransicao.workflow.workflow_id" class="input-medium" onchange="buscaPerfisEtapa();">
+									<c:forEach var="workflow" items="${workflows }">
+									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
 									 	</option>
 									</c:forEach>
 								</select>
 							</div>
 							<div class="span2">
+	      						<label for="workflowTransicaoPerfilId">Perfil</label>
+	      						<select id="workflowTransicaoPerfilId" name="workflowTransicao.perfil.perfil_id" class="input-medium" onchange="buscaEtapasWorkflow();">
+	      							<option value="">Selecion um Perfil...</option>
+	      						</select>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span2">
+	      						<label for="workflowTransicaoWorkflowEtapaId">Etapas</label>
+	      						<select  class="span12" id="workflowTransicaoWorkflowEtapaId" name="workflowTransicao.workflowEtapa.workflowEtapa_id" class="input-medium" onchange="buscaWorkflowEtapaTransicao();">
+	      							<option value="">Selecion uma Etapa...</option>
+	      						</select>
+							</div>
+							<div class="span2">
+	      						<label for="workflowTransicaoWorkflowEtapaProximoId">Etapas Próximo</label>
+	      						<select  class="span12" id="workflowTransicaoWorkflowEtapaProximoId" name="workflowTransicao.workflowEtapaProximo.workflowEtapa_id" class="input-medium">
+	      							<option value="">Selecion uma Etapa...</option>
+	      						</select>
+							</div>
+							<!--div class="span2">
 								<label for="workflowTransicaoWorkflowEtapaProximoId">Etapas Próximo</label>
 								<select id="workflowTransicaoWorkflowEtapaProximoId" name="workflowTransicao.workflowEtapaProximo.workflowEtapa_id" class="input-medium">
 									<c:forEach var="workflowEtapa" items="${workflowEtapas }">
@@ -242,6 +325,7 @@ function limpaForm(){
 									</c:forEach>
 								</select>
 							</div>
+							 -->
 							<div class="span1">
 								<label for="workflowTransicaoIsActive">Ativo</label>
 								<input id="workflowTransicaoIsActive" name="workflowTransicao.isActive" type="checkbox" checked="checked" value="1" >
@@ -250,7 +334,7 @@ function limpaForm(){
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-							</div>	
+							</div>
 							<div class="btn-group">
 								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
 							</div>
@@ -266,25 +350,27 @@ function limpaForm(){
 						<tr>
 							<th>Empresa</th>
 							<th>Organização</th>
+							<th>Worklflow</th>
 							<th>Worklflow Etapa</th>
 							<th>Worklflow Próxima</th>
 							<th>Perfil</th>
 							<th>Sequência</th>
 							<th>Padrão</th>
-							<th>Ativo</th>								
+							<th>Ativo</th>
 						</tr>
 					</thead>
-					<tbody>	
+					<tbody>
 						<c:forEach items="${workflowTransicoes }" var="workflowTransicao">
 							<tr>
 								<td>${workflowTransicao.empresa.nome }</td>
 								<td>${workflowTransicao.organizacao.nome }</td>
+								<td>${workflowTransicao.workflow.nome }</td>
 								<td>${workflowTransicao.workflowEtapa.nome }</td>
 								<td>${workflowTransicao.workflowEtapaProximo.nome }</td>
 								<td>${workflowTransicao.perfil.nome }</td>
 								<td>${workflowTransicao.sequencia }</td>
 								<td>${workflowTransicao.isPadrao }</td>
-								<td>${workflowTransicao.isActive }</td>									
+								<td>${workflowTransicao.isActive }</td>
 							</tr>
 						</c:forEach>
 					</tbody>

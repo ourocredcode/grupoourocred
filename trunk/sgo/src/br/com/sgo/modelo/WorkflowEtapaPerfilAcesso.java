@@ -29,6 +29,10 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 	private Empresa empresa;
 
 	@ManyToOne
+	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
+	private Workflow workflow;
+	
+	@ManyToOne
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
 
@@ -174,5 +178,13 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Workflow getWorkflow() {
+		return workflow;
+	}
+
+	public void setWorkflow(Workflow workflow) {
+		this.workflow = workflow;
 	}
 }

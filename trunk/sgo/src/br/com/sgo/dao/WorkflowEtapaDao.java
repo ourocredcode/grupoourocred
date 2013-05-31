@@ -29,6 +29,13 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 			" ,WORKFLOWETAPA.organizacao_id, WORKFLOWETAPA.workflow_id, WORKFLOWETAPA.ordemetapa, WORKFLOWETAPA.ispadrao" +
 			", WORKFLOWETAPA.isactive FROM WORKFLOWETAPA (NOLOCK) ";
 	
+	private final String sqlWorkflowEtapaEmpOrg = "SELECT WORKFLOWETAPA.workflowetapa_id, WORKFLOWETAPA.nome AS workflowetapa_nome, WORKFLOWETAPA.empresa_id "+
+										", EMPRESA.NOME AS empresa_nome, WORKFLOWETAPA.organizacao_id, ORGANIZACAO.nome as organizacao_nome "+
+										", WORKFLOWETAPA.isactive, WORKFLOWETAPA.ispadrao, WORKFLOWETAPA.ordemetapa "+
+										" FROM (WORKFLOWETAPA (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWETAPA.empresa_id = EMPRESA.empresa_id) "+ 
+										" INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWETAPA.organizacao_id = ORGANIZACAO.organizacao_id ";
+
+	
 	private final String sqlWorkflowEtapas = "SELECT WORKFLOWETAPA.workflowetapa_id, WORKFLOWETAPA.nome as workflowetapa_nome " +
 			", WORKFLOWETAPA.ordemetapa, WORKFLOWETAPA.ispadrao, WORKFLOWETAPA.isactive "+
 	", WORKFLOWETAPA.workflow_id, WORKFLOW.nome as workflow_nome, WORKFLOWETAPA.empresa_id, EMPRESA.nome as empresa_nome " +
@@ -44,6 +51,8 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 	public Collection<WorkflowEtapa> buscaTodosWorkflowEtapa() {
 
 		String sql = sqlWorkflowEtapas;
+		
+		sql += " ORDER BY WORKFLOW.workflow_id, WORKFLOWETAPA.nome ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -107,7 +116,9 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 			sql += " AND WORKFLOWETAPA.workflow_id = ?";
 		if (nome != null)
 			sql += " AND WORKFLOWETAPA.nome like ?";
-
+		
+		sql += " ORDER BY WORKFLOWETAPA.workflow_id, WORKFLOWETAPA.nome ";
+		
 		this.conn = this.conexao.getConexao();
 		
 		WorkflowEtapa workflowEtapa = null;
@@ -145,6 +156,8 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 		if (nome != null)
 			sql += " AND (WORKFLOWETAPA.nome like ?)";
 		
+		sql += " ORDER BY WORKFLOWETAPA.workflow_id, WORKFLOWETAPA.nome ";
+		
 		this.conn = this.conexao.getConexao();
 		
 		WorkflowEtapa workflowetapa = null;
@@ -173,7 +186,7 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 	
 	public Collection<WorkflowEtapa> buscaWorkflowEtapasByEmpOrgWorkflow(Long empresa_id, Long organizacao_id, Long workflow_id) {
 		
-		String sql = sqlWorkflowEtapa;
+		String sql = sqlWorkflowEtapaEmpOrg;
 		
 		if (empresa_id != null)
 			sql += " WHERE WORKFLOWETAPA.empresa_id = ?";
@@ -181,7 +194,9 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 			sql += " AND WORKFLOWETAPA.organizacao_id = ?";
 		if (workflow_id != null)
 			sql += " AND WORKFLOWETAPA.workflow_id = ?";
-
+		
+		sql += " ORDER BY WORKFLOWETAPA.nome ";
+		
 		this.conn = this.conexao.getConexao();
 		
 		Collection<WorkflowEtapa> workflowEtapas =  new ArrayList<WorkflowEtapa>();
@@ -198,23 +213,80 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 			
 			while (rsWorkflowEtapa.next()) {
 
-				WorkflowEtapa workflowetapa = new WorkflowEtapa();
-				workflowetapa.setWorkflowEtapa_id(rsWorkflowEtapa.getLong("workflowetapa_id"));
-				workflowetapa.setNome(rsWorkflowEtapa.getString("nome"));
-				
-				workflowEtapas.add(workflowetapa);
+				getWorkflowEtapa(workflowEtapas);
 
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsWorkflowEtapa, stmt, conn);
 		return workflowEtapas;
 	}
-	
-	public Collection<WorkflowEtapa> buscaWorkflowEtapasByNome(Long empresa, Long organizacao, String nome) {
-		String sql = sqlWorkflowEtapa;
+
+public Collection<WorkflowEtapa> buscaWorkflowEtapasToTransicaoByWorkflowPerfil(Long empresa_id, Long organizacao_id, Long workflow_id, Long perfil_id) {
 		
+		String sql = "SELECT WORKFLOWETAPAPERFILACESSO.empresa_id, EMPRESA.nome AS empresa_nome, WORKFLOWETAPAPERFILACESSO.organizacao_id "+
+					", ORGANIZACAO.nome AS organizacao_nome, WORKFLOWETAPAPERFILACESSO.workflowetapa_id, WORKFLOWETAPA.nome AS workflowetapa_nome "+
+					", WORKFLOWETAPAPERFILACESSO.isactive, WORKFLOWETAPAPERFILACESSO.isleituraescrita, WORKFLOWETAPAPERFILACESSO.isupload "+
+					", WORKFLOWETAPAPERFILACESSO.perfil_id, PERFIL.nome AS perfil_nome, WORKFLOWETAPAPERFILACESSO.workflow_id, WORKFLOW.nome AS workflow_nome "+
+					" FROM ((WORKFLOW (NOLOCK) INNER JOIN (ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
+					" INNER JOIN WORKFLOWETAPAPERFILACESSO (NOLOCK) ON EMPRESA.empresa_id = WORKFLOWETAPAPERFILACESSO.empresa_id) "+ 
+					" ON ORGANIZACAO.organizacao_id = WORKFLOWETAPAPERFILACESSO.organizacao_id) "+
+					" ON WORKFLOW.workflow_id = WORKFLOWETAPAPERFILACESSO.workflow_id) INNER JOIN WORKFLOWETAPA (NOLOCK) "+
+					" ON WORKFLOWETAPAPERFILACESSO.workflowetapa_id = WORKFLOWETAPA.workflowetapa_id) INNER JOIN PERFIL (NOLOCK) "+ 
+					" ON WORKFLOWETAPAPERFILACESSO.perfil_id = PERFIL.perfil_id ";
+		
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOWETAPA.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOWETAPA.organizacao_id = ?";
+		if (workflow_id != null)
+			sql += " AND WORKFLOWETAPA.workflow_id = ?";
+		if (perfil_id != null)
+			sql += " AND WORKFLOWETAPAPERFILACESSO.perfil_id = ?";
+		
+		sql += " ORDER BY WORKFLOWETAPA.nome ";
+		
+		this.conn = this.conexao.getConexao();
+		
+		Collection<WorkflowEtapa> workflowEtapas =  new ArrayList<WorkflowEtapa>();
+
+		try {
+			
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, workflow_id);
+			this.stmt.setLong(4, perfil_id);
+
+			this.rsWorkflowEtapa = this.stmt.executeQuery();
+
+			while (rsWorkflowEtapa.next()) {
+
+				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+				workflowEtapa.setWorkflowEtapa_id(rsWorkflowEtapa.getLong("workflowetapa_id"));
+				workflowEtapa.setNome(rsWorkflowEtapa.getString("workflowetapa_nome"));
+				workflowEtapas.add(workflowEtapa);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsWorkflowEtapa, stmt, conn);
+		return workflowEtapas;
+	}
+
+	public Collection<WorkflowEtapa> buscaWorkflowEtapasByNome(Long empresa, Long organizacao, String nome) {
+
+		String sql = sqlWorkflowEtapa;
+
 		if (empresa != null)
 			sql += " WHERE WORKFLOWETAPA.empresa_id = ?";
 		if (organizacao != null)
@@ -222,6 +294,8 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 		if (nome != null)
 			sql += " AND (WORKFLOWETAPA.nome like ?)";
 		
+		sql += " ORDER BY WORKFLOWETAPA.workflow_id, WORKFLOWETAPA.nome ";
+
 		this.conn = this.conexao.getConexao();
 		
 		Collection<WorkflowEtapa> workflowEtapas =  new ArrayList<WorkflowEtapa>();
@@ -257,6 +331,8 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 
 		if (workflowEtapa_id != null)
 			sql += " WHERE WORKFLOWETAPA.workflowEtapa_id = ? ";
+		
+		sql += " ORDER BY WORKFLOWETAPA.workflow_id, WORKFLOWETAPA.nome ";
 
 		this.conn = this.conexao.getConexao();
 		
@@ -489,7 +565,6 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, perfil_id);
-			//this.stmt.setLong(4, workflowetapa_id);
 
 			this.rsWorkflowEtapa = this.stmt.executeQuery();
 
@@ -512,5 +587,26 @@ public class WorkflowEtapaDao extends Dao<WorkflowEtapa> {
 		return workflowsEtapa;
 
 	}	
+	
+	private void getWorkflowEtapa(Collection<WorkflowEtapa> workflowEtapas)	throws SQLException {
+
+		Empresa empresa = new Empresa();
+		Organizacao organizacao = new Organizacao();
+		WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+
+		empresa.setEmpresa_id(rsWorkflowEtapa.getLong("empresa_id"));
+		empresa.setNome(rsWorkflowEtapa.getString("empresa_nome"));
+
+		organizacao.setOrganizacao_id(rsWorkflowEtapa.getLong("organizacao_id"));
+		empresa.setNome(rsWorkflowEtapa.getString("organizacao_nome"));
+
+		workflowEtapa.setEmpresa(empresa);
+		workflowEtapa.setOrganizacao(organizacao);
+		workflowEtapa.setWorkflowEtapa_id(rsWorkflowEtapa.getLong("workflowetapa_id"));
+		workflowEtapa.setNome(rsWorkflowEtapa.getString("workflowetapa_nome"));
+
+		workflowEtapas.add(workflowEtapa);
+
+	}
 
 }

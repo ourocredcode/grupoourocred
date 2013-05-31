@@ -6,8 +6,6 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.interceptor.Public;
@@ -17,27 +15,25 @@ import br.com.sgo.modelo.WorkflowEtapa;
 @Resource
 public class WorkflowetapaController {
 
-	private final Result result;
+	private final Result result;	
 	private final UsuarioInfo usuarioInfo;
 	private final WorkflowEtapaDao workflowEtapaDao;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
-	private final WorkflowDao workflowDao;	
+	private final WorkflowDao workflowDao;
+	
+	public WorkflowetapaController(Result result, UsuarioInfo usuarioInfo, WorkflowEtapaDao workflowEtapaDao, WorkflowDao workflowDao) {
 
-	public WorkflowetapaController(Result result,  UsuarioInfo usuarioInfo, WorkflowEtapaDao workflowEtapaDao, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, WorkflowDao workflowDao) {
 		this.result = result;
-		this.usuarioInfo = usuarioInfo;
 		this.workflowEtapaDao = workflowEtapaDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
 		this.workflowDao = workflowDao;
-		
+		this.usuarioInfo = usuarioInfo;
+
 	}
 
 	@Get
 	@Public
 	@Path("/workflowetapa/cadastro")
 	public void cadastro() {
+		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 		result.include("workflowEtapas", this.workflowEtapaDao.buscaTodosWorkflowEtapa());
 	}
 

@@ -6,8 +6,8 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
+import br.com.sgo.dao.PerfilDao;
+import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.dao.WorkflowTransicaoDao;
 import br.com.sgo.interceptor.Public;
@@ -18,20 +18,21 @@ import br.com.sgo.modelo.WorkflowTransicao;
 public class WorkflowtransicaoController {
 
 	private final Result result;
-	private final UsuarioInfo usuarioInfo;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
+	
 	private final WorkflowTransicaoDao workflowTransicaoDao;
+	private final WorkflowDao workflowDao;
 	private final WorkflowEtapaDao workflowEtapaDao;
+	private final PerfilDao perfilDao;
+	private final UsuarioInfo usuarioInfo;
 
-	public WorkflowtransicaoController(Result result,  UsuarioInfo usuarioInfo, WorkflowTransicaoDao workflowTransicaoDao, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, WorkflowEtapaDao workflowEtapaDao) {
+	public WorkflowtransicaoController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, WorkflowTransicaoDao workflowTransicaoDao, WorkflowEtapaDao workflowEtapaDao, PerfilDao perfilDao) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
+		this.workflowDao = workflowDao;
 		this.workflowTransicaoDao = workflowTransicaoDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
 		this.workflowEtapaDao = workflowEtapaDao;
+		this.perfilDao = perfilDao;
 
 	}
 
@@ -39,7 +40,8 @@ public class WorkflowtransicaoController {
 	@Public
 	public void cadastro() {
 
-		result.include("workflowEtapas", this.workflowEtapaDao.buscaTodosWorkflowEtapa());
+		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		//result.include("workflowEtapas", this.workflowEtapaDao.buscaTodosWorkflowEtapa());
 		result.include("workflowTransicoes", this.workflowTransicaoDao.buscaTodosWorkflowTransicao());
 
 	}
@@ -49,8 +51,9 @@ public class WorkflowtransicaoController {
 	public void salva(WorkflowTransicao workflowTransicao) {
 
 		String mensagem = "";
-
+		
 		try {
+			
 
 			if (this.workflowTransicaoDao.buscaWorkflowTransicaoPorEmpresaOrganizacaoWorkflowEtapaProximo(workflowTransicao.getEmpresa().getEmpresa_id(),workflowTransicao.getOrganizacao().getOrganizacao_id(),
 					workflowTransicao.getWorkflowEtapa().getWorkflowEtapa_id(), workflowTransicao.getWorkflowEtapaProximo().getWorkflowEtapa_id(), workflowTransicao.getPerfil().getPerfil_id()) == null) {				
@@ -100,6 +103,24 @@ public class WorkflowtransicaoController {
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
 
 		result.include("workflowsEtapa", this.workflowEtapaDao.buscaWorkflowEtapaByNome(empresa_id, organizacao_id, nome));
+
+	}
+
+	@Post
+	@Public
+	@Path("/workflowtransicao/workflowperfil")
+	public void workflowperfil(Long empresa_id, Long organizacao_id, Long workflow_id){
+
+		result.include("perfis",this.perfilDao.buscaPerfisToWorkflowTransicaoByWorkflow(empresa_id, organizacao_id, workflow_id));
+
+	}
+
+	@Post
+	@Public
+	@Path("/workflowtransicao/workflowtransicaoetapas")
+	public void workflowtransicaoetapas(Long empresa_id, Long organizacao_id, Long workflow_id){
+
+		result.include("workflowEtapas",this.workflowEtapaDao.buscaWorkflowEtapasByEmpOrgWorkflow(empresa_id, organizacao_id, workflow_id));
 
 	}
 

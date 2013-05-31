@@ -204,6 +204,51 @@ public class WorkflowDao extends Dao<Workflow> {
 			this.conexao.closeConnection(rsWorkflow, stmt, conn);
 
 		}
+
+		return workflows;
+	}
+
+	public Collection<Workflow> buscaWorkflowsByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
+
+		String sql = sqlWorkflows;
+
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOW.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOW.organizacao_id = ?";
+
+		sql += " ORDER BY WORKFLOW.empresa_id, WORKFLOW.organizacao_id, WORKFLOW.nome";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Workflow> workflows = new ArrayList<Workflow>();
+
+		if (workflows!=null){
+
+			try {
+
+				this.stmt = conn.prepareStatement(sql);
+
+				this.stmt.setLong(1, empresa_id);				
+				this.stmt.setLong(2, organizacao_id);
+
+				this.rsWorkflow = this.stmt.executeQuery();
+
+				while (rsWorkflow.next()) {
+
+					getWorkflows(workflows);
+
+				}
+
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+
+			}
+
+			this.conexao.closeConnection(rsWorkflow, stmt, conn);
+
+		}
 		return workflows;
 	}
 

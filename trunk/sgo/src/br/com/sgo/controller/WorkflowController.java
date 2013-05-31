@@ -6,38 +6,30 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.Public;
-import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Workflow;
 
 @Resource
 public class WorkflowController {
 
 	private final Result result;
-	private final UsuarioInfo usuarioInfo;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
 	private final WorkflowDao workflowDao;
-	private final TipoWorkflowDao tipoWorkflowDao;
 
-	public WorkflowController(Result result,  UsuarioInfo usuarioInfo, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao) {
-		this.result = result;
-		this.usuarioInfo = usuarioInfo;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
+	public WorkflowController(Result result, WorkflowDao workflowDao) {
+
+		this.result = result;		
 		this.workflowDao = workflowDao;
-		this.tipoWorkflowDao = tipoWorkflowDao;
+
 	}
 
 	@Get
 	@Public
 	@Path("/workflow/cadastro")
 	public void cadastro() {
+
 		result.include("workflows", this.workflowDao.buscaTodosWorkflow());
+
 	}
 
 	@Post

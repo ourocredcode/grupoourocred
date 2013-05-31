@@ -203,26 +203,24 @@ function limpaForm(){
 					<form id="workflowForm" name="workflowForm" action="<c:url value="/workflow/salva"/>" method="POST">
 
 						<div class="row-fluid">
-							<div class="span5">
+							<div class="span2">
 								<label for="workflowEmpresa">Empresa</label>							
-	      						<input class="input-xxlarge" id="workflowEmpresa" name="workflow.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="input-mini" id="workflowEmpresaId" name="workflow.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    					
+	      						<input class="span12" id="workflowEmpresa" name="workflow.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="workflowEmpresaId" name="workflow.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    					
 							</div>
-							<div class="span5">
+							<div class="span2">
 								<label for="workflowOrganizacao">Organização</label>
-	      						<input class="input-xxlarge" id="workflowOrganizacao" name="workflow.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="input-mini" id="workflowOrganizacaoId" name="workflow.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
-							</div>
-						</div>
-						<div class="row-fluid">
+	      						<input class="span12" id="workflowOrganizacao" name="workflow.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="workflowOrganizacaoId" name="workflow.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+							</div>						
 							<div class="span2">
 								<label for="workflowTipoWorkflow">Tipo de Worflow</label>
 	      						<input class="span12" id="workflowTipoWorkflow" name="workflow.tipoWorkflow.nome" value="${workflow.tipoWorkflow.nome }" type="text" required onChange="limpaForm();">
 	      						<input class="span1" id="workflowTipoWorkflowId" name="workflow.tipoWorkflow.tipoWorkflow_id" value="${workflow.tipoWorkflow.tipoWorkflow_id }" type="hidden">	    					
 							</div>
-							<div class="span5">
+							<div class="span3">
 								<label for="workflowNome">Nome</label>							
-								<input class="input-xxlarge" id="workflowNome" name="workflow.nome" value="${workflow.nome }" type="text" placeholder="Nome" required>							
+								<input class="span12" id="workflowNome" name="workflow.nome" value="${workflow.nome }" type="text" placeholder="Nome" required>							
 							</div>
 							<div class="span1">
 								<label for="workflowIsActive">Ativo</label>							
