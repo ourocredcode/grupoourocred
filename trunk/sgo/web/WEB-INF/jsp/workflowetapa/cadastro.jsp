@@ -213,12 +213,17 @@ function limpaForm(){
 								<label for="workflowEtapaOrganizacao">Organização</label>	
 	      						<input class="span12" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
-							</div>						
-							<div class="span2">						
-								<label for="workflowEtapaWorkflow">Worflow</label>
-								<input class="span12" id="workflowEtapaWorkflow" name="workflowEtapa.workflow.nome" value="${workflowEtapa.workflow.nome }" type="text" required onChange="limpaForm();">
-	      						<input class="span1" id="workflowEtapaWorkflowId" name="workflowEtapa.workflow.workflow_id" value="${workflowEtapa.workflow.workflow_id }" type="hidden">
-	    					</div>
+							</div>
+							
+							<div class="span2">
+								<label for="workflowEtapaWorkflow">Workflow</label>
+								<select id="workflowEtapaWorkflowId" name="workflowEtapaWorkflow.workflow.workflow_id" class="input-medium">
+									<c:forEach var="workflow" items="${workflows }">
+									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
+									 	</option>
+									</c:forEach>
+								</select>
+							</div>
 							<div class="span3">
 								<label for="workflowEtapaNome">Nome</label>
 								<input class="span12" id="workflowEtapaNome" name="workflowEtapa.nome" value="${workflowEtapa.nome }" type="text" placeholder="Nome" required>								
