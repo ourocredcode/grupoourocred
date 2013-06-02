@@ -40,7 +40,8 @@ public class WorkflowperfilacessoController {
 	@Public
 	@Path("/workflowperfilacesso/cadastro")
 	public void cadastro() {
-		
+		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("perfis",this.perfilDao.buscaAllPerfis(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 		result.include("workflowperfisacesso", this.workflowPerfilAcessoDao.buscaTodosWorkflowPerfilAcesso());
 		
 	}
