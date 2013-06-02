@@ -5,6 +5,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.dao.WorkflowEtapaPerfilAcessoDao;
@@ -17,17 +18,20 @@ public class WorkflowetapaperfilacessoController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
+	private final WorkflowDao workflowDao;
 	private final WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao;
 	private final WorkflowEtapaDao workflowEtapaDao;
-	private final WorkflowDao workflowDao;
+	private final PerfilDao perfilDao;
 	
-	public WorkflowetapaperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao, WorkflowEtapaDao workflowEtapaDao, WorkflowDao workflowDao) {
+	public WorkflowetapaperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao, WorkflowEtapaDao workflowEtapaDao
+			, WorkflowDao workflowDao, PerfilDao perfilDao) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
+		this.workflowDao = workflowDao;
 		this.workflowEtapaPerfilAcessoDao =  workflowEtapaPerfilAcessoDao;
 		this.workflowEtapaDao = workflowEtapaDao;
-		this.workflowDao = workflowDao;
+		this.perfilDao = perfilDao;
 
 	}
 
@@ -35,8 +39,10 @@ public class WorkflowetapaperfilacessoController {
 	@Public
 	@Path("/workflowetapaperfilacesso/cadastro")
 	public void cadastro() {
+
 		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 		result.include("workflowEtapasPerfilAcesso", this.workflowEtapaPerfilAcessoDao.buscaTodosWorkflowEtapaPerfilAcesso());
+		result.include("perfis", this.perfilDao.buscaPerfisToWorkflowEtapaPerfil());
 
 	}
 

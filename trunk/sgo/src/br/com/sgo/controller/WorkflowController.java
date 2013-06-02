@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Workflow;
@@ -14,12 +15,14 @@ import br.com.sgo.modelo.Workflow;
 public class WorkflowController {
 
 	private final Result result;
+	private final TipoWorkflowDao tipoWorkflowDao;
 	private final WorkflowDao workflowDao;
 
-	public WorkflowController(Result result, WorkflowDao workflowDao) {
+	public WorkflowController(Result result, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao) {
 
 		this.result = result;		
 		this.workflowDao = workflowDao;
+		this.tipoWorkflowDao = tipoWorkflowDao;
 
 	}
 
@@ -29,6 +32,7 @@ public class WorkflowController {
 	public void cadastro() {
 
 		result.include("workflows", this.workflowDao.buscaTodosWorkflow());
+		result.include("tiposWorkflow", this.tipoWorkflowDao.buscaTodosTipoWorkflow());
 
 	}
 
