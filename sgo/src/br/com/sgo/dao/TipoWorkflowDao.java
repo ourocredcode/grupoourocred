@@ -35,7 +35,7 @@ public class TipoWorkflowDao extends Dao<TipoWorkflow> {
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<TipoWorkflow> tiposworkflow = new ArrayList<TipoWorkflow>();
+		Collection<TipoWorkflow> tiposWorkflow = new ArrayList<TipoWorkflow>();
 
 		try {
 
@@ -45,12 +45,12 @@ public class TipoWorkflowDao extends Dao<TipoWorkflow> {
 
 			while (rsTipoWorkflow.next()) {
 
-				TipoWorkflow tipoworkflow = new TipoWorkflow();
+				TipoWorkflow tipoWorkflow = new TipoWorkflow();
 
-				tipoworkflow.setTipoWorkflow_id(rsTipoWorkflow.getLong("tipoworkflow_id"));
-				tipoworkflow.setNome(rsTipoWorkflow.getString("nome"));
+				tipoWorkflow.setTipoWorkflow_id(rsTipoWorkflow.getLong("tipoworkflow_id"));
+				tipoWorkflow.setNome(rsTipoWorkflow.getString("nome"));
 
-				tiposworkflow.add(tipoworkflow);
+				tiposWorkflow.add(tipoWorkflow);
 
 			}
 
@@ -61,7 +61,7 @@ public class TipoWorkflowDao extends Dao<TipoWorkflow> {
 		}
 
 		this.conexao.closeConnection(rsTipoWorkflow, stmt, conn);
-		return tiposworkflow;
+		return tiposWorkflow;
 	}
 
 	public TipoWorkflow buscaTipoWorkflowPorEmpresaOrganizacaoTipoworflow(Long empresa_id, Long organizacao_id, Long tipoworkflow_id) {
