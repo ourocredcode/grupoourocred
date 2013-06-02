@@ -337,8 +337,12 @@ function buscaEtapas(){
 							</div>
 							<div class="span2">
 								<label for="workflowEtapaPerfilAcessoPerfil">Perfil</label>
-		      					<input class="span12" id="workflowEtapaPerfilAcessoPerfil" name="workflowEtapaPerfilAcesso.perfil.nome" value="${workflowEtapaPerfilAcesso.perfil.nome }" type="text" required>
-		      					<input class="span1" id="workflowEtapaPerfilAcessoPerfilId" name="workflowEtapaPerfilAcesso.perfil.perfil_id" value="${workflowEtapaPerfilAcesso.perfil.perfil_id }" type="hidden">
+								<select id="workflowEtapaPerfilAcessoPerfilId" name="workflowEtapaPerfilAcessoPerfil.perfil.perfil_id" class="input-medium">
+									<c:forEach var="perfil" items="${perfis }">
+									 	<option value="${perfil.perfil_id }" selected="selected"> ${perfil.nome }
+									 	</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						<div class="row-fluid">
