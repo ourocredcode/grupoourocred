@@ -256,15 +256,23 @@ function limpaForm(){
 	      						<input class="span12" id="workflowPerfilAcessoOrganizacao" name="workflowPerfilAcessoOrganizacao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="workflowPerfilAcessoOrganizacaoId" name="workflowPerfilAcessoOrganizacao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 	    					</div>
-							<div class="span2">
-								<label for="workflowPerfilAcessoWorkflow">WorkFlow</label>
-	      						<input class="span12" id="workflowPerfilAcessoWorkflow" name="workflowPerfilAcesso.workflow.nome" value="${workflowPerfilAcesso.workflow.nome }" type="text" required onChange="limpaForm();">
-	      						<input class="span1" id="workflowPerfilAcessoWorkflowId" name="workflowPerfilAcesso.workflow.workflow_id" value="${workflowPerfilAcesso.workflow.workflow_id }" type="hidden">
+	    					<div class="span2">
+								<label for="workflowPerfilAcessoWorkflow">Workflow</label>
+								<select id="workflowPerfilAcessoWorkflowId" name="workflowPerfilAcesso.workflow.workflow_id" class="input-medium">
+									<c:forEach var="workflow" items="${workflows }">
+									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
+									 	</option>
+									</c:forEach>
+								</select>
 							</div>
 							<div class="span2">
 								<label for="workflowPerfilAcessoPerfil">Perfil</label>
-	      						<input class="span12" id="workflowPerfilAcessoPerfil" name="workflowPerfilAcesso.perfil.nome" value="${workflowPerfilAcesso.perfil.nome }" type="text" required onChange="limpaForm();">
-		      					<input class="span1" id="workflowPerfilAcessoPerfilId" name="workflowPerfilAcesso.perfil.perfil_id" value="${workflowPerfilAcesso.perfil.perfil_id }" type="hidden">
+								<select id="workflowPerfilAcessoPerfilId" name="workflowPerfilAcesso.perfil.perfil_id" class="input-medium">
+									<c:forEach var="perfil" items="${perfis }">
+									 	<option value="${perfil.perfil_id }" selected="selected"> ${perfil.nome }
+									 	</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						<div class="row-fluid">
