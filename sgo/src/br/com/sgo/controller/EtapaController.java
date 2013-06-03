@@ -6,7 +6,6 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -18,13 +17,11 @@ public class EtapaController {
 	private final Result result;	
 	private final UsuarioInfo usuarioInfo;
 	private final EtapaDao etapaDao;
-	private final WorkflowDao workflowDao;
 	
-	public EtapaController(Result result, UsuarioInfo usuarioInfo, EtapaDao etapaDao, WorkflowDao workflowDao) {
+	public EtapaController(Result result, UsuarioInfo usuarioInfo, EtapaDao etapaDao) {
 
 		this.result = result;
 		this.etapaDao = etapaDao;
-		this.workflowDao = workflowDao;
 		this.usuarioInfo = usuarioInfo;
 
 	}
@@ -33,8 +30,7 @@ public class EtapaController {
 	@Public
 	@Path("/etapa/cadastro")
 	public void cadastro() {
-		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
-		result.include("etapas", this.etapaDao.buscaTodosEtapa());
+		result.include("etapas", this.etapaDao.buscaAllEtapaByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 	}
 
 	@Post
@@ -80,14 +76,14 @@ public class EtapaController {
 	@Path("/etapa/busca.json")
 	@Public
 	public void etapa(Long empresa_id, Long organizacao_id, String nome) {	
-		result.use(Results.json()).withoutRoot().from(etapaDao.buscaEtapasByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome)).serialize();	
+		result.use(Results.json()).withoutRoot().from(etapaDao.buscaEtapasByNome(empresa_id, organizacao_id, nome)).serialize();	
 	}
 
 	@Post
 	@Path("/etapa/lista")
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
-		result.include("etapas", this.etapaDao.buscaEtapasByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
+		result.include("etapas", this.etapaDao.buscaEtapasByNome(empresa_id, organizacao_id, nome));
 	}
 
 	@Get

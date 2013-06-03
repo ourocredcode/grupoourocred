@@ -69,14 +69,13 @@ public class HisconbeneficioController {
 		this.hisconBeneficio = new HisconBeneficio();
 
 		Collection<HisconBeneficio> hisconsAuxiliar = new ArrayList<HisconBeneficio>();
-
-		Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Adm");
+		//TODO
+		//Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Adm");
 
 		if(usuarioInfo.getPerfil().getNome().equals("Administrativo")){
 
-			hisconsAuxiliar =
-					this.hisconBeneficioDao.buscaHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(), 
-							usuarioInfo.getOrganizacao().getOrganizacao_id(),etapaAguardandoAdm.getEtapa_id());
+			//TODO
+			//hisconsAuxiliar = this.hisconBeneficioDao.buscaHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),etapaAguardandoAdm.getEtapa_id());
 
 		} else {
 
@@ -95,12 +94,13 @@ public class HisconbeneficioController {
 
 			h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
 
-			h.setEtapas(etapaDao.buscaEtapaByHisconPerfil(
+			//TODO
+			/*h.setEtapas(etapaDao.buscaEtapaByHisconPerfil(
 						usuarioInfo.getEmpresa().getEmpresa_id(),
 						usuarioInfo.getOrganizacao().getOrganizacao_id(),
 						usuarioInfo.getPerfil().getPerfil_id(),
 						h.getHisconBeneficio_id()));
-
+			 */
 			h.getEtapas().add(h.getEtapa());
 
 			hiscons.add(h);
@@ -243,12 +243,11 @@ public class HisconbeneficioController {
 		
 		if(hisconBeneficio.getIsEnviado()){
 
-			Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(
-					usuarioInfo.getEmpresa().getEmpresa_id(), 
-					usuarioInfo.getOrganizacao().getOrganizacao_id(), 
-					"Enviado");
+			//TODO
+			//Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(usuarioInfo.getEmpresa().getEmpresa_id()
+				//	,usuarioInfo.getOrganizacao().getOrganizacao_id(),"Enviado");
 
-			this.hisconBeneficio.setEtapa(etapaEnviado);
+			//this.hisconBeneficio.setEtapa(etapaEnviado);
 
 			this.hisconBeneficio.setIsEnviado(true);
 
@@ -289,15 +288,15 @@ public class HisconbeneficioController {
 				IOUtils.copy(zip.getFile(), new FileOutputStream(new File(nomeFile)));
 
 				CustomFileUtil.extraiZip(new File(nomeFile),new File(diretorio));
-
-				Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(
+				//TODO
+				/*Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(
 						usuarioInfo.getEmpresa().getEmpresa_id(), 
 						usuarioInfo.getOrganizacao().getOrganizacao_id(), 
 						"Aguardando Adm");
 
 				hiscons = this.hisconBeneficioDao.buscaHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(), 
 																		usuarioInfo.getOrganizacao().getOrganizacao_id(),
-																		etapaAguardandoAdm.getEtapa_id());
+																		etapaAguardandoAdm.getEtapa_id());*/
 
 				for (HisconBeneficio h : hiscons){
 

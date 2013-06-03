@@ -250,8 +250,9 @@ public class FormularioController {
 
 		contrato.setWorkflow(this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(usuarioInfo.getEmpresa().getEmpresa_id(),
 				usuarioInfo.getOrganizacao().getOrganizacao_id(),1L,"Status Contrato"));
-		contrato.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(usuarioInfo.getEmpresa().getEmpresa_id(),
-				usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Status"));
+		//TODO
+		//contrato.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(usuarioInfo.getEmpresa().getEmpresa_id(),
+		//	usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Status"));
 
 		if(contrato.getRecompraBanco().getBanco_id() != null){
 			contrato.setRecompraBanco(this.bancoDao.buscaBancoById(contrato.getRecompraBanco().getBanco_id()));
