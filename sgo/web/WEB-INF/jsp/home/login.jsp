@@ -134,7 +134,7 @@
 						<form id="usuarioPerfilForm" action="<c:url value="/home/perfil"/>" method="POST">
 
 							<div class="control-group">
-								<label class="control-label" for="usuarioPerfil">Perfil ${usuario.usuario_id }</label>
+								<label class="control-label" for="usuarioPerfil">Perfil</label>
 								<select id="usuarioPerfil" name="usuarioPerfil.perfil.perfil_id">	
 									<option value="">Selecione o perfil</option>
 								</select>

@@ -101,7 +101,7 @@ public class WorkflowtransicaoController {
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
 
-		result.include("workflowsEtapa", this.workflowEtapaDao.buscaEtapaByNome(empresa_id, organizacao_id, nome));
+		result.include("workflowsEtapa", this.workflowEtapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
 
 	}
 
@@ -119,7 +119,7 @@ public class WorkflowtransicaoController {
 	@Path("/workflowtransicao/workflowtransicaoetapas")
 	public void workflowtransicaoetapas(Long empresa_id, Long organizacao_id, Long workflow_id){
 
-		result.include("workflowEtapas",this.workflowEtapaDao.buscaEtapasByEmpOrgWorkflow(empresa_id, organizacao_id, workflow_id));
+		result.include("workflowEtapas",this.workflowEtapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa_id, organizacao_id, workflow_id));
 
 	}
 

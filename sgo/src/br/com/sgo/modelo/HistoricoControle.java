@@ -35,8 +35,8 @@ public class HistoricoControle implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = true)
-	private Etapa workflowEtapa;
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = true)
+	private Etapa etapa;
 
 	@ManyToOne
 	@JoinColumn(name = "controle_id", updatable = true, nullable = true)
@@ -101,14 +101,6 @@ public class HistoricoControle implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public Etapa getWorkflowEtapa() {
-		return workflowEtapa;
-	}
-
-	public void setWorkflowEtapa(Etapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
 	}
 
 	public Controle getControle() {
@@ -205,5 +197,13 @@ public class HistoricoControle implements Serializable {
 
 	public void setContrato(Contrato contrato) {
 		this.contrato = contrato;
+	}
+
+	public Etapa getEtapa() {
+		return etapa;
+	}
+
+	public void setEtapa(Etapa etapa) {
+		this.etapa = etapa;
 	}
 }

@@ -71,7 +71,7 @@ public class FormularioController {
 	private final ContratoDao contratoDao;
 	private final CoeficienteDao coeficienteDao;
 	private final WorkflowDao workflowDao;
-	private final EtapaDao workflowEtapaDao;
+	private final EtapaDao etapaDao;
 	private final PnDao pnDao;
 
 	private HttpServletResponse response;
@@ -90,7 +90,7 @@ public class FormularioController {
 			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,ParceiroInfoBancoDao parceiroInfoBancoDao,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
-			WorkflowDao workflowDao, EtapaDao workflowEtapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
+			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao){		
 
 		this.result = result;
@@ -112,7 +112,7 @@ public class FormularioController {
 		this.tabelaDao = tabelaDao;
 		this.contratoDao = contratoDao;
 		this.workflowDao = workflowDao;
-		this.workflowEtapaDao = workflowEtapaDao;
+		this.etapaDao = etapaDao;
 		this.pnDao = pnDao;
 		this.parceiroNegocio = parceiroNegocio;
 		this.parceiroLocalidade = parceiroLocalidade;
@@ -250,7 +250,7 @@ public class FormularioController {
 
 		contrato.setWorkflow(this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(usuarioInfo.getEmpresa().getEmpresa_id(),
 				usuarioInfo.getOrganizacao().getOrganizacao_id(),1L,"Status Contrato"));
-		contrato.setEtapa(this.workflowEtapaDao.buscaEtapaByNome(usuarioInfo.getEmpresa().getEmpresa_id(),
+		contrato.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(usuarioInfo.getEmpresa().getEmpresa_id(),
 				usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Status"));
 
 		if(contrato.getRecompraBanco().getBanco_id() != null){
