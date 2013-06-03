@@ -46,7 +46,7 @@ public class EtapaController {
 
 		try {
 
-			if (this.etapaDao.buscaWorkflowPorEmpresaOrganizacaoNome(etapa.getEmpresa().getEmpresa_id(), etapa.getOrganizacao().getOrganizacao_id()
+			if (this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(etapa.getEmpresa().getEmpresa_id(), etapa.getOrganizacao().getOrganizacao_id()
 					, etapa.getNome()) == null) {				
 
 				etapa.setIsActive(etapa.getIsActive() == null ? false : true);
@@ -80,14 +80,14 @@ public class EtapaController {
 	@Path("/etapa/busca.json")
 	@Public
 	public void etapa(Long empresa_id, Long organizacao_id, String nome) {	
-		result.use(Results.json()).withoutRoot().from(etapaDao.buscaEtapasByNome(empresa_id, organizacao_id, nome)).serialize();	
+		result.use(Results.json()).withoutRoot().from(etapaDao.buscaEtapasByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome)).serialize();	
 	}
 
 	@Post
 	@Path("/etapa/lista")
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
-		result.include("etapas", this.etapaDao.buscaEtapasByNome(empresa_id, organizacao_id, nome));
+		result.include("etapas", this.etapaDao.buscaEtapasByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
 	}
 
 	@Get

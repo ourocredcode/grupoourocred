@@ -5,7 +5,6 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.Public;
@@ -17,13 +16,13 @@ public class WorkflowetapaController {
 
 	private final Result result;	
 	private final UsuarioInfo usuarioInfo;
-	private final EtapaDao workflowEtapaDao;
+	private final EtapaDao etapaDao;
 	private final WorkflowDao workflowDao;
 	
-	public WorkflowetapaController(Result result, UsuarioInfo usuarioInfo, EtapaDao workflowEtapaDao, WorkflowDao workflowDao) {
+	public WorkflowetapaController(Result result, UsuarioInfo usuarioInfo, EtapaDao etapaDao, WorkflowDao workflowDao) {
 
 		this.result = result;
-		this.workflowEtapaDao = workflowEtapaDao;
+		this.etapaDao = etapaDao;
 		this.workflowDao = workflowDao;
 		this.usuarioInfo = usuarioInfo;
 
@@ -34,7 +33,7 @@ public class WorkflowetapaController {
 	@Path("/workflowetapa/cadastro")
 	public void cadastro() {
 		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
-		result.include("workflowEtapas", this.workflowEtapaDao.buscaTodosEtapa());
+		result.include("workflowEtapas", this.etapaDao.buscaTodosEtapa());
 	}
 
 	@Post
@@ -46,15 +45,15 @@ public class WorkflowetapaController {
 
 		try {
 			//TODO
-			if (this.workflowEtapaDao.buscaEtapaByNome(workflowEtapa.getEmpresa().getEmpresa_id(), workflowEtapa.getOrganizacao().getOrganizacao_id()
+			if (this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(workflowEtapa.getEmpresa().getEmpresa_id(), workflowEtapa.getOrganizacao().getOrganizacao_id()
 					, workflowEtapa.getNome()) == null) {				
 
 				workflowEtapa.setIsActive(workflowEtapa.getIsActive() == null ? false : true);
 				
-				this.workflowEtapaDao.beginTransaction();
+				this.etapaDao.beginTransaction();
 				//TODO
 				//this.workflowEtapaDao.adiciona(workflowEtapa);
-				this.workflowEtapaDao.commit();
+				this.etapaDao.commit();
 
 				mensagem = "Etapa " + workflowEtapa.getNome() + " adicionado com sucesso para o workflow " + workflowEtapa.getWorkflow().getNome();
 
@@ -69,8 +68,8 @@ public class WorkflowetapaController {
 			mensagem = "Erro: Falha ao adicionar a Etapa do Workflow " + workflowEtapa.getWorkflow().getNome();			
 
 			} finally{
-				this.workflowEtapaDao.clear();
-				this.workflowEtapaDao.close();
+				this.etapaDao.clear();
+				this.etapaDao.close();
 			}
 
 			result.include("notice", mensagem);			

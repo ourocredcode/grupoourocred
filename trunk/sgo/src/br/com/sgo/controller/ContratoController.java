@@ -55,7 +55,7 @@ public class ContratoController {
 	private final TabelaDao tabelaDao;
 	private final ContratoDao contratoDao;
 	private final FormularioDao formularioDao;
-	private final EtapaDao workFlowetapaDao;
+	private final EtapaDao etapaDao;
 	private final PeriodoDao periodoDao;
 	private final TipoLogisticaDao tipoLogisticaDao;
 	private final TipoControleDao tipoControleDao;
@@ -84,7 +84,7 @@ public class ContratoController {
 	private Collection<HistoricoControle> historicoControleAverbacao;
 
 	public ContratoController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
-			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
+			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
 			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao,ControleDao controleDao,TipoControleDao tipoControleDao){		
 
@@ -101,7 +101,7 @@ public class ContratoController {
 		this.tabelaDao = tabelaDao;
 		this.periodoDao = periodoDao;
 		this.tipoControleDao = tipoControleDao;
-		this.workFlowetapaDao = workFlowetapaDao;
+		this.etapaDao = etapaDao;
 		this.tipoLogisticaDao = tipoLogisticaDao;
 		this.logisticaDao = logisticaDao;
 		this.historicoContratoDao = historicoContratoDao;
@@ -159,7 +159,7 @@ public class ContratoController {
 
 		contrato = contratoDao.load(id);
 		formulario = formularioDao.buscaFormularioByContrato(id);
-		etapas = workFlowetapaDao.buscaWorKFlowEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
+		etapas = etapaDao.buscaEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
 		periodos = periodoDao.buscaAllPeriodos();
 		historico = historicoContratoDao.buscaHistoricoByContrato(id);
 		

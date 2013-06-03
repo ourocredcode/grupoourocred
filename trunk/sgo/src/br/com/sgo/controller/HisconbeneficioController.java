@@ -70,7 +70,7 @@ public class HisconbeneficioController {
 
 		Collection<HisconBeneficio> hisconsAuxiliar = new ArrayList<HisconBeneficio>();
 
-		Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Adm");
+		Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Adm");
 
 		if(usuarioInfo.getPerfil().getNome().equals("Administrativo")){
 
@@ -95,7 +95,7 @@ public class HisconbeneficioController {
 
 			h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
 
-			h.setEtapas(etapaDao.buscaWorKFlowEtapaByHisconPerfil(
+			h.setEtapas(etapaDao.buscaEtapaByHisconPerfil(
 						usuarioInfo.getEmpresa().getEmpresa_id(),
 						usuarioInfo.getOrganizacao().getOrganizacao_id(),
 						usuarioInfo.getPerfil().getPerfil_id(),
@@ -243,7 +243,7 @@ public class HisconbeneficioController {
 		
 		if(hisconBeneficio.getIsEnviado()){
 
-			Etapa etapaEnviado = this.etapaDao.buscaEtapaByNome(
+			Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(
 					usuarioInfo.getEmpresa().getEmpresa_id(), 
 					usuarioInfo.getOrganizacao().getOrganizacao_id(), 
 					"Enviado");
@@ -290,7 +290,7 @@ public class HisconbeneficioController {
 
 				CustomFileUtil.extraiZip(new File(nomeFile),new File(diretorio));
 
-				Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByNome(
+				Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(
 						usuarioInfo.getEmpresa().getEmpresa_id(), 
 						usuarioInfo.getOrganizacao().getOrganizacao_id(), 
 						"Aguardando Adm");

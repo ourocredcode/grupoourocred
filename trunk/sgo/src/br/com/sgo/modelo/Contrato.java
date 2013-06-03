@@ -89,7 +89,7 @@ public class Contrato implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "etapa_id", updatable = true, nullable = true)
-	private Etapa Etapa;
+	private Etapa etapa;
 
 	@ManyToOne
 	@JoinColumn(name = "etapapendencia_id", updatable = true, nullable = true)
@@ -310,14 +310,6 @@ public class Contrato implements Serializable {
 
 	public void setWorkflow(Workflow workflow) {
 		this.workflow = workflow;
-	}
-
-	public Etapa getEtapa() {
-		return Etapa;
-	}
-
-	public void setEtapa(Etapa etapa) {
-		Etapa = etapa;
 	}
 
 	public Workflow getWorkflowpendencia() {
@@ -582,6 +574,14 @@ public class Contrato implements Serializable {
 
 	public void setLogistica(Logistica logistica) {
 		this.logistica = logistica;
+	}
+
+	public Etapa getEtapa() {
+		return etapa;
+	}
+
+	public void setEtapa(Etapa etapa) {
+		this.etapa = etapa;
 	}
 
 }

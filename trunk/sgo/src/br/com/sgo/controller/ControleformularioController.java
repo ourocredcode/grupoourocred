@@ -107,11 +107,11 @@ public class ControleformularioController {
 		posvenda.setPerfil(perfil);
 
 		workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Pós Venda");
-		etapas = etapaDao.buscaWorKFlowEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
+		etapas = etapaDao.buscaEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
 		posvenda.setWorkflow(workflow);
 
 		workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Motivos Pós Venda");
-		motivos = etapaDao.buscaWorKFlowEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
+		motivos = etapaDao.buscaEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
 		posvenda.setWorkflowPendencia(workflow);
 
 		result.include("posvenda",posvenda);

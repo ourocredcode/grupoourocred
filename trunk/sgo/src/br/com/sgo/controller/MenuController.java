@@ -49,7 +49,7 @@ public class MenuController {
 	private final ContratoDao contratoDao;
 	private final UsuarioDao usuarioDao;
 	private final PerfilDao perfilDao;
-	private final EtapaDao workflowEtapaDao;
+	private final EtapaDao etapaDao;
 	private final WorkflowDao workflowDao;
 	private final ProdutoDao produtoDao;
 	private final BancoDao bancoDao;
@@ -63,7 +63,7 @@ public class MenuController {
 	private Usuario usuario;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,
-			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao workflowEtapaDao,WorkflowDao workflowDao,ProdutoDao produtoDao,
+			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,WorkflowDao workflowDao,ProdutoDao produtoDao,
 			BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
@@ -75,7 +75,7 @@ public class MenuController {
 		this.result = result;
 		this.validator = validator;
 		this.contratoDao = contratoDao;
-		this.workflowEtapaDao = workflowEtapaDao;
+		this.etapaDao = etapaDao;
 		this.workflowDao = workflowDao;
 		this.produtoDao = produtoDao;
 		this.bancoDao = bancoDao;
@@ -117,9 +117,10 @@ public class MenuController {
 
 		result.include("bancos",this.bancoDao.buscaBancoByGrupo("Tomadores"));
 		result.include("bancosComprados",this.bancoDao.buscaBancoByGrupo("Comprados"));
-		//TODO
-		//result.include("etapas",this.workflowEtapaDao.buscaWorkflowEtapasByEmpOrgWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
-				//this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Contrato").getWorkflow_id()));
+
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
+				this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Contrato").getWorkflow_id()));
+
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
 		contador();

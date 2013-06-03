@@ -46,6 +46,44 @@ public class EtapaDao extends Dao<Etapa> {
 		super(session, Etapa.class);
 		this.conexao = conexao;
 	}
+	
+	public Etapa buscaEtapaById(Long etapa_id) {
+		String sql = sqlEtapa;
+
+		if (etapa_id != null)
+			sql += " WHERE ETAPA.etapa_id = ? ";
+		
+		sql += " ORDER BY ETAPA.workflow_id, ETAPA.nome ";
+
+		this.conn = this.conexao.getConexao();
+		
+		Etapa etapa = null;
+		
+		try {
+			
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, etapa_id);
+
+			this.rsEtapa = this.stmt.executeQuery();
+			
+			while (rsEtapa.next()) {
+
+				etapa = new Etapa();
+				etapa.setEtapa_id(rsEtapa.getLong("etapa_id"));
+				etapa.setNome(rsEtapa.getString("nome"));
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsEtapa, stmt, conn);
+		return etapa;
+
+	}
 
 	public Collection<Etapa> buscaTodosEtapa() {
 
@@ -98,7 +136,7 @@ public class EtapaDao extends Dao<Etapa> {
 		return etapas;
 	}
 
-	public Etapa buscaWorkflowPorEmpresaOrganizacaoNome(Long empresa_id, Long organizacao_id, String nome ) {
+	public Etapa buscaEtapaByEmpresaOrganizacaoNome(Long empresa_id, Long organizacao_id, String nome ) {
 		
 		String sql = sqlEtapa;
 
@@ -135,11 +173,11 @@ public class EtapaDao extends Dao<Etapa> {
 		this.conexao.closeConnection(rsEtapa, stmt, conn);
 		return etapa;
 	}
-
-	public Etapa buscaEtapaByNome(Long empresa, Long organizacao, String nome) {
+	
+	public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoNome(Long empresa, Long organizacao, String nome) {
 
 		String sql = sqlEtapa;
-		
+
 		if (empresa != null)
 			sql += " WHERE ETAPA.empresa_id = ?";
 		if (organizacao != null)
@@ -148,11 +186,11 @@ public class EtapaDao extends Dao<Etapa> {
 			sql += " AND (ETAPA.nome like ?)";
 		
 		sql += " ORDER BY ETAPA.workflow_id, ETAPA.nome ";
-		
+
 		this.conn = this.conexao.getConexao();
 		
-		Etapa etapa = null;
-		
+		Collection<Etapa> etapas =  new ArrayList<Etapa>();
+
 		try {
 			
 			this.stmt = conn.prepareStatement(sql);
@@ -164,18 +202,22 @@ public class EtapaDao extends Dao<Etapa> {
 			this.rsEtapa = this.stmt.executeQuery();
 			
 			while (rsEtapa.next()) {
-				etapa = new Etapa();
+
+				Etapa etapa = new Etapa();
 				etapa.setEtapa_id(rsEtapa.getLong("etapa_id"));
-				etapa.setNome(rsEtapa.getString("nome"));
+				etapa.setNome(rsEtapa.getString("etapa_nome"));
+				
+				etapas.add(etapa);
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		this.conexao.closeConnection(rsEtapa, stmt, conn);
-		return etapa;
+		return etapas;
 	}
-	
-	public Collection<Etapa> buscaEtapasByEmpOrgWorkflow(Long empresa_id, Long organizacao_id, Long workflow_id) {
+
+	public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoWorkflow(Long empresa_id, Long organizacao_id, Long workflow_id) {
 		
 		String sql = sqlEtapaEmpOrg;
 		
@@ -274,88 +316,11 @@ public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id,
 		return etapas;
 	}
 
-	public Collection<Etapa> buscaEtapasByNome(Long empresa, Long organizacao, String nome) {
-
-		String sql = sqlEtapa;
-
-		if (empresa != null)
-			sql += " WHERE ETAPA.empresa_id = ?";
-		if (organizacao != null)
-			sql += " AND ETAPA.organizacao_id = ?";
-		if (nome != null)
-			sql += " AND (ETAPA.nome like ?)";
-		
-		sql += " ORDER BY ETAPA.workflow_id, ETAPA.nome ";
-
-		this.conn = this.conexao.getConexao();
-		
-		Collection<Etapa> etapas =  new ArrayList<Etapa>();
-
-		try {
-			
-			this.stmt = conn.prepareStatement(sql);
-			
-			this.stmt.setLong(1, empresa);
-			this.stmt.setLong(2, organizacao);
-			this.stmt.setString(3, "%" + nome + "%");
-			
-			this.rsEtapa = this.stmt.executeQuery();
-			
-			while (rsEtapa.next()) {
-
-				Etapa etapa = new Etapa();
-				etapa.setEtapa_id(rsEtapa.getLong("etapa_id"));
-				etapa.setNome(rsEtapa.getString("etapa_nome"));
-				
-				etapas.add(etapa);
-
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		this.conexao.closeConnection(rsEtapa, stmt, conn);
-		return etapas;
-	}
 	
-	public Etapa buscaEtapaById(Long etapa_id) {
-		String sql = sqlEtapa;
+	
+	
 
-		if (etapa_id != null)
-			sql += " WHERE ETAPA.etapa_id = ? ";
-		
-		sql += " ORDER BY ETAPA.workflow_id, ETAPA.nome ";
-
-		this.conn = this.conexao.getConexao();
-		
-		Etapa etapa = null;
-		
-		try {
-			
-			this.stmt = conn.prepareStatement(sql);
-
-			this.stmt.setLong(1, etapa_id);
-
-			this.rsEtapa = this.stmt.executeQuery();
-			
-			while (rsEtapa.next()) {
-
-				etapa = new Etapa();
-				etapa.setEtapa_id(rsEtapa.getLong("etapa_id"));
-				etapa.setNome(rsEtapa.getString("nome"));
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-
-		}
-
-		this.conexao.closeConnection(rsEtapa, stmt, conn);
-		return etapa;
-
-	}
-
-	public Collection<Etapa> buscaWorKFlowEtapaByContratoPerfil(Long contrato_id, Long perfil_id) {
+	public Collection<Etapa> buscaEtapaByContratoPerfil(Long contrato_id, Long perfil_id) {
 
 		String sql = "SELECT " +
 				"		WORKFLOWTRANSICAO.workflowetapaproximo_id, ETAPA.nome FROM " +
@@ -397,7 +362,7 @@ public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id,
 
 	}
 
-	public Collection<Etapa> buscaWorKFlowEtapaByWorkFlowPerfil(Long workflow_id,Long perfil_id) {
+	public Collection<Etapa> buscaEtapaByWorkFlowPerfil(Long workflow_id,Long perfil_id) {
 
 		String sql = "SELECT DISTINCT WORKFLOWTRANSICAO.workflowetapaproximo_id, ETAPA.nome " +
 				"			FROM (( ETAPA  " +
@@ -439,7 +404,7 @@ public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id,
 
 	}
 
-	public Collection<Etapa> buscaWorKFlowEtapaByHisconPerfil(Long empresa_id, Long organizacao_id, Long perfil_id, Long hisconbeneficio_id) {
+	public Collection<Etapa> buscaEtapaByHisconPerfil(Long empresa_id, Long organizacao_id, Long perfil_id, Long hisconbeneficio_id) {
 
 		String sql = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, ETAPA.nome," +
 				" WORKFLOWTRANSICAO.workflowetapaproximo_id " +
@@ -486,7 +451,7 @@ public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id,
 
 	}
 	
-	public Collection<Etapa> buscaWorKFlowEtapaByPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
+	public Collection<Etapa> buscaEtapaByPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
 
 		String sql = "SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, ETAPA.nome " +
 				" FROM ETAPA (NOLOCK) INNER JOIN (((HISCONBENEFICIO (NOLOCK) " +
@@ -531,7 +496,7 @@ public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id,
 
 	}
 	
-	public Collection<Etapa> buscaWorKFlowEtapaByHisconBeneficioPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
+	public Collection<Etapa> buscaEtapaByHisconBeneficioPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
 
 		String sql = " SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , EMPRESA.nome as empresa_nome "+
 				", WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.etapa_id "+
