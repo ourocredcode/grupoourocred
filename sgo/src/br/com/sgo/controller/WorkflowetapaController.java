@@ -45,7 +45,7 @@ public class WorkflowetapaController {
 
 		result.include("workflowEtapas", this.workflowEtapaDao.buscaAllWorkflowEtapaByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
-		result.include("etapas",this.etapaDao.buscaAllEtapaByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 
 	}
 

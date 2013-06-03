@@ -30,7 +30,7 @@ public class EtapaController {
 	@Public
 	@Path("/etapa/cadastro")
 	public void cadastro() {
-		result.include("etapas", this.etapaDao.buscaAllEtapaByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("etapas", this.etapaDao.buscaEtapasByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 	}
 
 	@Post
@@ -76,14 +76,14 @@ public class EtapaController {
 	@Path("/etapa/busca.json")
 	@Public
 	public void etapa(Long empresa_id, Long organizacao_id, String nome) {	
-		result.use(Results.json()).withoutRoot().from(etapaDao.buscaEtapasByNome(empresa_id, organizacao_id, nome)).serialize();	
+		result.use(Results.json()).withoutRoot().from(etapaDao.buscaEtapasByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome)).serialize();	
 	}
 
 	@Post
 	@Path("/etapa/lista")
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
-		result.include("etapas", this.etapaDao.buscaEtapasByNome(empresa_id, organizacao_id, nome));
+		result.include("etapas", this.etapaDao.buscaEtapasByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
 	}
 
 	@Get
