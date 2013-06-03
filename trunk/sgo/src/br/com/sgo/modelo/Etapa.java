@@ -4,25 +4,27 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
 
+@Entity
 @Component
-@Table(name = "WORKFLOWETAPA")
-public class WorkflowEtapa implements Serializable {
+@Table(name = "ETAPA")
+public class Etapa implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne
-	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
-	private Workflow workflow;
-
-	@ManyToOne
-	@JoinColumn(name = "etapa_id", updatable = true, nullable = false)
-	private Etapa etapa;
+	@Id
+	@Column(name = "etapa_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long etapa_id;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
@@ -31,14 +33,20 @@ public class WorkflowEtapa implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
 	@ManyToOne
-	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
+	@JoinColumn(name = "updatedby", updatable = true, nullable = false)
 	private Usuario updatedBy;
+
+	@Column(name = "ordemetapa")
+	private Integer ordemEtapa;
+
+	@Column(name = "ispadrao")
+	private Boolean isPadrao;
 
 	@Column(name = "created")
 	private Calendar created;
@@ -57,24 +65,13 @@ public class WorkflowEtapa implements Serializable {
 
 	@Column(name = "isactive")
 	private Boolean isActive;
-	
-	@Column(name = "isleituraescrita")
-	private Boolean isLeituraEscrita;
 
-	public Workflow getWorkflow() {
-		return workflow;
+	public Long getEtapa_id() {
+		return etapa_id;
 	}
 
-	public void setWorkflow(Workflow workflow) {
-		this.workflow = workflow;
-	}
-
-	public Etapa getEtapa() {
-		return etapa;
-	}
-
-	public void setEtapa(Etapa etapa) {
-		this.etapa = etapa;
+	public void setEtapa_id(Long etapa_id) {
+		this.etapa_id = etapa_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -107,6 +104,22 @@ public class WorkflowEtapa implements Serializable {
 
 	public void setUpdatedBy(Usuario updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public Integer getOrdemEtapa() {
+		return ordemEtapa;
+	}
+
+	public void setOrdemEtapa(Integer ordemEtapa) {
+		this.ordemEtapa = ordemEtapa;
+	}
+
+	public Boolean getIsPadrao() {
+		return isPadrao;
+	}
+
+	public void setIsPadrao(Boolean isPadrao) {
+		this.isPadrao = isPadrao;
 	}
 
 	public Calendar getCreated() {
@@ -155,14 +168,6 @@ public class WorkflowEtapa implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public Boolean getIsLeituraEscrita() {
-		return isLeituraEscrita;
-	}
-
-	public void setIsLeituraEscrita(Boolean isLeituraEscrita) {
-		this.isLeituraEscrita = isLeituraEscrita;
 	}
 
 }

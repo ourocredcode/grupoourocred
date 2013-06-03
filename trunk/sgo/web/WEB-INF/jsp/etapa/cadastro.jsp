@@ -124,43 +124,8 @@ jQuery(function($){
 	     }
 	});
 	
-	$('#workflowEtapaEtapa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/etapa/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#workflowEtapaEmpresaId').val() == '' ? '0' :  $('#workflowEtapaEmpresaId').val(), 
-	        		  organizacao_id: $('#workflowEtapaOrganizacaoId').val() == '' ? '0' :  $('#workflowEtapaOrganizacaoId').val(),
-	        		  nome : $('#workflowEtapaEtapa').val()},
-	          success : function(data) {  
-
-	        	  if (!data || data.length == 0) {
-	     	            $('#workflowEtapaEtapa').val('');
-	     	           $('#workflowEtapaEtapaId').val('');
-	     	        }
-
-	        	  response($.map(data, function(etapa) {  
-	        		  return {
-	        			  label: etapa.nome,
-	        			  value: etapa.etapa_id
-	                  };
-	              })); 
-	           }
-	        });
-	     },
-	     focus: function( event, ui ) {
-	      	 $('#workflowEtapaEtapa').val(ui.item.label);
-	           return false;
-	       } ,
-	     select: function( event, ui ) {
-	         $('#workflowEtapaEtapa').val(ui.item.label);
-	         $('#workflowEtapaEtapaId').val(ui.item.value);
-	         return false;
-	     }
-	});
-	
 	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/etapa/cadastro" />';
+		window.location.href = '<c:url value="/workflowetapa/cadastro" />';
 	});
 	
 	$('#btnNovo').click(function() {
@@ -259,14 +224,9 @@ function limpaForm(){
 									</c:forEach>
 								</select>
 							</div>
-							<div class="span2">
-								<label for="workflowEtapaEtapa">Etapa</label>
-								<select id="workflowEtapaEtapaId" name="workflowEtapa.etapa.etapa_id" class="input-medium">
-									<c:forEach var="etapa" items="${etapas }">
-									 	<option value="${etapa.etapa_id }" selected="selected"> ${etapa.nome }
-									 	</option>
-									</c:forEach>
-								</select>
+							<div class="span3">
+								<label for="workflowEtapaNome">Nome</label>
+								<input class="span12" id="workflowEtapaNome" name="workflowEtapa.nome" value="${workflowEtapa.nome }" type="text" placeholder="Nome" required>								
 							</div>
 							<div class="span1">
 								<label for="workflowEtapaIsActive">Ativo</label>							

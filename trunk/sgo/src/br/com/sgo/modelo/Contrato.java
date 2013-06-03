@@ -84,16 +84,16 @@ public class Contrato implements Serializable {
 	private Workflow workflow;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = true)
-	private WorkflowEtapa workflowEtapa;
-
-	@ManyToOne
 	@JoinColumn(name = "workflowpendencia_id", updatable = true, nullable = true)
 	private Workflow workflowpendencia;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowetapapendencia_id", updatable = true, nullable = true)
-	private WorkflowEtapa workflowEtapaPendencia;
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = true)
+	private Etapa Etapa;
+
+	@ManyToOne
+	@JoinColumn(name = "etapapendencia_id", updatable = true, nullable = true)
+	private Etapa etapaPendencia;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", updatable = true, nullable = true)
@@ -312,12 +312,28 @@ public class Contrato implements Serializable {
 		this.workflow = workflow;
 	}
 
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
+	public Etapa getEtapa() {
+		return Etapa;
 	}
 
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
+	public void setEtapa(Etapa etapa) {
+		Etapa = etapa;
+	}
+
+	public Workflow getWorkflowpendencia() {
+		return workflowpendencia;
+	}
+
+	public void setWorkflowpendencia(Workflow workflowpendencia) {
+		this.workflowpendencia = workflowpendencia;
+	}
+
+	public Etapa getEtapaPendencia() {
+		return etapaPendencia;
+	}
+
+	public void setEtapaPendencia(Etapa etapaPendencia) {
+		this.etapaPendencia = etapaPendencia;
 	}
 
 	public Usuario getUsuario() {
@@ -328,20 +344,52 @@ public class Contrato implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public TipoSaque getTipoSaque() {
+		return tipoSaque;
+	}
+
+	public void setTipoSaque(TipoSaque tipoSaque) {
+		this.tipoSaque = tipoSaque;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
+	}
+
 	public String getChave() {
 		return chave;
 	}
 
 	public void setChave(String chave) {
 		this.chave = chave;
-	}
-
-	public String getObservacao() {
-		return observacao;
-	}
-
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
 	}
 
 	public String getNome() {
@@ -358,6 +406,14 @@ public class Contrato implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 	public Integer getPrazo() {
@@ -432,20 +488,20 @@ public class Contrato implements Serializable {
 		this.valorMeta = valorMeta;
 	}
 
-	public Double getValorQuitacao() {
-		return valorQuitacao;
-	}
-
-	public void setValorQuitacao(Double valorQuitacao) {
-		this.valorQuitacao = valorQuitacao;
-	}
-
 	public Boolean getIsActive() {
 		return isActive;
 	}
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Boolean getIsSaqueEfetuado() {
+		return isSaqueEfetuado;
+	}
+
+	public void setIsSaqueEfetuado(Boolean isSaqueEfetuado) {
+		this.isSaqueEfetuado = isSaqueEfetuado;
 	}
 
 	public String getNumeroBeneficio() {
@@ -456,20 +512,20 @@ public class Contrato implements Serializable {
 		this.numeroBeneficio = numeroBeneficio;
 	}
 
-	public Calendar getDataDigitacao() {
-		return dataDigitacao;
+	public Calendar getDataAgendado() {
+		return dataAgendado;
 	}
 
-	public void setDataDigitacao(Calendar dataDigitacao) {
-		this.dataDigitacao = dataDigitacao;
+	public void setDataAgendado(Calendar dataAgendado) {
+		this.dataAgendado = dataAgendado;
 	}
 
-	public Calendar getDataConcluido() {
-		return dataConcluido;
+	public Double getValorQuitacao() {
+		return valorQuitacao;
 	}
 
-	public void setDataConcluido(Calendar dataConcluido) {
-		this.dataConcluido = dataConcluido;
+	public void setValorQuitacao(Double valorQuitacao) {
+		this.valorQuitacao = valorQuitacao;
 	}
 
 	public Calendar getDataQuitacao() {
@@ -480,20 +536,12 @@ public class Contrato implements Serializable {
 		this.dataQuitacao = dataQuitacao;
 	}
 
-	public Calendar getDataStatusFinal() {
-		return dataStatusFinal;
+	public Calendar getDataDigitacao() {
+		return dataDigitacao;
 	}
 
-	public void setDataStatusFinal(Calendar dataStatusFinal) {
-		this.dataStatusFinal = dataStatusFinal;
-	}
-
-	public String getPropostaBanco() {
-		return propostaBanco;
-	}
-
-	public void setPropostaBanco(String propostaBanco) {
-		this.propostaBanco = propostaBanco;
+	public void setDataDigitacao(Calendar dataDigitacao) {
+		this.dataDigitacao = dataDigitacao;
 	}
 
 	public String getContratoBanco() {
@@ -504,28 +552,28 @@ public class Contrato implements Serializable {
 		this.contratoBanco = contratoBanco;
 	}
 
-	public Calendar getDataAgendado() {
-		return dataAgendado;
+	public String getPropostaBanco() {
+		return propostaBanco;
 	}
 
-	public void setDataAgendado(Calendar dataAgendado) {
-		this.dataAgendado = dataAgendado;
+	public void setPropostaBanco(String propostaBanco) {
+		this.propostaBanco = propostaBanco;
 	}
 
-	public Workflow getWorkflowpendencia() {
-		return workflowpendencia;
+	public Calendar getDataConcluido() {
+		return dataConcluido;
 	}
 
-	public void setWorkflowpendencia(Workflow workflowpendencia) {
-		this.workflowpendencia = workflowpendencia;
+	public void setDataConcluido(Calendar dataConcluido) {
+		this.dataConcluido = dataConcluido;
 	}
 
-	public WorkflowEtapa getWorkflowEtapaPendencia() {
-		return workflowEtapaPendencia;
+	public Calendar getDataStatusFinal() {
+		return dataStatusFinal;
 	}
 
-	public void setWorkflowEtapaPendencia(WorkflowEtapa workflowEtapaPendencia) {
-		this.workflowEtapaPendencia = workflowEtapaPendencia;
+	public void setDataStatusFinal(Calendar dataStatusFinal) {
+		this.dataStatusFinal = dataStatusFinal;
 	}
 
 	public Logistica getLogistica() {
@@ -534,54 +582,6 @@ public class Contrato implements Serializable {
 
 	public void setLogistica(Logistica logistica) {
 		this.logistica = logistica;
-	}
-
-	public Usuario getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Usuario createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Usuario getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(Usuario updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Calendar getCreated() {
-		return created;
-	}
-
-	public void setCreated(Calendar created) {
-		this.created = created;
-	}
-
-	public Calendar getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Calendar updated) {
-		this.updated = updated;
-	}
-
-	public TipoSaque getTipoSaque() {
-		return tipoSaque;
-	}
-
-	public void setTipoSaque(TipoSaque tipoSaque) {
-		this.tipoSaque = tipoSaque;
-	}
-
-	public Boolean getIsSaqueEfetuado() {
-		return isSaqueEfetuado;
-	}
-
-	public void setIsSaqueEfetuado(Boolean isSaqueEfetuado) {
-		this.isSaqueEfetuado = isSaqueEfetuado;
 	}
 
 }

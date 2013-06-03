@@ -74,6 +74,7 @@ public class BancoDao extends Dao<Banco> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, banco_id);
 
 			this.rsBanco = this.stmt.executeQuery();

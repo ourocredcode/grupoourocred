@@ -49,18 +49,18 @@ public class HistoricoControleFormulario implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "workflow_id", updatable = true, nullable = true)
 	private Workflow workflow;
-	
-	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = true)
-	private WorkflowEtapa workflowEtapa;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "workflowpendencia_id", updatable = true, nullable = true)
 	private Workflow workflowPendencia;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "workflowetapapendencia_id", updatable = true, nullable = true)
-	private WorkflowEtapa workflowEtapaPendencia;
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = true)
+	private Etapa etapa;
+
+	@ManyToOne
+	@JoinColumn(name = "etapapendencia_id", updatable = true, nullable = true)
+	private Etapa etapaPendencia;
 	
 	@Column(name = "created")
 	private Calendar created;
@@ -148,14 +148,6 @@ public class HistoricoControleFormulario implements Serializable {
 		this.workflow = workflow;
 	}
 
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
-	}
-
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
-	}
-
 	public Workflow getWorkflowPendencia() {
 		return workflowPendencia;
 	}
@@ -164,12 +156,20 @@ public class HistoricoControleFormulario implements Serializable {
 		this.workflowPendencia = workflowPendencia;
 	}
 
-	public WorkflowEtapa getWorkflowEtapaPendencia() {
-		return workflowEtapaPendencia;
+	public Etapa getEtapa() {
+		return etapa;
 	}
 
-	public void setWorkflowEtapaPendencia(WorkflowEtapa workflowEtapaPendencia) {
-		this.workflowEtapaPendencia = workflowEtapaPendencia;
+	public void setEtapa(Etapa etapa) {
+		this.etapa = etapa;
+	}
+
+	public Etapa getEtapaPendencia() {
+		return etapaPendencia;
+	}
+
+	public void setEtapaPendencia(Etapa etapaPendencia) {
+		this.etapaPendencia = etapaPendencia;
 	}
 
 	public Calendar getCreated() {
@@ -243,4 +243,5 @@ public class HistoricoControleFormulario implements Serializable {
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+
 }

@@ -16,7 +16,7 @@ import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Workflow;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.WorkflowTransicao;
 
 @Component
@@ -78,8 +78,8 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 				Empresa e = new Empresa();
 				Organizacao o = new Organizacao();
 				Workflow workflow = new Workflow(); 
-				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
-				WorkflowEtapa workflowEtapaProximo = new WorkflowEtapa();
+				Etapa etapa = new Etapa();
+				Etapa etapaProximo = new Etapa();
 				Perfil perfil = new Perfil();
 
 				e.setEmpresa_id(rsWorkflowTransicao.getLong("empresa_id"));
@@ -91,11 +91,11 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 				workflow.setWorkflow_id(rsWorkflowTransicao.getLong("workflow_id"));
 				workflow.setNome(rsWorkflowTransicao.getString("workflow_nome"));
 				
-				workflowEtapa.setWorkflowEtapa_id(rsWorkflowTransicao.getLong("workflowetapa_id"));
-				workflowEtapa.setNome(rsWorkflowTransicao.getString("workflowetapa_nome"));
+				etapa.setEtapa_id(rsWorkflowTransicao.getLong("etapa_id"));
+				etapa.setNome(rsWorkflowTransicao.getString("etapa_nome"));
 
-				workflowEtapaProximo.setWorkflowEtapa_id(rsWorkflowTransicao.getLong("workflowetapaproximo_id"));
-				workflowEtapaProximo.setNome(rsWorkflowTransicao.getString("workflowetapaproximo_nome"));
+				etapaProximo.setEtapa_id(rsWorkflowTransicao.getLong("etapaproximo_id"));
+				etapaProximo.setNome(rsWorkflowTransicao.getString("etapaproximo_nome"));
 
 				perfil.setPerfil_id(rsWorkflowTransicao.getLong("perfil_id"));
 				perfil.setNome(rsWorkflowTransicao.getString("perfil_nome"));
@@ -103,8 +103,8 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 				workflowTransicao.setEmpresa(e);
 				workflowTransicao.setOrganizacao(o);
 				workflowTransicao.setWorkflow(workflow);
-				workflowTransicao.setWorkflowEtapa(workflowEtapa);
-				workflowTransicao.setWorkflowEtapaProximo(workflowEtapaProximo);
+				workflowTransicao.setEtapa(etapa);
+				workflowTransicao.setEtapaProximo(etapaProximo);
 				workflowTransicao.setPerfil(perfil);
 				
 				workflowTransicao.setSequencia(rsWorkflowTransicao.getInt("sequencia"));

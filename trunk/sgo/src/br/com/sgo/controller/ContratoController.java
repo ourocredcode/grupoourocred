@@ -14,6 +14,7 @@ import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.HistoricoControleDao;
@@ -24,13 +25,13 @@ import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoLogisticaDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Controle;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoContrato;
 import br.com.sgo.modelo.HistoricoControle;
@@ -41,7 +42,6 @@ import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.Tabela;
 import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.Usuario;
-import br.com.sgo.modelo.WorkflowEtapa;
 
 @Resource
 public class ContratoController {
@@ -55,7 +55,7 @@ public class ContratoController {
 	private final TabelaDao tabelaDao;
 	private final ContratoDao contratoDao;
 	private final FormularioDao formularioDao;
-	private final WorkflowEtapaDao workFlowetapaDao;
+	private final EtapaDao workFlowetapaDao;
 	private final PeriodoDao periodoDao;
 	private final TipoLogisticaDao tipoLogisticaDao;
 	private final TipoControleDao tipoControleDao;
@@ -74,7 +74,7 @@ public class ContratoController {
 	private Controle averbacao;
 	private Collection<Produto> produtos;
 	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();;
-	private Collection<WorkflowEtapa> etapas;
+	private Collection<Etapa> etapas;
 	private Collection<Periodo> periodos;
 	private Collection<TipoLogistica> tiposLogistica;
 	private Collection<Logistica> logisticas;
@@ -84,7 +84,7 @@ public class ContratoController {
 	private Collection<HistoricoControle> historicoControleAverbacao;
 
 	public ContratoController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
-			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
+			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
 			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao,ControleDao controleDao,TipoControleDao tipoControleDao){		
 
@@ -165,7 +165,7 @@ public class ContratoController {
 		
 		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
 		logisticas = logisticaDao.buscaLogisticaByContrato(id);
-		etapas.add(contrato.getWorkflowEtapa());
+		etapas.add(contrato.getEtapa());
 		boleto = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByNome("Boleto").getTipoControle_id());
 		averbacao = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByNome("Averbacao").getTipoControle_id());
 
@@ -300,9 +300,9 @@ public class ContratoController {
 
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
 
-		if(!(this.contrato.getWorkflowEtapa().getWorkflowEtapa_id() == contrato.getWorkflowEtapa().getWorkflowEtapa_id())){
-			log.add("Status alterado de : " + this.contrato.getWorkflowEtapa().getNome() + " para : " + contrato.getWorkflowEtapa().getNome());
-			this.contrato.setWorkflowEtapa(contrato.getWorkflowEtapa() == null ? null : contrato.getWorkflowEtapa());
+		if(!(this.contrato.getEtapa().getEtapa_id() == contrato.getEtapa().getEtapa_id())){
+			log.add("Status alterado de : " + this.contrato.getEtapa().getNome() + " para : " + contrato.getEtapa().getNome());
+			this.contrato.setEtapa(contrato.getEtapa() == null ? null : contrato.getEtapa());
 		}
 
 		this.contratoDao.beginTransaction();

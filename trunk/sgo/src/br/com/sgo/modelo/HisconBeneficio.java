@@ -56,16 +56,16 @@ public class HisconBeneficio implements Serializable {
 	private Workflow workflow;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = false)
-	private WorkflowEtapa workflowEtapa;
-
-	@ManyToOne
 	@JoinColumn(name = "workflowposicao_id", updatable = true, nullable = false)
 	private Workflow workflowPosicao;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowposicaoetapa_id", updatable = true, nullable = false)
-	private WorkflowEtapa workflowPosicaoEtapa;
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = false)
+	private Etapa etapa;
+
+	@ManyToOne
+	@JoinColumn(name = "etapaposicao_id", updatable = true, nullable = false)
+	private Etapa etapaPosicao;
 	
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
@@ -115,7 +115,7 @@ public class HisconBeneficio implements Serializable {
 	private Boolean isActive;
 
 	@Transient
-	private Collection<WorkflowEtapa> workflowEtapas = new ArrayList<WorkflowEtapa>();
+	private Collection<Etapa> etapas = new ArrayList<Etapa>();
 
 	@Transient
 	private Integer countHiscons;
@@ -176,14 +176,6 @@ public class HisconBeneficio implements Serializable {
 		this.workflow = workflow;
 	}
 
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
-	}
-
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
-	}
-
 	public Workflow getWorkflowPosicao() {
 		return workflowPosicao;
 	}
@@ -192,12 +184,20 @@ public class HisconBeneficio implements Serializable {
 		this.workflowPosicao = workflowPosicao;
 	}
 
-	public WorkflowEtapa getWorkflowPosicaoEtapa() {
-		return workflowPosicaoEtapa;
+	public Etapa getEtapa() {
+		return etapa;
 	}
 
-	public void setWorkflowPosicaoEtapa(WorkflowEtapa workflowPosicaoEtapa) {
-		this.workflowPosicaoEtapa = workflowPosicaoEtapa;
+	public void setEtapa(Etapa etapa) {
+		this.etapa = etapa;
+	}
+
+	public Etapa getEtapaPosicao() {
+		return etapaPosicao;
+	}
+
+	public void setEtapaPosicao(Etapa etapaPosicao) {
+		this.etapaPosicao = etapaPosicao;
 	}
 
 	public Usuario getCreatedBy() {
@@ -232,6 +232,30 @@ public class HisconBeneficio implements Serializable {
 		this.updated = updated;
 	}
 
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public Calendar getDataAdm() {
 		return dataAdm;
 	}
@@ -246,14 +270,6 @@ public class HisconBeneficio implements Serializable {
 
 	public void setDataEnvio(Calendar dataEnvio) {
 		this.dataEnvio = dataEnvio;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public String getCaminhoArquivo() {
@@ -273,13 +289,13 @@ public class HisconBeneficio implements Serializable {
 	}
 
 	public Boolean getIsEnviado() {
-		return isEnviado == null ? false : isEnviado;
+		return isEnviado;
 	}
 
 	public void setIsEnviado(Boolean isEnviado) {
 		this.isEnviado = isEnviado;
 	}
-	
+
 	public Boolean getIsImportado() {
 		return isImportado;
 	}
@@ -304,6 +320,14 @@ public class HisconBeneficio implements Serializable {
 		this.isActive = isActive;
 	}
 
+	public Collection<Etapa> getEtapas() {
+		return etapas;
+	}
+
+	public void setWorkflowEtapas(Collection<Etapa> etapas) {
+		this.etapas = etapas;
+	}
+
 	public Integer getCountHiscons() {
 		return countHiscons;
 	}
@@ -312,26 +336,7 @@ public class HisconBeneficio implements Serializable {
 		this.countHiscons = countHiscons;
 	}
 
-	public Collection<WorkflowEtapa> getWorkflowEtapas() {
-		return workflowEtapas;
-	}
-
-	public void setWorkflowEtapas(Collection<WorkflowEtapa> workflowEtapas) {
-		this.workflowEtapas = workflowEtapas;
-	}
-
-	public String getChave() {
-		return chave;
-	}
-
-	public void setChave(String chave) {
-		this.chave = chave;
-	}
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setEtapas(Collection<Etapa> etapas) {
+		this.etapas = etapas;
 	}
 }

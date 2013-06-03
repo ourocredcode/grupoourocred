@@ -7,7 +7,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.WorkflowEtapaPerfilAcessoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -20,10 +20,10 @@ public class WorkflowetapaperfilacessoController {
 	private final UsuarioInfo usuarioInfo;
 	private final WorkflowDao workflowDao;
 	private final WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao;
-	private final WorkflowEtapaDao workflowEtapaDao;
+	private final EtapaDao workflowEtapaDao;
 	private final PerfilDao perfilDao;
 	
-	public WorkflowetapaperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao, WorkflowEtapaDao workflowEtapaDao
+	public WorkflowetapaperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao, EtapaDao workflowEtapaDao
 			, WorkflowDao workflowDao, PerfilDao perfilDao) {
 
 		this.result = result;
@@ -51,7 +51,8 @@ public class WorkflowetapaperfilacessoController {
 	@Path("/workflowetapaperfilacesso/workflowetapasperfil")
 	public void workflowetapasperfil(Long empresa_id, Long organizacao_id, Long workflow_id){
 
-		result.include("workflowEtapas",this.workflowEtapaDao.buscaWorkflowEtapasByEmpOrgWorkflow(empresa_id, organizacao_id, workflow_id));
+		//TODO
+		//result.include("workflowEtapas",this.workflowEtapaDao.buscaWorkflowEtapasByEmpOrgWorkflow(empresa_id, organizacao_id, workflow_id));
 
 	}
 
@@ -65,7 +66,7 @@ public class WorkflowetapaperfilacessoController {
 		try {
 
 			if (this.workflowEtapaPerfilAcessoDao.buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),
-					workflowEtapaPerfilAcesso.getWorkflowEtapa().getWorkflowEtapa_id(), workflowEtapaPerfilAcesso.getPerfil().getPerfil_id()) == null) {				
+					workflowEtapaPerfilAcesso.getEtapa().getEtapa_id(), workflowEtapaPerfilAcesso.getPerfil().getPerfil_id()) == null) {				
 
 				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null ? false : true);
 				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null ? false : true);
@@ -73,11 +74,11 @@ public class WorkflowetapaperfilacessoController {
 
 				this.workflowEtapaPerfilAcessoDao.insert(workflowEtapaPerfilAcesso);
 
-				mensagem = "Perfil " + workflowEtapaPerfilAcesso.getPerfil().getNome() + " adicionado com sucesso para etapa " + workflowEtapaPerfilAcesso.getWorkflowEtapa().getNome();
+				mensagem = "Perfil " + workflowEtapaPerfilAcesso.getPerfil().getNome() + " adicionado com sucesso para etapa " + workflowEtapaPerfilAcesso.getEtapa().getNome();
 
 			} else {
 
-				mensagem = "Erro: Perfil " + workflowEtapaPerfilAcesso.getPerfil().getNome() +" já cadastrado para a etapa " + workflowEtapaPerfilAcesso.getWorkflowEtapa().getNome();
+				mensagem = "Erro: Perfil " + workflowEtapaPerfilAcesso.getPerfil().getNome() +" já cadastrado para a etapa " + workflowEtapaPerfilAcesso.getEtapa().getNome();
 
 			} 
 

@@ -15,12 +15,11 @@ import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.ControleFormulario;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.Usuario;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 
 @Component
 public class ControleFormularioDao extends Dao<ControleFormulario> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -32,19 +31,20 @@ public class ControleFormularioDao extends Dao<ControleFormulario> {
 								 " CONTROLEFORMULARIO.usuario_id, USUARIO.nome as usuario_nome, " +    
 								 " CONTROLEFORMULARIO.dataatuacao , CONTROLEFORMULARIO.confirmaprazo, CONTROLEFORMULARIO.quantidadecontrato, " +   
 								 " CONTROLEFORMULARIO.valorliquido, CONTROLEFORMULARIO.valorparcela, " + 
-								 " ETAPA.nome as workflow_nome ,ETAPA.workflowetapa_id  , " +
-								 " MOTIVO.nome as workflowpendencia_nome, MOTIVO.workflowetapa_id as workflowetapapendencia_id " +
+								 " ETAPA.nome as workflow_nome ,ETAPA.etapa_id  , " +
+								 " MOTIVO.nome as workflowpendencia_nome, MOTIVO.etapa_id as etapapendencia_id " +
 								 " FROM ((((CONTROLEFORMULARIO (NOLOCK) " +      
 								 " INNER JOIN TIPOCONTROLE (NOLOCK) ON CONTROLEFORMULARIO.tipocontrole_id = TIPOCONTROLE.tipocontrole_id) " +       
 								 " INNER JOIN FORMULARIO (NOLOCK) ON CONTROLEFORMULARIO.formulario_id = FORMULARIO.formulario_id) " +       
 								 " INNER JOIN USUARIO (NOLOCK) ON CONTROLEFORMULARIO.usuario_id = USUARIO.usuario_id) " +  
-								 " INNER JOIN WORKFLOWETAPA AS ETAPA (NOLOCK) ON ETAPA.workflowetapa_id = CONTROLEFORMULARIO.workflowetapa_id) " +
-								 " LEFT JOIN WORKFLOWETAPA AS MOTIVO (NOLOCK) ON MOTIVO.workflowetapa_id = CONTROLEFORMULARIO.workflowetapapendencia_id ";
+								 " INNER JOIN WORKFLOWETAPA AS ETAPA (NOLOCK) ON ETAPA.etapa_id = CONTROLEFORMULARIO.etapa_id) " +
+								 " LEFT JOIN WORKFLOWETAPA AS MOTIVO (NOLOCK) ON MOTIVO.etapa_id = CONTROLEFORMULARIO.etapapendencia_id ";
 
 	public ControleFormularioDao(Session session, ConnJDBC conexao) {
+
 		super(session, ControleFormulario.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 	
 	public ControleFormulario buscaControleByContratoTipoControle(Long formulario_id, Long tipocontrole_id) {
@@ -76,17 +76,17 @@ public class ControleFormularioDao extends Dao<ControleFormulario> {
 				Usuario usuario = new Usuario();
 				Formulario formulario = new Formulario();
 				Calendar calendarAux = new GregorianCalendar();
-				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
-				WorkflowEtapa workflowEtapaPendencia = new WorkflowEtapa();
+				Etapa etapa = new Etapa();
+				Etapa etapaPendencia = new Etapa();
 
 				usuario.setUsuario_id(rsControleFormulario.getLong("usuario_id"));
 				usuario.setNome(rsControleFormulario.getString("usuario_nome"));
 				
-				workflowEtapa.setWorkflowEtapa_id(rsControleFormulario.getLong("workflowetapa_id"));
-				workflowEtapa.setNome(rsControleFormulario.getString("workflow_nome"));
+				etapa.setEtapa_id(rsControleFormulario.getLong("etapa_id"));
+				etapa.setNome(rsControleFormulario.getString("etapa_nome"));
 
-				workflowEtapaPendencia.setWorkflowEtapa_id(rsControleFormulario.getLong("workflowetapapendencia_id"));
-				workflowEtapaPendencia.setNome(rsControleFormulario.getString("workflowpendencia_nome"));
+				etapaPendencia.setEtapa_id(rsControleFormulario.getLong("etapapendencia_id"));
+				etapaPendencia.setNome(rsControleFormulario.getString("etapapendencia_nome"));
 
 				controleFormulario.setControleFormulario_id(rsControleFormulario.getLong("controleformulario_id"));
 				controleFormulario.setQuantidadeContrato(rsControleFormulario.getInt("quantidadecontrato"));
@@ -95,8 +95,8 @@ public class ControleFormularioDao extends Dao<ControleFormulario> {
 				controleFormulario.setValorParcela(rsControleFormulario.getDouble("valorparcela"));
 				controleFormulario.setFormulario(formulario);
 				controleFormulario.setUsuario(usuario);
-				controleFormulario.setWorkflowEtapa(workflowEtapa);
-				controleFormulario.setWorkflowEtapaPendencia(workflowEtapaPendencia);
+				controleFormulario.setEtapa(etapa);
+				controleFormulario.setEtapaPendencia(etapaPendencia);
 
 				if(rsControleFormulario.getDate("dataatuacao") != null){
 					calendarAux.setTime(rsControleFormulario.getDate("dataatuacao"));

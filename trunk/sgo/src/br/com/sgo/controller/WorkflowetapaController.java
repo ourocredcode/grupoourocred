@@ -6,8 +6,8 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.WorkflowEtapa;
@@ -17,10 +17,10 @@ public class WorkflowetapaController {
 
 	private final Result result;	
 	private final UsuarioInfo usuarioInfo;
-	private final WorkflowEtapaDao workflowEtapaDao;
+	private final EtapaDao workflowEtapaDao;
 	private final WorkflowDao workflowDao;
 	
-	public WorkflowetapaController(Result result, UsuarioInfo usuarioInfo, WorkflowEtapaDao workflowEtapaDao, WorkflowDao workflowDao) {
+	public WorkflowetapaController(Result result, UsuarioInfo usuarioInfo, EtapaDao workflowEtapaDao, WorkflowDao workflowDao) {
 
 		this.result = result;
 		this.workflowEtapaDao = workflowEtapaDao;
@@ -34,7 +34,7 @@ public class WorkflowetapaController {
 	@Path("/workflowetapa/cadastro")
 	public void cadastro() {
 		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
-		result.include("workflowEtapas", this.workflowEtapaDao.buscaTodosWorkflowEtapa());
+		result.include("workflowEtapas", this.workflowEtapaDao.buscaTodosEtapa());
 	}
 
 	@Post
@@ -45,14 +45,15 @@ public class WorkflowetapaController {
 		String mensagem = "";
 
 		try {
-
-			if (this.workflowEtapaDao.buscaWorkflowPorEmpresaOrganizacaoWorflowEtapaNome(workflowEtapa.getEmpresa().getEmpresa_id(), workflowEtapa.getOrganizacao().getOrganizacao_id()
-					, workflowEtapa.getWorkflow().getWorkflow_id(), workflowEtapa.getNome()) == null) {				
+			//TODO
+			if (this.workflowEtapaDao.buscaEtapaByNome(workflowEtapa.getEmpresa().getEmpresa_id(), workflowEtapa.getOrganizacao().getOrganizacao_id()
+					, workflowEtapa.getNome()) == null) {				
 
 				workflowEtapa.setIsActive(workflowEtapa.getIsActive() == null ? false : true);
 				
 				this.workflowEtapaDao.beginTransaction();
-				this.workflowEtapaDao.adiciona(workflowEtapa);
+				//TODO
+				//this.workflowEtapaDao.adiciona(workflowEtapa);
 				this.workflowEtapaDao.commit();
 
 				mensagem = "Etapa " + workflowEtapa.getNome() + " adicionado com sucesso para o workflow " + workflowEtapa.getWorkflow().getNome();
@@ -80,14 +81,16 @@ public class WorkflowetapaController {
 	@Path("/workflowetapa/busca.json")
 	@Public
 	public void workflowEtapa(Long empresa_id, Long organizacao_id, String nome) {	
-		result.use(Results.json()).withoutRoot().from(workflowEtapaDao.buscaWorkflowEtapasByNome(empresa_id, organizacao_id, nome)).serialize();	
+		//TODO
+		//result.use(Results.json()).withoutRoot().from(workflowEtapaDao.buscaWorkflowEtapasByNome(empresa_id, organizacao_id, nome)).serialize();	
 	}
 
 	@Post
 	@Path("/workflowetapa/lista")
 	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
-		result.include("workflowEtapas", this.workflowEtapaDao.buscaWorkflowEtapasByNome(empresa_id, organizacao_id, nome));
+		//TODO
+		//result.include("workflowEtapas", this.workflowEtapaDao.buscaWorkflowEtapasByNome(empresa_id, organizacao_id, nome));
 	}
 
 	@Get

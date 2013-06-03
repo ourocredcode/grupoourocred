@@ -26,12 +26,12 @@ import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.sgo.dao.HisconBeneficioDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.infra.CustomFileUtil;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.HisconBeneficio;
 import br.com.sgo.modelo.ParceiroBeneficio;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class HisconbeneficioController {
@@ -41,7 +41,7 @@ public class HisconbeneficioController {
 	private final HisconBeneficioDao hisconBeneficioDao;
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final WorkflowDao workflowDao;
-	private final WorkflowEtapaDao workflowEtapaDao;
+	private final EtapaDao etapaDao;
 
 	private HisconBeneficio hisconBeneficio;
 	private Calendar dataAtual = Calendar.getInstance();
@@ -49,14 +49,14 @@ public class HisconbeneficioController {
 	private HttpServletResponse response;
 
 	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo, HisconBeneficioDao hisconBeneficioDao, 
-			ParceiroBeneficioDao parceiroBeneficioDao, WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,HisconBeneficio hisconBeneficio,HttpServletResponse response) {
+			ParceiroBeneficioDao parceiroBeneficioDao, WorkflowDao workflowDao, EtapaDao etapaDao,HisconBeneficio hisconBeneficio,HttpServletResponse response) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.hisconBeneficioDao = hisconBeneficioDao;
 		this.parceiroBeneficioDao = parceiroBeneficioDao;
 		this.workflowDao = workflowDao;
-		this.workflowEtapaDao = workflowEtapaDao;
+		this.etapaDao = etapaDao;
 		this.hisconBeneficio = hisconBeneficio;
 		this.response = response;
 
@@ -70,16 +70,13 @@ public class HisconbeneficioController {
 
 		Collection<HisconBeneficio> hisconsAuxiliar = new ArrayList<HisconBeneficio>();
 
-		WorkflowEtapa etapaAguardandoAdm = this.workflowEtapaDao.buscaWorkflowEtapaByNome(
-				usuarioInfo.getEmpresa().getEmpresa_id(), 
-				usuarioInfo.getOrganizacao().getOrganizacao_id(), 
-				"Aguardando Adm");
+		Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Adm");
 
 		if(usuarioInfo.getPerfil().getNome().equals("Administrativo")){
 
 			hisconsAuxiliar =
 					this.hisconBeneficioDao.buscaHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(), 
-							usuarioInfo.getOrganizacao().getOrganizacao_id(),etapaAguardandoAdm.getWorkflowEtapa_id());
+							usuarioInfo.getOrganizacao().getOrganizacao_id(),etapaAguardandoAdm.getEtapa_id());
 
 		} else {
 
@@ -98,13 +95,13 @@ public class HisconbeneficioController {
 
 			h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
 
-			h.setWorkflowEtapas(workflowEtapaDao.buscaWorKFlowEtapaByHisconPerfil(
+			h.setEtapas(etapaDao.buscaWorKFlowEtapaByHisconPerfil(
 						usuarioInfo.getEmpresa().getEmpresa_id(),
 						usuarioInfo.getOrganizacao().getOrganizacao_id(),
 						usuarioInfo.getPerfil().getPerfil_id(),
 						h.getHisconBeneficio_id()));
 
-			h.getWorkflowEtapas().add(h.getWorkflowEtapa());
+			h.getEtapas().add(h.getEtapa());
 
 			hiscons.add(h);
 
@@ -187,10 +184,10 @@ public class HisconbeneficioController {
 		this.hisconBeneficio.setIsPadrao(false);
 
 		this.hisconBeneficio.setWorkflow(this.workflowDao.load(2L));
-		this.hisconBeneficio.setWorkflowEtapa(this.workflowEtapaDao.load(22L));
+		this.hisconBeneficio.setEtapa(this.etapaDao.load(22L));
 
 		this.hisconBeneficio.setWorkflowPosicao(this.workflowDao.load(3L));
-		this.hisconBeneficio.setWorkflowPosicaoEtapa(this.workflowEtapaDao.load(27L));
+		this.hisconBeneficio.setEtapaPosicao(this.etapaDao.load(27L));
 
 		try {
 
@@ -220,20 +217,19 @@ public class HisconbeneficioController {
 
 		this.hisconBeneficio = this.hisconBeneficioDao.buscaHisconBeneficioById(hisconBeneficio.getHisconBeneficio_id());
 
-		if(hisconBeneficio.getWorkflowEtapa() != null){
+		if(hisconBeneficio.getEtapa() != null){
 
-			hisconBeneficio.setWorkflowEtapa(this.workflowEtapaDao.buscaWorkflowEtapaById(hisconBeneficio.getWorkflowEtapa().getWorkflowEtapa_id()));
+			hisconBeneficio.setEtapa(this.etapaDao.buscaEtapaById(hisconBeneficio.getEtapa().getEtapa_id()));
 
-			if(!this.hisconBeneficio.getWorkflowEtapa().getNome().equals("Aguardando Adm") && !this.hisconBeneficio.getWorkflowEtapa().getNome().equals("Enviado"))
-				this.hisconBeneficio.setDataAdm(hisconBeneficio.getWorkflowEtapa().getNome().equals("Aguardando Adm") ? GregorianCalendar.getInstance() : null);
+			if(!this.hisconBeneficio.getEtapa().getNome().equals("Aguardando Adm") && !this.hisconBeneficio.getEtapa().getNome().equals("Enviado"))
+				this.hisconBeneficio.setDataAdm(hisconBeneficio.getEtapa().getNome().equals("Aguardando Adm") ? GregorianCalendar.getInstance() : null);
 
-			this.hisconBeneficio.setWorkflowEtapa(hisconBeneficio.getWorkflowEtapa());
-			this.hisconBeneficio.setIsEnviado(hisconBeneficio.getWorkflowEtapa().getNome().equals("Enviado") || hisconBeneficio.getWorkflowEtapa().getNome().equals("Desconsiderado") ? true : false);
+			this.hisconBeneficio.setEtapa(hisconBeneficio.getEtapa());
+			this.hisconBeneficio.setIsEnviado(hisconBeneficio.getEtapa().getNome().equals("Enviado") || hisconBeneficio.getEtapa().getNome().equals("Desconsiderado") ? true : false);
 
 		}
 
-		if (hisconBeneficio.getWorkflowPosicaoEtapa() != null)
-			this.hisconBeneficio.setWorkflowPosicaoEtapa(hisconBeneficio.getWorkflowPosicaoEtapa() == null ? null : hisconBeneficio.getWorkflowPosicaoEtapa());
+		if (hisconBeneficio.getEtapaPosicao() != null)
 
 		if(hisconBeneficio.getUsuario() != null)
 			this.hisconBeneficio.setUsuario(hisconBeneficio.getUsuario());
@@ -247,12 +243,12 @@ public class HisconbeneficioController {
 		
 		if(hisconBeneficio.getIsEnviado()){
 
-			WorkflowEtapa etapaEnviado = this.workflowEtapaDao.buscaWorkflowEtapaByNome(
+			Etapa etapaEnviado = this.etapaDao.buscaEtapaByNome(
 					usuarioInfo.getEmpresa().getEmpresa_id(), 
 					usuarioInfo.getOrganizacao().getOrganizacao_id(), 
 					"Enviado");
 
-			this.hisconBeneficio.setWorkflowEtapa(etapaEnviado);
+			this.hisconBeneficio.setEtapa(etapaEnviado);
 
 			this.hisconBeneficio.setIsEnviado(true);
 
@@ -294,14 +290,14 @@ public class HisconbeneficioController {
 
 				CustomFileUtil.extraiZip(new File(nomeFile),new File(diretorio));
 
-				WorkflowEtapa etapaAguardandoAdm = this.workflowEtapaDao.buscaWorkflowEtapaByNome(
+				Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByNome(
 						usuarioInfo.getEmpresa().getEmpresa_id(), 
 						usuarioInfo.getOrganizacao().getOrganizacao_id(), 
 						"Aguardando Adm");
 
 				hiscons = this.hisconBeneficioDao.buscaHisconsToUpload(usuarioInfo.getEmpresa().getEmpresa_id(), 
 																		usuarioInfo.getOrganizacao().getOrganizacao_id(),
-																		etapaAguardandoAdm.getWorkflowEtapa_id());
+																		etapaAguardandoAdm.getEtapa_id());
 
 				for (HisconBeneficio h : hiscons){
 

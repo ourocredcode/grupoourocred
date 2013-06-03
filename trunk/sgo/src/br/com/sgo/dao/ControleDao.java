@@ -18,8 +18,7 @@ import br.com.sgo.modelo.Usuario;
 
 @Component
 public class ControleDao extends Dao<Controle> {
-
-	private Session session;
+	
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -34,9 +33,10 @@ public class ControleDao extends Dao<Controle> {
 			"										INNER JOIN USUARIO (NOLOCK) ON CONTROLE.usuario_id = USUARIO.usuario_id ";
 
 	public ControleDao(Session session, ConnJDBC conexao) {
+
 		super(session, Controle.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 	
 	public Controle buscaControleByContratoTipoControle(Long contrato_id, Long tipocontrole_id) {

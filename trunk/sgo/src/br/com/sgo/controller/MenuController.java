@@ -26,7 +26,7 @@ import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
@@ -36,7 +36,7 @@ import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.Usuario;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class MenuController {
@@ -49,13 +49,13 @@ public class MenuController {
 	private final ContratoDao contratoDao;
 	private final UsuarioDao usuarioDao;
 	private final PerfilDao perfilDao;
-	private final WorkflowEtapaDao workflowEtapaDao;
+	private final EtapaDao workflowEtapaDao;
 	private final WorkflowDao workflowDao;
 	private final ProdutoDao produtoDao;
 	private final BancoDao bancoDao;
 	private final UsuarioInfo usuarioInfo;
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
-	private Collection<WorkflowEtapa> etapas = new ArrayList<WorkflowEtapa>();
+	private Collection<Etapa> etapas = new ArrayList<Etapa>();
 	private Collection<Produto> produtos = new ArrayList<Produto>();
 
 	private Empresa empresa;
@@ -63,7 +63,7 @@ public class MenuController {
 	private Usuario usuario;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,
-			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,WorkflowEtapaDao workflowEtapaDao,WorkflowDao workflowDao,ProdutoDao produtoDao,
+			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao workflowEtapaDao,WorkflowDao workflowDao,ProdutoDao produtoDao,
 			BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
@@ -117,9 +117,9 @@ public class MenuController {
 
 		result.include("bancos",this.bancoDao.buscaBancoByGrupo("Tomadores"));
 		result.include("bancosComprados",this.bancoDao.buscaBancoByGrupo("Comprados"));
-
-		result.include("etapas",this.workflowEtapaDao.buscaWorkflowEtapasByEmpOrgWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
-				this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Contrato").getWorkflow_id()));
+		//TODO
+		//result.include("etapas",this.workflowEtapaDao.buscaWorkflowEtapasByEmpOrgWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
+				//this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Contrato").getWorkflow_id()));
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
 		contador();
