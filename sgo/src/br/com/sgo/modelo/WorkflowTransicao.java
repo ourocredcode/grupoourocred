@@ -39,12 +39,12 @@ public class WorkflowTransicao implements Serializable {
 	private Workflow workflow;
 	
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = false)
-	private WorkflowEtapa workflowEtapa;
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = false)
+	private Etapa etapa;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowetapaproximo_id", updatable = true, nullable = false)
-	private WorkflowEtapa workflowEtapaProximo;
+	@JoinColumn(name = "etapaproximo_id", updatable = true, nullable = false)
+	private Etapa etapaProximo;
 
 	@ManyToOne
 	@JoinColumn(name = "perfil_id", updatable = true, nullable = true)
@@ -106,52 +106,28 @@ public class WorkflowTransicao implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
+	public Workflow getWorkflow() {
+		return workflow;
 	}
 
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
+	public void setWorkflow(Workflow workflow) {
+		this.workflow = workflow;
 	}
 
-	public WorkflowEtapa getWorkflowEtapaProximo() {
-		return workflowEtapaProximo;
+	public Etapa getEtapa() {
+		return etapa;
 	}
 
-	public void setWorkflowEtapaProximo(WorkflowEtapa workflowEtapaProximo) {
-		this.workflowEtapaProximo = workflowEtapaProximo;
+	public void setEtapa(Etapa etapa) {
+		this.etapa = etapa;
 	}
 
-	public String getNome() {
-		return nome;
+	public Etapa getEtapaProximo() {
+		return etapaProximo;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Integer getSequencia() {
-		return sequencia;
-	}
-
-	public void setSequencia(Integer sequencia) {
-		this.sequencia = sequencia;
-	}
-
-	public Boolean getIsPadrao() {
-		return isPadrao;
-	}
-
-	public void setIsPadrao(Boolean isPadrao) {
-		this.isPadrao = isPadrao;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
+	public void setEtapaProximo(Etapa etapaProximo) {
+		this.etapaProximo = etapaProximo;
 	}
 
 	public Perfil getPerfil() {
@@ -178,6 +154,22 @@ public class WorkflowTransicao implements Serializable {
 		this.updatedBy = updatedBy;
 	}
 
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void setSequencia(Integer sequencia) {
+		this.sequencia = sequencia;
+	}
+
+	public Boolean getIsPadrao() {
+		return isPadrao;
+	}
+
+	public void setIsPadrao(Boolean isPadrao) {
+		this.isPadrao = isPadrao;
+	}
+
 	public Calendar getCreated() {
 		return created;
 	}
@@ -202,6 +194,14 @@ public class WorkflowTransicao implements Serializable {
 		this.chave = chave;
 	}
 
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
 	public String getDescricao() {
 		return descricao;
 	}
@@ -210,11 +210,12 @@ public class WorkflowTransicao implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public Workflow getWorkflow() {
-		return workflow;
+	public Boolean getIsActive() {
+		return isActive;
 	}
 
-	public void setWorkflow(Workflow workflow) {
-		this.workflow = workflow;
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
+
 }

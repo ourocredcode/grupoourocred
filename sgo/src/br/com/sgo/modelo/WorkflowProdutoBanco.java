@@ -4,25 +4,27 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.caelum.vraptor.ioc.Component;
 
+@Entity
 @Component
-@Table(name = "WORKFLOWETAPA")
-public class WorkflowEtapa implements Serializable {
+@Table(name = "WORKFLOWPRODUTOBANCO")
+public class WorkflowProdutoBanco implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne
-	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
-	private Workflow workflow;
-
-	@ManyToOne
-	@JoinColumn(name = "etapa_id", updatable = true, nullable = false)
-	private Etapa etapa;
+	@Id
+	@Column(name = "workflowprodutobanco_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long workflowProdutoBanco_id;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
@@ -31,7 +33,19 @@ public class WorkflowEtapa implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
+
+	@ManyToOne
+	@JoinColumn(name = "produto_id", updatable = true, nullable = false)
+	private Produto produto;
+
+	@ManyToOne
+	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
+	private Produto banco;
 	
+	@ManyToOne
+	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
+	private Workflow workflow;
+
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
@@ -55,26 +69,18 @@ public class WorkflowEtapa implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
+	@Column(name = "isworkflow")
+	private Boolean isWorkflow;
+
 	@Column(name = "isactive")
 	private Boolean isActive;
-	
-	@Column(name = "isleituraescrita")
-	private Boolean isLeituraEscrita;
 
-	public Workflow getWorkflow() {
-		return workflow;
+	public Long getWorkflowProdutoBanco_id() {
+		return workflowProdutoBanco_id;
 	}
 
-	public void setWorkflow(Workflow workflow) {
-		this.workflow = workflow;
-	}
-
-	public Etapa getEtapa() {
-		return etapa;
-	}
-
-	public void setEtapa(Etapa etapa) {
-		this.etapa = etapa;
+	public void setWorkflowProdutoBanco_id(Long workflowProdutoBanco_id) {
+		this.workflowProdutoBanco_id = workflowProdutoBanco_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -91,6 +97,30 @@ public class WorkflowEtapa implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
+	public Produto getBanco() {
+		return banco;
+	}
+
+	public void setBanco(Produto banco) {
+		this.banco = banco;
+	}
+
+	public Workflow getWorkflow() {
+		return workflow;
+	}
+
+	public void setWorkflow(Workflow workflow) {
+		this.workflow = workflow;
 	}
 
 	public Usuario getCreatedBy() {
@@ -149,20 +179,20 @@ public class WorkflowEtapa implements Serializable {
 		this.descricao = descricao;
 	}
 
+	public Boolean getIsWorkflow() {
+		return isWorkflow;
+	}
+
+	public void setIsWorkflow(Boolean isWorkflow) {
+		this.isWorkflow = isWorkflow;
+	}
+
 	public Boolean getIsActive() {
 		return isActive;
 	}
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public Boolean getIsLeituraEscrita() {
-		return isLeituraEscrita;
-	}
-
-	public void setIsLeituraEscrita(Boolean isLeituraEscrita) {
-		this.isLeituraEscrita = isLeituraEscrita;
 	}
 
 }

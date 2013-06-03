@@ -17,7 +17,7 @@ import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Workflow;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.WorkflowEtapaPerfilAcesso;
 
 
@@ -176,7 +176,7 @@ public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganiz
 			
 			this.stmt.setLong(1, usuarioInfo.getEmpresa().getEmpresa_id());
 			this.stmt.setLong(2, usuarioInfo.getOrganizacao().getOrganizacao_id());			
-			this.stmt.setLong(3, workflowEtapaPerfilAcesso.getWorkflowEtapa().getWorkflowEtapa_id());
+			this.stmt.setLong(3, workflowEtapaPerfilAcesso.getEtapa().getEtapa_id());
 			this.stmt.setLong(4, workflowEtapaPerfilAcesso.getPerfil().getPerfil_id());
 			this.stmt.setBoolean(5, workflowEtapaPerfilAcesso.getIsActive());
 			this.stmt.setBoolean(6, workflowEtapaPerfilAcesso.getIsLeituraEscrita());
@@ -201,7 +201,7 @@ public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganiz
 		Organizacao organizacao = new Organizacao();
 		WorkflowEtapaPerfilAcesso workflowEtapaPerfilAcesso = new WorkflowEtapaPerfilAcesso();
 		Workflow workflow = new Workflow();
-		WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+		Etapa etapa = new Etapa();
 		Perfil perfil = new Perfil();
 		
 		empresa.setEmpresa_id(rsWorkflowEtapaPerfilAcesso.getLong("empresa_id"));
@@ -213,15 +213,15 @@ public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganiz
 		workflow.setWorkflow_id(rsWorkflowEtapaPerfilAcesso.getLong("workflow_id"));
 		workflow.setNome(rsWorkflowEtapaPerfilAcesso.getString("workflow_nome"));
 
-		workflowEtapa.setWorkflowEtapa_id(rsWorkflowEtapaPerfilAcesso.getLong("workflowetapa_id"));
-		workflowEtapa.setNome(rsWorkflowEtapaPerfilAcesso.getString("workflowetapa_nome"));
+		etapa.setEtapa_id(rsWorkflowEtapaPerfilAcesso.getLong("etapa_id"));
+		etapa.setNome(rsWorkflowEtapaPerfilAcesso.getString("etapa_nome"));
 
 		perfil.setPerfil_id(rsWorkflowEtapaPerfilAcesso.getLong("perfil_id"));
 		perfil.setNome(rsWorkflowEtapaPerfilAcesso.getString("perfil_nome"));
 
 		workflowEtapaPerfilAcesso.setEmpresa(empresa);
 		workflowEtapaPerfilAcesso.setOrganizacao(organizacao);
-		workflowEtapaPerfilAcesso.setWorkflowEtapa(workflowEtapa);
+		workflowEtapaPerfilAcesso.setEtapa(etapa);
 		workflowEtapaPerfilAcesso.setWorkflow(workflow);
 		workflowEtapaPerfilAcesso.setPerfil(perfil);
 		workflowEtapaPerfilAcesso.setIsActive(rsWorkflowEtapaPerfilAcesso.getBoolean("isactive"));

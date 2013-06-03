@@ -17,8 +17,8 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = false)
-	private WorkflowEtapa workflowEtapa;
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = false)
+	private Etapa etapa;
 
 	@ManyToOne
 	@JoinColumn(name = "perfil_id", updatable = true, nullable = false)
@@ -68,12 +68,12 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
+	public Etapa getEtapa() {
+		return etapa;
 	}
 
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
+	public void setEtapa(Etapa etapa) {
+		this.etapa = etapa;
 	}
 
 	public Perfil getPerfil() {
@@ -90,6 +90,14 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Workflow getWorkflow() {
+		return workflow;
+	}
+
+	public void setWorkflow(Workflow workflow) {
+		this.workflow = workflow;
 	}
 
 	public Organizacao getOrganizacao() {
@@ -114,14 +122,6 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 
 	public void setIsUpload(Boolean isUpload) {
 		this.isUpload = isUpload;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
 	}
 
 	public Usuario getCreatedBy() {
@@ -180,11 +180,12 @@ public class WorkflowEtapaPerfilAcesso implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public Workflow getWorkflow() {
-		return workflow;
+	public Boolean getIsActive() {
+		return isActive;
 	}
 
-	public void setWorkflow(Workflow workflow) {
-		this.workflow = workflow;
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
+
 }

@@ -35,8 +35,8 @@ public class HistoricoHiscon implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = true)
-	private WorkflowEtapa workflowEtapa;
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = true)
+	private Etapa etapa;
 
 	@ManyToOne
 	@JoinColumn(name = "hisconbeneficio_id", updatable = true, nullable = true)
@@ -96,12 +96,12 @@ public class HistoricoHiscon implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
+	public Etapa getEtapa() {
+		return etapa;
 	}
 
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
+	public void setEtapa(Etapa etapa) {
+		this.etapa = etapa;
 	}
 
 	public HisconBeneficio getHisconBeneficio() {
@@ -152,6 +152,14 @@ public class HistoricoHiscon implements Serializable {
 		this.updated = updated;
 	}
 
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -174,14 +182,6 @@ public class HistoricoHiscon implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public String getChave() {
-		return chave;
-	}
-
-	public void setChave(String chave) {
-		this.chave = chave;
 	}
 
 }

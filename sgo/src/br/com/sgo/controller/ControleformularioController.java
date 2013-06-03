@@ -15,7 +15,7 @@ import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.HistoricoControleFormularioDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.ControleFormulario;
@@ -27,14 +27,14 @@ import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class ControleformularioController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
-	private final WorkflowEtapaDao workFlowetapaDao;
+	private final EtapaDao etapaDao;
 	private final WorkflowDao workflowDao;
 	private final FormularioDao formularioDao;
 	private final ControleFormularioDao controleFormularioDao;
@@ -51,10 +51,10 @@ public class ControleformularioController {
 	private Usuario usuario;
 	private Perfil perfil;
 	private Workflow workflow;
-	private Collection<WorkflowEtapa> etapas;
-	private Collection<WorkflowEtapa> motivos;
+	private Collection<Etapa> etapas;
+	private Collection<Etapa> motivos;
 
-	public ControleformularioController(Result result,Formulario formulario, FormularioDao formularioDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
+	public ControleformularioController(Result result,Formulario formulario, FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
 			ControleFormularioDao controleFormularioDao,HistoricoControleFormularioDao historicoControleFormularioDao,ContratoDao contratoDao,WorkflowDao workflowDao,
 			Empresa empresa,Organizacao organizacao,Usuario usuario,Perfil perfil,TipoControleDao tipoControleDao,HistoricoContratoDao historicoContratoDao){		
 
@@ -62,7 +62,7 @@ public class ControleformularioController {
 		this.usuarioInfo = usuarioInfo;
 		this.formulario = formulario;
 		this.formularioDao = formularioDao;
-		this.workFlowetapaDao = workFlowetapaDao;
+		this.etapaDao = etapaDao;
 		this.workflowDao = workflowDao;
 		this.controleFormularioDao = controleFormularioDao;
 		this.empresa = usuarioInfo.getEmpresa();
@@ -107,11 +107,11 @@ public class ControleformularioController {
 		posvenda.setPerfil(perfil);
 
 		workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Pós Venda");
-		etapas = workFlowetapaDao.buscaWorKFlowEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
+		etapas = etapaDao.buscaWorKFlowEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
 		posvenda.setWorkflow(workflow);
 
 		workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Motivos Pós Venda");
-		motivos = workFlowetapaDao.buscaWorKFlowEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
+		motivos = etapaDao.buscaWorKFlowEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
 		posvenda.setWorkflowPendencia(workflow);
 
 		result.include("posvenda",posvenda);
@@ -146,8 +146,8 @@ public class ControleformularioController {
 		if(posvenda.getControleFormulario_id() != null){
 
 			this.posvenda = this.controleFormularioDao.load(posvenda.getControleFormulario_id());
-			this.posvenda.setWorkflowEtapa(this.workFlowetapaDao.buscaWorkflowEtapaById(posvenda.getWorkflowEtapa().getWorkflowEtapa_id()));
-			this.posvenda.setWorkflowEtapaPendencia(posvenda.getWorkflowEtapaPendencia().getWorkflowEtapa_id() == null ? null : this.workFlowetapaDao.buscaWorkflowEtapaById(posvenda.getWorkflowEtapaPendencia().getWorkflowEtapa_id()));
+			this.posvenda.setEtapa(this.etapaDao.buscaEtapaById(posvenda.getEtapa().getEtapa_id()));
+			this.posvenda.setEtapaPendencia(posvenda.getEtapaPendencia().getEtapa_id() == null ? null : this.etapaDao.buscaEtapaById(posvenda.getEtapaPendencia().getEtapa_id()));
 			this.posvenda.setCreatedBy(posvenda.getCreatedBy());
 			this.posvenda.setCreated(posvenda.getCreated());
 			this.posvenda.setConfirmaPrazo(posvenda.getConfirmaPrazo());
@@ -155,8 +155,8 @@ public class ControleformularioController {
 			this.posvenda.setValorLiquido(posvenda.getValorLiquido());
 			this.posvenda.setValorParcela(posvenda.getValorParcela());
 
-			status = this.posvenda.getWorkflowEtapa().getNome().equals("reprovado") || 
-					this.posvenda.getWorkflowEtapa().getNome().equals("pendente") ? "Recalcular" : "Em Assinatura";
+			status = this.posvenda.getEtapa().getNome().equals("reprovado") || 
+					this.posvenda.getEtapa().getNome().equals("pendente") ? "Recalcular" : "Em Assinatura";
 
 			this.controleFormularioDao.beginTransaction();
 			this.controleFormularioDao.atualiza(this.posvenda);
@@ -164,11 +164,11 @@ public class ControleformularioController {
 
 		} else {
 
-			posvenda.setWorkflowEtapa(this.workFlowetapaDao.buscaWorkflowEtapaById(posvenda.getWorkflowEtapa().getWorkflowEtapa_id()));
-			posvenda.setWorkflowEtapaPendencia(this.workFlowetapaDao.buscaWorkflowEtapaById(posvenda.getWorkflowEtapaPendencia().getWorkflowEtapa_id()));
+			posvenda.setEtapa(this.etapaDao.buscaEtapaById(posvenda.getEtapa().getEtapa_id()));
+			posvenda.setEtapaPendencia(this.etapaDao.buscaEtapaById(posvenda.getEtapaPendencia().getEtapa_id()));
 
-			status = posvenda.getWorkflowEtapa().getNome().equals("reprovado") || 
-					posvenda.getWorkflowEtapa().getNome().equals("pendente") ? "Recalcular" : "Em Assinatura";
+			status = posvenda.getEtapa().getNome().equals("reprovado") || 
+					posvenda.getEtapa().getNome().equals("pendente") ? "Recalcular" : "Em Assinatura";
 
 			posvenda.setEmpresa(empresa);
 			posvenda.setOrganizacao(organizacao);
@@ -185,10 +185,12 @@ public class ControleformularioController {
 		for(Contrato c : formulario.getContratos()){
 
 			c = this.contratoDao.load(c.getContrato_id());
-
-			if(c.getWorkflowEtapa().getNome().equals("Aguardando Pós Venda") || c.getWorkflowEtapa().getNome().equals("Aguardando Qualidade"))
-				c.setWorkflowEtapa(this.workFlowetapaDao.buscaWorkflowPorEmpresaOrganizacaoWorflowEtapaNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
-							c.getWorkflow().getWorkflow_id(), status));	
+			
+			
+			//TODO
+			if(c.getEtapa().getNome().equals("Aguardando Pós Venda") || c.getEtapa().getNome().equals("Aguardando Qualidade"))
+				//c.setEtapa(this.etapaDao.buscaWorkflowPorEmpresaOrganizacaoEtapaNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
+				//			c.getWorkflow().getWorkflow_id(), status));	
 			
 			
 			

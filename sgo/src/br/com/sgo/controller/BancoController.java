@@ -7,6 +7,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.BancoDao;
+import br.com.sgo.dao.GrupoBancoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Banco;
 
@@ -15,18 +16,20 @@ public class BancoController {
 
 	private final Result result;
 	private final BancoDao bancoDao;
+	private final GrupoBancoDao grupoBancoDao;
 
-	public BancoController(Result result, BancoDao bancoDao){
+	public BancoController(Result result, BancoDao bancoDao, GrupoBancoDao grupoBancoDao){
 
-		this.bancoDao = bancoDao;		
 		this.result = result;
+		this.bancoDao = bancoDao;
+		this.grupoBancoDao = grupoBancoDao;
 
 	}
 
 	@Get
 	@Path("/banco/cadastro")
 	public void cadastro(){
-
+		//result.include("workflows", this.grupoBancoDao.buscaGrupoBanco();
 	}
 
 	@Post

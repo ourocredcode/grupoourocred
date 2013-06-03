@@ -16,7 +16,7 @@ import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleDao;
 import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.TipoControleDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Controle;
@@ -24,14 +24,14 @@ import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Usuario;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class ControleController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
-	private final WorkflowEtapaDao workFlowetapaDao;
+	private final EtapaDao workFlowetapaDao;
 	private final ContratoDao contratoDao;
 	private final ControleDao controleDao;
 	private final HistoricoControleDao historicoControleDao;
@@ -43,9 +43,9 @@ public class ControleController {
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
-	private Collection<WorkflowEtapa> etapas;
+	private Collection<Etapa> etapas;
 
-	public ControleController(Result result,Contrato contrato, ContratoDao contratoDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,ControleDao controleDao
+	public ControleController(Result result,Contrato contrato, ContratoDao contratoDao,EtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,ControleDao controleDao
 			,Empresa empresa,Organizacao organizacao,Usuario usuario,HistoricoControleDao historicoControleDao,TipoControleDao tipoControleDao){		
 
 		this.result = result;

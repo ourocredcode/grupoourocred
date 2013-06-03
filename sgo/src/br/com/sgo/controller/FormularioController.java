@@ -35,7 +35,7 @@ import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.jasper.FormularioDataSource;
 import br.com.sgo.modelo.Banco;
@@ -71,7 +71,7 @@ public class FormularioController {
 	private final ContratoDao contratoDao;
 	private final CoeficienteDao coeficienteDao;
 	private final WorkflowDao workflowDao;
-	private final WorkflowEtapaDao workflowEtapaDao;
+	private final EtapaDao workflowEtapaDao;
 	private final PnDao pnDao;
 
 	private HttpServletResponse response;
@@ -90,7 +90,7 @@ public class FormularioController {
 			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,ParceiroInfoBancoDao parceiroInfoBancoDao,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
-			WorkflowDao workflowDao, WorkflowEtapaDao workflowEtapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
+			WorkflowDao workflowDao, EtapaDao workflowEtapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao){		
 
 		this.result = result;
@@ -250,7 +250,7 @@ public class FormularioController {
 
 		contrato.setWorkflow(this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(usuarioInfo.getEmpresa().getEmpresa_id(),
 				usuarioInfo.getOrganizacao().getOrganizacao_id(),1L,"Status Contrato"));
-		contrato.setWorkflowEtapa(this.workflowEtapaDao.buscaWorkflowEtapaByNome(usuarioInfo.getEmpresa().getEmpresa_id(),
+		contrato.setEtapa(this.workflowEtapaDao.buscaEtapaByNome(usuarioInfo.getEmpresa().getEmpresa_id(),
 				usuarioInfo.getOrganizacao().getOrganizacao_id(),"Aguardando Status"));
 
 		if(contrato.getRecompraBanco().getBanco_id() != null){

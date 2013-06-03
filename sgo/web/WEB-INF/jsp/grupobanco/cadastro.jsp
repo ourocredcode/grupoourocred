@@ -120,9 +120,26 @@ function limpaForm() {
 		<a href="#" class="current">Banco</a>
 	</div>
 
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+
 <div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">								
 				<li class="active" id="grupobanco-li"><a href="#grupobanco-div" data-toggle="tab" id="grupobanco-li-a">Grupo de Bancos</a></li>
@@ -132,66 +149,45 @@ function limpaForm() {
 			<div id="myTabContent" class="tab-content">
 
 				<div class="tab-pane fade active in" id="grupobanco-div">
-				
-						<div class="row25MarginTop">
-						<div class="span3">
-							<form id="grupoBancoForm" name="grupoBancoForm" action="<c:url value="/grupobanco/salva"/>" method="POST">
-								<div class="control-group">
-									<label class="control-label" for="grupoBancoEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="grupoBancoEmpresa" name="grupoBanco.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="grupoBancoEmpresaId" name="grupoBanco.empresa.empresa_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="grupoBancoOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="grupoBancoOrganizacao" name="grupoBanco.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="grupoBancoOrganizacaoId" name="grupoBanco.organizacao.organizacao_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="grupoBancoNome">Nome</label>
-									<div class="controls">
-										<input type="text" id="grupoBancoNome" name="grupoBanco.nome" placeholder="Nome" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="grupoBancoDescricao">Descrição</label>
-									<div class="controls">
-										<input type="text" id="grupoBancoDescricao" name="grupoBanco.descricao" placeholder="Descrição" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="grupoBancoIsActive">Ativo</label>
-									<div class="controls">
-										<input type="checkbox" id="grupoBancoIsActive" name="grupoBanco.isActive" checked="checked" value="1" >							
-									</div>
-								</div>
-							 	<div class="btn-group">
-									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-								</div>
-							</form>
+					<form id="grupoBancoForm" name="grupoBancoForm" action="<c:url value="/grupobanco/salva"/>" method="POST">
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="grupoBancoEmpresa">Empresa</label>
+	      						<input class="span10" id="grupoBancoEmpresa" name="grupoBanco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span10" id="grupoBancoEmpresaId" name="grupoBanco.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" >
+	    					</div>						
+							<div class="span2">
+								<label for="grupoBancoOrganizacao">Organização</label>
+	      						<input class="span10" id="grupoBancoOrganizacao" name="grupoBanco.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span10" id="grupoBancoOrganizacaoId" name="grupoBanco.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">	    						
+							</div>
+						</div>						
+						<div class="row-fluid">						
+							<div class="span3">
+								<label for="grupoBancoNome">Nome</label>
+								<input class="input-xlarge" id="grupoBancoNome" name="grupoBanco.nome" placeholder="Nome" type="text" required>
+							</div>
+							<div class="span3">
+								<label for="grupoBancoDescricao">Descrição</label>
+								<input class="input-xlarge"id="grupoBancoDescricao" name="grupoBanco.descricao" placeholder="Descrição" type="text" required>
+							</div>
+							<div class="span1">
+								<label for="grupoBancoIsActive">Ativo</label>
+								<input type="checkbox" id="grupoBancoIsActive" name="grupoBanco.isActive" checked="checked" value="1" >							
+							</div>
 						</div>
-						
-					</div>
-				
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
+					</form>
 				</div>
-
-				<div class="tab-pane fade " id="banco-div" >
-
-						
-					
-				</div>
-	
+				<div class="tab-pane fade " id="banco-div" ></div>
 			</div>
 		</div>
 	</div>

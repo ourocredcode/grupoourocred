@@ -28,7 +28,7 @@ import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.ProdutoBancoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
-import br.com.sgo.dao.WorkflowEtapaDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.jasper.CheckListDataSource;
 import br.com.sgo.modelo.Banco;
@@ -39,7 +39,7 @@ import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Produto;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class LogisticaController {
@@ -53,7 +53,7 @@ public class LogisticaController {
 	private final TabelaDao tabelaDao;
 	private final ContratoDao contratoDao;
 	private final FormularioDao formularioDao;
-	private final WorkflowEtapaDao workFlowetapaDao;
+	private final EtapaDao workFlowetapaDao;
 	private final LogisticaDao logisticaDao;
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
@@ -65,11 +65,11 @@ public class LogisticaController {
 	private Collection<Banco> bancos;
 	private Collection<Produto> produtos;
 	private Collection<Coeficiente> coeficientes;
-	private Collection<WorkflowEtapa> etapas;
+	private Collection<Etapa> etapas;
 	private HttpServletResponse response;
 
 	public LogisticaController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
-			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,WorkflowEtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
+			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
 			LogisticaDao logisticaDao,HttpServletResponse response, ParceiroNegocioDao parceiroNegocioDao,ParceiroLocalidadeDao parceiroLocalidadeDao){		
 
 		this.result = result;

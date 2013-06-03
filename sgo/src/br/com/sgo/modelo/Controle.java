@@ -51,9 +51,17 @@ public class Controle implements Serializable {
 	private Workflow workflow;
 	
 	@ManyToOne
-	@JoinColumn(name = "workflowetapa_id", updatable = true, nullable = true)
-	private WorkflowEtapa workflowEtapa;
+	@JoinColumn(name = "workflowpendencia_id", updatable = true, nullable = true)
+	private Workflow workflowPendencia;
 	
+	@ManyToOne
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = true)
+	private Etapa etapa;
+	
+	@ManyToOne
+	@JoinColumn(name = "etapapendencia_id", updatable = true, nullable = true)
+	private Etapa etapaPendencia;
+
 	@ManyToOne
 	@JoinColumn(name = "tipocontrole_id", updatable = true, nullable = true)
 	private TipoControle tipoControle;
@@ -101,6 +109,14 @@ public class Controle implements Serializable {
 
 	@Column(name="datavencimento")
 	private Calendar dataVencimento;
+
+	public Long getControle_id() {
+		return controle_id;
+	}
+
+	public void setControle_id(Long controle_id) {
+		this.controle_id = controle_id;
+	}
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -150,12 +166,92 @@ public class Controle implements Serializable {
 		this.workflow = workflow;
 	}
 
-	public WorkflowEtapa getWorkflowEtapa() {
-		return workflowEtapa;
+	public Workflow getWorkflowPendencia() {
+		return workflowPendencia;
 	}
 
-	public void setWorkflowEtapa(WorkflowEtapa workflowEtapa) {
-		this.workflowEtapa = workflowEtapa;
+	public void setWorkflowPendencia(Workflow workflowPendencia) {
+		this.workflowPendencia = workflowPendencia;
+	}
+
+	public Etapa getEtapa() {
+		return etapa;
+	}
+
+	public void setEtapa(Etapa etapa) {
+		this.etapa = etapa;
+	}
+
+	public Etapa getEtapaPendencia() {
+		return etapaPendencia;
+	}
+
+	public void setEtapaPendencia(Etapa etapaPendencia) {
+		this.etapaPendencia = etapaPendencia;
+	}
+
+	public TipoControle getTipoControle() {
+		return tipoControle;
+	}
+
+	public void setTipoControle(TipoControle tipoControle) {
+		this.tipoControle = tipoControle;
+	}
+
+	public Usuario getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Usuario getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public Boolean getIsActive() {
@@ -214,75 +310,5 @@ public class Controle implements Serializable {
 		this.dataVencimento = dataVencimento;
 	}
 
-	public TipoControle getTipoControle() {
-		return tipoControle;
-	}
-
-	public void setTipoControle(TipoControle tipoControle) {
-		this.tipoControle = tipoControle;
-	}
-
-	public Long getControle_id() {
-		return controle_id;
-	}
-
-	public void setControle_id(Long controle_id) {
-		this.controle_id = controle_id;
-	}
-
-	public Usuario getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Usuario createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Usuario getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(Usuario updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Calendar getCreated() {
-		return created;
-	}
-
-	public void setCreated(Calendar created) {
-		this.created = created;
-	}
-
-	public Calendar getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Calendar updated) {
-		this.updated = updated;
-	}
-
-	public String getChave() {
-		return chave;
-	}
-
-	public void setChave(String chave) {
-		this.chave = chave;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+	
 }

@@ -24,7 +24,7 @@ import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
-import br.com.sgo.modelo.WorkflowEtapa;
+import br.com.sgo.modelo.Etapa;
 
 @Component
 public class HisconBeneficioDao extends Dao<HisconBeneficio> {
@@ -38,7 +38,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			 ", HISCONBENEFICIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, HISCONBENEFICIO.parceirobeneficio_id , PARCEIROBENEFICIO.numerobeneficio " + 
 			 ", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,PERFIL.perfil_id, PERFIL.nome as perfil_nome " +
 			 ", HISCONBENEFICIO.workflow_id, PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.cpf " +
-			 ", PARCEIRONEGOCIO.nome as parceironegocio_nome, WORKFLOWETAPA.workflowetapa_id, WORKFLOWETAPA.nome AS workflowetapa_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " + 
+			 ", PARCEIRONEGOCIO.nome as parceironegocio_nome, ETAPA.etapa_id, ETAPA.nome AS etapa_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " + 
 			 ", HISCONBENEFICIO.dataadm, HISCONBENEFICIO.dataenvio, HISCONBENEFICIO.caminhoarquivo " +
 			 ", HISCONBENEFICIO.isworkflow, HISCONBENEFICIO.isenviado, HISCONBENEFICIO.isimportado, HISCONBENEFICIO.ispadrao, WORKFLOW.workflow_id " +
 			 " FROM (PERFIL (NOLOCK) INNER JOIN ((((((PARCEIRONEGOCIO (NOLOCK) INNER JOIN (HISCONBENEFICIO (NOLOCK) " +
@@ -48,13 +48,13 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			 " INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " +
 			 " INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id) " +
 			 " INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON PERFIL.perfil_id = USUARIOPERFIL.perfil_id) " +
-			 " INNER JOIN WORKFLOWETAPA (NOLOCK) ON (HISCONBENEFICIO.workflowetapa_id = WORKFLOWETAPA.workflowetapa_id) AND (HISCONBENEFICIO.workflow_id = WORKFLOWETAPA.workflow_id)";
+			 " INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id) AND (HISCONBENEFICIO.workflow_id = ETAPA.workflow_id)";
 
 	private String sqlHisconsExibe = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, EMPRESA.nome as empresa_nome " + 
 			 ", HISCONBENEFICIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, HISCONBENEFICIO.parceirobeneficio_id , PARCEIROBENEFICIO.numerobeneficio " + 
 			 ", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,PERFIL.perfil_id, PERFIL.nome as perfil_nome " +
 			 ", HISCONBENEFICIO.workflow_id, PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.cpf " +
-			 ", PARCEIRONEGOCIO.nome as parceironegocio_nome, WORKFLOWETAPA.workflowetapa_id, WORKFLOWETAPA.nome AS workflowetapa_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " + 
+			 ", PARCEIRONEGOCIO.nome as parceironegocio_nome, ETAPA.etapa_id, ETAPA.nome AS etapa_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " + 
 			 ", HISCONBENEFICIO.dataadm, HISCONBENEFICIO.dataenvio, HISCONBENEFICIO.caminhoarquivo " +
 			 ", HISCONBENEFICIO.isworkflow, HISCONBENEFICIO.isenviado, HISCONBENEFICIO.isimportado, HISCONBENEFICIO.ispadrao " +
 			 " FROM (((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) "+
@@ -64,7 +64,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			 " INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = USUARIOPERFIL.perfil_id) AND (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id)) " + 
 			 " INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) " +
 			 " INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +
-			 " INNER JOIN WORKFLOWETAPA (NOLOCK) ON (HISCONBENEFICIO.workflowetapa_id = WORKFLOWETAPA.workflowetapa_id) AND (HISCONBENEFICIO.workflow_id = WORKFLOWETAPA.workflow_id) ";
+			 " INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id) AND (HISCONBENEFICIO.workflow_id = ETAPA.workflow_id) ";
 
 	private String sqlCountHiscons = "SELECT COUNT(HISCONBENEFICIO.parceirobeneficio_id) AS quantidade_beneficio , PARCEIROBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numerobeneficio, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id "+
 			" FROM ((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) "+
@@ -394,7 +394,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		if (empresa_id != null)
 			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
 		if (organizacao_id != null)
-			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.workflowetapa_id = ?";
+			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.etapa_id = ?";
 		
 		this.conn = this.conexao.getConexao();
 
@@ -432,39 +432,36 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 	}
 
-	public Collection<WorkflowEtapa> buscaWorKFlowEtapaByHisconBeneficioPerfil() {
+	public Collection<Etapa> buscaWorKFlowEtapaByHisconBeneficioPerfil() {
 
 		String sql = " SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , EMPRESA.nome as empresa_nome "+
-				", WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.workflowetapa_id "+
-				", WT1.nome as workflowetapa_nome, WORKFLOWTRANSICAO.workflowetapaproximo_id, WT2.nome as workflowetapaproximo_nome "+
+				", WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.etapa_id "+
+				", WT1.nome as etapa_nome, WORKFLOWTRANSICAO.workflowetapaproximo_id, WT2.nome as workflowetapaproximo_nome "+
 				", PERFIL.perfil_id, PERFIL.nome as PERFIL_nome "+
 				", WORKFLOWTRANSICAO.sequencia, WORKFLOWTRANSICAO.ispadrao, WORKFLOWTRANSICAO.isactive "+ 
 				" FROM (((WORKFLOWTRANSICAO (NOLOCK) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) "+ 
 				" INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWTRANSICAO.empresa_id = EMPRESA.empresa_id) " +
 				" INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWTRANSICAO.organizacao_id = ORGANIZACAO.organizacao_id) " +
-				" INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT1 ON (WORKFLOWTRANSICAO.workflowetapa_id = WT1.workflowetapa_id) "+ 
-				" INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.workflowetapa_id) "+
-				"	WHERE WORKFLOWTRANSICAO.empresa_id=1 AND WORKFLOWTRANSICAO.organizacao_id=1 "+
+				" INNER JOIN ETAPA (NOLOCK) AS WT1 ON (WORKFLOWTRANSICAO.etapa_id = WT1.etapa_id) "+ 
+				" INNER JOIN ETAPA (NOLOCK) AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.etapa_id) "+
+				" WHERE WORKFLOWTRANSICAO.empresa_id=1 AND WORKFLOWTRANSICAO.organizacao_id=1 "+
 				" AND PERFIL.perfil_id= ? ";
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<WorkflowEtapa> workflowsEtapa = new ArrayList<WorkflowEtapa>();
+		Collection<Etapa> workflowsEtapa = new ArrayList<Etapa>();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//this.stmt.setLong(1, hisconbeneficio_id);
-			//this.stmt.setLong(2, perfil_id);
-
 			this.rsHisconBeneficio= this.stmt.executeQuery();
 
 			while (rsHisconBeneficio.next()) {
 
-				WorkflowEtapa workflowEtapa = new WorkflowEtapa();
+				Etapa workflowEtapa = new Etapa();
 
-				workflowEtapa.setWorkflowEtapa_id(rsHisconBeneficio.getLong("workflowetapaproximo_id"));
+				workflowEtapa.setEtapa_id(rsHisconBeneficio.getLong("workflowetapaproximo_id"));
 				workflowEtapa.setNome(rsHisconBeneficio.getString("nome"));
 
 				workflowsEtapa.add(workflowEtapa);
@@ -487,7 +484,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
 		ParceiroNegocio parceiro = new ParceiroNegocio();
 		Usuario usuario = new Usuario();
-		WorkflowEtapa workflowEtapa = new WorkflowEtapa();		
+		Etapa etapa = new Etapa();		
 		HisconBeneficio hisconBeneficio = new HisconBeneficio();		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Calendar created = new GregorianCalendar();
@@ -507,8 +504,8 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		parceiroBeneficio.setParceiroBeneficio_id(rsHisconBeneficio.getLong("parceirobeneficio_id"));
 		parceiroBeneficio.setNumeroBeneficio(rsHisconBeneficio.getString("numerobeneficio"));
 
-		workflowEtapa.setWorkflowEtapa_id(rsHisconBeneficio.getLong("workflowetapa_id"));
-		workflowEtapa.setNome(rsHisconBeneficio.getString("workflowetapa_nome"));
+		etapa.setEtapa_id(rsHisconBeneficio.getLong("etapa_id"));
+		etapa.setNome(rsHisconBeneficio.getString("etapa_nome"));
 		
 		usuario.setUsuario_id(rsHisconBeneficio.getLong("usuario_id"));
 		usuario.setNome(rsHisconBeneficio.getString("usuario_nome"));
@@ -517,7 +514,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		hisconBeneficio.setEmpresa(empresa);
 		hisconBeneficio.setOrganizacao(organizacao);
 		hisconBeneficio.setParceiroBeneficio(parceiroBeneficio);
-		hisconBeneficio.setWorkflowEtapa(workflowEtapa);
+		hisconBeneficio.setEtapa(etapa);
 		hisconBeneficio.setIsEnviado(rsHisconBeneficio.getBoolean("isenviado"));
 
 
@@ -566,7 +563,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		Usuario usuario = new Usuario();
 		Perfil perfil = new Perfil();
 		Workflow workflow = new Workflow();
-		WorkflowEtapa workflowEtapa = new WorkflowEtapa();			
+		Etapa etapa = new Etapa();			
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Calendar created = new GregorianCalendar();
 
@@ -590,8 +587,8 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		parceiroBeneficio.setParceiroBeneficio_id(rsHisconBeneficio.getLong("parceirobeneficio_id"));
 		parceiroBeneficio.setNumeroBeneficio(rsHisconBeneficio.getString("numerobeneficio"));
 
-		workflowEtapa.setWorkflowEtapa_id(rsHisconBeneficio.getLong("workflowetapa_id"));
-		workflowEtapa.setNome(rsHisconBeneficio.getString("workflowetapa_nome"));
+		etapa.setEtapa_id(rsHisconBeneficio.getLong("etapa_id"));
+		etapa.setNome(rsHisconBeneficio.getString("etapa_nome"));
 		
 		usuario.setUsuario_id(rsHisconBeneficio.getLong("usuario_id"));
 		usuario.setNome(rsHisconBeneficio.getString("usuario_nome"));
@@ -600,7 +597,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		hisconBeneficio.setEmpresa(empresa);
 		hisconBeneficio.setOrganizacao(organizacao);
 		hisconBeneficio.setParceiroBeneficio(parceiroBeneficio);
-		hisconBeneficio.setWorkflowEtapa(workflowEtapa);
+		hisconBeneficio.setEtapa(etapa);
 		hisconBeneficio.setPerfil(perfil);
 		hisconBeneficio.setWorkflow(workflow);
 		hisconBeneficio.setIsEnviado(rsHisconBeneficio.getBoolean("isenviado"));
