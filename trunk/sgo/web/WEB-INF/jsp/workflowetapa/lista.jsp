@@ -9,9 +9,9 @@
 			<th>Empresa</th>
 			<th>Organização</th>
 			<th>Worklflow</th>
-			<th>Worklflow Etapa</th>
-			<th>Padrão</th>
+			<th>Etapa</th>
 			<th>Ativo</th>
+			<th>R/W</th>			
 		</tr>
 	</thead>
 	<tbody>	
@@ -20,10 +20,9 @@
 				<td>${workflowEtapa.empresa.nome }</td>
 				<td>${workflowEtapa.organizacao.nome }</td>
 				<td>${workflowEtapa.workflow.nome }</td>
-				<td>${workflowEtapa.nome }</td>
-				<td>${workflowEtapa.ordemEtapa }</td>
-				<td>${workflowEtapa.isPadrao }</td>
+				<td>${workflowEtapa.etapa.nome }</td>				
 				<td>${workflowEtapa.isActive }</td>
+				<td>${workflowEtapa.isLeituraEscrita }</td>
 			</tr>
 		</c:forEach>
 	</tbody>
