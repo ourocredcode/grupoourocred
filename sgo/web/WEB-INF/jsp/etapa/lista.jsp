@@ -3,27 +3,26 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered" id="lista">
 	<thead>
 		<tr>
 			<th>Empresa</th>
-			<th>Organização</th>
-			<th>Worklflow</th>
-			<th>Worklflow Etapa</th>
+			<th>Organização</th>							
+			<th>Etapa</th>
+			<th>Ordem Etapa</th>
 			<th>Padrão</th>
-			<th>Ativo</th>
+			<th>Ativo</th>								
 		</tr>
 	</thead>
 	<tbody>	
-		<c:forEach items="${workflowEtapas }" var="workflowEtapa">
+		<c:forEach items="${etapas }" var="etapa">
 			<tr>
-				<td>${workflowEtapa.empresa.nome }</td>
-				<td>${workflowEtapa.organizacao.nome }</td>
-				<td>${workflowEtapa.workflow.nome }</td>
-				<td>${workflowEtapa.nome }</td>
-				<td>${workflowEtapa.ordemEtapa }</td>
-				<td>${workflowEtapa.isPadrao }</td>
-				<td>${workflowEtapa.isActive }</td>
+				<td>${etapa.empresa.nome }</td>
+				<td>${etapa.organizacao.nome }</td>								
+				<td>${etapa.nome }</td>
+				<td>${etapa.ordemEtapa }</td>
+				<td>${etapa.isPadrao }</td>
+				<td>${etapa.isActive }</td>									
 			</tr>
 		</c:forEach>
 	</tbody>

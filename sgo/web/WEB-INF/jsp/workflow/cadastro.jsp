@@ -11,6 +11,10 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowperfilacesso/cadastro" />';
 	});
 
+	$('#etapa-li-a').click(function() {
+		window.location.href = '<c:url value="/etapa/cadastro" />';
+	});
+	
 	$('#workflowetapa-li-a').click(function() {
 		window.location.href = '<c:url value="/workflowetapa/cadastro" />';
 	});
@@ -192,6 +196,7 @@ function limpaForm(){
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="active" id="workflow-li"><a href="#workflow-div" data-toggle="tab" id="workflow-li-a">Workflow</a></li>
 				<li class="" id="workflowperfilacesso-li"><a href="#workflowperfilacesso-div" data-toggle="tab" id="workflowperfilacesso-li-a">Workflow Perfil Acesso</a></li>
+				<li class="" id="etapa-li"><a href="#etapa-div" data-toggle="tab" id="etapa-li-a">Etapa</a></li>
 				<li class="" id="workflowetapa-li"><a href="#workflowetapa-div" data-toggle="tab" id="workflowetapa-li-a">Workflow Etapa</a></li>
 				<li class="" id="workflowetapaperfilacesso-li"><a href="#workflowetapaperfilacesso-div" data-toggle="tab" id="workflowetapaperfilacesso-li-a">Workflow Etapa Perfil Acesso</a></li>
 				<li class="" id="workflowtransicao-li"><a href="#workflowtransicao-div" data-toggle="tab" id="workflowtransicao-li-a">Workflow Transicao</a></li>				
@@ -266,6 +271,7 @@ function limpaForm(){
 				</table>
 								
 				<div class="tab-pane fade" id="workflowperfilacesso-div"></div>
+				<div class="tab-pane fade" id="etapa-div"></div>				
 				<div class="tab-pane fade" id="workflowetapa-div"></div>
 				<div class="tab-pane fade" id="workflowetapaperfilacesso-div"></div>
 				<div class="tab-pane fade" id="workflowtransicao-div"></div>

@@ -11,6 +11,10 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowperfilacesso/cadastro" />';
 	});
 
+	$('#etapa-li-a').click(function() {
+		window.location.href = '<c:url value="/etapa/cadastro" />';
+	});
+
 	$('#workflowetapa-li-a').click(function() {
 		window.location.href = '<c:url value="/workflowetapa/cadastro" />';
 	});
@@ -174,6 +178,14 @@ jQuery(function($){
 			document.workflowEtapaForm.workflowEtapaIsActive.value=false;
 		}
 	});
+	
+	$("#workflowEtapaIsLeituraEscrita").change(function(e){
+		if(document.workflowEtapaForm.workflowEtapaIsLeituraEscrita.checked==true){
+			document.workflowEtapaForm.workflowEtapaIsLeituraEscrita.value=true;
+		}else{
+			document.workflowEtapaForm.workflowEtapaIsLeituraEscrita.value=false;
+		}
+	});
 
 });
 
@@ -224,6 +236,7 @@ function limpaForm(){
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="workflow-li"><a href="#workflow-div" data-toggle="tab" id="workflow-li-a">Workflow</a></li>
 				<li class="" id="workflowperfilacesso-li"><a href="#workflowperfilacesso-div" data-toggle="tab" id="workflowperfilacesso-li-a">Workflow Perfil Acesso</a></li>
+				<li class="" id="etapa-li"><a href="#etapa-div" data-toggle="tab" id="etapa-li-a">Etapa</a></li>
 				<li class="active" id="workflowetapa-li"><a href="#workflowetapa-div" data-toggle="tab" id="workflowetapa-li-a">Workflow Etapa</a></li>
 				<li class="" id="workflowetapaperfilacesso-li"><a href="#workflowetapaperfilacesso-div" data-toggle="tab" id="workflowetapaperfilacesso-li-a">Workflow Etapa Perfil Acesso</a></li>
 				<li class="" id="workflowtransicao-li"><a href="#workflowtransicao-div" data-toggle="tab" id="workflowtransicao-li-a">Workflow Transicao</a></li>				
@@ -233,6 +246,7 @@ function limpaForm(){
 				
 				<div class="tab-pane fade" id="perfil-div"></div>
 				<div class="tab-pane fade" id="workflowperfilacesso-div"></div>
+				<div class="tab-pane fade" id="etapa-div"></div>
 				
 				<div class="tab-pane fade active in" id="workflowetapa-div">
 					
@@ -242,26 +256,26 @@ function limpaForm(){
 							<div class="span2">
 								<label for="workflowEtapaEmpresa">Empresa</label>
       							<input class="span12" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-      							<input class="span1" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
+      							<input class="span1" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="text">	    				
 							</div>
 							<div class="span2">
 								<label for="workflowEtapaOrganizacao">Organização</label>	
 	      						<input class="span12" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="span1" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+	      						<input class="span1" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="text">
 							</div>
 							
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowEtapaWorkflow">Workflow</label>
-								<select id="workflowEtapaWorkflowId" name="workflowEtapaWorkflow.workflow.workflow_id" class="input-medium">
+								<select class="input-xlarge" id="workflowEtapaWorkflowId" name="workflowEtapa.workflow.workflow_id" >
 									<c:forEach var="workflow" items="${workflows }">
 									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
 									 	</option>
 									</c:forEach>
 								</select>
 							</div>
-							<div class="span2">
-								<label for="workflowEtapaEtapa">Etapa</label>
-								<select id="workflowEtapaEtapaId" name="workflowEtapa.etapa.etapa_id" class="input-medium">
+							<div class="span3">
+								<label for="workflowEtapaEtapa">Etapas</label>
+								<select class="input-xlarge" id="workflowEtapaEtapaId" name="workflowEtapa.etapa.etapa_id" >
 									<c:forEach var="etapa" items="${etapas }">
 									 	<option value="${etapa.etapa_id }" selected="selected"> ${etapa.nome }
 									 	</option>
@@ -271,6 +285,10 @@ function limpaForm(){
 							<div class="span1">
 								<label for="workflowEtapaIsActive">Ativo</label>							
 								<input type="checkbox" id="workflowEtapaIsActive" name="workflowEtapa.isActive" checked="checked" value="1" >
+							</div>
+							<div class="span1">
+								<label for="workflowEtapaIsLeituraEscrita">Leitura/Escrita</label>							
+								<input type="checkbox" id="workflowEtapaIsLeituraEscrita" name="workflowEtapa.isLeituraEscrita" checked="checked" value="1" >
 							</div>
 						</div>
 
@@ -294,9 +312,9 @@ function limpaForm(){
 							<th>Empresa</th>
 							<th>Organização</th>
 							<th>Worklflow</th>
-							<th>Worklflow Etapa</th>
-							<th>Padrão</th>
-							<th>Ativo</th>								
+							<th>Etapa</th>
+							<th>Ativo</th>
+							<th>R/W</th>								
 						</tr>
 					</thead>
 					<tbody>	
@@ -305,10 +323,9 @@ function limpaForm(){
 								<td>${workflowEtapa.empresa.nome }</td>
 								<td>${workflowEtapa.organizacao.nome }</td>
 								<td>${workflowEtapa.workflow.nome }</td>
-								<td>${workflowEtapa.nome }</td>
-								<td>${workflowEtapa.ordemEtapa }</td>
-								<td>${workflowEtapa.isPadrao }</td>
-								<td>${workflowEtapa.isActive }</td>									
+								<td>${workflowEtapa.etapa.nome }</td>
+								<td>${workflowEtapa.isActive }</td>
+								<td>${workflowEtapa.isLeituraEscrita }</td>									
 							</tr>
 						</c:forEach>
 					</tbody>

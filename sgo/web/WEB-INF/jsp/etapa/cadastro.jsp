@@ -11,6 +11,10 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowperfilacesso/cadastro" />';
 	});
 
+	$('#etapa-li-a').click(function() {
+		window.location.href = '<c:url value="/etapa/cadastro" />';
+	});
+	
 	$('#workflowetapa-li-a').click(function() {
 		window.location.href = '<c:url value="/workflowetapa/cadastro" />';
 	});
@@ -23,7 +27,7 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowtransicao/cadastro" />';
 	});
 
-	$('#workflowEtapaEmpresa').autocomplete({
+	$('#etapaEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/empresa/busca.json' />",
@@ -32,8 +36,8 @@ jQuery(function($){
 	          success : function(data) {  
 
 	       		  if (!data || data.length == 0) {
-	       	            $('#workflowEtapaEmpresa').val('');
-						$('#workflowEtapaEmpresaId').val('');
+	       	            $('#etapaEmpresa').val('');
+						$('#etapaEmpresaId').val('');
 	       	        }
 
 	        	  response($.map(data, function(empresa) {  
@@ -46,27 +50,27 @@ jQuery(function($){
 	        });
 	     } ,
 	     focus: function( event, ui ) {
-	    	 $('#workflowEtapaEmpresa').val(ui.item.label);
+	    	 $('#etapaEmpresa').val(ui.item.label);
 	         return false;
 	     } ,
 	     select: function( event, ui ) {
-	    	 $('#workflowEtapaEmpresa').val(ui.item.label);
-	         $('#workflowEtapaEmpresaId').val(ui.item.value);
+	    	 $('#etapaEmpresa').val(ui.item.label);
+	         $('#etapaEmpresaId').val(ui.item.value);
 	         return false;
 	     }
 	});
 
-	$('#workflowEtapaOrganizacao').autocomplete({
+	$('#etapaOrganizacao').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#workflowEtapaEmpresaId').val() == '' ? '0' :  $('#workflowEtapaEmpresaId').val(), org_nome : $('#workflowEtapaOrganizacao').val()},
+	          data : {empresa_id: $('#etapaEmpresaId').val() == '' ? '0' :  $('#etapaEmpresaId').val(), org_nome : $('#etapaOrganizacao').val()},
 	          success : function(data) {  
 
 	        	  if (!data || data.length == 0) {
-	     	            $('#workflowEtapaOrganizacao').val('');
-	     	           $('#workflowEtapaOrganizacaoId').val('');
+	     	            $('#etapaOrganizacao').val('');
+	     	           $('#etapaOrganizacaoId').val('');
 	     	        }
 
 	        	  response($.map(data, function(organizacao) {  
@@ -79,64 +83,29 @@ jQuery(function($){
 	        });
 	     },
 	     focus: function( event, ui ) {
-	      	 $('#workflowEtapaOrganizacao').val(ui.item.label);
+	      	 $('#etapaOrganizacao').val(ui.item.label);
 	           return false;
 	       } ,
 	     select: function( event, ui ) {
-	         $('#workflowEtapaOrganizacao').val(ui.item.label);
-	         $('#workflowEtapaOrganizacaoId').val(ui.item.value);
-	         return false;
-	     }
-	});
-
-	$('#workflowEtapaWorkflow').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/workflow/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#workflowEtapaEmpresaId').val() == '' ? '0' :  $('#workflowEtapaEmpresaId').val(), 
-	        		  organizacao_id: $('#workflowEtapaOrganizacaoId').val() == '' ? '0' :  $('#workflowEtapaOrganizacaoId').val(),
-	        		  nome : $('#workflowEtapaWorkflow').val()},
-	          success : function(data) {  
-
-	        	  if (!data || data.length == 0) {
-	     	            $('#workflowEtapaWorkflow').val('');
-	     	           $('#workflowEtapaWorkflowId').val('');
-	     	        }
-
-	        	  response($.map(data, function(workflow) {  
-	        		  return {
-	        			  label: workflow.nome,
-	        			  value: workflow.workflow_id
-	                  };
-	              })); 
-	           }
-	        });
-	     },
-	     focus: function( event, ui ) {
-	      	 $('#workflowEtapaWorkflow').val(ui.item.label);
-	           return false;
-	       } ,
-	     select: function( event, ui ) {
-	         $('#workflowEtapaWorkflow').val(ui.item.label);
-	         $('#workflowEtapaWorkflowId').val(ui.item.value);
+	         $('#etapaOrganizacao').val(ui.item.label);
+	         $('#etapaOrganizacaoId').val(ui.item.value);
 	         return false;
 	     }
 	});
 	
 	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/workflowetapa/cadastro" />';
+		window.location.href = '<c:url value="/etapa/cadastro" />';
 	});
 	
 	$('#btnNovo').click(function() {
 		limpaForm();
 	});
 	
-	$("#workflowEtapaIsActive").change(function(e){
-		if(document.workflowEtapaForm.workflowEtapaIsActive.checked==true){
-			document.workflowEtapaForm.workflowEtapaIsActive.value=true;
+	$("#etapaIsActive").change(function(e){
+		if(document.etapaForm.etapaIsActive.checked==true){
+			document.etapaForm.etapaIsActive.value=true;
 		}else{
-			document.workflowEtapaForm.workflowEtapaIsActive.value=false;
+			document.etapaForm.etapaIsActive.value=false;
 		}
 	});
 
@@ -144,7 +113,7 @@ jQuery(function($){
 
 function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.workflowEtapaForm.reset();
+		document.etapaForm.reset();
 	}
 }
 
@@ -189,48 +158,38 @@ function limpaForm(){
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="workflow-li"><a href="#workflow-div" data-toggle="tab" id="workflow-li-a">Workflow</a></li>
 				<li class="" id="workflowperfilacesso-li"><a href="#workflowperfilacesso-div" data-toggle="tab" id="workflowperfilacesso-li-a">Workflow Perfil Acesso</a></li>
-				<li class="active" id="workflowetapa-li"><a href="#workflowetapa-div" data-toggle="tab" id="workflowetapa-li-a">Workflow Etapa</a></li>
+				<li class="active" id="etapa-li"><a href="#etapa-div" data-toggle="tab" id="etapa-li-a">Etapa</a></li>
+				<li class="" id="workflowetapa-li"><a href="#workflowetapa-div" data-toggle="tab" id="workflowetapa-li-a">Workflow Etapa</a></li>
 				<li class="" id="workflowetapaperfilacesso-li"><a href="#workflowetapaperfilacesso-div" data-toggle="tab" id="workflowetapaperfilacesso-li-a">Workflow Etapa Perfil Acesso</a></li>
 				<li class="" id="workflowtransicao-li"><a href="#workflowtransicao-div" data-toggle="tab" id="workflowtransicao-li-a">Workflow Transicao</a></li>				
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
 				
-				<div class="tab-pane fade" id="perfil-div"></div>
+				<div class="tab-pane fade" id="workflow-div"></div>
 				<div class="tab-pane fade" id="workflowperfilacesso-div"></div>
-				
-				<div class="tab-pane fade active in" id="workflowetapa-div">
-					
-					<form id="workflowEtapaForm" name="workflowEtapaForm" action="<c:url value="/workflowetapa/salva"/>" method="POST">
+
+				<div class="tab-pane fade active in" id="etapa-div">				
+					<form id="etapaForm" name="etapaForm" action="<c:url value="/etapa/salva"/>" method="POST">
 					
 						<div class="row-fluid">
 							<div class="span2">
-								<label for="workflowEtapaEmpresa">Empresa</label>
-      							<input class="span12" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-      							<input class="span1" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
+								<label for="etapaEmpresa">Empresa</label>
+      							<input class="span12" id="etapaEmpresa" name="etapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+      							<input class="span1" id="etapaEmpresaId" name="etapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
 							</div>
 							<div class="span2">
-								<label for="workflowEtapaOrganizacao">Organização</label>	
-	      						<input class="span12" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="span1" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
-							</div>
-							
-							<div class="span2">
-								<label for="workflowEtapaWorkflow">Workflow</label>
-								<select id="workflowEtapaWorkflowId" name="workflowEtapaWorkflow.workflow.workflow_id" class="input-medium">
-									<c:forEach var="workflow" items="${workflows }">
-									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
-									 	</option>
-									</c:forEach>
-								</select>
+								<label for="etapaOrganizacao">Organização</label>	
+	      						<input class="span12" id="etapaOrganizacao" name="etapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="etapaOrganizacaoId" name="etapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 							<div class="span3">
-								<label for="workflowEtapaNome">Nome</label>
-								<input class="span12" id="workflowEtapaNome" name="workflowEtapa.nome" value="${workflowEtapa.nome }" type="text" placeholder="Nome" required>								
+								<label for="etapaNome">Nome</label>
+								<input class="span12" id="etapaNome" name="etapa.nome" value="${etapa.nome }" type="text" placeholder="Nome" required>								
 							</div>
 							<div class="span1">
-								<label for="workflowEtapaIsActive">Ativo</label>							
-								<input type="checkbox" id="workflowEtapaIsActive" name="workflowEtapa.isActive" checked="checked" value="1" >
+								<label for="etapaIsActive">Ativo</label>							
+								<input type="checkbox" id="etapaIsActive" name="etapa.isActive" checked="checked" value="1" >
 							</div>
 						</div>
 
@@ -248,27 +207,28 @@ function limpaForm(){
 					</form>
 				</div>
 				
+				<div class="tab-pane fade" id="workflowetapa-div"></div>
+				
 				<table class="table table-striped table-bordered" id="lista">
 					<thead>
 						<tr>
 							<th>Empresa</th>
-							<th>Organização</th>
-							<th>Worklflow</th>
-							<th>Worklflow Etapa</th>
+							<th>Organização</th>							
+							<th>Etapa</th>
+							<th>Ordem Etapa</th>
 							<th>Padrão</th>
 							<th>Ativo</th>								
 						</tr>
 					</thead>
 					<tbody>	
-						<c:forEach items="${workflowEtapas }" var="workflowEtapa">
+						<c:forEach items="${etapas }" var="etapa">
 							<tr>
-								<td>${workflowEtapa.empresa.nome }</td>
-								<td>${workflowEtapa.organizacao.nome }</td>
-								<td>${workflowEtapa.workflow.nome }</td>
-								<td>${workflowEtapa.nome }</td>
-								<td>${workflowEtapa.ordemEtapa }</td>
-								<td>${workflowEtapa.isPadrao }</td>
-								<td>${workflowEtapa.isActive }</td>									
+								<td>${etapa.empresa.nome }</td>
+								<td>${etapa.organizacao.nome }</td>								
+								<td>${etapa.nome }</td>
+								<td>${etapa.ordemEtapa }</td>
+								<td>${etapa.isPadrao }</td>
+								<td>${etapa.isActive }</td>									
 							</tr>
 						</c:forEach>
 					</tbody>
