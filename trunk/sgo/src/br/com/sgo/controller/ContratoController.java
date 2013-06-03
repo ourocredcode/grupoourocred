@@ -159,7 +159,8 @@ public class ContratoController {
 
 		contrato = contratoDao.load(id);
 		formulario = formularioDao.buscaFormularioByContrato(id);
-		etapas = etapaDao.buscaEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
+		//TODO
+		//etapas = etapaDao.buscaEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
 		periodos = periodoDao.buscaAllPeriodos();
 		historico = historicoContratoDao.buscaHistoricoByContrato(id);
 		

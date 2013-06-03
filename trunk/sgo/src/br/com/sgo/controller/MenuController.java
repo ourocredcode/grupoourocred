@@ -118,9 +118,10 @@ public class MenuController {
 		result.include("bancos",this.bancoDao.buscaBancoByGrupo("Tomadores"));
 		result.include("bancosComprados",this.bancoDao.buscaBancoByGrupo("Comprados"));
 
-		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
+		//TODO
+		/*result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
 				this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Contrato").getWorkflow_id()));
-
+		 */
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
 		contador();

@@ -30,16 +30,15 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 	private ResultSet rsWorkflowEtapaPerfilAcesso;
 	private UsuarioInfo usuarioInfo;
 
-	private final String sqlWorkflowEtapaPerfilAcesso = "SELECT WORKFLOWETAPAPERFILACESSO.workflowetapa_id, WORKFLOWETAPAPERFILACESSO.nome as workflowetapaperfilacesso_nome "+
-							", WORKFLOWETAPAPERFILACESSO.isleituraescrita, WORKFLOWETAPAPERFILACESSO.isactive, WORKFLOWETAPAPERFILACESSO.empresa_id "+
-							", EMPRESA.nome as empresa_nome, WORKFLOWETAPAPERFILACESSO.organizacao_id, ORGANIZACAO.nome as organizacao_nome "+ 
-							", WORKFLOW.workflow_id, WORKFLOW.nome as workflow_nome "+
-							", WORKFLOWETAPAPERFILACESSO.workflowetapa_id, WORKFLOWETAPA.nome as workflowetapa_nome "+ 
-							", WORKFLOWETAPAPERFILACESSO.perfil_id, PERFIL.nome as perfil_nome "+ 
+	private final String sqlWorkflowEtapaPerfilAcesso = "SELECT WORKFLOWETAPAPERFILACESSO.etapa_id, WORKFLOWETAPAPERFILACESSO.isleituraescrita, WORKFLOWETAPAPERFILACESSO.isactive "+
+							 ", WORKFLOWETAPAPERFILACESSO.empresa_id, EMPRESA.nome as empresa_nome, WORKFLOWETAPAPERFILACESSO.organizacao_id "+
+							 ", ORGANIZACAO.nome as organizacao_nome, WORKFLOW.workflow_id, WORKFLOW.nome as workflow_nome "+
+							 ", WORKFLOWETAPAPERFILACESSO.etapa_id, ETAPA.nome as etapa_nome "+
+							 ", WORKFLOWETAPAPERFILACESSO.perfil_id, PERFIL.nome as perfil_nome "+
 							 " FROM ((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
-							 " INNER JOIN WORKFLOWETAPAPERFILACESSO (NOLOCK) ON EMPRESA.empresa_id = WORKFLOWETAPAPERFILACESSO.empresa_id) ON ORGANIZACAO.organizacao_id = WORKFLOWETAPAPERFILACESSO.organizacao_id) "+  
+							 " INNER JOIN WORKFLOWETAPAPERFILACESSO (NOLOCK) ON EMPRESA.empresa_id = WORKFLOWETAPAPERFILACESSO.empresa_id) ON ORGANIZACAO.organizacao_id = WORKFLOWETAPAPERFILACESSO.organizacao_id) "+   
 							 " INNER JOIN WORKFLOW (NOLOCK) ON WORKFLOW.workflow_id = WORKFLOWETAPAPERFILACESSO.workflow_id "+
-							 " INNER JOIN WORKFLOWETAPA (NOLOCK) ON WORKFLOWETAPAPERFILACESSO.workflowetapa_id = WORKFLOWETAPA.workflowetapa_id) "+
+							 " INNER JOIN ETAPA (NOLOCK) ON WORKFLOWETAPAPERFILACESSO.etapa_id = ETAPA.etapa_id) "+
 							 " INNER JOIN PERFIL (NOLOCK) ON WORKFLOWETAPAPERFILACESSO.perfil_id = PERFIL.perfil_id ";
 
 	public WorkflowEtapaPerfilAcessoDao(Session session, ConnJDBC conexao, UsuarioInfo usuarioInfo) {
@@ -52,7 +51,7 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 
 		String sql = sqlWorkflowEtapaPerfilAcesso;
 		
-		sql += " ORDER BY WORKFLOW.nome, WORKFLOWETAPA.nome, PERFIL.nome ";
+		sql += " ORDER BY WORKFLOW.nome, ETAPA.nome, PERFIL.nome ";
 
 		this.conn = this.conexao.getConexao();
 
