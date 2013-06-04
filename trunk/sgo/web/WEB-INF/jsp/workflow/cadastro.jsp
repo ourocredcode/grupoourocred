@@ -208,19 +208,21 @@ function limpaForm(){
 					<form id="workflowForm" name="workflowForm" action="<c:url value="/workflow/salva"/>" method="POST">
 
 						<div class="row-fluid">
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowEmpresa">Empresa</label>							
-	      						<input class="span12" id="workflowEmpresa" name="workflow.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-xlarge" id="workflowEmpresa" name="workflow.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="workflowEmpresaId" name="workflow.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    					
 							</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowOrganizacao">Organização</label>
-	      						<input class="span12" id="workflowOrganizacao" name="workflow.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-xlarge" id="workflowOrganizacao" name="workflow.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="workflowOrganizacaoId" name="workflow.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
-							<div class="span2">
+						</div>
+						<div class="row-fluid">
+							<div class="span3">
 								<label for="workflowTipoWorkflow">Tipo de Worflow</label>
-								<select id="workflowTipoWorkflowId" name="workflow.tipoWorkflow.tipoWorkflow_id" class="input-medium">
+								<select class="input-medim" id="workflowTipoWorkflowId" name="workflow.tipoWorkflow.tipoWorkflow_id" >
 									<c:forEach var="tipoWorkflow" items="${tiposWorkflow }">
 									 	<option value="${tipoWorkflow.tipoWorkflow_id }" selected="selected"> ${tipoWorkflow.nome }
 									 	</option>
@@ -229,11 +231,11 @@ function limpaForm(){
 							</div>
 							<div class="span3">
 								<label for="workflowNome">Nome</label>							
-								<input class="span12" id="workflowNome" name="workflow.nome" value="${workflow.nome }" type="text" placeholder="Nome" required>							
+								<input class="input-xlarge" id="workflowNome" name="workflow.nome" value="${workflow.nome }" type="text" placeholder="Nome" required>							
 							</div>
 							<div class="span1">
 								<label for="workflowIsActive">Ativo</label>							
-								<input id="workflowIsActive" name="workflow.isActive" type="checkbox" checked="checked" value="${workflow.isActive }" >
+								<input id="workflowIsActive" name="workflow.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
 						</div>
 

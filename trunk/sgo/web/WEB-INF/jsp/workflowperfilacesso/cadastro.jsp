@@ -251,42 +251,42 @@ function limpaForm(){
 					<form id="workflowPerfilAcessoForm" name="workflowPerfilAcessoForm" action="<c:url value="/workflowperfilacesso/salva"/>" method="POST">
 
 						<div class="row-fluid">
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowPerfilAcessoEmpresa">Empresa</label>							
-      							<input class="span12" id="workflowPerfilAcessoEmpresa" name="workflowPerfilAcessoEmpresa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+      							<input class="input-xlarge" id="workflowPerfilAcessoEmpresa" name="workflowPerfilAcessoEmpresa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
       							<input class="span1" id="workflowPerfilAcessoEmpresaId" name="workflowPerfilAcessoEmpresa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 							</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowPerfilAcessoOrganizacao">Organização</label>
-	      						<input class="span12" id="workflowPerfilAcessoOrganizacao" name="workflowPerfilAcessoOrganizacao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-xlarge" id="workflowPerfilAcessoOrganizacao" name="workflowPerfilAcessoOrganizacao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="workflowPerfilAcessoOrganizacaoId" name="workflowPerfilAcessoOrganizacao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 	    					</div>
-	    					<div class="span2">
+    					</div>
+    					<div class="row-fluid">
+	    					<div class="span3">
 								<label for="workflowPerfilAcessoWorkflow">Workflow</label>
-								<select id="workflowPerfilAcessoWorkflowId" name="workflowPerfilAcesso.workflow.workflow_id" class="input-medium">
+								<select class="input-medim" id="workflowPerfilAcessoWorkflowId" name="workflowPerfilAcesso.workflow.workflow_id" >
 									<c:forEach var="workflow" items="${workflows }">
 									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
 									 	</option>
 									</c:forEach>
 								</select>
 							</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowPerfilAcessoPerfil">Perfil</label>
-								<select id="workflowPerfilAcessoPerfilId" name="workflowPerfilAcesso.perfil.perfil_id" class="input-medium">
+								<select class="input-medim" id="workflowPerfilAcessoPerfilId" name="workflowPerfilAcesso.perfil.perfil_id" >
 									<c:forEach var="perfil" items="${perfis }">
 									 	<option value="${perfil.perfil_id }" selected="selected"> ${perfil.nome }
 									 	</option>
 									</c:forEach>
 								</select>
 							</div>
-						</div>
-						<div class="row-fluid">
 							<div class="span1">
 								<label for="workflowPerfilAcessoIsActive">Ativo</label>
 								<input id="workflowPerfilAcessoIsActive" name="workflowPerfilAcesso.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
-							<div class="span2">
-								<label for="workflowPerfilAcessoIsLeituraEscrita">Leitura e Escrita</label>
+							<div class="span1">
+								<label for="workflowPerfilAcessoIsLeituraEscrita">Escrita</label>
 								<input id="workflowPerfilAcessoIsLeituraEscrita" name="workflowPerfilAcesso.isLeituraEscrita" type="checkbox" checked="checked" value="1" >
 							</div>
 						</div>	

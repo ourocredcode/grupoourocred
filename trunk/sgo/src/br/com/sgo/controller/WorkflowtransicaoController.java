@@ -119,7 +119,8 @@ public class WorkflowtransicaoController {
 	@Path("/workflowtransicao/workflowtransicaoetapas")
 	public void workflowtransicaoetapas(Long empresa_id, Long organizacao_id, Long workflow_id){
 
-		result.include("workflowEtapas",this.workflowEtapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa_id, organizacao_id, workflow_id));
+		//TODO
+		//result.include("workflowEtapas",this.workflowEtapaDao.buscaEtapasToWorkflowEtapaPerfilByEmpresaOrganizacaoWorkflow(empresa_id, organizacao_id, workflow_id));
 
 	}
 

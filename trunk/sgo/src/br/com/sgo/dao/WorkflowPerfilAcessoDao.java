@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
@@ -25,7 +26,8 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsWorkflowPerfilAcesso;
-
+	private UsuarioInfo usuarioInfo;
+	
 	private final String sqlWorkflowPerfilAcesso = "SELECT WORKFLOWPERFILACESSO.empresa_id, EMPRESA.nome as empresa_nome, "
 			+ " WORKFLOWPERFILACESSO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "
 			+ " WORKFLOWPERFILACESSO.perfil_id, PERFIL.nome as perfil_nome, "
@@ -35,25 +37,26 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 			+ " INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWPERFILACESSO.empresa_id = EMPRESA.empresa_id) "
 			+ " INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWPERFILACESSO.organizacao_id = ORGANIZACAO.organizacao_id ";
 
-	public WorkflowPerfilAcessoDao(Session session, ConnJDBC conexao) {
+	public WorkflowPerfilAcessoDao(Session session, ConnJDBC conexao, UsuarioInfo usuarioInfo) {
 		super(session, WorkflowPerfilAcesso.class);
 		this.conexao = conexao;
+		this.usuarioInfo = usuarioInfo;
 	}
 
 	public Collection<WorkflowPerfilAcesso> buscaTodosWorkflowPerfilAcesso() {
-		
+
 		String sql = sqlWorkflowPerfilAcesso;
 
 		this.conn = this.conexao.getConexao();
-		
+
 		Collection<WorkflowPerfilAcesso> workflowperfisacesso = new ArrayList<WorkflowPerfilAcesso>();
 
 		try {
-			
+
 			this.stmt = conn.prepareStatement(sql);
-			
+
 			this.rsWorkflowPerfilAcesso = this.stmt.executeQuery();
-			
+
 			while (rsWorkflowPerfilAcesso.next()) {
 
 				Empresa empresa = new Empresa();
@@ -73,29 +76,29 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 				perfil.setNome(rsWorkflowPerfilAcesso.getString("perfil_nome"));
 
 				WorkflowPerfilAcesso workflowperfilacesso = new WorkflowPerfilAcesso();
-				
+
 				workflowperfilacesso.setEmpresa(empresa);
 				workflowperfilacesso.setOrganizacao(organizacao);
 				workflowperfilacesso.setWorkflow(workflow);
 				workflowperfilacesso.setPerfil(perfil);
 
 				workflowperfisacesso.add(workflowperfilacesso);
-				
+
 			}
-			
+
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
-			
+
 		}
-		
+
 		this.conexao.closeConnection(rsWorkflowPerfilAcesso, stmt, conn);
-		
+
 		return workflowperfisacesso;
 	}
 
 	public Collection<WorkflowPerfilAcesso> buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoPerfil(Long empresa_id, Long organizacao_id, Long workflow_id) {
-		
+
 		String sql = sqlWorkflowPerfilAcesso;
 
 		if (empresa_id != null)
@@ -150,7 +153,7 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 	}
 
 public WorkflowPerfilAcesso buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkflowPerfil(Long empresa_id, Long organizacao_id, Long workflow_id, Long perfil_id ) {
-		
+
 		String sql = sqlWorkflowPerfilAcesso;
 
 		if (empresa_id != null)
@@ -163,33 +166,34 @@ public WorkflowPerfilAcesso buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkfl
 			sql += " AND WORKFLOWPERFILACESSO.perfil_id = ?";
 
 		this.conn = this.conexao.getConexao();
-		
+
 		WorkflowPerfilAcesso workflowPerfilAcesso = null;
-		
+
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, workflow_id);
 			this.stmt.setLong(4, perfil_id);
-			
+
 			this.rsWorkflowPerfilAcesso = this.stmt.executeQuery();
-			
+
 			while (rsWorkflowPerfilAcesso.next()) {
 				workflowPerfilAcesso = new WorkflowPerfilAcesso();
-				
+
 				Perfil perfil = new Perfil();
 				perfil.setPerfil_id(rsWorkflowPerfilAcesso.getLong("perfil_id"));
+
 				workflowPerfilAcesso.setPerfil(perfil);
-				
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		this.conexao.closeConnection(rsWorkflowPerfilAcesso, stmt, conn);
-		
+
 		return workflowPerfilAcesso;
 	}
 
@@ -205,8 +209,8 @@ public WorkflowPerfilAcesso buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkfl
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1, workflowPerfilAcesso.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(2, workflowPerfilAcesso.getOrganizacao().getOrganizacao_id());			
+			this.stmt.setLong(1, usuarioInfo.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(2, usuarioInfo.getOrganizacao().getOrganizacao_id());
 			this.stmt.setLong(3, workflowPerfilAcesso.getWorkflow().getWorkflow_id());
 			this.stmt.setLong(4, workflowPerfilAcesso.getPerfil().getPerfil_id());
 			this.stmt.setBoolean(5, workflowPerfilAcesso.getIsActive());
@@ -214,7 +218,7 @@ public WorkflowPerfilAcesso buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkfl
 
 			this.stmt.executeUpdate();
 			this.conn.commit();
-			
+
 		} catch (SQLException e) {
 			this.conn.rollback();
 			throw e;

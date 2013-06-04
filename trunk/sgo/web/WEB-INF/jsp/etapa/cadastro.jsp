@@ -173,19 +173,19 @@ function limpaForm(){
 					<form id="etapaForm" name="etapaForm" action="<c:url value="/etapa/salva"/>" method="POST">
 					
 						<div class="row-fluid">
-							<div class="span2">
+							<div class="span3">
 								<label for="etapaEmpresa">Empresa</label>
-      							<input class="span12" id="etapaEmpresa" name="etapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+      							<input class="input-xlarge" id="etapaEmpresa" name="etapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
       							<input class="span1" id="etapaEmpresaId" name="etapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
 							</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="etapaOrganizacao">Organização</label>	
-	      						<input class="span12" id="etapaOrganizacao" name="etapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-xlarge" id="etapaOrganizacao" name="etapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="etapaOrganizacaoId" name="etapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 							<div class="span3">
 								<label for="etapaNome">Nome</label>
-								<input class="span12" id="etapaNome" name="etapa.nome" value="${etapa.nome }" type="text" placeholder="Nome" required>								
+								<input class="input-xlarge" id="etapaNome" name="etapa.nome" value="${etapa.nome }" type="text" placeholder="Nome" required>								
 							</div>
 							<div class="span1">
 								<label for="etapaIsActive">Ativo</label>							
