@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -12,6 +14,7 @@ import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Workflow;
 import br.com.sgo.modelo.WorkflowEtapa;
 
 @Resource
@@ -24,6 +27,9 @@ public class WorkflowetapaController {
 	private final WorkflowDao workflowDao;
 	private Empresa empresa;
 	private Organizacao organizacao;
+
+	private Workflow workflow;	
+	private Calendar dataAtual = Calendar.getInstance();
 
 	public WorkflowetapaController(Result result, Empresa empresa, Organizacao organizacao,UsuarioInfo usuarioInfo, EtapaDao etapaDao, WorkflowEtapaDao workflowEtapaDao, 
 			WorkflowDao workflowDao) {
@@ -63,6 +69,13 @@ public class WorkflowetapaController {
 
 				workflowEtapa.setEmpresa(this.empresa);
 				workflowEtapa.setOrganizacao(this.organizacao);
+				
+				this.workflow.setCreated(dataAtual);
+				this.workflow.setUpdated(dataAtual);
+
+				this.workflow.setCreatedBy(usuarioInfo.getUsuario());
+				this.workflow.setUpdatedBy(usuarioInfo.getUsuario());
+				
 				workflowEtapa.setIsActive(workflowEtapa.getIsActive() == null ? false : true);
 				workflowEtapa.setIsLeituraEscrita(workflowEtapa.getIsLeituraEscrita() == null ? false : true);
 
@@ -87,6 +100,13 @@ public class WorkflowetapaController {
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
+	}
+	
+	@Get
+	@Path("/workflowetapa/busca.json")
+	@Public
+	public void workflowEtapa(Long empresa_id, Long organizacao_id, String nome) {	
+		result.include("workflowEtapas", this.workflowEtapaDao.buscaAllWorkflowEtapaByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));	
 	}
 
 	@Post
