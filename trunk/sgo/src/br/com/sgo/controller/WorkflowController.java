@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -9,18 +11,25 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Workflow;
 
 @Resource
 public class WorkflowController {
 
 	private final Result result;
+	private final UsuarioInfo usuarioInfo;
 	private final TipoWorkflowDao tipoWorkflowDao;
 	private final WorkflowDao workflowDao;
+	
+	
+	private Workflow workflow;	
+	private Calendar dataAtual = Calendar.getInstance();
 
-	public WorkflowController(Result result, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao) {
+	public WorkflowController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao) {
 
-		this.result = result;		
+		this.result = result;
+		this.usuarioInfo = usuarioInfo;
 		this.workflowDao = workflowDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
 
@@ -47,6 +56,12 @@ public class WorkflowController {
 
 			if (this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(workflow.getEmpresa().getEmpresa_id(),workflow.getOrganizacao().getOrganizacao_id(),
 					workflow.getTipoWorkflow().getTipoWorkflow_id(), workflow.getNome()) == null) {				
+				
+				this.workflow.setCreated(dataAtual);
+				this.workflow.setUpdated(dataAtual);
+
+				this.workflow.setCreatedBy(usuarioInfo.getUsuario());
+				this.workflow.setUpdatedBy(usuarioInfo.getUsuario());
 				
 				workflow.setIsActive(workflow.getIsActive() == null ? false : true);
 				

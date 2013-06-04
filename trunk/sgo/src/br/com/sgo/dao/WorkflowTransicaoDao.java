@@ -28,28 +28,19 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 	private ResultSet rsWorkflowTransicao;
 
 	private final String sqlWorkflowTransicao = "SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id " +
-			 " ,WORKFLOWTRANSICAO.organizacao_id, WORKFLOWTRANSICAO.workflowetapa_id, WORKFLOWTRANSICAO.workflowetapaproximo_id" +
+			 " ,WORKFLOWTRANSICAO.organizacao_id, WORKFLOWTRANSICAO.etapa_id, WORKFLOWTRANSICAO.etapaproximo_id" +
 			 ", WORKFLOWTRANSICAO.perfil_id, WORKFLOWTRANSICAO.sequencia, WORKFLOWTRANSICAO.isactive FROM WORKFLOWTRANSICAO (NOLOCK) ";
 
-	/*private final String sqlWorkflowTransicoes = "SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id " +
-			", EMPRESA.nome as empresa_nome, WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome " +
-			", WORKFLOWTRANSICAO.workflowetapa_id, WT1.nome as workflowetapa_nome, WORKFLOWTRANSICAO.workflowetapaproximo_id, WT2.nome as workflowetapaproximo_nome " +
-			", WORKFLOWTRANSICAO.sequencia, WORKFLOWTRANSICAO.ispadrao, WORKFLOWTRANSICAO.isactive " +
-			" FROM ((WORKFLOWTRANSICAO INNER JOIN EMPRESA ON WORKFLOWTRANSICAO.empresa_id = EMPRESA.empresa_id) " +
-			" INNER JOIN ORGANIZACAO ON WORKFLOWTRANSICAO.organizacao_id = ORGANIZACAO.organizacao_id) " +
-			" INNER JOIN WORKFLOWETAPA AS WT1 ON (WORKFLOWTRANSICAO.workflowetapa_id = WT1.workflowetapa_id) " + 
-			" INNER JOIN WORKFLOWETAPA AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.workflowetapa_id) "; 
-	*/
-	private final String sqlWorkflowTransicoes = "SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , WORKFLOW.workflow_id, WORKFLOW.nome as workflow_nome, EMPRESA.nome as empresa_nome "+ 
-	 ", WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.workflowetapa_id "+
-	 ", WT1.nome as workflowetapa_nome, WORKFLOWTRANSICAO.workflowetapaproximo_id, WT2.nome as workflowetapaproximo_nome, PERFIL.perfil_id, PERFIL.nome as PERFIL_nome "+   
-	 ", WORKFLOWTRANSICAO.sequencia, WORKFLOWTRANSICAO.ispadrao, WORKFLOWTRANSICAO.isactive "+
-	 " FROM (((WORKFLOWTRANSICAO (NOLOCK) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) "+  
-	 " INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWTRANSICAO.empresa_id = EMPRESA.empresa_id) "+
-	 " INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWTRANSICAO.organizacao_id = ORGANIZACAO.organizacao_id) "+
-	 " INNER JOIN WORKFLOW (NOLOCK) ON (WORKFLOW.workflow_id = WORKFLOWTRANSICAO.workflow_id) "+
-	 " INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT1 ON (WORKFLOWTRANSICAO.workflowetapa_id = WT1.workflowetapa_id) "+    
-	 " INNER JOIN WORKFLOWETAPA (NOLOCK) AS WT2 ON (WORKFLOWTRANSICAO.workflowetapaproximo_id = WT2.workflowetapa_id) ";
+	private final String sqlWorkflowTransicoes = "SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , WORKFLOW.workflow_id, WORKFLOW.nome as workflow_nome " +
+									", EMPRESA.nome as empresa_nome, WORKFLOWTRANSICAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome , WORKFLOWTRANSICAO.etapa_id "+
+									", WT1.nome as etapa_nome, WORKFLOWTRANSICAO.etapaproximo_id, WT2.nome as etapaproximo_nome, PERFIL.perfil_id, PERFIL.nome as PERFIL_nome "+
+									", WORKFLOWTRANSICAO.sequencia, WORKFLOWTRANSICAO.ispadrao, WORKFLOWTRANSICAO.isactive "+
+									" FROM (((WORKFLOWTRANSICAO (NOLOCK) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) "+
+									" INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWTRANSICAO.empresa_id = EMPRESA.empresa_id) "+
+									" INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWTRANSICAO.organizacao_id = ORGANIZACAO.organizacao_id) "+
+									" INNER JOIN WORKFLOW (NOLOCK) ON (WORKFLOW.workflow_id = WORKFLOWTRANSICAO.workflow_id) "+
+									" INNER JOIN ETAPA (NOLOCK) AS WT1 ON (WORKFLOWTRANSICAO.etapa_id = WT1.etapa_id) "+
+									" INNER JOIN ETAPA (NOLOCK) AS WT2 ON (WORKFLOWTRANSICAO.etapaproximo_id = WT2.etapa_id) ";
 	
 	public WorkflowTransicaoDao(Session session, ConnJDBC conexao) {
 		super(session, WorkflowTransicao.class);
@@ -124,7 +115,7 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 
 	}
 
-	public WorkflowTransicao buscaWorkflowTransicaoPorEmpresaOrganizacaoWorkflowetapa(Long empresa_id, Long organizacao_id, Long workflowetapa_id) {
+	public WorkflowTransicao buscaWorkflowTransicaoPorEmpresaOrganizacaoEtapa(Long empresa_id, Long organizacao_id, Long etapa_id) {
 		
 		String sql = sqlWorkflowTransicao;
 
@@ -132,8 +123,8 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 			sql += " AND WORKFLOWTRANSICAO.empresa_id = ?";
 		if (organizacao_id != null)
 			sql += " AND WORKFLOWTRANSICAO.organizacao_id = ?";
-		if (workflowetapa_id != null)
-			sql += " AND (WORKFLOWTRANSICAO.workflowetapa_id = ?)";
+		if (etapa_id != null)
+			sql += " AND (WORKFLOWTRANSICAO.etapa_id = ?)";
 
 		this.conn = this.conexao.getConexao();
 		WorkflowTransicao workflowtransicao = null;
@@ -141,7 +132,7 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, workflowetapa_id);
+			this.stmt.setLong(3, etapa_id);
 			this.rsWorkflowTransicao = this.stmt.executeQuery();
 			while (rsWorkflowTransicao.next()) {
 				workflowtransicao = new WorkflowTransicao();
@@ -155,7 +146,7 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 		return workflowtransicao;
 	}
 
-	public WorkflowTransicao buscaWorkflowTransicaoPorEmpresaOrganizacaoWorkflowEtapaProximo(Long empresa_id, Long organizacao_id, Long workflowEtapa_id, Long workflowEtapaProximo_id, Long perfil_id) {
+	public WorkflowTransicao buscaWorkflowTransicaoPorEmpresaOrganizacaoEtapaProximo(Long empresa_id, Long organizacao_id, Long etapa_id, Long etapaProximo_id, Long perfil_id) {
 
 		String sql = sqlWorkflowTransicao;
 
@@ -163,10 +154,10 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 			sql += " WHERE WORKFLOWTRANSICAO.empresa_id = ?";
 		if (organizacao_id != null)
 			sql += " AND WORKFLOWTRANSICAO.organizacao_id = ?";
-		if (workflowEtapa_id != null)
-			sql += " AND (WORKFLOWTRANSICAO.workflowEtapa_id = ?)";
-		if (workflowEtapaProximo_id != null)
-			sql += " AND (WORKFLOWTRANSICAO.workflowetapaproximo_id = ?)";
+		if (etapa_id != null)
+			sql += " AND (WORKFLOWTRANSICAO.etapa_id = ?)";
+		if (etapaProximo_id != null)
+			sql += " AND (WORKFLOWTRANSICAO.etapaproximo_id = ?)";
 		if (perfil_id != null)
 			sql += " AND (WORKFLOWTRANSICAO.perfil_id = ?)";
 
@@ -180,8 +171,8 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, workflowEtapa_id);
-			this.stmt.setLong(4, workflowEtapaProximo_id);
+			this.stmt.setLong(3, etapa_id);
+			this.stmt.setLong(4, etapaProximo_id);
 			this.stmt.setLong(5, perfil_id);
 
 			this.rsWorkflowTransicao = this.stmt.executeQuery();

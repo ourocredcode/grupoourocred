@@ -9,8 +9,8 @@
 			<th>Empresa</th>
 			<th>Organização</th>
 			<th>Worklflow</th>
-			<th>Worklflow Etapa</th>
-			<th>Worklflow Próxima</th>
+			<th>Etapa</th>
+			<th>Etapa Próxima</th>
 			<th>Perfil</th>			
 			<th>Sequência</th>
 			<th>Padrão</th>
@@ -23,8 +23,8 @@
 				<td>${workflowTransicao.empresa.nome }</td>
 				<td>${workflowTransicao.organizacao.nome }</td>
 				<td>${workflowTransicao.workflow.nome }</td>
-				<td>${workflowTransicao.workflowEtapa.nome }</td>
-				<td>${workflowTransicao.workflowEtapaProximo.nome }</td>
+				<td>${workflowTransicao.etapa.nome }</td>
+				<td>${workflowTransicao.etapaProximo.nome }</td>
 				<td>${workflowTransicao.perfil.nome }</td>
 				<td>${workflowTransicao.sequencia }</td>
 				<td>${workflowTransicao.isPadrao }</td>
