@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 
 import org.hibernate.Session;
 
@@ -30,7 +32,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 
 	private final String sqlConferencia = " SELECT CONFERENCIA.conferencia_id, CONFERENCIA.empresa_id, EMPRESA.nome AS empresa_nome, "+
 					" CONFERENCIA.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, CONFERENCIA.observacao,CONFERENCIA.isvalido, CONFERENCIA.isactive, "+
-					" CONFERENCIA.contrato_id, CONFERENCIA.procedimentoconferencia_id, PROCEDIMENTOCONFERENCIA.nome as procedimentoconferencia_nome" +
+					" CONFERENCIA.contrato_id, CONFERENCIA.procedimentoconferencia_id, CONFERENCIA.created, PROCEDIMENTOCONFERENCIA.nome as procedimentoconferencia_nome" +
 					", CONFERENCIA.tipoprocedimento_id, TIPOPROCEDIMENTO.nome as tipoprocedimento_nome,USUARIO.usuario_id, USUARIO.nome as usuario_nome "+
 					" FROM ((((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
 					" INNER JOIN CONFERENCIA (NOLOCK) ON EMPRESA.empresa_id = CONFERENCIA.empresa_id) ON ORGANIZACAO.organizacao_id = CONFERENCIA.organizacao_id) "+
@@ -134,6 +136,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		ProcedimentoConferencia procedimentoConferencia = new ProcedimentoConferencia();
 		TipoProcedimento tipoProcedimento = new TipoProcedimento();
 		Usuario usuario = new Usuario();
+		Calendar created = new GregorianCalendar();
 		
 		empresa.setEmpresa_id(rsConferencia.getLong("empresa_id"));
 		empresa.setNome(rsConferencia.getString("empresa_nome"));
@@ -156,6 +159,9 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		conferencia.setObservacao(rsConferencia.getString("observacao"));
 		conferencia.setIsValido(rsConferencia.getBoolean("isvalido"));
 		conferencia.setIsActive(rsConferencia.getBoolean("isactive"));
+
+		created.setTime(rsConferencia.getDate("created"));
+		conferencia.setCreated(created);
 
 		conferencia.setEmpresa(empresa);
 		conferencia.setOrganizacao(organizacao);

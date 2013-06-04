@@ -20,23 +20,25 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.EmpresaDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.ProdutoDao;
+import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Produto;
+import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
-import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class MenuController {
@@ -51,6 +53,7 @@ public class MenuController {
 	private final PerfilDao perfilDao;
 	private final EtapaDao etapaDao;
 	private final WorkflowDao workflowDao;
+	private final TipoWorkflowDao tipoWorkflowDao;
 	private final ProdutoDao produtoDao;
 	private final BancoDao bancoDao;
 	private final UsuarioInfo usuarioInfo;
@@ -63,7 +66,7 @@ public class MenuController {
 	private Usuario usuario;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,
-			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,WorkflowDao workflowDao,ProdutoDao produtoDao,
+			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,WorkflowDao workflowDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,
 			BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
@@ -77,6 +80,7 @@ public class MenuController {
 		this.contratoDao = contratoDao;
 		this.etapaDao = etapaDao;
 		this.workflowDao = workflowDao;
+		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.produtoDao = produtoDao;
 		this.bancoDao = bancoDao;
 		this.empresa = usuarioInfo.getEmpresa();
@@ -118,10 +122,10 @@ public class MenuController {
 		result.include("bancos",this.bancoDao.buscaBancoByGrupo("Tomadores"));
 		result.include("bancosComprados",this.bancoDao.buscaBancoByGrupo("Comprados"));
 
-		//TODO
-		/*result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
-				this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Contrato").getWorkflow_id()));
-		 */
+		//TODO: verificar consultas Empresa e Organização SYSTEM (Felipe)
+		TipoWorkflow tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNome(1l, 1l, "Contrato");
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
+		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
 		contador();

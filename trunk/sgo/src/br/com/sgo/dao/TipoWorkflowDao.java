@@ -134,7 +134,7 @@ public class TipoWorkflowDao extends Dao<TipoWorkflow> {
 
 	}
 
-	public Collection<TipoWorkflow> buscaTipoWorkflowPorEmpresaOrganizacaoNome(Long empresa_id, Long organizacao_id, String nome) {
+	public Collection<TipoWorkflow> buscaTiposWorkflowPorEmpresaOrganizacaoNome(Long empresa_id, Long organizacao_id, String nome) {
 		
 		String sql = sqlTipoWorkflow;
 		
@@ -173,6 +173,49 @@ public class TipoWorkflowDao extends Dao<TipoWorkflow> {
 		this.conexao.closeConnection(rsTipoWorkflow, stmt, conn);
 
 		return tipoWorkflows;
+
+	}
+	
+	public TipoWorkflow buscaTipoWorkflowPorEmpresaOrganizacaoNome(Long empresa_id, Long organizacao_id, String nome) {
+		
+		String sql = sqlTipoWorkflow;
+		
+		if (empresa_id != null)
+			sql += " WHERE TIPOWORKFLOW.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND TIPOWORKFLOW.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND (TIPOWORKFLOW.nome like ?)";
+		
+		this.conn = this.conexao.getConexao();
+
+		TipoWorkflow tipoWorkflow = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, "%" + nome + "%");
+			
+			this.rsTipoWorkflow = this.stmt.executeQuery();
+
+			while (rsTipoWorkflow.next()) {
+
+				tipoWorkflow = new TipoWorkflow();
+
+				tipoWorkflow.setTipoWorkflow_id(rsTipoWorkflow.getLong("tipoworkflow_id"));
+				tipoWorkflow.setNome(rsTipoWorkflow.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsTipoWorkflow, stmt, conn);
+
+		return tipoWorkflow;
 
 	}
 

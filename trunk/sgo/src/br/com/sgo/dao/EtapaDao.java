@@ -24,14 +24,21 @@ public class EtapaDao extends Dao<Etapa> {
 	private Connection conn;
 	private ResultSet rsEtapa;
 
-	private final String sqlEtapa = "SELECT ETAPA.etapa_id, ETAPA.nome, ETAPA.empresa_id " +
-			" ,ETAPA.organizacao_id, ETAPA.ordemetapa, ETAPA.ispadrao, ETAPA.isactive FROM ETAPA (NOLOCK) ";
-	
-	private final String sqlEtapas = "SELECT ETAPA.etapa_id, ETAPA.nome AS etapa_nome, ETAPA.empresa_id "+
-										", EMPRESA.NOME AS empresa_nome, ETAPA.organizacao_id, ORGANIZACAO.nome as organizacao_nome "+
-										", ETAPA.isactive, ETAPA.ispadrao, ETAPA.ordemetapa "+
-										" FROM (ETAPA (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON ETAPA.empresa_id = EMPRESA.empresa_id) "+ 
-										" INNER JOIN ORGANIZACAO (NOLOCK) ON ETAPA.organizacao_id = ORGANIZACAO.organizacao_id ";
+	private final String sqlEtapa = " SELECT ETAPA.etapa_id, ETAPA.nome as etapa_nome, ETAPA.empresa_id  ,ETAPA.organizacao_id, ETAPA.ordemetapa, ETAPA.ispadrao, ETAPA.isactive," +
+			"						  EMPRESA.nome as empresa_nome, ORGANIZACAO.nome as organizacao_nome, EMPRESA.empresa_id, ORGANIZACAO.organizacao_id " +
+			"							FROM ETAPA (NOLOCK) " +
+			"							INNER JOIN EMPRESA (NOLOCK) ON EMPRESA.empresa_id = ETAPA.empresa_id " +
+			"							INNER JOIN ORGANIZACAO (NOLOCK) ON ORGANIZACAO.organizacao_id = ETAPA.organizacao_id  ";
+
+	private final String sqlEtapas = "SELECT ETAPA.etapa_id, ETAPA.nome AS etapa_nome, ETAPA.empresa_id " +
+									 ", EMPRESA.NOME AS empresa_nome, ETAPA.organizacao_id, ORGANIZACAO.nome as organizacao_nome " + 
+									 ", ETAPA.isactive, ETAPA.ispadrao, ETAPA.ordemetapa  " +
+										"FROM ((((ETAPA (NOLOCK)  " +
+										"INNER JOIN WORKFLOWETAPA (NOLOCK) ON WORKFLOWETAPA.etapa_id = ETAPA.etapa_id) " +
+										"INNER JOIN WORKFLOW (NOLOCK) ON WORKFLOWETAPA.workflow_id = WORKFLOW.workflow_id) " +
+										"INNER JOIN TIPOWORKFLOW (NOLOCk) ON WORKFLOW.tipoworkflow_id = TIPOWORKFLOW.tipoworkflow_id) " +
+										"INNER JOIN EMPRESA (NOLOCK) ON ETAPA.empresa_id = EMPRESA.empresa_id) " +  
+										"INNER JOIN ORGANIZACAO (NOLOCK) ON ETAPA.organizacao_id = ORGANIZACAO.organizacao_id ";
 
 	public EtapaDao(Session session, ConnJDBC conexao) {
 		super(session, Etapa.class);
@@ -110,13 +117,12 @@ public class EtapaDao extends Dao<Etapa> {
 
 	public Collection<Etapa> buscaEtapasByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
 
-		String sql = sqlEtapas;
-		
+		String sql = sqlEtapa;
 
 		if (empresa_id != null)
-			sql += " WHERE ETAPA.empresa_id = ?";
+			sql += " WHERE ETAPA.empresa_id = ? ";
 		if (organizacao_id != null)
-			sql += " AND ETAPA.organizacao_id = ?";
+			sql += " AND ETAPA.organizacao_id = ? ";
 		
 		sql += " ORDER BY ETAPA.nome ";
 
@@ -229,7 +235,6 @@ public class EtapaDao extends Dao<Etapa> {
 		return etapas;
 	}
 
-	//TODO
 	public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoWorkflow(Long empresa_id, Long organizacao_id, Long workflow_id) {
 		
 		String sql = sqlEtapas;
@@ -239,7 +244,7 @@ public class EtapaDao extends Dao<Etapa> {
 		if (organizacao_id != null)
 			sql += " AND ETAPA.organizacao_id = ?";
 		if (workflow_id != null)
-			sql += " AND ETAPA.workflow_id = ?";
+			sql += " AND WORKFLOWETAPA.workflow_id = ?";
 		
 		sql += " ORDER BY ETAPA.nome ";
 		
@@ -271,8 +276,50 @@ public class EtapaDao extends Dao<Etapa> {
 		this.conexao.closeConnection(rsEtapa, stmt, conn);
 		return etapas;
 	}
+	
+	public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoTipoWorkflow(Long empresa_id, Long organizacao_id, Long tipoworkflow_id) {
+		
+		String sql = sqlEtapas;
+		
+		if (empresa_id != null)
+			sql += " WHERE ETAPA.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND ETAPA.organizacao_id = ?";
+		if (tipoworkflow_id != null)
+			sql += " AND TIPOWORKFLOW.tipoworkflow_id = ?";
+		
+		sql += " ORDER BY ETAPA.nome ";
+		
+		this.conn = this.conexao.getConexao();
+		
+		Collection<Etapa> etapas =  new ArrayList<Etapa>();
 
-public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id, Long organizacao_id, Long workflow_id, Long perfil_id) {
+		try {
+			
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, tipoworkflow_id);
+
+			this.rsEtapa = this.stmt.executeQuery();
+			
+			while (rsEtapa.next()) {
+
+				getEtapa(etapas);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsEtapa, stmt, conn);
+		return etapas;
+	}
+
+	public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id, Long organizacao_id, Long workflow_id, Long perfil_id) {
 		
 		String sql = "SELECT WORKFLOWETAPAPERFILACESSO.empresa_id, EMPRESA.nome AS empresa_nome, WORKFLOWETAPAPERFILACESSO.organizacao_id "+
 					", ORGANIZACAO.nome AS organizacao_nome, WORKFLOWETAPAPERFILACESSO.etapa_id, WORKFLOWETAPA.nome AS etapa_nome "+
@@ -337,10 +384,9 @@ public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id,
 
 		String sql = "SELECT " +
 				"		WORKFLOWTRANSICAO.etapaproximo_id, ETAPA.nome FROM " +
-				"	(CONTRATO (NOLOCK) INNER JOIN (ETAPA (NOLOCK) INNER JOIN WORKFLOWTRANSICAO (NOLOCK) " +
-				" ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id) " +
-				"		ON CONTRATO.etapa_id = WORKFLOWTRANSICAO.etapa_id) " +
-				"	 INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id WHERE CONTRATO.contrato_id = ? AND PERFIL.perfil_id = ? ";
+				"		(CONTRATO (NOLOCK) INNER JOIN (ETAPA (NOLOCK) INNER JOIN WORKFLOWTRANSICAO (NOLOCK) ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id) " +
+				"		ON CONTRATO.etapa_id = WORKFLOWTRANSICAO.etapa_id) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id " +
+				"		WHERE CONTRATO.contrato_id = ? AND PERFIL.perfil_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
