@@ -107,13 +107,13 @@ public class ControleformularioController {
 		posvenda.setPerfil(perfil);
 
 		workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Pós Venda");
-		//TODO
-		//etapas = etapaDao.buscaEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
+
+		etapas = etapaDao.buscaEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
 		posvenda.setWorkflow(workflow);
 
 		workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Motivos Pós Venda");
-		//TODO
-		//motivos = etapaDao.buscaEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
+
+		motivos = etapaDao.buscaEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
 		posvenda.setWorkflowPendencia(workflow);
 
 		result.include("posvenda",posvenda);
@@ -187,15 +187,10 @@ public class ControleformularioController {
 		for(Contrato c : formulario.getContratos()){
 
 			c = this.contratoDao.load(c.getContrato_id());
-			
-			
-			//TODO
+
 			if(c.getEtapa().getNome().equals("Aguardando Pós Venda") || c.getEtapa().getNome().equals("Aguardando Qualidade"))
-				//c.setEtapa(this.etapaDao.buscaWorkflowPorEmpresaOrganizacaoEtapaNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
-				//			c.getWorkflow().getWorkflow_id(), status));	
-			
-			
-			
+				c.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), status));	
+
 			contratoDao.beginTransaction();
 			contratoDao.atualiza(c);
 			contratoDao.commit();
