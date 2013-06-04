@@ -256,12 +256,12 @@ function limpaForm(){
 							<div class="span2">
 								<label for="workflowEtapaEmpresa">Empresa</label>
       							<input class="span12" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-      							<input class="span1" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="text">	    				
+      							<input class="span1" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
 							</div>
 							<div class="span2">
 								<label for="workflowEtapaOrganizacao">Organização</label>	
 	      						<input class="span12" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="span1" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="text">
+	      						<input class="span1" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 							
 							<div class="span3">
@@ -287,7 +287,7 @@ function limpaForm(){
 								<input type="checkbox" id="workflowEtapaIsActive" name="workflowEtapa.isActive" checked="checked" value="1" >
 							</div>
 							<div class="span1">
-								<label for="workflowEtapaIsLeituraEscrita">Leitura/Escrita</label>							
+								<label for="workflowEtapaIsLeituraEscrita">R/W</label>							
 								<input type="checkbox" id="workflowEtapaIsLeituraEscrita" name="workflowEtapa.isLeituraEscrita" checked="checked" value="1" >
 							</div>
 						</div>

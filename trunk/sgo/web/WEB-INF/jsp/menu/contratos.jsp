@@ -3,8 +3,6 @@
 	<script type="text/javascript">
  
 	 $(document).ready(function() {
-		 
-		 buscaContratos();
 
 		$("#busca_Data").mask("99/99/99");
 		$("#busca_DataFim").mask("99/99/99");
@@ -12,6 +10,22 @@
 		$("#busca_DataAprovadoFim").mask("99/99/9999");
 		$("#busca_DataConcluidoInicio").mask("99/99/9999");
 		$("#busca_DataConcluidoFim").mask("99/99/9999");
+
+		var cliente = $("#busca_Cliente").val();
+		var documento = $("#busca_Documento").val();
+		var data = $("#busca_Data").val();
+		var dataFim = $("#busca_DataFim").val();
+		var dataAprovadoInicio = $("#busca_DataAprovadoInicio").val();
+		var dataAprovadoFim = $("#busca_DataAprovadoFim").val();
+ 		var dataConcluidoInicio = $("#busca_DataConcluidoInicio").val();
+		var dataConcluidoFim = $("#busca_DataConcluidoFim").val();
+		var dataRecusadoInicio = $("#busca_DataRecusadoInicio").val();
+		var dataRecusadoFim = $("#busca_DataRecusadoFim").val();
+
+		if(data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
+					  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
+			$(buscaContratos);
+		}
 
 		$('#busca_Data').datepicker({
 			dateFormat: 'dd/mm/y'
@@ -43,7 +57,7 @@
 				}
 			});
 		});
- 
+
 	 });
 	 
 	 function buscaContratos(){
@@ -118,12 +132,21 @@
 			bancosComprados[0] = "";
 		}
 
+		if(data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
+			  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
+
 		 $("#resultado").load('<c:url value="/menu/busca" />',{'informacaoSaque': informacaoSaque,'tipoAprovado': tipoAprovado,'empresa':empresa,
 			 	'tipoPagamento': tipoPagamento ,'tipoRecusado': tipoRecusado,'justificativa': justificativa,'status': status, 
 				'cliente' : cliente , 'documento' : documento, 'data' : data, 'dataFim' : dataFim,
 				'dataAprovadoInicio' : dataAprovadoInicio, 'dataAprovadoFim' : dataAprovadoFim, 'dataConcluidoInicio' : dataConcluidoInicio, 'dataConcluidoFim' : dataConcluidoFim, 
 				'dataRecusadoInicio' : dataRecusadoInicio, 'dataRecusadoFim' : dataRecusadoFim, 'bancos' : bancos, 'produtos' : produtos, 'bancosComprados' : bancosComprados , 
 				'motivoPendencia' : motivoPendencia});
+		 
+		} else {
+
+			alert("Escolha uma data ou dados do cliente.");
+
+		}
 
 	 }
 
@@ -454,7 +477,7 @@
 												${contrato.valorMeta }
 											</td>
 											<td >
-												<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.workflowEtapa.nome }</a>
+												<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
 											</td>
 											<td >
 												PÓS VENDA

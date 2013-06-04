@@ -105,7 +105,7 @@
 						${contrato.valorMeta }
 					</td>
 					<td >
-						<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.workflowEtapa.nome }</a>
+						<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
 					</td>
 					<td >
 						PÓS VENDA

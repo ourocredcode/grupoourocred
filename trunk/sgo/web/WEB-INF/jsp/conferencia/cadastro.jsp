@@ -20,9 +20,10 @@ $(document).ready(function() {
 	}
 	
 	$("input:radio").click(function() {
-		
+
 		var countRadios = 0;
-		
+		var elementos = document.forms["conferenciaForm"].elements;
+
 		for (var x = 0; x < elementos.length; x++) {
 
 			if (elementos[x].name.indexOf("isValido") != -1) {
@@ -68,7 +69,6 @@ $(document).ready(function() {
 	
 
 });
-
 
 function desabilita(campo){   
 
@@ -118,6 +118,7 @@ function validaForm(form) {
 					<input type="hidden" id="conferencia.empresa.empresa_id" name="conferencias[${status.index}].empresa.empresa_id" value="${conferencia.empresa.empresa_id }" />
 					<input type="hidden" id="conferencia.organizacao.organizacao_id" name="conferencias[${status.index}].organizacao.organizacao_id" value="${conferencia.organizacao.organizacao_id }" />
 					<input type="hidden" id="conferencia.createdBy.usuario_id" name="conferencias[${status.index}].createdBy.usuario_id" value="${conferencia.createdBy.usuario_id }" />
+					<input type="hidden" id="conferencia.created.time" name="conferencias[${status.index}].created.time" value="<fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${conferencia.created.time }" />" />
 					<input type="hidden" id="conferencia.isActive" name="conferencias[${status.index}].isActive" value="1" />
 					<input type="hidden" id="conferencia.conferencia_id" name="conferencias[${status.index}].conferencia_id" value="${conferencia.conferencia_id}" />
 					<tr>
