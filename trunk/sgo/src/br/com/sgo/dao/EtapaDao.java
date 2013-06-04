@@ -423,12 +423,13 @@ public class EtapaDao extends Dao<Etapa> {
 
 	public Collection<Etapa> buscaEtapaByWorkFlowPerfil(Long workflow_id,Long perfil_id) {
 
-		String sql = "SELECT DISTINCT WORKFLOWTRANSICAO.etapaproximo_id, ETAPA.nome " +
-				"			FROM (( ETAPA  " +
-				"		INNER JOIN WORKFLOWTRANSICAO  ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id)  " +
-				"		INNER JOIN PERFIL ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id)  " +
-				"		INNER JOIN WORKFLOW ON ETAPA.workflow_id = WORKFLOW.workflow_id " +
-				"	WHERE WORKFLOW.workflow_id = ? AND PERFIL.perfil_id = ? ";
+		String sql = "SELECT DISTINCT WORKFLOWTRANSICAO.etapaproximo_id, ETAPA.nome  " +
+							" FROM ((( ETAPA " +
+						" INNER JOIN WORKFLOWETAPA (NOLOCK) ON WORKFLOWETAPA.etapa_id = ETAPA.etapa_id) " +    
+						" INNER JOIN WORKFLOWTRANSICAO  ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id) " +   
+						" INNER JOIN PERFIL ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) " +   
+						" INNER JOIN WORKFLOW ON WORKFLOWETAPA.workflow_id = WORKFLOW.workflow_id " +  
+					" WHERE WORKFLOW.workflow_id = ? AND PERFIL.perfil_id = ? "; 
 
 		this.conn = this.conexao.getConexao();
 

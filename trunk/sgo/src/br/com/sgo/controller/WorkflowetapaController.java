@@ -88,14 +88,6 @@ public class WorkflowetapaController {
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 	}
-	
-	@Get
-	@Path("/workflowetapa/busca.json")
-	@Public
-	public void workflowEtapa(Long empresa_id, Long organizacao_id, String nome) {	
-		//TODO
-		//result.use(Results.json()).withoutRoot().from(workflowEtapaDao.buscaWorkflowEtapasByNome(empresa_id, organizacao_id, nome)).serialize();	
-	}
 
 	@Post
 	@Path("/workflowetapa/lista")
