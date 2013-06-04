@@ -438,7 +438,7 @@ function openPopup(url) {
 								</div>
 								<div class="span2">
 									<label for="parceiroBeneficioNumeroBeneficio">Beneficio</label>
-									<input type="text" class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" />
+									<input type="text" class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio" value="${formulario.parceiroBeneficio.numeroBeneficio }" />
 								</div>
 								<div class="span2">
 									<label for="formularioParceiroNegocioDataNascimento">Dt Nascimento</label>
@@ -447,7 +447,7 @@ function openPopup(url) {
 								</div>
 								<div class="span2">
 									<label for="parceiroLocalidadeLocalidadeCep">CEP</label>
-									<input  class="input-medium" id="parceiroLocalidadeLocalidadeCep" name="parceiroLocalidade.localidade.cep" type="text" value="${parceiroLocalidade.localidade.cep }" />
+									<input  class="input-medium" id="parceiroLocalidadeLocalidadeCep" name="parceiroLocalidade.localidade.cep" type="text" value="${formulario.parceiroLocalidade.localidade.cep }" />
 								</div>
 							</div>
 						</div>
@@ -456,23 +456,23 @@ function openPopup(url) {
 
 								<div class="span2">
 									<label for="Banco">Banco</label>
-									<input type="text" class="input-medium" id="Banco" name="Banco" value="${parceiroInfoBanco.banco.nome }"/>	
+									<input type="text" class="input-medium" id="Banco" name="Banco" value="${formulario.parceiroInfoBanco.banco.nome }"/>	
 								</div>
 								<div class="span2">
 									<label for="Agencia">Agencia</label>
-									<input type="text" class="input-medium" id="Agencia" name="Agencia" value="${parceiroInfoBanco.agencia.nome }" />
+									<input type="text" class="input-medium" id="Agencia" name="Agencia" value="${formulario.parceiroInfoBanco.agenciaNumero }" />
 								</div>
 								<div class="span2">
 									<label for="Conta">Conta</label>
-									<input type="text" class="input-medium" id="Conta" name="Conta" value="${parceiroInfoBanco.contaBancaria }" />
+									<input type="text" class="input-medium" id="Conta" name="Conta" value="${formulario.parceiroInfoBanco.contaCorrente }" />
 								</div>
 								<div class="span2">
 									<label for="TipoConta">Tipo Conta</label>
-									<input type="text" class="input-medium" id="TipoConta" name="TipoConta" value="${parceiroInfoBanco.contaBancaria.tipoConta }" />
+									<input type="text" class="input-medium" id="TipoConta" name="TipoConta" value="${formulario.parceiroInfoBanco.contaBancaria.tipoConta  }" />
 								</div>
 								<div class="span2">
 									<label for="TipoPagamento">Tipo Pagamento</label>
-									<input  class="input-medium" id="TipoPagamento" name="TipoPagamento" type="text" value="${parceiroInfoBanco.meioPagamento }" />
+									<input  class="input-medium" id="TipoPagamento" name="TipoPagamento" type="text" value="${formulario.parceiroInfoBanco.meioPagamento.nome }" />
 								</div>
 							</div>
 						</div>
@@ -608,27 +608,6 @@ function openPopup(url) {
 						<span class="icon">
 							<i class="icon-align-justify"></i>									
 						</span>
-						<h5>Conferência Contrato</h5>
-						<div class="buttons"><a href="#" class="btn btn-mini" onclick="conferencia('${contrato.contrato_id}');"><i class="icon-refresh"></i> Conferencia</a></div>
-					</div>
-					<div class="widget-content padding">
-						<div class="row-fluid">
-							<div id="divConferencia" style="margin-left: 50px"></div> 
-						</div>
-					</div>	
-				</div>
-			</div>										
-		</div>
-	</div>	
-	
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
-				<div class="widget-box">
-					<div class="widget-title">
-						<span class="icon">
-							<i class="icon-align-justify"></i>									
-						</span>
 						<h5>Logística</h5>
 					</div>
 					<div class="widget-content padding">
@@ -710,7 +689,7 @@ function openPopup(url) {
 											<div class="controls">
 												<select id="contrato_ids[]" name="contrato_ids[]" multiple="multiple" style="width: 300px">
 													<c:forEach var="contrato" items="${contratos }">
-														<option value="${contrato.contrato_id }">${contrato.produto.nome } - ${contrato.workflowEtapa.nome }</option>
+														<option value="${contrato.contrato_id }">${contrato.produto.nome } - ${contrato.etapa.nome }</option>
 													</c:forEach>
 												</select>
 											</div>
@@ -730,7 +709,57 @@ function openPopup(url) {
 				</div>
 			</div>										
 		</div>
-	</div>					
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Conferência Contrato </h5>
+						<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
+							<div class="buttons"><a href="#" class="btn btn-mini" onclick="conferencia('${contrato.contrato_id}');"><i class="icon-refresh"></i> Conferencia</a></div>
+						</c:if>
+					</div>
+					<div class="widget-content padding">
+						<div class="row-fluid">
+							<div id="divConferencia" style="margin-left: 50px">
+								<c:if test="${not empty conferencias }">
+									<table class="table table-striped table-bordered" id="conferencias">
+										<thead>
+											<tr>
+												<th>Data</th>
+ 												<th>Conferente</th>
+ 												<th>Procedimento</th>
+												<th>Observação</th>
+											</tr>
+											<c:forEach var="conferencia" items="${conferencias }">
+												<tr>
+													<td style="text-align: center;"><fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${conferencia.created.time }" /></td>	
+													<td style="text-align: center;"><c:out value="${conferencia.createdBy.nome }"></c:out></td>
+													<td style="text-align: center;"><c:out value="${conferencia.procedimentoConferencia.nome }"></c:out></td>
+													<td style="text-align: center;"><c:if test="${conferencia.isValido }"> OK </c:if> ${conferencia.observacao }</td>
+												</tr>
+											</c:forEach>
+										</thead>
+									</table>
+								</c:if>
+								<c:if test="${empty conferencias }">
+									
+									Conferência não realizada
+								
+								</c:if>
+							</div> 
+						</div>
+					</div>	
+				</div>
+			</div>										
+		</div>
+	</div>	
+					
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
@@ -744,40 +773,32 @@ function openPopup(url) {
 							<div class="span6">
 								<div id="divBoleto" style="margin-left: 50px">	
 									<div class="control-group">
-										<label class="control-label">Última Atuação :</label>
+
 										<div class="controls">
 										<c:if test="${not empty boleto.controle_id }">
+
 											realizada por ${boleto.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
+
+											<div class="control-group">
+												<label class="control-label">Previsão de Chegada : <fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataPrevisao.time }" /></label>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Próxima Atuação : <fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataProximaAtuacao.time }" /></label>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Data de Chegada : <fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataChegada.time }" /></label>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Data de Vencimento : <fmt:formatDate pattern="dd/MM/yyyy"  value="${boleto.dataVencimento.time }" /></label>
+											</div>
+											
+											
 										</c:if>
 										<c:if test="${empty boleto.controle_id }">
 											Ainda não realizado
 										</c:if> 
 										</div>
 									 </div>
-									<div class="control-group">
-										<label class="control-label">Previsão de Chegada :</label>
-										<div class="controls">
-											<input id="boletoDataPrevisao" name="boleto.dataPrevisao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataPrevisao.time }" />" class="input-medium" />
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label">Próxima Atuação :</label>
-										<div class="controls">
-											<input id="boletoDataProximaAtuacao" name="boleto.dataProximaAtuacao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataProximaAtuacao.time }" />" class="input-medium" />
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label">Data de Chegada : </label>
-										<div class="controls">
-											<input id="boletoDataChegada" name="boleto.dataChegada" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataChegada.time }" />" class="input-medium" />
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label">Data de Vencimento : </label>
-										<div class="controls">
-											<input id="boletoDataVencimento" name="boleto.dataVencimento" value="<fmt:formatDate pattern="dd/MM/yyyy"  value="${boleto.dataVencimento.time }" />"  class="input-medium" />
-										</div>
-									</div>
 								</div>
 							</div>
 							<div class="span6">
@@ -822,28 +843,24 @@ function openPopup(url) {
 							<div class="span6">
 								<div id="divAverbacao" style="margin-left: 50px">	
 									<div class="control-group">
-										<label class="control-label">Última Atuação :</label>
 										<div class="controls">
 										<c:if test="${not empty averbacao.controle_id }">
 											realizada por ${averbacao.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
+											
+											<div class="control-group">
+												<label class="control-label">Próxima Atuação : <fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataProximaAtuacao.time }" /></label>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Previsão de Chegada : <fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataPrevisao.time }" /></label>
+											</div>
+
 										</c:if>
 										<c:if test="${empty averbacao.controle_id }">
 											Ainda não realizado
 										</c:if> 
 									</div>
 									</div>
-									<div class="control-group">
-										<label class="control-label">Próxima Atuação :</label>
-										<div class="controls">
-											<input id="averbacaoDataProximaAtuacao" name="averbacao.dataProximaAtuacao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataProximaAtuacao.time }" />" class="input-medium" />
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label">Previsão de Chegada :</label>
-										<div class="controls">
-											<input id="averbacaoDataPrevisao" name="averbacao.dataPrevisao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataPrevisao.time }" />" class="input-medium" />
-										</div>
-									</div>
+									
 								</div>
 							</div>
 							<div class="span6">
@@ -937,10 +954,10 @@ function openPopup(url) {
 
 						<div class="span2">
 							<label for="contratoStatus">Status Contrato</label>
-							<select id="contratoStatus" name="contrato.workflowEtapa.workflowEtapa_id" class="input-medium" onchange="verificaStatus();">
+							<select id="contratoStatus" name="contrato.etapa.etapa_id" class="input-medium" onchange="verificaStatus();">
 								<c:forEach var="etapa" items="${etapas }">
-									<option value="${etapa.workflowEtapa_id}" 
-									<c:if test="${etapa.workflowEtapa_id == contrato.workflowEtapa.workflowEtapa_id}">selected</c:if>>${etapa.nome }</option>
+									<option value="${etapa.etapa_id}" 
+									<c:if test="${etapa.etapa_id == contrato.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -957,7 +974,7 @@ function openPopup(url) {
 					
 						<div class="span2">
 							<label for="justificativa">Justificativa</label>
-							<select id="justificativa" name="contrato.workflowEtapaPendencia.workflowEtapa_id" class="input-medium">
+							<select id="justificativa" name="contrato.etapaPendencia.etapa_id" class="input-medium">
 
 								<option value="" selected="selected">Selecione</option>
 
