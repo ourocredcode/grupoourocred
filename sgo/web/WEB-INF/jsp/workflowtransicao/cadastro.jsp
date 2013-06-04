@@ -200,24 +200,24 @@ function buscaPerfisEtapa(){
 
 }
 
-function buscaEtapasWorkflow(){
+function buscaEtapas(){
 
 	var empresa_id = $('#workflowTransicaoEmpresaId').val();
 	var organizacao_id = $('#workflowTransicaoOrganizacaoId').val();
 	var workflow_id = $('#workflowTransicaoWorkflowId').val();
 
-	$("#workflowTransicaoWorkflowEtapaId").load('<c:url value="/workflowtransicao/workflowtransicaoetapas" />',			
+	$("#workflowTransicaoEtapaId").load('<c:url value="/workflowtransicao/workflowtransicaoetapas" />',			
 			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'workflow_id' : workflow_id});
 
 }
 
-function buscaWorkflowEtapaTransicao(){
+function buscaEtapasTransicao(){
 
 	var empresa_id = $('#workflowTransicaoEmpresaId').val();
 	var organizacao_id = $('#workflowTransicaoOrganizacaoId').val();
 	var workflow_id = $('#workflowTransicaoWorkflowId').val();
 
-	$("#workflowTransicaoWorkflowEtapaProximoId").load('<c:url value="/workflowtransicao/workflowtransicaoetapas" />',			
+	$("#workflowTransicaoEtapaProximoId").load('<c:url value="/workflowtransicao/workflowtransicaoetapas" />',			
 			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'workflow_id' : workflow_id});
 
 }
@@ -304,21 +304,21 @@ function buscaWorkflowEtapaTransicao(){
 							</div>
 							<div class="span2">
 	      						<label for="workflowTransicaoPerfilId">Perfil</label>
-	      						<select id="workflowTransicaoPerfilId" name="workflowTransicao.perfil.perfil_id" class="input-medium" onchange="buscaEtapasWorkflow();">
+	      						<select id="workflowTransicaoPerfilId" name="workflowTransicao.perfil.perfil_id" class="input-medium" onchange="buscaEtapas();">
 	      							<option value="">Selecion um Perfil...</option>
 	      						</select>
 							</div>
 						</div>
 						<div class="row-fluid">
 							<div class="span2">
-	      						<label for="workflowTransicaoWorkflowEtapaId">Etapas</label>
-	      						<select  class="span12" id="workflowTransicaoWorkflowEtapaId" name="workflowTransicao.workflowEtapa.workflowEtapa_id" class="input-medium" onchange="buscaWorkflowEtapaTransicao();">
+	      						<label for="workflowTransicaoEtapaId">Etapas</label>
+	      						<select id="workflowTransicaoEtapaId" name="workflowTransicao.etapa.etapa_id" class="input-medium" onchange="buscaEtapasTransicao();">
 	      							<option value="">Selecion uma Etapa...</option>
 	      						</select>
 							</div>
 							<div class="span2">
-	      						<label for="workflowTransicaoWorkflowEtapaProximoId">Etapas Próximo</label>
-	      						<select  class="span12" id="workflowTransicaoWorkflowEtapaProximoId" name="workflowTransicao.workflowEtapaProximo.workflowEtapa_id" class="input-medium">
+	      						<label for="workflowTransicaoEtapaProximoId">Etapas Próximo</label>
+	      						<select  class="span12" id="workflowTransicaoEtapaProximoId" name="workflowTransicao.etapaProximo.etapa_id" class="input-medium">
 	      							<option value="">Selecion uma Etapa...</option>
 	      						</select>
 							</div>							
@@ -347,8 +347,8 @@ function buscaWorkflowEtapaTransicao(){
 							<th>Empresa</th>
 							<th>Organização</th>
 							<th>Worklflow</th>
-							<th>Worklflow Etapa</th>
-							<th>Worklflow Próxima</th>
+							<th>Etapa</th>
+							<th>Etapa Próxima</th>
 							<th>Perfil</th>
 							<th>Sequência</th>
 							<th>Padrão</th>
@@ -361,8 +361,8 @@ function buscaWorkflowEtapaTransicao(){
 								<td>${workflowTransicao.empresa.nome }</td>
 								<td>${workflowTransicao.organizacao.nome }</td>
 								<td>${workflowTransicao.workflow.nome }</td>
-								<td>${workflowTransicao.workflowEtapa.nome }</td>
-								<td>${workflowTransicao.workflowEtapaProximo.nome }</td>
+								<td>${workflowTransicao.etapa.nome }</td>
+								<td>${workflowTransicao.etapaProximo.nome }</td>
 								<td>${workflowTransicao.perfil.nome }</td>
 								<td>${workflowTransicao.sequencia }</td>
 								<td>${workflowTransicao.isPadrao }</td>

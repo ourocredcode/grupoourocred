@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -20,7 +22,9 @@ public class WorkflowperfilacessoController {
 	private final WorkflowPerfilAcessoDao workflowPerfilAcessoDao;
 	private final WorkflowDao workflowDao;
 	private final PerfilDao perfilDao;
-	
+
+	private WorkflowPerfilAcesso workflowPerfilAcesso;	
+	private Calendar dataAtual = Calendar.getInstance();
 
 	public WorkflowperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowPerfilAcessoDao workflowPerfilAcessoDao, WorkflowDao workflowDao, PerfilDao perfilDao) {
 
@@ -54,6 +58,12 @@ public class WorkflowperfilacessoController {
 
 			if (this.workflowPerfilAcessoDao.buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkflowPerfil(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),
 					workflowPerfilAcesso.getWorkflow().getWorkflow_id(), workflowPerfilAcesso.getPerfil().getPerfil_id()) == null) {				
+
+				this.workflowPerfilAcesso.setCreated(dataAtual);
+				this.workflowPerfilAcesso.setUpdated(dataAtual);
+
+				this.workflowPerfilAcesso.setCreatedBy(usuarioInfo.getUsuario());
+				this.workflowPerfilAcesso.setUpdatedBy(usuarioInfo.getUsuario());
 
 				workflowPerfilAcesso.setIsActive(workflowPerfilAcesso.getIsActive() == null ? false: true);
 				workflowPerfilAcesso.setIsLeituraEscrita(workflowPerfilAcesso.getIsLeituraEscrita() == null ? false: true);

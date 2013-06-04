@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -22,6 +24,9 @@ public class WorkflowetapaperfilacessoController {
 	private final WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao;	
 	private final PerfilDao perfilDao;
 	private final EtapaDao etapaDao;
+
+	private WorkflowEtapaPerfilAcesso workflowEtapaPerfilAcesso;	
+	private Calendar dataAtual = Calendar.getInstance();
 
 	public WorkflowetapaperfilacessoController(Result result, UsuarioInfo usuarioInfo, WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao
 			, WorkflowDao workflowDao, PerfilDao perfilDao, EtapaDao etapaDao) {
@@ -46,6 +51,12 @@ public class WorkflowetapaperfilacessoController {
 
 			if (this.workflowEtapaPerfilAcessoDao.buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id()
 					,workflowEtapaPerfilAcesso.getWorkflow().getWorkflow_id(), workflowEtapaPerfilAcesso.getEtapa().getEtapa_id(), workflowEtapaPerfilAcesso.getPerfil().getPerfil_id()) == null) {			
+
+				this.workflowEtapaPerfilAcesso.setCreated(dataAtual);
+				this.workflowEtapaPerfilAcesso.setUpdated(dataAtual);
+
+				this.workflowEtapaPerfilAcesso.setCreatedBy(usuarioInfo.getUsuario());
+				this.workflowEtapaPerfilAcesso.setUpdatedBy(usuarioInfo.getUsuario());
 
 				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null ? false : true);				
 				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null ? false : true);
