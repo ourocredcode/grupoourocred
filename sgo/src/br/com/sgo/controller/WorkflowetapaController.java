@@ -43,9 +43,9 @@ public class WorkflowetapaController {
 	@Path("/workflowetapa/cadastro")
 	public void cadastro() {
 
-		result.include("workflowEtapas", this.workflowEtapaDao.buscaAllWorkflowEtapaByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
-		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
-		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("workflowEtapas", this.workflowEtapaDao.buscaAllWorkflowEtapaByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 

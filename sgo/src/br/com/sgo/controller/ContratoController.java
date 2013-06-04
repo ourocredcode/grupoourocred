@@ -12,6 +12,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CoeficienteDao;
+import br.com.sgo.dao.ConferenciaDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleDao;
 import br.com.sgo.dao.EtapaDao;
@@ -19,15 +20,21 @@ import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.LogisticaDao;
+import br.com.sgo.dao.ParceiroBeneficioDao;
+import br.com.sgo.dao.ParceiroInfoBancoDao;
+import br.com.sgo.dao.ParceiroLocalidadeDao;
+import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PeriodoDao;
 import br.com.sgo.dao.ProdutoBancoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoLogisticaDao;
+import br.com.sgo.dao.TipoProcedimentoDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
+import br.com.sgo.modelo.Conferencia;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Controle;
 import br.com.sgo.modelo.Empresa;
@@ -37,10 +44,15 @@ import br.com.sgo.modelo.HistoricoContrato;
 import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.ParceiroBeneficio;
+import br.com.sgo.modelo.ParceiroInfoBanco;
+import br.com.sgo.modelo.ParceiroLocalidade;
+import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.Tabela;
 import br.com.sgo.modelo.TipoLogistica;
+import br.com.sgo.modelo.TipoProcedimento;
 import br.com.sgo.modelo.Usuario;
 
 @Resource
@@ -59,19 +71,30 @@ public class ContratoController {
 	private final PeriodoDao periodoDao;
 	private final TipoLogisticaDao tipoLogisticaDao;
 	private final TipoControleDao tipoControleDao;
+	private final TipoProcedimentoDao tipoProcedimentoDao;
 	private final LogisticaDao logisticaDao;
 	private final HistoricoContratoDao historicoContratoDao;
 	private final HistoricoControleDao historicoControleDao;
 	private final ControleDao controleDao;
+	private final ConferenciaDao conferenciaDao;
+	private final ParceiroBeneficioDao parceiroBeneficioDao;
+	private final ParceiroNegocioDao parceiroNegocioDao;
+	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
+	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 
 	private Contrato contrato;
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
 	private Formulario formulario;
+	private ParceiroNegocio parceiroNegocio;
+	private ParceiroLocalidade parceiroLocalidade;
+	private ParceiroInfoBanco parceiroInfoBanco;
+	private ParceiroBeneficio parceiroBeneficio;
 	private Collection<Banco> bancos;
 	private Controle boleto;
 	private Controle averbacao;
+	private Collection<Conferencia> conferencias;
 	private Collection<Produto> produtos;
 	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();;
 	private Collection<Etapa> etapas;
@@ -86,12 +109,19 @@ public class ContratoController {
 	public ContratoController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
 			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
 			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
-			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao,ControleDao controleDao,TipoControleDao tipoControleDao){		
+			ParceiroNegocio parceiroNegocio, ParceiroLocalidade parceiroLocalidade, ParceiroInfoBanco parceiroInfoBanco, ParceiroBeneficio parceiroBeneficio,
+			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
+			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
+			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.contrato = contrato;
 		this.formulario = formulario;
+		this.parceiroInfoBanco = parceiroInfoBanco;
+		this.parceiroBeneficio = parceiroBeneficio;
+		this.parceiroNegocio = parceiroNegocio;
+		this.parceiroLocalidade = parceiroLocalidade;
 		this.bancoDao = bancoDao;
 		this.contratoDao = contratoDao;
 		this.produtoBancoDao = produtoBancoDao;
@@ -106,12 +136,19 @@ public class ContratoController {
 		this.logisticaDao = logisticaDao;
 		this.historicoContratoDao = historicoContratoDao;
 		this.historicoControleDao = historicoControleDao;
+		this.parceiroBeneficioDao = parceiroBeneficioDao;
+		this.parceiroNegocioDao = parceiroNegocioDao;
+		this.parceiroInfoBancoDao = parceiroInfoBancoDao;
+		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
 		this.boleto = boleto;
 		this.averbacao = averbacao;
+		this.conferencias = conferencias;
 		this.controleDao = controleDao;
+		this.conferenciaDao = conferenciaDao;
+		this.tipoProcedimentoDao = tipoProcedimentoDao;
 
 	}
 
@@ -159,16 +196,23 @@ public class ContratoController {
 
 		contrato = contratoDao.load(id);
 		formulario = formularioDao.buscaFormularioByContrato(id);
-		//TODO
-		//etapas = etapaDao.buscaEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
+
+		etapas = etapaDao.buscaEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
+		etapas.add(contrato.getEtapa());
+		
 		periodos = periodoDao.buscaAllPeriodos();
 		historico = historicoContratoDao.buscaHistoricoByContrato(id);
 		
 		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
 		logisticas = logisticaDao.buscaLogisticaByContrato(id);
-		etapas.add(contrato.getEtapa());
+		
 		boleto = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByNome("Boleto").getTipoControle_id());
 		averbacao = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByNome("Averbacao").getTipoControle_id());
+
+		TipoProcedimento tipoProcedimento = this.tipoProcedimentoDao.buscaTipoProcedimentoByNome("Contrato");
+		
+		conferencias = this.conferenciaDao.buscaConferenciaByEmOrTipoProcedimentoContrato(contrato.getEmpresa().getEmpresa_id(), contrato.getOrganizacao().getOrganizacao_id(), 
+				tipoProcedimento.getTipoProcedimento_id(), contrato.getContrato_id());
 
 		contratos = contratoDao.buscaContratoByFormulario(formulario.getFormulario_id());
 
@@ -177,6 +221,24 @@ public class ContratoController {
 
 		if(averbacao != null)
 			historicoControleAverbacao = this.historicoControleDao.buscaHistoricoByContratoControle(contrato.getContrato_id(), averbacao.getControle_id());
+		
+		parceiroBeneficio = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(contrato.getNumeroBeneficio());
+		
+		parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
+		parceiroInfoBanco = parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
+
+		for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
+
+			if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+				parceiroLocalidade = pl;
+			}
+
+		}
+
+		formulario.setParceiroNegocio(parceiroNegocio);
+		formulario.setParceiroBeneficio(parceiroBeneficio);
+		formulario.setParceiroLocalidade(parceiroLocalidade);
+		formulario.setParceiroInfoBanco(parceiroInfoBanco);
 
 		result.include("formulario",formulario);
 		result.include("contrato",contrato);
@@ -188,6 +250,7 @@ public class ContratoController {
 		result.include("historico",historico);
 		result.include("boleto",boleto);
 		result.include("averbacao",averbacao);
+		result.include("conferencias",conferencias);
 		result.include("historicoControleBoleto",historicoControleBoleto);
 		result.include("historicoControleAverbacao",historicoControleAverbacao);
 

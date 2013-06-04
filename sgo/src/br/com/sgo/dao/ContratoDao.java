@@ -54,10 +54,10 @@ public class ContratoDao extends Dao<Contrato> {
 			"B1.nome as banco_nome, B2.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor,   " +
 			"PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf,  " +
 			"CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome ," +
-			"WORKFLOWETAPA.nome as etapa_nome, LOGISTICA.dataassinatura, LOGISTICA.logistica_id ," +
-			" TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome as tipologistica_nome  , PERIODO.periodo_id, PERIODO.nome as periodo_nome " +
+			"ETAPA.etapa_id, ETAPA.nome as etapa_nome, LOGISTICA.dataassinatura, LOGISTICA.logistica_id ," +
+			"TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome as tipologistica_nome  , PERIODO.periodo_id, PERIODO.nome as periodo_nome " +
 			"FROM   " +
-"(((((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
+				"(((((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
 				 "INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id)" +
 				 "INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id )   " +
 				 " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.contrato_id = CONTRATO.contrato_id) " +
@@ -71,7 +71,8 @@ public class ContratoDao extends Dao<Contrato> {
 				 "INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id)   " +
 				 "INNER JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id)   " +
 				 "INNER JOIN BANCO AS B1 (NOLOCK) ON CONTRATO.banco_id = B1.banco_id   " +
-				 "INNER JOIN WORKFLOWETAPA (NOLOCK) ON CONTRATO.etapa_id = WORKFLOWETAPA.etapa_id " +
+				 "INNER JOIN WORKFLOWETAPA (NOLOCK) ON CONTRATO.workflow_id = WORKFLOWETAPA.workflow_id " +
+				 "INNER JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id  = WORKFLOWETAPA.etapa_id AND ETAPA.etapa_id = CONTRATO.etapa_id " +
 				 "INNER JOIN USUARIO as SUPER (NOLOCK) ON USUARIO.supervisor_usuario_id = SUPER.usuario_id   " +
 				 "LEFT JOIN BANCO AS B2 (NOLOCK) ON CONTRATO.recompra_banco_id = B2.banco_id ";
 
@@ -219,7 +220,7 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(!statusAux1.equals("")){
-				sql += clause + " ( WORKFLOWETAPA.nome like ? ) ";
+				sql += clause + " ( ETAPA.nome like ? ) ";
 				x++;
 				clause = "";
 			}

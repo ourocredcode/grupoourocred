@@ -2,6 +2,7 @@ package br.com.sgo.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.caelum.vraptor.Get;
@@ -87,6 +88,8 @@ public class ConferenciaController {
 				c.setEmpresa(empresa);
 				c.setOrganizacao(organizacao);
 				c.setCreatedBy(usuario);
+				c.setCreated(GregorianCalendar.getInstance());
+				c.setIsValido(true);
 				c.setIsActive(true);
 
 				conferencias.add(c);
