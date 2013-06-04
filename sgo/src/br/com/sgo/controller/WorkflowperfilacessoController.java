@@ -5,8 +5,6 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowPerfilAcessoDao;
@@ -20,26 +18,25 @@ public class WorkflowperfilacessoController {
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
 	private final WorkflowPerfilAcessoDao workflowPerfilAcessoDao;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
 	private final WorkflowDao workflowDao;
 	private final PerfilDao perfilDao;
 	
 
-	public WorkflowperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowPerfilAcessoDao workflowPerfilAcessoDao, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, WorkflowDao workflowDao, PerfilDao perfilDao) {
+	public WorkflowperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowPerfilAcessoDao workflowPerfilAcessoDao, WorkflowDao workflowDao, PerfilDao perfilDao) {
+
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.workflowPerfilAcessoDao =  workflowPerfilAcessoDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
 		this.workflowDao = workflowDao;
 		this.perfilDao = perfilDao;
+
 	}
 
 	@Get
 	@Public
 	@Path("/workflowperfilacesso/cadastro")
 	public void cadastro() {
+
 		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 		result.include("perfis",this.perfilDao.buscaAllPerfis(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 		result.include("workflowperfisacesso", this.workflowPerfilAcessoDao.buscaTodosWorkflowPerfilAcesso());
@@ -58,11 +55,6 @@ public class WorkflowperfilacessoController {
 			if (this.workflowPerfilAcessoDao.buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkflowPerfil(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),
 					workflowPerfilAcesso.getWorkflow().getWorkflow_id(), workflowPerfilAcesso.getPerfil().getPerfil_id()) == null) {				
 
-				workflowPerfilAcesso.setEmpresa(this.empresaDao.load(usuarioInfo.getEmpresa().getEmpresa_id()));
-				workflowPerfilAcesso.setOrganizacao(this.organizacaoDao.load(usuarioInfo.getOrganizacao().getOrganizacao_id()));				
-				workflowPerfilAcesso.setWorkflow(this.workflowDao.load(workflowPerfilAcesso.getWorkflow().getWorkflow_id()));
-				workflowPerfilAcesso.setPerfil(this.perfilDao.load(workflowPerfilAcesso.getPerfil().getPerfil_id()));
-				
 				workflowPerfilAcesso.setIsActive(workflowPerfilAcesso.getIsActive() == null ? false: true);
 				workflowPerfilAcesso.setIsLeituraEscrita(workflowPerfilAcesso.getIsLeituraEscrita() == null ? false: true);
 

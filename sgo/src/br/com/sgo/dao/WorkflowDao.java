@@ -208,6 +208,54 @@ public class WorkflowDao extends Dao<Workflow> {
 		return workflows;
 	}
 
+	public Collection<Workflow> buscaWorkflowsToWorkflowEtapaPerfilByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
+
+		String sql = " SELECT DISTINCT(WORKFLOWPERFILACESSO.workflow_id), WORKFLOW.nome AS workflow_nome "+
+				", WORKFLOWPERFILACESSO.empresa_id, EMPRESA.nome AS empresa_nome, WORKFLOWPERFILACESSO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
+				" FROM ((WORKFLOWPERFILACESSO (NOLOCK) INNER JOIN WORKFLOW (NOLOCK) ON WORKFLOWPERFILACESSO.workflow_id = WORKFLOW.workflow_id) "+
+				" INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWPERFILACESSO.empresa_id = EMPRESA.empresa_id) "+
+				" INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWPERFILACESSO.organizacao_id = ORGANIZACAO.organizacao_id ";
+
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOWPERFILACESSO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOWPERFILACESSO.organizacao_id = ?";
+
+		sql += " ORDER BY WORKFLOW.nome";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Workflow> workflows = new ArrayList<Workflow>();
+
+		if (workflows!=null){
+
+			try {
+
+				this.stmt = conn.prepareStatement(sql);
+
+				this.stmt.setLong(1, empresa_id);				
+				this.stmt.setLong(2, organizacao_id);
+
+				this.rsWorkflow = this.stmt.executeQuery();
+
+				while (rsWorkflow.next()) {
+
+					getWorkflows(workflows);
+
+				}
+
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+
+			}
+
+			this.conexao.closeConnection(rsWorkflow, stmt, conn);
+
+		}
+		return workflows;
+	}
+	
 	public Collection<Workflow> buscaWorkflowsByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
 
 		String sql = sqlWorkflows;

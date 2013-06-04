@@ -6,7 +6,7 @@
 			<th>Empresa</th>
 			<th>Organização</th>
 			<th>Worklflow</th>
-			<th>Worklflow Etapa</th>
+			<th>Etapa</th>
 			<th>Perfil</th>
 			<th>Leitura e Escrita</th>
 			<th>Ativo</th>
@@ -18,7 +18,7 @@
 				<td>${workflowEtapaPerfilAcesso.empresa.nome }</td>
 				<td>${workflowEtapaPerfilAcesso.organizacao.nome }</td>
 				<td>${workflowEtapaPerfilAcesso.workflow.nome }</td>
-				<td>${workflowEtapaPerfilAcesso.workflowEtapa.nome }</td>
+				<td>${workflowEtapaPerfilAcesso.etapa.nome }</td>
 				<td>${workflowEtapaPerfilAcesso.perfil.nome }</td>								
 				<td>${workflowEtapaPerfilAcesso.isLeituraEscrita }</td>
 				<td>${workflowEtapaPerfilAcesso.isActive }</td>									

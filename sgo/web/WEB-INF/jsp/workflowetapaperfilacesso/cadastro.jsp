@@ -132,37 +132,37 @@ jQuery(function($){
 	     }
 	});
 
-	$('#workflowEtapaPerfilAcessoWorkflowEtapa').autocomplete({
+	$('#workflowEtapaPerfilAcessoEtapa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
-	          url: "<c:url value='/workflowetapa/busca.json' />",
+	          url: "<c:url value='/etapa/busca.json' />",
 	          dataType: "json",
 	          data : {empresa_id: $('#workflowEtapaPerfilAcessoEmpresaId').val() == '' ? '0' :  $('#workflowEtapaPerfilAcessoEmpresaId').val(), 
 	        		  organizacao_id: $('#workflowEtapaPerfilAcessoOrganizacaoId').val() == '' ? '0' :  $('#workflowEtapaPerfilAcessoOrganizacaoId').val(),
-	        		  nome : $('#workflowEtapaPerfilAcessoWorkflowEtapa').val()},
+	        		  nome : $('#workflowEtapaPerfilAcessoEtapa').val()},
 	          success : function(data) {  
 
 	        	  if (!data || data.length == 0) {
-	     	            $('#workflowEtapaPerfilAcessoWorkflowEtapa').val('');
-	     	           $('#workflowEtapaPerfilAcessoWorkflowEtapaId').val('');
+	     	            $('#workflowEtapaPerfilAcessoEtapa').val('');
+	     	           $('#workflowEtapaPerfilAcessoEtapaId').val('');
 	     	        }
 
-	        	  response($.map(data, function(workflowEtapa) {  
+	        	  response($.map(data, function(etapa) {  
 	        		  return {
-	        			  label: workflowEtapa.nome,
-	        			  value: workflowEtapa.workflowEtapa_id
+	        			  label: etapa.nome,
+	        			  value: etapa.etapa_id
 	                  };
 	              }));  
 	           }
 	        });
 	     },
 	     focus: function( event, ui ) {
-	      	 $('#workflowEtapaPerfilAcessoWorkflowEtapa').val(ui.item.label);
+	      	 $('#workflowEtapaPerfilAcessoEtapa').val(ui.item.label);
 	           return false;
 	       } ,
 	     select: function( event, ui ) {
-	         $('#workflowEtapaPerfilAcessoWorkflowEtapa').val(ui.item.label);
-	         $('#workflowEtapaPerfilAcessoWorkflowEtapaId').val(ui.item.value);
+	         $('#workflowEtapaPerfilAcessoEtapa').val(ui.item.label);
+	         $('#workflowEtapaPerfilAcessoEtapaId').val(ui.item.value);
 	         return false;
 	     }
 	});
@@ -250,7 +250,7 @@ function buscaEtapas(){
 	var organizacao_id = $('#workflowEtapaPerfilAcessoOrganizacaoId').val();
 	var workflow_id = $('#workflowEtapaPerfilAcessoWorkflowId').val();
 
-	$("#workflowEtapaPerfilAcessoWorkflowEtapaId").load('<c:url value="/workflowetapaperfilacesso/workflowetapasperfil" />',
+	$("#workflowEtapaPerfilAcessoEtapaId").load('<c:url value="/workflowetapaperfilacesso/etapas" />',
 			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'workflow_id' : workflow_id});
 
 }
@@ -314,20 +314,21 @@ function buscaEtapas(){
 					<form id="workflowEtapaPerfilAcessoForm" name="workflowEtapaPerfilAcessoForm" action="<c:url value="/workflowetapaperfilacesso/salva"/>" method="POST">
 
 						<div class="row-fluid">
-
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowEtapaPerfilAcessoEmpresa">Empresa</label>
-	      						<input class="span12" id="workflowEtapaPerfilAcessoEmpresa" name="workflowEtapaPerfilAcessoEmpresa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-		      					<input class="span1" id="workflowEtapaPerfilAcessoEmpresaId" name="workflowEtapaPerfilAcessoEmpresa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+	      						<input class="input-xlarge" id="workflowEtapaPerfilAcessoEmpresa" name="workflowEtapaPerfilAcessoEmpresa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input id="workflowEtapaPerfilAcessoEmpresaId" name="workflowEtapaPerfilAcessoEmpresa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 							</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowEtapaPerfilAcessoOrganizacao">Organização</label>
-		      					<input class="span12" id="workflowEtapaPerfilAcessoOrganizacao" name="workflowEtapaPerfilAcessoOrganizacao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-		      					<input class="span1" id="workflowEtapaPerfilAcessoOrganizacaoId" name="workflowEtapaPerfilAcessoOrganizacao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+		      					<input class="input-xlarge" id="workflowEtapaPerfilAcessoOrganizacao" name="workflowEtapaPerfilAcessoOrganizacao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input id="workflowEtapaPerfilAcessoOrganizacaoId" name="workflowEtapaPerfilAcessoOrganizacao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
+						</div>
+						<div class="row-fluid">
 							<div class="span2">
-								<label for="workflowEtapaPerfilAcessoWorkflow">Workflow</label>
-								<select id="workflowEtapaPerfilAcessoWorkflowId" name="workflowEtapaPerfilAcesso.workflow.workflow_id" class="input-medium" onchange="buscaEtapas();">
+								<label for="workflowEtapaPerfilAcessoWorkflowId">Workflow</label>
+								<select id="workflowEtapaPerfilAcessoWorkflowId" name="workflowEtapaPerfilAcesso.workflow.workflow_id" onchange="buscaEtapas();" class="input-medium">
 									<c:forEach var="workflow" items="${workflows }">
 									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
 									 	</option>
@@ -335,29 +336,27 @@ function buscaEtapas(){
 								</select>
 							</div>
 							<div class="span2">
-	      						<label for="workflowEtapaPerfilAcessoWorkflowEtapaId">WorkFlow Etapa</label>
-	      						<select  class="span12" id="workflowEtapaPerfilAcessoWorkflowEtapaId" name="workflowEtapaPerfilAcessoWorkflowEtapaId">
+	      						<label for="workflowEtapaPerfilAcessoEtapaId">Etapa</label>
+	      						<select id="workflowEtapaPerfilAcessoEtapaId" name="workflowEtapaPerfilAcesso.etapa.etapa_id" class="input-medium">
 	      							<option value="">Selecion um Workflow...</option>
 	      						</select>
 							</div>
 							<div class="span2">
-								<label for="workflowEtapaPerfilAcessoPerfil">Perfil</label>
-								<select id="workflowEtapaPerfilAcessoPerfilId" name="workflowEtapaPerfilAcessoPerfil.perfil.perfil_id" class="input-medium">
+								<label for="workflowEtapaPerfilAcessoPerfilId">Perfil</label>
+								<select id="workflowEtapaPerfilAcessoPerfilId" name="workflowEtapaPerfilAcesso.perfil.perfil_id" class="input-medium">
 									<c:forEach var="perfil" items="${perfis }">
 									 	<option value="${perfil.perfil_id }" selected="selected"> ${perfil.nome }
 									 	</option>
 									</c:forEach>
 								</select>
 							</div>
-						</div>
-						<div class="row-fluid">
 							<div class="span1">
 								<label for="workflowEtapaPerfilAcessoIsActive">Ativo</label>
-								<input id="workflowEtapaPerfilAcessoIsActive" name="workflowEtapaPerfilAcesso.isActive" type="checkbox" checked="checked" value="1" value="${workflowEtapaPerfilAcesso.isActive }">
+								<input id="workflowEtapaPerfilAcessoIsActive" name="workflowEtapaPerfilAcesso.isActive" type="checkbox" checked="checked" value="1">
 							</div>
 							<div class="span1">
 								<label for="workflowEtapaPerfilAcessoIsLeituraEscrita">Escrita</label>
-								<input id="workflowEtapaPerfilAcessoIsLeituraEscrita" name="workflowEtapaPerfilAcesso.isLeituraEscrita" type="checkbox" checked="checked" value="1" value="${workflowEtapaPerfilAcesso.isLeituraEscrita }">
+								<input id="workflowEtapaPerfilAcessoIsLeituraEscrita" name="workflowEtapaPerfilAcesso.isLeituraEscrita" type="checkbox" checked="checked" value="1">
 							</div>
 							<div class="span1">
 								<label for="workflowEtapaPerfilAcessoIsUpload">Upload</label>
@@ -396,7 +395,7 @@ function buscaEtapas(){
 								<td>${workflowEtapaPerfilAcesso.empresa.nome }</td>
 								<td>${workflowEtapaPerfilAcesso.organizacao.nome }</td>
 								<td>${workflowEtapaPerfilAcesso.workflow.nome }</td>
-								<td>${workflowEtapaPerfilAcesso.workflowEtapa.nome }</td>
+								<td>${workflowEtapaPerfilAcesso.etapa.nome }</td>
 								<td>${workflowEtapaPerfilAcesso.perfil.nome }</td>								
 								<td>${workflowEtapaPerfilAcesso.isLeituraEscrita }</td>
 								<td>${workflowEtapaPerfilAcesso.isActive }</td>									

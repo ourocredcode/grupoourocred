@@ -321,17 +321,7 @@ function buscaWorkflowEtapaTransicao(){
 	      						<select  class="span12" id="workflowTransicaoWorkflowEtapaProximoId" name="workflowTransicao.workflowEtapaProximo.workflowEtapa_id" class="input-medium">
 	      							<option value="">Selecion uma Etapa...</option>
 	      						</select>
-							</div>
-							<!--div class="span2">
-								<label for="workflowTransicaoWorkflowEtapaProximoId">Etapas Próximo</label>
-								<select id="workflowTransicaoWorkflowEtapaProximoId" name="workflowTransicao.workflowEtapaProximo.workflowEtapa_id" class="input-medium">
-									<c:forEach var="workflowEtapa" items="${workflowEtapas }">
-									 	<option value="${workflowEtapa.workflowEtapa_id }" selected="selected"> ${workflowEtapa.nome }
-									 	</option>
-									</c:forEach>
-								</select>
-							</div>
-							 -->
+							</div>							
 							<div class="span1">
 								<label for="workflowTransicaoIsActive">Ativo</label>
 								<input id="workflowTransicaoIsActive" name="workflowTransicao.isActive" type="checkbox" checked="checked" value="1" >

@@ -14,10 +14,10 @@ import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Workflow;
-import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.WorkflowEtapaPerfilAcesso;
 
 
@@ -28,6 +28,7 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsWorkflowEtapaPerfilAcesso;
+	
 	private UsuarioInfo usuarioInfo;
 
 	private final String sqlWorkflowEtapaPerfilAcesso = "SELECT WORKFLOWETAPAPERFILACESSO.etapa_id, WORKFLOWETAPAPERFILACESSO.isleituraescrita, WORKFLOWETAPAPERFILACESSO.isactive "+
@@ -42,9 +43,11 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 							 " INNER JOIN PERFIL (NOLOCK) ON WORKFLOWETAPAPERFILACESSO.perfil_id = PERFIL.perfil_id ";
 
 	public WorkflowEtapaPerfilAcessoDao(Session session, ConnJDBC conexao, UsuarioInfo usuarioInfo) {
+
 		super(session, WorkflowEtapaPerfilAcesso.class);
 		this.conexao = conexao;
 		this.usuarioInfo = usuarioInfo;
+
 	}
 
 	public Collection<WorkflowEtapaPerfilAcesso> buscaTodosWorkflowEtapaPerfilAcesso() {
@@ -116,16 +119,18 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 		return workflowEtapasPerfilAcesso;
 	}
 	
-public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(Long empresa_id, Long organizacao_id, Long workflowetapa_id, Long perfil_id ) {
-		
+public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(Long empresa_id, Long organizacao_id, Long workflow_id, Long etapa_id, Long perfil_id) {
+
 		String sql = sqlWorkflowEtapaPerfilAcesso;
 
 		if (empresa_id != null)
 			sql += " WHERE WORKFLOWETAPAPERFILACESSO.empresa_id = ?";
 		if (organizacao_id != null)
 			sql += " AND WORKFLOWETAPAPERFILACESSO.organizacao_id = ?";
-		if (workflowetapa_id != null)
-			sql += " AND WORKFLOWETAPAPERFILACESSO.workflowetapa_id = ?";
+		if (workflow_id != null)
+			sql += " AND WORKFLOWETAPAPERFILACESSO.workflow_id = ?";
+		if (etapa_id != null)
+			sql += " AND WORKFLOWETAPAPERFILACESSO.etapa_id = ?";
 		if (perfil_id != null)
 			sql += " AND WORKFLOWETAPAPERFILACESSO.perfil_id = ?";
 
@@ -139,8 +144,9 @@ public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganiz
 			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, workflowetapa_id);
-			this.stmt.setLong(4, perfil_id);
+			this.stmt.setLong(3, workflow_id);
+			this.stmt.setLong(4, etapa_id);
+			this.stmt.setLong(5, perfil_id);
 			
 			this.rsWorkflowEtapaPerfilAcesso = this.stmt.executeQuery();
 			
@@ -164,30 +170,35 @@ public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganiz
 
 	public void insert(WorkflowEtapaPerfilAcesso workflowEtapaPerfilAcesso) throws SQLException {
 
-		String sql = "INSERT INTO WORKFLOWETAPAPERFILACESSO (empresa_id, organizacao_id, workflowetapa_id, perfil_id, isactive,isleituraescrita,isupload) VALUES (?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO WORKFLOWETAPAPERFILACESSO (empresa_id, organizacao_id, workflow_id, etapa_id, perfil_id, isactive, isleituraescrita,isupload) VALUES (?,?,?,?,?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
 		try {
+
 			this.conn.setAutoCommit(false);
 
 			this.stmt = conn.prepareStatement(sql);
-			
+
 			this.stmt.setLong(1, usuarioInfo.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(2, usuarioInfo.getOrganizacao().getOrganizacao_id());			
-			this.stmt.setLong(3, workflowEtapaPerfilAcesso.getEtapa().getEtapa_id());
-			this.stmt.setLong(4, workflowEtapaPerfilAcesso.getPerfil().getPerfil_id());
-			this.stmt.setBoolean(5, workflowEtapaPerfilAcesso.getIsActive());
-			this.stmt.setBoolean(6, workflowEtapaPerfilAcesso.getIsLeituraEscrita());
-			this.stmt.setBoolean(7, workflowEtapaPerfilAcesso.getIsUpload());
+			this.stmt.setLong(2, usuarioInfo.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(3, workflowEtapaPerfilAcesso.getWorkflow().getWorkflow_id());
+			this.stmt.setLong(4, workflowEtapaPerfilAcesso.getEtapa().getEtapa_id());
+			this.stmt.setLong(5, workflowEtapaPerfilAcesso.getPerfil().getPerfil_id());
+			this.stmt.setBoolean(6, workflowEtapaPerfilAcesso.getIsActive());
+			this.stmt.setBoolean(7, workflowEtapaPerfilAcesso.getIsLeituraEscrita());
+			this.stmt.setBoolean(8, workflowEtapaPerfilAcesso.getIsUpload());
 
 			this.stmt.executeUpdate();
 			this.conn.commit();
 
 		} catch (SQLException e) {
+			
 			this.conn.rollback();
 			throw e;
+
 		} finally {
+
 			this.conn.setAutoCommit(true);
 			this.conexao.closeConnection(stmt, conn);
 		}
