@@ -17,20 +17,19 @@ import br.com.sgo.modelo.SubGrupoProduto;
 @Component
 public class SubGrupoProdutoDao extends Dao<SubGrupoProduto> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsSubGrupoProdutos;
 
 	public SubGrupoProdutoDao(Session session, ConnJDBC conexao) {
+
 		super(session, SubGrupoProduto.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
-	public Collection<SubGrupoProduto> buscaSubGrupoProdutos(Long empresa_id,
-			Long organizacao_id, String nome) {
+	public Collection<SubGrupoProduto> buscaSubGrupoProdutos(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = "select SUBGRUPOPRODUTO.subgrupoproduto_id, SUBGRUPOPRODUTO.nome from SUBGRUPOPRODUTO (NOLOCK) "
 				+ "	WHERE SUBGRUPOPRODUTO.empresa_id = ? AND SUBGRUPOPRODUTO.organizacao_id = ? AND SUBGRUPOPRODUTO.nome like ?";
@@ -67,8 +66,62 @@ public class SubGrupoProdutoDao extends Dao<SubGrupoProduto> {
 
 	}
 
-	public Collection<SubGrupoProduto> buscaSubGrupoProdutos(Long empresa_id,
-			Long organizacao_id) {
+	public Collection<SubGrupoProduto> buscaSubGrupoProdutoToGrupoProduto(Long empresa_id, Long organizacao_id, Long grupoProduto_id) {
+/*
+		String sql = "SELECT SUBGRUPOPRODUTO.grupoproduto_id, GRUPOPRODUTO.nome AS grupoproduto_nome "+
+					", SUBGRUPOPRODUTO.subgrupoproduto_id, SUBGRUPOPRODUTO.nome AS subgrupoproduto_nome " +
+					", SUBGRUPOPRODUTO.empresa_id, SUBGRUPOPRODUTO.organizacao_id "+
+					" FROM GRUPOPRODUTO (NOLOCK) INNER JOIN (ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
+					" INNER JOIN SUBGRUPOPRODUTO (NOLOCK) ON EMPRESA.empresa_id = SUBGRUPOPRODUTO.empresa_id) "+
+					" ON ORGANIZACAO.organizacao_id = SUBGRUPOPRODUTO.organizacao_id) ON GRUPOPRODUTO.grupoproduto_id = SUBGRUPOPRODUTO.grupoproduto_id ";
+*/
+		String sql = "SELECT SUBGRUPOPRODUTO.subgrupoproduto_id, SUBGRUPOPRODUTO.nome "+
+		" FROM ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) INNER JOIN SUBGRUPOPRODUTO (NOLOCK) ON EMPRESA.empresa_id = SUBGRUPOPRODUTO.empresa_id) "+
+		" ON ORGANIZACAO.organizacao_id = SUBGRUPOPRODUTO.organizacao_id WHERE SUBGRUPOPRODUTO.empresa_id = ? AND SUBGRUPOPRODUTO.organizacao_id = ? AND SUBGRUPOPRODUTO.grupoproduto_id = ?";
+
+		/*if (empresa_id != null)
+			sql += " WHERE SUBGRUPOPRODUTO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND SUBGRUPOPRODUTO.organizacao_id = ?";
+		if (grupoProduto_id != null)
+			sql += " AND SUBGRUPOPRODUTO.grupoproduto_id = ?";
+		*/
+		this.conn = this.conexao.getConexao();
+
+		Collection<SubGrupoProduto> subGrupoProdutos = new ArrayList<SubGrupoProduto>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, grupoProduto_id);
+
+			this.rsSubGrupoProdutos = this.stmt.executeQuery();
+
+			while (rsSubGrupoProdutos.next()) {
+
+				SubGrupoProduto subGrupoProduto = new SubGrupoProduto();
+
+				subGrupoProduto.setSubGrupoProduto_id(rsSubGrupoProdutos.getLong("subgrupoproduto_id"));
+				subGrupoProduto.setNome(rsSubGrupoProdutos.getString("nome"));
+
+				subGrupoProdutos.add(subGrupoProduto);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsSubGrupoProdutos, stmt, conn);
+
+		return subGrupoProdutos;
+
+	}
+
+	public Collection<SubGrupoProduto> buscaSubGrupoProdutos(Long empresa_id,Long organizacao_id) {
 
 		String sql = "select SUBGRUPOPRODUTO.subgrupoproduto_id, SUBGRUPOPRODUTO.nome from SUBGRUPOPRODUTO (NOLOCK) "
 				+ "	WHERE SUBGRUPOPRODUTO.empresa_id = ? AND SUBGRUPOPRODUTO.organizacao_id = ?";
@@ -80,18 +133,21 @@ public class SubGrupoProdutoDao extends Dao<SubGrupoProduto> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
+
 			this.rsSubGrupoProdutos = this.stmt.executeQuery();
 
 			while (rsSubGrupoProdutos.next()) {
+
 				SubGrupoProduto subGrupoProduto = new SubGrupoProduto();
 
-				subGrupoProduto.setSubGrupoProduto_id(rsSubGrupoProdutos
-						.getLong("subgrupoproduto_id"));
+				subGrupoProduto.setSubGrupoProduto_id(rsSubGrupoProdutos.getLong("subgrupoproduto_id"));
 				subGrupoProduto.setNome(rsSubGrupoProdutos.getString("nome"));
 
 				subGrupoProdutos.add(subGrupoProduto);
+
 			}
 
 		} catch (SQLException e) {

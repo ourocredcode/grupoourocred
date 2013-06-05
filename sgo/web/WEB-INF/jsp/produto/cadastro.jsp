@@ -3,16 +3,16 @@
 <script type="text/javascript">
 jQuery(function($){
 
+	$('#produto-li-a').click(function() {
+		window.location.href = '<c:url value="/produto/cadastro" />';
+	});
+
 	$('#grupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/grupoproduto/cadastro" />';
 	});
 
 	$('#subgrupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/subgrupoproduto/cadastro" />';
-	});
-	
-	$('#produto-li-a').click(function() {
-		window.location.href = '<c:url value="/produto/cadastro" />';
 	});
 
 	$('#produtoEmpresa').autocomplete({
@@ -177,6 +177,20 @@ function limpaForm() {
 		document.produtoForm.reset();
 	}
 }
+
+function buscaSubGrupoProduto(){
+	
+	var empresa_id = $('#produtoEmpresaId').val();
+	var organizacao_id = $('#produtoOrganizacaoId').val();
+	var grupoProduto_id = $('#produtoGrupoProdutoId').val();
+
+	alert(empresa_id +  organizacao_id +  grupoProduto_id);
+
+	$("#produtoSubGrupoProdutoId").load('<c:url value="/produto/subgrupoprodutos" />',
+			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'grupoProduto_id' : grupoProduto_id});
+
+}
+
 </script>
 
 <div id="content-header">
@@ -194,101 +208,98 @@ function limpaForm() {
 		<a href="#" class="current">Produto</a>
 	</div>
 
-<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
-			<ul id="myTab" class="nav nav-tabs">								
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+
+			<ul id="myTab" class="nav nav-tabs">
+				<li class="active" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
 				<li class="" id="grupoproduto-li"><a href="#grupoproduto-div" data-toggle="tab" id="grupoproduto-li-a">Grupo de Produtos</a></li>
 				<li class="" id="subgrupoproduto-li"><a href="#subgrupoproduto-div" data-toggle="tab" id="subgrupoproduto-li-a">Sub Grupo de Produtos</a></li>
-				<li class="active" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
 			</ul>
+			
 			<div id="myTabContent" class="tab-content">
 
-				<div class="tab-pane fade" id="grupoproduto-div"></div>
+				<div class="tab-pane fade active in" id="produto-div" >					
+					<form id="produtoForm" name="produtoForm" action="<c:url value="/produto/salva"/>" method="POST">
 
-				<div class="tab-pane fade" id="subgrupoproduto-div" ></div>
-
-				<div class="tab-pane fade active in" id="produto-div" >
-					
-					<div class="row25MarginTop">
-						<form id="produtoForm" name="produtoForm" action="<c:url value="/produto/salva"/>" method="POST">
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="produtoEmpresa">Empresa</label>									
+	      						<input class="input-xlarge" id="produtoEmpresa" name="produto.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required readonly="readonly">
+	      						<input class="span1" id="produtoEmpresaId" name="produto.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+	    					</div>
 
 							<div class="span3">
-									<div class="control-group">
-										<label class="control-label" for="produtoEmpresa">Empresa</label>
-										<div class="input-prepend">
-											<span class="add-on"><i class="icon-plus-sign"></i></span>
-				      						<input class="span10" id="produtoEmpresa" name="produto.empresa.nome" type="text" required onChange="limpaForm();">
-				      						<input class="span10" id="produtoEmpresaId" name="produto.empresa.empresa_id" type="hidden">
-				    					</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label" for="produtoOrganizacao">Organização</label>
-										<div class="input-prepend">
-											<span class="add-on"><i class="icon-plus-sign"></i></span>
-				      						<input class="span10" id="produtoOrganizacao" name="produto.organizacao.nome" type="text" required onChange="limpaForm();">
-				      						<input class="span10" id="produtoOrganizacaoId" name="produto.organizacao.organizacao_id" type="hidden">
-				    					</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label" for="produtoNome">Nome</label>
-										<div class="controls">
-											<input type="text" id="produtoNome" name="produto.nome" placeholder="Nome" required>
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label" for="produtoDescricao">Descrição</label>
-										<div class="controls">
-											<input type="text" id="produtoDescricao" name="produto.descricao" placeholder="Descrição" required>
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label" for="produtoIsActive">Ativo</label>
-										<div class="controls">
-											<input type="checkbox" id="produtoIsActive" name="produto.isActive" checked="checked" value="1" >							
-										</div>
-									</div>
-								 	<div class="btn-group">
-										<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-									</div>
-									<div class="btn-group">
-										<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-									</div>
-									<div class="btn-group">
-										<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-									</div>
-								
+								<label for="produtoOrganizacao">Organização</label>									
+	      						<input class="input-xlarge" id="produtoOrganizacao" name="produto.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required readonly="readonly">
+	      						<input class="span1" id="produtoOrganizacaoId" name="produto.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
-	
+						</div>
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="produtoGrupoProdutoId">Grupo Produto</label>
+								<select id="produtoGrupoProdutoId" name="produto.grupoProduto.grupoProduto_id" onchange="buscaSubGrupoProduto();" class="input-medium">
+									<option value="">Selecione o grupo...</option>
+									<c:forEach var="grupoProduto" items="${gruposProduto }">
+									 	<option value="${grupoProduto.grupoProduto_id }" > ${grupoProduto.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="span2">
+	      						<label for="produtoSubGrupoProdutoId">Sub Grupo Produto</label>
+	      						<select id="produtoSubGrupoProdutoId" name="produto.subGrupoProduto.subGrupoProduto_id" class="input-medium">
+	      							<option value="">Selecion um Grupo Produto...</option>
+	      						</select>
+							</div>
+						</div>
+						<div class="row-fluid">
 							<div class="span3">
-
-									<div class="control-group">
-										<label class="control-label" for="produtoGrupoProduto">Grupo Produto</label>
-										<div class="input-prepend">
-											<span class="add-on"><i class="icon-plus-sign"></i></span>
-				      						<input class="span10" id="produtoGrupoProduto" name="produto.grupoProduto.nome" type="text" required onChange="limpaForm();">
-				      						<input class="span10" id="produtoGrupoProdutoId" name="produto.grupoProduto.grupoProduto_id" type="hidden">
-				    					</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label" for="produtoSubGrupoProduto">SubGrupo Produto</label>
-										<div class="input-prepend">
-											<span class="add-on"><i class="icon-plus-sign"></i></span>
-				      						<input class="span10" id="produtoSubGrupoProduto" name="produto.subGrupoProduto.nome" type="text" required onChange="limpaForm();">
-				      						<input class="span10" id="produtoSubGrupoProdutoId" name="produto.subGrupoProduto.subGrupoProduto_id" type="hidden">
-				    					</div>
-									</div>
-							
-							
+								<label for="produtoNome">Nome</label>
+								<input class="input-xlarge" id="produtoNome" name="produto.nome" placeholder="Nome" type="text" required>
 							</div>
-
-						</form>
-						
-					</div>
-				
+							<div class="span3">
+								<label for="produtoDescricao">Descrição</label>
+								<input class="input-xlarge" id="produtoDescricao" name="produto.descricao" placeholder="Descrição" type="text" required>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="produtoIsActive">Ativo</label>
+								<div class="controls">
+									<input type="checkbox" id="produtoIsActive" name="produto.isActive" checked="checked" value="1" >							
+								</div>
+							</div>
+						 	<div class="btn-group">
+								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+							</div>
+						</div>				
+					</form>
 				</div>
-	
+
+				<div class="tab-pane fade" id="grupoproduto-div"></div>
+				<div class="tab-pane fade" id="subgrupoproduto-div"></div>
 			</div>
 		</div>
 	</div>

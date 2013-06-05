@@ -40,7 +40,7 @@ public class WorkflowProdutoBanco implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
-	private Produto banco;
+	private Banco banco;
 	
 	@ManyToOne
 	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
@@ -107,11 +107,11 @@ public class WorkflowProdutoBanco implements Serializable {
 		this.produto = produto;
 	}
 
-	public Produto getBanco() {
+	public Banco getBanco() {
 		return banco;
 	}
 
-	public void setBanco(Produto banco) {
+	public void setBanco(Banco banco) {
 		this.banco = banco;
 	}
 
