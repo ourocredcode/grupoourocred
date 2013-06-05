@@ -11,39 +11,41 @@ import br.com.sgo.dao.GrupoProdutoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.GrupoProduto;
 
 @Resource
 public class GrupoprodutoController {
 
 	private final Result result;
-	private final Validator validator;
+	private final UsuarioInfo usuarioInfo;
 	private final GrupoProdutoDao grupoProdutoDao;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;
 
-	public GrupoprodutoController(Result result,Validator validator, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,GrupoProdutoDao grupoProdutoDao){
+	public GrupoprodutoController(Result result, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,GrupoProdutoDao grupoProdutoDao, UsuarioInfo usuarioInfo){
+		
+		this.result = result;
+		this.usuarioInfo = usuarioInfo;
 		this.grupoProdutoDao = grupoProdutoDao;
 		this.empresaDao = empresaDao;
 		this.organizacaoDao = organizacaoDao;		
-		this.result = result;
-		this.validator = validator;
+
 	}
 
 	@Get
 	@Public
 	@Path("/grupoproduto/cadastro")
 	public void cadastro(){
-		result.include("grupoProduto",this.grupoProdutoDao.listaTudo("ASC","nome"));
+
+		result.include("gruposProduto", this.grupoProdutoDao.buscaAllGrupoProdutoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+
 	}
 
 	@Post
 	@Public
 	@Path("/grupoproduto/salva")
 	public void salva(GrupoProduto grupoProduto){
-
-		validator.validate(grupoProduto);
-		validator.onErrorUsePageOf(this).cadastro();
 
 		String mensagem = "";
 

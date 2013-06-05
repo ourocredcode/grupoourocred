@@ -3,16 +3,16 @@
 <script type="text/javascript">
 jQuery(function($){
 
+	$('#produto-li-a').click(function() {
+		window.location.href = '<c:url value="/produto/cadastro" />';
+	});
+
 	$('#grupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/grupoproduto/cadastro" />';
 	});
 
 	$('#subgrupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/subgrupoproduto/cadastro" />';
-	});
-
-	$('#produto-li-a').click(function() {
-		window.location.href = '<c:url value="/produto/cadastro" />';
 	});
 
 	$('#subGrupoProdutoEmpresa').autocomplete({
@@ -164,12 +164,13 @@ function limpaForm() {
 			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
+				<li class="" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
 				<li class="" id="grupoproduto-li"><a href="#grupoproduto-div" data-toggle="tab" id="grupoproduto-li-a">Grupo de Produtos</a></li>
 				<li class="active" id="subgrupoproduto-li"><a href="#subgrupoproduto-div" data-toggle="tab" id="subgrupoproduto-li-a">Sub Grupo de Produtos</a></li>
-				<li class="" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
 			</ul>
 			<div id="myTabContent" class="tab-content">
-				
+
+				<div class="tab-pane fade" id="produto-div"></div>
 				<div class="tab-pane fade" id="grupoproduto-div"></div>
 
 				<div class="tab-pane fade active in" id="subgrupoproduto-div">
@@ -234,7 +235,6 @@ function limpaForm() {
 					</div>
 				</div>
 			
-				<div class="tab-pane fade" id="produto-div"></div>
 			</div>
 		</div>
 	</div>

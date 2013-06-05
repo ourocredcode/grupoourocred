@@ -64,8 +64,8 @@ public class SubGrupoProduto implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
-	public GrupoProduto getGrupoProduto() {
-		return grupoProduto;
+	public Long getSubGrupoProduto_id() {
+		return subGrupoProduto_id;
 	}
 
 	public void setSubGrupoProduto_id(Long subGrupoProduto_id) {
@@ -88,36 +88,12 @@ public class SubGrupoProduto implements Serializable {
 		this.organizacao = organizacao;
 	}
 
+	public GrupoProduto getGrupoProduto() {
+		return grupoProduto;
+	}
+
 	public void setGrupoProduto(GrupoProduto grupoProduto) {
 		this.grupoProduto = grupoProduto;
-	}
-
-	public Long getSubGrupoProduto_id() {
-		return subGrupoProduto_id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
 	}
 
 	public Usuario getCreatedBy() {
@@ -160,5 +136,27 @@ public class SubGrupoProduto implements Serializable {
 		this.chave = chave;
 	}
 
+	public String getNome() {
+		return nome;
+	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 }

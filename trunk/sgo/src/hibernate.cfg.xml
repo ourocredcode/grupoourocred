@@ -114,6 +114,7 @@
 		<mapping class="br.com.sgo.modelo.WorkflowEtapa" />
 		<mapping class="br.com.sgo.modelo.WorkflowPerfilAcesso" />
 		<mapping class="br.com.sgo.modelo.WorkflowTransicao" />
+		<mapping class="br.com.sgo.modelo.WorkflowProdutoBanco" />
 		<mapping class="br.com.sgo.modelo.TipoWorkflow" />
 		
 

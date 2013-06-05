@@ -8,29 +8,40 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.GrupoProdutoDao;
 import br.com.sgo.dao.ProdutoDao;
+import br.com.sgo.dao.SubGrupoProdutoDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Produto;
 
 @Resource
 public class ProdutoController {
 
 	private final Result result;
-	private final ProdutoDao produtoDao;
+	private final ProdutoDao produtoDao;	
+	private final SubGrupoProdutoDao subGrupoProdutoDao;
+	private final GrupoProdutoDao grupoProdutoDao;
+	private final UsuarioInfo usuarioInfo;
+
 	private Collection<Produto> produtos;
 
-	public ProdutoController(Result result,ProdutoDao produtoDao){
+	public ProdutoController(Result result, UsuarioInfo usuarioInfo, ProdutoDao produtoDao, GrupoProdutoDao grupoProdutoDao, SubGrupoProdutoDao subGrupoProdutoDao){
 
-		this.produtoDao = produtoDao;
 		this.result = result;
+		this.usuarioInfo = usuarioInfo;
+		this.produtoDao = produtoDao;
+		this.grupoProdutoDao = grupoProdutoDao;
+		this.subGrupoProdutoDao = subGrupoProdutoDao;
 
 	}	
 
 	@Get
-	@Public
 	@Path("/produto/cadastro")
 	public void cadastro(){
-		
+
+		result.include("gruposProduto",this.grupoProdutoDao.buscaAllGrupoProdutoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+
 	}
 
 	@Post
@@ -74,6 +85,7 @@ public class ProdutoController {
 
 		produtos = produtoDao.buscaProdutosByBanco(bancoId);
 		result.include("produtos",produtos);
+		result.include("gruposProduto",this.grupoProdutoDao.buscaAllGrupoProdutoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 
 	}
 	
@@ -81,6 +93,14 @@ public class ProdutoController {
 	@Public
 	public void produtos(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(produtoDao.buscaProdutos(empresa_id, organizacao_id, nome)).serialize();
+	}
+	
+	@Post
+	@Path("/produto/subgrupoprodutos")
+	public void subgrupoprodutos(Long empresa_id, Long organizacao_id, Long grupoProduto_id){
+
+		result.include("subGrupoProdutos",this.subGrupoProdutoDao.buscaSubGrupoProdutoToGrupoProduto(empresa_id, organizacao_id, grupoProduto_id));
+
 	}
 
 }

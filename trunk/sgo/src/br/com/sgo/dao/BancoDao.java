@@ -22,13 +22,52 @@ public class BancoDao extends Dao<Banco> {
 	private Connection conn;
 	private ResultSet rsBanco;
 
+	private final String sqlBancos = "SELECT BANCO.banco_id, BANCO.nome AS banco_nome, BANCO.empresa_id, EMPRESA.nome AS empresa_nome "+
+							", BANCO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, BANCO.isactive "+
+							" FROM (BANCO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON BANCO.empresa_id = EMPRESA.empresa_id) "+ 
+							" INNER JOIN ORGANIZACAO (NOLOCK) ON BANCO.organizacao_id = ORGANIZACAO.organizacao_id ";
+
 	public BancoDao(Session session, ConnJDBC conexao) {
 		super(session, Banco.class);
 		this.conexao = conexao;
 	}
 
-	public Collection<Banco> buscaBancos(Long empresa_id, Long organizacao_id,
-			String nome) {
+	public Collection<Banco> buscaAllBancos() {
+
+		String sql = sqlBancos;
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Banco> bancos = new ArrayList<Banco>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.rsBanco = this.stmt.executeQuery();
+
+			while (rsBanco.next()) {
+
+				Banco banco = new Banco();
+
+				banco.setBanco_id(rsBanco.getLong("banco_id"));
+				banco.setNome(rsBanco.getString("banco_nome"));
+
+				bancos.add(banco);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsBanco, stmt, conn);
+
+		return bancos;
+
+	}
+
+	public Collection<Banco> buscaBancos(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = "select BANCO.banco_id, BANCO.nome from BANCO (NOLOCK) WHERE BANCO.empresa_id = ? AND BANCO.organizacao_id = ? AND BANCO.nome like ?";
 
