@@ -1,7 +1,5 @@
 package br.com.sgo.controller;
 
-import java.util.Calendar;
-
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -14,7 +12,6 @@ import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
-import br.com.sgo.modelo.Workflow;
 import br.com.sgo.modelo.WorkflowEtapa;
 
 @Resource
@@ -27,9 +24,6 @@ public class WorkflowetapaController {
 	private final WorkflowDao workflowDao;
 	private Empresa empresa;
 	private Organizacao organizacao;
-
-	private Workflow workflow;	
-	private Calendar dataAtual = Calendar.getInstance();
 
 	public WorkflowetapaController(Result result, Empresa empresa, Organizacao organizacao,UsuarioInfo usuarioInfo, EtapaDao etapaDao, WorkflowEtapaDao workflowEtapaDao, 
 			WorkflowDao workflowDao) {
@@ -64,38 +58,34 @@ public class WorkflowetapaController {
 
 		try {
 
-			if (this.workflowEtapaDao.buscaWorkflowEtapaPorEmpresaOrganizacaoWorkflowEtapa(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()
-					, workflowEtapa.getWorkflow().getWorkflow_id(), workflowEtapa.getEtapa().getEtapa_id()) == null) {				
+			if (this.workflowEtapaDao.buscaWorkflowEtapaPorEmpresaOrganizacaoWorkflowEtapa(usuarioInfo.getEmpresa().getEmpresa_id()
+					, usuarioInfo.getOrganizacao().getOrganizacao_id(), workflowEtapa.getWorkflow().getWorkflow_id(), workflowEtapa.getEtapa().getEtapa_id()) == null) {				
 
 				workflowEtapa.setEmpresa(this.empresa);
 				workflowEtapa.setOrganizacao(this.organizacao);
-				
-				this.workflow.setCreated(dataAtual);
-				this.workflow.setUpdated(dataAtual);
 
-				this.workflow.setCreatedBy(usuarioInfo.getUsuario());
-				this.workflow.setUpdatedBy(usuarioInfo.getUsuario());
-				
 				workflowEtapa.setIsActive(workflowEtapa.getIsActive() == null ? false : true);
 				workflowEtapa.setIsLeituraEscrita(workflowEtapa.getIsLeituraEscrita() == null ? false : true);
 
 				this.workflowEtapaDao.insert(workflowEtapa);
 
-				mensagem = "Etapa " + workflowEtapa.getNome() + " adicionado com sucesso para o workflow. " ;
+				mensagem = "Etapa adicionado com sucesso para o workflow. " ;
 
 			} else {
-				
-				mensagem = "Erro: Etapa " + workflowEtapa.getNome() + " já cadastrado para o workflow. " ;
-				
+
+				mensagem = "Erro: Etapa já cadastrado para o workflow. " ;
+
 			} 
 
 		} catch (Exception e) {
-			
+
 			mensagem = "Erro: Falha ao adicionar a Etapa do Workflow. ";			
 
 		} finally{
+
 			this.workflowEtapaDao.clear();
 			this.workflowEtapaDao.close();
+
 		}
 
 		result.include("notice", mensagem);			

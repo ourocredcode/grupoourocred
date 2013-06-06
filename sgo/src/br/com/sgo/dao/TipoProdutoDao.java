@@ -17,44 +17,42 @@ import br.com.sgo.modelo.TipoProduto;
 @Component
 public class TipoProdutoDao extends Dao<TipoProduto> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsTipoProdutos;
 
 	public TipoProdutoDao(Session session, ConnJDBC conexao) {
+
 		super(session, TipoProduto.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
-	public Collection<TipoProduto> buscaTipoProdutos(Long empresa_id,
-			Long organizacao_id, String nome) {
+	public Collection<TipoProduto> buscaTipoProdutosByEmpOrgNome(String nome) {
 
 		String sql = "select TIPOPRODUTO.tipoproduto_id, TIPOPRODUTO.nome from TIPOPRODUTO (NOLOCK) "
-				+ "	WHERE TIPOPRODUTO.empresa_id = ? AND TIPOPRODUTO.organizacao_id = ? AND TIPOPRODUTO.nome like ?";
+				+ "	WHERE TIPOPRODUTO.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<TipoProduto> tipoProdutos = new ArrayList<TipoProduto>();
+		Collection<TipoProduto> tiposProduto = new ArrayList<TipoProduto>();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3, "%" + nome + "%");
+
+			this.stmt.setString(1, "%" + nome + "%");
+
 			this.rsTipoProdutos = this.stmt.executeQuery();
 
 			while (rsTipoProdutos.next()) {
 				TipoProduto tipoProduto = new TipoProduto();
 
-				tipoProduto.setTipoProduto_id(rsTipoProdutos
-						.getLong("TipoProduto_id"));
+				tipoProduto.setTipoProduto_id(rsTipoProdutos.getLong("TipoProduto_id"));
 				tipoProduto.setNome(rsTipoProdutos.getString("nome"));
 
-				tipoProdutos.add(tipoProduto);
+				tiposProduto.add(tipoProduto);
 			}
 
 		} catch (SQLException e) {
@@ -63,35 +61,31 @@ public class TipoProdutoDao extends Dao<TipoProduto> {
 
 		this.conexao.closeConnection(rsTipoProdutos, stmt, conn);
 
-		return tipoProdutos;
+		return tiposProduto;
 
 	}
 
-	public Collection<TipoProduto> buscaTipoProdutos(Long empresa_id,
-			Long organizacao_id) {
+	public Collection<TipoProduto> buscaAllTiposProdutoByEmpresaOrganizacao() {
 
-		String sql = "select TIPOPRODUTO.TipoProduto_id, TIPOPRODUTO.nome from TIPOPRODUTO (NOLOCK) "
-				+ "	WHERE TIPOPRODUTO.empresa_id = ? AND TIPOPRODUTO.organizacao_id = ?";
+		String sql = "select TIPOPRODUTO.tipoproduto_id, TIPOPRODUTO.nome from TIPOPRODUTO (NOLOCK) ";
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<TipoProduto> tipoProdutos = new ArrayList<TipoProduto>();
+		Collection<TipoProduto> tiposProduto = new ArrayList<TipoProduto>();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
+
 			this.rsTipoProdutos = this.stmt.executeQuery();
 
 			while (rsTipoProdutos.next()) {
 				TipoProduto tipoProduto = new TipoProduto();
 
-				tipoProduto.setTipoProduto_id(rsTipoProdutos
-						.getLong("TipoProduto_id"));
+				tipoProduto.setTipoProduto_id(rsTipoProdutos.getLong("tipoproduto_id"));
 				tipoProduto.setNome(rsTipoProdutos.getString("nome"));
 
-				tipoProdutos.add(tipoProduto);
+				tiposProduto.add(tipoProduto);
 			}
 
 		} catch (SQLException e) {
@@ -100,7 +94,7 @@ public class TipoProdutoDao extends Dao<TipoProduto> {
 
 		this.conexao.closeConnection(rsTipoProdutos, stmt, conn);
 
-		return tipoProdutos;
+		return tiposProduto;
 
 	}
 

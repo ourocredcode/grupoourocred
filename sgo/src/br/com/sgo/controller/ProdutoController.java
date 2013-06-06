@@ -8,10 +8,13 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.CategoriaProdutoDao;
 import br.com.sgo.dao.GrupoProdutoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.SubGrupoProdutoDao;
+import br.com.sgo.dao.TipoProdutoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Produto;
@@ -23,20 +26,27 @@ public class ProdutoController {
 	private final ProdutoDao produtoDao;	
 	private final SubGrupoProdutoDao subGrupoProdutoDao;
 	private final GrupoProdutoDao grupoProdutoDao;
+	private final CategoriaProdutoDao categoriaProdutoDao;
+	private final TipoProdutoDao tipoProdutoDao;
 	private final UsuarioInfo usuarioInfo;
+	private final Validator validator;
 	
 	private Produto produto;
 	private Calendar dataAtual = Calendar.getInstance();
 
 	private Collection<Produto> produtos;
 
-	public ProdutoController(Result result, UsuarioInfo usuarioInfo, ProdutoDao produtoDao, GrupoProdutoDao grupoProdutoDao, SubGrupoProdutoDao subGrupoProdutoDao){
+	public ProdutoController(Result result, Validator validator, UsuarioInfo usuarioInfo, ProdutoDao produtoDao, GrupoProdutoDao grupoProdutoDao, SubGrupoProdutoDao subGrupoProdutoDao
+			,CategoriaProdutoDao categoriaProdutoDao, TipoProdutoDao tipoProdutoDao){
 
 		this.result = result;
+		this.validator = validator;
 		this.usuarioInfo = usuarioInfo;
 		this.produtoDao = produtoDao;
 		this.grupoProdutoDao = grupoProdutoDao;
 		this.subGrupoProdutoDao = subGrupoProdutoDao;
+		this.categoriaProdutoDao = categoriaProdutoDao;
+		this.tipoProdutoDao = tipoProdutoDao;
 
 	}	
 
@@ -44,7 +54,9 @@ public class ProdutoController {
 	@Path("/produto/cadastro")
 	public void cadastro(){
 
-		result.include("gruposProduto",this.grupoProdutoDao.buscaAllGrupoProdutoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("gruposProduto",this.grupoProdutoDao.buscaAllGruposProduto());
+		result.include("tiposProduto",this.tipoProdutoDao.buscaAllTiposProdutoByEmpresaOrganizacao());
+		result.include("categoriasProduto",this.categoriaProdutoDao.buscaAllCategoriaProduto());
 
 	}
 
@@ -52,7 +64,10 @@ public class ProdutoController {
 	@Public
 	@Path("/produto/salva")
 	public void salva(Produto produto){
-
+		
+		validator.validate(produto);
+		validator.onErrorUsePageOf(this).cadastro();
+		
 		String mensagem = "";
 
 		try {
@@ -103,8 +118,8 @@ public class ProdutoController {
 	public void produtos(Long bancoId) {
 
 		produtos = produtoDao.buscaProdutosByBanco(bancoId);
-		result.include("produtos",produtos);
-		result.include("gruposProduto",this.grupoProdutoDao.buscaAllGrupoProdutoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("produtos", produtos);
+		result.include("gruposProduto",this.grupoProdutoDao.buscaAllGruposProduto());
 
 	}
 	
@@ -116,9 +131,9 @@ public class ProdutoController {
 	
 	@Post
 	@Path("/produto/subgrupoprodutos")
-	public void subgrupoprodutos(Long empresa_id, Long organizacao_id, Long grupoProduto_id){
+	public void subgrupoprodutos(Long grupoProduto_id){
 
-		result.include("subGrupoProdutos",this.subGrupoProdutoDao.buscaSubGrupoProdutoToGrupoProduto(empresa_id, organizacao_id, grupoProduto_id));
+		result.include("subGrupoProdutos",this.subGrupoProdutoDao.buscaSubGrupoProdutoByGrupoProduto(grupoProduto_id));
 
 	}
 

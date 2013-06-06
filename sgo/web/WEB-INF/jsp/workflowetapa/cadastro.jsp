@@ -253,23 +253,23 @@ function limpaForm(){
 					<form id="workflowEtapaForm" name="workflowEtapaForm" action="<c:url value="/workflowetapa/salva"/>" method="POST">
 					
 						<div class="row-fluid">
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowEtapaEmpresa">Empresa</label>
-      							<input class="span12" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+      							<input class="input-xlarge" id="workflowEtapaEmpresa" name="workflowEtapa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required readonly="readonly">
       							<input class="span1" id="workflowEtapaEmpresaId" name="workflowEtapa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    				
 							</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="workflowEtapaOrganizacao">Organização</label>	
-	      						<input class="span12" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-xlarge" id="workflowEtapaOrganizacao" name="workflowEtapa.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required readonly="readonly">
 	      						<input class="span1" id="workflowEtapaOrganizacaoId" name="workflowEtapa.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
-							
+						</div>
+						<div class="row-fluid">
 							<div class="span3">
 								<label for="workflowEtapaWorkflow">Workflow</label>
 								<select class="input-xlarge" id="workflowEtapaWorkflowId" name="workflowEtapa.workflow.workflow_id" >
 									<c:forEach var="workflow" items="${workflows }">
-									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
-									 	</option>
+									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -277,8 +277,7 @@ function limpaForm(){
 								<label for="workflowEtapaEtapa">Etapas</label>
 								<select class="input-xlarge" id="workflowEtapaEtapaId" name="workflowEtapa.etapa.etapa_id" >
 									<c:forEach var="etapa" items="${etapas }">
-									 	<option value="${etapa.etapa_id }" selected="selected"> ${etapa.nome }
-									 	</option>
+									 	<option value="${etapa.etapa_id }" selected="selected"> ${etapa.nome }</option>
 									</c:forEach>
 								</select>
 							</div>

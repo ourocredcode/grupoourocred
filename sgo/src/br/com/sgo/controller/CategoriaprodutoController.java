@@ -79,8 +79,8 @@ public class CategoriaprodutoController {
 
 	@Get @Path("/categoriaproduto/busca.json")
 	@Public
-	public void categoriaproduto(Long empresa_id, Long organizacao_id, String nome){
-		result.use(Results.json()).withoutRoot().from(categoriaProdutoDao.buscaCategoriaProdutos(empresa_id, organizacao_id, nome)).serialize();
+	public void categoriaproduto(String nome){
+		result.use(Results.json()).withoutRoot().from(categoriaProdutoDao.buscaCategoriaProdutos(nome)).serialize();
 	}
 
 }

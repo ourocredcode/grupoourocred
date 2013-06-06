@@ -179,13 +179,11 @@ function limpaForm() {
 }
 
 function buscaSubGrupoProduto(){
-	
-	var empresa_id = $('#produtoEmpresaId').val();
-	var organizacao_id = $('#produtoOrganizacaoId').val();
+
 	var grupoProduto_id = $('#produtoGrupoProdutoId').val();
 
 	$("#produtoSubGrupoProdutoId").load('<c:url value="/produto/subgrupoprodutos" />',
-			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'grupoProduto_id' : grupoProduto_id});
+			{'grupoProduto_id' : grupoProduto_id});
 
 }
 
@@ -267,6 +265,24 @@ function buscaSubGrupoProduto(){
 	      							<option value="">Selecion um Grupo Produto...</option>
 	      						</select>
 							</div>
+							<div class="span2">
+								<label for="produtoCategoriaProdutoId">Categoria Produto</label>
+								<select id="produtoCategoriaProdutoId" name="produto.categoriaProduto.categoriaProduto_id" class="input-medium">
+									<!--option value="">Selecione o grupo...</option-->								
+									<c:forEach var="categoriaProduto" items="${categoriasProduto }">
+									 	<option value="${categoriaProduto.categoriaProduto_id }" > ${categoriaProduto.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="span2">
+								<label for="produtoTipoProdutoId">Tipo Produto</label>
+								<select id="produtoTipoProdutoId" name="produto.tipoProduto.tipoProduto_id" class="input-medium">
+									<!--option value="">Selecione o grupo...</option-->
+									<c:forEach var="tipoProduto" items="${tiposProduto }">
+									 	<option value="${tipoProduto.tipoProduto_id }" > ${tipoProduto.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
 						</div>
 						<div class="row-fluid">
 							<div class="span3">
@@ -277,12 +293,12 @@ function buscaSubGrupoProduto(){
 								<label for="produtoDescricao">Descrição</label>
 								<input class="input-xlarge" id="produtoDescricao" name="produto.descricao" placeholder="Descrição" type="text" required>
 							</div>
-							<div class="control-group">
-								<label class="control-label" for="produtoIsActive">Ativo</label>
-								<div class="controls">
-									<input type="checkbox" id="produtoIsActive" name="produto.isActive" checked="checked" value="1" >							
-								</div>
+							<div class="span1">
+								<label for="produtoIsActive">Ativo</label>
+								<input type="checkbox" id="produtoIsActive" name="produto.isActive" checked="checked" value="1" >
 							</div>
+						</div>
+						<div class="row-fluid">
 						 	<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
 							</div>
