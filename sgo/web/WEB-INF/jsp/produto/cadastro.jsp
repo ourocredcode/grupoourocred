@@ -184,8 +184,6 @@ function buscaSubGrupoProduto(){
 	var organizacao_id = $('#produtoOrganizacaoId').val();
 	var grupoProduto_id = $('#produtoGrupoProdutoId').val();
 
-	alert(empresa_id +  organizacao_id +  grupoProduto_id);
-
 	$("#produtoSubGrupoProdutoId").load('<c:url value="/produto/subgrupoprodutos" />',
 			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'grupoProduto_id' : grupoProduto_id});
 
