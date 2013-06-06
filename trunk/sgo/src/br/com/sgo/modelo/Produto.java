@@ -35,23 +35,23 @@ public class Produto implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "categoriaproduto_id", updatable = true, nullable = false)
+	@JoinColumn(name = "categoriaproduto_id", updatable = true, nullable = true)
 	private CategoriaProduto categoriaProduto;
 	
 	@ManyToOne
-	@JoinColumn(name = "grupoproduto_id", updatable = true, nullable = false)
+	@JoinColumn(name = "grupoproduto_id", updatable = true, nullable = true)
 	private GrupoProduto grupoProduto;
 	
 	@ManyToOne
-	@JoinColumn(name = "subgrupoproduto_id", updatable = true, nullable = false)
+	@JoinColumn(name = "subgrupoproduto_id", updatable = true, nullable = true)
 	private SubGrupoProduto subGrupoProduto;
 	
 	@ManyToOne
-	@JoinColumn(name = "localidade_id", updatable = true, nullable = false)
+	@JoinColumn(name = "localidade_id", updatable = true, nullable = true)
 	private Localidade localidade;
 
 	@ManyToOne
-	@JoinColumn(name = "tipoproduto_id", updatable = true, nullable = false)
+	@JoinColumn(name = "tipoproduto_id", updatable = true, nullable = true)
 	private TipoProduto tipoProduto;
 
 	@ManyToOne
