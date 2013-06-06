@@ -66,18 +66,14 @@ public class SubGrupoProdutoDao extends Dao<SubGrupoProduto> {
 
 	}
 
-	public Collection<SubGrupoProduto> buscaSubGrupoProdutoToGrupoProduto(Long empresa_id, Long organizacao_id, Long grupoProduto_id) {
+	public Collection<SubGrupoProduto> buscaSubGrupoProdutoByGrupoProduto(Long grupoProduto_id) {
 
 		String sql = "SELECT SUBGRUPOPRODUTO.subgrupoproduto_id, SUBGRUPOPRODUTO.nome "+
 					" FROM ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) INNER JOIN SUBGRUPOPRODUTO (NOLOCK) ON EMPRESA.empresa_id = SUBGRUPOPRODUTO.empresa_id) "+
 					" ON ORGANIZACAO.organizacao_id = SUBGRUPOPRODUTO.organizacao_id ";
 
-		if (empresa_id != null)
-			sql += " WHERE SUBGRUPOPRODUTO.empresa_id = ?";
-		if (organizacao_id != null)
-			sql += " AND SUBGRUPOPRODUTO.organizacao_id = ?";
 		if (grupoProduto_id != null)
-			sql += " AND SUBGRUPOPRODUTO.grupoproduto_id = ?";
+			sql += " WHERE SUBGRUPOPRODUTO.grupoproduto_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -87,9 +83,7 @@ public class SubGrupoProdutoDao extends Dao<SubGrupoProduto> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, grupoProduto_id);
+			this.stmt.setLong(1, grupoProduto_id);
 
 			this.rsSubGrupoProdutos = this.stmt.executeQuery();
 

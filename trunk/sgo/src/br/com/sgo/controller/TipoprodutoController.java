@@ -45,6 +45,7 @@ public class TipoprodutoController {
 
 			tipoProduto.setEmpresa(this.empresaDao.load(tipoProduto.getEmpresa().getEmpresa_id()));		
 			tipoProduto.setOrganizacao(this.organizacaoDao.load(tipoProduto.getOrganizacao().getOrganizacao_id()));
+
 			tipoProduto.setIsActive(tipoProduto.getIsActive() == null ? false : true);
 			
 			this.tipoProdutoDao.beginTransaction();
@@ -67,6 +68,7 @@ public class TipoprodutoController {
 
 		this.tipoProdutoDao.clear();
 		this.tipoProdutoDao.close();
+
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 
@@ -74,8 +76,10 @@ public class TipoprodutoController {
 
 	@Get @Path("/tipoproduto/busca.json")
 	@Public
-	public void tipoproduto(Long empresa_id, Long organizacao_id, String nome){
-		result.use(Results.json()).withoutRoot().from(tipoProdutoDao.buscaTipoProdutos(empresa_id, organizacao_id, nome)).serialize();
+	public void tipoproduto(String nome){
+
+		result.use(Results.json()).withoutRoot().from(tipoProdutoDao.buscaTipoProdutosByEmpOrgNome(nome)).serialize();
+
 	}
 
 }

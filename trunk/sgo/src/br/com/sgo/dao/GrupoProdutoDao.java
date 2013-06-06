@@ -35,50 +35,11 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 		this.conexao = conexao;
 
 	}
-
-	public Collection<GrupoProduto> buscaGrupoProdutos(Long empresa_id, Long organizacao_id, String nome) {
-
-		String sql = sqlGruposProduto;
-
-		this.conn = this.conexao.getConexao();
-
-		Collection<GrupoProduto> grupoProdutos = new ArrayList<GrupoProduto>();
-
-		try {
-
-			this.stmt = conn.prepareStatement(sql);
-
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3, "%" + nome + "%");
-
-			this.rsGrupoProdutos = this.stmt.executeQuery();
-
-			while (rsGrupoProdutos.next()) {
-
-				getGrupoProduto(grupoProdutos);
-
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		this.conexao.closeConnection(rsGrupoProdutos, stmt, conn);
-
-		return grupoProdutos;
-
-	}
-
-	public Collection<GrupoProduto> buscaAllGrupoProdutoByEmpresaOrganizacao(Long empresa_id,Long organizacao_id) {
+	
+	public Collection<GrupoProduto> buscaAllGruposProduto() {
 
 		String sql = sqlGruposProduto;
 
-		if (empresa_id != null)
-			sql += " WHERE GRUPOPRODUTO.empresa_id = ?";
-		if (organizacao_id != null)
-			sql += " AND GRUPOPRODUTO.organizacao_id = ?";
-		
 		this.conn = this.conexao.getConexao();
 
 		Collection<GrupoProduto> gruposProduto = new ArrayList<GrupoProduto>();
@@ -86,9 +47,6 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
 
 			this.rsGrupoProdutos = this.stmt.executeQuery();
 
@@ -107,6 +65,38 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 		this.conexao.closeConnection(rsGrupoProdutos, stmt, conn);
 
 		return gruposProduto;
+
+	}
+
+	public Collection<GrupoProduto> buscaGrupoProdutosByNome(String nome) {
+
+		String sql = sqlGruposProduto;
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<GrupoProduto> grupoProdutos = new ArrayList<GrupoProduto>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1, "%" + nome + "%");
+
+			this.rsGrupoProdutos = this.stmt.executeQuery();
+
+			while (rsGrupoProdutos.next()) {
+
+				getGrupoProduto(grupoProdutos);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsGrupoProdutos, stmt, conn);
+
+		return grupoProdutos;
 
 	}
 

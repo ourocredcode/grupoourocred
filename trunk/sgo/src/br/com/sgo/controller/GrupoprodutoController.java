@@ -5,10 +5,9 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.GrupoProdutoDao;
 import br.com.sgo.dao.EmpresaDao;
+import br.com.sgo.dao.GrupoProdutoDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -38,7 +37,7 @@ public class GrupoprodutoController {
 	@Path("/grupoproduto/cadastro")
 	public void cadastro(){
 
-		result.include("gruposProduto", this.grupoProdutoDao.buscaAllGrupoProdutoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("gruposProduto", this.grupoProdutoDao.buscaAllGruposProduto());
 
 	}
 
@@ -81,8 +80,8 @@ public class GrupoprodutoController {
 
 	@Get @Path("/grupoproduto/busca.json")
 	@Public
-	public void grupoproduto(Long empresa_id, Long organizacao_id, String nome){
-		result.use(Results.json()).withoutRoot().from(grupoProdutoDao.buscaGrupoProdutos(empresa_id, organizacao_id, nome)).serialize();
+	public void grupoproduto(String nome){
+		result.use(Results.json()).withoutRoot().from(grupoProdutoDao.buscaGrupoProdutosByNome(nome)).serialize();
 	}
 
 }
