@@ -62,8 +62,8 @@ public class ProdutoDao extends Dao<Produto> {
 
 	}
 
-	public Collection<Produto> buscaProdutos(Long empresa_id,
-			Long organizacao_id, String nome) {
+	
+	public Collection<Produto> buscaProdutos(Long empresa_id,Long organizacao_id, String nome) {
 
 		String sql = "select PRODUTO.produto_id, PRODUTO.nome from PRODUTO (NOLOCK) WHERE PRODUTO.empresa_id = ? AND PRODUTO.organizacao_id = ? AND PRODUTO.nome like ?";
 
@@ -166,5 +166,45 @@ public class ProdutoDao extends Dao<Produto> {
 
 		return produto;
 
+	}
+	
+	public Produto buscaProdutoByEmpresaOrgCategoriaGrupoSubGrupoTipoNome(Long empresa_id, Long organizacao_id, Long categoria_id, Long grupoProduto_id
+			, Long subGrupoProduto_id, Long tipoProduto_id, String nome) {
+		
+		String sql = "select PRODUTO.produto_id, PRODUTO.nome from PRODUTO (NOLOCK) " +
+				" WHERE PRODUTO.empresa_id = ? AND PRODUTO.organizacao_id = ? " +
+				" AND PRODUTO.categoria_id = ? AND PRODUTO.grupoproduto_id = ? AND PRODUTO.subgrupoproduto_id = ? AND PRODUTO.tipoproduto_id = ? AND PRODUTO.nome = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Produto produto = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, categoria_id);
+			this.stmt.setLong(4, grupoProduto_id);
+			this.stmt.setLong(5, subGrupoProduto_id);
+			this.stmt.setLong(6, tipoProduto_id);
+			this.stmt.setString(7, nome);
+
+			this.rsProdutos = this.stmt.executeQuery();
+
+			while (rsProdutos.next()) {
+
+				produto = new Produto();
+				produto.setProduto_id(rsProdutos.getLong("produto_id"));
+				produto.setNome(rsProdutos.getString("nome"));
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsProdutos, stmt, conn);
+		
+		return produto;
 	}
 }
