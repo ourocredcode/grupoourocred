@@ -1,5 +1,6 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
 import java.util.Collection;
 
 import br.com.caelum.vraptor.Get;
@@ -23,6 +24,9 @@ public class ProdutoController {
 	private final SubGrupoProdutoDao subGrupoProdutoDao;
 	private final GrupoProdutoDao grupoProdutoDao;
 	private final UsuarioInfo usuarioInfo;
+	
+	private Produto produto;
+	private Calendar dataAtual = Calendar.getInstance();
 
 	private Collection<Produto> produtos;
 
@@ -52,30 +56,45 @@ public class ProdutoController {
 		String mensagem = "";
 
 		try {
+			
+			if(this.produtoDao.buscaProdutoByEmpresaOrgCategoriaGrupoSubGrupoTipoNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()
+					, produto.getCategoriaProduto().getCategoriaProduto_id(), produto.getGrupoProduto().getGrupoProduto_id(), produto.getSubGrupoProduto().getSubGrupoProduto_id()
+					, produto.getTipoProduto().getTipoProduto_id(), produto.getNome()) == null) {
 
-			this.produtoDao.beginTransaction();
-			this.produtoDao.adiciona(produto);
-			this.produtoDao.commit();
+				this.produto.setCreated(dataAtual);
+				this.produto.setUpdated(dataAtual);
+	
+				this.produto.setCreatedBy(usuarioInfo.getUsuario());
+				this.produto.setUpdatedBy(usuarioInfo.getUsuario());
+				
+				this.produto.setChave(produto.getNome());
+				this.produto.setDescricao(produto.getNome());
+	
+				this.produtoDao.beginTransaction();
+				this.produtoDao.adiciona(produto);
+				this.produtoDao.commit();
 
-			mensagem = "Produto " + produto.getNome() + " adicionado com sucesso";
+				mensagem = "Produto " + produto.getNome() + " adicionado com sucesso";
 
-		} catch(Exception e) {
-
-			this.produtoDao.rollback();
-
-			if (e.getCause().toString().indexOf("PK_PRODUTO") != -1){
-				mensagem = "Erro: Produto " + produto.getNome() + " já existente.";
 			} else {
-				mensagem = "Erro ao adicionar Tabela Bd:";
+	
+				mensagem = "Erro: Produto " + produto.getNome() + " já cadastrado.";
+	
+			} 
+	
+			} catch(Exception e) {
+		
+				mensagem = "Erro: Falha ao adicionar o Produto.";
+		
+			} finally{
+		
+				this.produtoDao.clear();
+				this.produtoDao.close();
+		
 			}
-
-		}
-
-		this.produtoDao.clear();
-		this.produtoDao.close();
-
-		result.include("notice",mensagem);
-		result.redirectTo(this).cadastro();
+		
+			result.include("notice", mensagem);			
+			result.redirectTo(this).cadastro();
 
 	}
 	

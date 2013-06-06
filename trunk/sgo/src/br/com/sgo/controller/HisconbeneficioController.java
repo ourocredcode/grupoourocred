@@ -201,7 +201,7 @@ public class HisconbeneficioController {
 
 		} catch (Exception e) {
 
-			mensagem = "Erro: Falha ao adicionar o workflow.";
+			mensagem = "Erro: Falha ao adicionar o hiscon.";
 
 		} finally{
 
