@@ -67,25 +67,18 @@ public class SubGrupoProdutoDao extends Dao<SubGrupoProduto> {
 	}
 
 	public Collection<SubGrupoProduto> buscaSubGrupoProdutoToGrupoProduto(Long empresa_id, Long organizacao_id, Long grupoProduto_id) {
-/*
-		String sql = "SELECT SUBGRUPOPRODUTO.grupoproduto_id, GRUPOPRODUTO.nome AS grupoproduto_nome "+
-					", SUBGRUPOPRODUTO.subgrupoproduto_id, SUBGRUPOPRODUTO.nome AS subgrupoproduto_nome " +
-					", SUBGRUPOPRODUTO.empresa_id, SUBGRUPOPRODUTO.organizacao_id "+
-					" FROM GRUPOPRODUTO (NOLOCK) INNER JOIN (ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
-					" INNER JOIN SUBGRUPOPRODUTO (NOLOCK) ON EMPRESA.empresa_id = SUBGRUPOPRODUTO.empresa_id) "+
-					" ON ORGANIZACAO.organizacao_id = SUBGRUPOPRODUTO.organizacao_id) ON GRUPOPRODUTO.grupoproduto_id = SUBGRUPOPRODUTO.grupoproduto_id ";
-*/
-		String sql = "SELECT SUBGRUPOPRODUTO.subgrupoproduto_id, SUBGRUPOPRODUTO.nome "+
-		" FROM ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) INNER JOIN SUBGRUPOPRODUTO (NOLOCK) ON EMPRESA.empresa_id = SUBGRUPOPRODUTO.empresa_id) "+
-		" ON ORGANIZACAO.organizacao_id = SUBGRUPOPRODUTO.organizacao_id WHERE SUBGRUPOPRODUTO.empresa_id = ? AND SUBGRUPOPRODUTO.organizacao_id = ? AND SUBGRUPOPRODUTO.grupoproduto_id = ?";
 
-		/*if (empresa_id != null)
+		String sql = "SELECT SUBGRUPOPRODUTO.subgrupoproduto_id, SUBGRUPOPRODUTO.nome "+
+					" FROM ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) INNER JOIN SUBGRUPOPRODUTO (NOLOCK) ON EMPRESA.empresa_id = SUBGRUPOPRODUTO.empresa_id) "+
+					" ON ORGANIZACAO.organizacao_id = SUBGRUPOPRODUTO.organizacao_id ";
+
+		if (empresa_id != null)
 			sql += " WHERE SUBGRUPOPRODUTO.empresa_id = ?";
 		if (organizacao_id != null)
 			sql += " AND SUBGRUPOPRODUTO.organizacao_id = ?";
 		if (grupoProduto_id != null)
 			sql += " AND SUBGRUPOPRODUTO.grupoproduto_id = ?";
-		*/
+
 		this.conn = this.conexao.getConexao();
 
 		Collection<SubGrupoProduto> subGrupoProdutos = new ArrayList<SubGrupoProduto>();
