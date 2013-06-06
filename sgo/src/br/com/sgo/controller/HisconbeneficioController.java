@@ -219,7 +219,7 @@ public class HisconbeneficioController {
 	@Path("/hisconbeneficio/altera")
 	public void altera(HisconBeneficio hisconBeneficio) {
 
-		this.hisconBeneficio = this.hisconBeneficioDao.buscaHisconBeneficioById(hisconBeneficio.getHisconBeneficio_id());
+		this.hisconBeneficio = this.hisconBeneficioDao.load(hisconBeneficio.getHisconBeneficio_id());
 
 		if(hisconBeneficio.getEtapa() != null){
 
@@ -234,6 +234,7 @@ public class HisconbeneficioController {
 		}
 
 		if (hisconBeneficio.getEtapaPosicao() != null)
+			this.hisconBeneficio.setEtapaPosicao(hisconBeneficio.getEtapaPosicao() == null ? null : hisconBeneficio.getEtapaPosicao());
 
 		if(hisconBeneficio.getUsuario() != null)
 			this.hisconBeneficio.setUsuario(hisconBeneficio.getUsuario());
@@ -241,14 +242,19 @@ public class HisconbeneficioController {
 		if(this.hisconBeneficio.getDataEnvio() == null)
 			this.hisconBeneficio.setDataEnvio(this.hisconBeneficio.getIsEnviado() == false ? null :GregorianCalendar.getInstance());
 
-		if(hisconBeneficio.getCaminhoArquivo() != null){
+		if(hisconBeneficio.getCaminhoArquivo() != null)
 			this.hisconBeneficio.setCaminhoArquivo(hisconBeneficio.getCaminhoArquivo());
-		}
+		
 		
 		if(hisconBeneficio.getIsEnviado()){
 
-			Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),"Enviado");
+			Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(
+					usuarioInfo.getEmpresa().getEmpresa_id(), 
+					usuarioInfo.getOrganizacao().getOrganizacao_id(), 
+					"Enviado");
+
 			this.hisconBeneficio.setEtapa(etapaEnviado);
+
 			this.hisconBeneficio.setIsEnviado(true);
 
 		}
@@ -260,6 +266,7 @@ public class HisconbeneficioController {
 		hisconBeneficioDao.commit();
 
 		result.nothing();
+
 
 	}
 
