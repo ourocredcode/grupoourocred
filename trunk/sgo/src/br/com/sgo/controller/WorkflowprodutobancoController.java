@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowProdutoBancoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.WorkflowProdutoBanco;
 
@@ -37,7 +36,6 @@ public class WorkflowprodutobancoController {
 	}
 
 	@Get
-	@Public
 	@Path("/workflowprodutobanco/cadastro")
 	public void cadastro() {
 
@@ -48,7 +46,6 @@ public class WorkflowprodutobancoController {
 	}
 
 	@Post
-	@Public
 	@Path("/workflowprodutobanco/salva")
 	public void salva(WorkflowProdutoBanco workflowProdutoBanco) {
 
@@ -96,7 +93,6 @@ public class WorkflowprodutobancoController {
 
 	@Post
 	@Path("/workflowprodutobanco/lista")
-	@Public
 	public void lista(Long empresa_id, Long organizacao_id) {
 		result.include("workflowsProdutoBanco", this.workflowProdutoBancoDao.buscaAllWorkflowProdutoBancoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 	}

@@ -253,13 +253,13 @@ function limpaForm(){
 						<div class="row-fluid">
 							<div class="span3">
 								<label for="workflowPerfilAcessoEmpresa">Empresa</label>							
-      							<input class="input-xlarge" id="workflowPerfilAcessoEmpresa" name="workflowPerfilAcessoEmpresa.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-      							<input class="span1" id="workflowPerfilAcessoEmpresaId" name="workflowPerfilAcessoEmpresa.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+      							<input class="input-xlarge" id="workflowPerfilAcessoEmpresa" name="workflowPerfilAcesso.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+      							<input class="span1" id="workflowPerfilAcessoEmpresaId" name="workflowPerfilAcesso.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 							</div>
 							<div class="span3">
 								<label for="workflowPerfilAcessoOrganizacao">Organização</label>
-	      						<input class="input-xlarge" id="workflowPerfilAcessoOrganizacao" name="workflowPerfilAcessoOrganizacao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="span1" id="workflowPerfilAcessoOrganizacaoId" name="workflowPerfilAcessoOrganizacao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+	      						<input class="input-xlarge" id="workflowPerfilAcessoOrganizacao" name="workflowPerfilAcesso.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="span1" id="workflowPerfilAcessoOrganizacaoId" name="workflowPerfilAcesso.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 	    					</div>
     					</div>
     					<div class="row-fluid">
