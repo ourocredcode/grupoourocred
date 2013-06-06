@@ -231,22 +231,6 @@ function limpaForm(){
 					</div>
 				</div>
 
-				<table style="width: 200px">
-					<tr>											
-						<td>					
-							<form action="<c:url value="/testejasper/${formulario.id}"/>">
-								<div class="btn-group">
-									<input type="submit" class="btn btn-primary" id="btnImprimir" value="Imprimir"/>
-								</div>
-							</form>					
-						</td>						
-					</tr>
-				</table>
-		
-		
-				
-				
-				
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>

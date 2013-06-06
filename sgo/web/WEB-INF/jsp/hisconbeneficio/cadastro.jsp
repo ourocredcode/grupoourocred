@@ -190,9 +190,9 @@ function limpaForm() {
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 								<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
 								<td>
-									<select id="hisconBeneficioStatus" class="input-medium" onchange="return altera('workflowEtapa.workflowEtapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
-										<c:forEach var="etapa" items="${hiscon.workflowEtapas }">
-											<option value="${etapa.workflowEtapa_id}" <c:if test="${etapa.workflowEtapa_id == hiscon.workflowEtapa.workflowEtapa_id}">selected</c:if>>${etapa.nome }</option>
+									<select id="hisconBeneficioStatus" class="input-medium" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+										<c:forEach var="etapa" items="${hiscon.etapas }">
+											<option value="${etapa.etapa_id }" <c:if test="${etapa.etapa_id == hiscon.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
 										</c:forEach>
 									</select>
 								</td>

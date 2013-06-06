@@ -86,7 +86,7 @@ public class ContratoDao extends Dao<Contrato> {
 		String sql = sqlContrato;
 		
 		if(usuario_id != null)
-			sql += " WHERE USUARIO.usuario_id = ? ";
+			sql += " WHERE ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -96,6 +96,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, usuario_id);
+			this.stmt.setLong(2, usuario_id);
 
 			this.rsContrato = this.stmt.executeQuery();
 
@@ -199,7 +200,7 @@ public class ContratoDao extends Dao<Contrato> {
 	}
 
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, String cliente, String documento,
-			Collection<String> status,Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados) {
+			Collection<String> status,Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores) {
 
 		String sql = sqlContrato;
 		String clause = "";
@@ -268,6 +269,21 @@ public class ContratoDao extends Dao<Contrato> {
 
 			if(!bancosCompradosAux1.equals("")) {
 				sql += clause + " ( B2.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+		
+		sql += " ) ";
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(Usuario u : consultores){
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(u != null) {
+				sql += clause + " ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
 				x++;
 				clause = "";
 			}
@@ -345,6 +361,17 @@ public class ContratoDao extends Dao<Contrato> {
 
 				if(!bancosCompradosAux2.equals("")) {
 					this.stmt.setString(curr, '%' + bancosCompradosAux2 + '%');
+					curr++;
+				}
+
+			}
+			
+			for(Usuario u : consultores){
+
+				if(u != null) {
+					this.stmt.setLong(curr,u.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr,u.getUsuario_id());
 					curr++;
 				}
 

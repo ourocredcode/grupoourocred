@@ -70,7 +70,7 @@ public class EtapaDao extends Dao<Etapa> {
 
 				etapa = new Etapa();
 				etapa.setEtapa_id(rsEtapa.getLong("etapa_id"));
-				etapa.setNome(rsEtapa.getString("nome"));
+				etapa.setNome(rsEtapa.getString("etapa_nome"));
 			}
 
 		} catch (SQLException e) {
@@ -183,7 +183,7 @@ public class EtapaDao extends Dao<Etapa> {
 			while (rsEtapa.next()) {
 				etapa = new Etapa();
 				etapa.setEtapa_id(rsEtapa.getLong("etapa_id"));
-				etapa.setNome(rsEtapa.getString("nome"));
+				etapa.setNome(rsEtapa.getString("etapa_nome"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -383,7 +383,7 @@ public class EtapaDao extends Dao<Etapa> {
 	public Collection<Etapa> buscaEtapaByContratoPerfil(Long contrato_id, Long perfil_id) {
 
 		String sql = "SELECT " +
-				"		WORKFLOWTRANSICAO.etapaproximo_id, ETAPA.nome FROM " +
+				"		WORKFLOWTRANSICAO.etapaproximo_id, ETAPA.nome as etapa_nome FROM " +
 				"		(CONTRATO (NOLOCK) INNER JOIN (ETAPA (NOLOCK) INNER JOIN WORKFLOWTRANSICAO (NOLOCK) ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id) " +
 				"		ON CONTRATO.etapa_id = WORKFLOWTRANSICAO.etapa_id) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id " +
 				"		WHERE CONTRATO.contrato_id = ? AND PERFIL.perfil_id = ? ";
@@ -406,7 +406,7 @@ public class EtapaDao extends Dao<Etapa> {
 				Etapa etapa = new Etapa();
 
 				etapa.setEtapa_id(rsEtapa.getLong("etapaproximo_id"));
-				etapa.setNome(rsEtapa.getString("nome"));
+				etapa.setNome(rsEtapa.getString("etapa_nome"));
 
 				workflowsEtapa.add(etapa);
 			}
@@ -423,7 +423,7 @@ public class EtapaDao extends Dao<Etapa> {
 
 	public Collection<Etapa> buscaEtapaByWorkFlowPerfil(Long workflow_id,Long perfil_id) {
 
-		String sql = "SELECT DISTINCT WORKFLOWTRANSICAO.etapaproximo_id, ETAPA.nome  " +
+		String sql = "SELECT DISTINCT WORKFLOWTRANSICAO.etapaproximo_id, ETAPA.nome as etapa_nome  " +
 							" FROM ((( ETAPA " +
 						" INNER JOIN WORKFLOWETAPA (NOLOCK) ON WORKFLOWETAPA.etapa_id = ETAPA.etapa_id) " +    
 						" INNER JOIN WORKFLOWTRANSICAO  ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id) " +   
@@ -449,7 +449,7 @@ public class EtapaDao extends Dao<Etapa> {
 				Etapa etapa = new Etapa();
 
 				etapa.setEtapa_id(rsEtapa.getLong("etapaproximo_id"));
-				etapa.setNome(rsEtapa.getString("nome"));
+				etapa.setNome(rsEtapa.getString("etapa_nome"));
 
 				workflowsEtapa.add(etapa);
 			}
@@ -466,7 +466,7 @@ public class EtapaDao extends Dao<Etapa> {
 
 	public Collection<Etapa> buscaEtapaByHisconPerfil(Long empresa_id, Long organizacao_id, Long perfil_id, Long hisconbeneficio_id) {
 
-		String sql = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, ETAPA.nome," +
+		String sql = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, ETAPA.nome as etapa_nome," +
 				" WORKFLOWTRANSICAO.etapaproximo_id " +
 				" FROM ETAPA (NOLOCK) INNER JOIN (((HISCONBENEFICIO (NOLOCK) " +
 				" INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) " +
@@ -496,7 +496,7 @@ public class EtapaDao extends Dao<Etapa> {
 				Etapa etapa = new Etapa();
 
 				etapa.setEtapa_id(rsEtapa.getLong("etapaproximo_id"));
-				etapa.setNome(rsEtapa.getString("nome"));
+				etapa.setNome(rsEtapa.getString("etapa_nome"));
 
 				workflowsEtapa.add(etapa);
 			}
@@ -513,7 +513,7 @@ public class EtapaDao extends Dao<Etapa> {
 	
 	public Collection<Etapa> buscaEtapaByPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
 
-		String sql = "SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, ETAPA.nome " +
+		String sql = "SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, ETAPA.nome as etapa_nome " +
 				" FROM ETAPA (NOLOCK) INNER JOIN (((HISCONBENEFICIO (NOLOCK) " +
 				" INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) " +
 				" INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " +
@@ -541,7 +541,7 @@ public class EtapaDao extends Dao<Etapa> {
 				Etapa etapa = new Etapa();
 
 				etapa.setEtapa_id(rsEtapa.getLong("etapaproximo_id"));
-				etapa.setNome(rsEtapa.getString("nome"));
+				etapa.setNome(rsEtapa.getString("etapa_nome"));
 
 				workflowsEtapa.add(etapa);
 			}
