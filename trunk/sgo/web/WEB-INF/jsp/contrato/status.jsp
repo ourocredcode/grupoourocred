@@ -14,6 +14,30 @@ $(document).ready(function() {
 	$("#telefoneRes").mask("(99) 9999-9999?9");
 	$("#telefoneCel").mask("(99) 9999-9999?9");
 	$("#valorQuitacao").maskMoney({symbol:"",decimal:".",thousands:""});
+	
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+	
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+	
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
 
 	var justificativa = document.getElementById("justificativa");
 	var dataQuitacao = document.getElementById("dataQuitacao");
@@ -386,7 +410,7 @@ function openPopup(url) {
 		<h1>Formulário</h1>
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
 			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
@@ -1006,8 +1030,8 @@ function openPopup(url) {
 						</span>
 						<h5>Histórico</h5>
 					</div>
-					<div class="widget-content padding">
-						<table class="table table-striped table-bordered">
+					<div class="widget-content">
+						<table class="table table-bordered table-striped table-hover data-table">
 							<c:if test="${not empty historico}">
 							<thead>	
 								<tr>

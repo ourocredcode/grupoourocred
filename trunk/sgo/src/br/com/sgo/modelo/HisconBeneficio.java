@@ -48,23 +48,23 @@ public class HisconBeneficio implements Serializable {
 	private Usuario usuario;
 	
 	@ManyToOne
-	@JoinColumn(name = "perfil_id", updatable = true, nullable = false)
+	@JoinColumn(name = "perfil_id", updatable = true, nullable = true)
 	private Perfil perfil;
 
 	@ManyToOne
-	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
+	@JoinColumn(name = "workflow_id", updatable = true, nullable = true)
 	private Workflow workflow;
 
 	@ManyToOne
-	@JoinColumn(name = "workflowposicao_id", updatable = true, nullable = false)
+	@JoinColumn(name = "workflowposicao_id", updatable = true, nullable = true)
 	private Workflow workflowPosicao;
 
 	@ManyToOne
-	@JoinColumn(name = "etapa_id", updatable = true, nullable = false)
+	@JoinColumn(name = "etapa_id", updatable = true, nullable = true)
 	private Etapa etapa;
 
 	@ManyToOne
-	@JoinColumn(name = "etapaposicao_id", updatable = true, nullable = false)
+	@JoinColumn(name = "etapaposicao_id", updatable = true, nullable = true)
 	private Etapa etapaPosicao;
 	
 	@ManyToOne
@@ -289,7 +289,7 @@ public class HisconBeneficio implements Serializable {
 	}
 
 	public Boolean getIsEnviado() {
-		return isEnviado;
+		return isEnviado == null ? false : isEnviado;
 	}
 
 	public void setIsEnviado(Boolean isEnviado) {

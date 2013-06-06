@@ -57,9 +57,13 @@ public class MenuController {
 	private final ProdutoDao produtoDao;
 	private final BancoDao bancoDao;
 	private final UsuarioInfo usuarioInfo;
+	
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
 	private Collection<Etapa> etapas = new ArrayList<Etapa>();
 	private Collection<Produto> produtos = new ArrayList<Produto>();
+	private Collection<Usuario> consultores = new ArrayList<Usuario>();
+	private Collection<Usuario> supervisores = new ArrayList<Usuario>();
+	private Collection<Usuario> consultoresAux = new ArrayList<Usuario>();
 
 	private Empresa empresa;
 	private Organizacao organizacao;
@@ -122,11 +126,12 @@ public class MenuController {
 		result.include("bancos",this.bancoDao.buscaBancoByGrupo("Tomadores"));
 		result.include("bancosComprados",this.bancoDao.buscaBancoByGrupo("Comprados"));
 
-		//TODO: verificar consultas Empresa e Organização SYSTEM (Felipe)
 		TipoWorkflow tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNome(1l, 1l, "Contrato");
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
 		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
+
+		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 
 		contador();
 
@@ -136,7 +141,8 @@ public class MenuController {
 	@Path("/menu/busca") 
 	public void busca(String informacaoSaque,String tipoAprovado,String empresa,String tipoPagamento,String tipoRecusado,String justificativa, Collection<String> status,
 			String cliente, String documento,String data, String dataFim,String dataAprovadoInicio, String dataAprovadoFim,String dataConcluidoInicio, String dataConcluidoFim,
-			String dataRecusadoInicio, String dataRecusadoFim,Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados, String motivoPendencia) {
+			String dataRecusadoInicio, String dataRecusadoFim,Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados, String motivoPendencia,
+			Long consultor) {
 
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();
@@ -252,9 +258,34 @@ public class MenuController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		if(usuarioInfo.getPerfil().getChave().equals("Consultor") || usuarioInfo.getPerfil().getChave().equals("Supervisor")){
+
+			Usuario u = new Usuario();
+
+			if(consultor != null) {
+				u = usuarioInfo.getUsuario();
+			} else {
+				u = this.usuarioDao.load(usuario.getUsuario_id());
+			}
+
+			consultoresAux.add(u);
+
+		} else {
+
+			if(consultor != null){
+
+				consultoresAux.add(this.usuarioDao.load(consultor));
+
+				//TODO : VERIFICA PERFIL SUPERVISOR INATIVO
+				//consultoresAux.addAll(this.consultorDao.buscaLoginsSupervisoresInativos());
+
+			}
+
+		}
 
 		contratos.addAll(this.contratoDao.buscaContratoByFiltros(this.empresa.getEmpresa_id(), this.organizacao.getOrganizacao_id(), calInicio, calFim, cliente, documento, status,
-				produtos, bancos, bancosComprados));
+				produtos, bancos, bancosComprados,consultoresAux));
 
 		result.include("contratos",contratos);		
 
@@ -312,6 +343,16 @@ public class MenuController {
 	@Public
 	public void menus(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(menuDao.buscaMenus(empresa_id, organizacao_id, nome)).serialize();
+	}
+	
+	@Post
+ 	@Path("/menu/consultores")
+	public void consultores(Long supervisor_id) {
+
+		consultores = this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), supervisor_id);
+
+		result.include("consultores",consultores);
+
 	}
 
 	private void contador() {

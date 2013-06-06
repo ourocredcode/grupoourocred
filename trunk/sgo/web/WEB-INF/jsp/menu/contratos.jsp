@@ -57,6 +57,17 @@
 				}
 			});
 		});
+		
+		$("#busca_Supervisor").change(function() {   
+			
+			var supervisor_id = $("#busca_Supervisor").val();
+
+			if(supervisor_id != '')
+				$("#busca_Consultor").load('<c:url value="/menu/consultores" />', {'supervisor_id': supervisor_id});
+			else
+				$('#busca_Consultor option').remove();
+
+		});
 
 	 });
 	 
@@ -83,6 +94,8 @@
 		var produtos = $("#busca_Produto").val();
 		var bancosComprados = $("#busca_BancoComprado").val();
 		var motivoPendencia = $("#busca_Pendente").val();
+		var consultor = $("#busca_Consultor").val();
+		var supervisor = $("#busca_Supervisor").val();
 		
 		if(dataAprovadoInicio == undefined || dataAprovadoInicio == '__/__/____')
 			dataAprovadoInicio = "";
@@ -111,6 +124,18 @@
 			informacaoSaque = "";
 		if(motivoPendencia == undefined)
 			motivoPendencia = "";
+		if(supervisor == undefined)
+			supervisor = "";
+		if(consultor == undefined)
+			consultor = "";
+
+		if(consultor == ""){
+			if(supervisor == "Todos"){
+				consultor = "";
+			} else {
+				consultor = supervisor;
+			}
+		}
 		 
 		if(status == null){
 			status = new Array();
@@ -140,7 +165,7 @@
 				'cliente' : cliente , 'documento' : documento, 'data' : data, 'dataFim' : dataFim,
 				'dataAprovadoInicio' : dataAprovadoInicio, 'dataAprovadoFim' : dataAprovadoFim, 'dataConcluidoInicio' : dataConcluidoInicio, 'dataConcluidoFim' : dataConcluidoFim, 
 				'dataRecusadoInicio' : dataRecusadoInicio, 'dataRecusadoFim' : dataRecusadoFim, 'bancos' : bancos, 'produtos' : produtos, 'bancosComprados' : bancosComprados , 
-				'motivoPendencia' : motivoPendencia});
+				'motivoPendencia' : motivoPendencia, 'consultor' : consultor});
 		 
 		} else {
 
@@ -156,7 +181,7 @@
 		<h1>DashBoard</h1>
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Users" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
 			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
@@ -232,13 +257,33 @@
 						
 						<div class="row-fluid">
 		
-							<div class="span5">								
+							<div class="span6">								
 								<label for="busca_Data">Data Início</label>
-								<input id="busca_Data" name="busca_Data"  class="input-mini" type="text" />
+								<input id="busca_Data" name="busca_Data"  class="input-small" type="text" />
 							</div>
-							<div class="span5">
+							<div class="span6">
 								<label for="busca_DataFim">Data Fim</label>
-								<input id="busca_DataFim" name="busca_DataFim" class="input-mini" type="text"  />
+								<input id="busca_DataFim" name="busca_DataFim" class="input-small" type="text"  />
+							</div>
+		
+						</div>
+						
+						<div class="row-fluid">
+		
+							<div class="span6">								
+								<label for="busca_Supervisor">Supervisor</label>
+								<select id="busca_Supervisor" name="busca_Supervisor" class="input-medium">
+									<option value="">Todos</option>
+									<c:forEach items="${supervisores}" var="supervisor">
+										<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="span6">
+								<label for="busca_Consultor">Consultor</label>
+								<select id="busca_Consultor" name="busca_Consultor" class="input-medium">
+									<option value="">Selecione um Supervisor</option>
+								</select>
 							</div>
 		
 						</div>
@@ -251,11 +296,11 @@
 		
 							<div class="span4">								
 								<label for="busca_DataAprovadoInicio">Aprovado Inicio</label>
-								<input id="busca_DataAprovadoInicio" name="busca_DataAprovadoInicio"  class="input-mini" type="text" />
+								<input id="busca_DataAprovadoInicio" name="busca_DataAprovadoInicio"  class="input-small" type="text" />
 							</div>
 							<div class="span4">
 								<label for="busca_DataAprovadoFim">Aprovado Fim</label>
-								<input id="busca_DataAprovadoFim" name="busca_DataAprovadoFim" class="input-mini" type="text"  />
+								<input id="busca_DataAprovadoFim" name="busca_DataAprovadoFim" class="input-small" type="text"  />
 							</div>
 							<div class="span4">
 								<label for="busca_TipoAprovado">Tipo Aprovado</label>
@@ -272,11 +317,11 @@
 		
 							<div class="span4">								
 								<label for="busca_DataConcluidoInicio">Concluído Início</label>
-								<input id="busca_DataConcluidoInicio" name="busca_DataConcluidoInicio"  class="input-mini" type="text" />
+								<input id="busca_DataConcluidoInicio" name="busca_DataConcluidoInicio"  class="input-small" type="text" />
 							</div>
 							<div class="span4">
 								<label for="busca_DataConcluidoFim">Concluído Fim</label>
-								<input id="busca_DataConcluidoFim" name="busca_DataConcluidoFim" class="input-mini" type="text"  />
+								<input id="busca_DataConcluidoFim" name="busca_DataConcluidoFim" class="input-small" type="text"  />
 							</div>
 		
 						</div>
@@ -286,7 +331,7 @@
 							<div class="span4">								
 								
 								<label for="busca_TipoPagamento">Tipo Pagamento</label>
-								<select id="busca_TipoPagamento" name="busca_TipoPagamento"  onchange="buscaContratos();" style="width:100px" >
+								<select id="busca_TipoPagamento" name="busca_TipoPagamento" style="width:100px" >
 									<option value="Todos">Todos</option>
 									<option value="OP">OP</option>
 									<option value="TED">TED</option>
@@ -296,7 +341,7 @@
 							<div class="span4">
 								
 								<label for="busca_InformacaoSaque">Info Saque</label>
-								<select id="busca_InformacaoSaque" name="busca_InformacaoSaque"  onchange="buscaContratos();" style="width:100px" >
+								<select id="busca_InformacaoSaque" name="busca_InformacaoSaque" style="width:100px" >
 									<option value="Todos">Todos</option>
 									<option value="Aguardando Saque">Aguardando Saque</option>
 									<option value="Saque Efetuado">Saque Efetuado</option>
@@ -314,11 +359,11 @@
 		
 							<div class="span5">								
 								<label for="busca_DataRecusadoInicio">Recusado Início</label>
-								<input id="busca_DataRecusadoInicio" name="busca_DataRecusadoInicio"  class="input-mini" type="text" />
+								<input id="busca_DataRecusadoInicio" name="busca_DataRecusadoInicio"  class="input-small" type="text" />
 							</div>
 							<div class="span5">
 								<label for="busca_DataRecusadoFim">Recusado Fim</label>
-								<input id="busca_DataRecusadoFim" name="busca_DataRecusadoFim" class="input-mini" type="text"  />
+								<input id="busca_DataRecusadoFim" name="busca_DataRecusadoFim" class="input-small" type="text"  />
 							</div>
 		
 						</div>

@@ -54,7 +54,7 @@ function excluiLinha(linha, resposta) {
 	</div>
 	
 	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+		<a href="<c:url value="/menu/inicio/${usuarioInfo.perfil.chave}" />" title="Dashboard" class="tip-bottom"><i class="icon-home"></i> Dashboard</a>
 		<a href="#" class="current">Equipe</a>
 	</div>
 

@@ -48,23 +48,23 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			 " INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " +
 			 " INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id) " +
 			 " INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON PERFIL.perfil_id = USUARIOPERFIL.perfil_id) " +
-			 " INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id) AND (HISCONBENEFICIO.workflow_id = ETAPA.workflow_id)";
+			 " INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id)";
 
-	private String sqlHisconsExibe = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, EMPRESA.nome as empresa_nome " + 
-			 ", HISCONBENEFICIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, HISCONBENEFICIO.parceirobeneficio_id , PARCEIROBENEFICIO.numerobeneficio " + 
-			 ", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,PERFIL.perfil_id, PERFIL.nome as perfil_nome " +
-			 ", HISCONBENEFICIO.workflow_id, PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.cpf " +
-			 ", PARCEIRONEGOCIO.nome as parceironegocio_nome, ETAPA.etapa_id, ETAPA.nome AS etapa_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " + 
-			 ", HISCONBENEFICIO.dataadm, HISCONBENEFICIO.dataenvio, HISCONBENEFICIO.caminhoarquivo " +
-			 ", HISCONBENEFICIO.isworkflow, HISCONBENEFICIO.isenviado, HISCONBENEFICIO.isimportado, HISCONBENEFICIO.ispadrao " +
-			 " FROM (((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) "+
-			 " INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) " +
-			 " INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " + 
-			 " INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id) " +
-			 " INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = USUARIOPERFIL.perfil_id) AND (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id)) " + 
-			 " INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) " +
-			 " INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +
-			 " INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id) AND (HISCONBENEFICIO.workflow_id = ETAPA.workflow_id) ";
+	private String sqlHisconsExibe = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, EMPRESA.nome as empresa_nome   " + 
+			", HISCONBENEFICIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, HISCONBENEFICIO.parceirobeneficio_id , PARCEIROBENEFICIO.numerobeneficio " +     
+			", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,PERFIL.perfil_id, PERFIL.nome as perfil_nome " +    
+			", HISCONBENEFICIO.workflow_id, PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.cpf " +    
+			", PARCEIRONEGOCIO.nome as parceironegocio_nome, ETAPA.etapa_id, ETAPA.nome AS etapa_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " +     
+			", HISCONBENEFICIO.dataadm, HISCONBENEFICIO.dataenvio, HISCONBENEFICIO.caminhoarquivo " +    
+			", HISCONBENEFICIO.isworkflow, HISCONBENEFICIO.isenviado, HISCONBENEFICIO.isimportado, HISCONBENEFICIO.ispadrao " +    
+			"FROM (((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) " +   
+			"INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) " +    
+			"INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " +       
+			"INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id) " +   
+			"INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = USUARIOPERFIL.perfil_id) AND (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id)) " +     
+			"INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) " +    
+			"INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +    
+			"INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id) ";  
 
 	private String sqlCountHiscons = "SELECT COUNT(HISCONBENEFICIO.parceirobeneficio_id) AS quantidade_beneficio , PARCEIROBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numerobeneficio, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id "+
 			" FROM ((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) "+
@@ -432,6 +432,8 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 	}
 
+	
+	//TODO : Consulta incorreta.
 	public Collection<Etapa> buscaWorKFlowEtapaByHisconBeneficioPerfil() {
 
 		String sql = " SELECT WORKFLOWTRANSICAO.workflowtransicao_id, WORKFLOWTRANSICAO.empresa_id , EMPRESA.nome as empresa_nome "+
@@ -462,7 +464,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				Etapa workflowEtapa = new Etapa();
 
 				workflowEtapa.setEtapa_id(rsHisconBeneficio.getLong("workflowetapaproximo_id"));
-				workflowEtapa.setNome(rsHisconBeneficio.getString("nome"));
+				workflowEtapa.setNome(rsHisconBeneficio.getString("etapa_nome"));
 
 				workflowsEtapa.add(workflowEtapa);
 			}
@@ -486,7 +488,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		Usuario usuario = new Usuario();
 		Etapa etapa = new Etapa();		
 		HisconBeneficio hisconBeneficio = new HisconBeneficio();		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.FFF");
 		Calendar created = new GregorianCalendar();
 
 		empresa.setEmpresa_id(rsHisconBeneficio.getLong("empresa_id"));
@@ -564,7 +566,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		Perfil perfil = new Perfil();
 		Workflow workflow = new Workflow();
 		Etapa etapa = new Etapa();			
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.FFF");
 		Calendar created = new GregorianCalendar();
 
 		empresa.setEmpresa_id(rsHisconBeneficio.getLong("empresa_id"));
