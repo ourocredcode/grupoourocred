@@ -35,12 +35,24 @@ public class Produto implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
+	@JoinColumn(name = "categoriaproduto_id", updatable = true, nullable = false)
+	private CategoriaProduto categoriaProduto;
+	
+	@ManyToOne
 	@JoinColumn(name = "grupoproduto_id", updatable = true, nullable = false)
 	private GrupoProduto grupoProduto;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "subgrupoproduto_id", updatable = true, nullable = false)
 	private SubGrupoProduto subGrupoProduto;
+	
+	@ManyToOne
+	@JoinColumn(name = "localidade_id", updatable = true, nullable = false)
+	private Localidade localidade;
+
+	@ManyToOne
+	@JoinColumn(name = "tipoproduto_id", updatable = true, nullable = false)
+	private TipoProduto tipoProduto;
 
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
@@ -84,38 +96,6 @@ public class Produto implements Serializable {
 		this.empresa = empresa;
 	}
 
-	public GrupoProduto getGrupoProduto() {
-		return grupoProduto;
-	}
-
-	public void setGrupoProduto(GrupoProduto grupoProduto) {
-		this.grupoProduto = grupoProduto;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
-
 	public Organizacao getOrganizacao() {
 		return organizacao;
 	}
@@ -124,12 +104,44 @@ public class Produto implements Serializable {
 		this.organizacao = organizacao;
 	}
 
+	public CategoriaProduto getCategoriaProduto() {
+		return categoriaProduto;
+	}
+
+	public void setCategoriaProduto(CategoriaProduto categoriaProduto) {
+		this.categoriaProduto = categoriaProduto;
+	}
+
+	public GrupoProduto getGrupoProduto() {
+		return grupoProduto;
+	}
+
+	public void setGrupoProduto(GrupoProduto grupoProduto) {
+		this.grupoProduto = grupoProduto;
+	}
+
 	public SubGrupoProduto getSubGrupoProduto() {
 		return subGrupoProduto;
 	}
 
 	public void setSubGrupoProduto(SubGrupoProduto subGrupoProduto) {
 		this.subGrupoProduto = subGrupoProduto;
+	}
+
+	public Localidade getLocalidade() {
+		return localidade;
+	}
+
+	public void setLocalidade(Localidade localidade) {
+		this.localidade = localidade;
+	}
+
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
 	}
 
 	public Usuario getCreatedBy() {
@@ -170,6 +182,30 @@ public class Produto implements Serializable {
 
 	public void setChave(String chave) {
 		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }
