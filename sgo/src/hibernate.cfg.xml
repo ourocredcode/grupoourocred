@@ -51,6 +51,7 @@
 		<mapping class="br.com.sgo.modelo.ElementoBd" />
 		<mapping class="br.com.sgo.modelo.CampoFormulario" />
 		<mapping class="br.com.sgo.modelo.CategoriaParceiro" />
+		<mapping class="br.com.sgo.modelo.CategoriaProduto" />
 		<mapping class="br.com.sgo.modelo.ClassificacaoParceiro" />
 		<mapping class="br.com.sgo.modelo.ClassificacaoBanco" />
 		<mapping class="br.com.sgo.modelo.ColunaBd" />
