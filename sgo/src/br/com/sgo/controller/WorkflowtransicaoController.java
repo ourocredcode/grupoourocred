@@ -28,14 +28,16 @@ public class WorkflowtransicaoController {
 	private final UsuarioInfo usuarioInfo;
 
 	private WorkflowTransicao workflowTransicao;	
-	private Calendar dataAtual = Calendar.getInstance();
+
 	
-	public WorkflowtransicaoController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, WorkflowTransicaoDao workflowTransicaoDao, EtapaDao etapaDao, PerfilDao perfilDao) {
+	public WorkflowtransicaoController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, WorkflowTransicaoDao workflowTransicaoDao, EtapaDao etapaDao, 
+			PerfilDao perfilDao,WorkflowTransicao workflowTransicao) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.workflowDao = workflowDao;
 		this.workflowTransicaoDao = workflowTransicaoDao;
+		this.workflowTransicao = workflowTransicao;
 		this.etapaDao = etapaDao;
 		this.perfilDao = perfilDao;
 
@@ -54,8 +56,10 @@ public class WorkflowtransicaoController {
 	@Public
 	public void salva(WorkflowTransicao workflowTransicao) {
 
+		Calendar dataAtual = Calendar.getInstance();
+
 		String mensagem = "";
-		
+
 		try {
 			
 

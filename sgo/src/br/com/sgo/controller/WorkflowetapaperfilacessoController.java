@@ -11,8 +11,10 @@ import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowEtapaPerfilAcessoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.WorkflowEtapaPerfilAcesso;
 
 @Resource
@@ -25,38 +27,42 @@ public class WorkflowetapaperfilacessoController {
 	private final PerfilDao perfilDao;
 	private final EtapaDao etapaDao;
 
-	private WorkflowEtapaPerfilAcesso workflowEtapaPerfilAcesso;	
-	private Calendar dataAtual = Calendar.getInstance();
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 
 	public WorkflowetapaperfilacessoController(Result result, UsuarioInfo usuarioInfo, WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao
-			, WorkflowDao workflowDao, PerfilDao perfilDao, EtapaDao etapaDao) {
+			, WorkflowDao workflowDao, PerfilDao perfilDao, EtapaDao etapaDao, Empresa empresa,Organizacao organizacao,Usuario usuario) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.workflowDao = workflowDao;
-		this.workflowEtapaPerfilAcessoDao =  workflowEtapaPerfilAcessoDao;		
+		this.workflowEtapaPerfilAcessoDao =  workflowEtapaPerfilAcessoDao;	
 		this.perfilDao = perfilDao;
 		this.etapaDao = etapaDao;
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
 
 	}
 
 	@Post
-	@Public
 	@Path("/workflowetapaperfilacesso/salva")
 	public void salva(WorkflowEtapaPerfilAcesso workflowEtapaPerfilAcesso) {
 
 		String mensagem = "";
+		Calendar dataAtual = Calendar.getInstance();
 
 		try {
 
-			if (this.workflowEtapaPerfilAcessoDao.buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id()
+			if (this.workflowEtapaPerfilAcessoDao.buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()
 					,workflowEtapaPerfilAcesso.getWorkflow().getWorkflow_id(), workflowEtapaPerfilAcesso.getEtapa().getEtapa_id(), workflowEtapaPerfilAcesso.getPerfil().getPerfil_id()) == null) {			
 
-				this.workflowEtapaPerfilAcesso.setCreated(dataAtual);
-				this.workflowEtapaPerfilAcesso.setUpdated(dataAtual);
+				workflowEtapaPerfilAcesso.setCreated(dataAtual);
+				workflowEtapaPerfilAcesso.setUpdated(dataAtual);
 
-				this.workflowEtapaPerfilAcesso.setCreatedBy(usuarioInfo.getUsuario());
-				this.workflowEtapaPerfilAcesso.setUpdatedBy(usuarioInfo.getUsuario());
+				workflowEtapaPerfilAcesso.setCreatedBy(usuario);
+				workflowEtapaPerfilAcesso.setUpdatedBy(usuario);
 
 				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null ? false : true);				
 				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null ? false : true);
@@ -89,17 +95,15 @@ public class WorkflowetapaperfilacessoController {
 	}
 
 	@Get
-	@Public
 	@Path("/workflowetapaperfilacesso/cadastro")
 	public void cadastro() {
 
 		result.include("workflowEtapasPerfilAcesso", this.workflowEtapaPerfilAcessoDao.buscaTodosWorkflowEtapaPerfilAcesso());
-		result.include("workflows", this.workflowDao.buscaWorkflowsToWorkflowEtapaPerfilByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("workflows", this.workflowDao.buscaWorkflowsToWorkflowEtapaPerfilByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("perfis", this.perfilDao.buscaPerfisToWorkflowEtapaPerfil());
 	}
 
 	@Post
-	@Public
 	@Path("/workflowetapaperfilacesso/etapas")
 	public void etapas(Long empresa_id, Long organizacao_id, Long workflow_id){
 

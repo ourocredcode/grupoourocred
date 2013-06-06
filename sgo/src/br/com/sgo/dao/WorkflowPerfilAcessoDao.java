@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,7 +13,6 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
-import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
@@ -26,7 +26,6 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsWorkflowPerfilAcesso;
-	private UsuarioInfo usuarioInfo;
 	
 	private final String sqlWorkflowPerfilAcesso = "SELECT WORKFLOWPERFILACESSO.empresa_id, EMPRESA.nome as empresa_nome, "
 			+ " WORKFLOWPERFILACESSO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "
@@ -37,10 +36,9 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 			+ " INNER JOIN EMPRESA (NOLOCK) ON WORKFLOWPERFILACESSO.empresa_id = EMPRESA.empresa_id) "
 			+ " INNER JOIN ORGANIZACAO (NOLOCK) ON WORKFLOWPERFILACESSO.organizacao_id = ORGANIZACAO.organizacao_id ";
 
-	public WorkflowPerfilAcessoDao(Session session, ConnJDBC conexao, UsuarioInfo usuarioInfo) {
+	public WorkflowPerfilAcessoDao(Session session, ConnJDBC conexao) {
 		super(session, WorkflowPerfilAcesso.class);
 		this.conexao = conexao;
-		this.usuarioInfo = usuarioInfo;
 	}
 
 	public Collection<WorkflowPerfilAcesso> buscaTodosWorkflowPerfilAcesso() {
@@ -200,7 +198,8 @@ public WorkflowPerfilAcesso buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkfl
 
 	public void insert(WorkflowPerfilAcesso workflowPerfilAcesso) throws SQLException {
 
-		String sql = "INSERT INTO WORKFLOWPERFILACESSO (empresa_id, organizacao_id,workflow_id, perfil_id, isactive, isleituraescrita) VALUES (?,?,?,?,?,?)";
+		String sql = "INSERT INTO WORKFLOWPERFILACESSO (empresa_id, organizacao_id,workflow_id, perfil_id, created, createdby," +
+				"updated,updatedby, isactive, isleituraescrita) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
@@ -209,12 +208,16 @@ public WorkflowPerfilAcesso buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkfl
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1, usuarioInfo.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(2, usuarioInfo.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(1, workflowPerfilAcesso.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(2, workflowPerfilAcesso.getOrganizacao().getOrganizacao_id());
 			this.stmt.setLong(3, workflowPerfilAcesso.getWorkflow().getWorkflow_id());
 			this.stmt.setLong(4, workflowPerfilAcesso.getPerfil().getPerfil_id());
-			this.stmt.setBoolean(5, workflowPerfilAcesso.getIsActive());
-			this.stmt.setBoolean(6, workflowPerfilAcesso.getIsLeituraEscrita());
+			this.stmt.setTimestamp(5, new Timestamp(workflowPerfilAcesso.getCreated().getTimeInMillis()));
+			this.stmt.setLong(6,workflowPerfilAcesso.getCreatedBy().getUsuario_id());
+			this.stmt.setTimestamp(7, new Timestamp(workflowPerfilAcesso.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(8,workflowPerfilAcesso.getUpdatedBy().getUsuario_id());
+			this.stmt.setBoolean(9, workflowPerfilAcesso.getIsActive());
+			this.stmt.setBoolean(10, workflowPerfilAcesso.getIsLeituraEscrita());
 
 			this.stmt.executeUpdate();
 			this.conn.commit();

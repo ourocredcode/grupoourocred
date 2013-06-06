@@ -26,12 +26,13 @@ public class WorkflowController {
 	private Workflow workflow;	
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public WorkflowController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao) {
+	public WorkflowController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao,Workflow workflow) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.workflowDao = workflowDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
+		this.workflow = workflow;
 
 	}
 
