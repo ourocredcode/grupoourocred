@@ -155,7 +155,7 @@ public class EtapaDao extends Dao<Etapa> {
 	}
 	
 	public Etapa buscaEtapaByEmpresaOrganizacaoNome(Long empresa_id, Long organizacao_id, String nome ) {
-		
+
 		String sql = sqlEtapa;
 
 		if (empresa_id != null)
@@ -164,20 +164,21 @@ public class EtapaDao extends Dao<Etapa> {
 			sql += " AND ETAPA.organizacao_id = ?";
 		if (nome != null)
 			sql += " AND ETAPA.nome like ?";
-		
+
 		sql += " ORDER BY ETAPA.nome ";
 		
 		this.conn = this.conexao.getConexao();
-		
+
 		Etapa etapa = null;
 		
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
 			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + nome + "%");
-			
+
 			this.rsEtapa = this.stmt.executeQuery();
 			
 			while (rsEtapa.next()) {
@@ -185,9 +186,11 @@ public class EtapaDao extends Dao<Etapa> {
 				etapa.setEtapa_id(rsEtapa.getLong("etapa_id"));
 				etapa.setNome(rsEtapa.getString("etapa_nome"));
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		this.conexao.closeConnection(rsEtapa, stmt, conn);
 		return etapa;
 	}

@@ -10,24 +10,25 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleFormularioDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.HistoricoControleFormularioDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.ControleFormulario;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoContrato;
 import br.com.sgo.modelo.HistoricoControleFormulario;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Perfil;
+import br.com.sgo.modelo.TipoControle;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
-import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class ControleformularioController {
@@ -81,12 +82,11 @@ public class ControleformularioController {
 	public void posvenda(Long formulario_id){
 
 		formulario = formularioDao.load(formulario_id);
+		TipoControle tp = this.tipoControleDao.buscaTipoControleByNome("Pós Venda");
 
 		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario_id));
 
-		posvenda = this.controleFormularioDao.buscaControleByContratoTipoControle(
-								formulario_id, 
-								this.tipoControleDao.buscaTipoControleByNome("Pós Venda").getTipoControle_id());
+		posvenda = this.controleFormularioDao.buscaControleByContratoTipoControle(formulario_id, tp.getTipoControle_id());
 
 		Double countValorParcela = new Double(0.00);
 		Double countValorLiquido = new Double(0.00);
@@ -97,6 +97,9 @@ public class ControleformularioController {
 			countValorLiquido += c.getValorLiquido();
 			countContratos += 1;
 		}
+		
+		if(posvenda != null)
+			result.include("historicos",this.historicoControleFormularioDao.buscaHistoricoByFormularioControle(formulario.getFormulario_id(),posvenda.getControleFormulario_id()));
 
 		if(posvenda == null)
 			posvenda = new ControleFormulario();
@@ -108,12 +111,13 @@ public class ControleformularioController {
 
 		workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Pós Venda");
 
-		etapas = etapaDao.buscaEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
+		etapas = etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), workflow.getWorkflow_id());
 		posvenda.setWorkflow(workflow);
 
 		workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Motivos Pós Venda");
 
-		motivos = etapaDao.buscaEtapaByWorkFlowPerfil(workflow.getWorkflow_id(), perfil.getPerfil_id());
+		motivos = etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), workflow.getWorkflow_id());
+
 		posvenda.setWorkflowPendencia(workflow);
 
 		result.include("posvenda",posvenda);
@@ -123,7 +127,7 @@ public class ControleformularioController {
 		result.include("countValorLiquido",countValorLiquido);
 		result.include("etapas", etapas);
 		result.include("motivos", motivos);
-		result.include("historicos",this.historicoControleFormularioDao.buscaHistoricoByFormularioControle(formulario.getFormulario_id(),posvenda.getControleFormulario_id()));
+		
 
 	}
 	
@@ -166,8 +170,17 @@ public class ControleformularioController {
 
 		} else {
 
-			posvenda.setEtapa(this.etapaDao.buscaEtapaById(posvenda.getEtapa().getEtapa_id()));
-			posvenda.setEtapaPendencia(this.etapaDao.buscaEtapaById(posvenda.getEtapaPendencia().getEtapa_id()));
+			if(posvenda.getEtapa().getEtapa_id() != null){
+				posvenda.setEtapa(this.etapaDao.buscaEtapaById(posvenda.getEtapa().getEtapa_id()));
+			} else {
+				posvenda.setEtapa(null);
+			}
+
+			if(posvenda.getEtapaPendencia().getEtapa_id() != null) {
+				posvenda.setEtapaPendencia(this.etapaDao.buscaEtapaById(posvenda.getEtapaPendencia().getEtapa_id()));
+			} else {
+				posvenda.setEtapaPendencia(null);
+			}
 
 			status = posvenda.getEtapa().getNome().equals("reprovado") || 
 					posvenda.getEtapa().getNome().equals("pendente") ? "Recalcular" : "Em Assinatura";
@@ -177,6 +190,9 @@ public class ControleformularioController {
 			posvenda.setIsActive(true);
 			posvenda.setCreatedBy(usuario);
 			posvenda.setCreated(GregorianCalendar.getInstance());
+			
+			
+			System.out.println("AQUI : " + posvenda.getEtapa().getEtapa_id());
 
 			controleFormularioDao.beginTransaction();
 			controleFormularioDao.adiciona(posvenda);

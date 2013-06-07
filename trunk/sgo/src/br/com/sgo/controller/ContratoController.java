@@ -364,6 +364,8 @@ public class ContratoController {
 
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
 
+		contrato.setEtapa(this.etapaDao.buscaEtapaById(contrato.getEtapa().getEtapa_id()));
+
 		if(!(this.contrato.getEtapa().getEtapa_id() == contrato.getEtapa().getEtapa_id())){
 			log.add("Status alterado de : " + this.contrato.getEtapa().getNome() + " para : " + contrato.getEtapa().getNome());
 			this.contrato.setEtapa(contrato.getEtapa() == null ? null : contrato.getEtapa());

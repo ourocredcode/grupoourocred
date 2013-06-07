@@ -3,7 +3,7 @@
 	<script type="text/javascript" src="<c:url value="/js/unicorn.dashboard.js"/>"></script>
 
 	<div id="content-header">
-		<h1>DashBoard - ${usuarioInfo.usuario.nome }</h1>
+		<h1>DashBoard - ${usuarioInfo.usuario.nome } / Equipe : ${usuarioInfo.usuario.supervisorUsuario.nome }</h1>
 		
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
