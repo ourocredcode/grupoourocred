@@ -360,9 +360,6 @@ public class ParceironegocioController {
 			}
 
 		}
-		
-		System.out.println(" 2 localidade id" + localidade.getLocalidade_id());
-		System.out.println(" 2 localidade  == null" + localidade.getLocalidade_id() == null);
 
 		Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
 

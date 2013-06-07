@@ -32,7 +32,7 @@ public class ControleFormularioDao extends Dao<ControleFormulario> {
 								 " CONTROLEFORMULARIO.dataatuacao , CONTROLEFORMULARIO.confirmaprazo, CONTROLEFORMULARIO.quantidadecontrato, " +   
 								 " CONTROLEFORMULARIO.valorliquido, CONTROLEFORMULARIO.valorparcela, " + 
 								 " ETAPA.nome as etapa_nome ,ETAPA.etapa_id  , " +
-								 " MOTIVO.nome as workflowpendencia_nome, MOTIVO.etapa_id as etapapendencia_id " +
+								 " MOTIVO.nome as workflowpendencia_nome, MOTIVO.etapa_id as etapapendencia_id, MOTIVO.nome as etapapendencia_nome " +
 								 " FROM ((((CONTROLEFORMULARIO (NOLOCK) " +      
 								 " INNER JOIN TIPOCONTROLE (NOLOCK) ON CONTROLEFORMULARIO.tipocontrole_id = TIPOCONTROLE.tipocontrole_id) " +       
 								 " INNER JOIN FORMULARIO (NOLOCK) ON CONTROLEFORMULARIO.formulario_id = FORMULARIO.formulario_id) " +       

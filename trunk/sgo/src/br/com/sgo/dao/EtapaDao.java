@@ -387,8 +387,13 @@ public class EtapaDao extends Dao<Etapa> {
 
 		String sql = "SELECT " +
 				"		WORKFLOWTRANSICAO.etapaproximo_id, ETAPA.nome as etapa_nome FROM " +
-				"		(CONTRATO (NOLOCK) INNER JOIN (ETAPA (NOLOCK) INNER JOIN WORKFLOWTRANSICAO (NOLOCK) ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id) " +
-				"		ON CONTRATO.etapa_id = WORKFLOWTRANSICAO.etapa_id) INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id " +
+				"		(CONTRATO (NOLOCK) " +
+				"			INNER JOIN (ETAPA (NOLOCK) " +
+				"			INNER JOIN WORKFLOWTRANSICAO (NOLOCK) " +
+				"					ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id) " +
+				"					ON ( CONTRATO.etapa_id = WORKFLOWTRANSICAO.etapa_id " +
+				"					 AND CONTRATO.workflow_id = WORKFLOWTRANSICAO.workflow_id ) " +
+				"			INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) " +
 				"		WHERE CONTRATO.contrato_id = ? AND PERFIL.perfil_id = ? ";
 
 		this.conn = this.conexao.getConexao();

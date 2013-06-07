@@ -42,6 +42,7 @@ import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.ControleFormulario;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoControleFormulario;
 import br.com.sgo.modelo.Organizacao;
@@ -50,7 +51,9 @@ import br.com.sgo.modelo.ParceiroInfoBanco;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Perfil;
+import br.com.sgo.modelo.TipoControle;
 import br.com.sgo.modelo.Usuario;
+import br.com.sgo.modelo.Workflow;
 
 @Resource
 public class FormularioController {
@@ -85,13 +88,16 @@ public class FormularioController {
 	private Organizacao organizacao;
 	private Usuario usuario;
 	private Perfil perfil;
+	private Workflow workflow;
+	private Collection<Etapa> etapas;
+	private Collection<Etapa> motivos;
 
 	public FormularioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,FormularioDao formularioDao,ContratoDao contratoDao,
 			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,ParceiroInfoBancoDao parceiroInfoBancoDao,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
 			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
-			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao){		
+			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -123,6 +129,7 @@ public class FormularioController {
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
 		this.perfil = usuarioInfo.getPerfil();
+		this.workflow = workflow;
 
 	}
 
@@ -131,7 +138,7 @@ public class FormularioController {
 	public void cadastro(){
 
 		Collection<Banco> bancos = this.bancoDao.buscaBancoByGrupo("Tomadores");
-		Collection<Banco> bancosRecompra = this.bancoDao.buscaBancoByGrupo("Comprados");
+		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoByGrupo("Comprados");
 
 		this.formulario.setEmpresa(usuarioInfo.getEmpresa());
 		this.formulario.setOrganizacao(usuarioInfo.getOrganizacao());
@@ -139,7 +146,7 @@ public class FormularioController {
 		this.formulario.setCreated(Calendar.getInstance());
 
 		result.include("bancos",bancos);
-		result.include("bancosRecompra",bancosRecompra);
+		result.include("recompraBancos",recompraBancos);
 		result.include("contratos",contratos);
 		result.include("formulario",formulario);
 		result.include("parceiroLocalidade",parceiroLocalidade);
@@ -155,9 +162,9 @@ public class FormularioController {
 		formulario = formularioDao.load(id);
 		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario.getFormulario_id()));
 
-		ControleFormulario posvenda = 
-				controleFormularioDao.buscaControleByContratoTipoControle(formulario.getFormulario_id(), 
-						 this.tipoControleDao.buscaTipoControleByNome("Pós Venda").getTipoControle_id());
+		TipoControle tp = this.tipoControleDao.buscaTipoControleByNome("Pós Venda");
+
+		ControleFormulario posvenda = controleFormularioDao.buscaControleByContratoTipoControle(formulario.getFormulario_id(), tp.getTipoControle_id());
 
 		if(posvenda != null) {
 			
@@ -173,9 +180,24 @@ public class FormularioController {
 			historico.setPerfil(perfil);
 			historico.setFormulario(formulario);
 			
+			workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Pós Venda");
+
+			etapas = etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), workflow.getWorkflow_id());
+			posvenda.setWorkflow(workflow);
+
+			workflow = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Motivos Pós Venda");
+
+			motivos = etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), workflow.getWorkflow_id());
+
+			posvenda.setWorkflowPendencia(workflow);
+
+
 			result.include("historico",historico);
 			result.include("historicos",historicos);
-			
+			result.include("posvenda",posvenda);
+			result.include("etapas", etapas);
+			result.include("motivos", motivos);
+
 		}
 
 		result.include("formulario",formulario);
@@ -253,8 +275,8 @@ public class FormularioController {
 		contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
 		contrato.setNumeroBeneficio(this.formulario.getParceiroBeneficio().getNumeroBeneficio());
 
-		//TODO : Alterar o workflow através da tabela PRODUTO BANCO.
-		contrato.setWorkflow(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Contrato"));
+		contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoProdutoBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
+				contrato.getProduto().getProduto_id(), contrato.getBanco().getBanco_id()));
 
 		contrato.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),"Aguardando Status"));
 

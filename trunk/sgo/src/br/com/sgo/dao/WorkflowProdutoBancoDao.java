@@ -12,8 +12,10 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
+import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.Workflow;
 import br.com.sgo.modelo.WorkflowProdutoBanco;
 
@@ -115,7 +117,7 @@ public class WorkflowProdutoBancoDao extends Dao<WorkflowProdutoBanco> {
 		return workflowsProdutoBanco;
 	}
 
-	public WorkflowProdutoBanco buscaWorkflowProdutoBancoByEmpresaOrganizacaoWorkflowPerfil(Long empresa_id, Long organizacao_id, Long produto_id, Long banco_id, Long workflow_id ) {
+	public WorkflowProdutoBanco buscaWorkflowProdutoBancoByEmpresaOrganizacaoProdutoBancoWorkflow(Long empresa_id, Long organizacao_id, Long produto_id, Long banco_id, Long workflow_id ) {
 
 		String sql = sqlWorkflowProdutoBanco;
 
@@ -163,6 +165,52 @@ public class WorkflowProdutoBancoDao extends Dao<WorkflowProdutoBanco> {
 
 		return workflowProdutoBanco;
 	}
+	
+	public WorkflowProdutoBanco buscaWorkflowProdutoBancoByEmpresaOrganizacaoProdutoBanco(Long empresa_id, Long organizacao_id, Long produto_id, Long banco_id) {
+
+		String sql = sqlWorkflowProdutoBanco;
+
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOWPRODUTOBANCO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOWPRODUTOBANCO.organizacao_id = ?";
+		if (produto_id != null)
+			sql += " AND WORKFLOWPRODUTOBANCO.produto_id = ?";
+		if (banco_id != null)
+			sql += " AND WORKFLOWPRODUTOBANCO.banco_id = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		WorkflowProdutoBanco workflowProdutoBanco = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, produto_id);
+			this.stmt.setLong(4, banco_id);
+			
+			this.rsWorkflowProdutoBanco = this.stmt.executeQuery();
+
+			while (rsWorkflowProdutoBanco.next()) {
+
+				workflowProdutoBanco = new WorkflowProdutoBanco();
+
+				Workflow workflow = new Workflow();
+				workflow.setWorkflow_id(rsWorkflowProdutoBanco.getLong("workflow_id"));
+
+				workflowProdutoBanco.setWorkflow(workflow);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsWorkflowProdutoBanco, stmt, conn);
+
+		return workflowProdutoBanco;
+	}
 
 	private void getWorkflowProdutoBanco(Collection<WorkflowProdutoBanco> workflowsProdutoBanco)throws SQLException {
 
@@ -170,6 +218,8 @@ public class WorkflowProdutoBancoDao extends Dao<WorkflowProdutoBanco> {
 		Organizacao organizacao = new Organizacao();
 		Workflow workflow = new Workflow();
 		WorkflowProdutoBanco workflowProdutoBanco = new WorkflowProdutoBanco();
+		Banco banco = new Banco();
+		Produto produto = new Produto();
 		
 		empresa.setEmpresa_id(rsWorkflowProdutoBanco.getLong("empresa_id"));
 		empresa.setNome(rsWorkflowProdutoBanco.getString("empresa_nome"));
@@ -179,10 +229,19 @@ public class WorkflowProdutoBancoDao extends Dao<WorkflowProdutoBanco> {
 
 		workflow.setWorkflow_id(rsWorkflowProdutoBanco.getLong("workflow_id"));
 		workflow.setNome(rsWorkflowProdutoBanco.getString("workflow_nome"));
+		
+		banco.setBanco_id(rsWorkflowProdutoBanco.getLong("banco_id"));
+		banco.setNome(rsWorkflowProdutoBanco.getString("banco_nome"));
+		
+		produto.setProduto_id(rsWorkflowProdutoBanco.getLong("produto_id"));
+		produto.setNome(rsWorkflowProdutoBanco.getString("produto_nome"));
+		
 
 		workflowProdutoBanco.setEmpresa(empresa);
 		workflowProdutoBanco.setOrganizacao(organizacao);
 		workflowProdutoBanco.setWorkflow(workflow);
+		workflowProdutoBanco.setBanco(banco);
+		workflowProdutoBanco.setProduto(produto);
 
 		workflowsProdutoBanco.add(workflowProdutoBanco);
 
