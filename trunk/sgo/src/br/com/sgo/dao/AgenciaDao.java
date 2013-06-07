@@ -81,9 +81,10 @@ public class AgenciaDao extends Dao<Agencia> {
 		return agencia;
 	}
 
-	public Agencia buscaAgenciaByEmOrBaCa(Long empresa_id, Long organizacao_id,
-			Long banco_id, String codigoagencia) {
+	public Agencia buscaAgenciaByEmOrBaCa(Long empresa_id, Long organizacao_id,Long banco_id, String codigoagencia) {
+		
 		String sql = sqlAgencias;
+		
 		if (empresa_id != null)
 			sql += " WHERE AGENCIA.empresa_id = ?";
 		if (organizacao_id != null)
@@ -92,23 +93,36 @@ public class AgenciaDao extends Dao<Agencia> {
 			sql += " AND AGENCIA.banco_id = ?";
 		if (codigoagencia != null)
 			sql += " AND (AGENCIA.codigoagencia like ?)";
+		
 		this.conn = this.conexao.getConexao();
+		
 		Agencia agencia = null;
+		
 		try {
+			
 			this.stmt = conn.prepareStatement(sql);
+			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, banco_id);
 			this.stmt.setString(4, "%" + codigoagencia + "%");
+			
 			this.rsAgencia = this.stmt.executeQuery();
+			
 			while (rsAgencia.next()) {
+				
 				agencia = new Agencia();
 				agencia.setAgencia_id(rsAgencia.getLong("agencia_id"));
 				agencia.setNome(rsAgencia.getString("nome"));
+				
 			}
+			
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+			
 		}
+		
 		this.conexao.closeConnection(rsAgencia, stmt, conn);
 		return agencia;
 	}
