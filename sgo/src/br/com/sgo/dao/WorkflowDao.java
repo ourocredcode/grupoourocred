@@ -345,6 +345,49 @@ public class WorkflowDao extends Dao<Workflow> {
 
 	}
 	
+	public Workflow buscaWorkflowByEmpresaOrganizacaoProdutoBanco(Long empresa_id, Long organizacao_id, Long produto_id, Long banco_id) {
+
+		String sql = " SELECT WORKFLOWPRODUTOBANCO.workflow_id FROM WORKFLOWPRODUTOBANCO ";
+
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOWPRODUTOBANCO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOWPRODUTOBANCO.organizacao_id = ?";
+		if (produto_id != null)
+			sql += " AND WORKFLOWPRODUTOBANCO.produto_id = ?";
+		if (banco_id != null)
+			sql += " AND WORKFLOWPRODUTOBANCO.banco_id = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Workflow workflow = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, produto_id);
+			this.stmt.setLong(4, banco_id);
+			
+			this.rsWorkflow = this.stmt.executeQuery();
+
+			while (rsWorkflow.next()) {
+
+				workflow = new Workflow();
+				workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
+
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsWorkflow, stmt, conn);
+
+		return workflow;
+	}
+	
 	private void getWorkflows(Collection<Workflow> workflows) throws SQLException {
 
 		Workflow workflow = new Workflow();

@@ -195,6 +195,60 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 		return workflowtransicao;
 
 	}
+	
+	public WorkflowTransicao buscaWorkflowTransicaoPorEmpresaOrganizacaoEtapasPerfilWorkFlow(Long empresa_id, Long organizacao_id, Long etapa_id, 
+			Long etapaProximo_id, Long perfil_id, Long workflow_id) {
+
+		String sql = sqlWorkflowTransicao;
+
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOWTRANSICAO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOWTRANSICAO.organizacao_id = ?";
+		if (etapa_id != null)
+			sql += " AND (WORKFLOWTRANSICAO.etapa_id = ?)";
+		if (etapaProximo_id != null)
+			sql += " AND (WORKFLOWTRANSICAO.etapaproximo_id = ?)";
+		if (perfil_id != null)
+			sql += " AND (WORKFLOWTRANSICAO.perfil_id = ?)";
+		if (workflow_id != null)
+			sql += " AND (WORKFLOWTRANSICAO.workflow_id = ?)";
+
+		this.conn = this.conexao.getConexao();
+
+		WorkflowTransicao workflowtransicao = null;
+
+		try {
+			
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, etapa_id);
+			this.stmt.setLong(4, etapaProximo_id);
+			this.stmt.setLong(5, perfil_id);
+			this.stmt.setLong(6, workflow_id);
+
+			this.rsWorkflowTransicao = this.stmt.executeQuery();
+
+			while (rsWorkflowTransicao.next()) {
+
+				workflowtransicao = new WorkflowTransicao();
+				workflowtransicao.setWorkflowTransicao_id(rsWorkflowTransicao.getLong("workflowtransicao_id"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+		
+		this.conexao.closeConnection(rsWorkflowTransicao, stmt, conn);
+		
+		return workflowtransicao;
+
+	}
 
 	public WorkflowTransicao buscaWorkflowTransicaoPorNome(Long empresa, Long organizacao, String nome) {
 

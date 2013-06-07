@@ -30,8 +30,6 @@ public class WorkflowprodutobancoController {
 	private Usuario usuario;
 	private Calendar dataAtual = Calendar.getInstance();
 
-	private WorkflowProdutoBanco workflowProdutoBanco;
-
 	public WorkflowprodutobancoController(Result result, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, WorkflowProdutoBancoDao workflowProdutoBancoDao, BancoDao bancoDao) {
 
 		this.result = result;
@@ -63,15 +61,15 @@ public class WorkflowprodutobancoController {
 
 		try {
 
-			if (this.workflowProdutoBancoDao.buscaWorkflowProdutoBancoByEmpresaOrganizacaoWorkflowPerfil(workflowProdutoBanco.getEmpresa().getEmpresa_id(), workflowProdutoBanco.getOrganizacao().getOrganizacao_id(),
+			if (this.workflowProdutoBancoDao.buscaWorkflowProdutoBancoByEmpresaOrganizacaoProdutoBancoWorkflow(workflowProdutoBanco.getEmpresa().getEmpresa_id(), workflowProdutoBanco.getOrganizacao().getOrganizacao_id(),
 					workflowProdutoBanco.getProduto().getProduto_id(), workflowProdutoBanco.getBanco().getBanco_id(), workflowProdutoBanco.getWorkflow().getWorkflow_id()) == null) {				
-				
-				this.workflowProdutoBanco.setCreated(dataAtual);
-				this.workflowProdutoBanco.setUpdated(dataAtual);
 
-				this.workflowProdutoBanco.setCreatedBy(usuario);
-				this.workflowProdutoBanco.setUpdatedBy(usuario);
-				
+				workflowProdutoBanco.setCreated(dataAtual);
+				workflowProdutoBanco.setUpdated(dataAtual);
+
+				workflowProdutoBanco.setCreatedBy(usuario);
+				workflowProdutoBanco.setUpdatedBy(usuario);
+
 				workflowProdutoBanco.setIsActive(workflowProdutoBanco.getIsActive() == null ? false : true);
 				workflowProdutoBanco.setIsWorkflow(workflowProdutoBanco.getIsWorkflow() == null ? false : true);
 				

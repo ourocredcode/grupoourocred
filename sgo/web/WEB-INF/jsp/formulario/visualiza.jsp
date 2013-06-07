@@ -283,7 +283,76 @@ function mostra(formulario_id){
 											<div class="row-fluid">
 												<div id="divPosVenda">
 													<div class="row-fluid">
-														<div class="span8"></div>
+														<div class="span8">
+
+															<table class="table table-striped table-bordered">
+															<tbody>
+																<tr>
+																	<td>
+																		Quantidade de Contratos
+																	</td>
+																	<td>
+																		<input id="qtContratos" name="posvenda.quantidadeContrato" value="${posvenda.quantidadeContrato}" type="text" class="input-medium" maxlength="20" onblur="verificaValor();" />
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		Valor Parcela confirmado
+																	</td>
+																	<td>
+																		<input id="valorParcela" name="posvenda.valorParcela" value="${posvenda.valorParcela}" type="text" class="input-medium" maxlength="20" onblur="verificaValor();"/>
+																	</td>
+																</tr>
+																	<tr>
+																	<td>
+																		Prazo confirmado:
+																	</td>
+																	<td>
+																		<select id="prazo" name="posvenda.confirmaPrazo" class="input-medium">
+																			<option value="1" <c:if test="${posvenda.confirmaPrazo}">selected</c:if>>Confirma</option>
+																			<option value="0" <c:if test="${!posvenda.confirmaPrazo}">selected</c:if>>Não Confirma</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		Valor Líquido confirmado:
+																	</td>
+																	<td>
+																		<input id="valorLiquido" name="posvenda.valorLiquido" value="${posvenda.valorLiquido}" type="text" class="input-medium" maxlength="20" onblur="verificaValor();" />
+																		
+																	</td>
+																</tr>	
+																<tr>
+																	<td>
+																		Status:
+																	</td>
+																	<td>
+																		<select id="status" name="posvenda.etapa.etapa_id" class="input-medium">
+																			<option value="">Selecione</option>
+																			<c:forEach var="etapa" items="${etapas }">
+																				<option value="${etapa.etapa_id }" <c:if test="${posvenda.etapa.etapa_id == etapa.etapa_id}">selected="selected"</c:if>>${etapa.nome }</option>
+																			</c:forEach>
+																		</select>
+																	</td>
+																</tr>
+																<tr>	
+																	<td>
+																		Motivo :
+																	</td>
+																	<td>
+																		<select id="motivo" name="posvenda.etapaPendencia.etapa_id" class="input-medium">
+																			<option value="">Selecione</option>
+																			<c:forEach var="motivo" items="${motivos }">
+																				<option value="${motivo.etapa_id }" <c:if test="${posvenda.etapaPendencia.etapa_id == motivo.etapa_id}">selected</c:if>>${motivo.nome }</option>
+																			</c:forEach>
+																		</select>
+																	</td>
+																</tr>	
+															</tbody>
+															</table>
+
+														</div>
 														<div class="span4">
 															<table class="table table-striped table-bordered">
 																<thead>
@@ -352,15 +421,22 @@ function mostra(formulario_id){
 				</div>
 
 				<div class="row-fluid">
+
 					<div class="span1" style="float: left;">
 						<input value="Voltar" type="button" class="btn" onclick="javascript:window.location='/sgo/menu/inicio/${usuarioInfo.perfil.chave}'">
 					</div>
-					<div class="span1" style="float: left;">
-						<input value="Imprimir" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/impressao/${formulario.formulario_id}'">
-					</div>
-					<div class="span1" style="float: left;">	
-						<input value="Pós Venda" type="button" class="btn" onclick="mostra('${formulario.formulario_id}');">
-					</div>
+
+					<c:if test="${posvenda.etapa.nome == 'Aprovado pela Análise' }">
+						<div class="span1" style="float: left;">
+							<input value="Imprimir" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/impressao/${formulario.formulario_id}'">
+						</div>
+					</c:if>
+
+					<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
+						<div class="span1" style="float: left;">	
+							<input value="Pós Venda" type="button" class="btn" onclick="mostra('${formulario.formulario_id}');">
+						</div>
+					</c:if>
 				</div>
 
 			</div>

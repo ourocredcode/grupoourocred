@@ -255,17 +255,17 @@ function limpaForm(){
 				<table class="table table-striped table-bordered" id="lista">
 					<thead>
 						<tr>
-							<th>Empresa</th>
-							<th>Organização</th>
-							<th>Nome</th>								
+							<th>Banco</th>
+							<th>Produto</th>
+							<th>Workflow</th>								
 						</tr>
 					</thead>
 					<tbody>	
-						<c:forEach items="${workflowProdutoBancos }" var="workflowProdutoBanco">
+						<c:forEach items="${workflowsProdutoBanco }" var="workflowProdutoBanco">
 							<tr>
-								<td>${workflowProdutoBanco.empresa.nome }</td>
-								<td>${workflowProdutoBanco.organizacao.nome }</td>
-								<td>${workflowProdutoBanco.nome }</td>									
+								<td>${workflowProdutoBanco.banco.nome }</td>
+								<td>${workflowProdutoBanco.produto.nome }</td>
+								<td>${workflowProdutoBanco.workflow.nome }</td>									
 							</tr>
 						</c:forEach>
 					</tbody>
