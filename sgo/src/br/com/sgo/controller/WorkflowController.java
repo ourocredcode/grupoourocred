@@ -10,8 +10,10 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
 
 @Resource
@@ -21,23 +23,26 @@ public class WorkflowController {
 	private final UsuarioInfo usuarioInfo;
 	private final TipoWorkflowDao tipoWorkflowDao;
 	private final WorkflowDao workflowDao;
-	
-	
-	private Workflow workflow;	
+
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
+
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public WorkflowController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao,Workflow workflow) {
+	public WorkflowController(Result result, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.workflowDao = workflowDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
-		this.workflow = workflow;
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
 
 	}
 
 	@Get
-	@Public
 	@Path("/workflow/cadastro")
 	public void cadastro() {
 
@@ -47,7 +52,6 @@ public class WorkflowController {
 	}
 
 	@Post
-	@Public
 	@Path("/workflow/salva")
 	public void salva(Workflow workflow) {
 
@@ -55,14 +59,14 @@ public class WorkflowController {
 
 		try {
 
-			if (this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(workflow.getEmpresa().getEmpresa_id(),workflow.getOrganizacao().getOrganizacao_id(),
+			if (this.workflowDao.buscaWorkflowPorEmpresaOrganizacaoTipoworflowNome(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
 					workflow.getTipoWorkflow().getTipoWorkflow_id(), workflow.getNome()) == null) {				
 				
-				this.workflow.setCreated(dataAtual);
-				this.workflow.setUpdated(dataAtual);
+				workflow.setCreated(dataAtual);
+				workflow.setUpdated(dataAtual);
 
-				this.workflow.setCreatedBy(usuarioInfo.getUsuario());
-				this.workflow.setUpdatedBy(usuarioInfo.getUsuario());
+				workflow.setCreatedBy(usuario);
+				workflow.setUpdatedBy(usuario);
 				
 				workflow.setIsActive(workflow.getIsActive() == null ? false : true);
 				
@@ -80,7 +84,7 @@ public class WorkflowController {
 
 			mensagem = "Erro: Falha ao adicionar o workflow " + workflow.getNome() + ".";
 
-		}finally{
+		} finally{
 
 			this.workflowDao.clear();
 			this.workflowDao.close();
@@ -94,16 +98,18 @@ public class WorkflowController {
 
 	@Get
 	@Path("/workflow/busca.json")
-	@Public
-	public void workflow(Long empresa_id, Long organizacao_id, String nome) {	
+	public void workflow(Long empresa_id, Long organizacao_id, String nome) {
+
 		result.use(Results.json()).withoutRoot().from(workflowDao.buscaWorkflowsPorNome(empresa_id, organizacao_id, nome)).serialize();
+
 	}
 	
 	@Post
 	@Path("/workflow/lista")
-	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
+
 		result.include("workflows", this.workflowDao.buscaWorkflowsPorNome(empresa_id, organizacao_id, nome));
+
 	}
 
 	@Get

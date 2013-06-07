@@ -1,93 +1,101 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.UsuarioDao;
-import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Perfil;
 
 @Resource
 public class PerfilController {
 
-	private final Result result;
-	private final Validator validator;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
+	private final Result result;	
 	private final PerfilDao perfilDao;
-	private final UsuarioDao usuarioDao;
-
-	public PerfilController(Result result,Validator validator, PerfilDao perfilDao, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, UsuarioDao usuarioDao){
+	private final UsuarioInfo usuarioInfo;
+	
+	public PerfilController(Result result, PerfilDao perfilDao, UsuarioInfo usuarioInfo, UsuarioDao usuarioDao){
 
 		this.result = result;
-		this.validator = validator;
 		this.perfilDao = perfilDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;		
-		this.usuarioDao = usuarioDao;
+		this.usuarioInfo = usuarioInfo;
 
 	}
 	
 	@Get
-	@Public
 	@Path("/perfil/cadastro")
 	public void cadastro(){
+		
+		result.include("perfis", this.perfilDao.buscaPerfisByEmpOrg(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 		
 	}
 
 	@Post
-	@Public
 	@Path("/perfil/salva")
 	public void salva(Perfil perfil){
 
-		validator.validate(perfil);
-		validator.onErrorUsePageOf(this).cadastro();
+		Calendar dataAtual = Calendar.getInstance();
 
 		String mensagem = "";
 
 		try {
 
-			perfil.setEmpresa(this.empresaDao.load(perfil.getEmpresa().getEmpresa_id()));		
-			perfil.setOrganizacao(this.organizacaoDao.load(perfil.getOrganizacao().getOrganizacao_id()));
-			perfil.setUsuario(this.usuarioDao.load(perfil.getUsuario().getUsuario_id()));
-			perfil.setIsActive(perfil.getIsActive() == null ? false : true);
+			if (this.perfilDao.buscaPerfilByOrgEmpNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), perfil.getNome()) == null) {				
+				
+				perfil.setCreated(dataAtual);
+				perfil.setUpdated(dataAtual);
 
-			this.perfilDao.beginTransaction();
-			this.perfilDao.adiciona(perfil);
-			this.perfilDao.commit();		
+				perfil.setCreatedBy(usuarioInfo.getUsuario());
+				perfil.setUpdatedBy(usuarioInfo.getUsuario());
 
-			mensagem = "Perfil " + perfil.getNome() + " adicionado com sucesso";			
-			
-		} catch(Exception e) {
+				perfil.setSupervisorUsuario(perfil.getSupervisorUsuario().getUsuario_id() == null ? null : perfil.getSupervisorUsuario());
 
-			this.perfilDao.rollback();
+				perfil.setIsActive(perfil.getIsActive() == null ? false : true);
 
-			if (e.getCause().toString().indexOf("IX_PERFIL_EMPORGNOME") != -1){
-				mensagem = "Erro: Perfil " + perfil.getNome() + " já existente.";
+				this.perfilDao.beginTransaction();
+				this.perfilDao.adiciona(perfil);
+				this.perfilDao.commit();		
+
+				mensagem = "Perfil adicionado com sucesso.";
+				
 			} else {
-				mensagem = "Erro ao adicionar Perfil:";
-			}
+
+				mensagem = "Erro: Perfil já cadastrado.";
+
+			} 
+
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			System.out.println(e);
+			System.out.println(e.getMessage());
+			System.out.println(e.getCause());
+			
+			mensagem = "Erro: Falha ao adicionar o Perfil.";
+
+		} finally{
+
+			this.perfilDao.clear();
+			this.perfilDao.close();
 
 		}
 
-		this.perfilDao.clear();
-		this.perfilDao.close();
-		result.include("notice",mensagem);
+		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
-
 	}
-	
-	@Get @Path("/perfil/busca.json")
-	@Public
+
+	@Get 
+	@Path("/perfil/busca.json")
 	public void perfis(Long empresa_id, Long organizacao_id, String nome){
+
 		result.use(Results.json()).withoutRoot().from(perfilDao.buscaPerfis(empresa_id, organizacao_id, nome)).serialize();
+
 	}
 
 }

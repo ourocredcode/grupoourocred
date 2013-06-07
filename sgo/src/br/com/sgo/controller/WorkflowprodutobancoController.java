@@ -11,6 +11,9 @@ import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowProdutoBancoDao;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.WorkflowProdutoBanco;
 
 @Resource
@@ -21,17 +24,24 @@ public class WorkflowprodutobancoController {
 	private final WorkflowProdutoBancoDao workflowProdutoBancoDao;
 	private final WorkflowDao workflowDao;
 	private final BancoDao bancoDao;
-	
-	private WorkflowProdutoBanco workflowProdutoBanco;	
+
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public WorkflowprodutobancoController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, WorkflowProdutoBancoDao workflowProdutoBancoDao, BancoDao bancoDao) {
+	private WorkflowProdutoBanco workflowProdutoBanco;
+
+	public WorkflowprodutobancoController(Result result, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, WorkflowProdutoBancoDao workflowProdutoBancoDao, BancoDao bancoDao) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.workflowDao = workflowDao;
 		this.workflowProdutoBancoDao = workflowProdutoBancoDao;
 		this.bancoDao = bancoDao;
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
 
 	}
 
@@ -39,8 +49,8 @@ public class WorkflowprodutobancoController {
 	@Path("/workflowprodutobanco/cadastro")
 	public void cadastro() {
 
-		result.include("workflowsProdutoBanco", this.workflowProdutoBancoDao.buscaAllWorkflowProdutoBancoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
-		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+		result.include("workflowsProdutoBanco", this.workflowProdutoBancoDao.buscaAllWorkflowProdutoBancoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("bancos", this.bancoDao.buscaAllBancos());
 
 	}
@@ -59,8 +69,8 @@ public class WorkflowprodutobancoController {
 				this.workflowProdutoBanco.setCreated(dataAtual);
 				this.workflowProdutoBanco.setUpdated(dataAtual);
 
-				this.workflowProdutoBanco.setCreatedBy(usuarioInfo.getUsuario());
-				this.workflowProdutoBanco.setUpdatedBy(usuarioInfo.getUsuario());
+				this.workflowProdutoBanco.setCreatedBy(usuario);
+				this.workflowProdutoBanco.setUpdatedBy(usuario);
 				
 				workflowProdutoBanco.setIsActive(workflowProdutoBanco.getIsActive() == null ? false : true);
 				workflowProdutoBanco.setIsWorkflow(workflowProdutoBanco.getIsWorkflow() == null ? false : true);
@@ -94,7 +104,9 @@ public class WorkflowprodutobancoController {
 	@Post
 	@Path("/workflowprodutobanco/lista")
 	public void lista(Long empresa_id, Long organizacao_id) {
-		result.include("workflowsProdutoBanco", this.workflowProdutoBancoDao.buscaAllWorkflowProdutoBancoByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
+
+		result.include("workflowsProdutoBanco", this.workflowProdutoBancoDao.buscaAllWorkflowProdutoBancoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+
 	}
 
 	@Get

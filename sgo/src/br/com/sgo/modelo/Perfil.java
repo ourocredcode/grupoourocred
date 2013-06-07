@@ -35,8 +35,8 @@ public class Perfil implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "supervisor_perfil_id", updatable = true, nullable = true)
-	private Usuario usuario;
+	@JoinColumn(name = "supervisor_usuario_id", updatable = true, nullable = true)
+	private Usuario supervisorUsuario;
 
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
@@ -64,44 +64,12 @@ public class Perfil implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public String getChave() {
-		return chave;
-	}
-
-	public void setChave(String chave) {
-		this.chave = chave;
-	}
-
 	public Long getPerfil_id() {
 		return perfil_id;
 	}
 
 	public void setPerfil_id(Long perfil_id) {
 		this.perfil_id = perfil_id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public Empresa getEmpresa() {
@@ -118,6 +86,14 @@ public class Perfil implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
+	}
+
+	public Usuario getSupervisorUsuario() {
+		return supervisorUsuario;
+	}
+
+	public void setSupervisorUsuario(Usuario supervisorUsuario) {
+		this.supervisorUsuario = supervisorUsuario;
 	}
 
 	public Usuario getCreatedBy() {
@@ -152,11 +128,35 @@ public class Perfil implements Serializable {
 		this.updated = updated;
 	}
 
+	public String getChave() {
+		return chave;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
 	public String getDescricao() {
 		return descricao;
 	}
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 }
