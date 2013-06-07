@@ -71,12 +71,7 @@ public class PerfilController {
 			} 
 
 		} catch (Exception e) {
-			
-			e.printStackTrace();
-			System.out.println(e);
-			System.out.println(e.getMessage());
-			System.out.println(e.getCause());
-			
+		
 			mensagem = "Erro: Falha ao adicionar o Perfil.";
 
 		} finally{
@@ -92,9 +87,9 @@ public class PerfilController {
 
 	@Get 
 	@Path("/perfil/busca.json")
-	public void perfis(Long empresa_id, Long organizacao_id, String nome){
+	public void perfil(String nome){
 
-		result.use(Results.json()).withoutRoot().from(perfilDao.buscaPerfis(empresa_id, organizacao_id, nome)).serialize();
+		result.use(Results.json()).withoutRoot().from(perfilDao.buscaAllPerfisByNome(nome)).serialize();
 
 	}
 

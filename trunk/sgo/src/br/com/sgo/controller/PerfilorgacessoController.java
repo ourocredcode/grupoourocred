@@ -10,24 +10,27 @@ import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.PerfilOrgAcessoDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.PerfilOrgAcesso;
 
 @Resource
 public class PerfilorgacessoController {
 
 	private final Result result;
+	private final UsuarioInfo usuarioInfo;
 	private final EmpresaDao empresaDao;
 	private final OrganizacaoDao organizacaoDao;	
 	private final PerfilDao perfilDao;
 	private final PerfilOrgAcessoDao perfilOrgAcessoDao;
 
-	public PerfilorgacessoController(Result result, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, PerfilDao perfilDao, PerfilOrgAcessoDao perfilOrgAcessoDao){
+	public PerfilorgacessoController(Result result, UsuarioInfo usuarioInfo, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, PerfilDao perfilDao, PerfilOrgAcessoDao perfilOrgAcessoDao){
 
+		this.result = result;
+		this.usuarioInfo = usuarioInfo;
 		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;		
+		this.organizacaoDao = organizacaoDao;
 		this.perfilDao = perfilDao;
 		this.perfilOrgAcessoDao = perfilOrgAcessoDao;
-		this.result = result;
 
 	}
 	
@@ -35,6 +38,8 @@ public class PerfilorgacessoController {
 	@Public
 	@Path("/perfilorgacesso/cadastro")
 	public void cadastro() {
+		
+		result.include("perfisOrgAcesso", this.perfilOrgAcessoDao.buscaAllPerfilOrgAcessoByEmpOrg(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 
 	}
 

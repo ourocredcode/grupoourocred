@@ -167,6 +167,8 @@ jQuery(function($){
 			document.usuarioForm.usuarioIsActive.value=false;
 		}
 	});
+	
+	$("#usuarioForm").validate();
 
 });
 
@@ -176,27 +178,43 @@ function limpaForm(){
 	}	
 }
 
-
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Usuário</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+	<h1>Cadastro Usuário</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
+</div>
+
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Usuário</a>
+</div>
 	
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
-		<a href="#" class="current">Usuário</a>
-	</div>
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="active" id="usuario-li"><a href="#usuario-div" data-toggle="tab" id="usuario-li-a">Usuário</a></li>
@@ -206,82 +224,60 @@ function limpaForm(){
 
 			<div id="myTabContent" class="tab-content">
 
-				<div class="tab-pane fade active in" id="usuario-div">					
-
+				<div class="tab-pane fade active in" id="usuario-div">
 					<form id="usuarioForm" name="usuarioForm" action="<c:url value="/usuario/salva"/>" method="POST">
-						<div class="control-group">
-							<label class="control-label" for="usuarioEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="usuarioEmpresa" name="usuario.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="usuarioEmpresaId" name="usuario.empresa.empresa_id" type="hidden">
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="usuarioEmpresa">Empresa</label>
+	      						<input class="input-xlarge" id="usuarioEmpresa" name="usuario.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" readonly="readonly">
+	      						<input class="span1" id="usuarioEmpresaId" name="usuario.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+	    					</div>						
+							<div class="span3">
+								<label for="usuarioOrganizacao">Organização</label>
+	      						<input class="input-xlarge" id="usuarioOrganizacao" name="usuario.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" readonly="readonly">
+	      						<input class="span1" id="usuarioOrganizacaoId" name="usuario.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 	    					</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="usuarioOrganizacao" name="usuario.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="usuarioOrganizacaoId" name="usuario.organizacao.organizacao_id" type="hidden">
-	    					</div>
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="usuarioParceiroNegocio">Perceiro de Negócios</label>
+	      						<input class="input-medium" id="usuarioParceiroNegocio" name="usuario.parceiroNegocio.nome" type="text" required>
+	      						<input class="span1" id="usuarioParceiroNegocioId" name="usuario.parceiroNegocio.parceiroNegocio_id" type="hidden">
+							</div>
+							<div class="span2">
+								<label for="usuarioSupervisorUsuario">Supervisor Usuário</label>
+	      						<input class="input-medium" id="usuarioSupervisorUsuario" name="usuario.usuario.nome" type="text" required>
+	      						<input class="span1" id="usuarioSupervisorUsuarioId" name="usuario.usuario.usuario_id" type="hidden" required>	    				
+							</div>
+							
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioParceiroNegocio">Perceiro de Negócios</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="usuarioParceiroNegocio" name="usuario.parceiroNegocio.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="usuarioParceiroNegocioId" name="usuario.parceiroNegocio.parceiroNegocio_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioSupervisorUsuario">Supervisor Usuário</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="usuarioSupervisorUsuario" name="usuario.usuario.nome" type="text" onChange="limpaForm();">
-	      						<input class="span10" id="usuarioSupervisorUsuarioId" name="usuario.usuario.usuario_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioChave">Login</label>
-							<div class="controls">
-								<input type="text" id="usuarioChave" name="usuario.chave" placeholder="Login" required>
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="usuarioNome">Nome</label>
+								<input class="input-xlarge" type="text" id="usuarioNome" name="usuario.nome" placeholder="Nome" required readonly="readonly">
+							</div>
+							<div class="span2">
+								<label for="usuarioEmail">Email</label>
+								<input class="input-xlarge" type="text" id="usuarioEmail" name="usuario.email" placeholder="E-mail" required>
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioNome">Nome</label>
-							<div class="controls">
-								<input type="text" id="usuarioNome" name="usuario.nome" placeholder="Nome" required readonly="readonly">
+						<div class="row-fluid">							
+							<div class="span2">
+								<label for="usuarioTelefone">Telefone</label>
+								<input class="input-medium" type="text" id="usuarioTelefone" name="usuario.telefone" placeholder="Telefone" required>
 							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioDescricao">Descrição</label>
-							<div class="controls">
-								<input type="text" id="usuarioDescricao" name="usuario.descricao" placeholder="Descricao">
+							<div class="span2">
+								<label for="usuarioSenha">Senha</label>
+								<input class="input-medium" type="password" id="usuarioSenha" name="usuario.senha" placeholder="Senha" required>
 							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioSenha">Senha</label>
-							<div class="controls">
-								<input type="password" id="usuarioSenha" name="usuario.senha" placeholder="Senha" required>
+							<div class="span2">
+								<label for="usuarioChave">Login</label>
+								<input class="input-medium" id="usuarioChave" name="usuario.chave" placeholder="Login" type="text" required>
 							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioEmail">Email</label>
-							<div class="controls">
-								<input type="text" id="usuarioEmail" name="usuario.email" placeholder="E-mail" required>
+							<div class="span1">
+								<label for="usuarioIsActive">Ativo</label>							
+								<input class="span1" type="checkbox" id="usuarioIsActive" name="usuario.isActive" checked="checked" value="${usuario.isActive }" >
 							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioTelefone">Telefone</label>
-							<div class="controls">
-								<input type="text" id="usuarioTelefone" name="usuario.telefone" placeholder="Telefone" required>
-							</div>
-						</div>
-							<div class="control-group">
-							<label class="control-label" for="usuarioIsActive">Ativo</label>
-							<div class="controls">
-								<input type="checkbox" id="usuarioIsActive" name="usuario.isActive" checked="checked" value="${usuario.isActive }" >							
-							</div>							
 						</div>
 						<div class="btn-toolbar">
 							<div class="btn-group">
@@ -294,21 +290,14 @@ function limpaForm(){
 								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 							</div>
 						</div>
-
 					</form>
-
 				</div>
 
-				<div class="tab-pane fade" id="usuarioperfil-div">					
-
-				</div>
-
-				<div class="tab-pane fade" id="usuarioorgacesso-div">
-
-				</div>
+				<div class="tab-pane fade" id="usuarioperfil-div"></div>
+				<div class="tab-pane fade" id="usuarioorgacesso-div"></div>
 
 			</div>
-		</div>
+		</div>		
 	</div>
 </div>
 

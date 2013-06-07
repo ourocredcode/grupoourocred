@@ -106,8 +106,9 @@ jQuery(function($){
          }
     });
 	
-	$('#perfilOrgAcessoPerfil').autocomplete({
+	$('#perfilOrgAcessoPerfil').autocomplete({		
 		source: function( request, response ) {
+
 	        $.ajax({
 	          url: "<c:url value='/perfil/busca.json' />",
 	          dataType: "json",
@@ -154,7 +155,7 @@ jQuery(function($){
 	});
 
 	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/perfilorgacessoz/cadastro" />';
+		window.location.href = '<c:url value="/perfilorgacesso/cadastro" />';
 	});
 
 });
@@ -170,24 +171,41 @@ function limpaForm(){
 
 </script>
 
-	<div id="content-header">
-		<h1>Cadastro Perfil</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+<div id="content-header">
+	<h1>Cadastro Perfil</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
-	
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current">Perfil</a>
-	</div>
+</div>
+
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+	<a href="#" class="current">Perfil</a>
+</div>
+
+<c:if test="${not empty notice}">
+		<c:choose>
+			<c:when test="${fn:contains(notice,'Erro:')}">
+					<div class="alert alert-error">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:when>
+			<c:otherwise>
+					<div class="alert alert-success">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
 
 <div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="perfil-li"><a href="#perfil-div" data-toggle="tab" id="perfil-li-a">Perfil</a></li>
@@ -203,43 +221,32 @@ function limpaForm(){
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
-				
-				<div class="tab-pane fade" id="perfil-div">					
 
-				</div>
+				<div class="tab-pane fade" id="perfil-div"></div>
 				
-				<div class="tab-pane fade active in" id="perfilorgacesso-div">
-					<form id="perfilOrgAcessoForm" name="perfilOrgAcessoForm" action="<c:url value="/perfilorgacesso/salva"/>" method="POST">
+				<div class="tab-pane fade active in" id="perfilorgacesso-div">				
 						
-						<div class="control-group">
-							<label class="control-label" for="perfilOrgAcessoEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="perfilOrgAcessoEmpresa" name="perfilOrgAcesso.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="perfilOrgAcessoEmpresaId" name="perfilOrgAcesso.empresa.empresa_id" type="hidden">
+					<form id="perfilOrgAcessoForm" name="perfilOrgAcessoForm" action="<c:url value="/perfilorgacesso/salva"/>" method="POST">
+						<div class="row-fluid">
+							<div class="span3">								
+								<label for="perfilOrgAcessoEmpresa">Empresa</label>							
+	      						<input class="input-xlarge" id="perfilOrgAcessoEmpresa" name="perfilOrgAcesso.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required readonly="readonly">
+	      						<input class="span1" id="perfilOrgAcessoEmpresaId" name="perfilOrgAcesso.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    					
+							</div>
+							<div class="span3">
+								<label for="perfilOrgAcessoOrganizacao">Organização</label>
+	      						<input class="input-xlarge" id="perfilOrgAcessoOrganizacao" name="perfilOrgAcesso.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required >
+	      						<input class="span1" id="perfilOrgAcessoOrganizacaoId" name="perfilOrgAcesso.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+							</div>
+							<div class="span2">
+								<label for="perfilOrgAcessoPerfil">Perfil</label>								
+	      						<input class="input-medium" id="perfilOrgAcessoPerfil" name="perfilOrgAcesso.perfil.nome" type="text" required value="${perfilOrgAcesso.perfil.nome }" >
+	      						<input class="span1" id="perfilOrgAcessoPerfilId" name="perfilOrgAcesso.perfil.perfil_id" value="${perfilOrgAcesso.perfil.perfil_id }" type="hidden">
 	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="perfilOrgAcessoOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="perfilOrgAcessoOrganizacao" name="perfilOrgAcesso.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="perfilOrgAcessoOrganizacaoId" name="perfilOrgAcesso.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="perfilOrgAcessoPerfil">Perfil</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="perfilOrgAcessoPerfil" name="perfilOrgAcesso.perfil.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="perfilOrgAcessoPerfilId" name="perfilOrgAcesso.perfil.perfil_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="perfilOrgAcessoIsActive">Ativo</label>
-							<div class="controls">
-								<input type="checkbox" id="perfilOrgAcessoIsActive" name="perfilOrgAcesso.isActive" checked="checked" value="1">							
-							</div>							
+							<div class="span1">
+								<label  for="perfilOrgAcessoIsActive">Ativo</label>
+								<input type="checkbox" id="perfilOrgAcessoIsActive" name="perfilOrgAcesso.isActive" checked="checked" value="1">
+							</div>
 						</div>
 						<div class="btn-toolbar">
 							<div class="btn-group">
@@ -252,39 +259,37 @@ function limpaForm(){
 								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 							</div>
 						</div>
-
 					</form>
-
-				</div>
-			
-				<div class="tab-pane fade" id="janela-div">					
-
-				</div>
-				
-				<div class="tab-pane fade" id="perfiljanelaacesso-div">
-					
 				</div>
 
-				<div class="tab-pane fade" id="formulariosjanela-div">
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th>Empresa</th>
+							<th>Organização</th>
+							<th>Perfil</th>
+						</tr>
+					</thead>
+					<tbody>	
+						<c:forEach items="${perfisOrgAcesso }" var="perfilOrgAcesso">
+							<tr>
+								<td>${perfilOrgAcesso.empresa.nome }</td>
+								<td>${perfilOrgAcesso.organizacao.nome }</td>
+								<td>${perfilOrgAcesso.perfil.nome }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
 
-				</div>
+				<div class="tab-pane fade" id="janela-div"></div>				
+				<div class="tab-pane fade" id="perfiljanelaacesso-div"></div>
+				<div class="tab-pane fade" id="formulariosjanela-div"></div>
+				<div class="tab-pane fade" id="campoformulario-div"></div>
+				<div class="tab-pane fade" id="tabelabd-div"></div>
+				<div class="tab-pane fade" id="colunabd-div"></div>
+				<div class="tab-pane fade" id="elementobd-div"></div>
+				<div class="tab-pane fade" id="tipodadobd-div"></div>
 
-				<div class="tab-pane fade" id="campoformulario-div">
-
-				</div>
-
-				<div class="tab-pane fade" id="tabelabd-div">
-
-				</div>
-				<div class="tab-pane fade" id="colunabd-div">
-
-				</div>
-				<div class="tab-pane fade" id="elementobd-div">
-
-				</div>
-				<div class="tab-pane fade" id="tipodadobd-div">
-
-				</div>
 			</div>
 		</div>
 	</div>

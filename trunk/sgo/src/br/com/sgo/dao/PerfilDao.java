@@ -76,7 +76,44 @@ public class PerfilDao extends Dao<Perfil> {
 		return perfis;
 
 	}
-	
+
+	public Collection<Perfil> buscaAllPerfisByNome(String nome) {
+
+		String sql = sqlPerfis;
+		
+		if (nome != null)
+			sql += " WHERE PERFIL.nome like ? ORDER BY PERFIL.nome ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Perfil> perfis = new ArrayList<Perfil>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1, "%" + nome + "%");
+
+			this.rsPerfil = this.stmt.executeQuery();
+
+			while (rsPerfil.next()) {
+
+				getPerfil(perfis);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsPerfil, stmt, conn);
+
+		return perfis;
+
+	}
+
 	public Collection<Perfil> buscaPerfisByEmpOrg(Long empresa_id, Long organizacao_id) {
 
 		String sql = "SELECT PERFIL.perfil_id, PERFIL.nome AS perfil_nome, PERFIL.isactive, "+
@@ -206,14 +243,14 @@ public class PerfilDao extends Dao<Perfil> {
 
 	public Collection<Perfil> buscaPerfis(Long empresa_id, Long organizacao_id, String nome) {
 
-		String sql = sqlPerfil;
+		String sql = sqlPerfis;
 		
 		if (empresa_id != null)
 			sql += " WHERE PERFIL.empresa_id = ? ";		
 		if (organizacao_id != null)
 			sql += " AND PERFIL.organizacao_id = ?";
 		if (nome != null)
-			sql += " AND PERFIL.nome = ?";
+			sql += " AND PERFIL.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -231,7 +268,12 @@ public class PerfilDao extends Dao<Perfil> {
 
 			while (rsPerfil.next()) {
 
-				getPerfil(perfis);
+				Perfil perfil = new Perfil();
+
+				perfil.setPerfil_id(rsPerfil.getLong("perfil_id"));
+				perfil.setNome(rsPerfil.getString("perfil_nome"));
+				
+				perfis.add(perfil);
 
 			}
 
