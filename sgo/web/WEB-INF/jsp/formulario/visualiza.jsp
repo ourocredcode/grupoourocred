@@ -241,7 +241,7 @@ function mostra(formulario_id){
 										</c:if>
 									</td>
 									<td>
-										<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.workflowEtapa.nome }</a>
+										<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
 									</td>
 								</tr>
 							</c:forEach>
@@ -261,70 +261,89 @@ function mostra(formulario_id){
 									<h5>Pós Venda</h5>
 								</div>
 								<div class="widget-content padding">
-									<div class="row-fluid">
+									
+									<c:if test="${empty posvenda }">
 										
-										<div id="divPosVenda">
 											<div class="row-fluid">
-												<div class="span8"></div>
-												<div class="span4">
-													
-													<table class="table table-striped table-bordered">
-														<thead>
-															<tr>
-																<th>Data</th>
-																<th>Responsável</th>
-																<th>Observação</th>
-															</tr>
-														</thead>
-														<tbody>
-															<c:forEach items="${historicos }" var="historico">
-															<tr>
-																<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${historico.created.time }" /></td>
-																<td>${historico.createdBy.nome }</td>
-																<td>${historico.observacao }</td>
-															</tr>
-															</c:forEach>
-														</tbody>
-													</table>
-												
+												<div id="divPosVenda">
+													<div class="row-fluid">
+														<div class="span8">
+														
+															Não realizado
+														
+														</div>
+													</div>
+												</div>
+											</div>			
+
+									</c:if>
+									
+									<c:if test="${not empty posvenda }">
+											
+											<div class="row-fluid">
+												<div id="divPosVenda">
+													<div class="row-fluid">
+														<div class="span8"></div>
+														<div class="span4">
+															<table class="table table-striped table-bordered">
+																<thead>
+																	<tr>
+																		<th>Data</th>
+																		<th>Responsável</th>
+																		<th>Observação</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<c:forEach items="${historicos }" var="historico">
+																	<tr>
+																		<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${historico.created.time }" /></td>
+																		<td>${historico.createdBy.nome }</td>
+																		<td>${historico.observacao }</td>
+																	</tr>
+																	</c:forEach>
+																</tbody>
+															</table>
+														</div>
+													</div>
 												</div>
 											</div>
+		
+											<div class="row-fluid">
+												<div style="float: left;clear: both;">
+													
+													
+													<form id="posvendahistoricoform" name="posvendahistoricoform" action="<c:url value="/controleformulario/incluiComunicacao" />" method="post">
+													
+													<input type="hidden" id="historico.controleFormulario.controleFormulario_id" name="historico.controleFormulario.controleFormulario_id" value="${historico.controleFormulario.controleFormulario_id }" />
+													<input type="hidden" id="historico.formulario.formulario_id" name="historico.formulario.formulario_id" value="${historico.formulario.formulario_id }" />
+													<input type="hidden" id="historico.createdBy.usuario_id" name="historico.createdBy.usuario_id" value="${historico.createdBy.usuario_id }" />
+													<input type="hidden" id="historico.empresa.empresa_id" name="historico.empresa.empresa_id" value="${historico.empresa.empresa_id }" />	
+													<input type="hidden" id="historico.organizacao.organizacao_id" name="historico.organizacao.organizacao_id" value="${historico.organizacao.organizacao_id }" />
+													<input type="hidden" id="historico.perfil.perfil_id " name="historico.perfil.perfil_id" value="${historico.perfil.perfil_id }" />	
+													
+														<table id="myform" style="width: 650px;display: left;">
+															<tr>
+																<th style="text-align: right;">Incluir observação:</th>
+																<td> <textarea id="historico.observacao" name="historico.observacao" rows="3" cols="55" maxlength="190"><c:out value="${historico.observacao}" /></textarea></td>
+															</tr>
+															<tr>
+																<td class="btt">
+																	
+																</td>
+																<td class="btt">
+																	<button id="historicoBtt" type="submit" class="form_button" style="display: none;float: left;">Salvar</button>
+																</td>
+															</tr>
+														</table>
+											
+													</form>
 										
-										</div>
-											
-									</div>
+												</div>
+												
+											</div>
 									
-									<div class="row-fluid">
-										<div style="float: left;clear: both;">
-			
-											<form id="posvendahistoricoform" name="posvendahistoricoform" action="<c:url value="/controleformulario/incluiComunicacao" />" method="post">
-											
-											<input type="hidden" id="historico.controleFormulario.controleFormulario_id" name="historico.controleFormulario.controleFormulario_id" value="${historico.controleFormulario.controleFormulario_id }" />
-											<input type="hidden" id="historico.formulario.formulario_id" name="historico.formulario.formulario_id" value="${historico.formulario.formulario_id }" />
-											<input type="hidden" id="historico.createdBy.usuario_id" name="historico.createdBy.usuario_id" value="${historico.createdBy.usuario_id }" />
-											<input type="hidden" id="historico.empresa.empresa_id" name="historico.empresa.empresa_id" value="${historico.empresa.empresa_id }" />	
-											<input type="hidden" id="historico.organizacao.organizacao_id" name="historico.organizacao.organizacao_id" value="${historico.organizacao.organizacao_id }" />
-											<input type="hidden" id="historico.perfil.perfil_id " name="historico.perfil.perfil_id" value="${historico.perfil.perfil_id }" />	
-											
-											<table id="myform" style="width: 650px;display: left;">
-												<tr>
-													<th style="text-align: right;">Incluir observação:</th>
-													<td> <textarea id="historico.observacao" name="historico.observacao" class="label_txt" rows="3" cols="65" maxlength="255"><c:out value="${historico.observacao}" /></textarea></td>
-												</tr>
-												<tr>
-													<td class="btt">
-														
-													</td>
-													<td class="btt">
-														<button id="historicoBtt" type="submit" class="form_button" style="display: none;float: left;">Salvar</button>
-														</td>
-													</tr>
-												</table>
 									
-											</form>
-								
-										</div>
-									</div>
+									</c:if>
 									
 								</div>
 							</div>

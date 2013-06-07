@@ -35,7 +35,7 @@ public class ControleFormulario implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "formulario_id", updatable = true, nullable = false)
+	@JoinColumn(name = "formulario_id", updatable = true, nullable = true)
 	private Formulario formulario;
 	
 	@ManyToOne

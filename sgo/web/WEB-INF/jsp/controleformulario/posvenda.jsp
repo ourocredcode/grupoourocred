@@ -82,11 +82,11 @@
 									Status:
 								</td>
 								<td>
-									<select id="status" name="posvenda.workflowEtapa.workflowEtapa_id" class="input-medium">
+									<select id="status" name="posvenda.etapa.etapa_id" class="input-medium">
 										<option value="">Selecione</option>
 										
 										<c:forEach var="etapa" items="${etapas }">
-											<option value="${etapa.workflowEtapa_id }" <c:if test="${posvenda.workflowEtapa.workflowEtapa_id == etapa.workflowEtapa_id}">selected="selected"</c:if>>${etapa.nome }</option>
+											<option value="${etapa.etapa_id }" <c:if test="${posvenda.etapa.etapa_id == etapa.etapa_id}">selected="selected"</c:if>>${etapa.nome }</option>
 										</c:forEach>
 									</select>
 								</td>
@@ -99,10 +99,10 @@
 									Motivo :
 								</td>
 								<td>
-									<select id="motivo" name="posvenda.workflowEtapaPendencia.workflowEtapa_id" class="input-medium">
+									<select id="motivo" name="posvenda.etapaPendencia.etapa_id" class="input-medium">
 										<option value="">Selecione</option>
 										<c:forEach var="motivo" items="${motivos }">
-											<option value="${motivo.workflowEtapa_id }" <c:if test="${posvenda.workflowEtapaPendencia.workflowEtapa_id == motivo.workflowEtapa_id}">selected</c:if>>${motivo.nome }</option>
+											<option value="${motivo.etapa_id }" <c:if test="${posvenda.etapaPendencia.etapa_id == motivo.etapa_id}">selected</c:if>>${motivo.nome }</option>
 										</c:forEach>
 									</select>
 								</td>

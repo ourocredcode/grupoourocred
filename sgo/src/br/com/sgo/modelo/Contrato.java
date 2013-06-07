@@ -40,7 +40,7 @@ public class Contrato implements Serializable {
 	private Organizacao organizacaoDigitacao;
 	
 	@ManyToOne
-	@JoinColumn(name = "formulario_id", updatable = true, nullable = false)
+	@JoinColumn(name = "formulario_id", updatable = true, nullable = true)
 	private Formulario formulario;
 
 	@ManyToOne

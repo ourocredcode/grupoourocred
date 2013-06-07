@@ -632,6 +632,159 @@ function openPopup(url) {
 						<span class="icon">
 							<i class="icon-align-justify"></i>									
 						</span>
+						<h5>Status</h5>
+					</div>
+					<div class="widget-content padding">
+					<form id="contratoStatusForm" name="contratoStatusForm" action="<c:url value="/contrato/altera/status"/>" method="POST">
+					<input id="contratoId" type="hidden" name="contrato.contrato_id" value="${contrato.contrato_id }" />	
+						<div class="row-fluid"> 
+	
+							<div class="span2">
+								<label for="dataAgendado">Data Agendado</label>
+								<input id="dataAgendado" type="text" name="contrato.dataAgendado" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataAgendado.time}" />" class="input-medium"/>
+							</div>
+							
+							<div class="span2">
+								<label for="valorQuitacao">Valor Quitação</label>
+								<input id="valorQuitacao" type="text" name="contrato.valorQuitacao" value="${contrato.valorQuitacao}" class="input-medium" />
+							</div>
+							
+							<div class="span2">
+								<label for="dataQuitacao">Data Quitação</label>
+								<input id="dataQuitacao" type="text" name="contrato.dataQuitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataQuitacao.time}" />" class="input-medium"/>
+							</div>
+						</div>
+						
+						<div class="row-fluid">
+	
+							<div class="span2">
+								<label for="dataDigitacao">Data Digitacao</label>
+								<input id="dataDigitacao" type="text" name="contrato.dataDigitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataDigitacao.time}" />" class="input-medium" />
+							</div>
+							<div class="span2">	
+								<label for="contratoBanco">Contrato Banco</label>	
+								<input id="contratoBanco" type="text" name="contrato.contratoBanco" value="${contrato.contratoBanco}" class="input-medium" />
+							</div>
+							<div class="span2">	
+								<label for="propostaBanco">Proposta Banco</label>	
+								<input id="propostaBanco" type="text" name="contrato.propostaBanco" value="${contrato.propostaBanco}" class="input-medium" />
+							</div>
+							<div class="span2">	
+								<label for="empresa">Empresa</label>	
+								<select id="empresa" name="contrato.empresa" class="input-medium" >
+									<option value="">Selecione</option>
+									<option value="ATGGOLD" <c:if test="${contrato.empresa == 'ATGGOLD'}">selected</c:if>>ATGGOLD</option>
+									<option value="GOCX" <c:if test="${contrato.empresa == 'GOCX'}">selected</c:if>>GOCX</option>
+									<option value="GRGOLD" <c:if test="${contrato.empresa == 'GRGOLD'}">selected</c:if>>GRGOLD</option>
+									<option value="OUROCRED" <c:if test="${contrato.empresa == 'OUROCRED'}">selected</c:if>>OUROCRED</option>
+								</select>
+							</div>
+	
+						</div>
+					
+					<div class="row-fluid">
+
+						<div class="span2">
+							<label for="contratoStatus">Status Contrato</label>
+							<select id="contratoStatus" name="contrato.etapa.etapa_id" class="input-medium" onchange="verificaStatus();">
+								<c:forEach var="etapa" items="${etapas }">
+									<option value="${etapa.etapa_id}" 
+									<c:if test="${etapa.etapa_id == contrato.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
+								</c:forEach>
+							</select>
+						</div>
+					
+						<div class="span2">
+							<label for="dataStatusFinal">Data Aprova/Recusa</label>
+							<input id="dataStatusFinal" type="text" name="contrato.dataStatusFinal" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataStatusFinal.time}" />" class="input-medium"/>
+						</div>
+					
+						<div class="span2">
+							<label for="dataConcluido">Data Conclusão</label>
+							<input id="dataConcluido" type="text" name="contrato.dataConcluido" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataConcluido.time}" />" class="input-medium"/>
+						</div>
+					
+						<div class="span2">
+							<label for="justificativa">Justificativa</label>
+							<select id="justificativa" name="contrato.etapaPendencia.etapa_id" class="input-medium">
+
+								<option value="" selected="selected">Selecione</option>
+
+							</select>
+						</div>
+					</div>
+					
+					<div class="form-actions">
+						<div class="span1" style="float: left;">
+							<input value="Salva" type="submit" class="btn btn-primary" >
+						</div>
+						<div class="span1" style="float: left;">
+							<input value="Formulário" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'">
+						</div>
+					</div>	
+				  </form>	
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Histórico</h5>
+					</div>
+					<div class="widget-content">
+						<table class="table table-bordered table-striped table-hover data-table">
+							<c:if test="${not empty historico}">
+							<thead>	
+								<tr>
+									<th scope="col">
+										Data
+									</th>
+									<th scope="col">
+										Usuario
+									</th>
+									<th scope="col">
+										Observacao
+									</th>
+								</tr>
+							</thead>
+							<tbody>		
+								<c:forEach var="historico" items="${historico }">
+									<tr>
+										<td>
+											<fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${historico.created.time }" />
+										</td>
+										<td>
+											${historico.createdBy.nome }
+										</td>
+										<td>
+											${historico.observacao }
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>	
+							</c:if>
+						</table>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
 						<h5>Logística</h5>
 					</div>
 					<div class="widget-content padding">
@@ -713,7 +866,7 @@ function openPopup(url) {
 											<div class="controls">
 												<select id="contrato_ids[]" name="contrato_ids[]" multiple="multiple" style="width: 300px">
 													<c:forEach var="contrato" items="${contratos }">
-														<option value="${contrato.contrato_id }">${contrato.produto.nome } - ${contrato.etapa.nome }</option>
+														<option value="${contrato.contrato_id }" selected="selected">${contrato.produto.nome } - ${contrato.etapa.nome }</option>
 													</c:forEach>
 												</select>
 											</div>
@@ -916,157 +1069,6 @@ function openPopup(url) {
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
-				<div class="widget-box">
-					<div class="widget-title">
-						<span class="icon">
-							<i class="icon-align-justify"></i>									
-						</span>
-						<h5>Status</h5>
-					</div>
-					<div class="widget-content padding">
-					<form id="contratoStatusForm" name="contratoStatusForm" action="<c:url value="/contrato/altera/status"/>" method="POST">
-					<input id="contratoId" type="hidden" name="contrato.contrato_id" value="${contrato.contrato_id }" />	
-						<div class="row-fluid"> 
-	
-							<div class="span2">
-								<label for="dataAgendado">Data Agendado</label>
-								<input id="dataAgendado" type="text" name="contrato.dataAgendado" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataAgendado.time}" />" class="input-medium"/>
-							</div>
-							
-							<div class="span2">
-								<label for="valorQuitacao">Valor Quitação</label>
-								<input id="valorQuitacao" type="text" name="contrato.valorQuitacao" value="${contrato.valorQuitacao}" class="input-medium" />
-							</div>
-							
-							<div class="span2">
-								<label for="dataQuitacao">Data Quitação</label>
-								<input id="dataQuitacao" type="text" name="contrato.dataQuitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataQuitacao.time}" />" class="input-medium"/>
-							</div>
-						</div>
-						
-						<div class="row-fluid">
-	
-							<div class="span2">
-								<label for="dataDigitacao">Data Digitacao</label>
-								<input id="dataDigitacao" type="text" name="contrato.dataDigitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataDigitacao.time}" />" class="input-medium" />
-							</div>
-							<div class="span2">	
-								<label for="contratoBanco">Contrato Banco</label>	
-								<input id="contratoBanco" type="text" name="contrato.contratoBanco" value="${contrato.contratoBanco}" class="input-medium" />
-							</div>
-							<div class="span2">	
-								<label for="propostaBanco">Proposta Banco</label>	
-								<input id="propostaBanco" type="text" name="contrato.propostaBanco" value="${contrato.propostaBanco}" class="input-medium" />
-							</div>
-							<div class="span2">	
-								<label for="empresa">Empresa</label>	
-								<select id="empresa" name="contrato.empresa" class="input-medium" >
-									<option value="">Selecione</option>
-									<option value="ATGGOLD" <c:if test="${contrato.empresa == 'ATGGOLD'}">selected</c:if>>ATGGOLD</option>
-									<option value="GOCX" <c:if test="${contrato.empresa == 'GOCX'}">selected</c:if>>GOCX</option>
-									<option value="GRGOLD" <c:if test="${contrato.empresa == 'GRGOLD'}">selected</c:if>>GRGOLD</option>
-									<option value="OUROCRED" <c:if test="${contrato.empresa == 'OUROCRED'}">selected</c:if>>OUROCRED</option>
-								</select>
-							</div>
-	
-						</div>
-					
-					<div class="row-fluid">
-
-						<div class="span2">
-							<label for="contratoStatus">Status Contrato</label>
-							<select id="contratoStatus" name="contrato.etapa.etapa_id" class="input-medium" onchange="verificaStatus();">
-								<c:forEach var="etapa" items="${etapas }">
-									<option value="${etapa.etapa_id}" 
-									<c:if test="${etapa.etapa_id == contrato.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
-								</c:forEach>
-							</select>
-						</div>
-					
-						<div class="span2">
-							<label for="dataStatusFinal">Data Aprova/Recusa</label>
-							<input id="dataStatusFinal" type="text" name="contrato.dataStatusFinal" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataStatusFinal.time}" />" class="input-medium"/>
-						</div>
-					
-						<div class="span2">
-							<label for="dataConcluido">Data Conclusão</label>
-							<input id="dataConcluido" type="text" name="contrato.dataConcluido" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataConcluido.time}" />" class="input-medium"/>
-						</div>
-					
-						<div class="span2">
-							<label for="justificativa">Justificativa</label>
-							<select id="justificativa" name="contrato.etapaPendencia.etapa_id" class="input-medium">
-
-								<option value="" selected="selected">Selecione</option>
-
-							</select>
-						</div>
-					</div>
-					
-					<div class="form-actions">
-						<div class="span1" style="float: left;">
-							<input value="Salva" type="submit" class="btn btn-primary" >
-						</div>
-						<div class="span1" style="float: left;">
-							<input value="Formulário" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'">
-						</div>
-					</div>	
-				  </form>	
-				  </div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
-				<div class="widget-box">
-					<div class="widget-title">
-						<span class="icon">
-							<i class="icon-align-justify"></i>									
-						</span>
-						<h5>Histórico</h5>
-					</div>
-					<div class="widget-content">
-						<table class="table table-bordered table-striped table-hover data-table">
-							<c:if test="${not empty historico}">
-							<thead>	
-								<tr>
-									<th scope="col">
-										Data
-									</th>
-									<th scope="col">
-										Usuario
-									</th>
-									<th scope="col">
-										Observacao
-									</th>
-								</tr>
-							</thead>
-							<tbody>		
-								<c:forEach var="historico" items="${historico }">
-									<tr>
-										<td>
-											<fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${historico.created.time }" />
-										</td>
-										<td>
-											${historico.createdBy.nome }
-										</td>
-										<td>
-											${historico.observacao }
-										</td>
-									</tr>
-								</c:forEach>
-							</tbody>	
-							</c:if>
-						</table>
-				  </div>
-				</div>
-			</div>
-		</div>
-	</div>		
+		
 
 <%@ include file="/footer.jspf" %>

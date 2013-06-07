@@ -159,21 +159,26 @@ public class FormularioController {
 				controleFormularioDao.buscaControleByContratoTipoControle(formulario.getFormulario_id(), 
 						 this.tipoControleDao.buscaTipoControleByNome("Pós Venda").getTipoControle_id());
 
-		HistoricoControleFormulario historico = new HistoricoControleFormulario();
-		Collection<HistoricoControleFormulario> historicos = new ArrayList<HistoricoControleFormulario>();
+		if(posvenda != null) {
+			
+			HistoricoControleFormulario historico = new HistoricoControleFormulario();
+			Collection<HistoricoControleFormulario> historicos = new ArrayList<HistoricoControleFormulario>();
 
-		historicos.addAll(this.historicoControleFormularioDao.buscaHistoricoByFormularioControle(formulario.getFormulario_id(),posvenda.getControleFormulario_id()));
+			historicos.addAll(this.historicoControleFormularioDao.buscaHistoricoByFormularioControle(formulario.getFormulario_id(),posvenda.getControleFormulario_id()));
 
-		historico.setControleFormulario(posvenda);
-		historico.setCreatedBy(usuario);
-		historico.setEmpresa(empresa);
-		historico.setOrganizacao(organizacao);
-		historico.setPerfil(perfil);
-		historico.setFormulario(formulario);
+			historico.setControleFormulario(posvenda);
+			historico.setCreatedBy(usuario);
+			historico.setEmpresa(empresa);
+			historico.setOrganizacao(organizacao);
+			historico.setPerfil(perfil);
+			historico.setFormulario(formulario);
+			
+			result.include("historico",historico);
+			result.include("historicos",historicos);
+			
+		}
 
 		result.include("formulario",formulario);
-		result.include("historico",historico);
-		result.include("historicos",historicos);
 
 	}
 	
