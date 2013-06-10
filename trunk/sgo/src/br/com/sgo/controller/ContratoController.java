@@ -1,6 +1,8 @@
 package br.com.sgo.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -20,6 +22,7 @@ import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.LogisticaDao;
+import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
@@ -60,6 +63,7 @@ public class ContratoController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
+	private final OrganizacaoDao organizacaoDao;
 	private final BancoDao bancoDao;
 	private final ProdutoBancoDao produtoBancoDao;
 	private final ProdutoDao produtoDao;
@@ -102,11 +106,11 @@ public class ContratoController {
 	private Collection<TipoLogistica> tiposLogistica;
 	private Collection<Logistica> logisticas;
 	private Collection<Contrato> contratos;
-	private Collection<HistoricoContrato> historico;
+	private Collection<HistoricoContrato> historico = new ArrayList<HistoricoContrato>();
 	private Collection<HistoricoControle> historicoControleBoleto;
 	private Collection<HistoricoControle> historicoControleAverbacao;
 
-	public ContratoController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
+	public ContratoController(Result result,BancoDao bancoDao,OrganizacaoDao organizacaoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
 			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
 			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			ParceiroNegocio parceiroNegocio, ParceiroLocalidade parceiroLocalidade, ParceiroInfoBanco parceiroInfoBanco, ParceiroBeneficio parceiroBeneficio,
@@ -122,6 +126,7 @@ public class ContratoController {
 		this.parceiroBeneficio = parceiroBeneficio;
 		this.parceiroNegocio = parceiroNegocio;
 		this.parceiroLocalidade = parceiroLocalidade;
+		this.organizacaoDao = organizacaoDao;
 		this.bancoDao = bancoDao;
 		this.contratoDao = contratoDao;
 		this.produtoBancoDao = produtoBancoDao;
@@ -201,8 +206,8 @@ public class ContratoController {
 		etapas.add(contrato.getEtapa());
 		
 		periodos = periodoDao.buscaAllPeriodos();
-		historico = historicoContratoDao.buscaHistoricoByContrato(id);
-		
+		historico.addAll(historicoContratoDao.buscaHistoricoByContrato(id));
+
 		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
 		logisticas = logisticaDao.buscaLogisticaByContrato(id);
 		
@@ -253,6 +258,7 @@ public class ContratoController {
 		result.include("conferencias",conferencias);
 		result.include("historicoControleBoleto",historicoControleBoleto);
 		result.include("historicoControleAverbacao",historicoControleAverbacao);
+		result.include("organizacoes", this.organizacaoDao.buscaOrganizacoesByEmpresa(empresa.getEmpresa_id()));
 
 	}
 	
@@ -361,6 +367,8 @@ public class ContratoController {
 	public void alteraStatus(Contrato contrato) {
 
 		List<String> log = new ArrayList<String>();
+		Calendar calInicial =  new GregorianCalendar(9999, 0, 1);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
 
@@ -369,6 +377,144 @@ public class ContratoController {
 		if(!(this.contrato.getEtapa().getEtapa_id() == contrato.getEtapa().getEtapa_id())){
 			log.add("Status alterado de : " + this.contrato.getEtapa().getNome() + " para : " + contrato.getEtapa().getNome());
 			this.contrato.setEtapa(contrato.getEtapa() == null ? null : contrato.getEtapa());
+		}
+		
+		this.contrato.setDataDigitacao(this.contrato.getDataDigitacao() == null ? calInicial : this.contrato.getDataDigitacao());
+		contrato.setDataDigitacao(contrato.getDataDigitacao() == null ? calInicial : contrato.getDataDigitacao());
+
+		if(!(this.contrato.getDataDigitacao().compareTo(contrato.getDataDigitacao() == null ? calInicial : contrato.getDataDigitacao()) == 0)) {
+			if (this.contrato.getDataDigitacao().compareTo(calInicial) == 0){
+
+				log.add("Data de digitação alterado para : " + dateFormat.format(contrato.getDataDigitacao().getTime()));
+				this.contrato.setDataDigitacao(contrato.getDataDigitacao());
+
+			} else if (contrato.getDataDigitacao().compareTo(calInicial) != 0) {
+
+				log.add("Data de digitação alterado de : " + dateFormat.format(this.contrato.getDataDigitacao().getTime()) + " para: " + dateFormat.format(contrato.getDataDigitacao().getTime()));
+				this.contrato.setDataDigitacao(contrato.getDataDigitacao());
+
+			} else if (contrato.getDataDigitacao().compareTo(calInicial) == 0) {
+				log.add("Data de digitação alterado de : " + dateFormat.format(this.contrato.getDataDigitacao().getTime()) + " para: em branco.");
+				this.contrato.setDataDigitacao(null);
+			}
+		}
+		
+		if(this.contrato.getDataDigitacao() != null) {
+			if(this.contrato.getDataDigitacao().compareTo(calInicial) == 0)
+				this.contrato.setDataDigitacao(null);
+		}
+		
+		this.contrato.setDataQuitacao(this.contrato.getDataQuitacao() == null ? calInicial : this.contrato.getDataQuitacao());
+		contrato.setDataQuitacao(contrato.getDataQuitacao() == null ? calInicial : contrato.getDataQuitacao());
+
+		if(!(this.contrato.getDataQuitacao().compareTo(contrato.getDataQuitacao() == null ? calInicial : contrato.getDataQuitacao()) == 0)) {
+			if (this.contrato.getDataQuitacao().compareTo(calInicial) == 0){
+
+				log.add("Data de quitação alterado para : " + dateFormat.format(contrato.getDataQuitacao().getTime()));
+				this.contrato.setDataQuitacao(contrato.getDataQuitacao());
+
+			} else if (contrato.getDataQuitacao().compareTo(calInicial) != 0) {
+
+				log.add("Data de quitação alterado de : " + dateFormat.format(this.contrato.getDataQuitacao().getTime()) + " para: " + dateFormat.format(contrato.getDataQuitacao().getTime()));
+				this.contrato.setDataQuitacao(contrato.getDataQuitacao());
+
+			} else if (contrato.getDataQuitacao().compareTo(calInicial) == 0) {
+				log.add("Data de quitação alterado de : " + dateFormat.format(this.contrato.getDataQuitacao().getTime()) + " para: em branco.");
+				this.contrato.setDataQuitacao(null);
+			}
+		}
+
+		if(this.contrato.getDataQuitacao() != null) {
+			if(this.contrato.getDataQuitacao().compareTo(calInicial) == 0)
+				this.contrato.setDataQuitacao(null);
+		}
+		
+		this.contrato.setDataStatusFinal(this.contrato.getDataStatusFinal() == null ? calInicial : this.contrato.getDataStatusFinal());
+		contrato.setDataStatusFinal(contrato.getDataStatusFinal() == null ? calInicial : contrato.getDataStatusFinal());
+
+		if(!(this.contrato.getDataStatusFinal().compareTo(contrato.getDataStatusFinal()) == 0)) {
+			if (this.contrato.getDataStatusFinal().compareTo(calInicial) == 0) {
+
+				log.add("Data de Aprovação/Recusa alterado para : " + dateFormat.format(contrato.getDataStatusFinal().getTime()));
+				this.contrato.setDataStatusFinal(contrato.getDataStatusFinal());
+
+			} else if(contrato.getDataStatusFinal().compareTo(calInicial) != 0) {
+
+				log.add("Data de Aprovação/Recusa alterado de : " + dateFormat.format(this.contrato.getDataStatusFinal().getTime()) + " para: " + dateFormat.format(contrato.getDataStatusFinal().getTime()));
+				this.contrato.setDataStatusFinal(contrato.getDataStatusFinal());
+
+			} else if(contrato.getDataStatusFinal().compareTo(calInicial) == 0) {
+
+				log.add("Data de Aprovação/Recusa alterado de : " + dateFormat.format(this.contrato.getDataStatusFinal().getTime()) + " para: em branco.");
+				this.contrato.setDataStatusFinal(null);
+
+			}	
+		}
+
+		if(this.contrato.getDataStatusFinal() != null) {
+			if(this.contrato.getDataStatusFinal().compareTo(calInicial) == 0)
+				this.contrato.setDataStatusFinal(null);
+		}
+		
+		this.contrato.setDataConcluido(this.contrato.getDataConcluido() == null ? calInicial : this.contrato.getDataConcluido());
+		contrato.setDataConcluido(contrato.getDataConcluido() == null ? calInicial : contrato.getDataConcluido());
+		
+		if(!(this.contrato.getDataConcluido().compareTo(contrato.getDataConcluido()) == 0)) {
+			if (this.contrato.getDataConcluido().compareTo(calInicial) == 0) {
+
+				log.add("Data de Conclusão alterado para : " + dateFormat.format(contrato.getDataConcluido().getTime()));
+				this.contrato.setDataConcluido(contrato.getDataConcluido());
+
+			} else if(contrato.getDataConcluido().compareTo(calInicial) != 0) {
+
+				log.add("Data de Conclusão alterado de : " + dateFormat.format(this.contrato.getDataConcluido().getTime()) + " para: " + dateFormat.format(contrato.getDataConcluido().getTime()));
+				this.contrato.setDataConcluido(contrato.getDataConcluido());
+
+			} else if(contrato.getDataConcluido().compareTo(calInicial) == 0) {
+
+				log.add("Data de Conclusão alterado de : " + dateFormat.format(this.contrato.getDataConcluido().getTime()) + " para: em branco.");
+				this.contrato.setDataConcluido(null);
+
+			}	
+		}
+		
+		if(this.contrato.getDataConcluido() != null) {
+			if(this.contrato.getDataConcluido().compareTo(calInicial) == 0)
+				this.contrato.setDataConcluido(null);
+		}
+		
+		if(!this.contrato.getPropostaBanco().equals(contrato.getPropostaBanco())) {
+			log.add("Proposta Banco alterada para : " + contrato.getPropostaBanco() );
+			this.contrato.setPropostaBanco(contrato.getPropostaBanco());
+		}
+
+		if(!this.contrato.getContratoBanco().equals(contrato.getContratoBanco())) {
+			log.add("Contrato Banco alterada para : " + contrato.getContratoBanco() );
+			this.contrato.setContratoBanco(contrato.getContratoBanco());
+		}
+
+		if(contrato.getOrganizacaoDigitacao().getOrganizacao_id() != null){
+
+			contrato.setOrganizacaoDigitacao(this.organizacaoDao.load(contrato.getOrganizacaoDigitacao().getOrganizacao_id()));
+
+			if(this.contrato.getOrganizacaoDigitacao() != null){
+				if(this.contrato.getOrganizacaoDigitacao().getOrganizacao_id() != contrato.getOrganizacaoDigitacao().getOrganizacao_id())
+					log.add("Organização Digitado alterado de : " + this.contrato.getOrganizacaoDigitacao().getNome() + " para : " + contrato.getOrganizacaoDigitacao().getNome() );
+					this.contrato.setOrganizacaoDigitacao(contrato.getOrganizacaoDigitacao());
+			}
+
+			if(this.contrato.getOrganizacaoDigitacao() == null){
+				log.add("Organização Digitado alterado para : " + contrato.getOrganizacaoDigitacao().getNome() );
+				this.contrato.setOrganizacaoDigitacao(contrato.getOrganizacaoDigitacao());
+			}
+
+		}
+
+		if(!(this.contrato.getValorQuitacao() == null && contrato.getValorQuitacao() == null)){
+			if(!(this.contrato.getValorQuitacao().compareTo(contrato.getValorQuitacao() == null ? null : contrato.getValorQuitacao()) == 0)){
+				log.add("Valor Quitação alterado de : " + this.contrato.getValorQuitacao() + " para : " + contrato.getValorQuitacao());
+				this.contrato.setValorQuitacao(contrato.getValorQuitacao() == null ? null : contrato.getValorQuitacao());
+			}
 		}
 
 		this.contratoDao.beginTransaction();

@@ -284,7 +284,8 @@ public class MenuController {
 
 		}
 
-		contratos.addAll(this.contratoDao.buscaContratoByFiltros(this.empresa.getEmpresa_id(), this.organizacao.getOrganizacao_id(), calInicio, calFim, cliente, documento, status,
+		contratos.addAll(this.contratoDao.buscaContratoByFiltros(this.empresa.getEmpresa_id(), this.organizacao.getOrganizacao_id(), calInicio, calFim, 
+				calAprovadoInicio, calAprovadoFim ,cliente, documento, status,
 				produtos, bancos, bancosComprados,consultoresAux));
 
 		result.include("contratos",contratos);		

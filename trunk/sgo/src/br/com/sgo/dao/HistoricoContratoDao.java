@@ -34,15 +34,15 @@ public class HistoricoContratoDao extends Dao<HistoricoContrato> {
 	
 	public Collection<HistoricoContrato> buscaHistoricoByContrato(Long contrato_id) {
 
-		String sql = "SELECT " +
+		String sql = " SELECT " +
 				"			HISTORICOCONTRATO.historicocontrato_id, " +
 				"			HISTORICOCONTRATO.contrato_id, HISTORICOCONTRATO.createdby, USUARIO.nome as usuario_nome, HISTORICOCONTRATO.created, " +
 				"			HISTORICOCONTRATO.observacao FROM (HISTORICOCONTRATO " +
 				"				INNER JOIN CONTRATO ON HISTORICOCONTRATO.contrato_id = CONTRATO.contrato_id) " +
-				"				INNER JOIN USUARIO ON HISTORICOCONTRATO.createdby = USUARIO.usuario_id";
+				"				INNER JOIN USUARIO ON HISTORICOCONTRATO.createdby = USUARIO.usuario_id ";
 
 		if (contrato_id != null)
-			sql += " WHERE HISTORICOCONTRATO.contrato_id = ? ";
+			sql += " WHERE HISTORICOCONTRATO.contrato_id = ? ORDER BY HISTORICOCONTRATO.created DESC ";
 
 		this.conn = this.conexao.getConexao();
 		
@@ -68,7 +68,6 @@ public class HistoricoContratoDao extends Dao<HistoricoContrato> {
 				historicoContrato.setHistoricoContrato_id(rsHistoricoContrato.getLong("historicocontrato_id"));
 				createdBy.setUsuario_id(rsHistoricoContrato.getLong("createdby"));
 				createdBy.setNome(rsHistoricoContrato.getString("usuario_nome"));
-				created.setTime(rsHistoricoContrato.getDate("created"));
 				created.setTime(sdf.parse(rsHistoricoContrato.getTimestamp("created").toString()));
 
 				historicoContrato.setObservacao(rsHistoricoContrato.getString("observacao"));
