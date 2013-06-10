@@ -18,7 +18,8 @@ $(document).ready(function() {
 	$('.data-table').dataTable({
 		"bJQueryUI": true,
 		"sPaginationType": "full_numbers",
-		"sDom": '<""l>t<"F"fp>'
+		"sDom": '<""l>t<"F"fp>',
+		"aaSorting": []
 	});
 	
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
@@ -47,7 +48,7 @@ $(document).ready(function() {
 	var dataConcluido = document.getElementById("dataConcluido");
 	var propostaBanco = document.getElementById("propostaBanco");
 	var contratoBanco = document.getElementById("contratoBanco");
-	var empresa = document.getElementById("empresa");
+	var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
 	var valorQuitacao = document.getElementById("valorQuitacao");
 	var bairro = document.getElementById("bairro");
 	var cidade = document.getElementById("cidade");
@@ -114,9 +115,9 @@ $(document).ready(function() {
 			desabilita(contratoBanco);	
 	}
 	
-	if(empresa != undefined) {
-		if(empresa.value == "")
-			desabilita(empresa);	
+	if(organizacaoDigitacao != undefined) {
+		if(organizacaoDigitacao.value == "")
+			desabilita(organizacaoDigitacao);	
 	}
 
 	if(valorQuitacao != undefined) {
@@ -160,51 +161,20 @@ $(document).ready(function() {
 		};
 	});
 
-	$('#dataDigitacao').focus( function() {
-		$(this).calendario({
-			target:'#dataDigitacao',
-			top:0,
-			left:100
-		});
+	$('#dataDigitacao').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
-
-	$('#dataQuitacao').focus( function() {
-		$(this).calendario({
-			target:'#dataQuitacao',
-			top:0,
-			left:100
-		});
+	$('#dataQuitacao').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
-
-	$('#dataAgendado').focus( function() {
-		$(this).calendario({
-			target:'#dataAgendado',
-			top:0,
-			left:100
-		});
+	$('#dataStatusFinal').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
-
-	$('#dataConcluido').focus( function() {
-		$(this).calendario({
-			target:'#dataConcluido',
-			top:0,
-			left:100
-		});
+	$('#dataConcluido').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
-
-	$('#dataStatusFinal').focus( function() {
-		$(this).calendario({
-			target:'#dataStatusFinal',
-			top:0,
-			left:100
-		});
-	});
+	
 });
-
-function buscaByCalendar(){
-	return false;
-}
-
 
 function verificaStatus() {
 
@@ -220,7 +190,7 @@ function verificaStatus() {
 
 	var propostaBanco = document.getElementById("propostaBanco");
 	var contratoBanco = document.getElementById("contratoBanco");
-	var empresa = document.getElementById("empresa");
+	var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
 	var contratoProduto = $("#contratoProduto").val();
 	var valorQuitacao = document.getElementById("valorQuitacao");
 	var bairro = document.getElementById("bairro");
@@ -292,22 +262,22 @@ function verificaStatus() {
 
 	if(status == 'Digitado'){
 
+		habilita(contratoBanco);
 		habilita(propostaBanco);
-		habilita(empresa);
+		habilita(organizacaoDigitacao);
 		habilita(dataDigitacao);
 		$("#dataDigitacao").val(getCurrentDate());
-		contratoBanco.disabled=0;
 
 	} else {
 
+		if(contratoBanco.value == '')
+			desabilita(contratoBanco);
 		if(propostaBanco.value == '')
 			desabilita(propostaBanco);
-		if(empresa.value == '')
-			desabilita(empresa);
+		if(organizacaoDigitacao.value == '')
+			desabilita(organizacaoDigitacao);
 		if(dataDigitacao.value == '')
 			desabilita(dataDigitacao);
-		if(contratoBanco.value == '')
-			contratoBanco.disabled=1;
 
 	}
 
@@ -670,16 +640,14 @@ function openPopup(url) {
 								<input id="propostaBanco" type="text" name="contrato.propostaBanco" value="${contrato.propostaBanco}" class="input-medium" />
 							</div>
 							<div class="span2">	
-								<label for="empresa">Empresa</label>	
-								<select id="empresa" name="contrato.empresa" class="input-medium" >
+								<label for="organizacaoDigitacao">Organização Digitação</label>	
+								<select id="organizacaoDigitacao" name="contrato.organizacaoDigitacao.organizacao_id" class="input-medium" >
 									<option value="">Selecione</option>
-									<option value="ATGGOLD" <c:if test="${contrato.empresa == 'ATGGOLD'}">selected</c:if>>ATGGOLD</option>
-									<option value="GOCX" <c:if test="${contrato.empresa == 'GOCX'}">selected</c:if>>GOCX</option>
-									<option value="GRGOLD" <c:if test="${contrato.empresa == 'GRGOLD'}">selected</c:if>>GRGOLD</option>
-									<option value="OUROCRED" <c:if test="${contrato.empresa == 'OUROCRED'}">selected</c:if>>OUROCRED</option>
+									<c:forEach var="organizacao" items="${organizacoes }">
+										<option value="${organizacao.organizacao_id }" <c:if test="${organizacao.organizacao_id == contrato.organizacaoDigitacao.organizacao_id }">selected="selected" </c:if>>${organizacao.nome }</option>
+									</c:forEach>
 								</select>
 							</div>
-	
 						</div>
 					
 					<div class="row-fluid">

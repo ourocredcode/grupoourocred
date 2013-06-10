@@ -235,181 +235,193 @@ public class ParceironegocioController {
 
 		String mensagem = "";
 
-		try {
 
-			this.parceiroNegocioDao.beginTransaction();
-			this.parceiroNegocioDao.adiciona(parceiroNegocio);
-			this.parceiroNegocioDao.commit();
+		if(this.parceiroNegocioDao.buscaParceiroNegocioByDocumento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), parceiroNegocio.getCpf()) == null ){
 
-		} catch(Exception e) {
-
-			this.parceiroNegocioDao.rollback();
-
-			if (e.getCause().toString().indexOf("PK_PARCEIRONEGOCIO") != -1){
-				mensagem = "Erro: Parceiro Negócio " + parceiroNegocio.getNome() + " já existente.";
-			} else {
-				mensagem = "Erro ao adicionar Parceiro Negócio:";
-			}
-
-		}
-
-		if(parceiroNegocio.getIsFuncionario()){
-
-			Funcionario f = new Funcionario();
-
-			f.setSupervisor(this.parceiroNegocioDao.buscaParceiroNegocioById(funcionario.getSupervisor().getParceiroNegocio_id()));
-			f.setEmpresa(parceiroNegocio.getEmpresa());
-			f.setOrganizacao(parceiroNegocio.getOrganizacao());
-			f.setDepartamento(funcionario.getDepartamento());
-			f.setParceiroNegocio(parceiroNegocio);
-			f.setFuncao(funcionario.getFuncao());
-			f.setApelido(funcionario.getApelido());
-			f.setIsActive(parceiroNegocio.getIsActive());
-			
 			try {
 
-				this.funcionarioDao.beginTransaction();
-				this.funcionarioDao.adiciona(f);
-				this.funcionarioDao.commit();
-
+				this.parceiroNegocioDao.beginTransaction();
+				this.parceiroNegocioDao.adiciona(parceiroNegocio);
+				this.parceiroNegocioDao.commit();
+	
 			} catch(Exception e) {
-
-				this.funcionarioDao.rollback();
-
-				if (e.getCause().toString().indexOf("PK_FUNCIONARIO") != -1){
-					mensagem = "Erro: Funcionário " + funcionario.getApelido() + " já existente.";
+	
+				this.parceiroNegocioDao.rollback();
+	
+				if (e.getCause().toString().indexOf("PK_PARCEIRONEGOCIO") != -1){
+					mensagem = "Erro: Parceiro Negócio " + parceiroNegocio.getNome() + " já existente.";
 				} else {
-					mensagem = "Erro ao adicionar Perfil:";
+					mensagem = "Erro ao adicionar Parceiro Negócio:";
 				}
-
-			}
-
-			Usuario u = new Usuario();
-
-			u.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),funcionario.getSupervisor().getParceiroNegocio_id()));
-			u.setChave(parceiroNegocio.getCpf());
-			u.setEmpresa(parceiroNegocio.getEmpresa());
-			u.setOrganizacao(parceiroNegocio.getOrganizacao());
-			u.setParceiroNegocio(parceiroNegocio);
-			u.setSenha("123456");
-			u.setNome(parceiroNegocio.getNome());
-			u.setIsActive(true);
-
-			if(u.getUsuario_id() == null) {
-				this.usuarioDao.beginTransaction();
-				this.usuarioDao.adiciona(u);
-				this.usuarioDao.commit();
-			}
-
-		}
-
-		if(parceiroContatos != null){
-			for(ParceiroContato parceiroContato : parceiroContatos){
-
-				parceiroContato.setEmpresa(empresa);
-				parceiroContato.setOrganizacao(organizacao);
-				parceiroContato.setParceiroNegocio(parceiroNegocio);
-				parceiroContato.setIsActive(true);
-	
-				this.parceiroContatoDao.beginTransaction();
-				this.parceiroContatoDao.adiciona(parceiroContato);
-				this.parceiroContatoDao.commit();
 	
 			}
-		}
+	
+			if(parceiroNegocio.getIsFuncionario()){
+	
+				Funcionario f = new Funcionario();
+	
+				if(funcionario.getSupervisor().getParceiroNegocio_id() != null)
+					f.setSupervisor(this.parceiroNegocioDao.buscaParceiroNegocioById(funcionario.getSupervisor().getParceiroNegocio_id()));
+	
+				f.setEmpresa(parceiroNegocio.getEmpresa());
+				f.setOrganizacao(parceiroNegocio.getOrganizacao());
+				f.setDepartamento(funcionario.getDepartamento());
+				f.setParceiroNegocio(parceiroNegocio);
+				f.setFuncao(funcionario.getFuncao());
+				f.setApelido(funcionario.getApelido());
+				f.setIsActive(parceiroNegocio.getIsActive());
+				
+				try {
+	
+					this.funcionarioDao.beginTransaction();
+					this.funcionarioDao.adiciona(f);
+					this.funcionarioDao.commit();
+	
+				} catch(Exception e) {
+	
+					this.funcionarioDao.rollback();
+	
+					if (e.getCause().toString().indexOf("PK_FUNCIONARIO") != -1){
+						mensagem = "Erro: Funcionário " + funcionario.getApelido() + " já existente.";
+					} else {
+						mensagem = "Erro: Erro ao adicionar Perfil:";
+					}
+	
+				}
+	
+				Usuario u = new Usuario();
+				
+				if(funcionario.getSupervisor().getParceiroNegocio_id() != null)
+					u.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),funcionario.getSupervisor().getParceiroNegocio_id()));
+	
+				u.setChave(parceiroNegocio.getCpf());
+				u.setEmpresa(parceiroNegocio.getEmpresa());
+				u.setOrganizacao(parceiroNegocio.getOrganizacao());
+				u.setParceiroNegocio(parceiroNegocio);
+				u.setSenha("123456");
+				u.setNome(parceiroNegocio.getNome());
+				u.setIsActive(true);
+	
+				if(u.getUsuario_id() == null) {
+					this.usuarioDao.beginTransaction();
+					this.usuarioDao.adiciona(u);
+					this.usuarioDao.commit();
+				}
+	
+			}
+	
+			if(parceiroContatos != null){
+				for(ParceiroContato parceiroContato : parceiroContatos){
+	
+					parceiroContato.setEmpresa(empresa);
+					parceiroContato.setOrganizacao(organizacao);
+					parceiroContato.setParceiroNegocio(parceiroNegocio);
+					parceiroContato.setIsActive(true);
 		
-		if(parceiroBeneficios != null){
-			for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
-
-				parceiroBeneficio.setEmpresa(empresa);
-				parceiroBeneficio.setOrganizacao(organizacao);
-				parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
-				parceiroBeneficio.setIsActive(true);
-
-				this.parceiroBeneficioDao.beginTransaction();
-				this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
-				this.parceiroBeneficioDao.commit();
-
+					this.parceiroContatoDao.beginTransaction();
+					this.parceiroContatoDao.adiciona(parceiroContato);
+					this.parceiroContatoDao.commit();
+		
+				}
 			}
-		}
-
-		localidade.setLocalidade_id(this.localidadeDao.buscaLocalidade(localidade.getCep()).getLocalidade_id());
-
-		if(localidade.getLocalidade_id() == null)	{
-
-			localidade.setEmpresa(empresa);
-			localidade.setOrganizacao(organizacao);
-			localidade.setIsActive(true);
-
-			try {
-
-				this.localidadeDao.beginTransaction();
-				this.localidadeDao.adiciona(localidade);
-				this.localidadeDao.commit();
 			
-			} catch(Exception e) {
-
-				this.localidadeDao.rollback();
-
-				if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
-					mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
-				} else {
-					mensagem = "Erro ao adicionar Localidade:";
+			if(parceiroBeneficios != null){
+				for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
+	
+					parceiroBeneficio.setEmpresa(empresa);
+					parceiroBeneficio.setOrganizacao(organizacao);
+					parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
+					parceiroBeneficio.setIsActive(true);
+	
+					this.parceiroBeneficioDao.beginTransaction();
+					this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
+					this.parceiroBeneficioDao.commit();
+	
 				}
-
 			}
-
-		}
-
-		Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
-
-		for(TipoEndereco tipoEndereco : tiposEndereco){
-
-			ParceiroLocalidade pl = new ParceiroLocalidade();
-
-			pl.setEmpresa(empresa);
-			pl.setOrganizacao(organizacao);
-			pl.setParceiroNegocio(parceiroNegocio);
-			pl.setLocalidade(localidade);
-			pl.setTipoEndereco(tipoEndereco);
-			pl.setNumero(parceiroLocalidade.getNumero());
-			pl.setComplemento(parceiroLocalidade.getComplemento());
-			pl.setPontoReferencia(parceiroLocalidade.getPontoReferencia());
-			pl.setIsActive(true);
-
-			try{
+	
+			localidade.setLocalidade_id(this.localidadeDao.buscaLocalidade(localidade.getCep()).getLocalidade_id());
+	
+			if(localidade.getLocalidade_id() == null)	{
+	
+				localidade.setEmpresa(empresa);
+				localidade.setOrganizacao(organizacao);
+				localidade.setIsActive(true);
+	
+				try {
+	
+					this.localidadeDao.beginTransaction();
+					this.localidadeDao.adiciona(localidade);
+					this.localidadeDao.commit();
 				
-				this.parceiroLocalidadeDao.beginTransaction();
-				this.parceiroLocalidadeDao.adiciona(pl);
-				this.parceiroLocalidadeDao.commit();
-				
-			} catch(Exception e) {
-
-				this.parceiroLocalidadeDao.rollback();
-
-				if (e.getCause().toString().indexOf("PK__PARCEIROLOCALIDADE") != -1){
-					mensagem = "Erro: Parceiro Localidade " + funcionario.getApelido() + " já existente.";
-				} else {
-					mensagem = "Erro ao adicionar Parceiro Localidade :";
+				} catch(Exception e) {
+	
+					this.localidadeDao.rollback();
+	
+					if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
+						mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
+					} else {
+						mensagem = "Erro: Erro ao adicionar Localidade:";
+					}
+	
 				}
-
+	
 			}
-
+	
+			Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
+	
+			for(TipoEndereco tipoEndereco : tiposEndereco){
+	
+				ParceiroLocalidade pl = new ParceiroLocalidade();
+	
+				pl.setEmpresa(empresa);
+				pl.setOrganizacao(organizacao);
+				pl.setParceiroNegocio(parceiroNegocio);
+				pl.setLocalidade(localidade);
+				pl.setTipoEndereco(tipoEndereco);
+				pl.setNumero(parceiroLocalidade.getNumero());
+				pl.setComplemento(parceiroLocalidade.getComplemento());
+				pl.setPontoReferencia(parceiroLocalidade.getPontoReferencia());
+				pl.setIsActive(true);
+	
+				try{
+					
+					this.parceiroLocalidadeDao.beginTransaction();
+					this.parceiroLocalidadeDao.adiciona(pl);
+					this.parceiroLocalidadeDao.commit();
+					
+				} catch(Exception e) {
+	
+					this.parceiroLocalidadeDao.rollback();
+	
+					if (e.getCause().toString().indexOf("PK__PARCEIROLOCALIDADE") != -1){
+						mensagem = "Erro: Parceiro Localidade " + funcionario.getApelido() + " já existente.";
+					} else {
+						mensagem = "Erro: Erro ao adicionar Parceiro Localidade :";
+					}
+	
+				}
+	
+			}
+	
+			if(parceiroInfoBanco != null){
+	
+				parceiroInfoBanco.setEmpresa(empresa);
+				parceiroInfoBanco.setOrganizacao(organizacao);
+				parceiroInfoBanco.setIsActive(true);
+				parceiroInfoBanco.setParceiroNegocio(parceiroNegocio);
+	
+				this.parceiroInfoBancoDao.beginTransaction();
+				this.parceiroInfoBancoDao.adiciona(parceiroInfoBanco);
+				this.parceiroInfoBancoDao.commit();
+			}
+	
+			mensagem = "Parceiro de Negócios " + parceiroNegocio.getNome() + " adicionado com sucesso. ";	
+		
+		} else {
+			
+			mensagem = "Erro: Parceiro de Negócios " + parceiroNegocio.getNome() + " já cadastrado. ";
 		}
-
-		if(parceiroInfoBanco != null){
-
-			parceiroInfoBanco.setEmpresa(empresa);
-			parceiroInfoBanco.setOrganizacao(organizacao);
-			parceiroInfoBanco.setIsActive(true);
-			parceiroInfoBanco.setParceiroNegocio(parceiroNegocio);
-
-			this.parceiroInfoBancoDao.beginTransaction();
-			this.parceiroInfoBancoDao.adiciona(parceiroInfoBanco);
-			this.parceiroInfoBancoDao.commit();
-		}
-
-		mensagem = "Parceiro de Negócios " + parceiroNegocio.getNome() + " adicionado com sucesso";			
 
 		this.parceiroNegocioDao.clear();
 		this.parceiroNegocioDao.close();

@@ -84,6 +84,7 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			sql += " AND ORGANIZACAO.organizacao_id = ? AND (PARCEIRONEGOCIO.cpf like ? OR PARCEIRONEGOCIO.rg like ?)";
 
 		this.conn = this.conexao.getConexao();
+
 		ParceiroNegocio parceiro = null;
 
 		try {
@@ -109,8 +110,10 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		this.conexao.closeConnection(rsParceiroNegocio, stmt, conn);
 		return parceiro;
+
 	}
 
 	public ParceiroNegocio buscaParceiroNegocioById(Long parceiro_id) {

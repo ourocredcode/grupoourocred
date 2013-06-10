@@ -497,7 +497,7 @@ public class Contrato implements Serializable {
 	}
 
 	public String getNumeroBeneficio() {
-		return numeroBeneficio;
+		return numeroBeneficio == null ? "" : numeroBeneficio;
 	}
 
 	public void setNumeroBeneficio(String numeroBeneficio) {
@@ -537,7 +537,7 @@ public class Contrato implements Serializable {
 	}
 
 	public String getContratoBanco() {
-		return contratoBanco;
+		return contratoBanco == null ? "" : contratoBanco;
 	}
 
 	public void setContratoBanco(String contratoBanco) {
@@ -545,7 +545,7 @@ public class Contrato implements Serializable {
 	}
 
 	public String getPropostaBanco() {
-		return propostaBanco;
+		return propostaBanco == null ? "" : propostaBanco;
 	}
 
 	public void setPropostaBanco(String propostaBanco) {

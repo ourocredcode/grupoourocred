@@ -199,8 +199,9 @@ public class ContratoDao extends Dao<Contrato> {
 		return contrato;
 	}
 
-	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, String cliente, String documento,
-			Collection<String> status,Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores) {
+	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
+			Calendar calAprovadoInicio,Calendar calAprovadoFim,String cliente, String documento, Collection<String> status,Collection<String> produtos,
+			Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores) {
 
 		String sql = sqlContrato;
 		String clause = "";
@@ -295,6 +296,9 @@ public class ContratoDao extends Dao<Contrato> {
 
 		if(calInicio != null)
 			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
+		
+		if(calAprovadoInicio != null)
+			sql += " AND (CONTRATO.dataStatusFinal BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -384,9 +388,18 @@ public class ContratoDao extends Dao<Contrato> {
 
 				this.stmt.setTimestamp(curr,new Timestamp(calFim.getTimeInMillis()));
 				curr++;
+
 			} 
+			
+			if(calAprovadoInicio != null){
 
+				this.stmt.setTimestamp(curr,new Timestamp(calAprovadoInicio.getTimeInMillis()));
+				curr++;
 
+				this.stmt.setTimestamp(curr,new Timestamp(calAprovadoFim.getTimeInMillis()));
+				curr++;
+
+			}
 
 			this.rsContrato = this.stmt.executeQuery();
 
