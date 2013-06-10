@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -10,22 +12,28 @@ import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.UsuarioOrgAcessoDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.UsuarioOrgAcesso;
 
 @Resource
 public class UsuarioorgacessoController {
 
 	private final Result result;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
-	private final UsuarioDao usuarioDao;
+	private final UsuarioInfo usuarioInfo;
 	private final UsuarioOrgAcessoDao usuarioOrgAcessoDao;
+	
+	private Empresa empresa;
+	private Organizacao organizacao;
 
-	public UsuarioorgacessoController(Result result,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,UsuarioDao usuarioDao,UsuarioOrgAcessoDao usuarioOrgAcessoDao){
+	private Calendar dataAtual = Calendar.getInstance();
 
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
-		this.usuarioDao = usuarioDao;
+	public UsuarioorgacessoController(Result result, UsuarioInfo usuarioInfo, Empresa empresa, Organizacao organizacao, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,UsuarioDao usuarioDao,UsuarioOrgAcessoDao usuarioOrgAcessoDao){
+
+		this.usuarioInfo = usuarioInfo;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuarioOrgAcessoDao = usuarioOrgAcessoDao;
 		this.result = result;
 
@@ -35,6 +43,8 @@ public class UsuarioorgacessoController {
 	@Public
 	@Path("/usuarioorgacesso/cadastro")
 	public void cadastro() {
+
+		result.include("usuariosOrgAcesso", this.usuarioOrgAcessoDao.buscaAllUsuarioOrgAcessoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 
@@ -47,31 +57,39 @@ public class UsuarioorgacessoController {
 
 		try {
 
-			usuarioOrgAcesso.setEmpresa(this.empresaDao.load(usuarioOrgAcesso.getEmpresa().getEmpresa_id()));		
-			usuarioOrgAcesso.setOrganizacao(this.organizacaoDao.load(usuarioOrgAcesso.getOrganizacao().getOrganizacao_id()));
-			usuarioOrgAcesso.setUsuario(this.usuarioDao.load(usuarioOrgAcesso.getUsuario().getUsuario_id()));
+			if (this.usuarioOrgAcessoDao.buscaUsuarioOrgAcessoByEmpresaOrganizacaoUsuarioPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()
+					, usuarioOrgAcesso.getUsuario().getUsuario_id()) == null) {
 
-			usuarioOrgAcesso.setIsActive(usuarioOrgAcesso.getIsActive() == null ? false : true);
+				usuarioOrgAcesso.setCreated(dataAtual);
+				usuarioOrgAcesso.setUpdated(dataAtual);
+	
+				usuarioOrgAcesso.setCreatedBy(usuarioOrgAcesso.getUsuario());
+				usuarioOrgAcesso.setUpdatedBy(usuarioOrgAcesso.getUsuario());
+	
+				usuarioOrgAcesso.setIsActive(usuarioOrgAcesso.getIsActive() == null ? false : true);
+	
+				this.usuarioOrgAcessoDao.insert(usuarioOrgAcesso);
+	
+				mensagem = "Usuário adicionado com sucesso.";
 
-			this.usuarioOrgAcessoDao.insert(usuarioOrgAcesso);
-
-			mensagem = "Usuário Perfil adicionado com sucesso";
-
-		} catch(Exception e) {
-
-			System.out.println(e);
-
-			if (e.getMessage().indexOf("PK_USUARIOORGACESSO") != -1){
-				mensagem = "Erro: Usuário Perfil Acesso  já existente.";
 			} else {
-				mensagem = "Erro ao adicionar Usuário Perfil:";
-			}
 
-		} 
+				mensagem = "Erro: Usuário já cadastrado.";
 
-		this.usuarioOrgAcessoDao.clear();
-		this.usuarioOrgAcessoDao.close();
-		result.include("notice",mensagem);
+			} 
+
+		} catch (Exception e) {
+
+			mensagem = "Erro: Falha ao adicionar o Usuário.";
+
+		} finally{
+
+			this.usuarioOrgAcessoDao.clear();
+			this.usuarioOrgAcessoDao.close();
+
+		}
+
+		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
 	}
