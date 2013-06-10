@@ -33,6 +33,12 @@
 		$('#busca_DataFim').datepicker({
 			dateFormat: 'dd/mm/y'
 		});
+		$('#busca_DataAprovadoInicio').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataAprovadoFim').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
 		
 		$('.data-table').dataTable({
 			"bJQueryUI": true,
@@ -537,5 +543,6 @@
 			</div>
 		</div>
 	</div>	
+
 
 <%@ include file="/footer.jspf"%>
