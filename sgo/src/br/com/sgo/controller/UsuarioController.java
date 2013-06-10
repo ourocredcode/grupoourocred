@@ -1,15 +1,13 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -22,24 +20,17 @@ public class UsuarioController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
-	private final Validator validator;
 	private final UsuarioDao usuarioDao;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
-	private final ParceiroNegocioDao parceiroNegocioDao;
 	private Empresa empresa;
 	private Organizacao organizacao;
 
-	public UsuarioController(Result result,UsuarioInfo usuarioInfo,Validator validator, UsuarioDao usuarioDao,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao, ParceiroNegocioDao parceiroNegocioDao
-			,Empresa empresa,Organizacao organizacao){
+	private Calendar dataAtual = Calendar.getInstance();
+
+	public UsuarioController(Result result,UsuarioInfo usuarioInfo, UsuarioDao usuarioDao, Empresa empresa,Organizacao organizacao){
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
-		this.validator = validator;
 		this.usuarioDao = usuarioDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
-		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 
@@ -48,6 +39,8 @@ public class UsuarioController {
 	@Get
 	@Path("/usuario/cadastro")
 	public void cadastro() {
+		
+		result.include("usuarios", this.usuarioDao.buscaAllUsuariosByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 
@@ -56,41 +49,47 @@ public class UsuarioController {
 	@Path("/usuario/salva")
 	public void salva(Usuario usuario){
 
-		validator.validate(usuario);
-		validator.onErrorUsePageOf(this).cadastro();
-
 		String mensagem = "";
 
 		try {
-			usuario.setEmpresa(this.empresaDao.load(usuario.getEmpresa().getEmpresa_id()));
-			usuario.setOrganizacao(this.organizacaoDao.load(usuario.getOrganizacao().getOrganizacao_id()));
-			usuario.setParceiroNegocio(this.parceiroNegocioDao.load(usuario.getParceiroNegocio().getParceiroNegocio_id()));
-			usuario.setIsActive(usuario.getIsActive() == null ? false : true);
-	
-			this.usuarioDao.beginTransaction();
-			this.usuarioDao.adiciona(usuario);
-			this.usuarioDao.commit();
-	
-			
-			mensagem = "Ususário " + usuario.getNome() + " adicionado com sucesso";
-	
-			} catch(Exception e) {
-			
-			this.usuarioDao.rollback();
 
-			if (e.getCause().toString().indexOf("IX_USUARIO_EMP_ORG_PARC") != -1){
-				mensagem = "Erro: Parceiro de negócios " + usuario.getNome() + " já existente.";
+			if (this.usuarioDao.buscaUsuarioByEmpresaOrganizacaoChave(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), usuario.getChave()) == null) {
+
+				usuario.setCreated(dataAtual);
+				usuario.setUpdated(dataAtual);
+
+				usuario.setCreatedBy(usuario);
+				usuario.setUpdatedBy(usuario);
+
+				usuario.setParceiroNegocio(usuario.getParceiroNegocio().getParceiroNegocio_id() == null ? null : usuario.getParceiroNegocio());
+				usuario.setSupervisorUsuario(usuario.getSupervisorUsuario().getUsuario_id() == null ? null : usuario.getSupervisorUsuario());
+
+				usuario.setIsActive(usuario.getIsActive() == null ? false : true);
+
+				this.usuarioDao.beginTransaction();
+				this.usuarioDao.adiciona(usuario);
+				this.usuarioDao.commit();
+
+				mensagem = "Usuário adicionado com sucesso.";
+
 			} else {
-				mensagem = "Erro: Parceiro de negócios " + usuario.getParceiroNegocio().getNome() + " já cadastrado para a empresa " +
-						"" +  usuario.getEmpresa().getNome() + " e organização " +
-						"" + usuario.getOrganizacao().getNome() + ".";				
-			}
+
+				mensagem = "Erro: Usuário já cadastrado.";
+
+			} 
+
+		} catch (Exception e) {
+
+			mensagem = "Erro: Falha ao adicionar o Usuário.";
+
+		} finally{
+
+			this.usuarioDao.clear();
+			this.usuarioDao.close();
 
 		}
 
-		this.usuarioDao.clear();
-		this.usuarioDao.close();
-		result.include("notice",mensagem);
+		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
 	}

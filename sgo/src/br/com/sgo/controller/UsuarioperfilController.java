@@ -1,36 +1,44 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.UsuarioPerfilDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.UsuarioPerfil;
 
 @Resource
 public class UsuarioperfilController {
 
 	private final Result result;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
+	private final UsuarioInfo usuarioInfo; 
 	private final UsuarioDao usuarioDao;
-	private final PerfilDao perfilDao;
-	private final UsuarioPerfilDao usuarioPerfildao;
+	private final UsuarioPerfilDao usuarioPerfilDao;
+	
+	private Empresa empresa;
+	private Organizacao organizacao;
 
-	public UsuarioperfilController(Result result,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,UsuarioDao usuarioDao, PerfilDao perfilDao, UsuarioPerfilDao usuarioPerfildao){
+	private Calendar dataAtual = Calendar.getInstance();
 
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
-		this.usuarioDao = usuarioDao;
-		this.perfilDao = perfilDao;
-		this.usuarioPerfildao = usuarioPerfildao;
+	public UsuarioperfilController(Result result, Empresa empresa, Organizacao organizacao, UsuarioInfo usuarioInfo
+			, UsuarioDao usuarioDao, UsuarioPerfilDao usuarioPerfilDao){
+
 		this.result = result;
+		this.empresa = empresa;
+		this.organizacao = organizacao;
+		this.usuarioInfo = usuarioInfo;		
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();		
+		this.usuarioDao = usuarioDao;
+		this.usuarioPerfilDao = usuarioPerfilDao;
 
 	}
 
@@ -38,6 +46,8 @@ public class UsuarioperfilController {
 	@Public
 	@Path("/usuarioperfil/cadastro")
 	public void cadastro() {
+		
+		result.include("usuarioPerfis", this.usuarioPerfilDao.buscaAllUsuarioPerfilByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 
@@ -50,33 +60,40 @@ public class UsuarioperfilController {
 
 		try {
 
-			usuarioPerfil.setEmpresa(this.empresaDao.load(usuarioPerfil.getEmpresa().getEmpresa_id()));		
-			usuarioPerfil.setOrganizacao(this.organizacaoDao.load(usuarioPerfil.getOrganizacao().getOrganizacao_id()));
-			usuarioPerfil.setUsuario(this.usuarioDao.load(usuarioPerfil.getUsuario().getUsuario_id()));
-			usuarioPerfil.setPerfil(this.perfilDao.load(usuarioPerfil.getPerfil().getPerfil_id()));
+			if (this.usuarioPerfilDao.buscaUsuarioPerfilByEmpresaOrganizacaoUsuarioPerfil(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()
+					, usuarioPerfil.getUsuario().getUsuario_id(), usuarioPerfil.getPerfil().getPerfil_id()) == null) {
 
-			usuarioPerfil.setIsActive(usuarioPerfil.getIsActive() == null ? false : true);
+				usuarioPerfil.setCreated(dataAtual);
+				usuarioPerfil.setUpdated(dataAtual);
 
-			this.usuarioPerfildao.insert(usuarioPerfil);
+				usuarioPerfil.setCreatedBy(usuarioPerfil.getUsuario());
+				usuarioPerfil.setUpdatedBy(usuarioPerfil.getUsuario());
 
-			mensagem = "Usuário Perfil adicionado com sucesso";
+				usuarioPerfil.setIsActive(usuarioPerfil.getIsActive() == null ? false : true);
 
-		} catch(Exception e) {
+				this.usuarioPerfilDao.insert(usuarioPerfil);
 
-			System.out.println(e);
+				mensagem = "Usuário adicionado com sucesso.";
 
-			if (e.getMessage().indexOf("PK_USUARIOPERFIL") != -1){
-				mensagem = "Erro: Usuário Perfil Acesso  já existente.";
 			} else {
-				mensagem = "Erro ao adicionar Usuário Perfil:";
-			}
 
-		} 
+				mensagem = "Erro: Perfil já cadastrado.";
 
-		this.usuarioPerfildao.clear();
-		this.usuarioPerfildao.close();
-		result.include("notice",mensagem);
+			} 
+
+		} catch (Exception e) {
+
+			mensagem = "Erro: Falha ao adicionar o Perfil.";
+
+		} finally{
+
+			this.usuarioDao.clear();
+			this.usuarioDao.close();
+
+		}
+
+		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
-	}
 
+	}
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -27,12 +28,130 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 	private ResultSet rsUsuarioPerfil;
 	private ResultSet rsEmpresaPerfil;
 	private ResultSet rsOrganizacaoPerfil;
+	
+	private final String sqlPerfil = " SELECT USUARIOPERFIL.empresa_id, USUARIOPERFIL.organizacao_id, USUARIOPERFIL.usuario_id, USUARIOPERFIL.perfil_id FROM USUARIOPERFIL (NOLOCK) ";
+	
+	private final String sqlUsuarioPerfis = "SELECT USUARIOPERFIL.usuario_id, USUARIO.nome as usuario_nome, USUARIOPERFIL.perfil_id, PERFIL.nome as perfil_nome "+
+						", USUARIOPERFIL.empresa_id, EMPRESA.nome as empresa_nome, USUARIOPERFIL.organizacao_id, ORGANIZACAO.nome as organizacao_nome, USUARIOPERFIL.isactive "+
+						" FROM (((USUARIOPERFIL (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON USUARIOPERFIL.empresa_id = EMPRESA.empresa_id) "+
+						" INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIOPERFIL.organizacao_id = ORGANIZACAO.organizacao_id) "+
+						" INNER JOIN USUARIO (NOLOCK) ON USUARIOPERFIL.usuario_id = USUARIO.usuario_id) "+
+						" INNER JOIN PERFIL (NOLOCK) ON USUARIOPERFIL.perfil_id = PERFIL.perfil_id ";
 
 	public UsuarioPerfilDao(Session session, ConnJDBC conexao) {
 		super(session, UsuarioPerfil.class);
 		this.conexao = conexao;
 	}
 
+	public UsuarioPerfil buscaUsuarioPerfilByEmpresaOrganizacaoUsuarioPerfil(Long empresa_id, Long organizacao_id, Long usuario_id, Long perfil_id) {
+
+		String sql = sqlPerfil; 
+
+		this.conn = this.conexao.getConexao();
+		
+		if (empresa_id != null)
+			sql += " WHERE USUARIOPERFIL.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND USUARIOPERFIL.organizacao_id = ?";
+		if (usuario_id != null)
+			sql += " AND USUARIOPERFIL.usuario_id = ?";
+		if (perfil_id != null)
+			sql += " AND USUARIOPERFIL.perfil_id = ?";
+
+		UsuarioPerfil usuarioPerfil = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, usuario_id);
+			this.stmt.setLong(4, perfil_id);
+
+			this.rsUsuarioPerfil = this.stmt.executeQuery();
+
+			while (rsUsuarioPerfil.next()) {
+
+				usuarioPerfil = new UsuarioPerfil();				
+				Perfil perfil = new Perfil();
+				perfil.setPerfil_id(rsUsuarioPerfil.getLong("perfil_id"));				
+				usuarioPerfil.setPerfil(perfil);
+
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsUsuarioPerfil, stmt, conn);
+		return usuarioPerfil;
+	}
+
+	public Collection<UsuarioPerfil> buscaAllUsuarioPerfilByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
+
+		String sql = sqlUsuarioPerfis;
+
+		if (empresa_id != null)
+			sql += " WHERE USUARIOPERFIL.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND USUARIOPERFIL.organizacao_id = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<UsuarioPerfil> usuarioPerfis = new ArrayList<UsuarioPerfil>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
+			this.rsUsuarioPerfil = this.stmt.executeQuery();
+
+			while (rsUsuarioPerfil.next()) {
+
+				UsuarioPerfil usuarioPerfil = new UsuarioPerfil();
+				Empresa empresa = new Empresa();
+				Organizacao organizacao = new Organizacao();
+				Perfil perfil = new Perfil();
+				Usuario usuario = new Usuario();
+				
+				empresa.setEmpresa_id(rsUsuarioPerfil.getLong("empresa_id"));
+				empresa.setNome(rsUsuarioPerfil.getString("empresa_nome"));
+
+				organizacao.setOrganizacao_id(rsUsuarioPerfil.getLong("organizacao_id"));
+				organizacao.setNome(rsUsuarioPerfil.getString("organizacao_nome"));				
+				
+				perfil.setPerfil_id(rsUsuarioPerfil.getLong("perfil_id"));
+				perfil.setNome(rsUsuarioPerfil.getString("perfil_nome"));				
+
+				usuario.setUsuario_id(rsUsuarioPerfil.getLong("usuario_id"));
+				usuario.setNome(rsUsuarioPerfil.getString("usuario_nome"));	
+				
+				usuarioPerfil.setEmpresa(empresa);
+				usuarioPerfil.setOrganizacao(organizacao);
+				usuarioPerfil.setPerfil(perfil);
+				usuarioPerfil.setUsuario(usuario);
+				usuarioPerfil.setIsActive(rsUsuarioPerfil.getBoolean("isactive"));
+
+				usuarioPerfis.add(usuarioPerfil);
+				
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsUsuarioPerfil, stmt, conn);
+
+		return usuarioPerfis;
+
+	}
+	
 	public Collection<Perfil> buscaUsuarioPerfilAcesso(Usuario u) {
 
 		String sql = "SELECT PERFIL.perfil_id ,PERFIL.nome  FROM (ORGANIZACAO (NOLOCK) "
@@ -76,8 +195,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 		return perfis;
 	}
 
-	public Collection<Empresa> buscaEmpresaPerfilAcesso(Long perfil_id,
-			Long usuario_id) {
+	public Collection<Empresa> buscaEmpresaPerfilAcesso(Long perfil_id,	Long usuario_id) {
 
 		String sql = "SELECT DISTINCT(EMPRESA.empresa_id), EMPRESA.nome "
 				+ " FROM (ORGANIZACAO (NOLOCK) "
@@ -188,21 +306,26 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 
 	public void insert(UsuarioPerfil usuarioPerfil) throws SQLException {
 
-		String sql = "INSERT INTO USUARIOPERFIL " + "	(usuario_id, "
-				+ "	 perfil_id ," + "	 empresa_id ," + "	 organizacao_id) "
-				+ "    VALUES (?,?,?,?)";
+		String sql = "INSERT INTO USUARIOPERFIL (empresa_id, organizacao_id, usuario_id, perfil_id, created, updated, createdby, updatedby, isactive) "
+				+ "    VALUES (?,?,?,?,?,?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
 		try {
 
 			this.conn.setAutoCommit(false);
-			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1, usuarioPerfil.getUsuario().getUsuario_id());
-			this.stmt.setLong(2, usuarioPerfil.getPerfil().getPerfil_id());
-			this.stmt.setLong(3, usuarioPerfil.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(4, usuarioPerfil.getOrganizacao().getOrganizacao_id());
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, usuarioPerfil.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(2, usuarioPerfil.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(3, usuarioPerfil.getUsuario().getUsuario_id());
+			this.stmt.setLong(4, usuarioPerfil.getPerfil().getPerfil_id());
+			this.stmt.setTimestamp(5, new Timestamp(usuarioPerfil.getCreated().getTimeInMillis()));
+			this.stmt.setTimestamp(6, new Timestamp(usuarioPerfil.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(7, usuarioPerfil.getCreatedBy().getUsuario_id());
+			this.stmt.setLong(8, usuarioPerfil.getUpdatedBy().getUsuario_id());
+			this.stmt.setBoolean(9, usuarioPerfil.getIsActive());
 
 			this.stmt.executeUpdate();
 

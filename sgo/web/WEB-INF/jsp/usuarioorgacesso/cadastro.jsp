@@ -15,6 +15,30 @@ jQuery(function($){
 		window.location.href = '<c:url value="/usuarioorgacesso/cadastro" />';
 	});
 	
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+	
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+	
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
 	$('#usuarioOrgAcessoEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -145,20 +169,37 @@ function limpaForm(){
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Usuário</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+	<h1>Cadastro Usuário</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
-	
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
-		<a href="#" class="current">Usuário</a>
-	</div>
-	
+</div>
+
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Usuário</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
@@ -171,46 +212,31 @@ function limpaForm(){
 
 			<div id="myTabContent" class="tab-content">
 
-				<div class="tab-pane fade" id="usuario-div">					
-
-				</div>
-
-				<div class="tab-pane fade" id="usuarioperfil-div">					
-
-				</div>
+				<div class="tab-pane fade" id="usuario-div"></div>
+				<div class="tab-pane fade" id="usuarioperfil-div"></div>
 
 				<div class="tab-pane fade active in" id="usuarioorgacesso-div">
-
-						<form id="usuarioOrgAcessoForm" name="usuarioOrgAcessoForm" action="<c:url value="/usuarioorgacesso/salva"/>" method="POST">
-						
-						<div class="control-group">
-							<label class="control-label" for="usuarioOrgAcessoEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="usuarioOrgAcessoEmpresa" name="usuarioOrgAcesso.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="usuarioOrgAcessoEmpresaId" name="usuarioOrgAcesso.empresa.empresa_id" type="hidden">
+					<form id="usuarioOrgAcessoForm" name="usuarioOrgAcessoForm" action="<c:url value="/usuarioorgacesso/salva"/>" method="POST">
+					
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="usuarioOrgAcessoEmpresa">Empresa</label>
+      							<input class="input-medium" id="usuarioOrgAcessoEmpresa" name="usuarioOrgAcesso.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }">
+      							<input class="span1" id="usuarioOrgAcessoEmpresaId" name="usuarioOrgAcesso.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+    						</div>						
+							<div class="span2">
+								<label for="usuarioOrgAcessoOrganizacao">Organização</label>
+	      						<input class="input-medium" id="usuarioOrgAcessoOrganizacao" name="usuarioOrgAcesso.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" >
+	      						<input class="span1" id="usuarioOrgAcessoOrganizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+							</div>
+							<div class="span2">
+								<label for="usuarioOrgAcessoUsuario">Usuário</label>
+	      						<input class="input-medium" id="usuarioOrgAcessoUsuario" name="usuarioOrgAcesso.usuario.nome" value="${usuarioOrgAcesso.usuario.nome }" type="text" required>
+	      						<input class="span1" id="usuarioOrgAcessoUsuarioId" name="usuarioOrgAcesso.usuario.usuario_id" value="${usuarioOrgAcesso.usuario.usuario_id }" type="hidden">
 	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioOrgAcessoOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="usuarioOrgAcessoOrganizacao" name="usuarioOrgAcesso.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="usuarioOrgAcessoOrganizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioOrgAcessoUsuario">Usuário</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span10" id="usuarioOrgAcessoUsuario" name="usuarioOrgAcesso.usuario.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span10" id="usuarioOrgAcessoUsuarioId" name="usuarioOrgAcesso.usuario.usuario_id" type="hidden">
-	    					</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="usuarioOrgAcessoIsActive">Ativo</label>
-							<div class="controls">
-								<input type="checkbox" id="usuarioOrgAcessoIsActive" name="usuarioOrgAcesso.isActive" checked="checked" value="${usuarioOrgAcesso.isActive }">							
+							<div class="span1">
+								<label for="usuarioOrgAcessoIsActive">Ativo</label>
+								<input type="checkbox" id="usuarioOrgAcessoIsActive" name="usuarioOrgAcesso.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">
@@ -224,11 +250,44 @@ function limpaForm(){
 								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 							</div>
 						</div>
-
 					</form>
-
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Usuário Organização</h5></div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty usuariosOrgAcesso}">
+						<table class="table table-bordered table-striped table-hover data-table" style="font-size: 12px">
+							<thead>									
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Usuário</th>
+									<th>Login</th>
+									<th>Ativo</th>			
+								</tr>
+							</thead>								
+							<tbody>
+							<c:forEach items="${usuariosOrgAcesso }" var="usuarioOrgAcesso">
+								<tr>
+									<td>${usuarioOrgAcesso.empresa.nome }</td>
+									<td>${usuarioOrgAcesso.organizacao.nome }</td>
+									<td>${usuarioOrgAcesso.usuario.nome }</td>
+									<td>${usuarioOrgAcesso.usuario.chave }</td>
+									<td>${usuarioOrgAcesso.isActive }</td>
+								</tr>
+							</c:forEach>
+							</tbody>								
+						</table>
+					</c:if>							
+				</div>
 			</div>
 		</div>
 	</div>

@@ -168,7 +168,29 @@ jQuery(function($){
 		}
 	});
 	
-	$("#usuarioForm").validate();
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+	
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+	
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
 
 });
 
@@ -241,39 +263,36 @@ function limpaForm(){
 						<div class="row-fluid">
 							<div class="span2">
 								<label for="usuarioParceiroNegocio">Perceiro de Negócios</label>
-	      						<input class="input-medium" id="usuarioParceiroNegocio" name="usuario.parceiroNegocio.nome" type="text" required>
-	      						<input class="span1" id="usuarioParceiroNegocioId" name="usuario.parceiroNegocio.parceiroNegocio_id" type="hidden">
+	      						<input class="input-medium" id="usuarioParceiroNegocio" name="usuario.parceiroNegocio.nome" type="text" value="${usuario.parceiroNegocio.nome }" required>
+	      						<input class="span1" id="usuarioParceiroNegocioId" name="usuario.parceiroNegocio.parceiroNegocio_id" value="${usuario.parceiroNegocio.parceiroNegocio_id }" type="hidden">
+							</div>
+							<div class="span2">
+								<label for="usuarioChave">Login</label>
+								<input class="input-medium" id="usuarioChave" name="usuario.chave" placeholder="Login" type="text" value="${usuario.chave }" required>
+							</div>
+							<div class="span2">
+								<label for="usuarioSenha">Senha</label>
+								<input class="input-medium" type="password" id="usuarioSenha" name="usuario.senha" placeholder="Senha" value="${usuario.senha }" required>
 							</div>
 							<div class="span2">
 								<label for="usuarioSupervisorUsuario">Supervisor Usuário</label>
-	      						<input class="input-medium" id="usuarioSupervisorUsuario" name="usuario.usuario.nome" type="text" required>
-	      						<input class="span1" id="usuarioSupervisorUsuarioId" name="usuario.usuario.usuario_id" type="hidden" required>	    				
-							</div>
-							
+	      						<input class="input-medium" id="usuarioSupervisorUsuario" name="usuario.supervisorUsuario.nome" value="${usuario.supervisorUsuario.nome }" type="text" required>
+	      						<input class="span1" id="usuarioSupervisorUsuarioId" name="usuario.supervisorUsuario.usuario_id" value="${usuario.supervisorUsuario.usuario_id }" type="hidden" required>	    				
+							</div>							
 						</div>
 						<div class="row-fluid">
 							<div class="span3">
 								<label for="usuarioNome">Nome</label>
-								<input class="input-xlarge" type="text" id="usuarioNome" name="usuario.nome" placeholder="Nome" required readonly="readonly">
+								<input class="input-xlarge" type="text" id="usuarioNome" name="usuario.nome" placeholder="Nome" value="${usuario.nome }" required readonly="readonly">
 							</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="usuarioEmail">Email</label>
-								<input class="input-xlarge" type="text" id="usuarioEmail" name="usuario.email" placeholder="E-mail" required>
+								<input class="input-xlarge" type="text" id="usuarioEmail" name="usuario.email" placeholder="E-mail" value="${usuario.email }" required>
 							</div>
-						</div>
-						<div class="row-fluid">							
 							<div class="span2">
 								<label for="usuarioTelefone">Telefone</label>
-								<input class="input-medium" type="text" id="usuarioTelefone" name="usuario.telefone" placeholder="Telefone" required>
-							</div>
-							<div class="span2">
-								<label for="usuarioSenha">Senha</label>
-								<input class="input-medium" type="password" id="usuarioSenha" name="usuario.senha" placeholder="Senha" required>
-							</div>
-							<div class="span2">
-								<label for="usuarioChave">Login</label>
-								<input class="input-medium" id="usuarioChave" name="usuario.chave" placeholder="Login" type="text" required>
-							</div>
+								<input class="input-medium" type="text" id="usuarioTelefone" name="usuario.telefone" placeholder="Telefone" value="${usuario.telefone }" required>
+							</div>							
 							<div class="span1">
 								<label for="usuarioIsActive">Ativo</label>							
 								<input class="span1" type="checkbox" id="usuarioIsActive" name="usuario.isActive" checked="checked" value="${usuario.isActive }" >
@@ -298,6 +317,44 @@ function limpaForm(){
 
 			</div>
 		</div>		
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Usuários</h5></div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty usuarios}">
+						<table class="table table-bordered table-striped table-hover data-table" style="font-size: 12px">
+							<thead>									
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Usuário</th>
+									<th>Supervisor Usuário</th>
+									<th>Login</th>
+									<th>Ativo</th>			
+								</tr>
+							</thead>								
+							<tbody>
+							<c:forEach items="${usuarios }" var="user">
+								<tr>
+									<td>${user.empresa.nome }</td>
+									<td>${user.organizacao.nome }</td>
+									<td>${user.nome }</td>
+									<td>${user.supervisorUsuario.nome }</td>
+									<td>${user.chave }</td>											
+									<td>${user.isActive }</td>
+								</tr>
+							</c:forEach>
+							</tbody>								
+						</table>
+					</c:if>							
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
