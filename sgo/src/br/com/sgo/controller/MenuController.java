@@ -94,19 +94,39 @@ public class MenuController {
 	}
 	
 	@Get
-	@Path("/menu/inicio/{tipo}") 
-	public void inicio(String tipo) {
+	@Path("/menu/inicio/{perfil}") 
+	public void inicio(String perfil) {
 
 		usuarioDao.refresh(usuarioInfo.getUsuario());
 		perfilDao.refresh(usuarioInfo.getPerfil());
 
-		if(tipo.equals("Supervisor") || tipo.equals("Consultor"))
+		Calendar c1 = new GregorianCalendar();
+		Calendar c2 = new GregorianCalendar();
+		c1.set(GregorianCalendar.DAY_OF_MONTH, c1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
+		c2.set(GregorianCalendar.DAY_OF_MONTH, c2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+
+		Long empresa_id = empresa.getEmpresa_id();
+		Long organizacao_id = organizacao.getOrganizacao_id();
+		String cliente = "";
+		String documento = "";
+		Collection<String> status = new ArrayList<String>();
+		Collection<String> produtos = new ArrayList<String>();
+		Collection<String> bancos = new ArrayList<String>();
+		Collection<String> bancosComprados = new ArrayList<String>();
+		Collection<Usuario> consultores = new ArrayList<Usuario>();
+		Calendar calAprovadoInicio = null;
+		Calendar calAprovadoFim = null;
+
+		if(perfil.equals("Supervisor") || perfil.equals("Consultor"))
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
 
-		if(tipo.equals("Administrativo"))
+		if(perfil.equals("Administrativo"))
 			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
-		contador();
+		if(perfil.equals("Gestor"))
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
+
+		contadorSeparado();
 
 	}
 	
@@ -116,12 +136,47 @@ public class MenuController {
 
 		usuarioDao.refresh(usuarioInfo.getUsuario());
 		perfilDao.refresh(usuarioInfo.getPerfil());
+		
+		Calendar c1 = new GregorianCalendar();
+		Calendar c2 = new GregorianCalendar();
+		c1.set(GregorianCalendar.DAY_OF_MONTH, c1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
+		c2.set(GregorianCalendar.DAY_OF_MONTH, c2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+
+		Long empresa_id = empresa.getEmpresa_id();
+		Long organizacao_id = organizacao.getOrganizacao_id();
+		String cliente = "";
+		String documento = "";
+		Collection<String> status = new ArrayList<String>();
+		Collection<String> produtos = new ArrayList<String>();
+		Collection<String> bancos = new ArrayList<String>();
+		Collection<String> bancosComprados = new ArrayList<String>();
+		Collection<Usuario> consultores = new ArrayList<Usuario>();
+		Calendar calAprovadoInicio = null;
+		Calendar calAprovadoFim = null;
 
 		if(tipo.equals("Supervisor") || tipo.equals("Consultor"))
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
 
 		if(tipo.equals("Administrativo"))
 			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		
+		if(tipo.equals("Gestor")){
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
+		}
+
+		if(tipo.equals("aprovados")){
+			status.add("Aprovado");
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
+		}
+		
+		if(tipo.equals("boletos")){
+			result.include("buscaBoleto","block");
+			result.include("buscaAprovado","none");
+		} else {
+			result.include("buscaBoleto","none");
+			result.include("buscaAprovado","block");
+		}
+			
 
 		result.include("bancos",this.bancoDao.buscaBancoByGrupo("Tomadores"));
 		result.include("bancosComprados",this.bancoDao.buscaBancoByGrupo("Comprados"));
@@ -378,10 +433,52 @@ public class MenuController {
 
 		result.include("contratos",contratos);
 		result.include("totalValorContratos",totalValorContratos);
-		result.include("totalValorMeta",totalValorMeta);
+
 		result.include("totalValorDivida",totalValorDivida);
 		result.include("totalValorSeguro",totalValorSeguro);
 		result.include("totalValorLiquido",totalValorLiquido);
+		result.include("totalValorMeta",totalValorMeta);
+		result.include("countContratos",countContratos);
+		result.include("countClientes",countClientes.size());
+
+	}
+	
+	private void contadorSeparado() {
+
+		Double totalValorContratos = 0.0;
+		Double totalValorMeta = 0.0;
+		Double totalValorDivida = 0.0;
+		Double totalValorSeguro = 0.0;
+		Double totalValorLiquido = 0.0;
+		Integer countContratos = 0;
+		Set<ParceiroNegocio> countClientes = new HashSet<ParceiroNegocio>();
+		Etapa aprovado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNomeExato(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Aprovado");
+
+		for(Contrato cs : contratos){
+
+			countClientes.add(cs.getFormulario().getParceiroNegocio());
+			totalValorContratos += cs.getValorContrato();
+			
+			totalValorDivida += cs.getValorDivida();
+			totalValorSeguro += cs.getValorSeguro();
+			totalValorLiquido += cs.getValorLiquido();
+
+			if(cs.getEtapa().getEtapa_id().compareTo(aprovado.getEtapa_id()) == 0){
+				totalValorMeta += cs.getValorMeta();
+			}
+				
+
+			countContratos += 1;
+
+		}
+
+		result.include("contratos",contratos);
+		result.include("totalValorContratos",totalValorContratos);
+
+		result.include("totalValorDivida",totalValorDivida);
+		result.include("totalValorSeguro",totalValorSeguro);
+		result.include("totalValorLiquido",totalValorLiquido);
+		result.include("totalValorMeta",totalValorMeta);
 		result.include("countContratos",countContratos);
 		result.include("countClientes",countClientes.size());
 

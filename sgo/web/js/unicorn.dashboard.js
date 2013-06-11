@@ -3,9 +3,13 @@
  * Diablo9983 -> diablo9983@gmail.com
 **/
 $(document).ready(function(){
+	
+	
 
 	// === Prepare peity charts === //
 	unicorn.peity();
+	
+	$('select').select2();
 	
 	// === Prepare the chart data ===/
 	var sin = [], cos = [];
@@ -137,7 +141,10 @@ $(document).ready(function(){
        trigger: trigger,
        html: html   
     });
+
 });
+
+
 
 
 unicorn = {

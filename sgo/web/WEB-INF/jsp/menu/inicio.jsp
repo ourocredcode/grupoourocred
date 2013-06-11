@@ -58,9 +58,11 @@
 										</li>
 										<li class="popover-orders">
 											<div class="left peity_bar_bad"><span>1030,480,200,5200,1200,250,${totalValorMeta }</span>0%</div>
-											<div class="right">
-												<strong>${totalValorMeta }</strong>
-												Meta
+											<div class="right" style="width: auto;">
+												<a href="#" onclick="javascript:window.location='/sgo/menu/contratos/aprovados'">
+													<strong><fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" /></strong>
+													Aprovados
+												</a>
 											</div>
 										</li>
 										<li class="popover-tickets">
@@ -216,62 +218,19 @@
 				</div>
 
 			</div>
-			<div class="span3">
+
+			<div class="span6">
 				<div class="widget-box">
 					<div class="widget-title">
 						<span class="icon">
 							<i class="icon-tag"></i>
 						</span>
-						<h5>Cliente</h5>
+						<h5>Controle de Boletos</h5>
+						<div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-search"></i> Buscar</a></div>
 					</div>
 
 					<div class="widget-content">
-					
-						<h3>Cliente</h3>
-
-						<div class="control-group">
-							<label class="control-label">Nome Cliente</label>
-							<div class="controls">
-								<input type="text" class="span12"/>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">Documento</label>
-							<div class="controls">
-								<input type="text" class="span12"/>
-							</div>
-						</div>
-
-					</div>
-
-				</div>	
-			</div>
-			<div class="span3">
-				<div class="widget-box">
-					<div class="widget-title">
-						<span class="icon">
-							<i class="icon-tag"></i>
-						</span>
-						<h5>Data</h5>
-					</div>
-
-					<div class="widget-content">
-					
-						<h3>Data</h3>
-
-						<div class="control-group">
-							<label class="control-label">Data Início</label>
-							<div class="controls">
-								<input type="text" class="span12"/>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">Data Fim</label>
-							<div class="controls">
-								<input type="text" class="span12"/>
-							</div>
-						</div>
-
+						<a href="/sgo/menu/contratos/boletos">Aguardando Boleto</a>
 					</div>
 
 				</div>	

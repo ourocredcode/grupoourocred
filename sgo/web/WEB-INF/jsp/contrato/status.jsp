@@ -4,9 +4,7 @@
 $(document).ready(function() {
 
 	$("#dataStatusFinal").mask("99/99/9999");
-	
 	$("#logisticaDataAssinatura").mask("99/99/9999");
-
 	$("#dataConcluido").mask("99/99/9999");
 	$("#dataDigitacao").mask("99/99/9999");
 	$("#dataQuitacao").mask("99/99/9999");
@@ -23,9 +21,7 @@ $(document).ready(function() {
 	});
 	
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
-	
-	$('select').select2();
-	
+
 	$("span.icon input:checkbox, th input:checkbox").click(function() {
 		var checkedStatus = this.checked;
 		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
@@ -168,6 +164,9 @@ $(document).ready(function() {
 		dateFormat: 'dd/mm/y'
 	});
 	$('#dataStatusFinal').datepicker({
+		dateFormat: 'dd/mm/y'
+	});
+	$('#dataConcluido').datepicker({
 		dateFormat: 'dd/mm/y'
 	});
 	$('#dataConcluido').datepicker({
@@ -316,15 +315,26 @@ function mostra(id){
 }
 
 function conferencia(contrato_id){
+
 	$('#divConferencia').load('<c:url value="/conferencia/cadastro"/>',{'contrato_id' : contrato_id});
+	
+	return false;
 }
 
 function boleto(contrato_id){
+
 	$('#divBoleto').load('<c:url value="/controle/boleto"/>',{'contrato_id': contrato_id});
+	
+	return false;
+
 }
 
 function averbacao(contrato_id){
+
 	$('#divAverbacao').load('<c:url value="/controle/averbacao"/>',{'contrato_id': contrato_id});
+
+	return false;
+
 }
 
 function desabilita(campo){   
@@ -866,7 +876,7 @@ function openPopup(url) {
 						</span>
 						<h5>Conferência Contrato </h5>
 						<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
-							<div class="buttons"><a href="#" class="btn btn-mini" onclick="conferencia('${contrato.contrato_id}');"><i class="icon-refresh"></i> Conferencia</a></div>
+							<div class="buttons"><a href="#" class="btn btn-mini" onclick="javascript:return conferencia('${contrato.contrato_id}');"><i class="icon-refresh"></i> Conferencia</a></div>
 						</c:if>
 					</div>
 					<div class="widget-content padding">
@@ -911,7 +921,7 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Boleto</h5>
-						<div class="buttons"><a href="#" class="btn btn-mini" onclick="boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						<div class="buttons"><a href="#" class="btn btn-mini" onclick="javascript:return boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
@@ -981,7 +991,7 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Averbacao</h5>
-						<div class="buttons"><a href="#" class="btn btn-mini" onclick="averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						<div class="buttons"><a href="#" class="btn btn-mini" onclick="javascript:return averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
