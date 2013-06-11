@@ -27,6 +27,30 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowtransicao/cadastro" />';
 	});
 
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
 	$('#etapaEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -208,35 +232,48 @@ function limpaForm(){
 				</div>
 				
 				<div class="tab-pane fade" id="workflowetapa-div"></div>
-				
-				<table class="table table-striped table-bordered" id="lista">
-					<thead>
-						<tr>
-							<th>Empresa</th>
-							<th>Organização</th>							
-							<th>Etapa</th>
-							<th>Ordem Etapa</th>
-							<th>Padrão</th>
-							<th>Ativo</th>								
-						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${etapas }" var="etapa">
-							<tr>
-								<td>${etapa.empresa.nome }</td>
-								<td>${etapa.organizacao.nome }</td>								
-								<td>${etapa.nome }</td>
-								<td>${etapa.ordemEtapa }</td>
-								<td>${etapa.isPadrao }</td>
-								<td>${etapa.isActive }</td>									
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-
 				<div class="tab-pane fade" id="workflowetapaperfilacesso-div"></div>
 				<div class="tab-pane fade" id="workflowtransicao-div"></div>
 
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Workflow Transição</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty etapas}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Etapa</th>
+									<th>Ordem Etapa</th>
+									<th>Padrão</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${etapas }" var="etapa">
+									<tr>
+										<td>${etapa.nome }</td>
+										<td>${etapa.ordemEtapa }</td>
+										<td>${etapa.isPadrao }</td>
+										<td>${etapa.isActive }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -38,7 +38,31 @@ jQuery(function($){
 	});
 	$('#tipodadobd-li-a').click(function() {
 		window.location.href = '<c:url value="/tipodadobd/cadastro" />';
-	});	
+	});
+	
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+	
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+	
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
 	
 	$('#perfilEmpresa').autocomplete({
 		source: function( request, response ) {
@@ -267,29 +291,7 @@ function limpaForm(){
 						</div>
 					</form>
 				</div>				
-				<table class="table table-striped table-bordered">
-					<thead>
-						<tr>
-							<th>Empresa</th>
-							<th>Organização</th>
-							<th>Perfil</th>
-							<th>Supervisor Usuário</th>
-							<th>Ativo</th>			
-						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${perfis }" var="perfil">
-							<tr>
-								<td>${perfil.empresa.nome }</td>
-								<td>${perfil.organizacao.nome }</td>
-								<td>${perfil.nome }</td>
-								<td>${perfil.supervisorUsuario.nome }</td>				
-								<td>${perfil.isActive }</td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-				
+
 				<div class="tab-pane fade" id="perfilorgacesso-div"></div>				
 				<div class="tab-pane fade" id="janela-div"></div>				
 				<div class="tab-pane fade" id="perfiljanelaacesso-div"></div>
@@ -299,10 +301,50 @@ function limpaForm(){
 				<div class="tab-pane fade" id="colunabd-div"></div>
 				<div class="tab-pane fade" id="elementobd-div"></div>
 				<div class="tab-pane fade" id="tipodadobd-div"></div>
-				
+
 			</div>
 		</div>
 	</div>
 </div>
 
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i></span>
+					<h5>Perfil</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty perfis}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Perfil</th>
+									<th>Supervisor Usuário</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${perfis }" var="perfil">
+									<tr>
+										<td>${perfil.empresa.nome }</td>
+										<td>${perfil.organizacao.nome }</td>
+										<td>${perfil.nome }</td>
+										<td>${perfil.supervisorUsuario.nome }</td>
+										<td>${perfil.isActive }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <%@ include file="/footer.jspf"%>

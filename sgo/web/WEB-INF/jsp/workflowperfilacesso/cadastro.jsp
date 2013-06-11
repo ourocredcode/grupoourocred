@@ -27,6 +27,30 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowtransicao/cadastro" />';
 	});
 
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
 	$('#workflowPerfilAcessoEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -263,18 +287,18 @@ function limpaForm(){
 	    					</div>
     					</div>
     					<div class="row-fluid">
-	    					<div class="span3">
+	    					<div class="span2">
 								<label for="workflowPerfilAcessoWorkflow">Workflow</label>
-								<select class="input-medim" id="workflowPerfilAcessoWorkflowId" name="workflowPerfilAcesso.workflow.workflow_id" >
+								<select class="input-medium" id="workflowPerfilAcessoWorkflowId" name="workflowPerfilAcesso.workflow.workflow_id" >
 									<c:forEach var="workflow" items="${workflows }">
 									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
 									 	</option>
 									</c:forEach>
 								</select>
 							</div>
-							<div class="span3">
+							<div class="span2">
 								<label for="workflowPerfilAcessoPerfil">Perfil</label>
-								<select class="input-medim" id="workflowPerfilAcessoPerfilId" name="workflowPerfilAcesso.perfil.perfil_id" >
+								<select class="input-medium" id="workflowPerfilAcessoPerfilId" name="workflowPerfilAcesso.perfil.perfil_id" >
 									<c:forEach var="perfil" items="${perfis }">
 									 	<option value="${perfil.perfil_id }" selected="selected"> ${perfil.nome }
 									 	</option>
@@ -304,32 +328,50 @@ function limpaForm(){
 					</form>
 				</div>
 
-				<table class="table table-striped table-bordered" id="lista">
-					<thead>
-						<tr>
-							<th>Empresa</th>
-							<th>Organização</th>
-							<th>Workflow</th>
-							<th>Perfil</th>								
-						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${workflowperfisacesso }" var="workflowperfilacesso">
-							<tr>
-								<td>${workflowperfilacesso.empresa.nome }</td>
-								<td>${workflowperfilacesso.organizacao.nome }</td>
-								<td>${workflowperfilacesso.workflow.nome }</td>
-								<td>${workflowperfilacesso.perfil.nome}</td>								
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>				
-
 				<div class="tab-pane fade" id="etapa-div"></div>
 				<div class="tab-pane fade" id="workflowetapa-div"></div>
 				<div class="tab-pane fade" id="workflowetapaperfilacesso-div"></div>
 				<div class="tab-pane fade" id="workflowtransicao-div"></div>
 
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Workflow Perfil Acesso</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty workflowPerfisAcesso}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Workflow</th>
+									<th>Perfil</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${workflowPerfisAcesso }" var="workflowPerfilAcesso">
+									<tr>
+										<td>${workflowPerfilAcesso.empresa.nome }</td>
+										<td>${workflowPerfilAcesso.organizacao.nome }</td>
+										<td>${workflowPerfilAcesso.workflow.nome }</td>
+										<td>${workflowPerfilAcesso.perfil.nome}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>

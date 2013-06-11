@@ -27,6 +27,30 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowtransicao/cadastro" />';
 	});
 
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
 	$('#workflowEtapaPerfilAcessoEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -376,36 +400,50 @@ function buscaEtapas(){
 						</div>
 					</form>
 				</div>
-				
-				<table class="table table-striped table-bordered" id="lista">
-					<thead>
-						<tr>
-							<th>Empresa</th>
-							<th>Organização</th>
-							<th>Worklflow</th>
-							<th>Worklflow Etapa</th>
-							<th>Perfil</th>
-							<th>Leitura e Escrita</th>
-							<th>Ativo</th>
-						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${workflowEtapasPerfilAcesso }" var="workflowEtapaPerfilAcesso">
-							<tr>
-								<td>${workflowEtapaPerfilAcesso.empresa.nome }</td>
-								<td>${workflowEtapaPerfilAcesso.organizacao.nome }</td>
-								<td>${workflowEtapaPerfilAcesso.workflow.nome }</td>
-								<td>${workflowEtapaPerfilAcesso.etapa.nome }</td>
-								<td>${workflowEtapaPerfilAcesso.perfil.nome }</td>								
-								<td>${workflowEtapaPerfilAcesso.isLeituraEscrita }</td>
-								<td>${workflowEtapaPerfilAcesso.isActive }</td>									
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-				
+
 				<div class="tab-pane fade" id="workflowtransicao-div"></div>
 
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Workflow Etapa Perfil Acesso</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty workflowEtapasPerfilAcesso}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Worklflow</th>
+									<th>Worklflow Etapa</th>
+									<th>Perfil</th>
+									<th>Leitura e Escrita</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${workflowEtapasPerfilAcesso }" var="workflowEtapaPerfilAcesso">
+									<tr>
+										<td>${workflowEtapaPerfilAcesso.workflow.nome }</td>
+										<td>${workflowEtapaPerfilAcesso.etapa.nome }</td>
+										<td>${workflowEtapaPerfilAcesso.perfil.nome }</td>
+										<td>${workflowEtapaPerfilAcesso.isLeituraEscrita }</td>
+										<td>${workflowEtapaPerfilAcesso.isActive }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>
