@@ -493,7 +493,7 @@ public class ContratoController {
 			this.contrato.setContratoBanco(contrato.getContratoBanco());
 		}
 
-		if(contrato.getOrganizacaoDigitacao().getOrganizacao_id() != null){
+		if(contrato.getOrganizacaoDigitacao() != null){
 
 			contrato.setOrganizacaoDigitacao(this.organizacaoDao.load(contrato.getOrganizacaoDigitacao().getOrganizacao_id()));
 

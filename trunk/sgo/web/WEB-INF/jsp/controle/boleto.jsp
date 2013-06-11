@@ -40,37 +40,18 @@ $(document).ready(function() {
 
 		};
 	});
-	
-	$('#boletoDataPrevisao').focus( function() {
-		$(this).calendario({
-			target:'#boletoDataPrevisao',
-			top:0,
-			left:100
-		});
+
+	$('#boletoDataPrevisao').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
-	
-	$('#boletoDataChegada').focus( function() {
-		$(this).calendario({
-			target:'#boletoDataChegada',
-			top:0,
-			left:100
-		});
+	$('#boletoDataChegada').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
-	
-	$('#boletoDataVencimento').focus( function() {
-		$(this).calendario({
-			target:'#boletoDataVencimento',
-			top:0,
-			left:100
-		});
+	$('#boletoDataVencimento').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
-	
-	$('#boletoDataProximaAtuacao').focus( function() {
-		$(this).calendario({
-			target:'#boletoDataProximaAtuacao',
-			top:0,
-			left:100
-		});
+	$('#boletoDataProximaAtuacao').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
 
 });

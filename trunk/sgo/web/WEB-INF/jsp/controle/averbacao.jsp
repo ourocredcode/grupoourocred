@@ -38,21 +38,12 @@ $(document).ready(function() {
 
 		};
 	});
-	
-	$('#averbacaoDataPrevisao').focus( function() {
-		$(this).calendario({
-			target:'#averbacaoDataPrevisao',
-			top:0,
-			left:100
-		});
+		
+	$('#averbacaoDataProximaAtuacao').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
-	
-	$('#averbacaoDataProximaAtuacao').focus( function() {
-		$(this).calendario({
-			target:'#averbacaoDataProximaAtuacao',
-			top:0,
-			left:100
-		});
+	$('#averbacaoDataPrevisao').datepicker({
+		dateFormat: 'dd/mm/y'
 	});
 
 });
