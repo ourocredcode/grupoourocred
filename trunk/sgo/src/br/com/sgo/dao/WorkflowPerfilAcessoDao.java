@@ -47,7 +47,7 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<WorkflowPerfilAcesso> workflowperfisacesso = new ArrayList<WorkflowPerfilAcesso>();
+		Collection<WorkflowPerfilAcesso> workflowPerfisAcesso = new ArrayList<WorkflowPerfilAcesso>();
 
 		try {
 
@@ -73,14 +73,14 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 				perfil.setPerfil_id(rsWorkflowPerfilAcesso.getLong("perfil_id"));
 				perfil.setNome(rsWorkflowPerfilAcesso.getString("perfil_nome"));
 
-				WorkflowPerfilAcesso workflowperfilacesso = new WorkflowPerfilAcesso();
+				WorkflowPerfilAcesso workflowPerfilAcesso = new WorkflowPerfilAcesso();
 
-				workflowperfilacesso.setEmpresa(empresa);
-				workflowperfilacesso.setOrganizacao(organizacao);
-				workflowperfilacesso.setWorkflow(workflow);
-				workflowperfilacesso.setPerfil(perfil);
+				workflowPerfilAcesso.setEmpresa(empresa);
+				workflowPerfilAcesso.setOrganizacao(organizacao);
+				workflowPerfilAcesso.setWorkflow(workflow);
+				workflowPerfilAcesso.setPerfil(perfil);
 
-				workflowperfisacesso.add(workflowperfilacesso);
+				workflowPerfisAcesso.add(workflowPerfilAcesso);
 
 			}
 
@@ -92,7 +92,7 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 
 		this.conexao.closeConnection(rsWorkflowPerfilAcesso, stmt, conn);
 
-		return workflowperfisacesso;
+		return workflowPerfisAcesso;
 	}
 
 	public Collection<WorkflowPerfilAcesso> buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoPerfil(Long empresa_id, Long organizacao_id, Long workflow_id) {

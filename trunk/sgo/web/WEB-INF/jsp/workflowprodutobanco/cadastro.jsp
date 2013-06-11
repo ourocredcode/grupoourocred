@@ -7,6 +7,30 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowprodutobanco/cadastro" />';
 	});
 
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
 	$('#workflowProdutoBancoEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -209,18 +233,18 @@ function limpaForm(){
 	      						<input class="span1" id="workflowProdutoBancoProdutoId" name="workflowProdutoBanco.produto.produto_id" value="${workflowProdutoBanco.produto.produto_id }" type="hidden">
 							
 							</div>
-							<div class="span3">
+							<div class="span2">
 								<label for="workflowProdutoBancoBanco">Banco</label>
-								<select class="input-medim" id="workflowProdutoBancoBancoId" name="workflowProdutoBanco.banco.banco_id" >
+								<select class="input-medium" id="workflowProdutoBancoBancoId" name="workflowProdutoBanco.banco.banco_id" >
 									<c:forEach var="banco" items="${bancos }">
 									 	<option value="${banco.banco_id }" selected="selected"> ${banco.nome }
 									 	</option>
 									</c:forEach>
 								</select>
 							</div>
-							<div class="span3">
+							<div class="span2">
 								<label for="workflowProdutoBancoWorkflow">Worflow</label>
-								<select class="input-medim" id="workflowProdutoBancoWorkflowId" name="workflowProdutoBanco.workflow.workflow_id" >
+								<select class="input-medium" id="workflowProdutoBancoWorkflowId" name="workflowProdutoBanco.workflow.workflow_id" >
 									<c:forEach var="workflow" items="${workflows }">
 									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
 									 	</option>
@@ -234,10 +258,8 @@ function limpaForm(){
 							<div class="span1">
 								<label for="workflowProdutoBancoIsWorkflow">Workflow</label>							
 								<input id="workflowProdutoBancoIsWorkflow" name="workflowProdutoBanco.isWorkflow" type="checkbox" checked="checked" value="1" >
-							</div>
-							
+							</div>							
 						</div>
-
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
@@ -251,26 +273,43 @@ function limpaForm(){
 						</div>
 					</form>
 				</div>
-				
-				<table class="table table-striped table-bordered" id="lista">
-					<thead>
-						<tr>
-							<th>Banco</th>
-							<th>Produto</th>
-							<th>Workflow</th>								
-						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${workflowsProdutoBanco }" var="workflowProdutoBanco">
-							<tr>
-								<td>${workflowProdutoBanco.banco.nome }</td>
-								<td>${workflowProdutoBanco.produto.nome }</td>
-								<td>${workflowProdutoBanco.workflow.nome }</td>									
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>							
-								
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Workflow Produto Banco</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty workflowsProdutoBanco}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Banco</th>
+									<th>Produto</th>
+									<th>Workflow</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${workflowsProdutoBanco }" var="workflowProdutoBanco">
+									<tr>
+										<td>${workflowProdutoBanco.banco.nome }</td>
+										<td>${workflowProdutoBanco.produto.nome }</td>
+										<td>${workflowProdutoBanco.workflow.nome }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>

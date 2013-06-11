@@ -27,6 +27,30 @@ jQuery(function($){
 		window.location.href = '<c:url value="/workflowtransicao/cadastro" />';
 	});
 
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
 	$('#workflowEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -220,7 +244,7 @@ function limpaForm(){
 							</div>
 						</div>
 						<div class="row-fluid">
-							<div class="span3">
+							<div class="span2">
 								<label for="workflowTipoWorkflow">Tipo de Worflow</label>
 								<select class="input-medim" id="workflowTipoWorkflowId" name="workflow.tipoWorkflow.tipoWorkflow_id" >
 									<c:forEach var="tipoWorkflow" items="${tiposWorkflow }">
@@ -252,31 +276,49 @@ function limpaForm(){
 						</div>
 					</form>
 				</div>
-				
-				<table class="table table-striped table-bordered" id="lista">
-					<thead>
-						<tr>
-							<th>Empresa</th>
-							<th>Organização</th>
-							<th>Nome</th>								
-						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${workflows }" var="workflow">
-							<tr>
-								<td>${workflow.empresa.nome }</td>
-								<td>${workflow.organizacao.nome }</td>
-								<td>${workflow.nome }</td>									
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-								
+
 				<div class="tab-pane fade" id="workflowperfilacesso-div"></div>
 				<div class="tab-pane fade" id="etapa-div"></div>				
 				<div class="tab-pane fade" id="workflowetapa-div"></div>
 				<div class="tab-pane fade" id="workflowetapaperfilacesso-div"></div>
 				<div class="tab-pane fade" id="workflowtransicao-div"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Workflow</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty workflows}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Nome</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${workflows }" var="workflow">
+									<tr>
+										<td>${workflow.empresa.nome }</td>
+										<td>${workflow.organizacao.nome }</td>
+										<td>${workflow.nome }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>
