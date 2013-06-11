@@ -24,7 +24,7 @@ public class ClassificacaoBanco implements Serializable {
 	@Id
 	@Column(name = "classificacaobanco_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long classificacaobanco_id;
+	private Long classificacaoBanco_id;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
@@ -59,13 +59,13 @@ public class ClassificacaoBanco implements Serializable {
 
 	@Column(name = "isactive")
 	private Boolean isActive;
-	
-	public Long getClassificacaobanco_id() {
-		return classificacaobanco_id;
+
+	public Long getClassificacaoBanco_id() {
+		return classificacaoBanco_id;
 	}
 
-	public void setClassificacaobanco_id(Long classificacaobanco_id) {
-		this.classificacaobanco_id = classificacaobanco_id;
+	public void setClassificacaoBanco_id(Long classificacaoBanco_id) {
+		this.classificacaoBanco_id = classificacaoBanco_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -82,30 +82,6 @@ public class ClassificacaoBanco implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
 	}
 
 	public Usuario getCreatedBy() {
@@ -146,6 +122,30 @@ public class ClassificacaoBanco implements Serializable {
 
 	public void setChave(String chave) {
 		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

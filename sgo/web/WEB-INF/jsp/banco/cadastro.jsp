@@ -10,7 +10,31 @@ jQuery(function($){
 	$('#banco-li-a').click(function() {
 		window.location.href = '<c:url value="/banco/cadastro" />';
 	});
+
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
 	$('#bancoEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -177,13 +201,11 @@ function limpaForm() {
 		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">								
-				<li class="" id="grupobanco-li"><a href="#grupobanco-div" data-toggle="tab" id="grupobanco-li-a">Grupo de Bancos</a></li>
 				<li class="active" id="banco-li"><a href="#banco-div" data-toggle="tab" id="banco-li-a">Banco</a></li>
+				<li class="" id="grupobanco-li"><a href="#grupobanco-div" data-toggle="tab" id="grupobanco-li-a">Grupo de Bancos</a></li>
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
-
-				<div class="tab-pane fade" id="grupobanco-div"></div>
 
 				<div class="tab-pane fade active in" id="banco-div" >
 					<form id="bancoForm" name="bancoForm" action="<c:url value="/banco/salva"/>" method="POST">
@@ -191,26 +213,35 @@ function limpaForm() {
 						<div class="row-fluid">
 							<div class="span2">
 								<label for="bancoEmpresa">Empresa</label>
-	      						<input class="span10" id="bancoEmpresa" name="banco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-xlarge" id="bancoEmpresa" name="banco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="bancoEmpresaId" name="banco.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 							</div>
 							<div class="span2">
 								<label for="bancoOrganizacao">Organização</label>
-	      						<input class="span10" id="bancoOrganizacao" name="banco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-xlarge" id="bancoOrganizacao" name="banco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="bancoOrganizacaoId" name="banco.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 	    					</div>
-							<div class="span2">
-								<label for="bancoGrupoBanco">Grupo banco</label>
-	      						<input class="span10" id="bancoGrupoBanco" name="banco.grupoBanco.nome" type="text" value="${banco.grupoBanco.nome }" required onChange="limpaForm();">
-	      						<input class="span1" id="bancoGrupoBancoId" name="banco.grupoBanco.grupoBanco_id" type="hidden" value="${banco.grupoBanco.grupoBanco_id }">
-	    					</div>								
-							<div class="span2">
-								<label for="bancoNome">Nome</label>
-								<input class="span10" type="text" id="bancoNome" name="banco.nome" placeholder="Nome" value="${banco.nome }" required>
+    					</div>
+    					<div class="row-fluid">
+	    					<div class="span2">
+								<label for="bancoGrupoBanco">Grupo Banco</label>
+								<select id="bancoGrupoBancoId" name="banco.grupoBanco.grupoBanco_id" class="input-medium" >
+									<c:forEach var="grupoBanco" items="${gruposBanco }">
+									 	<option value="${grupoBanco.grupoBanco_id }" selected="selected"> ${grupoBanco.nome } </option>
+									</c:forEach>
+								</select>
 							</div>
 							<div class="span2">
-								<label for="bancoDescricao">Descrição</label>
-								<input class="span10" type="text" id="bancoDescricao" name="banco.descricao" placeholder="Descrição" value="${banco.descricao }" required>
+								<label for="bancoClassificacaoBanco">Classificação Banco</label>
+								<select id="bancoClassificacaoBancoId" name="banco.classificacaoBanco.classificacaoBanco_id" class="input-medium" >
+									<c:forEach var="classificacaoBanco" items="${classificacaoBancos }">
+									 	<option value="${classificacaoBanco.classificacaoBanco_id }" selected="selected"> ${classificacaoBanco.nome } </option>
+									</c:forEach>
+								</select>
+							</div>	    					
+							<div class="span3">
+								<label for="bancoNome">Nome</label>
+								<input class="input-xlarge" type="text" id="bancoNome" name="banco.nome" placeholder="Nome" value="${banco.nome }" required>
 							</div>
 							<div class="span1">
 								<label for="bancoIsActive">Ativo</label>
@@ -227,6 +258,48 @@ function limpaForm() {
 							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 						</div>
 					</form>
+				</div>
+
+				<div class="tab-pane fade" id="grupobanco-div"></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Bancos</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty bancos}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Banco</th>
+									<th>Grupo Banco</th>
+									<th>Classificação Banco</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${bancos }" var="banco">
+									<tr>
+										<td>${banco.nome }</td>
+										<td>${banco.grupoBanco.nome }</td>
+										<td>${banco.classificacaoBanco.nome }</td>
+										<td>${banco.isActive }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
 				</div>
 			</div>
 		</div>

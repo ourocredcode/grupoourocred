@@ -316,7 +316,6 @@ function buscaEtapasTransicao(){
 		      					<input class="span12" id="workflowTransicaoOrganizacao" name="workflowTransicao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 		      					<input class="span1" id="workflowTransicaoOrganizacaoId" name="workflowTransicao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
-
 							<div class="span2">
 								<label for="workflowTransicaoWorkflow">Workflow</label>
 								<select id="workflowTransicaoWorkflowId" name="workflowTransicao.workflow.workflow_id" class="input-medium" onchange="buscaPerfisEtapa();">

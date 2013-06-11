@@ -71,9 +71,7 @@
 							<input  class="input-medium" id="parceiroLocalidadeLocalidadeCep" name="parceiroLocalidade.localidade.cep" type="text" value="${formulario.parceiroLocalidade.localidade.cep }" />
 						</div>
 					</div>
-
 				</div>
-
 				<div id="formDadosPagamento">
 					<div class="row-fluid">
 						<div class="span2">
@@ -115,91 +113,39 @@
 							<c:if test="${not empty formulario.contratos}">
 							<thead>	
 								<tr>
-									<th colspan="13">
-										Total de contratos 
-									</th>
+									<th colspan="13">Total de contratos</th>
 								</tr>
 								<tr>
-									<th scope="col">
-										Banco
-									</th>
-									<th scope="col">
-										Produto
-									</th>
-									<th scope="col">
-										Banco Comprado
-									</th>
-									<th scope="col">
-										Parcela Aberto
-									</th>
-									<th scope="col">
-										Contrato:
-									</th>
-									<th scope="col">
-										Parcel:
-									</th>
-									<th scope="col">
-										Prazo:
-									</th>
-									<th scope="col">
-										Dívida
-									</th>
-									<th scope="col">
-										Seguro
-									</th>
-									<th scope="col">
-										Desconto
-									</th>
-									<th scope="col">
-										Valor Liquido
-									</th>
-									<th scope="col">
-										Coeficiente
-									</th>
-									<th scope="col">
-										Observação
-									</th>
+									<th scope="col"></th>
+									<th scope="col"></th>
+									<th scope="col">Banco Comprado</th>
+									<th scope="col">Parcela Aberto</th>
+									<th scope="col">Contrato:</th>
+									<th scope="col">Parcel:</th>
+									<th scope="col">Prazo:</th>
+									<th scope="col">Dívida</th>
+									<th scope="col">Seguro</th>
+									<th scope="col">Desconto</th>
+									<th scope="col">Valor Liquido</th>
+									<th scope="col">Coeficiente</th>
+									<th scope="col">Observação</th>
 								</tr>
 							</thead>
 							<tbody>		
 								<c:forEach items="${formulario.contratos}" var="contrato">
 									<tr>
-										<td class="label_txt">
-											${contrato.banco.nome }
-										</td>
-										<td class="label_txt">
-											${contrato.produto.nome }
-										</td>
-										<td class="label_txt">
-											${contrato.recompraBanco.nome }
-										</td>
-										<td class="label_txt">
-											${contrato.qtdParcelasAberto }
-										</td>
-										<td class="label_txt">
-											${contrato.valorContrato }
-										</td>
-										<td class="label_txt">
-											${contrato.valorParcela }
-										</td>
-										<td class="label_txt">
-											${contrato.prazo }
-										</td>
-										<td class="label_txt">
-											${contrato.valorDivida }
-										</td>
-										<td class="label_txt">
-											${contrato.valorSeguro }
-										</td>
-										<td class="label_txt">
-											${contrato.desconto }
-										</td>
-										<td class="label_txt">
-											${contrato.valorLiquido }
-										</td>
-										<td class="label_txt">
-											<fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" />
-										</td>
+										<td class="label_txt">${contrato.banco.nome }</td>
+										<td class="label_txt">${contrato.produto.nome }</td>
+										<td class="label_txt">${contrato.recompraBanco.nome }</td>
+										<td class="label_txt">${contrato.qtdParcelasAberto }</td>
+										<td class="label_txt">${contrato.valorContrato }</td>
+										<td class="label_txt">${contrato.valorParcela }</td>
+										<td class="label_txt">${contrato.prazo }</td>
+										<td class="label_txt">${contrato.valorDivida }</td>
+										<td class="label_txt">${contrato.valorSeguro }</td>
+										<td class="label_txt">${contrato.desconto }</td>
+										<td class="label_txt">${contrato.valorLiquido }</td>
+										<td class="label_txt"><fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" /></td>
 										<td class="label_txt" style="text-align: center">
 											<c:if test="${not empty contrato.observacao}">
 												<a href="#" onclick="return showObs('${contrato.observacao}');" style="border: 0"><img src="../img/lupa.gif" border="0"/></a>

@@ -13,6 +13,8 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Banco;
+import br.com.sgo.modelo.ClassificacaoBanco;
+import br.com.sgo.modelo.GrupoBanco;
 
 @Component
 public class BancoDao extends Dao<Banco> {
@@ -22,10 +24,12 @@ public class BancoDao extends Dao<Banco> {
 	private Connection conn;
 	private ResultSet rsBanco;
 
-	private final String sqlBancos = "SELECT BANCO.banco_id, BANCO.nome AS banco_nome, BANCO.empresa_id, EMPRESA.nome AS empresa_nome "+
-							", BANCO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, BANCO.isactive "+
-							" FROM (BANCO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON BANCO.empresa_id = EMPRESA.empresa_id) "+ 
-							" INNER JOIN ORGANIZACAO (NOLOCK) ON BANCO.organizacao_id = ORGANIZACAO.organizacao_id ";
+	private final String sqlBanco = "SELECT BANCO.banco_id, BANCO.nome from BANCO (NOLOCK) ";
+
+	private final String sqlBancos = "SELECT BANCO.banco_id, BANCO.isactive, BANCO.nome AS banco_nome, BANCO.grupobanco_id "+
+					", GRUPOBANCO.nome AS grupobanco_nome, BANCO.classificacaobanco_id, CLASSIFICACAOBANCO.nome AS classificacaobanco_nome "+
+					" FROM (BANCO (NOLOCK) INNER JOIN GRUPOBANCO (NOLOCK) ON BANCO.grupobanco_id = GRUPOBANCO.grupobanco_id) "+
+					" LEFT JOIN CLASSIFICACAOBANCO (NOLOCK) ON BANCO.classificacaobanco_id = CLASSIFICACAOBANCO.classificacaobanco_id ";
 
 	public BancoDao(Session session, ConnJDBC conexao) {
 		super(session, Banco.class);
@@ -48,12 +52,7 @@ public class BancoDao extends Dao<Banco> {
 
 			while (rsBanco.next()) {
 
-				Banco banco = new Banco();
-
-				banco.setBanco_id(rsBanco.getLong("banco_id"));
-				banco.setNome(rsBanco.getString("banco_nome"));
-
-				bancos.add(banco);
+				getBanco(bancos);
 
 			}
 
@@ -78,9 +77,11 @@ public class BancoDao extends Dao<Banco> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + nome + "%");
+
 			this.rsBanco = this.stmt.executeQuery();
 
 			while (rsBanco.next()) {
@@ -102,6 +103,56 @@ public class BancoDao extends Dao<Banco> {
 
 	}
 	
+	public Banco buscaBancoByEmpOrgGrupoClassificacaoNome(Long empresa_id, Long organizacao_id, Long grupoBanco_id, Long classificacaoBanco_id, String nome) {
+
+		String sql = sqlBanco;
+		
+		if (empresa_id != null)
+			sql += " WHERE BANCO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND BANCO.organizacao_id = ?";
+		if (grupoBanco_id != null)
+			sql += " AND BANCO.grupobanco_id = ?";
+		if (classificacaoBanco_id != null)
+			sql += " AND BANCO.classificacaobanco_id = ?";
+		if (nome != null)
+			sql += " AND BANCO.nome = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Banco banco = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, grupoBanco_id);
+			this.stmt.setLong(4, classificacaoBanco_id);
+			this.stmt.setString(5, nome);
+
+			this.rsBanco = this.stmt.executeQuery();
+
+			while (rsBanco.next()) {
+				
+				banco = new Banco();
+
+				banco.setBanco_id(rsBanco.getLong("banco_id"));
+				banco.setNome(rsBanco.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsBanco, stmt, conn);
+
+		return banco;
+
+	}
+
 	public Banco buscaBancoById(Long banco_id) {
 
 		String sql = "select BANCO.banco_id, BANCO.nome from BANCO (NOLOCK) WHERE BANCO.banco_id = ? ";
@@ -173,7 +224,7 @@ public class BancoDao extends Dao<Banco> {
 
 	}
 	
-public Collection<Banco> buscaBancoByProcedimento(Long procedimento_id){
+	public Collection<Banco> buscaBancoByProcedimento(Long procedimento_id){
 		
 		String sql = "SELECT PROCEDIMENTOBANCO.banco_id, BANCO.nome FROM PROCEDIMENTOBANCO (NOLOCK) " +
 				" INNER JOIN BANCO (NOLOCK) ON PROCEDIMENTOBANCO.banco_id = BANCO.banco_id ";
@@ -209,8 +260,29 @@ public Collection<Banco> buscaBancoByProcedimento(Long procedimento_id){
 		}
 
 		this.conexao.closeConnection(rsBanco, stmt, conn);
-
 		return bancos;
+
+	}
+
+	private void getBanco(Collection<Banco> bancos) throws SQLException {
+
+		Banco banco = new Banco();
+		GrupoBanco grupoBanco = new GrupoBanco();
+		ClassificacaoBanco classificacaoBanco = new ClassificacaoBanco();
+		
+		grupoBanco.setGrupoBanco_id(rsBanco.getLong("grupobanco_id"));
+		grupoBanco.setNome(rsBanco.getString("grupobanco_nome"));
+		
+		classificacaoBanco.setClassificacaoBanco_id(rsBanco.getLong("classificacaobanco_id"));
+		classificacaoBanco.setNome(rsBanco.getString("classificacaobanco_nome"));
+		
+		banco.setGrupoBanco(grupoBanco);
+		banco.setClassificacaoBanco(classificacaoBanco);				
+		banco.setBanco_id(rsBanco.getLong("banco_id"));
+		banco.setNome(rsBanco.getString("banco_nome"));
+		banco.setIsActive(rsBanco.getBoolean("isactive"));
+
+		bancos.add(banco);
 
 	}
 

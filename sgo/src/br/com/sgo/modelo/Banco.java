@@ -37,7 +37,11 @@ public class Banco implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "grupobanco_id", updatable = true, nullable = true)
 	private GrupoBanco grupoBanco;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "classificacaobanco_id", updatable = true, nullable = true)
+	private ClassificacaoBanco classificacaoBanco;
+
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
@@ -88,36 +92,20 @@ public class Banco implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
-
 	public GrupoBanco getGrupoBanco() {
 		return grupoBanco;
 	}
 
 	public void setGrupoBanco(GrupoBanco grupoBanco) {
 		this.grupoBanco = grupoBanco;
+	}
+
+	public ClassificacaoBanco getClassificacaoBanco() {
+		return classificacaoBanco;
+	}
+
+	public void setClassificacaoBanco(ClassificacaoBanco classificacaoBanco) {
+		this.classificacaoBanco = classificacaoBanco;
 	}
 
 	public Usuario getCreatedBy() {
@@ -158,6 +146,30 @@ public class Banco implements Serializable {
 
 	public void setChave(String chave) {
 		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }
