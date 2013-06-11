@@ -11,12 +11,9 @@
 		   $("#localidadeCep").mask("99999999");
 		   $("#parceiroNegocioCpf").mask("99999999999");
 		   $("#parceiroNegocioDataNascimento").mask("99/99/9999");
-	
+
 		   $('#parceiroNegocioDataNascimento').datepicker();
-		   
-		   
-		   
-	
+
 		   $("#parceiroNegocioTipoParceiroId").change(function(evento){
 
 			   var tipoParceiroId = document.getElementById("parceiroNegocioTipoParceiroId");
@@ -378,7 +375,7 @@
 				
 						<div class="controls controls-row">
 							<label for="parceiroNegocioNome">Nome</label>
-							<input  class="input-xxlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" placeholder="Nome" value="${parceiroNegocio.nome }">				
+							<input  class="input-xxlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" placeholder="Nome" value="${parceiroNegocio.nome }" required>				
 						</div>
 						
 						<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" 

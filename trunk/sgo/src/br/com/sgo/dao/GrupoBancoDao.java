@@ -22,7 +22,7 @@ public class GrupoBancoDao extends Dao<GrupoBanco> {
 	private Connection conn;
 	private ResultSet rsGrupoParceiro;
 
-	private final String sqlGrupoBanco = " select GRUPOBANCO.grupobanco_id , GRUPOBANCO.nome from GRUPOBANCO (NOLOCK) ";
+	private final String sqlGrupoBanco = " select GRUPOBANCO.grupobanco_id , GRUPOBANCO.nome, GRUPOBANCO.isactive from GRUPOBANCO (NOLOCK) ";
 
 	public GrupoBancoDao(Session session, ConnJDBC conexao) {
 
@@ -72,15 +72,11 @@ public class GrupoBancoDao extends Dao<GrupoBanco> {
 
 	}
 
-	public Collection<GrupoBanco> buscaAllGrupoBanco(Long empresa_id, Long organizacao_id) {
+	
+	public Collection<GrupoBanco> buscaAllGrupoBanco() {
 
 		String sql = sqlGrupoBanco;
 
-		if (empresa_id != null)
-			sql += " WHERE GRUPOBANCO.empresa_id = ?";
-		if (organizacao_id != null)
-			sql += " AND GRUPOBANCO.organizacao_id = ?";
-		
 		this.conn = this.conexao.getConexao();
 
 		Collection<GrupoBanco> gruposBanco = new ArrayList<GrupoBanco>();
@@ -88,9 +84,6 @@ public class GrupoBancoDao extends Dao<GrupoBanco> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
 
 			this.rsGrupoParceiro = this.stmt.executeQuery();
 
@@ -116,7 +109,7 @@ public class GrupoBancoDao extends Dao<GrupoBanco> {
 
 		grupoBanco.setGrupoBanco_id(rsGrupoParceiro.getLong("grupobanco_id"));
 		grupoBanco.setNome(rsGrupoParceiro.getString("nome"));
-
+		grupoBanco.setIsActive(rsGrupoParceiro.getBoolean("isactive"));
 		gruposBanco.add(grupoBanco);
 
 	}
