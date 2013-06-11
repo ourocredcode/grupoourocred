@@ -211,12 +211,12 @@ function limpaForm() {
 					<form id="bancoForm" name="bancoForm" action="<c:url value="/banco/salva"/>" method="POST">
 
 						<div class="row-fluid">
-							<div class="span2">
+							<div class="span4">
 								<label for="bancoEmpresa">Empresa</label>
 	      						<input class="input-xlarge" id="bancoEmpresa" name="banco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="bancoEmpresaId" name="banco.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 							</div>
-							<div class="span2">
+							<div class="span4">
 								<label for="bancoOrganizacao">Organização</label>
 	      						<input class="input-xlarge" id="bancoOrganizacao" name="banco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
 	      						<input class="span1" id="bancoOrganizacaoId" name="banco.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
