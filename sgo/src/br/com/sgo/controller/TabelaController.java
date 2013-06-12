@@ -1,5 +1,6 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
 import java.util.Collection;
 
 import br.com.caelum.vraptor.Get;
@@ -10,7 +11,11 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Tabela;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class TabelaController {
@@ -18,18 +23,30 @@ public class TabelaController {
 	private final Result result;
 	private final TabelaDao tabelaDao;
 	private Collection<Tabela> tabelas;
+	
+	private UsuarioInfo usuarioInfo;	
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 
-	public TabelaController(Result result,TabelaDao tabelaDao){
+	private Calendar dataAtual = Calendar.getInstance();
+
+	public TabelaController(Result result,TabelaDao tabelaDao, UsuarioInfo usuarioInfo, Empresa empresa, Organizacao organizacao, Usuario usuario){
 
 		this.tabelaDao = tabelaDao;
 		this.result = result;
+		this.usuarioInfo = usuarioInfo;				
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
 
 	}	
 
 	@Get
 	@Path("/tabela/cadastro")
 	public void cadastro(){
-		
+
+		//result.include("tiposTabela", this.tabelaDao.buscaAllTabela(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 
 	}
 
@@ -39,31 +56,55 @@ public class TabelaController {
 		
 		String mensagem = "";
 
-		try {
 
-			this.tabelaDao.beginTransaction();
-			this.tabelaDao.adiciona(tabela);
-			this.tabelaDao.commit();
+			try {
+				
+				if(empresa.getNome().equals("SYSTEM") && organizacao.getNome().equals("SYSTEM")){
 
-			mensagem = "Tabela " + tabela.getNome() + " adicionado com sucesso";
+					//if (this.tabelaDao.buscaTipoTabelaByEmpOrgNome(1l, 1l, tabela.getNome()) == null) {				
+		
+						tabela.setCreated(dataAtual);
+						tabela.setUpdated(dataAtual);
+		
+						tabela.setCreatedBy(usuario);
+						tabela.setUpdatedBy(usuario);
+		
+						tabela.setChave(tabela.getNome());
+						tabela.setDescricao(tabela.getNome());
+						
+						tabela.setIsActive(tabela.getIsActive() == null ? false : true);
+		
+						this.tabelaDao.beginTransaction();
+						this.tabelaDao.adiciona(tabela);
+						this.tabelaDao.commit();
+		
+						mensagem = "Tabela adicionado com sucesso.";
+		
+					//} else {
 
-		} catch(Exception e) {
+					//	mensagem = "Erro: Tipo Tabela " + tabela.getNome() + " já cadastrado.";
 
-			this.tabelaDao.rollback();
+					//}
 
-			if (e.getCause().toString().indexOf("IX_TABELA_EMPORGNOME") != -1){
-				mensagem = "Erro: Tabela " + tabela.getNome() + " já existente.";
-			} else {
-				mensagem = "Erro ao adicionar Tabela:";
+				} else {
+					
+					mensagem = "Erro: Tipo Tabela não pode ser cadastrado nesta empresa..";
+
+				}
+
+			} catch (Exception e) {
+
+				mensagem = "Erro: Falha ao adicionar o Tipo Tabela " + tabela.getNome() + ".";
+
+			} finally{
+
+				this.tabelaDao.clear();
+				this.tabelaDao.close();
+
 			}
 
-		}
-
-		this.tabelaDao.clear();
-		this.tabelaDao.close();
-
-		result.include("notice",mensagem);
-		result.redirectTo(this).cadastro();
+			result.include("notice", mensagem);			
+			result.redirectTo(this).cadastro();
 
 	}
 	

@@ -21,14 +21,51 @@ public class TabelaDao extends Dao<Tabela> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsTabelas;
+	
+	private final String sqlTabelas = "";
 
 	public TabelaDao(Session session, ConnJDBC conexao) {
 		super(session, Tabela.class);
 		this.conexao = conexao;
 	}
 
-	public Collection<Tabela> buscaTabelas(Long empresa_id,
-			Long organizacao_id, String nome) {
+	public Collection<Tabela> buscaAllTabela(Long empresa_id,Long organizacao_id) {
+
+		String sql = sqlTabelas;
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Tabela> tabelas = new ArrayList<Tabela>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
+			this.rsTabelas = this.stmt.executeQuery();
+
+			while (rsTabelas.next()) {
+				Tabela tabela = new Tabela();
+
+				tabela.setTabela_id(rsTabelas.getLong("tabela_id"));
+				tabela.setNome(rsTabelas.getString("nome"));
+
+				tabelas.add(tabela);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsTabelas, stmt, conn);
+
+		return tabelas;
+
+	}
+
+	public Collection<Tabela> buscaTabelas(Long empresa_id,Long organizacao_id, String nome) {
 
 		String sql = "select TABELA.tabela_id, TABELA.nome from TABELA (NOLOCK) WHERE TABELA.empresa_id = ? AND TABELA.organizacao_id = ? AND TABELA.nome like ?";
 
