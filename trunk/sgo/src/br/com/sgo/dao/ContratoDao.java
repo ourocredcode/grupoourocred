@@ -19,6 +19,7 @@ import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.Organizacao;
@@ -28,7 +29,6 @@ import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
-import br.com.sgo.modelo.Etapa;
 
 @Component
 public class ContratoDao extends Dao<Contrato> {
@@ -55,7 +55,9 @@ public class ContratoDao extends Dao<Contrato> {
 			"PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf,  " +
 			"CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome ," +
 			"ETAPA.etapa_id, ETAPA.nome as etapa_nome, LOGISTICA.dataassinatura, LOGISTICA.logistica_id ," +
-			"TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome as tipologistica_nome  , PERIODO.periodo_id, PERIODO.nome as periodo_nome " +
+			"TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome as tipologistica_nome  , PERIODO.periodo_id, PERIODO.nome as periodo_nome, " +
+			"CONTROLE.dataprevisao, CONTROLE.dataatuacao, CONTROLE.datachegada, CONTROLE.dataprimeiraatuacao," +
+			"CONTROLE.dataproximaatuacao, CONTROLE.datavencimento " +
 			"FROM   " +
 				"(((((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
 				 "INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id)" +
@@ -63,6 +65,7 @@ public class ContratoDao extends Dao<Contrato> {
 				 " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.contrato_id = CONTRATO.contrato_id) " +
 				 " LEFT JOIN TIPOLOGISTICA (NOLOCK) ON TIPOLOGISTICA.tipologistica_id = LOGISTICA.tipologistica_id " +
 				 " LEFT JOIN PERIODO (NOLOCK) ON PERIODO.periodo_id = LOGISTICA.periodo_id " +
+				 " LEFT JOIN CONTROLE (NOLOCK) ON CONTROLE.contrato_id = CONTRATO.contrato_id " +
 				 "INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id)   " +
 				 "INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)   " +
 				 "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)" +
@@ -413,6 +416,251 @@ public class ContratoDao extends Dao<Contrato> {
 
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contratos;
+
+	}
+	
+	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,String tipoBusca,Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
+			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,String procedimento,
+			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status, Collection<Usuario> consultores,String cliente,
+			String documento,Collection<String> empresas) {
+
+		String sql = sqlContrato;
+		String clause = "";
+		int x = 0;
+
+		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
+
+		if(!cliente.equals(""))
+			sql += " AND PARCEIRONEGOCIO.nome like ? ";
+
+		if(!documento.equals(""))
+			sql += " AND ( PARCEIRONEGOCIO.cpf like ? OR PARCEIROBENEFICIO.numerobeneficio like ? ) ";
+
+		sql += " AND ( 1=1 ";
+
+		for(String statusAux1 : status){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!statusAux1.equals("")){
+				sql += clause + " ( ETAPA.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(String produtosAux1 : produtos){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!produtosAux1.equals("")) {
+				sql += clause + " ( PRODUTO.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(String bancosAux1 : bancos){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!bancosAux1.equals("")){
+				sql += clause + " ( B1.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(String bancosCompradosAux1 : bancosComprados){
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!bancosCompradosAux1.equals("")) {
+				sql += clause + " ( B2.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+		
+		sql += " ) ";
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(Usuario u : consultores){
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(u != null) {
+				sql += clause + " ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+		
+		sql += " ) ";
+		
+		if(previsaoInicio != null)
+			sql += " AND (CONTROLE.dataprevisao BETWEEN ? AND ? )";
+		
+		if(chegadaInicio != null)
+			sql += " AND (CONTRATO.datachegada BETWEEN ? AND ? )";
+		
+		if(vencimentoInicio != null)
+			sql += " AND (CONTRATO.datavencimento BETWEEN ? AND ? )";
+		
+		if(proximaAtuacaoInicio != null)
+			sql += " AND (CONTRATO.dataproximaatuacao BETWEEN ? AND ? )";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
+
+		try {
+
+			System.out.println(sql);
+
+			this.stmt = conn.prepareStatement(sql);
+
+			int curr = 1;
+
+			if(empresa_id != null){
+				this.stmt.setLong(curr, empresa_id);
+				curr++;
+			}
+			
+			if(organizacao_id != null){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+			
+			if(!cliente.equals("")){
+				this.stmt.setString(curr, '%' + cliente + '%');
+				curr++;
+			}
+			
+			if(!documento.equals("")){
+				this.stmt.setString(curr, '%' + documento + '%');
+				curr++;
+				this.stmt.setString(curr, '%' + documento + '%');
+				curr++;
+			}
+
+			for(String statusAux2 : status){
+
+				if(!statusAux2.equals("")) {
+					this.stmt.setString(curr, '%' + statusAux2 + '%');
+					curr++;
+				}
+
+			}
+			
+			for(String produtosAux2 : produtos){
+
+				if(!produtosAux2.equals("")) {
+					this.stmt.setString(curr, '%' + produtosAux2 + '%');
+					curr++;
+				}
+
+			}
+
+			for(String bancosAux2 : bancos){
+
+				if(!bancosAux2.equals("")) {
+					this.stmt.setString(curr, '%' + bancosAux2 + '%');
+					curr++;
+				}
+
+			}
+
+			for(String bancosCompradosAux2 : bancosComprados){
+
+				if(!bancosCompradosAux2.equals("")) {
+					this.stmt.setString(curr, '%' + bancosCompradosAux2 + '%');
+					curr++;
+				}
+
+			}
+			
+			for(Usuario u : consultores){
+
+				if(u != null) {
+					this.stmt.setLong(curr,u.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr,u.getUsuario_id());
+					curr++;
+				}
+
+			}
+			
+			if(previsaoInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(previsaoInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(previsaoFim.getTimeInMillis()));
+				curr++;
+
+			} 
+			
+			if(chegadaInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(chegadaInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(chegadaFim.getTimeInMillis()));
+				curr++;
+
+			} 
+			
+			if(vencimentoInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(vencimentoInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(vencimentoInicio.getTimeInMillis()));
+				curr++;
+
+			}
+			
+			if(proximaAtuacaoInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(proximaAtuacaoInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(proximaAtuacaoInicio.getTimeInMillis()));
+				curr++;
+
+			}
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+				getFormulario(contratos);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contratos;
+		
+		
 
 	}
 

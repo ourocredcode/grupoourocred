@@ -170,9 +170,11 @@ public class MenuController {
 		}
 		
 		if(tipo.equals("boletos")){
+			result.include("function","buscaDatasControle();");
 			result.include("buscaBoleto","block");
 			result.include("buscaAprovado","none");
 		} else {
+			result.include("function","buscaContratos();");
 			result.include("buscaBoleto","none");
 			result.include("buscaAprovado","block");
 		}
@@ -345,6 +347,149 @@ public class MenuController {
 
 		result.include("contratos",contratos);		
 
+	}
+
+	@Post
+	@Path("/menu/datasControle")
+	public void busca(String tipoBusca,String previsaoInicio,String previsaoFim, String chegadaInicio,String chegadaFim,String vencimentoInicio,String vencimentoFim,
+							String proximaAtuacaoInicio,String proximaAtuacaoFim , String procedimento ,Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,
+							Collection<String> status,Long consultor,String cliente, String documento,String empresa) {
+
+		Calendar calPrevisaoInicio = new GregorianCalendar();
+		Calendar calPrevisaoFim = new GregorianCalendar();
+		Calendar calChegadaInicio = new GregorianCalendar();
+		Calendar calChegadaFim = new GregorianCalendar();
+		Calendar calVencimentoInicio = new GregorianCalendar();
+		Calendar calVencimentoFim = new GregorianCalendar();
+		Calendar calProximaAtuacaoInicio = new GregorianCalendar();
+		Calendar calProximaAtuacaoFim = new GregorianCalendar();
+		Collection<String> empresas = new ArrayList<String>();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y");
+
+		Boolean isDataNUll = true;
+
+		try {
+
+		if(previsaoFim.equals(""))
+			previsaoFim = previsaoInicio;
+
+		if(previsaoInicio.equals("")) {
+			calPrevisaoInicio = null;
+			calPrevisaoFim = null;
+		} else {
+			calPrevisaoInicio.setTime(sdf.parse(previsaoInicio));
+			calPrevisaoFim.setTime(sdf.parse(previsaoFim));
+
+			isDataNUll = false;
+			
+			if(tipoBusca.equals("boleto"))
+				result.include("buscaDtBoletoPrevisao",true);
+			if(tipoBusca.equals("averbacao"))
+				result.include("buscaDtAverbacaoPrevisao",true);
+		}
+		
+		if(chegadaFim.equals(""))
+			chegadaFim = chegadaInicio;
+
+		if(chegadaInicio.equals("")) {
+			calChegadaInicio = null;
+			calChegadaFim = null;
+		} else {
+			calChegadaInicio.setTime(sdf.parse(chegadaInicio));
+			calChegadaFim.setTime(sdf.parse(chegadaFim));
+			
+			isDataNUll = false;
+
+			result.include("buscaDtBoletoChegada",true);
+
+		}
+		
+		if(vencimentoFim.equals(""))
+			vencimentoFim = vencimentoInicio;
+
+		if(vencimentoInicio.equals("")) {
+			calVencimentoInicio = null;
+			calVencimentoFim = null;
+		} else {
+			calVencimentoInicio.setTime(sdf.parse(vencimentoInicio));
+			calVencimentoFim.setTime(sdf.parse(vencimentoFim));
+			
+			isDataNUll = false;
+
+			result.include("buscaDtBoletoVencimento",true);
+				
+		}
+		
+		if(proximaAtuacaoFim.equals(""))
+			proximaAtuacaoFim = proximaAtuacaoInicio;
+
+		if(proximaAtuacaoInicio.equals("")) {
+			calProximaAtuacaoInicio = null;
+			calProximaAtuacaoFim = null;
+		} else {
+			calProximaAtuacaoInicio.setTime(sdf.parse(proximaAtuacaoInicio));
+			calProximaAtuacaoFim.setTime(sdf.parse(proximaAtuacaoFim));
+			
+			isDataNUll = false;
+			
+			if(tipoBusca.equals("boleto"))
+				result.include("buscaDtBoletoProximaAtuacao",true);
+			if(tipoBusca.equals("averbacao"))			
+				result.include("buscaDtAverbacaoProximaAtuacao",true);
+		}
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		if(usuarioInfo.getPerfil().getChave().equals("Consultor") || usuarioInfo.getPerfil().getChave().equals("Supervisor")){
+
+			Usuario u = new Usuario();
+
+			if(consultor != null) {
+				u = usuarioInfo.getUsuario();
+			} else {
+				u = this.usuarioDao.load(usuario.getUsuario_id());
+			}
+
+			consultoresAux.add(u);
+
+		} else {
+
+			if(consultor != null){
+
+				consultoresAux.add(this.usuarioDao.load(consultor));
+
+				//TODO : VERIFICA PERFIL SUPERVISOR INATIVO
+				//consultoresAux.addAll(this.consultorDao.buscaLoginsSupervisoresInativos());
+
+			}
+
+		}
+
+		if(isDataNUll){
+			if(tipoBusca.equals("boleto"))
+				result.include("buscaDtBoletoAtua",true);
+			
+			if(tipoBusca.equals("averbacao"))
+				result.include("buscaDtAverbacaoAtua",true);
+			
+		}
+		
+		if(empresa.equals("Todos")){
+			empresas.add("");
+		} else {
+			empresas.add(empresa);
+		}
+
+		contratos.clear();
+
+		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoBusca,calPrevisaoInicio, 
+				calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
+				calProximaAtuacaoInicio,calProximaAtuacaoFim,procedimento,bancos,produtos,bancosComprados,status,consultoresAux,
+				cliente,documento,empresas));
+
+		contador();
 	}
 
 	@Get
