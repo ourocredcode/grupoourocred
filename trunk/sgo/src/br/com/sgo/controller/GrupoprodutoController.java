@@ -28,7 +28,6 @@ public class GrupoprodutoController {
 	
 	private Calendar dataAtual = Calendar.getInstance();
 
-
 	public GrupoprodutoController(Result result, Empresa empresa,Organizacao organizacao, Usuario usuario, GrupoProdutoDao grupoProdutoDao, UsuarioInfo usuarioInfo){
 		
 		this.result = result;		
@@ -108,6 +107,11 @@ public class GrupoprodutoController {
 	@Get @Path("/grupoproduto/busca.json")
 	public void grupoproduto(String nome){
 		result.use(Results.json()).withoutRoot().from(grupoProdutoDao.buscaGrupoProdutosByNome(nome)).serialize();
+	}
+	
+	@Get
+	public void msg() {
+
 	}
 
 }
