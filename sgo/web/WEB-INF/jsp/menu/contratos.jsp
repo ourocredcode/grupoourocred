@@ -10,22 +10,33 @@
 		$("#busca_DataAprovadoFim").mask("99/99/9999");
 		$("#busca_DataConcluidoInicio").mask("99/99/9999");
 		$("#busca_DataConcluidoFim").mask("99/99/9999");
+		
+		//BOLETOS e AVERBACAO
+		$("#busca_DataPrevisaoInicio").mask("99/99/9999");
+		$("#busca_DataPrevisaoFim").mask("99/99/9999");
+		$("#busca_DataProximaAtuacaoInicio").mask("99/99/9999");
+		$("#busca_DataProximaAtuacaoFim").mask("99/99/9999");
+	
+		$("#busca_DataChegadaInicio").mask("99/99/9999");
+		$("#busca_DataChegadaFim").mask("99/99/9999");
+		$("#busca_DataVencimentoInicio").mask("99/99/9999");
+		$("#busca_DataVencimentoFim").mask("99/99/9999");
 
-		var cliente = $("#busca_Cliente").val();
-		var documento = $("#busca_Documento").val();
-		var data = $("#busca_Data").val();
-		var dataFim = $("#busca_DataFim").val();
-		var dataAprovadoInicio = $("#busca_DataAprovadoInicio").val();
-		var dataAprovadoFim = $("#busca_DataAprovadoFim").val();
- 		var dataConcluidoInicio = $("#busca_DataConcluidoInicio").val();
-		var dataConcluidoFim = $("#busca_DataConcluidoFim").val();
-		var dataRecusadoInicio = $("#busca_DataRecusadoInicio").val();
-		var dataRecusadoFim = $("#busca_DataRecusadoFim").val();
-
-		if(data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
-					  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
-			$(buscaContratos);
-		}
+			var cliente = $("#busca_Cliente").val();
+			var documento = $("#busca_Documento").val();
+			var data = $("#busca_Data").val();
+			var dataFim = $("#busca_DataFim").val();
+			var dataAprovadoInicio = $("#busca_DataAprovadoInicio").val();
+			var dataAprovadoFim = $("#busca_DataAprovadoFim").val();
+	 		var dataConcluidoInicio = $("#busca_DataConcluidoInicio").val();
+			var dataConcluidoFim = $("#busca_DataConcluidoFim").val();
+			var dataRecusadoInicio = $("#busca_DataRecusadoInicio").val();
+			var dataRecusadoFim = $("#busca_DataRecusadoFim").val();
+	
+			if(data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
+						  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
+				$(buscaContratos);
+			}
 
 		$('#busca_Data').datepicker({
 			dateFormat: 'dd/mm/y'
@@ -39,7 +50,31 @@
 		$('#busca_DataAprovadoFim').datepicker({
 			dateFormat: 'dd/mm/y'
 		});
-		
+		$('#busca_DataPrevisaoInicio').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataPrevisaoFim').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataProximaAtuacaoInicio').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataProximaAtuacaoFim').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataChegadaInicio').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataChegadaFim').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataVencimentoInicio').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataVencimentoFim').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+
 		$('.data-table').dataTable({
 			"bJQueryUI": true,
 			"sPaginationType": "full_numbers",
@@ -77,6 +112,104 @@
 
 	 });
 	 
+	 function buscaDatasControle(){
+
+			var status = $("#busca_Status").val();
+			var cliente = $("#busca_Cliente").val();
+			var documento = $("#busca_Documento").val();
+			var supervisor = $("#busca_Supervisor").val();
+			var consultor = $("#busca_Consultor").val();
+			var bancos = $("#busca_Banco").val();
+			var produtos = $("#busca_Produto").val();
+			var bancosComprados = $("#busca_BancoComprado").val();
+			var empresa = $("#busca_Empresa").val();
+			var previsaoInicio = $("#busca_DataPrevisaoInicio").val();
+			var previsaoFim = $("#busca_DataPrevisaoFim").val();
+			var chegadaInicio = $("#busca_DataChegadaInicio").val();
+			var chegadaFim = $("#busca_DataChegadaFim").val();
+			var vencimentoInicio = $("#busca_DataVencimentoInicio").val();
+			var vencimentoFim = $("#busca_DataVencimentoFim").val();
+			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
+			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
+			var procedimento = $("#busca_Procedimento").val();
+
+			var tipoBusca = '';
+			
+			if(consultor == undefined)
+				consultor = "";
+			if(supervisor == undefined)
+				supervisor = "";
+			if(empresa == undefined)
+				empresa = "";
+
+			if(status != null){
+
+				var arrayStatus = $("#busca_Status").val();
+
+				var statusDatasBoleto = jQuery.inArray("Aguardando Apoio comercial", arrayStatus) >= 0 
+						|| jQuery.inArray("Aguardando Quitação", arrayStatus) >= 0 
+						|| jQuery.inArray("Aguardando Boleto", arrayStatus) >= 0
+						|| jQuery.inArray("Contrato Fora Planilha", arrayStatus) >= 0
+						|| jQuery.inArray("Aguardando Qualidade", arrayStatus) >= 0
+						|| jQuery.inArray("Aguardando Pós Venda", arrayStatus) >= 0
+						|| jQuery.inArray("Aguardando Remarcação", arrayStatus) >= 0
+						|| jQuery.inArray("Em Análise", arrayStatus) >= 0
+						|| jQuery.inArray("Em Assinatura", arrayStatus) >= 0
+						|| jQuery.inArray("Em Conferência", arrayStatus) >= 0 ? 0 : -1;
+
+				if(statusDatasBoleto == 0)
+					tipoBusca = "boleto";
+				else
+					tipoBusca = "";
+
+				if(status == "Enviado DataPrev")
+					tipoBusca = "averbacao";
+
+			}
+
+			if(consultor == ""){
+				if(supervisor == "Todos"){
+					consultor = "";
+				} else {
+					consultor = supervisor;
+				}
+			}
+
+			if(status == null){
+				status = new Array();
+				status[0] = "";
+			}
+			
+			if(produtos == null){
+				produtos = new Array();
+				produtos[0] = "";
+			}
+			
+			if(bancos == null){
+				bancos = new Array();
+				bancos[0] = "";
+			}
+			
+			if(bancosComprados == null){
+				bancosComprados = new Array();
+				bancosComprados[0] = "";
+			}
+
+			if(previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
+					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || procedimento != ''){
+				$("#resultado").load('<c:url value="/menu/datasControle" />',{'tipoBusca': tipoBusca,'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
+										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
+										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'procedimento': procedimento,'bancos': bancos, 
+										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa});
+
+			} else {
+
+				alert("Escolha uma data para a busca.");
+
+			}
+		
+	 }
+
 	 function buscaContratos(){
 
 		var status = $("#busca_Status").val();
@@ -204,7 +337,7 @@
 			<div class="widget-box">
 			<div class="widget-title"><span class="icon">
 				<i class="icon-signal"></i></span><h5>Filtros</h5>
-				<div class="buttons"><a href="javascript:buscaContratos();" class="btn btn-mini"><i class="icon-refresh"></i> Busca</a></div>
+				<div class="buttons"><a href="javascript:${function }" class="btn btn-mini"><i class="icon-refresh"></i> Busca</a></div>
 			</div>
 			<div class="widget-content" style="padding: 8px;">
 				<div class="row-fluid">
@@ -291,75 +424,147 @@
 									<option value="">Selecione um Supervisor</option>
 								</select>
 							</div>
-		
+
 						</div>
-					
 					</div>
-					
-					<div class="span4">
-					
-						<div class="row-fluid">
-		
-							<div class="span4">								
-								<label for="busca_DataAprovadoInicio">Aprovado Inicio</label>
-								<input id="busca_DataAprovadoInicio" name="busca_DataAprovadoInicio"  class="input-small" type="text" />
+
+	
+					<div id="consultaBoleto" class="span7" style="display: ${buscaBoleto};">
+
+						<div class="span2">
+							<div class="control-group">
+								<label class="control-label">Prev Início</label>
+								<div class="controls">
+									<input id="busca_DataPrevisaoInicio" name="busca_DataPrevisaoInicio" type="text" class="input-small"/>
+								</div>
 							</div>
-							<div class="span4">
-								<label for="busca_DataAprovadoFim">Aprovado Fim</label>
-								<input id="busca_DataAprovadoFim" name="busca_DataAprovadoFim" class="input-small" type="text"  />
+							<div class="control-group">
+								<label class="control-label">Chegada Início</label>
+								<div class="controls">
+									<input id="busca_DataChegadaInicio" name="busca_DataChegadaInicio" type="text" class="input-small"/>
+								</div>
 							</div>
-							<div class="span4">
-								<label for="busca_TipoAprovado">Tipo Aprovado</label>
-								<select id="busca_TipoAprovado" name="busca_TipoAprovado" class="input-small">
-									<option value="Todos">Todos</option>
-									<option value="Aprovado">Aprovado</option>
-									<option value="Concluído">Concluído</option>
+							<div class="control-group">
+								<label class="control-label">Procedimento</label>
+								<select  id="busca_Procedimento" name="busca_Procedimento" class="input-medium">
+									<option value="">Apoio Agregado</option>
+									<option value="">Apoio Agregado</option>
+									<option value="">Apoio Agregado</option>
+									<option value="">Apoio Agregado</option>
+									<option value="">Apoio Agregado</option>
+									<option value="">Apoio Agregado</option>
 								</select>
 							</div>
-		
 						</div>
-						
-						<div class="row-fluid">
-		
-							<div class="span4">								
-								<label for="busca_DataConcluidoInicio">Concluído Início</label>
-								<input id="busca_DataConcluidoInicio" name="busca_DataConcluidoInicio"  class="input-small" type="text" />
+						<div class="span2">
+							<div class="control-group">
+								<label class="control-label">Prev Fim</label>
+								<div class="controls">
+									<input id="busca_DataPrevisaoFim" name="busca_DataPrevisaoFim" type="text" class="input-small"/>
+								</div>
 							</div>
-							<div class="span4">
-								<label for="busca_DataConcluidoFim">Concluído Fim</label>
-								<input id="busca_DataConcluidoFim" name="busca_DataConcluidoFim" class="input-small" type="text"  />
+							<div class="control-group">
+								<label class="control-label">Chegada Fim</label>
+								<div class="controls">
+									<input id="busca_DataChegadaInicio" name="busca_DataChegadaInicio" type="text" class="input-small"/>
+								</div>
 							</div>
-		
 						</div>
-						
-						<div class="row-fluid">
-		
-							<div class="span4">								
-								
-								<label for="busca_TipoPagamento">Tipo Pagamento</label>
-								<select id="busca_TipoPagamento" name="busca_TipoPagamento" style="width:100px" >
-									<option value="Todos">Todos</option>
-									<option value="OP">OP</option>
-									<option value="TED">TED</option>
-								</select>
-								
+						<div class="span2">
+							<div class="control-group">
+								<label class="control-label">Atuação Início</label>
+								<div class="controls">
+									<input id="busca_DataProximaAtuacaoInicio" name="busca_DataProximaAtuacaoInicio" type="text" class="input-small"/>
+								</div>
 							</div>
-							<div class="span4">
-								
-								<label for="busca_InformacaoSaque">Info Saque</label>
-								<select id="busca_InformacaoSaque" name="busca_InformacaoSaque" style="width:100px" >
-									<option value="Todos">Todos</option>
-									<option value="Aguardando Saque">Aguardando Saque</option>
-									<option value="Saque Efetuado">Saque Efetuado</option>
-								</select>
-								
+							<div class="control-group">
+								<label class="control-label">Venc. Início</label>
+								<div class="controls">
+									<input id="busca_DataVencimentoInicio" name="busca_DataVencimentoInicio" type="text" class="input-small"/>
+								</div>
 							</div>
-		
 						</div>
+						<div class="span2">
+							<div class="control-group">
+								<label class="control-label">Atuação Fim</label>
+								<div class="controls">
+									<input id="busca_DataProximaAtuacaoFim" name="busca_DataProximaAtuacaoFim" type="text" class="input-small"/>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Venc. Fim</label>
+								<div class="controls">
+									<input id="busca_DataVencimentoFim" name="busca_DataVencimentoFim" type="text" class="input-small"/>
+								</div>
+							</div>
+						</div>
+					</div>
+
+			
+					<div class="span4"  style="display: ${buscaAprovado};">
+
+							<div class="row-fluid">
+			
+								<div class="span4">								
+									<label for="busca_DataAprovadoInicio">Aprovado Inicio</label>
+									<input id="busca_DataAprovadoInicio" name="busca_DataAprovadoInicio"  class="input-small" type="text" />
+								</div>
+								<div class="span4">
+									<label for="busca_DataAprovadoFim">Aprovado Fim</label>
+									<input id="busca_DataAprovadoFim" name="busca_DataAprovadoFim" class="input-small" type="text"  />
+								</div>
+								<div class="span4">
+									<label for="busca_TipoAprovado">Tipo Aprovado</label>
+									<select id="busca_TipoAprovado" name="busca_TipoAprovado" class="input-small">
+										<option value="Todos">Todos</option>
+										<option value="Aprovado">Aprovado</option>
+										<option value="Concluído">Concluído</option>
+									</select>
+								</div>
+			
+							</div>
+							
+							<div class="row-fluid">
+			
+								<div class="span4">								
+									<label for="busca_DataConcluidoInicio">Concluído Início</label>
+									<input id="busca_DataConcluidoInicio" name="busca_DataConcluidoInicio"  class="input-small" type="text" />
+								</div>
+								<div class="span4">
+									<label for="busca_DataConcluidoFim">Concluído Fim</label>
+									<input id="busca_DataConcluidoFim" name="busca_DataConcluidoFim" class="input-small" type="text"  />
+								</div>
+			
+							</div>
+							
+							<div class="row-fluid">
+			
+								<div class="span4">								
+									
+									<label for="busca_TipoPagamento">Tipo Pagamento</label>
+									<select id="busca_TipoPagamento" name="busca_TipoPagamento" style="width:100px" >
+										<option value="Todos">Todos</option>
+										<option value="OP">OP</option>
+										<option value="TED">TED</option>
+									</select>
+									
+								</div>
+								<div class="span4">
+									
+									<label for="busca_InformacaoSaque">Info Saque</label>
+									<select id="busca_InformacaoSaque" name="busca_InformacaoSaque" style="width:100px" >
+										<option value="Todos">Todos</option>
+										<option value="Aguardando Saque">Aguardando Saque</option>
+										<option value="Saque Efetuado">Saque Efetuado</option>
+									</select>
+									
+								</div>
+			
+							</div>
 
 					</div>
 					
-					<div class="span3">
+					<div class="span3"  style="display: ${buscaAprovado};">
 					
 						<div class="row-fluid">
 		
@@ -406,15 +611,20 @@
 									<option value="Recusado Qualidade">Recusado Qualidade</option>
 									<option value="Recusado Pós Venda">Recusado Pós Venda</option>
 								</select>
-							</div>		
+							</div>
 						</div>
-					</div>					
+					</div>
 				</div>
+			</div>
+						
+
+			<!-- FIM -->
 			</div>
 		</div>
 		</div>
 		</div>
-	</div>	
+	
+	
 
 	<div class="container-fluid">
 		<div class="row-fluid">
@@ -427,43 +637,107 @@
 							<table class="table table-bordered table-striped table-hover data-table" style="font-size: 12px">
 								<thead>	
 									<tr>
-										<th>Data</th>
-										<th>Supervisor</th>
-										<th>Consultor</th>
-										<th>Cliente</th>
-										<th>Cpf</th>
-										<th>Banco:</th>
-										<th>Produto:</th>
-										<th>Banco Comprado:</th>
-										<th>Parcela</th>
-										<th>Coeficiente</th>
-										<th>Prazo</th>
-										<th>Dívida</th>
-										<th>Liquido</th>
-										<th>Meta</th>
-										<th>Status</th>
-										<th>Pós Venda</th>
+										<th>
+											Data
+										</th>
+										<th>
+											Supervisor
+										</th>
+										<th>
+											Consultor
+										</th>
+										<th>
+											Cliente
+										</th>
+										<th>
+											Cpf
+										</th>
+										<th>
+											Banco:
+										</th>
+										<th>
+											Produto:
+										</th>
+										<th>
+											Banco Comprado:
+										</th>
+										<th>
+											Parcela
+										</th>
+										<th>
+											Coeficiente
+										</th>
+										<th>
+											Prazo
+										</th>
+										<th>
+											Dívida
+										</th>
+										<th>
+											Liquido
+										</th>
+										<th>
+											Meta
+										</th>
+										<th>
+											Status
+										</th>
+										<th>
+											Pós Venda
+										</th>
 									</tr>
 								</thead>
 								<tbody>		
 									<c:forEach items="${contratos}" var="contrato">
 										<tr>
-											<td><fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yyyy" /></td>
-											<td>${contrato.usuario.supervisorUsuario.nome }</td>
-											<td>${contrato.usuario.nome }</td>
-											<td>${contrato.formulario.parceiroNegocio.nome }</td>
-											<td>${contrato.formulario.parceiroNegocio.cpf }</td>
-											<td>${contrato.banco.nome }</td>
-											<td>${contrato.produto.nome }</td>
-											<td>${contrato.recompraBanco.nome }</td>
-											<td>${contrato.valorParcela }</td>
-											<td><fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" /></td>
-											<td>${contrato.prazo }</td>
-											<td>${contrato.valorDivida }</td>
-											<td>${contrato.valorLiquido }</td>
-											<td>${contrato.valorMeta }</td>
-											<td><a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a></td>
-											<td>PÓS VENDA</td>
+											<td>
+												<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yyyy" />
+											</td>
+											<td >
+												${contrato.usuario.supervisorUsuario.nome }
+											</td>
+											<td >
+												${contrato.usuario.nome }
+											</td>
+											<td >
+												${contrato.formulario.parceiroNegocio.nome }
+											</td>
+											<td >
+												${contrato.formulario.parceiroNegocio.cpf }
+											</td>
+											<td >
+												${contrato.banco.nome }
+											</td>
+											<td >
+												${contrato.produto.nome }
+											</td>
+											<td >
+												${contrato.recompraBanco.nome }
+											</td>
+											<td >
+												${contrato.valorParcela }
+											</td>
+											<td >
+												<fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" />
+											</td>
+											<td >
+												${contrato.prazo }
+											</td>
+											<td >
+												${contrato.valorDivida }
+											</td>
+											<td >
+												${contrato.valorLiquido }
+											</td>
+											<td >
+												${contrato.valorMeta }
+											</td>
+											<td >
+												<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
+											</td>
+											<td >
+												PÓS VENDA
+											</td>
 										</tr>
 									</c:forEach>
 								</tbody>	
