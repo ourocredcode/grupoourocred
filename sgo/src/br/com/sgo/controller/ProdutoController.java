@@ -8,16 +8,17 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.CategoriaProdutoDao;
 import br.com.sgo.dao.GrupoProdutoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.SubGrupoProdutoDao;
 import br.com.sgo.dao.TipoProdutoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Produto;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class ProdutoController {
@@ -29,19 +30,24 @@ public class ProdutoController {
 	private final CategoriaProdutoDao categoriaProdutoDao;
 	private final TipoProdutoDao tipoProdutoDao;
 	private final UsuarioInfo usuarioInfo;
-	private final Validator validator;
+
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 	
-	private Produto produto;
 	private Calendar dataAtual = Calendar.getInstance();
 
 	private Collection<Produto> produtos;
 
-	public ProdutoController(Result result, Validator validator, UsuarioInfo usuarioInfo, ProdutoDao produtoDao, GrupoProdutoDao grupoProdutoDao, SubGrupoProdutoDao subGrupoProdutoDao
+	public ProdutoController(Result result, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo
+			, ProdutoDao produtoDao, GrupoProdutoDao grupoProdutoDao, SubGrupoProdutoDao subGrupoProdutoDao
 			,CategoriaProdutoDao categoriaProdutoDao, TipoProdutoDao tipoProdutoDao){
 
 		this.result = result;
-		this.validator = validator;
 		this.usuarioInfo = usuarioInfo;
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
 		this.produtoDao = produtoDao;
 		this.grupoProdutoDao = grupoProdutoDao;
 		this.subGrupoProdutoDao = subGrupoProdutoDao;
@@ -54,6 +60,7 @@ public class ProdutoController {
 	@Path("/produto/cadastro")
 	public void cadastro(){
 
+		result.include("produtos",this.produtoDao.buscaAllProdutosByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("gruposProduto",this.grupoProdutoDao.buscaAllGruposProduto());
 		result.include("tiposProduto",this.tipoProdutoDao.buscaAllTiposProdutoByEmpresaOrganizacao());
 		result.include("categoriasProduto",this.categoriaProdutoDao.buscaAllCategoriaProduto());
@@ -61,29 +68,27 @@ public class ProdutoController {
 	}
 
 	@Post
-	@Public
 	@Path("/produto/salva")
 	public void salva(Produto produto){
-		
-		validator.validate(produto);
-		validator.onErrorUsePageOf(this).cadastro();
 		
 		String mensagem = "";
 
 		try {
 			
-			if(this.produtoDao.buscaProdutoByEmpresaOrgCategoriaGrupoSubGrupoTipoNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()
-					, produto.getCategoriaProduto().getCategoriaProduto_id(), produto.getGrupoProduto().getGrupoProduto_id(), produto.getSubGrupoProduto().getSubGrupoProduto_id()
-					, produto.getTipoProduto().getTipoProduto_id(), produto.getNome()) == null) {
+			if(this.produtoDao.buscaProdutoByEmpresaOrgCategoriaGrupoSubGrupoTipoNome(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), produto.getCategoriaProduto().getCategoriaProduto_id()
+					, produto.getGrupoProduto().getGrupoProduto_id(), produto.getSubGrupoProduto().getSubGrupoProduto_id(), produto.getTipoProduto().getTipoProduto_id(), produto.getNome()) == null) {
 
-				this.produto.setCreated(dataAtual);
-				this.produto.setUpdated(dataAtual);
+				produto.setCreated(dataAtual);
+				produto.setUpdated(dataAtual);
 	
-				this.produto.setCreatedBy(usuarioInfo.getUsuario());
-				this.produto.setUpdatedBy(usuarioInfo.getUsuario());
+				produto.setCreatedBy(usuario);
+				produto.setUpdatedBy(usuario);
+
+				produto.setIsActive(produto.getIsActive() == null ? false : true);
+				produto.setIsProdutoContrato(produto.getIsProdutoContrato() == null ? false : true);
 				
-				this.produto.setChave(produto.getNome());
-				this.produto.setDescricao(produto.getNome());
+				produto.setChave(produto.getNome());
+				produto.setDescricao(produto.getNome());
 	
 				this.produtoDao.beginTransaction();
 				this.produtoDao.adiciona(produto);
@@ -96,18 +101,18 @@ public class ProdutoController {
 				mensagem = "Erro: Produto " + produto.getNome() + " já cadastrado.";
 	
 			} 
-	
+
 			} catch(Exception e) {
-		
+
 				mensagem = "Erro: Falha ao adicionar o Produto.";
-		
+
 			} finally{
-		
+
 				this.produtoDao.clear();
 				this.produtoDao.close();
-		
+
 			}
-		
+
 			result.include("notice", mensagem);			
 			result.redirectTo(this).cadastro();
 
@@ -124,9 +129,10 @@ public class ProdutoController {
 	}
 	
 	@Get @Path("/produto/busca.json")
-	@Public
 	public void produtos(Long empresa_id, Long organizacao_id, String nome){
+
 		result.use(Results.json()).withoutRoot().from(produtoDao.buscaProdutos(empresa_id, organizacao_id, nome)).serialize();
+
 	}
 	
 	@Post
@@ -134,6 +140,11 @@ public class ProdutoController {
 	public void subgrupoprodutos(Long grupoProduto_id){
 
 		result.include("subGrupoProdutos",this.subGrupoProdutoDao.buscaSubGrupoProdutoByGrupoProduto(grupoProduto_id));
+
+	}
+
+	@Get
+	public void msg() {
 
 	}
 

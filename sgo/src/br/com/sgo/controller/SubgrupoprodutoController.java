@@ -1,86 +1,118 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.GrupoProdutoDao;
 import br.com.sgo.dao.SubGrupoProdutoDao;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.interceptor.Public;
+import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.SubGrupoProduto;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class SubgrupoprodutoController {
 
 	private final Result result;
-	private final Validator validator;
+	private final GrupoProdutoDao grupoProdutoDao;
 	private final SubGrupoProdutoDao subGrupoProdutoDao;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
+	
+	private final UsuarioInfo usuarioInfo;
+	private Empresa empresa;	
+	private Organizacao organizacao;
+	private Usuario usuario;	
+	private Calendar dataAtual = Calendar.getInstance();
 
-	public SubgrupoprodutoController(Result result,Validator validator, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,SubGrupoProdutoDao subGrupoProdutoDao){
-		this.subGrupoProdutoDao = subGrupoProdutoDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;		
+	public SubgrupoprodutoController(Result result, UsuarioInfo usuarioInfo, Empresa empresa,Organizacao organizacao, Usuario usuario, GrupoProdutoDao grupoProdutoDao, SubGrupoProdutoDao subGrupoProdutoDao){
+
 		this.result = result;
-		this.validator = validator;
+		this.grupoProdutoDao = grupoProdutoDao;
+		this.subGrupoProdutoDao = subGrupoProdutoDao;
+		this.usuarioInfo = usuarioInfo;
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
+
 	}
 
 	@Get
-	@Public
 	@Path("/subgrupoproduto/cadastro")
 	public void cadastro(){
-		result.include("subGrupoProduto",this.subGrupoProdutoDao.listaTudo("ASC","nome"));
+
+		result.include("subGrupoProdutos", this.subGrupoProdutoDao.buscaAllSubGruposProduto());
+		result.include("gruposProduto", this.grupoProdutoDao.buscaAllGruposProduto());
+
 	}
 
 	@Post
-	@Public
 	@Path("/subgrupoproduto/salva")
 	public void salva(SubGrupoProduto subGrupoProduto){
-
-		validator.validate(subGrupoProduto);
-		validator.onErrorUsePageOf(this).cadastro();
 
 		String mensagem = "";
 
 		try {
 
-			subGrupoProduto.setEmpresa(this.empresaDao.load(subGrupoProduto.getEmpresa().getEmpresa_id()));		
-			subGrupoProduto.setOrganizacao(this.organizacaoDao.load(subGrupoProduto.getOrganizacao().getOrganizacao_id()));
+			if(empresa.getNome().equals("SYSTEM") && organizacao.getNome().equals("SYSTEM")){
+				
+				if(this.subGrupoProdutoDao.buscaSubGrupoProdutoByNome(subGrupoProduto.getGrupoProduto().getGrupoProduto_id(), subGrupoProduto.getNome()) == null) {
+	
+					subGrupoProduto.setCreated(dataAtual);
+					subGrupoProduto.setUpdated(dataAtual);
+	
+					subGrupoProduto.setCreatedBy(usuario);
+					subGrupoProduto.setUpdatedBy(usuario);
+	
+					subGrupoProduto.setIsActive(subGrupoProduto.getIsActive() == null ? false : true);
+	
+					subGrupoProduto.setChave(subGrupoProduto.getNome());
+					subGrupoProduto.setDescricao(subGrupoProduto.getNome());
+	
+					this.subGrupoProdutoDao.beginTransaction();
+					this.subGrupoProdutoDao.adiciona(subGrupoProduto);
+					this.subGrupoProdutoDao.commit();
+	
+					mensagem = "Sub Grupo adicionado com sucesso";
+	
+				} else {
+	
+					mensagem = "Erro: Sub Grupo do produto já cadastrado.";
+	
+				}
 
-			this.subGrupoProdutoDao.beginTransaction();
-			this.subGrupoProdutoDao.adiciona(subGrupoProduto);
-			this.subGrupoProdutoDao.commit();
+			} else {
 
-			mensagem = "Grupo de Produto " + subGrupoProduto.getNome() + " adicionado com sucesso";			
+				mensagem = "Erro: Sub Grupo não pode ser cadastrado nesta empresa.";
+
+			}
 
 		} catch(Exception e) {
 
-			this.subGrupoProdutoDao.rollback();
+			mensagem = "Erro: Falha ao adicionar o Sub Grupo do Produto.";
 
-			if (e.getCause().toString().indexOf("IX_SUBGRUPOPRODUTO") != -1){
-				mensagem = "Erro: SubGrupo de Produto " + subGrupoProduto.getNome() + " já existente.";
-			} else {
-				mensagem = "Erro ao adicionar SubGrupo de Produto";
-			}
+		} finally {
+
+			this.subGrupoProdutoDao.clear();
+			this.subGrupoProdutoDao.close();
 
 		}
 
-		this.subGrupoProdutoDao.clear();
-		this.subGrupoProdutoDao.close();
-		result.include("notice",mensagem);
+		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
 	}
 
-	@Get @Path("/subgrupoproduto/busca.json")
-	@Public
+	@Get 
+	@Path("/subgrupoproduto/busca.json")
 	public void subgrupoproduto(Long empresa_id, Long organizacao_id, String nome){
+
 		result.use(Results.json()).withoutRoot().from(subGrupoProdutoDao.buscaSubGrupoProdutos(empresa_id, organizacao_id, nome)).serialize();
+
 	}
 
 }

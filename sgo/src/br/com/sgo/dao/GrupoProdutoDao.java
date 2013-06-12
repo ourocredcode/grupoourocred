@@ -24,6 +24,8 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 	private Connection conn;
 	private ResultSet rsGrupoProdutos;
 	
+	private final String sqlGrupoProduto = "SELECT GRUPOPRODUTO.grupoproduto_id, GRUPOPRODUTO.empresa_id, GRUPOPRODUTO.organizacao_id, GRUPOPRODUTO.nome FROM GRUPOPRODUTO (NOLOCK) ";
+	
 	private final String sqlGruposProduto = "SELECT GRUPOPRODUTO.grupoproduto_id, GRUPOPRODUTO.nome AS grupoproduto_nome, GRUPOPRODUTO.isactive, GRUPOPRODUTO.empresa_id "+
 						", EMPRESA.nome AS empresa_nome, GRUPOPRODUTO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
 						" FROM (ORGANIZACAO (NOLOCK) INNER JOIN GRUPOPRODUTO (NOLOCK) ON ORGANIZACAO.organizacao_id = GRUPOPRODUTO.organizacao_id) "+
@@ -67,6 +69,46 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 		return gruposProduto;
 
 	}
+	
+	public GrupoProduto buscaGrupoProdutoByNome(String nome) {
+
+		String sql = sqlGrupoProduto;
+
+		if (nome != null)
+			sql += " WHERE GRUPOPRODUTO.nome = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		GrupoProduto grupoProduto = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setString(1, nome);
+
+			this.rsGrupoProdutos = this.stmt.executeQuery();
+
+			while (rsGrupoProdutos.next()) {
+
+				grupoProduto = new GrupoProduto();
+
+				grupoProduto.setGrupoProduto_id(rsGrupoProdutos.getLong("grupoproduto_id"));
+				grupoProduto.setNome(rsGrupoProdutos.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsGrupoProdutos, stmt, conn);
+
+		return grupoProduto;
+
+	}
 
 	public Collection<GrupoProduto> buscaGrupoProdutosByNome(String nome) {
 
@@ -101,23 +143,24 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 	}
 
 	private void getGrupoProduto(Collection<GrupoProduto> gruposProduto) throws SQLException {
-		
+
 		GrupoProduto grupoProduto = new GrupoProduto();
 		Empresa empresa = new Empresa();
 		Organizacao organizacao = new Organizacao();
 
 		empresa.setEmpresa_id(rsGrupoProdutos.getLong("empresa_id"));
 		empresa.setNome(rsGrupoProdutos.getString("empresa_nome"));
-		
+
 		organizacao.setOrganizacao_id(rsGrupoProdutos.getLong("organizacao_id"));
 		organizacao.setNome(rsGrupoProdutos.getString("organizacao_nome"));
-		
+
 		grupoProduto.setEmpresa(empresa);
 		grupoProduto.setOrganizacao(organizacao);
 		grupoProduto.setGrupoProduto_id(rsGrupoProdutos.getLong("grupoproduto_id"));
 		grupoProduto.setNome(rsGrupoProdutos.getString("grupoproduto_nome"));
 
 		gruposProduto.add(grupoProduto);
+
 	}
 
 }

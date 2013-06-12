@@ -7,6 +7,6 @@
 <c:if test="${subGrupoProdutos != null}">
 	<option value="">Selecione um Grupo Produto...</option>
 	<c:forEach items="${subGrupoProdutos }" var="subGrupo">
-		<option value="${subGrupo.subGrupoProduto_id } ">${subGrupo.nome}</option>
+		<option value="${subGrupo.subGrupoProduto_id }">${subGrupo.nome}</option>
 	</c:forEach>
 </c:if>
