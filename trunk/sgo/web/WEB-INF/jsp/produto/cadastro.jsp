@@ -14,145 +14,30 @@ jQuery(function($){
 	$('#subgrupoproduto-li-a').click(function() {
 		window.location.href = '<c:url value="/subgrupoproduto/cadastro" />';
 	});
-
-	$('#produtoEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
-
-           		  if (!data || data.length == 0) {
-           	            $('#produtoEmpresa').val('');
-						$('#produtoEmpresaId').val('');
-           	        }
-
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#produtoEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-
-        	 $('#produtoEmpresa').val(ui.item.label);
-             $('#produtoEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#produtoOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#produtoEmpresaId').val() == '' ? '0' :  $('#produtoEmpresaId').val(), org_nome : $('#produtoOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#produtoOrganizacao').val('');
-         	            $('#produtoOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#produtoOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#produtoOrganizacao').val(ui.item.label);
-             $('#produtoOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
 	
-	$('#produtoGrupoProduto').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/grupoproduto/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#produtoEmpresaId').val() == '' ? '0' :  $('#produtoEmpresaId').val(), 
-	        		  organizacao_id : $('#produtoOrganizacaoId').val() == '' ? '0' :  $('#produtoOrganizacaoId').val(),
-	        		  nome : $('#produtoGrupoProduto').val() },
-              success : function(data) {  
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
 
-            	  if (!data || data.length == 0) {
-         	            $('#produtoGrupoProduto').val('');
-         	            $('#produtoGrupoProdutoId').val('');
-         	        }
-
-            	  response($.map(data, function(grupoProduto) {  
-            		  return {
-            			  label: grupoProduto.nome,
-            			  value: grupoProduto.grupoProduto_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#produtoGrupoProduto').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#produtoGrupoProduto').val(ui.item.label);
-             $('#produtoGrupoProdutoId').val(ui.item.value);
-             return false;
-         }
-    });
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 	
-	$('#produtoSubGrupoProduto').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/subgrupoproduto/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#produtoEmpresaId').val() == '' ? '0' :  $('#produtoEmpresaId').val(), 
-	        		  organizacao_id : $('#produtoOrganizacaoId').val() == ''  ? '0' :  $('#produtoOrganizacaoId').val(),
-	        		  nome : $('#produtoSubGrupoProduto').val() },
-              success : function(data) {  
+	$('select').select2();
 
-            	  if (!data || data.length == 0) {
-         	            $('#produtoSubGrupoProduto').val('');
-         	            $('#produtoSubGrupoProdutoId').val('');
-         	        }
-
-            	  response($.map(data, function(subGrupoProduto) {  
-            		  return {
-            			  label: subGrupoProduto.nome,
-            			  value: subGrupoProduto.subGrupoProduto_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#produtoSubGrupoProduto').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#produtoSubGrupoProduto').val(ui.item.label);
-             $('#produtoSubGrupoProdutoId').val(ui.item.value);
-             return false;
-         }
-    });
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
 
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/produto/cadastro" />';
@@ -167,6 +52,14 @@ jQuery(function($){
 			document.produtoForm.produtoIsActive.value=true;
 		}else{
 			document.produtoForm.produtoIsActive.value=false;
+		}
+	});
+	
+	$("#produtoIsProdutoContrato").change(function(e){
+		if(document.produtoForm.produtoIsProdutoContrato.checked==true){
+			document.produtoForm.produtoIsProdutoContrato.value=true;
+		}else{
+			document.produtoForm.produtoIsProdutoContrato.value=false;
 		}
 	});
 
@@ -251,7 +144,7 @@ function buscaSubGrupoProduto(){
 						</div>
 						<div class="row-fluid">
 							<div class="span2">
-								<label for="produtoGrupoProdutoId">Grupo Produto</label>
+								<label for="produtoGrupoProduto">Grupo Produto</label>
 								<select id="produtoGrupoProdutoId" name="produto.grupoProduto.grupoProduto_id" onchange="buscaSubGrupoProduto();" class="input-medium">
 									<option value="">Selecione o grupo...</option>
 									<c:forEach var="grupoProduto" items="${gruposProduto }">
@@ -260,7 +153,7 @@ function buscaSubGrupoProduto(){
 								</select>
 							</div>
 							<div class="span2">
-	      						<label for="produtoSubGrupoProdutoId">Sub Grupo Produto</label>
+	      						<label for="produtoSubGrupoProduto">Sub Grupo Produto</label>
 	      						<select id="produtoSubGrupoProdutoId" name="produto.subGrupoProduto.subGrupoProduto_id" class="input-medium">
 	      							<option value="">Selecion um Grupo Produto...</option>
 	      						</select>
@@ -276,7 +169,7 @@ function buscaSubGrupoProduto(){
 							</div>
 							<div class="span2">
 								<label for="produtoTipoProdutoId">Tipo Produto</label>
-								<select id="produtoTipoProdutoId" name="produto.tipoProduto.tipoProduto_id" class="input-medium">
+								<select id="produtoTipoProdutoId" name="produto.tipoProduto.tipoProduto_id" class="input-xlarge">
 									<!--option value="">Selecione o grupo...</option-->
 									<c:forEach var="tipoProduto" items="${tiposProduto }">
 									 	<option value="${tipoProduto.tipoProduto_id }" > ${tipoProduto.nome }</option>
@@ -289,13 +182,13 @@ function buscaSubGrupoProduto(){
 								<label for="produtoNome">Nome</label>
 								<input class="input-xlarge" id="produtoNome" name="produto.nome" placeholder="Nome" type="text" required>
 							</div>
-							<div class="span3">
-								<label for="produtoDescricao">Descrição</label>
-								<input class="input-xlarge" id="produtoDescricao" name="produto.descricao" placeholder="Descrição" type="text" required>
-							</div>
 							<div class="span1">
 								<label for="produtoIsActive">Ativo</label>
 								<input type="checkbox" id="produtoIsActive" name="produto.isActive" checked="checked" value="1" >
+							</div>
+							<div class="span1">
+								<label for="produtoIsProdutoContrato">P/C</label>
+								<input type="checkbox" id="produtoIsProdutoContrato" name="produto.isProdutoContrato" checked="checked" value="1" >
 							</div>
 						</div>
 						<div class="row-fluid">
@@ -314,6 +207,50 @@ function buscaSubGrupoProduto(){
 
 				<div class="tab-pane fade" id="grupoproduto-div"></div>
 				<div class="tab-pane fade" id="subgrupoproduto-div"></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Produtos</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty produtos}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Produto</th>
+									<th>categoriaProduto</th>
+									<th>grupoProduto</th>
+									<th>subGrupoProduto</th>
+									<th>tipoProduto</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${produtos }" var="produto">
+									<tr>
+										<td>${produto.nome }</td>
+										<td>${produto.categoriaProduto.nome }</td>
+										<td>${produto.grupoProduto.nome }</td>
+										<td>${produto.subGrupoProduto.nome }</td>
+										<td>${produto.tipoProduto.nome }</td>
+										<td>${produto.isActive }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>

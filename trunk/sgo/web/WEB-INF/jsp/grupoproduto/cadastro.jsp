@@ -15,74 +15,29 @@ jQuery(function($){
 		window.location.href = '<c:url value="/subgrupoproduto/cadastro" />';
 	});
 
-	$('#grupoProdutoEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
 
-           		  if (!data || data.length == 0) {
-           	            $('#grupoProdutoEmpresa').val('');
-						$('#grupoProdutoEmpresaId').val('');
-           	        }
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
 
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#grupoProdutoEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-
-        	 $('#grupoProdutoEmpresa').val(ui.item.label);
-             $('#grupoProdutoEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#grupoProdutoOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#grupoProdutoEmpresaId').val() == '' ? '0' :  $('#grupoProdutoEmpresaId').val(), org_nome : $('#grupoProdutoOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#grupoProdutoOrganizacao').val('');
-         	            $('#grupoProdutoOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#grupoProdutoOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#grupoProdutoOrganizacao').val(ui.item.label);
-             $('#grupoProdutoOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
 
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/grupoproduto/cadastro" />';
@@ -173,10 +128,6 @@ function limpaForm() {
 								<label for="grupoProdutoNome">Nome</label>
 								<input class="input-xlarge" type="text" id="grupoProdutoNome" name="grupoProduto.nome" placeholder="Nome" required>
 							</div>
-							<div class="span3">
-								<label for="grupoProdutoDescricao">Descrição</label>
-								<input class="input-xlarge" type="text" id="grupoProdutoDescricao" name="grupoProduto.descricao" placeholder="Descrição" required>
-							</div>
 							<div class="span1">
 								<label for="grupoProdutoIsActive">Ativo</label>								
 								<input id="grupoProdutoIsActive" name="grupoProduto.isActive" type="checkbox" checked="checked" value="1" >
@@ -198,22 +149,49 @@ function limpaForm() {
 				
 				<table class="table table-striped table-bordered">
 					<thead>
-						<tr>
+						
+					</thead>
+					<tbody>	
+						
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Produtos</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty gruposProduto}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
 							<th>Empresa</th>
 							<th>Organização</th>
 							<th>Nome</th>
 						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${gruposProduto }" var="grupoProduto">
+							</thead>
+							<tbody>
+								<c:forEach items="${gruposProduto }" var="grupoProduto">
 							<tr>
 								<td>${grupoProduto.empresa.nome }</td>
 								<td>${grupoProduto.organizacao.nome }</td>
 								<td>${grupoProduto.nome }</td>
 							</tr>
 						</c:forEach>
-					</tbody>
-				</table>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -15,108 +15,28 @@ jQuery(function($){
 		window.location.href = '<c:url value="/subgrupoproduto/cadastro" />';
 	});
 
-	$('#subGrupoProdutoEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
 
-           		  if (!data || data.length == 0) {
-           	            $('#subGrupoProdutoEmpresa').val('');
-						$('#subGrupoProdutoEmpresaId').val('');
-           	        }
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
 
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#subGrupoProdutoEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-
-        	 $('#subGrupoProdutoEmpresa').val(ui.item.label);
-             $('#subGrupoProdutoEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#subGrupoProdutoOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#subGrupoProdutoEmpresaId').val() == '' ? '0' :  $('#subGrupoProdutoEmpresaId').val(), org_nome : $('#subGrupoProdutoOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#subGrupoProdutoOrganizacao').val('');
-         	            $('#subGrupoProdutoOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#subGrupoProdutoOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#subGrupoProdutoOrganizacao').val(ui.item.label);
-             $('#subGrupoProdutoOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
-
-	$('#subGrupoProdutoGrupoProduto').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/grupoproduto/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#subGrupoProdutoEmpresaId').val() == '' ? '0' :  $('#subGrupoProdutoEmpresaId').val(), 
-	        		  organizacao_id: $('#subGrupoProdutoOrganizacaoId').val() == '' ? '0' :  $('#subGrupoProdutoOrganizacaoId').val(),
-	        		  nome : $('#subGrupoProdutoGrupoProduto').val()},
-	          success : function(data) {  
-
-	        	  if (!data || data.length == 0) {
-	     	            $('#subGrupoProdutoGrupoProduto').val('');
-	     	           $('#subGrupoProdutoGrupoProdutoId').val('');
-	     	        }
-
-	        	  response($.map(data, function(grupoproduto) {  
-	        		  return {
-	        			  label: grupoproduto.nome,
-	        			  value: grupoproduto.grupoProduto_id
-	                  };
-	              }));  
-	           }
-	        });
-	     },
-	     focus: function( event, ui ) {
-	      	 $('#subGrupoProdutoGrupoProduto').val(ui.item.label);
-	           return false;
-	       } ,
-	     select: function( event, ui ) {
-	         $('#subGrupoProdutoGrupoProduto').val(ui.item.label);
-	         $('#subGrupoProdutoGrupoProdutoId').val(ui.item.value);
-	         return false;
-	     }
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
 	});
 
 	$('#btnSair').click(function() {
@@ -145,23 +65,40 @@ function limpaForm() {
 </script>
 
 <div id="content-header">
-		<h1>Cadastro Produto</h1>
-		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-		</div>
+	<h1>Cadastro Produto</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 	</div>
-	
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
-		<a href="#" class="current">Produto</a>
-	</div>
+</div>
+
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Produto</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
@@ -174,67 +111,86 @@ function limpaForm() {
 				<div class="tab-pane fade" id="grupoproduto-div"></div>
 
 				<div class="tab-pane fade active in" id="subgrupoproduto-div">
-				
-					<div class="row25MarginTop">
-						<div class="span3">
-							<form id="subGrupoProdutoForm" name="subGrupoProdutoForm" action="<c:url value="/subgrupoproduto/salva"/>" method="POST">
-								<div class="control-group">
-									<label class="control-label" for="subGrupoProdutoEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="subGrupoProdutoEmpresa" name="subGrupoProduto.empresa.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="subGrupoProdutoEmpresaId" name="subGrupoProduto.empresa.empresa_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="subGrupoProdutoOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="subGrupoProdutoOrganizacao" name="subGrupoProduto.organizacao.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="subGrupoProdutoOrganizacaoId" name="subGrupoProduto.organizacao.organizacao_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="subGrupoProdutoGrupoProduto">Grupo Produto</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="subGrupoProdutoGrupoProduto" name="subGrupoProduto.grupoProduto.nome" type="text" required onChange="limpaForm();">
-			      						<input class="span10" id="subGrupoProdutoGrupoProdutoId" name="subGrupoProduto.grupoProduto.grupoProduto_id" type="hidden">
-			    					</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="subGrupoProdutoNome">Nome</label>
-									<div class="controls">
-										<input type="text" id="subGrupoProdutoNome" name="subGrupoProduto.nome" placeholder="Nome" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="subGrupoProdutoDescricao">Descrição</label>
-									<div class="controls">
-										<input type="text" id="subGrupoProdutoDescricao" name="subGrupoProduto.descricao" placeholder="Descrição" required>
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="subGrupoProdutoIsActive">Ativo</label>
-									<div class="controls">
-										<input type="checkbox" id="subGrupoProdutoIsActive" name="subGrupoProduto.isActive" checked="checked" value="1" >							
-									</div>
-								</div>
-							 	<div class="btn-group">
-									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-								</div>
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-								</div>
-							</form>
+					<form id="subGrupoProdutoForm" name="subGrupoProdutoForm" action="<c:url value="/subgrupoproduto/salva"/>" method="POST">
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="subGrupoProdutoEmpresa">Empresa</label>
+	      						<input class="input-xlarge" id="subGrupoProdutoEmpresa" name="subGrupoProduto.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" readonly="readonly">
+	      						<input class="span1" id="subGrupoProdutoEmpresaId" name="subGrupoProduto.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }">
+	    					</div>								
+							<div class="span3">
+								<label for="subGrupoProdutoOrganizacao">Organização</label>
+	      						<input class="input-xlarge" id="subGrupoProdutoOrganizacao" name="subGrupoProduto.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" readonly="readonly">
+	      						<input class="span1" id="subGrupoProdutoOrganizacaoId" name="subGrupoProduto.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
+	    					</div>
 						</div>
-						
-					</div>
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="subGrupoProdutoGrupoProduto">Grupo Produto</label>
+								<select id="subGrupoProdutoGrupoProdutoId" name="subGrupoProduto.grupoProduto.grupoProduto_id" class="input-medium">
+									<!-- option value="">Selecione o grupo...</option-->
+									<c:forEach var="grupoProduto" items="${gruposProduto }">
+									 	<option value="${grupoProduto.grupoProduto_id }" > ${grupoProduto.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="span3">
+								<label for="subGrupoProdutoNome">Nome</label>
+								<input class="input-xlarge" type="text" id="subGrupoProdutoNome" name="subGrupoProduto.nome" placeholder="Nome" required>
+							</div>								
+							<div class="span1">
+								<label for="subGrupoProdutoIsActive">Ativo</label>
+								<input type="checkbox" id="subGrupoProdutoIsActive" name="subGrupoProduto.isActive" checked="checked" value="1" >							
+							</div>
+						</div>
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
+					</form>					
+				</div>			
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Sub Grupo Produtos</h5>
 				</div>
-			
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty subGrupoProdutos}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Grupo Produto</th>
+									<th>Sub Grupo Produto</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${subGrupoProdutos }" var="subGrupoProduto">
+									<tr>
+										<td>${subGrupoProduto.grupoProduto.nome }</td>
+										<td>${subGrupoProduto.nome }</td>
+										<td>${subGrupoProduto.isActive}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -77,9 +77,24 @@ public class Produto implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
+	@Column(name = "isestocado")
+	private Boolean isEstocado;
+	
+	@Column(name = "isvendido")
+	private Boolean isVendido;
+	
+	@Column(name = "iscomprado")
+	private Boolean isComprado;
+	
+	@Column(name = "islistamateriais")
+	private Boolean isListaMateriais;
+	
+	@Column(name = "isprodutocontrato")
+	private Boolean isProdutoContrato;
+	
 	@Column(name = "isactive")
 	private Boolean isActive;
-
+	
 	public Long getProduto_id() {
 		return produto_id;
 	}
@@ -206,6 +221,46 @@ public class Produto implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Boolean getIsEstocado() {
+		return isEstocado;
+	}
+
+	public void setIsEstocado(Boolean isEstocado) {
+		this.isEstocado = isEstocado;
+	}
+
+	public Boolean getIsVendido() {
+		return isVendido;
+	}
+
+	public void setIsVendido(Boolean isVendido) {
+		this.isVendido = isVendido;
+	}
+
+	public Boolean getIsComprado() {
+		return isComprado;
+	}
+
+	public void setIsComprado(Boolean isComprado) {
+		this.isComprado = isComprado;
+	}
+
+	public Boolean getIsListaMateriais() {
+		return isListaMateriais;
+	}
+
+	public void setIsListaMateriais(Boolean isListaMateriais) {
+		this.isListaMateriais = isListaMateriais;
+	}
+
+	public Boolean getIsProdutoContrato() {
+		return isProdutoContrato;
+	}
+
+	public void setIsProdutoContrato(Boolean isProdutoContrato) {
+		this.isProdutoContrato = isProdutoContrato;
 	}
 
 }
