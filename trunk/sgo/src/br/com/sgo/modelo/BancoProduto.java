@@ -16,15 +16,15 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name = "WORKFLOWPRODUTOBANCO")
-public class WorkflowProdutoBanco implements Serializable {
+@Table(name = "BANCOPRODUTO")
+public class BancoProduto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "workflowprodutobanco_id")
+	@Column(name = "bancoproduto_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long workflowProdutoBanco_id;
+	private Long bancoProduto_id;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
@@ -35,13 +35,13 @@ public class WorkflowProdutoBanco implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
+	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
+	private Banco banco;
+
+	@ManyToOne
 	@JoinColumn(name = "produto_id", updatable = true, nullable = false)
 	private Produto produto;
 
-	@ManyToOne
-	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
-	private Banco banco;
-	
 	@ManyToOne
 	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
 	private Workflow workflow;
@@ -69,18 +69,18 @@ public class WorkflowProdutoBanco implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name = "isworkflow")
-	private Boolean isWorkflow;
-
 	@Column(name = "isactive")
 	private Boolean isActive;
 
-	public Long getWorkflowProdutoBanco_id() {
-		return workflowProdutoBanco_id;
+	@Column(name = "isworkflow")
+	private Boolean isWorkflow;
+
+	public Long getBancoProduto_id() {
+		return bancoProduto_id;
 	}
 
-	public void setWorkflowProdutoBanco_id(Long workflowProdutoBanco_id) {
-		this.workflowProdutoBanco_id = workflowProdutoBanco_id;
+	public void setBancoProduto_id(Long bancoProduto_id) {
+		this.bancoProduto_id = bancoProduto_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -99,20 +99,20 @@ public class WorkflowProdutoBanco implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
 	public Banco getBanco() {
 		return banco;
 	}
 
 	public void setBanco(Banco banco) {
 		this.banco = banco;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	public Workflow getWorkflow() {
@@ -179,20 +179,20 @@ public class WorkflowProdutoBanco implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public Boolean getIsWorkflow() {
-		return isWorkflow;
-	}
-
-	public void setIsWorkflow(Boolean isWorkflow) {
-		this.isWorkflow = isWorkflow;
-	}
-
 	public Boolean getIsActive() {
 		return isActive;
 	}
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Boolean getIsWorkflow() {
+		return isWorkflow;
+	}
+
+	public void setIsWorkflow(Boolean isWorkflow) {
+		this.isWorkflow = isWorkflow;
 	}
 
 }

@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TipoTabelaDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
@@ -34,8 +33,8 @@ public class TipotabelaController {
 		this.result = result;
 		this.tipoTabelaDao = tipoTabelaDao;
 		this.usuarioInfo = usuarioInfo;				
-		this.empresa = this.usuarioInfo.getEmpresa();
-		this.organizacao = this.usuarioInfo.getOrganizacao();
+		this.empresa = empresa;
+		this.organizacao = organizacao;
 		this.usuario = this.usuarioInfo.getUsuario();
 
 	}	
@@ -44,7 +43,7 @@ public class TipotabelaController {
 	@Path("/tipotabela/cadastro")
 	public void cadastro(){
 
-		result.include("tiposTabela", this.tipoTabelaDao.buscaAllTipoTabela());
+		result.include("tiposTabela", this.tipoTabelaDao.buscaAllTipoTabela(1l, 1l));
 
 	}
 
@@ -55,37 +54,36 @@ public class TipotabelaController {
 		String mensagem = "";
 
 		try {
-			
-			if(empresa.getNome().equals("SYSTEM") && organizacao.getNome().equals("SYSTEM")){
 
-				if (this.tipoTabelaDao.buscaTipoTabelaByEmpOrgNome(1l, 1l, tipoTabela.getNome()) == null) {				
-	
-					tipoTabela.setCreated(dataAtual);
-					tipoTabela.setUpdated(dataAtual);
-	
-					tipoTabela.setCreatedBy(usuario);
-					tipoTabela.setUpdatedBy(usuario);
-	
-					tipoTabela.setChave(tipoTabela.getNome());
-					tipoTabela.setDescricao(tipoTabela.getNome());
-					
-					tipoTabela.setIsActive(tipoTabela.getIsActive() == null ? false : true);
-	
-					this.tipoTabelaDao.beginTransaction();
-					this.tipoTabelaDao.adiciona(tipoTabela);
-					this.tipoTabelaDao.commit();
-	
-					mensagem = "Tipo Tabela " + tipoTabela.getNome() + " adicionado com sucesso.";
-	
-				} else {
+			if (this.tipoTabelaDao.buscaTipoTabelaByEmpOrgNome(1l, 1l, tipoTabela.getNome()) == null) {				
 
-					mensagem = "Erro: Tipo Tabela " + tipoTabela.getNome() + " já cadastrado.";
+				tipoTabela.setCreated(dataAtual);
+				tipoTabela.setUpdated(dataAtual);
 
-				}
+				tipoTabela.setCreatedBy(usuario);
+				tipoTabela.setUpdatedBy(usuario);
+
+				tipoTabela.setChave(tipoTabela.getNome());
+				tipoTabela.setDescricao(tipoTabela.getNome());
+
+				empresa.setEmpresa_id(1l);
+				organizacao.setOrganizacao_id(1l);
+
+				tipoTabela.setEmpresa(empresa);
+				tipoTabela.setOrganizacao(organizacao);
+
+				tipoTabela.setIsActive(tipoTabela.getIsActive() == null ? false : true);
+
+				this.tipoTabelaDao.beginTransaction();
+				this.tipoTabelaDao.adiciona(tipoTabela);
+				this.tipoTabelaDao.commit();
+
+				mensagem = "Tipo Tabela " + tipoTabela.getNome() + " adicionado com sucesso.";
+
 
 			} else {
-				
-				mensagem = "Erro: Tipo Tabela não pode ser cadastrado nesta empresa..";
+
+				mensagem = "Erro: Tipo Tabela já cadastrado.";
 
 			}
 
@@ -105,8 +103,8 @@ public class TipotabelaController {
 
 	}
 
-	@Get @Path("/tipotabela/busca.json")
-	@Public
+	@Get 
+	@Path("/tipotabela/busca.json")
 	public void tipotabela(Long empresa_id, Long organizacao_id, String nome){
 
 		result.use(Results.json()).withoutRoot().from(tipoTabelaDao.buscaTiposTabela(empresa_id, organizacao_id, nome)).serialize();

@@ -6,9 +6,17 @@ jQuery(function($){
 	$('#tipotabela-li-a').click(function() {
 		window.location.href = '<c:url value="/tipotabela/cadastro" />';
 	});
-
+	
 	$('#tabela-li-a').click(function() {
 		window.location.href = '<c:url value="/tabela/cadastro" />';
+	});
+
+	$('#bancoproduto-li-a').click(function() {
+		window.location.href = '<c:url value="/bancoproduto/cadastro" />';
+	});
+
+	$('#bancoprodutotabela-li-a').click(function() {
+		window.location.href = '<c:url value="/bancoprodutotabela/cadastro" />';
 	});
 	
 	$('.data-table').dataTable({
@@ -95,15 +103,16 @@ function limpaForm() {
 			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="" id="tabela-li"><a href="#tabela-div" data-toggle="tab" id="tabela-li-a">Tabela</a></li>								
-				<li class="active" id="tipotabela-li"><a href="#tipotabela-div" data-toggle="tab" id="tipotabela-li-a">Tipo de Tabela</a></li>
+				<li class="active" id="tipotabela-li"><a href="#tipotabela-div" data-toggle="tab" id="tipotabela-li-a">Tipo Tabela</a></li>
+				<li class="" id="tabela-li"><a href="#tabela-div" data-toggle="tab" id="tabela-li-a">Tabela</a></li>
+				<li class="" id="bancoproduto-li"><a href="#bancoproduto-div" data-toggle="tab" id="bancoproduto-li-a">Banco Produto</a></li>
+				<li class="" id="bancoprodutotabela-li"><a href="#bancoprodutotabela-div" data-toggle="tab" id="bancoprodutotabela-li-a">Banco Produto Tabela</a></li>
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
 
-				<div class="tab-pane fade" id="tabela-div" ></div>
+				<div class="tab-pane fade active in" id="tipotabela-div">
 
-				<div class="tab-pane fade active in" id="tipotabela-div">				
 					<form id="tipoTabelaForm" name="tipoTabelaForm" action="<c:url value="/tipotabela/salva"/>" method="POST">
 						<div class="row-fluid">
 							<div class="span3">
@@ -136,6 +145,11 @@ function limpaForm() {
 						</div>
 					</form>
 				</div>
+
+				<div class="tab-pane fade" id="tabela-div"></div>
+				<div class="tab-pane fade" id="bancoproduto-div"></div>
+				<div class="tab-pane fade" id="bancoprodutotabela-div"></div>
+
 			</div>
 		</div>
 	</div>

@@ -25,7 +25,7 @@ import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.LogisticaDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
-import br.com.sgo.dao.ProdutoBancoDao;
+import br.com.sgo.dao.BancoProdutoTabelaDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.EtapaDao;
@@ -47,7 +47,7 @@ public class LogisticaController {
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
 	private final BancoDao bancoDao;
-	private final ProdutoBancoDao produtoBancoDao;
+	private final BancoProdutoTabelaDao produtoBancoDao;
 	private final ProdutoDao produtoDao;
 	private final CoeficienteDao coeficienteDao;
 	private final TabelaDao tabelaDao;
@@ -68,7 +68,7 @@ public class LogisticaController {
 	private Collection<Etapa> etapas;
 	private HttpServletResponse response;
 
-	public LogisticaController(Result result,BancoDao bancoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
+	public LogisticaController(Result result,BancoDao bancoDao,BancoProdutoTabelaDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
 			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
 			LogisticaDao logisticaDao,HttpServletResponse response, ParceiroNegocioDao parceiroNegocioDao,ParceiroLocalidadeDao parceiroLocalidadeDao){		
 

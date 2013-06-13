@@ -39,9 +39,14 @@ public class TipoTabelaDao extends Dao<TipoTabela> {
 
 	}
 	
-	public Collection<TipoTabela> buscaAllTipoTabela() {
+	public Collection<TipoTabela> buscaAllTipoTabela(Long empresa_id, Long organizacao_id) {
 
 		String sql = sqlTiposTabela;
+		
+		if (empresa_id != null)
+			sql += " WHERE TIPOTABELA.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND TIPOTABELA.organizacao_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -50,6 +55,9 @@ public class TipoTabelaDao extends Dao<TipoTabela> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
 
 			this.rsTiposTabela = this.stmt.executeQuery();
 

@@ -33,7 +33,11 @@ public class Coeficiente implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
+	private Banco banco;
+
 	@ManyToOne
 	@JoinColumn(name = "tabela_id", updatable = true, nullable = false)
 	private Tabela tabela;
@@ -180,5 +184,13 @@ public class Coeficiente implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Banco getBanco() {
+		return banco;
+	}
+
+	public void setBanco(Banco banco) {
+		this.banco = banco;
 	}
 }

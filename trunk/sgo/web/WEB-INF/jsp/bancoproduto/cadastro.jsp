@@ -3,8 +3,20 @@
 <script type="text/javascript">
 jQuery(function($){
 
-	$('#workflowProdutoBancoprodutobanco-li-a').click(function() {
-		window.location.href = '<c:url value="/workflowprodutobanco/cadastro" />';
+	$('#tipotabela-li-a').click(function() {
+		window.location.href = '<c:url value="/tipotabela/cadastro" />';
+	});
+	
+	$('#tabela-li-a').click(function() {
+		window.location.href = '<c:url value="/tabela/cadastro" />';
+	});
+
+	$('#bancoproduto-li-a').click(function() {
+		window.location.href = '<c:url value="/bancoproduto/cadastro" />';
+	});
+
+	$('#bancoprodutotabela-li-a').click(function() {
+		window.location.href = '<c:url value="/bancoprodutotabela/cadastro" />';
 	});
 
 	$('.data-table').dataTable({
@@ -31,7 +43,7 @@ jQuery(function($){
 		});
 	});
 
-	$('#workflowProdutoBancoEmpresa').autocomplete({
+	$('#bancoProdutoEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/empresa/busca.json' />",
@@ -54,30 +66,30 @@ jQuery(function($){
 	        });
 	     } ,
 	     focus: function( event, ui ) {
-	    	 $('#workflowProdutoBancoEmpresa').val(ui.item.label);
+	    	 $('#bancoProdutoEmpresa').val(ui.item.label);
 	         return false;
 	     } ,
 	     select: function( event, ui ) {
-	    	 $('#workflowProdutoBancoEmpresa').val(ui.item.label);
-	         $('#workflowProdutoBancoEmpresaId').val(ui.item.value);
+	    	 $('#bancoProdutoEmpresa').val(ui.item.label);
+	         $('#bancoProdutoEmpresaId').val(ui.item.value);
 	         return false;
 	     }
 	});
 
-	$('#workflowProdutoBancoOrganizacao').autocomplete({
+	$('#bancoProdutoOrganizacao').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
 
-	          data : {empresa_id: $('#workflowProdutoBancoEmpresaId').val() == '' ? '0' :  $('#workflowProdutoBancoEmpresaId').val(),
-	        		  org_nome : $('#workflowProdutoBancoOrganizacao').val()},
+	          data : {empresa_id: $('#bancoProdutoEmpresaId').val() == '' ? '0' :  $('#bancoProdutoEmpresaId').val(),
+	        		  org_nome : $('#bancoProdutoOrganizacao').val()},
 
 	          success : function(data) {  
 
 	        	  if (!data || data.length == 0) {
-	     	            $('#workflowProdutoBancoOrganizacao').val('');
-	     	           $('#workflowProdutoBancoOrganizacaoId').val('');
+	     	            $('#bancoProdutoOrganizacao').val('');
+	     	           $('#bancoProdutoOrganizacaoId').val('');
 	     	        }
 
 	        	  response($.map(data, function(organizacao) {  
@@ -90,29 +102,29 @@ jQuery(function($){
 	        });
 	     },
 	     focus: function( event, ui ) {
-	      	 $('#workflowProdutoBancoOrganizacao').val(ui.item.label);
+	      	 $('#bancoProdutoOrganizacao').val(ui.item.label);
 	           return false;
 	       } ,
 	     select: function( event, ui ) {
-	         $('#workflowProdutoBancoOrganizacao').val(ui.item.label);
-	         $('#workflowProdutoBancoOrganizacaoId').val(ui.item.value);
+	         $('#bancoProdutoOrganizacao').val(ui.item.label);
+	         $('#bancoProdutoOrganizacaoId').val(ui.item.value);
 	         return false;
 	     }
 	});
 
-	$('#workflowProdutoBancoProduto').autocomplete({
+	$('#bancoProdutoProduto').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/produto/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#workflowProdutoBancoEmpresaId').val() == '' ? '0' :  $('#workflowProdutoBancoEmpresaId').val(), 
-	        		  organizacao_id: $('#workflowProdutoBancoOrganizacaoId').val() == '' ? '0' :  $('#workflowProdutoBancoOrganizacaoId').val(),
-	        		  nome : $('#workflowProdutoBancoProduto').val()},
+	          data : {empresa_id: $('#bancoProdutoEmpresaId').val() == '' ? '0' :  $('#bancoProdutoEmpresaId').val(), 
+	        		  organizacao_id: $('#bancoProdutoOrganizacaoId').val() == '' ? '0' :  $('#bancoProdutoOrganizacaoId').val(),
+	        		  nome : $('#bancoProdutoProduto').val()},
 	          success : function(data) {  
 
 	        	  if (!data || data.length == 0) {
-	     	            $('#workflowProdutoBancoProduto').val('');
-	     	           $('#workflowProdutoBancoProdutoId').val('');
+	     	            $('#bancoProdutoProduto').val('');
+	     	           $('#bancoProdutoProdutoId').val('');
 	     	        }
 
 	        	  response($.map(data, function(produto) {  
@@ -125,37 +137,37 @@ jQuery(function($){
 	        });
 	     },
 	     focus: function( event, ui ) {
-	      	 $('#workflowProdutoBancoProduto').val(ui.item.label);
+	      	 $('#bancoProdutoProduto').val(ui.item.label);
 	           return false;
 	       } ,
 	     select: function( event, ui ) {
-	         $('#workflowProdutoBancoProduto').val(ui.item.label);
-	         $('#workflowProdutoBancoProdutoId').val(ui.item.value);
+	         $('#bancoProdutoProduto').val(ui.item.label);
+	         $('#bancoProdutoProdutoId').val(ui.item.value);
 	         return false;
 	     }
 	});
 
 	$('#btnSair').click(function() {
-		window.location.href = '<c:url value="/workflowprodutobanco/cadastro" />';
+		window.location.href = '<c:url value="/bancoproduto/cadastro" />';
 	});
 
 	$('#btnNovo').click(function() {
 		limpaForm();
 	});
 
-	$("#workflowProdutoBancoIsActive").change(function(e){
-		if(document.workflowProdutoBancoForm.workflowProdutoBancoIsActive.checked==true){
-			document.workflowProdutoBancoForm.workflowProdutoBancoIsActive.value=true;
+	$("#bancoProdutoIsActive").change(function(e){
+		if(document.bancoProdutoForm.bancoProdutoIsActive.checked==true){
+			document.bancoProdutoForm.bancoProdutoIsActive.value=true;
 		}else{
-			document.workflowProdutoBancoForm.workflowProdutoBancoIsActive.value=false;
+			document.bancoProdutoForm.bancoProdutoIsActive.value=false;
 		}
 	});
 	
-	$("#workflowProdutoBancoIsWorkflow").change(function(e){
-		if(document.workflowProdutoBancoForm.workflowProdutoBancoIsWorkflow.checked==true){
-			document.workflowProdutoBancoForm.workflowProdutoBancoIsWorkflow.value=true;
+	$("#bancoProdutoIsWorkflow").change(function(e){
+		if(document.bancoProdutoForm.bancoProdutoIsWorkflow.checked==true){
+			document.bancoProdutoForm.bancoProdutoIsWorkflow.value=true;
 		}else{
-			document.workflowProdutoBancoForm.workflowProdutoBancoIsWorkflow.value=false;
+			document.bancoProdutoForm.bancoProdutoIsWorkflow.value=false;
 		}
 	});
 
@@ -163,14 +175,14 @@ jQuery(function($){
 
 function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
-		document.workflowProdutoBancoForm.reset();
+		document.bancoProdutoForm.reset();
 	}
 }
 
 </script>
 
 	<div id="content-header">
-		<h1>Cadastro Workflow Produto Banco</h1>
+		<h1>Cadastro Banco Produto</h1>
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
@@ -181,7 +193,7 @@ function limpaForm(){
 	
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current">Workflow Produto Banco</a>
+		<a href="#" class="current">Banco Produto</a>
 	</div>
 	
 	<c:if test="${not empty notice}">
@@ -206,36 +218,42 @@ function limpaForm(){
 			<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="active" id="workflowprodutobanco-li"><a href="#workflowprodutobanco-div" data-toggle="tab" id="workflowprodutobanco-li-a">Workflow Produto Banco</a></li>
+				<li class="" id="tipotabela-li"><a href="#tipotabela-div" data-toggle="tab" id="tipotabela-li-a">Tipo Tabela</a></li>
+				<li class="" id="tabela-li"><a href="#tabela-div" data-toggle="tab" id="tabela-li-a">Tabela</a></li>
+				<li class="active" id="bancoproduto-li"><a href="#bancoproduto-div" data-toggle="tab" id="bancoproduto-li-a">Banco Produto</a></li>
+				<li class="" id="bancoprodutotabela-li"><a href="#bancoprodutotabela-div" data-toggle="tab" id="bancoprodutotabela-li-a">Banco Produto Tabela</a></li>
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
-				<div class="tab-pane fade active in" id="perfil-div">
 
-					<form id="workflowProdutoBancoForm" name="workflowProdutoBancoForm" action="<c:url value="/workflowprodutobanco/salva"/>" method="POST">
+				<div class="tab-pane fade" id="tipotabela-div"></div>
+				<div class="tab-pane fade" id="tabela-div"></div>
+
+				<div class="tab-pane fade active in" id="bancoproduto-div">
+
+					<form id="bancoProdutoForm" name="bancoProdutoForm" action="<c:url value="/bancoproduto/salva"/>" method="POST">
 
 						<div class="row-fluid">
 							<div class="span3">
-								<label for="workflowProdutoBancoEmpresa">Empresa</label>							
-	      						<input class="input-xlarge" id="workflowProdutoBancoEmpresa" name="workflowProdutoBanco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="span1" id="workflowProdutoBancoEmpresaId" name="workflowProdutoBanco.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    					
+								<label for="bancoProdutoEmpresa">Empresa</label>							
+	      						<input class="input-xlarge" id="bancoProdutoEmpresa" name="bancoProduto.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" readonly="readonly">
+	      						<input class="span1" id="bancoProdutoEmpresaId" name="bancoProduto.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    					
 							</div>
 							<div class="span3">
-								<label for="workflowProdutoBancoOrganizacao">Organização</label>
-	      						<input class="input-xlarge" id="workflowProdutoBancoOrganizacao" name="workflowProdutoBanco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
-	      						<input class="span1" id="workflowProdutoBancoOrganizacaoId" name="workflowProdutoBanco.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+								<label for="bancoProdutoOrganizacao">Organização</label>
+	      						<input class="input-xlarge" id="bancoProdutoOrganizacao" name="bancoProduto.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" readonly="readonly">
+	      						<input class="span1" id="bancoProdutoOrganizacaoId" name="bancoProduto.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 						</div>
 						<div class="row-fluid">
 							<div class="span3">
-								<label for="workflowProdutoBancoProduto">Produto</label>
-	      						<input class="input-xlarge" id="workflowProdutoBancoProduto" name="workflowProdutoBanco.produto.nome" value="${workflowProdutoBanco.produto.nome }" type="text" required>
-	      						<input class="span1" id="workflowProdutoBancoProdutoId" name="workflowProdutoBanco.produto.produto_id" value="${workflowProdutoBanco.produto.produto_id }" type="hidden">
-							
+								<label for="bancoProdutoProduto">Produto</label>
+	      						<input class="input-xlarge" id="bancoProdutoProduto" name="bancoProduto.produto.nome" value="${bancoProduto.produto.nome }" type="text" required>
+	      						<input class="span1" id="bancoProdutoProdutoId" name="bancoProduto.produto.produto_id" value="${bancoProduto.produto.produto_id }" type="hidden">							
 							</div>
 							<div class="span2">
-								<label for="workflowProdutoBancoBanco">Banco</label>
-								<select class="input-medium" id="workflowProdutoBancoBancoId" name="workflowProdutoBanco.banco.banco_id" >
+								<label for="bancoProdutoBanco">Banco</label>
+								<select class="input-medium" id="bancoProdutoBancoId" name="bancoProduto.banco.banco_id" >
 									<c:forEach var="banco" items="${bancos }">
 									 	<option value="${banco.banco_id }" selected="selected"> ${banco.nome }
 									 	</option>
@@ -243,8 +261,8 @@ function limpaForm(){
 								</select>
 							</div>
 							<div class="span2">
-								<label for="workflowProdutoBancoWorkflow">Worflow</label>
-								<select class="input-medium" id="workflowProdutoBancoWorkflowId" name="workflowProdutoBanco.workflow.workflow_id" >
+								<label for="bancoProdutoWorkflow">Worflow</label>
+								<select class="input-medium" id="bancoProdutoWorkflowId" name="bancoProduto.workflow.workflow_id" >
 									<c:forEach var="workflow" items="${workflows }">
 									 	<option value="${workflow.workflow_id }" selected="selected"> ${workflow.nome }
 									 	</option>
@@ -252,12 +270,12 @@ function limpaForm(){
 								</select>
 							</div>
 							<div class="span1">
-								<label for="workflowProdutoBancoIsActive">Ativo</label>							
-								<input id="workflowProdutoBancoIsActive" name="workflowProdutoBanco.isActive" type="checkbox" checked="checked" value="1" >
+								<label for="bancoProdutoIsActive">Ativo</label>							
+								<input id="bancoProdutoIsActive" name="bancoProduto.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
 							<div class="span1">
-								<label for="workflowProdutoBancoIsWorkflow">Workflow</label>							
-								<input id="workflowProdutoBancoIsWorkflow" name="workflowProdutoBanco.isWorkflow" type="checkbox" checked="checked" value="1" >
+								<label for="bancoProdutoIsWorkflow">Workflow</label>							
+								<input id="bancoProdutoIsWorkflow" name="bancoProduto.isWorkflow" type="checkbox" checked="checked" value="1" >
 							</div>							
 						</div>
 						<div class="btn-toolbar">
@@ -273,6 +291,9 @@ function limpaForm(){
 						</div>
 					</form>
 				</div>
+
+				<div class="tab-pane fade" id="bancoprodutotabela-div"></div>
+
 			</div>
 		</div>
 	</div>
@@ -284,7 +305,7 @@ function limpaForm(){
 			<div class="widget-box">
 				<div class="widget-title">
 					<span class="icon"><i class="icon-signal"></i> </span>
-					<h5>Workflow Produto Banco</h5>
+					<h5>Banco Produto</h5>
 				</div>
 				<div id="resultado" class="widget-content">
 					<c:if test="${not empty workflowsProdutoBanco}">
@@ -299,11 +320,11 @@ function limpaForm(){
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${workflowsProdutoBanco }" var="workflowProdutoBanco">
+								<c:forEach items="${workflowsProdutoBanco }" var="bancoProduto">
 									<tr>
-										<td>${workflowProdutoBanco.banco.nome }</td>
-										<td>${workflowProdutoBanco.produto.nome }</td>
-										<td>${workflowProdutoBanco.workflow.nome }</td>
+										<td>${bancoProduto.banco.nome }</td>
+										<td>${bancoProduto.produto.nome }</td>
+										<td>${bancoProduto.workflow.nome }</td>
 									</tr>
 								</c:forEach>
 							</tbody>
