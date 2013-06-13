@@ -1,0 +1,405 @@
+<%@ include file="/header.jspf"%>
+
+<script type="text/javascript">
+jQuery(function($){
+
+	$('#tipotabela-li-a').click(function() {
+		window.location.href = '<c:url value="/tipotabela/cadastro" />';
+	});
+	
+	$('#tabela-li-a').click(function() {
+		window.location.href = '<c:url value="/tabela/cadastro" />';
+	});
+
+	$('#bancoproduto-li-a').click(function() {
+		window.location.href = '<c:url value="/bancoproduto/cadastro" />';
+	});
+
+	$('#bancoprodutotabela-li-a').click(function() {
+		window.location.href = '<c:url value="/bancoprodutotabela/cadastro" />';
+	});
+
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
+	$('#bancoProdutoTabelaEmpresa').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/empresa/busca.json' />",
+	          dataType: "json",
+	          data : {n: request.term},
+              success : function(data) {  
+
+           		  if (!data || data.length == 0) {
+           	            $('#bancoProdutoTabelaEmpresa').val('');
+						$('#bancoProdutoTabelaEmpresaId').val('');
+           	        }
+
+            	  response($.map(data, function(empresa) {  
+            		  return {
+                          label: empresa.nome,
+                          value: empresa.empresa_id
+                      };
+                  }));  
+               }
+	        });
+         } ,
+         focus: function( event, ui ) {
+        	 $('#bancoProdutoTabelaEmpresa').val(ui.item.label);
+             return false;
+         } ,
+         select: function( event, ui ) {
+
+        	 $('#bancoProdutoTabelaEmpresa').val(ui.item.label);
+             $('#bancoProdutoTabelaEmpresaId').val(ui.item.value);
+
+             return false;
+
+         }
+    });
+
+	$('#bancoProdutoTabelaOrganizacao').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/organizacao/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), org_nome : $('#bancoProdutoTabelaOrganizacao').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#bancoProdutoTabelaOrganizacao').val('');
+         	            $('#bancoProdutoTabelaOrganizacaoId').val('');
+         	        }
+
+            	  response($.map(data, function(organizacao) {  
+            		  return {
+            			  label: organizacao.nome,
+            			  value: organizacao.organizacao_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#bancoProdutoTabelaOrganizacao').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#bancoProdutoTabelaOrganizacao').val(ui.item.label);
+             $('#bancoProdutoTabelaOrganizacaoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#bancoProdutoTabelaBanco').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/banco/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), 
+	        		  organizacao_id : $('#bancoProdutoTabelaOrganizacaoId').val() == '' ? '0' :  $('#bancoProdutoTabelaOrganizacaoId').val(),
+	        		  nome : $('#bancoProdutoTabelaBanco').val() },
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#bancoProdutoTabelaBanco').val('');
+         	            $('#bancoProdutoTabelaBancoId').val('');
+         	        }
+
+            	  response($.map(data, function(banco) {  
+            		  return {
+            			  label: banco.nome,
+            			  value: banco.banco_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#bancoProdutoTabelaBanco').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#bancoProdutoTabelaBanco').val(ui.item.label);
+             $('#bancoProdutoTabelaBancoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#bancoProdutoTabelaProduto').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/produto/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), 
+	        		  organizacao_id : $('#bancoProdutoTabelaOrganizacaoId').val() == '' ? '0' :  $('#bancoProdutoTabelaOrganizacaoId').val(),
+	        		  nome : $('#bancoProdutoTabelaProduto').val() },
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#bancoProdutoTabelaProduto').val('');
+         	            $('#bancoProdutoTabelaProdutoId').val('');
+         	        }
+
+            	  response($.map(data, function(produto) {  
+            		  return {
+            			  label: produto.nome,
+            			  value: produto.produto_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#bancoProdutoTabelaProduto').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#bancoProdutoTabelaProduto').val(ui.item.label);
+             $('#bancoProdutoTabelaProdutoId').val(ui.item.value);
+             return false;
+         }
+    });
+	
+	$('#bancoProdutoTabelaTabela').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/tabela/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), 
+	        		  organizacao_id : $('#bancoProdutoTabelaOrganizacaoId').val() == '' ? '0' :  $('#bancoProdutoTabelaOrganizacaoId').val(),
+	        		  nome : $('#bancoProdutoTabelaTabela').val() },
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#bancoProdutoTabelaTabela').val('');
+         	            $('#bancoProdutoTabelaTabelaId').val('');
+         	        }
+
+            	  response($.map(data, function(tabela) {  
+            		  return {
+            			  label: tabela.nome,
+            			  value: tabela.tabela_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#bancoProdutoTabelaTabela').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#bancoProdutoTabelaTabela').val(ui.item.label);
+             $('#bancoProdutoTabelaTabelaId').val(ui.item.value);
+             return false;
+         }
+    });
+
+	$("#bancoProdutoTabelaIsActive").change(function(e){
+		if(document.bancoProdutoTabelaForm.bancoProdutoTabelaIsActive.checked==true){
+			document.bancoProdutoTabelaForm.bancoProdutoTabelaIsActive.value=true;
+		}else{
+			document.bancoProdutoTabelaForm.bancoProdutoTabelaIsActive.value=false;
+		}
+	});
+
+	$('#btnNovo').click(function() {		
+		limpaForm();
+	});
+
+	$('#btnSair').click(function() {
+		window.location.href = '<c:url value="/bancoprodutotabela/cadastro" />';
+	});
+
+});
+
+function limpaForm() {
+	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
+		document.produtoForm.reset();
+	}
+}
+
+function buscaProdutos(){
+
+	var empresa_id = $('#bancoProdutoTabelaEmpresaId').val();
+	var organizacao_id = $('#bancoProdutoTabelaOrganizacaoId').val();
+	var banco_id = $('#bancoProdutoTabelaBancoId').val();
+	
+	$("#bancoProdutoTabelaProdutoId").load('<c:url value="/bancoprodutotabela/produtos" />',			
+			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'banco_id' : banco_id});
+
+}
+
+</script>
+
+<div id="content-header">
+	<h1>Cadastro Banco Produto Tabela</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+	</div>
+</div>
+
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Banco Produto Tabela</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+
+			<ul id="myTab" class="nav nav-tabs">
+				<li class="" id="tipotabela-li"><a href="#tipotabela-div" data-toggle="tab" id="tipotabela-li-a">Tipo Tabela</a></li>
+				<li class="" id="tabela-li"><a href="#tabela-div" data-toggle="tab" id="tabela-li-a">Tabela</a></li>
+				<li class="" id="bancoproduto-li"><a href="#bancoproduto-div" data-toggle="tab" id="bancoproduto-li-a">Banco Produto</a></li>
+				<li class="active" id="bancoprodutotabela-li"><a href="#bancoprodutotabela-div" data-toggle="tab" id="bancoprodutotabela-li-a">Banco Produto Tabela</a></li>
+			</ul>
+
+			<div id="myTabContent" class="tab-content">
+
+				<div class="tab-pane fade" id="tipotabela-div"></div>
+				<div class="tab-pane fade" id="tabela-div"></div>
+				<div class="tab-pane fade" id="bancoproduto-div"></div>
+
+				<div class="tab-pane fade active in" id="bancoprodutotabela-div">
+					<form id="bancoProdutoTabelaForm" name="bancoProdutoTabelaForm" action="<c:url value="/bancoprodutotabela/salva"/>" method="POST">
+						<div class="row-fluid">
+							<div class="span3">								
+								<label for="bancoProdutoTabelaEmpresa">Empresa</label>
+	      						<input class="input-xlarge" id="bancoProdutoTabelaEmpresa" name="bancoProdutoTabela.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" readonly="readonly">
+	      						<input class="span1" id="bancoProdutoTabelaEmpresaId" name="bancoProdutoTabela.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" >
+							</div>
+							<div class="span3">
+								<label for="bancoProdutoTabelaOrganizacao">Organização</label>
+	      						<input class="input-xlarge" id="bancoProdutoTabelaOrganizacao" name="bancoProdutoTabela.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" readonly="readonly">
+	      						<input class="span1" id="bancoProdutoTabelaOrganizacaoId" name="bancoProdutoTabela.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span2">
+								<label for="bancoProdutoTabelaBanco">Banco</label>
+								<select id="bancoProdutoTabelaBancoId" name="bancoProdutoTabela.banco.banco_id" class="input-medium" onchange="buscaProdutos();">
+									<c:if test="${bancos != null}">
+										<option value="">Selecione o banco</option>
+										<c:forEach var="banco" items="${bancos }">
+										 	<option value="${banco.banco_id }"> ${banco.nome }</option>
+										</c:forEach>
+									</c:if>
+								</select>
+							</div>
+							<div class="span2">
+	      						<label for="bancoProdutoTabelaProdutoId">Produto</label>
+	      						<select id="bancoProdutoTabelaProdutoId" name="bancoProdutoTabela.produto.produto_id" class="input-medium">
+	      							<option value="">Selecion um Banco...</option>
+	      						</select>
+							</div>
+							<div class="span2">
+								<label for="bancoProdutoTabelaTabela">Tabela</label>
+								<input class="input-medium" id="bancoProdutoTabelaTabela" name="bancoProdutoTabela.tabela.nome" type="text" value="${bancoProdutoTabela.tabela.nome }" required >
+	      						<input class="span1" id="bancoProdutoTabelaTabelaId" name="bancoProdutoTabela.tabela.tabela_id" type="hidden">			    					
+							</div>
+							<div class="span2">
+								<label for="bancoProdutoTabelaPrazo">Prazo</label>
+								<input class="input-mini" type="text" id="bancoProdutoTabelaNome" name="bancoProdutoTabela.prazo" placeholder="Nome" value="${bancoProdutoTabela.prazo }" required>
+							</div>
+							<div class="span1">
+								<label for="bancoProdutoTabelaIsActive">Ativo</label>									
+								<input type="checkbox" id="bancoProdutoTabelaIsActive" name="bancoProdutoTabela.isActive" checked="checked" value="1" >
+							</div>
+						</div>
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Banco Produto Tabela</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty workflowsProdutoBanco}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Banco</th>
+									<th>Produto</th>
+									<th>Workflow</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${workflowsProdutoBanco }" var="workflowProdutoBanco">
+									<tr>
+										<td>${workflowProdutoBanco.banco.nome }</td>
+										<td>${workflowProdutoBanco.produto.nome }</td>
+										<td>${workflowProdutoBanco.workflow.nome }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<%@ include file="/footer.jspf"%>

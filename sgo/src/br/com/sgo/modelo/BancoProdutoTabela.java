@@ -5,6 +5,9 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -13,10 +16,15 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name = "PRODUTOBANCO")
-public class ProdutoBanco implements Serializable {
+@Table(name = "BANCOPRODUTOTABELA")
+public class BancoProdutoTabela implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(name = "bancoprodutotabela_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long bancoProdutoTabela_id;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
@@ -27,15 +35,15 @@ public class ProdutoBanco implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
+	@JoinColumn(name = "banco_id", updatable = true, nullable = true)
 	private Banco banco;
 
 	@ManyToOne
-	@JoinColumn(name = "produto_id", updatable = true, nullable = false)
+	@JoinColumn(name = "produto_id", updatable = true, nullable = true)
 	private Produto produto;
 
 	@ManyToOne
-	@JoinColumn(name = "tabela_id", updatable = true, nullable = false)
+	@JoinColumn(name = "tabela_id", updatable = true, nullable = true)
 	private Tabela tabela;
 	
 	@ManyToOne
@@ -61,31 +69,18 @@ public class ProdutoBanco implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
+	@Column(name = "prazo")
+	private Integer prazo;
+
 	@Column(name = "isactive")
 	private Boolean isActive;
 
-	public Produto getProduto() {
-		return produto;
+	public Long getBancoProdutoTabela_id() {
+		return bancoProdutoTabela_id;
 	}
 
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Banco getBanco() {
-		return banco;
-	}
-
-	public void setBanco(Banco banco) {
-		this.banco = banco;
-	}
-
-	public Tabela getTabela() {
-		return tabela;
-	}
-
-	public void setTabela(Tabela tabela) {
-		this.tabela = tabela;
+	public void setBancoProdutoTabela_id(Long bancoProdutoTabela_id) {
+		this.bancoProdutoTabela_id = bancoProdutoTabela_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -104,12 +99,28 @@ public class ProdutoBanco implements Serializable {
 		this.organizacao = organizacao;
 	}
 
-	public Boolean getIsActive() {
-		return isActive;
+	public Banco getBanco() {
+		return banco;
 	}
 
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
+	public void setBanco(Banco banco) {
+		this.banco = banco;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
+	public Tabela getTabela() {
+		return tabela;
+	}
+
+	public void setTabela(Tabela tabela) {
+		this.tabela = tabela;
 	}
 
 	public Usuario getCreatedBy() {
@@ -166,6 +177,22 @@ public class ProdutoBanco implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Integer getPrazo() {
+		return prazo;
+	}
+
+	public void setPrazo(Integer prazo) {
+		this.prazo = prazo;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

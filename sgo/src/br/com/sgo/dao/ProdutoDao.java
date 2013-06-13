@@ -86,6 +86,50 @@ public class ProdutoDao extends Dao<Produto> {
 
 	}
 
+	public Collection<Produto> buscaProdutosToBancoProdutoTabelaByEmpOrgBanco(Long empresa_id,Long organizacao_id, Long banco_id) {
+
+		String sql = "SELECT BANCOPRODUTO.empresa_id, EMPRESA.nome as empresa_nome, BANCOPRODUTO.organizacao_id "+
+					", ORGANIZACAO.nome AS organizacao_nome, BANCOPRODUTO.produto_id, PRODUTO.nome AS produto_nome "+
+					" FROM ((BANCOPRODUTO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON BANCOPRODUTO.empresa_id = EMPRESA.empresa_id) "+ 
+					" INNER JOIN ORGANIZACAO (NOLOCK) ON BANCOPRODUTO.organizacao_id = ORGANIZACAO.organizacao_id) "+
+					" INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTO.produto_id = PRODUTO.produto_id " +
+					" WHERE BANCOPRODUTO.empresa_id = ? AND BANCOPRODUTO.organizacao_id = ? AND BANCOPRODUTO.banco_id = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Produto> produtos = new ArrayList<Produto>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, banco_id);
+
+			this.rsProdutos = this.stmt.executeQuery();
+
+			while (rsProdutos.next()) {
+
+				Produto produto = new Produto();
+				
+				produto.setProduto_id(rsProdutos.getLong("produto_id"));
+				produto.setNome(rsProdutos.getString("produto_nome"));		
+
+				produtos.add(produto);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsProdutos, stmt, conn);
+		return produtos;
+	}
+
 	public Collection<Produto> buscaProdutosByEmpOrg(Long empresa_id,Long organizacao_id) {
 
 		String sql = "select PRODUTO.produto_id, PRODUTO.nome from PRODUTO (NOLOCK) WHERE PRODUTO.empresa_id = ? AND PRODUTO.organizacao_id = ?";
@@ -127,17 +171,28 @@ public class ProdutoDao extends Dao<Produto> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + nome + "%");
+
 			this.rsProdutos = this.stmt.executeQuery();
 
 			while (rsProdutos.next()) {
-				getProduto(produtos);
+
+				Produto produto = new Produto();
+
+				produto.setProduto_id(rsProdutos.getLong("produto_id"));
+				produto.setNome(rsProdutos.getString("nome"));
+
+				produtos.add(produto);
+
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsProdutos, stmt, conn);

@@ -66,6 +66,50 @@ public class BancoDao extends Dao<Banco> {
 
 	}
 
+	public Collection<Banco> buscaBancoToBancoProdutoTabelaByEmpOrg(Long empresa_id, Long organizacao_id) {
+
+		String sql = "SELECT DISTINCT(BANCOPRODUTO.banco_id), BANCO.nome "+
+						" FROM ((BANCO (NOLOCK) INNER JOIN BANCOPRODUTO ON BANCO.banco_id = BANCOPRODUTO.banco_id) "+
+						" INNER JOIN EMPRESA (NOLOCK) ON BANCOPRODUTO.empresa_id = EMPRESA.empresa_id) "+
+						" INNER JOIN ORGANIZACAO (NOLOCK) ON BANCOPRODUTO.organizacao_id = ORGANIZACAO.organizacao_id "+
+						" WHERE BANCOPRODUTO.empresa_id = ? AND BANCOPRODUTO.organizacao_id = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Banco> bancos = new ArrayList<Banco>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
+			this.rsBanco = this.stmt.executeQuery();
+
+			while (rsBanco.next()) {
+
+				Banco banco = new Banco();
+
+				banco.setBanco_id(rsBanco.getLong("banco_id"));
+				banco.setNome(rsBanco.getString("nome"));
+
+				bancos.add(banco);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsBanco, stmt, conn);
+
+		return bancos;
+
+	}
+
 	public Collection<Banco> buscaBancos(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = "select BANCO.banco_id, BANCO.nome from BANCO (NOLOCK) WHERE BANCO.empresa_id = ? AND BANCO.organizacao_id = ? AND BANCO.nome like ?";

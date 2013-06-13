@@ -98,8 +98,8 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				Banco banco = new Banco();
 				banco.setBanco_id(rsCoeficiente.getLong("tabela_id"));
 				banco.setNome(rsCoeficiente.getString("banco_nome"));
-				
-				tabela.setBanco(banco);
+				//TODO
+				//tabela.setBanco(banco);
 
 				Coeficiente coeficiente = new Coeficiente();
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
@@ -154,7 +154,9 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				Tabela tabela = new Tabela();
 				tabela.setTabela_id(rsCoeficiente.getLong("tabela_id"));
 				tabela.setNome(rsCoeficiente.getString("tabela_nome"));
-				tabela.setPrazo(rsCoeficiente.getInt("prazo"));
+				
+				//TODO
+				//tabela.setPrazo(rsCoeficiente.getInt("prazo"));
 
 				Coeficiente coeficiente = new Coeficiente();
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
@@ -214,7 +216,8 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				banco.setBanco_id(rsCoeficiente.getLong("tabela_id"));
 				banco.setNome(rsCoeficiente.getString("banco_nome"));
 				
-				tabela.setBanco(banco);
+				//TODO
+				//tabela.setBanco(banco);
 
 				Coeficiente coeficiente = new Coeficiente();
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
@@ -288,7 +291,8 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				banco.setBanco_id(rsCoeficiente.getLong("tabela_id"));
 				banco.setNome(rsCoeficiente.getString("banco_nome"));
 				
-				tabela.setBanco(banco);
+				//TODO
+				//tabela.setBanco(banco);
 
 				Coeficiente coeficiente = new Coeficiente();
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
@@ -485,7 +489,8 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		banco.setBanco_id(rsCoeficiente.getLong("tabela_id"));
 		banco.setNome(rsCoeficiente.getString("banco_nome"));
 		
-		tabela.setBanco(banco);
+		//TODO
+		//tabela.setBanco(banco);
 
 		coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
 		coeficiente.setValor(rsCoeficiente.getDouble("valor"));

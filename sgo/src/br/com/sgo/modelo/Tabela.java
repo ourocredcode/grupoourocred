@@ -33,18 +33,11 @@ public class Tabela implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
 	private Organizacao organizacao;
-	
-	@ManyToOne
-	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
-	private Banco banco;
 
 	@ManyToOne
-	@JoinColumn(name = "tipotabela_id", updatable = true, nullable = false)
+	@JoinColumn(name = "tipotabela_id", updatable = true, nullable = true)
 	private TipoTabela tipoTabela;
 
-	@Column(name="prazo")
-	private Integer prazo;
-	
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
@@ -125,22 +118,6 @@ public class Tabela implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public Banco getBanco() {
-		return banco;
-	}
-
-	public void setBanco(Banco banco) {
-		this.banco = banco;
-	}
-
-	public Integer getPrazo() {
-		return prazo;
-	}
-
-	public void setPrazo(Integer prazo) {
-		this.prazo = prazo;
 	}
 
 	public Usuario getCreatedBy() {

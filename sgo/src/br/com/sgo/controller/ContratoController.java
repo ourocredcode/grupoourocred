@@ -28,7 +28,7 @@ import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PeriodoDao;
-import br.com.sgo.dao.ProdutoBancoDao;
+import br.com.sgo.dao.BancoProdutoTabelaDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
@@ -65,7 +65,7 @@ public class ContratoController {
 	private final UsuarioInfo usuarioInfo;
 	private final OrganizacaoDao organizacaoDao;
 	private final BancoDao bancoDao;
-	private final ProdutoBancoDao produtoBancoDao;
+	private final BancoProdutoTabelaDao produtoBancoDao;
 	private final ProdutoDao produtoDao;
 	private final CoeficienteDao coeficienteDao;
 	private final TabelaDao tabelaDao;
@@ -110,7 +110,7 @@ public class ContratoController {
 	private Collection<HistoricoControle> historicoControleBoleto;
 	private Collection<HistoricoControle> historicoControleAverbacao;
 
-	public ContratoController(Result result,BancoDao bancoDao,OrganizacaoDao organizacaoDao,ProdutoBancoDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
+	public ContratoController(Result result,BancoDao bancoDao,OrganizacaoDao organizacaoDao,BancoProdutoTabelaDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
 			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
 			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			ParceiroNegocio parceiroNegocio, ParceiroLocalidade parceiroLocalidade, ParceiroInfoBanco parceiroInfoBanco, ParceiroBeneficio parceiroBeneficio,
@@ -566,7 +566,8 @@ public class ContratoController {
 
 		Tabela t = tabelaDao.buscaTabelasByCoeficiente(coeficiente_id);
 
-		contrato.setPrazo(t.getPrazo());
+		//TODO
+		//contrato.setPrazo(t.getPrazo());
 
 		result.include("contrato",contrato);
 

@@ -8,7 +8,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.GrupoBancoDao;
 import br.com.sgo.interceptor.Public;
-import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.GrupoBanco;
 
 @Resource
