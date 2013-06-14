@@ -218,23 +218,52 @@
 				</div>
 
 			</div>
-
-			<div class="span6">
+			
+			<div class="span3">
+			
 				<div class="widget-box">
 					<div class="widget-title">
 						<span class="icon">
 							<i class="icon-tag"></i>
 						</span>
-						<h5>Controle de Boletos</h5>
-						<div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-search"></i> Buscar</a></div>
+						<h5>Controles</h5>
 					</div>
-
 					<div class="widget-content">
-						<a href="/sgo/menu/contratos/boletos">Aguardando Boleto</a>
-					</div>
 
-				</div>	
+							<h3>Controles</h3>
+							<table class="table table-bordered table-striped">
+							<thead>
+							  <tr>
+								<th>Tipo</th>
+								<th>Busca</th>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+								<td>
+								 Boleto
+								</td>
+								<td>
+								  <span class="badge"><a href="/sgo/menu/contratos/boletos">1</a></span>
+								</td>
+							  </tr>
+							  <tr>
+								<td>
+								  Averbação
+								</td>
+								<td>
+								  <span class="badge"><a href="/sgo/menu/contratos/averbacao">1</a></span>
+								</td>
+							  </tr>
+
+							</tbody>
+						  </table>
+
+					</div>
+				</div>
+
 			</div>
+
 		</div>
 	</div>
 

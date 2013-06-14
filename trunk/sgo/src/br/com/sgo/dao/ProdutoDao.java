@@ -132,7 +132,7 @@ public class ProdutoDao extends Dao<Produto> {
 
 	public Collection<Produto> buscaProdutosByEmpOrg(Long empresa_id,Long organizacao_id) {
 
-		String sql = "select PRODUTO.produto_id, PRODUTO.nome from PRODUTO (NOLOCK) WHERE PRODUTO.empresa_id = ? AND PRODUTO.organizacao_id = ?";
+		String sql = "select PRODUTO.produto_id, PRODUTO.nome as produto_nome from PRODUTO (NOLOCK) WHERE PRODUTO.empresa_id = ? AND PRODUTO.organizacao_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -147,7 +147,13 @@ public class ProdutoDao extends Dao<Produto> {
 			this.rsProdutos = this.stmt.executeQuery();
 
 			while (rsProdutos.next()) {
-				getProduto(produtos);
+				Produto produto = new Produto();
+
+				produto.setProduto_id(rsProdutos.getLong("produto_id"));
+				produto.setNome(rsProdutos.getString("produto_nome"));
+
+				produtos.add(produto);
+
 			}
 
 		} catch (SQLException e) {

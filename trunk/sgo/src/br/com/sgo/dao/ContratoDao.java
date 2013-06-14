@@ -26,6 +26,7 @@ import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
+import br.com.sgo.modelo.TipoControle;
 import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
@@ -419,7 +420,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 	}
 	
-	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,String tipoBusca,Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
+	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,TipoControle tipoControle,Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
 			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,String procedimento,
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status, Collection<Usuario> consultores,String cliente,
 			String documento,Collection<String> empresas) {
@@ -429,6 +430,9 @@ public class ContratoDao extends Dao<Contrato> {
 		int x = 0;
 
 		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
+		
+		if(tipoControle != null)
+			sql += " AND CONTROLE.tipocontrole_id = ?";
 
 		if(!cliente.equals(""))
 			sql += " AND PARCEIRONEGOCIO.nome like ? ";
@@ -518,13 +522,13 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " AND (CONTROLE.dataprevisao BETWEEN ? AND ? )";
 		
 		if(chegadaInicio != null)
-			sql += " AND (CONTRATO.datachegada BETWEEN ? AND ? )";
+			sql += " AND (CONTROLE.datachegada BETWEEN ? AND ? )";
 		
 		if(vencimentoInicio != null)
-			sql += " AND (CONTRATO.datavencimento BETWEEN ? AND ? )";
+			sql += " AND (CONTROLE.datavencimento BETWEEN ? AND ? )";
 		
 		if(proximaAtuacaoInicio != null)
-			sql += " AND (CONTRATO.dataproximaatuacao BETWEEN ? AND ? )";
+			sql += " AND (CONTROLE.dataproximaatuacao BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -547,7 +551,12 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setLong(curr, organizacao_id);
 				curr++;
 			}
-			
+
+			if(tipoControle != null){
+				this.stmt.setLong(curr, tipoControle.getTipoControle_id());
+				curr++;
+			}
+
 			if(!cliente.equals("")){
 				this.stmt.setString(curr, '%' + cliente + '%');
 				curr++;
@@ -742,8 +751,6 @@ public class ContratoDao extends Dao<Contrato> {
 			dataAssinatura.setTime(rsContrato.getDate("dataassinatura"));
 			logistica.setDataAssinatura(dataAssinatura);
 		}
-		
-		
 
 		formulario.setParceiroNegocio(parceiro);
 		contrato.setFormulario(formulario);
