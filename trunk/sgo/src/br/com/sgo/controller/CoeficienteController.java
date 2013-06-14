@@ -30,7 +30,6 @@ public class CoeficienteController {
 	private Collection<Coeficiente> coeficientes;
 	private Collection<Banco> bancos;
 
-
 	public CoeficienteController(Result result,BancoDao bancoDao, CoeficienteDao coeficienteDao,TabelaDao tabelaDao, ProdutoDao produtoDao, Coeficiente coeficiente){
 
 		this.result = result;

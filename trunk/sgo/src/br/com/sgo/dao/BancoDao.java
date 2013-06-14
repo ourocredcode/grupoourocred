@@ -66,9 +66,9 @@ public class BancoDao extends Dao<Banco> {
 
 	}
 
-	public Collection<Banco> buscaBancoProdutoByEmpOrg(Long empresa_id, Long organizacao_id) {
+	public Collection<Banco> buscaBancosToBancoProdutoByEmpOrg(Long empresa_id, Long organizacao_id) {
 
-		String sql = "SELECT DISTINCT(BANCOPRODUTO.banco_id), BANCO.nome "+
+		String sql = " SELECT DISTINCT(BANCOPRODUTO.banco_id), BANCO.nome "+
 						" FROM ((BANCO (NOLOCK) INNER JOIN BANCOPRODUTO ON BANCO.banco_id = BANCOPRODUTO.banco_id) "+
 						" INNER JOIN EMPRESA (NOLOCK) ON BANCOPRODUTO.empresa_id = EMPRESA.empresa_id) "+
 						" INNER JOIN ORGANIZACAO (NOLOCK) ON BANCOPRODUTO.organizacao_id = ORGANIZACAO.organizacao_id "+
@@ -231,42 +231,6 @@ public class BancoDao extends Dao<Banco> {
 		return banco;
 
 	}
-	
-	/*public Collection<Banco> buscaBancoToContratoByEmpOrg(Long empresa_id, Long organizacao_id){
-		
-		String sql = "SELECT BANCO.banco_id, BANCO.nome FROM GRUPOBANCO INNER JOIN BANCO ON GRUPOBANCO.grupobanco_id = BANCO.grupobanco_id WHERE GRUPOBANCO.nome = ? ";
-
-		this.conn = this.conexao.getConexao();
-
-		Collection<Banco> bancos = new ArrayList<Banco>();
-
-		try {
-
-			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setString(1, grupo);
-
-			this.rsBanco = this.stmt.executeQuery();
-
-			while (rsBanco.next()) {
-
-				Banco banco = new Banco();
-
-				banco.setBanco_id(rsBanco.getLong("banco_id"));
-				banco.setNome(rsBanco.getString("nome"));
-
-				bancos.add(banco);
-
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		this.conexao.closeConnection(rsBanco, stmt, conn);
-
-		return bancos;
-
-	}*/
 
 	public Collection<Banco> buscaBancoByGrupo(String grupo){
 		

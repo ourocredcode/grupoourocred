@@ -252,7 +252,7 @@ function limpaForm() {
 							<tr>
 								<td>${coeficiente.empresa.nome }</td>
 								<td>${coeficiente.organizacao.nome }</td>
-								<td>${coeficiente.tabela.banco.nome }</td>
+								<td>${coeficiente.banco.nome }</td>
 								<td>${coeficiente.tabela.nome }</td>
 								<td>${coeficiente.valor }</td>
 								<td>${coeficiente.percentualMeta }</td>
