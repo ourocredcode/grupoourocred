@@ -86,7 +86,7 @@ public class ProdutoDao extends Dao<Produto> {
 
 	}
 
-	public Collection<Produto> buscaProdutosToBancoProdutoTabelaByEmpOrgBanco(Long empresa_id,Long organizacao_id, Long banco_id) {
+	public Collection<Produto> buscaProdutoBancoByEmpOrgBanco(Long empresa_id,Long organizacao_id, Long banco_id) {
 
 		String sql = "SELECT BANCOPRODUTO.empresa_id, EMPRESA.nome as empresa_nome, BANCOPRODUTO.organizacao_id "+
 					", ORGANIZACAO.nome AS organizacao_nome, BANCOPRODUTO.produto_id, PRODUTO.nome AS produto_nome "+

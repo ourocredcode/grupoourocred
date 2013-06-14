@@ -48,7 +48,7 @@ public class BancoprodutotabelaController {
 	@Path("/bancoprodutotabela/cadastro")
 	public void cadastro(){
 
-		result.include("bancos", this.bancoDao.buscaBancoToBancoProdutoTabelaByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));		
+		result.include("bancos", this.bancoDao.buscaBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));		
 		result.include("bancoProdutoTabelas", this.bancoProdutoTabelaDao.buscaAllBancoProdutoTabelaByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
@@ -103,7 +103,7 @@ public class BancoprodutotabelaController {
 	@Path("/bancoprodutotabela/produtos")
 	public void produtos(Long empresa_id, Long organizacao_id, Long banco_id){
 
-		result.include("produtos",this.produtoDao.buscaProdutosToBancoProdutoTabelaByEmpOrgBanco(empresa_id, organizacao_id, banco_id));
+		result.include("produtos",this.produtoDao.buscaProdutoBancoByEmpOrgBanco(empresa_id, organizacao_id, banco_id));
 
 	}
 	

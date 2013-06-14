@@ -63,7 +63,7 @@ public class TabelaController {
 
 		try {
 
-			if (this.tabelaDao.buscaTabelasByCoeficiente(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tabela.getTipoTabela().getTipoTabela_id(), tabela.getNome()) == null) {				
+			if (this.tabelaDao.buscaTabelasByEmpOrgTipoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tabela.getTipoTabela().getTipoTabela_id(), tabela.getNome()) == null) {				
 
 				tabela.setCreated(dataAtual);
 				tabela.setUpdated(dataAtual);
