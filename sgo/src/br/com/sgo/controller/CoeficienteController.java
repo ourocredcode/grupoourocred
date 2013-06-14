@@ -15,13 +15,18 @@ import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.infra.CustomDateUtil;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class CoeficienteController {
 
 	private final Result result;
+	private final UsuarioInfo usuarioInfo;
 	private final BancoDao bancoDao;
 	private final ProdutoDao produtoDao;
 	private final TabelaDao tabelaDao;
@@ -29,15 +34,24 @@ public class CoeficienteController {
 	private  Coeficiente coeficiente;
 	private Collection<Coeficiente> coeficientes;
 	private Collection<Banco> bancos;
+	
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 
-	public CoeficienteController(Result result,BancoDao bancoDao, CoeficienteDao coeficienteDao,TabelaDao tabelaDao, ProdutoDao produtoDao, Coeficiente coeficiente){
+	public CoeficienteController(Result result,UsuarioInfo usuarioInfo,BancoDao bancoDao, CoeficienteDao coeficienteDao,TabelaDao tabelaDao, ProdutoDao produtoDao, Coeficiente coeficiente,
+			Empresa empresa, Organizacao organizacao, Usuario usuario){
 
 		this.result = result;
+		this.usuarioInfo = usuarioInfo;
 		this.coeficienteDao = coeficienteDao;
 		this.coeficiente = coeficiente;
 		this.tabelaDao = tabelaDao;
 		this.bancoDao = bancoDao;
 		this.produtoDao = produtoDao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = usuarioInfo.getUsuario();
 
 	}
 
@@ -45,8 +59,8 @@ public class CoeficienteController {
 	public void cadastro(){
 
 		coeficientes = coeficienteDao.buscaCoeficientes();
-		
-		bancos = bancoDao.listaTudo();
+
+		bancos = bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id());
 
 		result.include("coeficientes",coeficientes);
 		result.include("bancos",bancos);
@@ -94,17 +108,16 @@ public class CoeficienteController {
 	@Path("/coeficiente/adiciona")
 	public void adiciona(Coeficiente coeficiente) {
 
-		Long tabelaId = coeficiente.getTabela().getTabela_id();
-		coeficiente.setIsActive(true);
-
-		coeficiente.setTabela(tabelaDao.load(tabelaId));
+		coeficiente.setTabela(tabelaDao.load(coeficiente.getTabela().getTabela_id()));
+		coeficiente.setBanco(bancoDao.load(coeficiente.getBanco().getBanco_id()));
 		coeficiente.setCreated(CustomDateUtil.getTimeAtual());
+		coeficiente.setIsActive(true);
 
 		coeficienteDao.beginTransaction();
 		coeficienteDao.atualiza(coeficiente);
 		coeficienteDao.commit();
 
-		result.redirectTo(this).listaAdd(tabelaId);
+		result.redirectTo(this).listaAdd(coeficiente.getTabela().getTabela_id());
 
 	}
 
