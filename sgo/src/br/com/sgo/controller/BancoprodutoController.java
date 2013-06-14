@@ -47,7 +47,7 @@ public class BancoprodutoController {
 	@Path("/bancoproduto/cadastro")
 	public void cadastro() {
 
-		result.include("workflowsProdutoBanco", this.bancoProdutoDao.buscaAllBancoProdutoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("bancoProdutos", this.bancoProdutoDao.buscaAllBancoProdutoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("bancos", this.bancoDao.buscaAllBancos());
 
@@ -55,26 +55,26 @@ public class BancoprodutoController {
 
 	@Post
 	@Path("/bancoproduto/salva")
-	public void salva(BancoProduto bancoProdutoDao) {
+	public void salva(BancoProduto bancoProduto) {
 
 		String mensagem = "";
 
 		try {
 
-			if (this.bancoProdutoDao.buscaBancoProdutoByEmpresaOrganizacaoProdutoBancoWorkflow(bancoProdutoDao.getEmpresa().getEmpresa_id(), bancoProdutoDao.getOrganizacao().getOrganizacao_id(),
-					bancoProdutoDao.getProduto().getProduto_id(), bancoProdutoDao.getBanco().getBanco_id(), bancoProdutoDao.getWorkflow().getWorkflow_id()) == null) {				
+			if (this.bancoProdutoDao.buscaBancoProdutoByEmpresaOrganizacaoProdutoBancoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),
+					bancoProduto.getProduto().getProduto_id(), bancoProduto.getBanco().getBanco_id(), bancoProduto.getWorkflow().getWorkflow_id()) == null) {				
 
-				bancoProdutoDao.setCreated(dataAtual);
-				bancoProdutoDao.setUpdated(dataAtual);
+				bancoProduto.setCreated(dataAtual);
+				bancoProduto.setUpdated(dataAtual);
 
-				bancoProdutoDao.setCreatedBy(usuario);
-				bancoProdutoDao.setUpdatedBy(usuario);
+				bancoProduto.setCreatedBy(usuario);
+				bancoProduto.setUpdatedBy(usuario);
 
-				bancoProdutoDao.setIsActive(bancoProdutoDao.getIsActive() == null ? false : true);
-				bancoProdutoDao.setIsWorkflow(bancoProdutoDao.getIsWorkflow() == null ? false : true);
+				bancoProduto.setIsActive(bancoProduto.getIsActive() == null ? false : true);
+				bancoProduto.setIsWorkflow(bancoProduto.getIsWorkflow() == null ? false : true);
 				
 				this.bancoProdutoDao.beginTransaction();
-				this.bancoProdutoDao.adiciona(bancoProdutoDao);
+				this.bancoProdutoDao.adiciona(bancoProduto);
 				this.bancoProdutoDao.commit();
 				
 				mensagem = "Banco Produto adicionado com sucesso.";
@@ -87,7 +87,7 @@ public class BancoprodutoController {
 
 			mensagem = "Erro: Falha ao adicionar o Produto.";
 
-		}finally{
+		} finally{
 
 			this.bancoProdutoDao.clear();
 			this.bancoProdutoDao.close();

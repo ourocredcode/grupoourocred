@@ -98,12 +98,14 @@ public class TabelaDao extends Dao<Tabela> {
 			this.rsTabelas = this.stmt.executeQuery();
 
 			while (rsTabelas.next()) {
+
 				Tabela tabela = new Tabela();
 
 				tabela.setTabela_id(rsTabelas.getLong("tabela_id"));
 				tabela.setNome(rsTabelas.getString("nome"));
 
 				tabelas.add(tabela);
+
 			}
 
 		} catch (SQLException e) {

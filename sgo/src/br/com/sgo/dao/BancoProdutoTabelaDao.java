@@ -33,7 +33,8 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 
 	private final String sqlBancoProdutoTabelas = "SELECT BANCOPRODUTOTABELA.empresa_id, EMPRESA.nome as empresa_nome, BANCOPRODUTOTABELA.organizacao_id "+
 									", ORGANIZACAO.nome as organizacao_nome, BANCOPRODUTOTABELA.banco_id, BANCO.nome as banco_nome "+
-									", BANCOPRODUTOTABELA.produto_id, PRODUTO.nome as produto_nome, BANCOPRODUTOTABELA.tabela_id, TABELA.nome as tabela_nome "+
+									", BANCOPRODUTOTABELA.produto_id, PRODUTO.nome as produto_nome, BANCOPRODUTOTABELA.tabela_id, TABELA.nome as tabela_nome " +
+									", BANCOPRODUTOTABELA.prazo, BANCOPRODUTOTABELA.isactive "+
 									" FROM (TABELA (NOLOCK) INNER JOIN (PRODUTO (NOLOCK) INNER JOIN (ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
 									" INNER JOIN BANCOPRODUTOTABELA (NOLOCK) ON EMPRESA.empresa_id = BANCOPRODUTOTABELA.empresa_id) "+
 									" ON ORGANIZACAO.organizacao_id = BANCOPRODUTOTABELA.organizacao_id) ON PRODUTO.produto_id = BANCOPRODUTOTABELA.produto_id) "+
@@ -46,9 +47,14 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 
 	}
 	
-	public Collection<BancoProdutoTabela> buscaAllBancos() {
+	public Collection<BancoProdutoTabela> buscaAllBancoProdutoTabelaByEmpOrg(Long empresa_id, Long organizacao_id) {
 
 		String sql = sqlBancoProdutoTabelas;
+		
+		if (empresa_id != null)
+			sql += " WHERE BANCOPRODUTOTABELA.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND BANCOPRODUTOTABELA.organizacao_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -57,6 +63,9 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
 
 			this.rsBancoProdutoTabela = this.stmt.executeQuery();
 
@@ -126,45 +135,6 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 
 	}
 
-	/*public void insert(BancoProdutoTabela produtoBanco) throws SQLException {
-
-		String sql = "INSERT INTO PRODUTOBANCO " + "	(produto_id, "
-				+ "	 banco_id ," + "	 empresa_id ," + "	 organizacao_id, "
-				+ "    tabela_id," + "    isactive) "
-				+ "    VALUES (?,?,?,?,?,?)";
-
-		this.conn = this.conexao.getConexao();
-
-		try {
-
-			this.conn.setAutoCommit(false);
-			this.stmt = conn.prepareStatement(sql);
-
-			this.stmt.setLong(1, produtoBanco.getProduto().getProduto_id());
-			this.stmt.setLong(2, produtoBanco.getBanco().getBanco_id());
-			this.stmt.setLong(3, produtoBanco.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(4, produtoBanco.getOrganizacao().getOrganizacao_id());
-			this.stmt.setLong(5, produtoBanco.getTabela().getTabela_id());
-			this.stmt.setBoolean(6, produtoBanco.getIsActive());
-
-			this.stmt.executeUpdate();
-
-			this.conn.commit();
-
-		} catch (SQLException e) {
-
-			this.conn.rollback();
-			throw e;
-
-		} finally {
-
-			this.conn.setAutoCommit(true);
-
-		}
-		this.conexao.closeConnection(stmt, conn);
-
-	}*/
-
 	private void getBancoProdutoTabela(Collection<BancoProdutoTabela> bancoProdutoTabelas) throws SQLException {
 
 		BancoProdutoTabela bancoProdutoTabela = new BancoProdutoTabela();
@@ -195,7 +165,9 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 		bancoProdutoTabela.setBanco(banco);
 		bancoProdutoTabela.setProduto(produto);
 		bancoProdutoTabela.setTabela(tabela);
-		
+		bancoProdutoTabela.setPrazo(rsBancoProdutoTabela.getInt("prazo"));
+		bancoProdutoTabela.setIsActive(rsBancoProdutoTabela.getBoolean("isactive"));
+
 		bancoProdutoTabelas.add(bancoProdutoTabela);
 
 	}
