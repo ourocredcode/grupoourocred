@@ -42,7 +42,7 @@ $(document).ready(function() {
 
 
 <c:if test="${not empty contratos}">
-	<table class="table table-bordered table-striped table-hover data-table" style="font-size: 12px">
+	<table class="table table-bordered table-striped table-hover data-table">
 		<thead>	
 			<tr>
 				<th >

@@ -33,7 +33,6 @@ import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PnDao;
 import br.com.sgo.dao.ProdutoDao;
-import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -69,7 +68,6 @@ public class FormularioController {
 	private final TipoControleDao tipoControleDao;
 	private final BancoDao bancoDao;
 	private final ProdutoDao produtoDao;
-	private final TabelaDao tabelaDao;
 	private final FormularioDao formularioDao;
 	private final ContratoDao contratoDao;
 	private final CoeficienteDao coeficienteDao;
@@ -93,7 +91,7 @@ public class FormularioController {
 	private Collection<Etapa> motivos;
 
 	public FormularioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,FormularioDao formularioDao,ContratoDao contratoDao,
-			TabelaDao tabelaDao,CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,ParceiroInfoBancoDao parceiroInfoBancoDao,
+			CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,ParceiroInfoBancoDao parceiroInfoBancoDao,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
 			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
@@ -115,7 +113,6 @@ public class FormularioController {
 		this.produtoDao = produtoDao;
 		this.formulario = formulario;
 		this.formularioDao = formularioDao;
-		this.tabelaDao = tabelaDao;
 		this.contratoDao = contratoDao;
 		this.workflowDao = workflowDao;
 		this.etapaDao = etapaDao;
@@ -137,7 +134,7 @@ public class FormularioController {
 	@Path("/formulario/cadastro")
 	public void cadastro(){
 
-		Collection<Banco> bancos = this.bancoDao.buscaBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id());
+		Collection<Banco> bancos = this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id());
 		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoByGrupo("Comprados");
 
 		this.formulario.setEmpresa(usuarioInfo.getEmpresa());

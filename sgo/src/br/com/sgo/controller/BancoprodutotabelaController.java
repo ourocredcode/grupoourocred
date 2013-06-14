@@ -48,7 +48,7 @@ public class BancoprodutotabelaController {
 	@Path("/bancoprodutotabela/cadastro")
 	public void cadastro(){
 
-		result.include("bancos", this.bancoDao.buscaBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));		
+		result.include("bancos", this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));		
 		result.include("bancoProdutoTabelas", this.bancoProdutoTabelaDao.buscaAllBancoProdutoTabelaByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}

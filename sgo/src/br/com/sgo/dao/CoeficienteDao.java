@@ -53,29 +53,30 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 		Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
 
-		String sql = " SELECT  " +
-				"		DISTINCT COEFICIENTE.empresa_id, EMPRESA.nome as empresa_nome,   " +
-				"		COEFICIENTE.organizacao_id, ORGANIZACAO.nome as organizacao_nome,   " +
-				"		COEFICIENTE.tabela_id, TABELA.nome as tabela_nome,TABELA.prazo as prazo, COEFICIENTE.created,    " +
-				"		PRODUTOBANCO.banco_id, BANCO.nome as banco_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta   " +
-				"		FROM (((((COEFICIENTE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id)    " +
-				"		INNER JOIN ORGANIZACAO (NOLOCK) ON COEFICIENTE.organizacao_id = ORGANIZACAO.organizacao_id)    " +
-				"		INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id)   " +
-				"		INNER JOIN PRODUTOBANCO (NOLOCK) ON TABELA.tabela_id = PRODUTOBANCO.tabela_id)   " +
-				"		INNER JOIN PRODUTO (NOLOCK) ON PRODUTOBANCO.produto_id = PRODUTO.produto_id)   " +
-				"		INNER JOIN BANCO (NOLOCK) ON PRODUTOBANCO.banco_id = BANCO.banco_id " +
-				" WHERE  COEFICIENTE.updated is null   " +
-				"	AND BANCO.isactive = 1   " +
-				"	AND PRODUTO.isactive = 1   " +
-				"	AND TABELA.isactive = 1  " +
-				"GROUP BY " +
-				"	COEFICIENTE.empresa_id, " +
-				"	EMPRESA.nome,   " +
-				"	COEFICIENTE.organizacao_id, " +
-				"	ORGANIZACAO.nome,    " +
-				"	COEFICIENTE.tabela_id, " +
-				"	TABELA.nome,TABELA.prazo, COEFICIENTE.created,     " +
-				"	PRODUTOBANCO.banco_id, BANCO.nome,  COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta  ORDER BY BANCO.nome, TABELA.nome ";
+		String sql = " SELECT " +    
+					 " DISTINCT COEFICIENTE.empresa_id, EMPRESA.nome as empresa_nome, " +    
+					 " COEFICIENTE.organizacao_id, ORGANIZACAO.nome as organizacao_nome, " +    
+					 " COEFICIENTE.tabela_id, TABELA.nome as tabela_nome,TABELA.prazo as prazo, COEFICIENTE.created, " +     
+					 " BANCO.banco_id, BANCO.nome as banco_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta " +    
+					 " FROM (((((COEFICIENTE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id) " +     
+					 " 		INNER JOIN ORGANIZACAO (NOLOCK) ON COEFICIENTE.organizacao_id = ORGANIZACAO.organizacao_id) " +     
+					 " 		INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id) " +    
+					 " 		INNER JOIN BANCOPRODUTOTABELA (NOLOCK) ON TABELA.tabela_id = dbo.BANCOPRODUTOTABELA.tabela_id) " +    
+					 "		INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTOTABELA.produto_id = PRODUTO.produto_id) " +    
+					 " 		INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id " +  
+					 " 			WHERE  COEFICIENTE.updated is null " +    
+					 "			AND BANCO.isactive = 1 " +    
+					 "			AND PRODUTO.isactive = 1 " +    
+					 "			AND TABELA.isactive = 1 " +   
+					 "				GROUP BY " +  
+					 "				COEFICIENTE.empresa_id, " +  
+					 "				EMPRESA.nome, " +    
+					 "				COEFICIENTE.organizacao_id, " +  
+					 "				ORGANIZACAO.nome, " +     
+					 "				COEFICIENTE.tabela_id, " +  
+					 "				TABELA.nome,TABELA.prazo, COEFICIENTE.created, " +      
+					 "				BANCO.banco_id, BANCO.nome,  COEFICIENTE.coeficiente_id, COEFICIENTE.valor, " + 
+					 "				COEFICIENTE.percentualmeta  ORDER BY BANCO.nome, TABELA.nome ";
 
 		try {
 
@@ -98,8 +99,6 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				Banco banco = new Banco();
 				banco.setBanco_id(rsCoeficiente.getLong("tabela_id"));
 				banco.setNome(rsCoeficiente.getString("banco_nome"));
-				//TODO
-				//tabela.setBanco(banco);
 
 				Coeficiente coeficiente = new Coeficiente();
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
@@ -110,7 +109,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				created.setTime(rsCoeficiente.getDate("created"));
 
 				coeficiente.setCreated(created);
-
+				coeficiente.setBanco(banco);
 				coeficiente.setEmpresa(empresa);
 				coeficiente.setOrganizacao(organizacao);
 				coeficiente.setTabela(tabela);
@@ -153,10 +152,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 				Tabela tabela = new Tabela();
 				tabela.setTabela_id(rsCoeficiente.getLong("tabela_id"));
-				tabela.setNome(rsCoeficiente.getString("tabela_nome"));
-				
-				//TODO
-				//tabela.setPrazo(rsCoeficiente.getInt("prazo"));
+				tabela.setNome(rsCoeficiente.getString("tabela_nome"));;
 
 				Coeficiente coeficiente = new Coeficiente();
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
