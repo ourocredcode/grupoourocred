@@ -200,7 +200,7 @@ public class TabelaDao extends Dao<Tabela> {
 
 	}
 
-	public Tabela buscaTabelasByCoeficiente(Long empresa_id, Long organizacao_id, Long tipoTabela_id, String nome) {
+	public Tabela buscaTabelasByEmpOrgTipoNome(Long empresa_id, Long organizacao_id, Long tipoTabela_id, String nome) {
 
 		String sql = sqlTabela;
 

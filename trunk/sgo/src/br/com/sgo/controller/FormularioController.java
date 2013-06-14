@@ -137,7 +137,7 @@ public class FormularioController {
 	@Path("/formulario/cadastro")
 	public void cadastro(){
 
-		Collection<Banco> bancos = this.bancoDao.buscaBancoByGrupo("Tomadores");
+		Collection<Banco> bancos = this.bancoDao.buscaBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id());
 		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoByGrupo("Comprados");
 
 		this.formulario.setEmpresa(usuarioInfo.getEmpresa());
@@ -272,7 +272,8 @@ public class FormularioController {
 		contrato.setBanco(this.bancoDao.buscaBancoById(contrato.getBanco().getBanco_id()));
 		contrato.setProduto(this.produtoDao.buscaProdutoById(contrato.getProduto().getProduto_id()));
 		contrato.setCoeficiente(this.coeficienteDao.buscaCoeficienteById(contrato.getCoeficiente().getCoeficiente_id()));
-		contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
+		//TODO
+		//contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
 		contrato.setNumeroBeneficio(this.formulario.getParceiroBeneficio().getNumeroBeneficio());
 
 		contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoProdutoBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 

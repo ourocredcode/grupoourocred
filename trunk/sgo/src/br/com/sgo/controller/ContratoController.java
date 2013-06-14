@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
+import br.com.sgo.dao.BancoProdutoTabelaDao;
 import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ConferenciaDao;
 import br.com.sgo.dao.ContratoDao;
@@ -28,7 +29,6 @@ import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PeriodoDao;
-import br.com.sgo.dao.BancoProdutoTabelaDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
@@ -53,7 +53,6 @@ import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
-import br.com.sgo.modelo.Tabela;
 import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.TipoProcedimento;
 import br.com.sgo.modelo.Usuario;
@@ -65,7 +64,7 @@ public class ContratoController {
 	private final UsuarioInfo usuarioInfo;
 	private final OrganizacaoDao organizacaoDao;
 	private final BancoDao bancoDao;
-	private final BancoProdutoTabelaDao produtoBancoDao;
+	private final BancoProdutoTabelaDao bancoProdutoTabelaDao;
 	private final ProdutoDao produtoDao;
 	private final CoeficienteDao coeficienteDao;
 	private final TabelaDao tabelaDao;
@@ -95,11 +94,9 @@ public class ContratoController {
 	private ParceiroLocalidade parceiroLocalidade;
 	private ParceiroInfoBanco parceiroInfoBanco;
 	private ParceiroBeneficio parceiroBeneficio;
-	private Collection<Banco> bancos;
 	private Controle boleto;
 	private Controle averbacao;
 	private Collection<Conferencia> conferencias;
-	private Collection<Produto> produtos;
 	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();;
 	private Collection<Etapa> etapas;
 	private Collection<Periodo> periodos;
@@ -110,13 +107,13 @@ public class ContratoController {
 	private Collection<HistoricoControle> historicoControleBoleto;
 	private Collection<HistoricoControle> historicoControleAverbacao;
 
-	public ContratoController(Result result,BancoDao bancoDao,OrganizacaoDao organizacaoDao,BancoProdutoTabelaDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
+	public ContratoController(Result result,BancoDao bancoDao,OrganizacaoDao organizacaoDao, ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
 			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
 			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			ParceiroNegocio parceiroNegocio, ParceiroLocalidade parceiroLocalidade, ParceiroInfoBanco parceiroInfoBanco, ParceiroBeneficio parceiroBeneficio,
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
-			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao){		
+			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -128,8 +125,8 @@ public class ContratoController {
 		this.parceiroLocalidade = parceiroLocalidade;
 		this.organizacaoDao = organizacaoDao;
 		this.bancoDao = bancoDao;
+		this.bancoProdutoTabelaDao = bancoProdutoTabelaDao;
 		this.contratoDao = contratoDao;
-		this.produtoBancoDao = produtoBancoDao;
 		this.produtoDao = produtoDao;
 		this.coeficienteDao = coeficienteDao;
 		this.formularioDao = formularioDao;
@@ -544,10 +541,12 @@ public class ContratoController {
 
 	@Post
 	@Path("/contrato/produtos")
-	public void produtos(Long banco_id) {
+	public void produtos(Long empresa_id, Long organizacao_id, Long banco_id) {
 
-		produtos = banco_id == null ? null : produtoDao.buscaProdutosByBanco(banco_id);
-		result.include("produtos",produtos);
+		result.include("produtos",this.produtoDao.buscaProdutoBancoByEmpOrgBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), banco_id));
+
+		//produtos = banco_id == null ? null : produtoDao.buscaProdutosByBanco(banco_id);
+		//result.include("produtos",produtos);
 
 	}
 
@@ -559,17 +558,17 @@ public class ContratoController {
 		result.include("coeficientes",coeficientes);
 
 	}
-	
+
 	@Post
  	@Path("/contrato/prazo")
 	public void prazo(Long coeficiente_id) {
 
-		Tabela t = tabelaDao.buscaTabelasByCoeficiente(coeficiente_id);
-
+		//BancoProdutoTabela bancoProdutoTabela = bancoProdutoTabelaDao.buscaTabelasByCoeficiente(coeficiente_id);
+		//Tabela t = tabelaDao.buscaTabelasByCoeficiente(coeficiente_id);
 		//TODO
 		//contrato.setPrazo(t.getPrazo());
 
-		result.include("contrato",contrato);
+		//result.include("contrato",contrato);
 
 	}
 	
