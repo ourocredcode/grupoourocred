@@ -363,9 +363,9 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		"FROM (((((COEFICIENTE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id) " + 
 			"INNER JOIN ORGANIZACAO (NOLOCK) ON COEFICIENTE.organizacao_id = ORGANIZACAO.organizacao_id) " + 
 			"INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id) " + 
-			"INNER JOIN PRODUTOBANCO (NOLOCK) ON TABELA.tabela_id = PRODUTOBANCO.tabela_id) " + 
-			"INNER JOIN PRODUTO (NOLOCK) ON PRODUTOBANCO.produto_id = PRODUTO.produto_id) " +  
-			"INNER JOIN BANCO (NOLOCK) ON PRODUTOBANCO.banco_id = BANCO.banco_id WHERE BANCO.banco_id = ? AND PRODUTO.produto_id = ? AND BANCO.isActive = 1 " +
+			"INNER JOIN BANCOPRODUTOTABELA (NOLOCK) ON TABELA.tabela_id = BANCOPRODUTOTABELA.tabela_id) " + 
+			"INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTOTABELA.produto_id = PRODUTO.produto_id) " +  
+			"INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id WHERE BANCO.banco_id = ? AND PRODUTO.produto_id = ? AND BANCO.isActive = 1 " +
 			" AND PRODUTO.isActive = 1 AND TABELA.isActive = 1 ";
 
 		try {

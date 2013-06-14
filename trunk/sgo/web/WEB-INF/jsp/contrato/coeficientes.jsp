@@ -8,7 +8,7 @@
 	<option value="">Selecione um coeficiente...</option>
 
 	<c:forEach var="coeficiente" items="${coeficientes}">
-	<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id}">${coeficiente.valor} - ${coeficiente.tabela.nome} (${coeficiente.tabela.prazo })</option>
+	<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id}">${coeficiente.valor} - ${coeficiente.tabela.nome}</option>
 	</c:forEach>
 
 </c:if>
