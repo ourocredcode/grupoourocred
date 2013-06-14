@@ -394,7 +394,7 @@
 		
 							<div class="span6">								
 								<label for="busca_Supervisor">Supervisor</label>
-								<select id="busca_Supervisor" name="busca_Supervisor" class="input-medium">
+								<select id="busca_Supervisor" name="busca_Supervisor" class="input-small">
 									<option value="">Todos</option>
 									<c:forEach items="${supervisores}" var="supervisor">
 										<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
@@ -403,7 +403,7 @@
 							</div>
 							<div class="span6">
 								<label for="busca_Consultor">Consultor</label>
-								<select id="busca_Consultor" name="busca_Consultor" class="input-medium">
+								<select id="busca_Consultor" name="busca_Consultor" class="input-small">
 									<option value="">Selecione um Supervisor</option>
 								</select>
 							</div>
@@ -617,7 +617,7 @@
 					<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Contratos</h5></div>
 					<div id="resultado" class="widget-content">
 						<c:if test="${not empty contratos}">
-							<table class="table table-bordered table-striped table-hover data-table" style="font-size: 12px">
+							<table class="table table-bordered table-striped table-hover data-table">
 								<thead>	
 									<tr>
 										<th>

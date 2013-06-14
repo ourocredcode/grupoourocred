@@ -10,6 +10,7 @@
 body {
 	overflow-x: hidden;
     margin-top: -9px;
+    font-size: 11px;
 }
 a:hover {
 	text-decoration: none;
@@ -26,7 +27,7 @@ a:hover {
 #header h1 {
     background: url("../img/logo.png") no-repeat scroll 0 0 transparent;
     height: 91px;
-    left: 25px;
+    left: 15px;
     line-height: 600px;
     overflow: hidden;
     position: relative;
@@ -42,12 +43,12 @@ a:hover {
 #search {
 	position: absolute;
 	z-index: 25;
-	top: 6px;
-	left: 230px;
+	top: 9px;
+	left: 180px;
 }
 #search input[type=text] {
 	font-size: 12px;
-	line-height: 18px;
+	line-height: 16px;
 	border-radius: 4px 0 0 4px;
 	padding: 5px 10px 4px;
 	border: 0;
@@ -132,7 +133,7 @@ a:hover {
     display: block;
     float: left;
     position: relative;
-    width: 180px;
+    width: 160px;
     z-index: 16;
 }
 
@@ -141,7 +142,7 @@ a:hover {
 	margin: 10px 0 0;
 	padding: 0;
 	position: absolute;
-	width: 180px;
+	width: 160px;
 }
 #sidebar > ul > li {
 	display: block;	
@@ -200,7 +201,7 @@ a:hover {
 /* Content */
 #content {
     background: none repeat scroll 0 0 #eeeeee;
-    margin-left: 180px;
+    margin-left: 160px;
     margin-right: 0;
     padding-bottom: 25px;
     position: relative;
@@ -218,7 +219,7 @@ a:hover {
     background-image: -o-linear-gradient(top, #FFFFFF 0%, #EEEEEE 100%);
     background-image: linear-gradient(top, #FFFFFF 0%, #EEEEEE 100%);
     border-top-left-radius: 8px;
-    min-height: 80px; /*FIX: Use MIN-height... Allow header to get bigger for larger content (such as the h1) */
+    min-height: 75px; /*FIX: Use MIN-height... Allow header to get bigger for larger content (such as the h1) */
     /*position: absolute; FIX: This breaks layout significantly when spelled correctly*/
     padding-top: 5px; /*FIX: Allows h1 to not have to be absolutely positioned and control it's parent's height*/
     width: 100%;
@@ -228,7 +229,7 @@ a:hover {
  
 #content-header h1 {
     color: #555555;
-    font-size: 28px;
+    font-size: 25px;
     font-weight: normal;
     /*float: left; FIX: Keep h1 in DOM flow. Fixes weird layout problems with long text/no absolute positioned parent... */
     text-shadow: 0 1px 0 #ffffff;
