@@ -116,7 +116,9 @@ public class TabelaController {
 	@Get @Path("/tabela/busca.json")
 	@Public
 	public void tabelas(Long empresa_id, Long organizacao_id, String nome){
+
 		result.use(Results.json()).withoutRoot().from(tabelaDao.buscaTabelas(empresa_id, organizacao_id, nome)).serialize();
+
 	}
 
 }

@@ -242,6 +242,8 @@ public class BancoProdutoDao extends Dao<BancoProduto> {
 		bancoProduto.setWorkflow(workflow);
 		bancoProduto.setBanco(banco);
 		bancoProduto.setProduto(produto);
+		bancoProduto.setIsActive(rsBancoProduto.getBoolean("isactive"));
+		bancoProduto.setIsWorkflow(rsBancoProduto.getBoolean("isworkflow"));
 
 		bancoProdutos.add(bancoProduto);
 

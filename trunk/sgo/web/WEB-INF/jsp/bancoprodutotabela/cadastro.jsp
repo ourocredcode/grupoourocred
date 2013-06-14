@@ -42,7 +42,7 @@ jQuery(function($){
 			}
 		});
 	});
-
+	
 	$('#bancoProdutoTabelaEmpresa').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -84,7 +84,8 @@ jQuery(function($){
 	        $.ajax({
 	          url: "<c:url value='/organizacao/busca.json' />",
 	          dataType: "json",
-	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), org_nome : $('#bancoProdutoTabelaOrganizacao').val()},
+	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), 
+	        		  org_nome : $('#bancoProdutoTabelaOrganizacao').val()},
               success : function(data) {  
 
             	  if (!data || data.length == 0) {
@@ -111,78 +112,8 @@ jQuery(function($){
              return false;
          }
     });
-	
-	$('#bancoProdutoTabelaBanco').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/banco/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), 
-	        		  organizacao_id : $('#bancoProdutoTabelaOrganizacaoId').val() == '' ? '0' :  $('#bancoProdutoTabelaOrganizacaoId').val(),
-	        		  nome : $('#bancoProdutoTabelaBanco').val() },
-              success : function(data) {  
 
-            	  if (!data || data.length == 0) {
-         	            $('#bancoProdutoTabelaBanco').val('');
-         	            $('#bancoProdutoTabelaBancoId').val('');
-         	        }
-
-            	  response($.map(data, function(banco) {  
-            		  return {
-            			  label: banco.nome,
-            			  value: banco.banco_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#bancoProdutoTabelaBanco').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#bancoProdutoTabelaBanco').val(ui.item.label);
-             $('#bancoProdutoTabelaBancoId').val(ui.item.value);
-             return false;
-         }
-    });
-	
-	$('#bancoProdutoTabelaProduto').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/produto/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), 
-	        		  organizacao_id : $('#bancoProdutoTabelaOrganizacaoId').val() == '' ? '0' :  $('#bancoProdutoTabelaOrganizacaoId').val(),
-	        		  nome : $('#bancoProdutoTabelaProduto').val() },
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#bancoProdutoTabelaProduto').val('');
-         	            $('#bancoProdutoTabelaProdutoId').val('');
-         	        }
-
-            	  response($.map(data, function(produto) {  
-            		  return {
-            			  label: produto.nome,
-            			  value: produto.produto_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#bancoProdutoTabelaProduto').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#bancoProdutoTabelaProduto').val(ui.item.label);
-             $('#bancoProdutoTabelaProdutoId').val(ui.item.value);
-             return false;
-         }
-    });
-	
-	$('#bancoProdutoTabelaTabela').autocomplete({
+	$('#bancoProdutoTabelaTabela').autocomplete({		
 		source: function( request, response ) {
 	        $.ajax({
 	          url: "<c:url value='/tabela/busca.json' />",
@@ -190,7 +121,7 @@ jQuery(function($){
 	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), 
 	        		  organizacao_id : $('#bancoProdutoTabelaOrganizacaoId').val() == '' ? '0' :  $('#bancoProdutoTabelaOrganizacaoId').val(),
 	        		  nome : $('#bancoProdutoTabelaTabela').val() },
-              success : function(data) {  
+              success : function(data) {
 
             	  if (!data || data.length == 0) {
          	            $('#bancoProdutoTabelaTabela').val('');
@@ -374,7 +305,7 @@ function buscaProdutos(){
 					<h5>Banco Produto Tabela</h5>
 				</div>
 				<div id="resultado" class="widget-content">
-					<c:if test="${not empty workflowsProdutoBanco}">
+					<c:if test="${not empty bancoProdutoTabelas}">
 						<table
 							class="table table-bordered table-striped table-hover data-table"
 							style="font-size: 12px">
@@ -382,15 +313,19 @@ function buscaProdutos(){
 								<tr>
 									<th>Banco</th>
 									<th>Produto</th>
-									<th>Workflow</th>
+									<th>Tabela</th>
+									<th>Prazo</th>
+									<th>Ativo</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${workflowsProdutoBanco }" var="workflowProdutoBanco">
+								<c:forEach items="${bancoProdutoTabelas }" var="bancoProdutoTabela">
 									<tr>
-										<td>${workflowProdutoBanco.banco.nome }</td>
-										<td>${workflowProdutoBanco.produto.nome }</td>
-										<td>${workflowProdutoBanco.workflow.nome }</td>
+										<td>${bancoProdutoTabela.banco.nome }</td>
+										<td>${bancoProdutoTabela.produto.nome }</td>
+										<td>${bancoProdutoTabela.tabela.nome }</td>
+										<td>${bancoProdutoTabela.prazo }</td>
+										<td>${bancoProdutoTabela.isActive }</td>
 									</tr>
 								</c:forEach>
 							</tbody>
