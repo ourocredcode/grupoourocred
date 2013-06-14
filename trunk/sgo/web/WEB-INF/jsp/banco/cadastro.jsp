@@ -277,9 +277,7 @@ function limpaForm() {
 				</div>
 				<div id="resultado" class="widget-content">
 					<c:if test="${not empty bancos}">
-						<table
-							class="table table-bordered table-striped table-hover data-table"
-							style="font-size: 12px">
+						<table class="table table-bordered table-striped table-hover data-table">
 							<thead>
 								<tr>
 									<th>Banco</th>

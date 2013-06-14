@@ -10,74 +10,29 @@ jQuery(function($){
 		window.location.href = '<c:url value="/coeficiente/cadastro" />';
 	});
 	
-	$('#coeficienteEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
 
-           		  if (!data || data.length == 0) {
-           	            $('#coeficienteEmpresa').val('');
-						$('#coeficienteEmpresaId').val('');
-           	        }
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
 
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#coeficienteEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-
-        	 $('#coeficienteEmpresa').val(ui.item.label);
-             $('#coeficienteEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#coeficienteOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#coeficienteEmpresaId').val() == '' ? '0' :  $('#coeficienteEmpresaId').val(), org_nome : $('#coeficienteOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#coeficienteOrganizacao').val('');
-         	            $('#coeficienteOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#coeficienteOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#coeficienteOrganizacao').val(ui.item.label);
-             $('#coeficienteOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
 
 	$("#banco").change(function() {   
 
@@ -102,6 +57,10 @@ jQuery(function($){
 	});
 	
 	$('#coeficienteForm').submit(function() {
+		
+		$("input", this).attr("readonly", true);
+		$("input[type='submit'],input[type='button']", this).attr("disabled", true);
+		
 		$.ajax({
 			data: $(this).serialize()
 			, type: $(this).attr('method')
@@ -152,6 +111,7 @@ function limpaForm() {
 		document.coeficienteForm.reset();
 	}
 }
+
 </script>
 
 <div id="content-header">
@@ -169,37 +129,53 @@ function limpaForm() {
 		<a href="#" class="current">Coeficiente</a>
 	</div>
 
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+
 <div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
 
-		<div class="row-fluid">
+			<ul id="myTab" class="nav nav-tabs">
+				<li class="active" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
+			</ul>
+			
+			<div id="myTabContent" class="tab-content">
 
-			<div class="span12">
-
-				<div class="tab-pane fade active in" id="coeficiente-div" >
-
-					<div class="row25MarginTop">
-						<form id="coeficienteForm" name="coeficienteForm" action="<c:url value="/coeficiente/adiciona"/>" method="POST">
-
+				<div class="tab-pane fade active in" id="produto-div" >					
+					
+					<form id="coeficienteForm" name="coeficienteForm" action="<c:url value="/coeficiente/adiciona"/>" method="POST">
+			
 							<div class="row-fluid">
 								<div class="span2">
-									<label for="coeficienteEmpresa">Empresa</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="coeficienteEmpresa" name="coeficiente.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" required onChange="limpaForm();">
-			      						<input class="span10" id="coeficienteEmpresaId" name="coeficiente.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }">
-			    					</div>
+									<label for="coeficienteEmpresa">Empresa</label>	
+									<input id="coeficienteEmpresa" name="coeficiente.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" class="input-medium">
+									<input id="coeficienteEmpresaId" name="coeficiente.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }">
 								</div>
 								<div class="span2">
-									<label for="coeficienteOrganizacao">Organização</label>
-									<div class="input-prepend">
-										<span class="add-on"><i class="icon-plus-sign"></i></span>
-			      						<input class="span10" id="coeficienteOrganizacao" name="coeficiente.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" required onChange="limpaForm();">
-			      						<input class="span10" id="coeficienteOrganizacaoId" name="coeficiente.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
-			    					</div>
+									<label for="coeficienteOrganizacao">Organização</label>	
+									<input id="coeficienteOrganizacao" name="coeficiente.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" class="input-large">
+									<input id="coeficienteOrganizacaoId" name="coeficiente.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
 								</div>
+							</div>
+							<div class="row-fluid">	
 								<div class="span2">
 									<label for="banco">Banco</label>
-									<select id="banco" name="banco" class="span12">
+									<select id="banco" name="coeficiente.banco.banco_id" class="span12">
 										<option value="">Selecione</option>
 										<c:forEach var="banco" items="${bancos }">
 										 	<option value="${banco.banco_id }" >${banco.nome }</option>
@@ -221,53 +197,66 @@ function limpaForm() {
 									<input class="span10" type="text" id="percentualMeta" name="coeficiente.percentualMeta" placeholder="Percentual" required>
 								</div>
 							</div>
-
+		
 						 	<div class="btn-group">
 								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
 							</div>
 							<div class="btn-group">
 								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
 							</div>
-
-						</form>						
-					</div>
-					
-					<br/>
-					
-					<table class="table table-striped table-bordered" id="lista">
-					<thead>
-						<tr>
-							<th>Empresa</th>
-							<th>Organização</th>
-							<th>Banco</th>
-							<th>Tabela</th>
-							<th>Valor</th>
-							<th>Percentual</th>
-							<th>Inclusão</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${coeficientes}" var="coeficiente">
-							<tr>
-								<td>${coeficiente.empresa.nome }</td>
-								<td>${coeficiente.organizacao.nome }</td>
-								<td>${coeficiente.banco.nome }</td>
-								<td>${coeficiente.tabela.nome }</td>
-								<td>${coeficiente.valor }</td>
-								<td>${coeficiente.percentualMeta }</td>
-								<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${coeficiente.created.time }" /></td>
-								<td style="text-align:center;"><a href="#" onClick="return exclui(this,'${coeficiente.coeficiente_id}');">X</a></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
+		
+						</form>
 					
 				</div>
-	
+
 			</div>
 		</div>
+	</div>
 </div>
 
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Coeficientes</h5>
+				</div>
+				<div id="lista" class="widget-content">
+					<c:if test="${not empty coeficientes}">
+						<table class="table table-bordered table-striped table-hover data-table" >
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Banco</th>
+									<th>Tabela</th>
+									<th>Valor</th>
+									<th>Percentual</th>
+									<th>Inclusão</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>	
+								<c:forEach items="${coeficientes}" var="coeficiente">
+									<tr>
+										<td>${coeficiente.empresa.nome }</td>
+										<td>${coeficiente.organizacao.nome }</td>
+										<td>${coeficiente.banco.nome }</td>
+										<td>${coeficiente.tabela.nome }</td>
+										<td>${coeficiente.valor }</td>
+										<td>${coeficiente.percentualMeta }</td>
+										<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${coeficiente.created.time }" /></td>
+										<td style="text-align:center;"><a href="#" onClick="return exclui(this,'${coeficiente.coeficiente_id}');">X</a></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <%@ include file="/footer.jspf"%>

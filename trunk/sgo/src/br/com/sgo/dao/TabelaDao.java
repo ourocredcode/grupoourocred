@@ -159,11 +159,13 @@ public class TabelaDao extends Dao<Tabela> {
 	
 	public Collection<Tabela> buscaTabelasByBanco(Long banco_id) {
 
-		String sql = " SELECT PRODUTOBANCO.tabela_id, TABELA.nome as tabela_nome FROM  " +
-				"		((PRODUTOBANCO (NOLOCK) INNER JOIN PRODUTO (NOLOCK) ON PRODUTOBANCO.produto_id = PRODUTO.produto_id) " +
-				" INNER JOIN BANCO (NOLOCK) ON PRODUTOBANCO.banco_id = BANCO.banco_id)  " +
-				" INNER JOIN TABELA (NOLOCK) ON PRODUTOBANCO.tabela_id = TABELA.tabela_id  WHERE BANCO.banco_id = ? ";
-		
+		String sql = " SELECT BANCOPRODUTOTABELA.tabela_id, TABELA.nome as tabela_nome " +
+				"				FROM ((BANCOPRODUTOTABELA (NOLOCK) " +
+				"		INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTOTABELA.produto_id = PRODUTO.produto_id) " +
+				"		INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id) " +
+				"		INNER JOIN TABELA (NOLOCK) ON BANCOPRODUTOTABELA.tabela_id = TABELA.tabela_id " +
+				"			 WHERE BANCO.banco_id = ? ";
+
 		this.conn = this.conexao.getConexao();
 
 		Collection<Tabela> tabelas = new ArrayList<Tabela>();
