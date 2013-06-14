@@ -25,6 +25,7 @@ import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.ProdutoDao;
+import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
@@ -37,6 +38,7 @@ import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Produto;
+import br.com.sgo.modelo.TipoControle;
 import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
 
@@ -56,6 +58,7 @@ public class MenuController {
 	private final TipoWorkflowDao tipoWorkflowDao;
 	private final ProdutoDao produtoDao;
 	private final BancoDao bancoDao;
+	private final TipoControleDao tipoControleDao;
 	private final UsuarioInfo usuarioInfo;
 	
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
@@ -71,7 +74,7 @@ public class MenuController {
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,
 			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,WorkflowDao workflowDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,
-			BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
+			TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
 		this.usuarioDao = usuarioDao;
@@ -87,6 +90,7 @@ public class MenuController {
 		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.produtoDao = produtoDao;
 		this.bancoDao = bancoDao;
+		this.tipoControleDao = tipoControleDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
@@ -154,30 +158,56 @@ public class MenuController {
 		Calendar calAprovadoInicio = null;
 		Calendar calAprovadoFim = null;
 
-		if(tipo.equals("Supervisor") || tipo.equals("Consultor"))
+		if(tipo.equals("Supervisor") || tipo.equals("Consultor")){
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
-
-		if(tipo.equals("Administrativo"))
+			
+			
+			result.include("function","buscaContratos();");
+			result.include("buscaBoleto","none");
+			result.include("buscaAprovado","block");
+		}
+	
+		if(tipo.equals("Administrativo")) {
 			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+			
+			
+			result.include("function","buscaContratos();");
+			result.include("buscaBoleto","none");
+			result.include("buscaAprovado","block");
+			
+		}
+			
 		
 		if(tipo.equals("Gestor")){
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
+			
+			result.include("function","buscaContratos();");
+			result.include("buscaBoleto","none");
+			result.include("buscaAprovado","block");
 		}
 
 		if(tipo.equals("aprovados")){
 			status.add("Aprovado");
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
-		}
-		
-		if(tipo.equals("boletos")){
-			result.include("function","buscaDatasControle();");
-			result.include("buscaBoleto","block");
-			result.include("buscaAprovado","none");
-		} else {
+			
 			result.include("function","buscaContratos();");
 			result.include("buscaBoleto","none");
 			result.include("buscaAprovado","block");
 		}
+
+		if(tipo.equals("boletos")){
+			result.include("tipobusca","boleto");
+			result.include("function","buscaDatasControle();");
+			result.include("buscaBoleto","block");
+			result.include("buscaAprovado","none");
+		} 
+		
+		if(tipo.equals("averbacao")) {
+			result.include("tipobusca","averbacao");
+			result.include("function","buscaDatasControle();");
+			result.include("buscaBoleto","block");
+			result.include("buscaAprovado","none");
+		} 
 			
 
 		result.include("bancos",this.bancoDao.buscaBancoByGrupo("Tomadores"));
@@ -352,8 +382,8 @@ public class MenuController {
 	@Post
 	@Path("/menu/datasControle")
 	public void busca(String tipoBusca,String previsaoInicio,String previsaoFim, String chegadaInicio,String chegadaFim,String vencimentoInicio,String vencimentoFim,
-							String proximaAtuacaoInicio,String proximaAtuacaoFim , String procedimento ,Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,
-							Collection<String> status,Long consultor,String cliente, String documento,String empresa) {
+							String proximaAtuacaoInicio,String proximaAtuacaoFim , String procedimento ,Collection<String> bancos, Collection<String> produtos, 
+							Collection<String> bancosComprados,Collection<String> status,Long consultor,String cliente, String documento,String empresa) {
 
 		Calendar calPrevisaoInicio = new GregorianCalendar();
 		Calendar calPrevisaoFim = new GregorianCalendar();
@@ -481,10 +511,12 @@ public class MenuController {
 		} else {
 			empresas.add(empresa);
 		}
+		
+		TipoControle tipoControle = this.tipoControleDao.buscaTipoControleByNome(tipoBusca);
 
 		contratos.clear();
 
-		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoBusca,calPrevisaoInicio, 
+		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoControle,calPrevisaoInicio, 
 				calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
 				calProximaAtuacaoInicio,calProximaAtuacaoFim,procedimento,bancos,produtos,bancosComprados,status,consultoresAux,
 				cliente,documento,empresas));

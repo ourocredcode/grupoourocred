@@ -112,103 +112,7 @@
 
 	 });
 	 
-	 function buscaDatasControle(){
-
-			var status = $("#busca_Status").val();
-			var cliente = $("#busca_Cliente").val();
-			var documento = $("#busca_Documento").val();
-			var supervisor = $("#busca_Supervisor").val();
-			var consultor = $("#busca_Consultor").val();
-			var bancos = $("#busca_Banco").val();
-			var produtos = $("#busca_Produto").val();
-			var bancosComprados = $("#busca_BancoComprado").val();
-			var empresa = $("#busca_Empresa").val();
-			var previsaoInicio = $("#busca_DataPrevisaoInicio").val();
-			var previsaoFim = $("#busca_DataPrevisaoFim").val();
-			var chegadaInicio = $("#busca_DataChegadaInicio").val();
-			var chegadaFim = $("#busca_DataChegadaFim").val();
-			var vencimentoInicio = $("#busca_DataVencimentoInicio").val();
-			var vencimentoFim = $("#busca_DataVencimentoFim").val();
-			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
-			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
-			var procedimento = $("#busca_Procedimento").val();
-
-			var tipoBusca = '';
-			
-			if(consultor == undefined)
-				consultor = "";
-			if(supervisor == undefined)
-				supervisor = "";
-			if(empresa == undefined)
-				empresa = "";
-
-			if(status != null){
-
-				var arrayStatus = $("#busca_Status").val();
-
-				var statusDatasBoleto = jQuery.inArray("Aguardando Apoio comercial", arrayStatus) >= 0 
-						|| jQuery.inArray("Aguardando Quitação", arrayStatus) >= 0 
-						|| jQuery.inArray("Aguardando Boleto", arrayStatus) >= 0
-						|| jQuery.inArray("Contrato Fora Planilha", arrayStatus) >= 0
-						|| jQuery.inArray("Aguardando Qualidade", arrayStatus) >= 0
-						|| jQuery.inArray("Aguardando Pós Venda", arrayStatus) >= 0
-						|| jQuery.inArray("Aguardando Remarcação", arrayStatus) >= 0
-						|| jQuery.inArray("Em Análise", arrayStatus) >= 0
-						|| jQuery.inArray("Em Assinatura", arrayStatus) >= 0
-						|| jQuery.inArray("Em Conferência", arrayStatus) >= 0 ? 0 : -1;
-
-				if(statusDatasBoleto == 0)
-					tipoBusca = "boleto";
-				else
-					tipoBusca = "";
-
-				if(status == "Enviado DataPrev")
-					tipoBusca = "averbacao";
-
-			}
-
-			if(consultor == ""){
-				if(supervisor == "Todos"){
-					consultor = "";
-				} else {
-					consultor = supervisor;
-				}
-			}
-
-			if(status == null){
-				status = new Array();
-				status[0] = "";
-			}
-			
-			if(produtos == null){
-				produtos = new Array();
-				produtos[0] = "";
-			}
-			
-			if(bancos == null){
-				bancos = new Array();
-				bancos[0] = "";
-			}
-			
-			if(bancosComprados == null){
-				bancosComprados = new Array();
-				bancosComprados[0] = "";
-			}
-
-			if(previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
-					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || procedimento != ''){
-				$("#resultado").load('<c:url value="/menu/datasControle" />',{'tipoBusca': tipoBusca,'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
-										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
-										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'procedimento': procedimento,'bancos': bancos, 
-										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa});
-
-			} else {
-
-				alert("Escolha uma data para a busca.");
-
-			}
-		
-	 }
+	 
 
 	 function buscaContratos(){
 
@@ -313,6 +217,79 @@
 		}
 
 	 }
+	 
+	 function buscaDatasControle(){
+
+			var status = $("#busca_Status").val();
+			var cliente = $("#busca_Cliente").val();
+			var documento = $("#busca_Documento").val();
+			var supervisor = $("#busca_Supervisor").val();
+			var consultor = $("#busca_Consultor").val();
+			var bancos = $("#busca_Banco").val();
+			var produtos = $("#busca_Produto").val();
+			var bancosComprados = $("#busca_BancoComprado").val();
+			var empresa = $("#busca_Empresa").val();
+			var previsaoInicio = $("#busca_DataPrevisaoInicio").val();
+			var previsaoFim = $("#busca_DataPrevisaoFim").val();
+			var chegadaInicio = $("#busca_DataChegadaInicio").val();
+			var chegadaFim = $("#busca_DataChegadaFim").val();
+			var vencimentoInicio = $("#busca_DataVencimentoInicio").val();
+			var vencimentoFim = $("#busca_DataVencimentoFim").val();
+			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
+			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
+			var procedimento = $("#busca_Procedimento").val();
+
+			var tipoBusca = $("#busca_Tipo").val();
+			
+			if(consultor == undefined)
+				consultor = "";
+			if(supervisor == undefined)
+				supervisor = "";
+			if(empresa == undefined)
+				empresa = "";
+
+			if(consultor == ""){
+				if(supervisor == "Todos"){
+					consultor = "";
+				} else {
+					consultor = supervisor;
+				}
+			}
+
+			if(status == null){
+				status = new Array();
+				status[0] = "";
+			}
+			
+			if(produtos == null){
+				produtos = new Array();
+				produtos[0] = "";
+			}
+			
+			if(bancos == null){
+				bancos = new Array();
+				bancos[0] = "";
+			}
+			
+			if(bancosComprados == null){
+				bancosComprados = new Array();
+				bancosComprados[0] = "";
+			}
+
+			if(previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
+					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || procedimento != ''){
+				$("#resultado").load('<c:url value="/menu/datasControle" />',{'tipoBusca': tipoBusca,'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
+										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
+										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'procedimento': procedimento,'bancos': bancos, 
+										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa});
+
+			} else {
+
+				alert("Escolha uma data para a busca.");
+
+			}
+		
+	 }
 
 	 </script>
 
@@ -330,6 +307,8 @@
 		<a href="<c:url value="/menu/inicio/${usuarioInfo.perfil.chave}" />" title="Dashboard" class="tip-bottom"><i class="icon-home"></i> Dashboard</a>
 		<a href="#" class="current">Contratos</a>
 	</div>
+	
+	
 
 	<div class="container-fluid">
 		<div class="row-fluid">
@@ -339,6 +318,10 @@
 				<i class="icon-signal"></i></span><h5>Filtros</h5>
 				<div class="buttons"><a href="javascript:${function }" class="btn btn-mini"><i class="icon-refresh"></i> Busca</a></div>
 			</div>
+			
+			<input type="hidden" id="busca_Tipo" name="busca_Tipo" value="${tipobusca }"/>
+			
+			
 			<div class="widget-content" style="padding: 8px;">
 				<div class="row-fluid">
 
@@ -472,7 +455,7 @@
 						</div>
 						<div class="span2">
 							<div class="control-group">
-								<label class="control-label">Atuação Início</label>
+								<label class="control-label">Prox Atua Início</label>
 								<div class="controls">
 									<input id="busca_DataProximaAtuacaoInicio" name="busca_DataProximaAtuacaoInicio" type="text" class="input-small"/>
 								</div>
@@ -486,7 +469,7 @@
 						</div>
 						<div class="span2">
 							<div class="control-group">
-								<label class="control-label">Atuação Fim</label>
+								<label class="control-label">Prox Atua Fim</label>
 								<div class="controls">
 									<input id="busca_DataProximaAtuacaoFim" name="busca_DataProximaAtuacaoFim" type="text" class="input-small"/>
 								</div>
