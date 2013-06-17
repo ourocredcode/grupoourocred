@@ -28,7 +28,7 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 	private ResultSet rsBancoProdutoTabela;
 
 	private final String sqlBancoProdutoTabela = "SELECT BANCOPRODUTOTABELA.bancoprodutotabela_id, BANCOPRODUTOTABELA.empresa_id " +
-										", BANCOPRODUTOTABELA.organizacao_id, BANCOPRODUTOTABELA.banco_id " +
+										", BANCOPRODUTOTABELA.organizacao_id, BANCOPRODUTOTABELA.banco_id, BANCOPRODUTOTABELA.prazo " +
 										", BANCOPRODUTOTABELA.produto_id, BANCOPRODUTOTABELA.tabela_id FROM BANCOPRODUTOTABELA ";
 
 	private final String sqlBancoProdutoTabelas = "SELECT BANCOPRODUTOTABELA.empresa_id, EMPRESA.nome as empresa_nome, BANCOPRODUTOTABELA.organizacao_id "+
@@ -85,6 +85,57 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 
 	}
 	
+	public Collection<BancoProdutoTabela> buscaBancoProdutoTabelasByEmpOrgoBancoProdutoTabela(Long empresa_id, Long organizacao_id, Long banco_id, Long produto_id, Long tabela_id) {
+
+		String sql = sqlBancoProdutoTabela;
+		
+		if (empresa_id != null)
+			sql += " WHERE BANCOPRODUTOTABELA.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND BANCOPRODUTOTABELA.organizacao_id = ?";
+		if (banco_id != null)
+			sql += " AND BANCOPRODUTOTABELA.banco_id = ?";
+		if (produto_id != null)
+			sql += " AND BANCOPRODUTOTABELA.produto_id = ?";
+		if (tabela_id != null)
+			sql += " AND BANCOPRODUTOTABELA.tabela_id = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<BancoProdutoTabela> bancoProdutoTabelas = new ArrayList<BancoProdutoTabela>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, banco_id);
+			this.stmt.setLong(4, produto_id);
+			this.stmt.setLong(5, tabela_id);
+
+			this.rsBancoProdutoTabela = this.stmt.executeQuery();
+
+			while (rsBancoProdutoTabela.next()) {
+
+				BancoProdutoTabela bancoProdutoTabela = new BancoProdutoTabela();
+				bancoProdutoTabela.setBancoProdutoTabela_id(rsBancoProdutoTabela.getLong("bancoprodutotabela_id"));
+				bancoProdutoTabela.setPrazo(rsBancoProdutoTabela.getInt("prazo"));
+				
+				bancoProdutoTabelas.add(bancoProdutoTabela);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsBancoProdutoTabela, stmt, conn);
+
+		return bancoProdutoTabelas;
+
+	}
+	
 	public BancoProdutoTabela buscaBancoProdutoTabelaByEmpOrgoBancoProdutoTabela(Long empresa_id, Long organizacao_id, Long banco_id, Long produto_id, Long tabela_id) {
 
 		String sql = sqlBancoProdutoTabela;
@@ -120,7 +171,7 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 
 				bancoProdutoTabela = new BancoProdutoTabela();
 				bancoProdutoTabela.setBancoProdutoTabela_id(rsBancoProdutoTabela.getLong("bancoprodutotabela_id"));
-
+				bancoProdutoTabela.setPrazo(rsBancoProdutoTabela.getInt("prazo"));
 
 			}
 
@@ -134,6 +185,7 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 		return bancoProdutoTabela;
 
 	}
+
 
 	private void getBancoProdutoTabela(Collection<BancoProdutoTabela> bancoProdutoTabelas) throws SQLException {
 

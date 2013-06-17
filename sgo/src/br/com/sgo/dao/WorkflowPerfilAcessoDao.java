@@ -223,11 +223,55 @@ public WorkflowPerfilAcesso buscaWorkflowPerfilAcessoPorEmpresaOrganizacaoWorkfl
 			this.conn.commit();
 
 		} catch (SQLException e) {
+
 			this.conn.rollback();
 			throw e;
+
 		} finally {
+
 			this.conn.setAutoCommit(true);
+
 		}
+
+		this.conexao.closeConnection(stmt, conn);
+	}
+	
+	public void altera(WorkflowPerfilAcesso workflowPerfilAcesso) throws SQLException {
+
+		String sql = "UPDATE WORKFLOWPERFILACESSO SET updated = ? , updatedby = ?, isactive = ?, isleituraescrita = ? " +
+				" WHERE WORKFLOWPERFILACESSO.empresa_id = ? AND WORKFLOWPERFILACESSO.organizacao_id = ? AND WORKFLOWPERFILACESSO.workflow_id = ? AND WORKFLOWPERFILACESSO.perfil_id ";
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.conn.setAutoCommit(false);
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setTimestamp(1, new Timestamp(workflowPerfilAcesso.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(2,workflowPerfilAcesso.getUpdatedBy().getUsuario_id());
+			this.stmt.setBoolean(3, workflowPerfilAcesso.getIsActive());
+			this.stmt.setBoolean(4, workflowPerfilAcesso.getIsLeituraEscrita());
+			this.stmt.setLong(5, workflowPerfilAcesso.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(6, workflowPerfilAcesso.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(7, workflowPerfilAcesso.getWorkflow().getWorkflow_id());
+			this.stmt.setLong(8, workflowPerfilAcesso.getPerfil().getPerfil_id());
+			
+			this.stmt.executeUpdate();
+			this.conn.commit();
+
+		} catch (SQLException e) {
+
+			this.conn.rollback();
+			throw e;
+
+		} finally {
+
+			this.conn.setAutoCommit(true);
+
+		}
+
 		this.conexao.closeConnection(stmt, conn);
 	}
 
