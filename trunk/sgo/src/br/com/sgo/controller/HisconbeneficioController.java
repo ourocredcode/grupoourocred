@@ -271,6 +271,12 @@ public class HisconbeneficioController {
 	}
 
 	@Get
+	@Path("/hisconbeneficio/consulta")
+	public void consulta() {
+
+	}
+
+	@Get
 	public void msg() {
 
 	}

@@ -64,8 +64,8 @@ public class WorkflowetapaController {
 				workflowEtapa.setEmpresa(this.empresa);
 				workflowEtapa.setOrganizacao(this.organizacao);
 
-				workflowEtapa.setIsActive(workflowEtapa.getIsActive() == null ? false : true);
-				workflowEtapa.setIsLeituraEscrita(workflowEtapa.getIsLeituraEscrita() == null ? false : true);
+				workflowEtapa.setIsActive(workflowEtapa.getIsActive() == null || workflowEtapa.getIsActive() == false ? false : true);
+				workflowEtapa.setIsLeituraEscrita(workflowEtapa.getIsLeituraEscrita() == null || workflowEtapa.getIsLeituraEscrita() == false ? false : true);
 
 				this.workflowEtapaDao.insert(workflowEtapa);
 

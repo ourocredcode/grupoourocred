@@ -64,8 +64,9 @@ public class WorkflowtransicaoController {
 				workflowTransicao.setUpdated(dataAtual);
 				workflowTransicao.setCreatedBy(usuarioInfo.getUsuario());
 				workflowTransicao.setUpdatedBy(usuarioInfo.getUsuario());
-				workflowTransicao.setIsActive(workflowTransicao.getIsActive() == null ? false : true);
-				
+
+				workflowTransicao.setIsActive(workflowTransicao.getIsActive() == null || workflowTransicao.getIsActive() == false ? false : true);
+
 				this.workflowTransicaoDao.beginTransaction();
 				this.workflowTransicaoDao.adiciona(workflowTransicao);
 				this.workflowTransicaoDao.commit();
