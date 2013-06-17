@@ -31,6 +31,8 @@ public class WorkflowperfilacessoController {
 	private Organizacao organizacao;
 	private Usuario usuario;
 
+	Calendar dataAtual = GregorianCalendar.getInstance();
+
 	public WorkflowperfilacessoController(Result result,  UsuarioInfo usuarioInfo, WorkflowPerfilAcessoDao workflowPerfilAcessoDao, WorkflowDao workflowDao, PerfilDao perfilDao
 			,Empresa empresa,Organizacao organizacao,Usuario usuario) {
 
@@ -59,8 +61,6 @@ public class WorkflowperfilacessoController {
 	@Path("/workflowperfilacesso/salva")
 	public void salva(WorkflowPerfilAcesso workflowPerfilAcesso) {
 
-		Calendar dataAtual = GregorianCalendar.getInstance();
-
 		String mensagem = "";
 
 		try {
@@ -73,9 +73,9 @@ public class WorkflowperfilacessoController {
 
 				workflowPerfilAcesso.setCreatedBy(usuario);
 				workflowPerfilAcesso.setUpdatedBy(usuario);
-
-				workflowPerfilAcesso.setIsActive(workflowPerfilAcesso.getIsActive() == null ? false : true);
-				workflowPerfilAcesso.setIsLeituraEscrita(workflowPerfilAcesso.getIsLeituraEscrita() == null ? false : true);
+				
+				workflowPerfilAcesso.setIsActive(workflowPerfilAcesso.getIsActive() == null || workflowPerfilAcesso.getIsActive() == false ? false : true);
+				workflowPerfilAcesso.setIsLeituraEscrita(workflowPerfilAcesso.getIsLeituraEscrita() == null || workflowPerfilAcesso.getIsLeituraEscrita() == false ? false : true);
 
 				this.workflowPerfilAcessoDao.insert(workflowPerfilAcesso);
 
@@ -100,6 +100,45 @@ public class WorkflowperfilacessoController {
 		
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
+	}
+	
+	@Post
+	@Path("/workflowperfilacesso/altera")
+	public void altera(WorkflowPerfilAcesso workflowPerfilAcesso) {
+
+		workflowPerfilAcesso = this.workflowPerfilAcessoDao.load(workflowPerfilAcesso.getEmpresa().getEmpresa_id());
+		workflowPerfilAcesso = this.workflowPerfilAcessoDao.load(workflowPerfilAcesso.getOrganizacao().getOrganizacao_id());
+		workflowPerfilAcesso = this.workflowPerfilAcessoDao.load(workflowPerfilAcesso.getWorkflow().getWorkflow_id());
+		workflowPerfilAcesso = this.workflowPerfilAcessoDao.load(workflowPerfilAcesso.getPerfil().getPerfil_id());
+
+		String mensagem = "";
+
+		try {
+
+			workflowPerfilAcesso.setUpdated(dataAtual);
+			workflowPerfilAcesso.setUpdatedBy(usuario);
+
+			workflowPerfilAcesso.setIsActive(workflowPerfilAcesso.getIsActive() == null ? false : true);
+			workflowPerfilAcesso.setIsLeituraEscrita(workflowPerfilAcesso.getIsLeituraEscrita() == null ? false : true);
+
+			this.workflowPerfilAcessoDao.insert(workflowPerfilAcesso);
+
+			mensagem = "Perfil alterado com sucesso.";
+
+		} catch (SQLException e) {
+
+			mensagem = "Erro: ao alterar o Perfil Workflow :";
+
+		} finally {
+
+			this.workflowPerfilAcessoDao.clear();
+			this.workflowPerfilAcessoDao.close();
+
+		}
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+
 	}
 
 	@Get

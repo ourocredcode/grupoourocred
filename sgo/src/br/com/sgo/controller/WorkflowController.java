@@ -27,13 +27,14 @@ public class WorkflowController {
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
-
+	private Workflow workflow;
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public WorkflowController(Result result, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao) {
+	public WorkflowController(Result result, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo, Workflow workflow, WorkflowDao workflowDao, TipoWorkflowDao tipoWorkflowDao) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
+		this.workflow = workflow;
 		this.workflowDao = workflowDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.empresa = this.usuarioInfo.getEmpresa();
@@ -68,7 +69,7 @@ public class WorkflowController {
 				workflow.setCreatedBy(usuario);
 				workflow.setUpdatedBy(usuario);
 				
-				workflow.setIsActive(workflow.getIsActive() == null ? false : true);
+				this.workflow.setIsActive(workflow.getIsActive() == null || workflow.getIsActive() == false ? false : true);
 				
 				this.workflowDao.beginTransaction();
 				this.workflowDao.adiciona(workflow);
@@ -94,6 +95,30 @@ public class WorkflowController {
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
+	}
+
+	@Post
+	@Path("/workflow/altera")
+	public void altera(Workflow workflow) {
+
+		String mensagem = "";
+
+		this.workflow = this.workflowDao.load(workflow.getWorkflow_id());
+
+		this.workflow.setUpdated(dataAtual);
+		this.workflow.setUpdatedBy(usuario);
+
+		this.workflow.setIsActive(workflow.getIsActive() == null || workflow.getIsActive() == false ? false : true);
+
+		workflowDao.beginTransaction();		
+		workflowDao.atualiza(this.workflow);
+		workflowDao.commit();
+
+		mensagem = " Workflow adicionado com sucesso.";
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+		
 	}
 
 	@Get

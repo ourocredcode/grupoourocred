@@ -64,9 +64,9 @@ public class WorkflowetapaperfilacessoController {
 				workflowEtapaPerfilAcesso.setCreatedBy(usuario);
 				workflowEtapaPerfilAcesso.setUpdatedBy(usuario);
 
-				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null ? false : true);				
-				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null ? false : true);
-				workflowEtapaPerfilAcesso.setIsUpload(workflowEtapaPerfilAcesso.getIsUpload() == null ? false : true);
+				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null || workflowEtapaPerfilAcesso.getIsActive() == false ? false : true);
+				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null || workflowEtapaPerfilAcesso.getIsUpload() == false ? false : true);
+				workflowEtapaPerfilAcesso.setIsUpload(workflowEtapaPerfilAcesso.getIsUpload() == null || workflowEtapaPerfilAcesso.getIsUpload() == false ? false : true);
 
 				this.workflowEtapaPerfilAcessoDao.insert(workflowEtapaPerfilAcesso);
 

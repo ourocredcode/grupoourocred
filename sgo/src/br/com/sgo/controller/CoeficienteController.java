@@ -94,7 +94,8 @@ public class CoeficienteController {
 
 		this.coeficiente = this.coeficienteDao.load(coeficiente.getCoeficiente_id());
 		this.coeficiente.setUpdated(CustomDateUtil.getTimeAtual());
-		this.coeficiente.setIsActive(false);
+
+		this.coeficiente.setIsActive(coeficiente.getIsActive() == null ? false : true);
 
 		coeficienteDao.beginTransaction();
 		coeficienteDao.atualiza(this.coeficiente);
@@ -111,7 +112,8 @@ public class CoeficienteController {
 		coeficiente.setTabela(tabelaDao.load(coeficiente.getTabela().getTabela_id()));
 		coeficiente.setBanco(bancoDao.load(coeficiente.getBanco().getBanco_id()));
 		coeficiente.setCreated(CustomDateUtil.getTimeAtual());
-		coeficiente.setIsActive(true);
+		
+		this.coeficiente.setIsActive(coeficiente.getIsActive() == null ? false : true);
 
 		coeficienteDao.beginTransaction();
 		coeficienteDao.atualiza(coeficiente);
