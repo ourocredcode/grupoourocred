@@ -163,18 +163,29 @@ jQuery(function($){
 		limpaForm();
 	});
 
-	$("#workflowIsActive").change(function(e){
+	$("#workflowIsActive").change(function(e){		
 		if(document.workflowForm.workflowIsActive.checked==true){
 			document.workflowForm.workflowIsActive.value=true;
 		}else{
 			document.workflowForm.workflowIsActive.value=false;
 		}
 	});
-
 });
 
-function limpaForm(){
-	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
+function altera(linha, id) {
+
+	var valor = linha.checked == true ? true : false ;
+
+	if (window.confirm("Deseja alterar o workflow selecionado?"))
+		$.post('<c:url value="/workflow/altera" />', {
+			'workflow.workflow_id' : id, 'workflow.isActive' : valor
+		});
+
+	return false;
+}
+
+function limpaForm() {
+	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
 		document.workflowForm.reset();
 	}
 }
@@ -256,8 +267,8 @@ function limpaForm(){
 							<div class="span3">
 								<label for="workflowNome">Nome</label>							
 								<input class="input-xlarge" id="workflowNome" name="workflow.nome" value="${workflow.nome }" type="text" placeholder="Nome" required>							
-							</div>
-							<div class="span1">
+							</div>							
+							<div class="span1">								
 								<label for="workflowIsActive">Ativo</label>							
 								<input id="workflowIsActive" name="workflow.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
@@ -305,6 +316,7 @@ function limpaForm(){
 									<th>Empresa</th>
 									<th>Organização</th>
 									<th>Nome</th>
+									<th>Ativo</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -313,6 +325,12 @@ function limpaForm(){
 										<td>${workflow.empresa.nome }</td>
 										<td>${workflow.organizacao.nome }</td>
 										<td>${workflow.nome }</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="workflowIsActiveLine" name="workflow.isActive"
+												<c:if test="${workflow.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${workflow.workflow_id}');">
+											</label>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
