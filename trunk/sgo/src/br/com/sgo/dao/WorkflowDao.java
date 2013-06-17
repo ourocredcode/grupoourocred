@@ -400,12 +400,13 @@ public class WorkflowDao extends Dao<Workflow> {
 		o.setOrganizacao_id(rsWorkflow.getLong("organizacao_id"));
 		o.setNome(rsWorkflow.getString("organizacao_nome"));
 
-		workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
-		workflow.setNome(rsWorkflow.getString("workflow_nome"));
-
 		workflow.setEmpresa(e);
 		workflow.setOrganizacao(o);
 
+		workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
+		workflow.setNome(rsWorkflow.getString("workflow_nome"));
+		workflow.setIsActive(rsWorkflow.getBoolean("isactive"));
+		
 		workflows.add(workflow);
 
 	}
