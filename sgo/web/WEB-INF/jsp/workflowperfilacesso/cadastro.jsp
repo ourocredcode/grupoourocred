@@ -213,6 +213,22 @@ jQuery(function($){
 
 });
 
+function altera(linha, id) {
+
+	var empresa_id = $('#workflowEtapaPerfilAcessoEmpresaId').val();
+	var organizacao_id = $('#workflowEtapaPerfilAcessoOrganizacaoId').val();
+	var workflow_id = $('#workflowEtapaPerfilAcessoWorkflowId').val();
+	var perfil_id = $('#workflowPerfilAcessoPerfilId').val();
+
+	alert(empresa_id + organizacao_id +  workflow_id +  perfil_id);
+
+	if (window.confirm("Deseja alterar o workflow selecionado?"))
+		$.post('<c:url value='/workflowperfilacesso/altera' />'
+				,{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'workflow_id' : workflow_id, 'perfil_id' : perfil_id}
+		);
+	return false;
+}
+
 function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
 		document.workflowPerfilAcessoForm.reset();
@@ -357,6 +373,7 @@ function limpaForm(){
 									<th>Organização</th>
 									<th>Workflow</th>
 									<th>Perfil</th>
+									<th>Ativo</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -365,7 +382,8 @@ function limpaForm(){
 										<td>${workflowPerfilAcesso.empresa.nome }</td>
 										<td>${workflowPerfilAcesso.organizacao.nome }</td>
 										<td>${workflowPerfilAcesso.workflow.nome }</td>
-										<td>${workflowPerfilAcesso.perfil.nome}</td>
+										<td>${workflowPerfilAcesso.perfil.nome }</td>
+										<td>${workflowPerfilAcesso.isActive }</td>
 									</tr>
 								</c:forEach>
 							</tbody>

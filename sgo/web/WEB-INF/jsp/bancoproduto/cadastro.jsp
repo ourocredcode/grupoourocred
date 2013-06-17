@@ -179,10 +179,10 @@ function limpaForm(){
 						<div class="row-fluid">
 							<div class="span2">
 								<label for="bancoProdutoBanco">Banco</label>
-								<select class="input-medium" id="bancoProdutoBancoId" name="bancoProduto.banco.banco_id" >
+								<select class="input-medium" id="bancoProdutoBancoId" name="bancoProduto.banco.banco_id" required>
 									<option value=""></option>
 									<c:forEach var="banco" items="${bancos }">
-									 	<option value="${banco.banco_id }"> ${banco.nome }</option>
+									 	<option value="${banco.banco_id }">${banco.nome }</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -193,10 +193,10 @@ function limpaForm(){
 							</div>
 							<div class="span3">
 								<label for="bancoProdutoWorkflow">Worflow</label>
-								<select class="input-xlarge" id="bancoProdutoWorkflowId" name="bancoProduto.workflow.workflow_id" >
+								<select class="input-xlarge" id="bancoProdutoWorkflowId" name="bancoProduto.workflow.workflow_id" required>
 									<option value=""></option>
 									<c:forEach var="workflow" items="${workflows }">
-									 	<option value="${workflow.workflow_id }"> ${workflow.nome }</option>
+									 	<option value="${workflow.workflow_id }">${workflow.nome }</option>
 									</c:forEach>
 								</select>
 							</div>
