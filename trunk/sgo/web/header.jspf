@@ -5,13 +5,18 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib uri="/WEB-INF/lib/formattag.jar" prefix="f" %>
 
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>SGO - SISTEMA GRUPO OURO CRED 2013</title>
-		<meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
+	<head>
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+		<title>SGO - SISTEMA GRUPO OURO CRED 2013</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
 		<link rel="stylesheet" href="<c:url value="/css/jquery-ui.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/jquery.ui.ie.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap.css"/>" />
@@ -24,13 +29,12 @@
 		<link rel="stylesheet" href="<c:url value="/css/jquery.gritter.css"/>" />	
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.main.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.grey.css"/>" class="skin-color" />
-
+		
 		<script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/bootstrap.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/bootstrap.js"/>"></script>		
         <script type="text/javascript" src="<c:url value="/js/jquery.peity.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/js/jquery.uniform.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/js/jquery.validate.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/jquery.uniform.js"/>"></script>        
 		<script type="text/javascript" src="<c:url value="/js/jquery.wizard.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.dataTables.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.maskedinput-1.2.2.min.js"/>"></script>
@@ -45,7 +49,7 @@
 		</div>
 
 		<div id="search">
-			<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="POST">
+			<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="post">
 				<input id="doc" name="doc" type="text" placeholder="Busca Parceiro..."/><button type="submit"><i class="icon-search icon-white"></i></button>
 			</form>
 		</div>
