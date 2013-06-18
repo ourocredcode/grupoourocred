@@ -124,6 +124,18 @@
 					</ul>
 
 				</li>
+				
+				<li class="submenu">
+
+					<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+				
+					<ul class="consultor">
+						<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+						<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+					</ul>
+			
+				</li>
+				
 
 				<li><a href="buttons.html"><i class="icon icon-tint"></i> <span>Buttons &amp; icons</span></a></li>
 

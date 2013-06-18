@@ -47,13 +47,14 @@ a:hover {
 	left: 180px;
 }
 #search input[type=text] {
-	font-size: 12px;
-	line-height: 16px;
+	font-size: 11px;
+	line-height: 11px;
 	border-radius: 4px 0 0 4px;
 	padding: 5px 10px 4px;
 	border: 0;
 	box-shadow: 2px 2px 3px rgba(0,0,0,0.7) inset, 0 1px 0 rgba(255,255,255,0.2); 
 	width: 100px;
+	height: 15px;
 }
 
 #search button {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +27,7 @@ import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.HisconBeneficioDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
+import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.infra.CustomFileUtil;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -34,6 +36,8 @@ import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.HisconBeneficio;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
+import br.com.sgo.modelo.Usuario;
+import br.com.sgo.modelo.Workflow;
 
 @Resource
 public class HisconbeneficioController {
@@ -44,27 +48,34 @@ public class HisconbeneficioController {
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final WorkflowDao workflowDao;
 	private final EtapaDao etapaDao;
+	private final UsuarioDao usuarioDao;
 
 	private HisconBeneficio hisconBeneficio;
 	private Calendar dataAtual = Calendar.getInstance();
 	private Collection<HisconBeneficio> hiscons;
+	private Collection<Usuario> consultoresAux = new ArrayList<Usuario>();
+	private Collection<Usuario> consultores;
 	private HttpServletResponse response;
 	private Empresa empresa;
 	private Organizacao organizacao;
+	private Usuario usuario;
 
-	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, HisconBeneficioDao hisconBeneficioDao, 
+	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, Usuario usuario,
+			UsuarioDao usuarioDao ,HisconBeneficioDao hisconBeneficioDao, 
 			ParceiroBeneficioDao parceiroBeneficioDao, WorkflowDao workflowDao, EtapaDao etapaDao,HisconBeneficio hisconBeneficio,HttpServletResponse response) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.hisconBeneficioDao = hisconBeneficioDao;
 		this.parceiroBeneficioDao = parceiroBeneficioDao;
+		this.usuarioDao = usuarioDao;
 		this.workflowDao = workflowDao;
 		this.etapaDao = etapaDao;
 		this.hisconBeneficio = hisconBeneficio;
 		this.response = response;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = usuarioInfo.getUsuario();
 
 	}
 
@@ -187,11 +198,11 @@ public class HisconbeneficioController {
 		this.hisconBeneficio.setIsImportado(false);
 		this.hisconBeneficio.setIsPadrao(false);
 
-		this.hisconBeneficio.setWorkflow(this.workflowDao.load(2L));
-		this.hisconBeneficio.setEtapa(this.etapaDao.load(22L));
+		this.hisconBeneficio.setWorkflow(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Hiscon"));
+		this.hisconBeneficio.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Aguardando Supervisor"));
 
-		this.hisconBeneficio.setWorkflowPosicao(this.workflowDao.load(3L));
-		this.hisconBeneficio.setEtapaPosicao(this.etapaDao.load(27L));
+		this.hisconBeneficio.setWorkflowPosicao(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Posicao Hiscon"));
+		this.hisconBeneficio.setEtapaPosicao(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Aguardando Posição"));
 
 		try {
 
@@ -276,10 +287,100 @@ public class HisconbeneficioController {
 	}
 	
 	@Get
-	@Path("/menu/hiscons/{tipo}")
+	@Path("/hisconbeneficio/hiscons/{tipo}")
 	public void hiscons(String tipo) {
 
-		System.out.println("busca hiscons " + tipo);
+		Workflow w = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Hiscon");
+		Workflow posicao = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Posicao Hiscon");
+
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), w.getWorkflow_id()));
+		result.include("posicoes",this.etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), posicao.getWorkflow_id()));
+		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+
+	}
+	
+	@Post
+	@Path("/hisconbeneficio/lista")
+	public void lista(Collection<String> status,Collection<String> posicao,String cliente,String documento,String dataInicio, String dataFim, Long consultor) {
+
+		if(usuarioInfo.getPerfil().getChave().equals("Consultor") || usuarioInfo.getPerfil().getChave().equals("Supervisor")){
+
+			Usuario u = new Usuario();
+
+			if(consultor != null) {
+				u = usuarioInfo.getUsuario();
+			} else {
+				u = this.usuarioDao.load(usuario.getUsuario_id());
+			}
+
+			consultoresAux.add(u);
+
+		} else {
+
+			if(consultor != null){
+
+				consultoresAux.add(this.usuarioDao.load(consultor));
+
+				//TODO : VERIFICA PERFIL SUPERVISOR INATIVO
+				//consultoresAux.addAll(this.consultorDao.buscaLoginsSupervisoresInativos());
+
+			}
+
+		}
+
+		
+		Calendar calendarInicio = new GregorianCalendar();
+		Calendar calendarFim = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+		try {
+
+			if(dataFim.equals(""))
+				dataFim = dataInicio;
+
+			if(dataInicio.equals("")) {
+				calendarInicio = null;
+				calendarFim = null;
+			} else {
+				calendarInicio.setTime(sdf.parse(dataInicio));
+				calendarFim.setTime(sdf.parse(dataFim));
+				calendarInicio.set(Calendar.HOUR_OF_DAY,calendarInicio.getActualMinimum(Calendar.HOUR_OF_DAY));
+				calendarFim.set(Calendar.HOUR_OF_DAY,calendarFim.getActualMaximum(Calendar.HOUR_OF_DAY));
+			}	
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		Collection<HisconBeneficio> hisconsAux = new ArrayList<HisconBeneficio>();
+
+		hisconsAux = this.hisconBeneficioDao.buscaHisconsByFiltro(empresa, organizacao,consultoresAux,status,posicao,cliente,documento,calendarInicio,calendarFim);
+
+		hiscons = new ArrayList<HisconBeneficio>();
+
+		for(HisconBeneficio h : hisconsAux){
+			h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), h.getParceiroBeneficio().getParceiroBeneficio_id()));
+			
+			h.setEtapas(etapaDao.buscaEtapaByHisconPerfil(
+					usuarioInfo.getEmpresa().getEmpresa_id(),
+					usuarioInfo.getOrganizacao().getOrganizacao_id(),
+					usuarioInfo.getPerfil().getPerfil_id(),
+					h.getHisconBeneficio_id()));
+		
+			h.getEtapas().add(h.getEtapa());
+			
+			
+			hiscons.add(h);
+		}
+
+		if(usuarioInfo.getPerfil().equals("Supervisor")){
+
+			consultores = this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), usuarioInfo.getUsuario().getUsuario_id());
+			consultores.add(usuarioInfo.getUsuario());
+			result.include("consultores",consultores);
+		}
+
+		result.include("hisconsBeneficio",hiscons);
 
 	}
 
@@ -351,6 +452,16 @@ public class HisconbeneficioController {
 		}
 
 		result.redirectTo(this).cadastro();
+
+	}
+	
+	@Post
+ 	@Path("/hisconbeneficio/consultores")
+	public void consultores(Long supervisor_id) {
+
+		consultores = this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), supervisor_id);
+
+		result.include("consultores",consultores);
 
 	}
 	
