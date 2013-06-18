@@ -219,10 +219,9 @@ public class MenuController {
 			result.include("function","buscaDatasControle();");
 			result.include("buscaBoleto","block");
 			result.include("buscaAprovado","none");
-		} 
-			
+		}
 
-		result.include("bancos",this.bancoDao.buscaBancoByGrupo("Tomadores"));
+		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("bancosComprados",this.bancoDao.buscaBancoByGrupo("Comprados"));
 
 		TipoWorkflow tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNome(1l, 1l, "Contrato");
@@ -534,6 +533,18 @@ public class MenuController {
 				cliente,documento,empresas));
 
 		contador();
+	}
+	
+	@Post
+	@Path("/menu/busca/status")
+	public void busca(String status) {
+
+		contratos.clear();
+		
+		contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacaoUsuarioStatus(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),usuario.getUsuario_id(),status));
+		
+		contador();
+
 	}
 
 	@Get
