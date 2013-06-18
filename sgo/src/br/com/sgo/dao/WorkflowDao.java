@@ -240,7 +240,10 @@ public class WorkflowDao extends Dao<Workflow> {
 
 				while (rsWorkflow.next()) {
 
-					getWorkflows(workflows);
+					Workflow workflow = new Workflow();
+					workflow.setWorkflow_id(rsWorkflow.getLong("workflow_id"));
+					workflow.setNome(rsWorkflow.getString("workflow_nome"));
+					workflows.add(workflow);
 
 				}
 
