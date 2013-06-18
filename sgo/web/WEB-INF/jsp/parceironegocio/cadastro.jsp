@@ -326,7 +326,7 @@
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"
 									<c:if test="${parceiroNegocio.isFornecedor }">checked="checked"</c:if>
 									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">disabled="disabled"</c:if>> Fornecedor
-							</label>
+								</label>
 							</div>
 						</div>
 						
@@ -336,32 +336,61 @@
 							<div class="span2">
 								<label for="parceiroNegocioEmpresa">Empresa</label>
 								<input class="input-medium" id="parceiroNegocioEmpresa" name="parceiroNegocio.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required readonly="readonly"/>
-								<input class="input-medium" id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" />
+								<input class="span1" id="parceiroNegocioEmpresaId" name="parceiroNegocio.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" />
 							</div>
 							<div class="span2">
 								<label for="parceiroNegocioOrganizacao">Organização</label>
 								<input  class="input-medium" id="parceiroNegocioOrganizacao" name="parceiroNegocio.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required readonly="readonly" />
-								<input  class="input-medium" id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.organizacao.organizacao_id }" type="hidden" />
+								<input  class="span1" id="parceiroNegocioOrganizacaoId" name="parceiroNegocio.organizacao.organizacao_id"  value="${usuarioInfo.organizacao.organizacao_id }" type="hidden" />
 							</div>
 							<div class="span2">
-								<label for="parceiroNegocioCategoriaParceiro">Categoria</label>
+								<label for="categoriaParceiro">Categoria</label>
+								<select class="input-medium" id="categoriaParceiro" name="parceiroNegocio.categoriaParceiro.categoriaParceiro_id">
+									<!--option value="">Escolha uma banco</option-->
+									<c:forEach items="${categoriasParceiro }" var="categoriaParceiro">
+										<option value="${categoriaParceiro.categoriaParceiro_id}"> ${categoriaParceiro.nome}</option>
+									</c:forEach>
+								</select>
+							</div>
+							<!-- 
+							<div class="span2">
+								<label for="categoriaParceiro">Categoria</label>
 								<input  class="input-medium" id="parceiroNegocioCategoriaParceiro" name="parceiroNegocio.categoriaParceiro.nome" type="text" value="Serviço">
 								<input  class="input-medium" id="parceiroNegocioCategoriaParceiroId" name="parceiroNegocio.categoriaParceiro.categoriaParceiro_id" type="hidden" value="1">
 							</div>
+
 							<div class="span2">
 								<label for="parceiroNegocioClassificacaoParceiro">Classificação</label>
 								<input  class="input-medium" id="parceiroNegocioClassificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.nome" type="text" value="Normal">
-								<input  class="input-medium" id="parceiroNegocioClassificacaoParceiroId" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id" type="hidden" value="1">
+								<input  class="span1" id="parceiroNegocioClassificacaoParceiroId" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id" type="hidden" value="1">
 							</div>
 							<div class="span2">
 								<label for="parceiroNegocioGrupoParceiro">Grupo</label>
 								<input  class="input-medium" id="parceiroNegocioGrupoParceiro" name="parceiroNegocio.grupoParceiro.nome" type="text" value="Teste">
-								<input  class="input-medium" id="parceiroNegocioGrupoParceiroId" name="parceiroNegocio.grupoParceiro.grupoParceiro_id" type="hidden" value="1">
+								<input  class="span1" id="parceiroNegocioGrupoParceiroId" name="parceiroNegocio.grupoParceiro.grupoParceiro_id" type="hidden" value="1">
+							</div-->
+							<div class="span2">
+								<label for="classificacaoParceiro">Classificação</label>
+								<select class="input-medium" id="classificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id">
+									<!--option value="">Escolha uma banco</option-->
+									<c:forEach items="${classificacoesParceiro }" var="classificacaoParceiro">
+										<option value="${classificacaoParceiro.classificacaoParceiro_id}"> ${classificacaoParceiro.nome}</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="span2">
+								<label for="grupoParceiro">Grupo</label>
+								<select class="input-medium" id="grupoParceiro" name="parceiroNegocio.grupoParceiro.grupoParceiro_id">
+									<!--option value="">Escolha uma banco</option-->
+									<c:forEach items="${gruposParceiro }" var="grupoParceiro">
+										<option value="${grupoParceiro.grupoParceiro_id}"> ${grupoParceiro.nome}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>	
-				
+
 						<div class="control-group"></div>
-				
+
 						<div class="controls controls-row">
 							<label for="parceiroNegocioTipoParceiroId">Tipo Parceiro</label>
 							<select id="parceiroNegocioTipoParceiroId" name="parceiroNegocio.tipoParceiro.tipoParceiro_id" class="input-medium">
@@ -370,12 +399,12 @@
 								</c:forEach>
 							</select>
 						</div>
-						
+
 						<div class="control-group"></div>
 				
 						<div class="controls controls-row">
 							<label for="parceiroNegocioNome">Nome</label>
-							<input  class="input-xxlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" placeholder="Nome" value="${parceiroNegocio.nome }" required>				
+							<input class="input-xxlarge" id="parceiroNegocioNome" name="parceiroNegocio.nome" type="text" placeholder="Nome" value="${parceiroNegocio.nome }" required>				
 						</div>
 						
 						<div id="parceiroNegocioTipoPessoaFisica" class="row-fluid" 
@@ -489,7 +518,7 @@
 															<td><input type="text" id="parceiroInfoBancoAgenciaNumero" name="parceiroInfoBanco.agenciaNumero" value="${parceiroInfoBanco.agenciaNumero }" class="input-small" /></td>
 															<td>
 																<input type="text" id="parceiroInfoMeioPagamento" name="parceiroInfoBanco.meioPagamento.nome" value="${parceiroInfoBanco.meioPagamento.nome }" class="input-large" />
-																<input type="hidden" id="parceiroInfoMeioPagamentoId" name="parceiroInfoBanco.meioPagamento.meiopagamento_id" value="${parceiroInfoBanco.meioPagamento.meiopagamento_id }" />
+																<input type="hidden" id="parceiroInfoMeioPagamentoId" name="parceiroInfoBanco.meioPagamento.meioPagamento_id" value="${parceiroInfoBanco.meioPagamento.meioPagamento_id }" />
 															</td>
 															
 														</tr>

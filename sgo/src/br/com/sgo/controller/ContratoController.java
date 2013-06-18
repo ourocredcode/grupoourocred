@@ -23,6 +23,7 @@ import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.LogisticaDao;
+import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
@@ -46,6 +47,7 @@ import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoContrato;
 import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Logistica;
+import br.com.sgo.modelo.MeioPagamento;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroInfoBanco;
@@ -84,6 +86,7 @@ public class ContratoController {
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
+	private final MeioPagamentoDao meioPagamentoDao;	
 
 	private Contrato contrato;
 	private Empresa empresa;
@@ -94,6 +97,7 @@ public class ContratoController {
 	private ParceiroLocalidade parceiroLocalidade;
 	private ParceiroInfoBanco parceiroInfoBanco;
 	private ParceiroBeneficio parceiroBeneficio;
+	private Collection<MeioPagamento> meiosPagamento;
 	private Controle boleto;
 	private Controle averbacao;
 	private Collection<Conferencia> conferencias;
@@ -113,7 +117,8 @@ public class ContratoController {
 			ParceiroNegocio parceiroNegocio, ParceiroLocalidade parceiroLocalidade, ParceiroInfoBanco parceiroInfoBanco, ParceiroBeneficio parceiroBeneficio,
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
-			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao){		
+			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
+			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -151,6 +156,7 @@ public class ContratoController {
 		this.controleDao = controleDao;
 		this.conferenciaDao = conferenciaDao;
 		this.tipoProcedimentoDao = tipoProcedimentoDao;
+		this.meioPagamentoDao = meioPagamentoDao;
 
 	}
 
@@ -158,7 +164,8 @@ public class ContratoController {
 	@Path("/contrato/cadastro")
 	public void cadastro(Long id){
 
-		Collection<Banco> bancos = this.bancoDao.buscaBancoByGrupo("Tomadores");
+		result.include("bancos", this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		//Collection<Banco> bancos = this.bancoDao.buscaBancoByGrupo("Tomadores");
 		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoByGrupo("Comprados");
 
 		contrato = contratoDao.load(id);
@@ -183,7 +190,7 @@ public class ContratoController {
 		Banco banco = bancoDao.buscaBancoById(contrato.getBanco().getBanco_id());
 		Collection<Produto> produtos = produtoDao.buscaProdutosByBanco(banco.getBanco_id());
 
-		result.include("bancos",bancos);
+		//result.include("bancos",bancos);
 		result.include("recompraBancos",recompraBancos);
 		result.include("contrato",contrato);
 		result.include("banco",banco);
@@ -236,6 +243,8 @@ public class ContratoController {
 			}
 
 		}
+		
+		meiosPagamento = meioPagamentoDao.buscaAllMeioPagamento(1L, 1L);
 
 		formulario.setParceiroNegocio(parceiroNegocio);
 		formulario.setParceiroBeneficio(parceiroBeneficio);
@@ -256,6 +265,7 @@ public class ContratoController {
 		result.include("historicoControleBoleto",historicoControleBoleto);
 		result.include("historicoControleAverbacao",historicoControleAverbacao);
 		result.include("organizacoes", this.organizacaoDao.buscaOrganizacoesByEmpresa(empresa.getEmpresa_id()));
+		result.include("meiosPagamento",meiosPagamento);
 
 	}
 	
@@ -545,9 +555,6 @@ public class ContratoController {
 
 		result.include("produtos",this.produtoDao.buscaProdutoBancoByEmpOrgBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), banco_id));
 
-		//produtos = banco_id == null ? null : produtoDao.buscaProdutosByBanco(banco_id);
-		//result.include("produtos",produtos);
-
 	}
 
 	@Post
@@ -560,15 +567,17 @@ public class ContratoController {
 	}
 
 	@Post
- 	@Path("/contrato/prazo")
-	public void prazo(Long coeficiente_id) {
-
-		//BancoProdutoTabela bancoProdutoTabela = bancoProdutoTabelaDao.buscaTabelasByCoeficiente(coeficiente_id);
+ 	@Path("/contrato/prazobancoproduto")
+	public void prazobancoproduto(Long empresa_id, Long organizacao_id, Long banco_id, Long produto_id, Long tabela_id) {
+		
+		result.include("bancoProdutoTabelas", this.bancoProdutoTabelaDao.buscaBancoProdutoTabelasByEmpOrgoBancoProdutoTabela(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()
+				, 1l, 1l, 1l));
+		
 		//Tabela t = tabelaDao.buscaTabelasByCoeficiente(coeficiente_id);
-		//TODO
+		//result.include("produtos",this.bancoProdutoTabelaDao.buscaPracoToContratoByEmpOrgoBancoProdutoTabela(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()
+		//		,produto_id, banco_id, tabela));		//TODO
 		//contrato.setPrazo(t.getPrazo());
-
-		//result.include("contrato",contrato);
+		//result.include("bancoProdutoTabela", bancoProdutoTabela);
 
 	}
 	

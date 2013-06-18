@@ -34,10 +34,13 @@ public class TipoControleDao extends Dao<TipoControle> {
 		String sql = sqlTiposControle;
 
 		this.conn = this.conexao.getConexao();
+
 		Collection<TipoControle> tiposcontrole = new ArrayList<TipoControle>();
 
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
 			this.rsTipoControle = this.stmt.executeQuery();
 
 			while (rsTipoControle.next()) {
@@ -50,7 +53,9 @@ public class TipoControleDao extends Dao<TipoControle> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsTipoControle, stmt, conn);
@@ -72,6 +77,7 @@ public class TipoControleDao extends Dao<TipoControle> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setString(1, "%" + nome + "%");
 
 			this.rsTipoControle = this.stmt.executeQuery();
@@ -85,11 +91,12 @@ public class TipoControleDao extends Dao<TipoControle> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsTipoControle, stmt, conn);
 		return tipoControle;
-
 	}
 }

@@ -2,6 +2,41 @@
 
 <script type="text/javascript">
 
+$('#Banco').autocomplete({
+	source: function( request, response ) {
+        $.ajax({
+          url: "<c:url value='/banco/busca.json' />",
+          dataType: "json",
+          data : {empresa_id: $('#agenciaEmpresaId').val() == '' ? '0' :  $('#agenciaEmpresaId').val(), 
+        		  organizacao_id: $('#agenciaOrganizacaoId').val() == '' ? '0' :  $('#agenciaOrganizacaoId').val(),
+        		  nome : $('#Banco').val()},
+          success : function(data) {  
+
+        	  if (!data || data.length == 0) {
+     	            $('#Banco').val('');
+     	           $('#BancoId').val('');
+     	        }
+
+        	  response($.map(data, function(banco) {  
+        		  return {
+        			  label: banco.nome,
+        			  value: banco.banco_id
+                  };
+              }));  
+           }
+        });
+     },
+     focus: function( event, ui ) {
+      	 $('#Banco').val(ui.item.label);
+           return false;
+       } ,
+     select: function( event, ui ) {
+         $('#Banco').val(ui.item.label);
+         $('#BancoId').val(ui.item.value);
+         return false;
+     }
+});
+
 function showObs(value){
 	alert(value);
 	return false;
@@ -134,9 +169,14 @@ function mostra(formulario_id){
 							<label for="TipoConta">Tipo Conta</label>
 							<input type="text" class="input-medium" id="TipoConta" name="TipoConta" value="${parceiroInfoBanco.contaBancaria.tipoConta }" />
 						</div>
-						<div class="span2">
-							<label for="TipoPagamento">Tipo Pagamento</label>
-							<input  class="input-medium" id="TipoPagamento" name="TipoPagamento" type="text" value="${parceiroInfoBanco.meioPagamento }" />
+						<div class="span3">
+							<label for="meioPagamento">Tipo Pagamento</label>
+							<select class="input-medium" id="meioPagamento" name="formulario.parceiroInfoBanco.meioPagamento.meioPagamento_id">
+								<option value="">Escolha Tipo Pagamento</option>
+								<c:forEach items="${meiosPagamento }" var="meioPagamento">
+									<option value="${meioPagamento.meioPagamento_id }">${meioPagamento.nome }</option>
+								</c:forEach>
+							</select>
 						</div>
 					</div>
 				</div>

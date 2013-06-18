@@ -17,16 +17,16 @@ import br.com.sgo.modelo.Menu;
 @Component
 public class MenuDao extends Dao<Menu> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsMenu;
 
 	public MenuDao(Session session, ConnJDBC conexao) {
+
 		super(session, Menu.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public Collection<Menu> buscaMenus(Long empresa_id, Long organizacao_id,

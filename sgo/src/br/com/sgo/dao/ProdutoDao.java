@@ -209,9 +209,9 @@ public class ProdutoDao extends Dao<Produto> {
 	
 	public Collection<Produto> buscaProdutosByBanco(Long banco_id) {
 
-		String sql = "SELECT DISTINCT PRODUTOBANCO.produto_id, PRODUTO.nome as produto_nome, PRODUTOBANCO.banco_id, BANCO.nome as banco_nome " +
-				" FROM (PRODUTOBANCO (NOLOCK) INNER JOIN PRODUTO (NOLOCK) ON PRODUTOBANCO.produto_id = PRODUTO.produto_id) " +
-				"	INNER JOIN BANCO (NOLOCK) ON PRODUTOBANCO.banco_id = BANCO.banco_id WHERE BANCO.banco_id = ? ";
+		String sql = "SELECT DISTINCT(BANCOPRODUTO.produto_id), PRODUTO.nome as produto_nome, BANCOPRODUTO.banco_id, BANCO.nome as banco_nome " +
+				" FROM (BANCOPRODUTO (NOLOCK) INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTO.produto_id = PRODUTO.produto_id) " +
+				"	INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTO.banco_id = BANCO.banco_id WHERE BANCO.banco_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
