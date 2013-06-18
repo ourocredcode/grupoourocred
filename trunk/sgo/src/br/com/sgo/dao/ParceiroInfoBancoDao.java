@@ -23,42 +23,61 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 	private Connection conn;
 	private ResultSet rsParceiroInfoBanco;
 
-	private final String sqlParceiroInfoBancos = " SELECT PARCEIROINFOBANCO.parceiroinfobanco_id,   " +
-			"	PARCEIROINFOBANCO.nome, PARCEIROINFOBANCO.empresa_id, PARCEIROINFOBANCO.organizacao_id, " +
-			"	PARCEIROINFOBANCO.parceironegocio_id, PARCEIROINFOBANCO.banco_id, PARCEIROINFOBANCO.agencia_id,   " +
-			"	PARCEIROINFOBANCO.contabancaria_id, PARCEIROINFOBANCO.meiopagamento_id, PARCEIROINFOBANCO.agencianumero, PARCEIROINFOBANCO.contacorrente," +
-			"	MEIOPAGAMENTO.nome as meiopagamento_nome,   " +
-			"	MEIOPAGAMENTO.meiopagamento_id, PARCEIROINFOBANCO.isactive FROM PARCEIROINFOBANCO (NOLOCK) " +
-			"		INNER JOIN MEIOPAGAMENTO (NOLOCK) ON  PARCEIROINFOBANCO.meiopagamento_id = MEIOPAGAMENTO.meiopagamento_id ";
+	private final String sqlParceiroInfoBanco = "SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, PARCEIROINFOBANCO.organizacao_id, PARCEIROINFOBANCO.parceironegocio_id, PARCEIROINFOBANCO.banco_id, PARCEIROINFOBANCO.agencia_id, PARCEIROINFOBANCO.contabancaria_id, PARCEIROINFOBANCO.meiopagamento_id FROM PARCEIROINFOBANCO (NOLOCK) ";
+
+	
+	private final String sqlParceiroInfoBancos =  "SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, EMPRESA.nome AS empresa_nome "+
+							", PARCEIROINFOBANCO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
+							", PARCEIROINFOBANCO.parceironegocio_id, PARCEIRONEGOCIO.nome AS parceironegocio_nome "+
+							" PARCEIROINFOBANCO.banco_id, BANCO.nome AS banco_nome, PARCEIROINFOBANCO.isactive "+
+							", PARCEIROINFOBANCO.meiopagamento_id, MEIOPAGAMENTO.nome as meiopagamento_nome "+
+							" FROM ((((PARCEIROINFOBANCO (NOLOCK) LEFT JOIN BANCO (NOLOCK) ON PARCEIROINFOBANCO.banco_id = BANCO.banco_id) "+
+							" INNER JOIN EMPRESA (NOLOCK) ON PARCEIROINFOBANCO.empresa_id = EMPRESA.empresa_id) "+
+							" INNER JOIN ORGANIZACAO (NOLOCK) ON PARCEIROINFOBANCO.organizacao_id = ORGANIZACAO.organizacao_id) "+
+							" INNER JOIN MEIOPAGAMENTO (NOLOCK) ON PARCEIROINFOBANCO.meiopagamento_id = MEIOPAGAMENTO.meiopagamento_id) "+
+							" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROINFOBANCO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id ";
 
 	public ParceiroInfoBancoDao(Session session, ConnJDBC conexao) {
+
 		super(session, ParceiroInfoBanco.class);
 		this.conexao = conexao;
+
 	}
 
 	public Collection<ParceiroInfoBanco> buscaAllParceiroInfoBanco() {
+
 		String sql = sqlParceiroInfoBancos;
+
 		this.conn = this.conexao.getConexao();
+
 		Collection<ParceiroInfoBanco> informacoesParceiro = new ArrayList<ParceiroInfoBanco>();
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
 			this.rsParceiroInfoBanco = this.stmt.executeQuery();
+
 			while (rsParceiroInfoBanco.next()) {
+
 				ParceiroInfoBanco informacaoParceiro = new ParceiroInfoBanco();
-				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco
-						.getLong("parceiroinfobanco_id"));
+				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco.getLong("parceiroinfobanco_id"));
 				informacoesParceiro.add(informacaoParceiro);
+
 			}
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsParceiroInfoBanco, stmt, conn);
 		return informacoesParceiro;
 	}
 
 	public ParceiroInfoBanco buscaParceiroInfoBancoByParceiro(Long parceironegocio_id) {
 
-		String sql = sqlParceiroInfoBancos;
+		String sql = sqlParceiroInfoBanco;
 
 		if (parceironegocio_id != null)
 			sql += " WHERE PARCEIROINFOBANCO.parceironegocio_id = ?";
@@ -79,8 +98,8 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 				parceiroInfoBanco = new ParceiroInfoBanco();
 				MeioPagamento meioPagamento = new MeioPagamento();
 
-				meioPagamento.setMeiopagamento_id(rsParceiroInfoBanco.getLong("meiopagamento_id"));
-				meioPagamento.setNome(rsParceiroInfoBanco.getString("meiopagamento_nome"));
+				meioPagamento.setMeioPagamento_id(rsParceiroInfoBanco.getLong("meiopagamento_id"));
+				meioPagamento.setNome(rsParceiroInfoBanco.getString("nome"));
 
 				parceiroInfoBanco.setParceiroInfoBanco_id(rsParceiroInfoBanco.getLong("parceiroinfobanco_id"));
 				parceiroInfoBanco.setMeioPagamento(meioPagamento);
@@ -90,7 +109,9 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsParceiroInfoBanco, stmt, conn);
@@ -98,9 +119,10 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 		return parceiroInfoBanco;
 	}
 
-	public ParceiroInfoBanco buscaParceiroInfoBancoByEmOrPaBa(Long empresa_id,
-			Long organizacao_id, Long parceironegocio_id, Long banco_id) {
-		String sql = sqlParceiroInfoBancos;
+	public ParceiroInfoBanco buscaParceiroInfoBancoByEmOrPaBa(Long empresa_id,Long organizacao_id, Long parceironegocio_id, Long banco_id) {
+
+		String sql = sqlParceiroInfoBanco;
+
 		if (empresa_id != null)
 			sql += " WHERE PARCEIROINFOBANCO.empresa_id = ?";
 		if (organizacao_id != null)
@@ -109,31 +131,43 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 			sql += " AND PARCEIROINFOBANCO.parceironegocio_id = ?";
 		if (banco_id != null)
 			sql += " AND PARCEIROINFOBANCO.banco_id = ?";
+
 		this.conn = this.conexao.getConexao();
-		ParceiroInfoBanco informacaoParceiro = null;
+
+	ParceiroInfoBanco informacaoParceiro = null;
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, parceironegocio_id);
 			this.stmt.setLong(4, banco_id);
+
 			this.rsParceiroInfoBanco = this.stmt.executeQuery();
+
 			while (rsParceiroInfoBanco.next()) {
+
 				informacaoParceiro = new ParceiroInfoBanco();
-				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco
-						.getLong("parceiroinfobanco_id"));
+				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco.getLong("parceiroinfobanco_id"));
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsParceiroInfoBanco, stmt, conn);
 		return informacaoParceiro;
 	}
 
-	public ParceiroInfoBanco buscaParceiroInfoBancoByEmOrPaBaAg(
-			Long empresa_id, Long organizacao_id, Long parceironegocio_id,
-			Long banco_id, Long agencia_id) {
-		String sql = sqlParceiroInfoBancos;
+	public ParceiroInfoBanco buscaParceiroInfoBancoByEmOrPaBaAg(Long empresa_id, Long organizacao_id, Long parceironegocio_id, Long banco_id, Long agencia_id) {
+
+		String sql = sqlParceiroInfoBanco;
+
 		if (empresa_id != null)
 			sql += " WHERE PARCEIROINFOBANCO.empresa_id = ?";
 		if (organizacao_id != null)
@@ -144,32 +178,44 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 			sql += " AND PARCEIROINFOBANCO.banco_id = ?";
 		if (agencia_id != null)
 			sql += " AND PARCEIROINFOBANCO.agencia_id = ?";
+
 		this.conn = this.conexao.getConexao();
+		
 		ParceiroInfoBanco informacaoParceiro = null;
+		
 		try {
+			
 			this.stmt = conn.prepareStatement(sql);
+			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, parceironegocio_id);
 			this.stmt.setLong(4, banco_id);
 			this.stmt.setLong(5, agencia_id);
+
 			this.rsParceiroInfoBanco = this.stmt.executeQuery();
+
 			while (rsParceiroInfoBanco.next()) {
+
 				informacaoParceiro = new ParceiroInfoBanco();
-				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco
-						.getLong("parceiroinfobanco_id"));
+				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco.getLong("parceiroinfobanco_id"));
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsParceiroInfoBanco, stmt, conn);
 		return informacaoParceiro;
 	}
 
-	public ParceiroInfoBanco buscaParceiroInfoBancoByEmOrPaBaAgCb(
-			Long empresa_id, Long organizacao_id, Long parceironegocio_id,
-			Long banco_id, Long agencia_id, Long contabancaria_id) {
-		String sql = sqlParceiroInfoBancos;
+	public ParceiroInfoBanco buscaParceiroInfoBancoByEmOrPaBaAgCb(Long empresa_id, Long organizacao_id, Long parceironegocio_id,Long banco_id, Long agencia_id, Long contabancaria_id) {
+
+		String sql = sqlParceiroInfoBanco;
+
 		if (empresa_id != null)
 			sql += " WHERE PARCEIROINFOBANCO.empresa_id = ?";
 		if (organizacao_id != null)
@@ -182,25 +228,37 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 			sql += " AND PARCEIROINFOBANCO.agencia_id = ?";
 		if (contabancaria_id != null)
 			sql += " AND PARCEIROINFOBANCO.contabancaria_id = ?";
+
 		this.conn = this.conexao.getConexao();
+		
 		ParceiroInfoBanco informacaoParceiro = null;
+		
 		try {
+		
 			this.stmt = conn.prepareStatement(sql);
+			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, parceironegocio_id);
 			this.stmt.setLong(4, banco_id);
 			this.stmt.setLong(5, agencia_id);
 			this.stmt.setLong(6, contabancaria_id);
+			
 			this.rsParceiroInfoBanco = this.stmt.executeQuery();
+			
 			while (rsParceiroInfoBanco.next()) {
+			
 				informacaoParceiro = new ParceiroInfoBanco();
-				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco
-						.getLong("parceiroinfobanco_id"));
+				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco.getLong("parceiroinfobanco_id"));
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsParceiroInfoBanco, stmt, conn);
 		return informacaoParceiro;
 	}
@@ -208,7 +266,9 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 	public ParceiroInfoBanco buscaParceiroInfoBancoByAllTypes(Long empresa_id,
 			Long organizacao_id, Long parceironegocio_id, Long banco_id,
 			Long agencia_id, Long contabancaria_id, String nome) {
+
 		String sql = sqlParceiroInfoBancos;
+
 		if (empresa_id != null)
 			sql += " WHERE PARCEIROINFOBANCO.empresa_id = ?";
 		if (organizacao_id != null)
@@ -223,10 +283,16 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 			sql += " AND PARCEIROINFOBANCO.contabancaria_id = ?";
 		if (nome != null)
 			sql += " AND (PARCEIROINFOBANCO.nome like ?)";
+
 		this.conn = this.conexao.getConexao();
+
 		ParceiroInfoBanco informacaoParceiro = null;
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, parceironegocio_id);
@@ -234,15 +300,22 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 			this.stmt.setLong(5, agencia_id);
 			this.stmt.setLong(6, contabancaria_id);
 			this.stmt.setString(7, "%" + nome + "%");
+
 			this.rsParceiroInfoBanco = this.stmt.executeQuery();
+
 			while (rsParceiroInfoBanco.next()) {
+
 				informacaoParceiro = new ParceiroInfoBanco();
-				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco
-						.getLong("parceiroinfobanco_id"));
+				informacaoParceiro.setParceiroInfoBanco_id(rsParceiroInfoBanco.getLong("parceiroinfobanco_id"));
+
 			}
+
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsParceiroInfoBanco, stmt, conn);
 		return informacaoParceiro;
 	}

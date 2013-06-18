@@ -35,6 +35,41 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	$('#Banco').autocomplete({
+		source: function( request, response ) {
+	        $.ajax({
+	          url: "<c:url value='/banco/busca.json' />",
+	          dataType: "json",
+	          data : {empresa_id: $('#agenciaEmpresaId').val() == '' ? '0' :  $('#agenciaEmpresaId').val(), 
+	        		  organizacao_id: $('#agenciaOrganizacaoId').val() == '' ? '0' :  $('#agenciaOrganizacaoId').val(),
+	        		  nome : $('#Banco').val()},
+              success : function(data) {  
+
+            	  if (!data || data.length == 0) {
+         	            $('#Banco').val('');
+         	           $('#BancoId').val('');
+         	        }
+
+            	  response($.map(data, function(banco) {  
+            		  return {
+            			  label: banco.nome,
+            			  value: banco.banco_id
+                      };
+                  }));  
+               }
+	        });
+         },
+         focus: function( event, ui ) {
+          	 $('#Banco').val(ui.item.label);
+               return false;
+           } ,
+         select: function( event, ui ) {
+             $('#Banco').val(ui.item.label);
+             $('#BancoId').val(ui.item.value);
+             return false;
+         }
+    });
 
 	var justificativa = document.getElementById("justificativa");
 	var dataQuitacao = document.getElementById("dataQuitacao");
@@ -457,10 +492,10 @@ function openPopup(url) {
 						</div>
 						<div class="row-fluid">
 							<div id="formDadosPagamento">
-
 								<div class="span2">
 									<label for="Banco">Banco</label>
-									<input type="text" class="input-medium" id="Banco" name="Banco" value="${formulario.parceiroInfoBanco.banco.nome }"/>	
+									<input type="text" class="input-medium" id="Banco" name="Banco" value="${formulario.parceiroInfoBanco.banco.nome }"/>
+									<input type="hidden" class="span1" id="BancoId" name="BancoId" value="${formulario.parceiroInfoBanco.banco.banco_id }"/>
 								</div>
 								<div class="span2">
 									<label for="Agencia">Agencia</label>
@@ -474,10 +509,15 @@ function openPopup(url) {
 									<label for="TipoConta">Tipo Conta</label>
 									<input type="text" class="input-medium" id="TipoConta" name="TipoConta" value="${formulario.parceiroInfoBanco.contaBancaria.tipoConta  }" />
 								</div>
-								<div class="span2">
-									<label for="TipoPagamento">Tipo Pagamento</label>
-									<input  class="input-medium" id="TipoPagamento" name="TipoPagamento" type="text" value="${formulario.parceiroInfoBanco.meioPagamento.nome }" />
-								</div>
+								<div class="span3">
+									<label for="meioPagamento">Tipo Pagamento</label>
+									<select class="input-medium" id="meioPagamento" name="formulario.parceiroInfoBanco.meioPagamento.meioPagamento_id">
+										<option value="">Escolha Tipo Pagamento</option>
+										<c:forEach items="${meiosPagamento }" var="meioPagamento">
+											<option value="${meioPagamento.meioPagamento_id }">${meioPagamento.nome }</option>
+										</c:forEach>
+									</select>
+								</div>								
 							</div>
 						</div>
 					</div>

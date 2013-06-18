@@ -82,7 +82,7 @@ public class GrupoparceiroController {
 	@Get @Path("/grupoparceiro/busca.json")
 	@Public
 	public void grupoparceiro(Long empresa_id, Long organizacao_id, String nome){
-		result.use(Results.json()).withoutRoot().from(grupoParceiroDao.buscaGrupoParceiro(empresa_id, organizacao_id, nome)).serialize();
+		result.use(Results.json()).withoutRoot().from(grupoParceiroDao.buscaGrupoParceiroByEmpOrgNome(1l, 1l, nome)).serialize();
 	}
 
 }

@@ -27,6 +27,7 @@ import br.com.sgo.dao.ControleFormularioDao;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoControleFormularioDao;
+import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
@@ -44,6 +45,7 @@ import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoControleFormulario;
+import br.com.sgo.modelo.MeioPagamento;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroInfoBanco;
@@ -74,6 +76,7 @@ public class FormularioController {
 	private final WorkflowDao workflowDao;
 	private final EtapaDao etapaDao;
 	private final PnDao pnDao;
+	private final MeioPagamentoDao meioPagamentoDao;
 
 	private HttpServletResponse response;
 	private Formulario formulario;
@@ -89,13 +92,14 @@ public class FormularioController {
 	private Workflow workflow;
 	private Collection<Etapa> etapas;
 	private Collection<Etapa> motivos;
+	private Collection<MeioPagamento> meiosPagamento;
 
 	public FormularioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,FormularioDao formularioDao,ContratoDao contratoDao,
 			CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,ParceiroInfoBancoDao parceiroInfoBancoDao,
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
 			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
-			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow){		
+			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow, MeioPagamentoDao meioPagamentoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -127,6 +131,7 @@ public class FormularioController {
 		this.usuario = usuarioInfo.getUsuario();
 		this.perfil = usuarioInfo.getPerfil();
 		this.workflow = workflow;
+		this.meioPagamentoDao = meioPagamentoDao;
 
 	}
 
@@ -159,6 +164,8 @@ public class FormularioController {
 		formulario = formularioDao.load(id);
 		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario.getFormulario_id()));
 
+		result.include("bancos", this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+
 		TipoControle tp = this.tipoControleDao.buscaTipoControleByNome("Pós Venda");
 
 		ControleFormulario posvenda = controleFormularioDao.buscaControleByContratoTipoControle(formulario.getFormulario_id(), tp.getTipoControle_id());
@@ -188,12 +195,14 @@ public class FormularioController {
 
 			posvenda.setWorkflowPendencia(workflow);
 
+			meiosPagamento = meioPagamentoDao.buscaAllMeioPagamento(1L, 1L);
 
 			result.include("historico",historico);
 			result.include("historicos",historicos);
 			result.include("posvenda",posvenda);
 			result.include("etapas", etapas);
 			result.include("motivos", motivos);
+			result.include("meiosPagamento",meiosPagamento);			
 
 		}
 

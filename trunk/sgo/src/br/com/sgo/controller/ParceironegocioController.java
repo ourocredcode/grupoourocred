@@ -1,5 +1,6 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
 import java.util.Collection;
 
 import br.com.caelum.restfulie.RestClient;
@@ -10,11 +11,14 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.CategoriaParceiroDao;
 import br.com.sgo.dao.CidadeDao;
+import br.com.sgo.dao.ClassificacaoParceiroDao;
 import br.com.sgo.dao.DepartamentoDao;
 import br.com.sgo.dao.EstadoCivilDao;
 import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.FuncionarioDao;
+import br.com.sgo.dao.GrupoParceiroDao;
 import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.PaisDao;
@@ -73,17 +77,24 @@ public class ParceironegocioController {
 	private final CidadeDao cidadeDao;
 	private final TipoLocalidadeDao tipoLocalidadeDao;
 	private final UsuarioDao usuarioDao;
+	private final CategoriaParceiroDao categoriaParceiroDao;
+	private final ClassificacaoParceiroDao classificacaoParceiroDao;
+	private final GrupoParceiroDao grupoParceiroDao;
 	private BrazilianAddressFinder addressFinder;
 	private RestClient restfulie;
+
 	private Empresa empresa;
 	private Organizacao organizacao;
-	
+	private Usuario usuario;
 
+	private Calendar dataAtual = Calendar.getInstance();
+	
+	
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
-			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,
+			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,Usuario usuario,
 			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao,MeioPagamentoDao meioPagamentoDao,
-			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao) {
+			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao, CategoriaParceiroDao categoriaParceiroDao, ClassificacaoParceiroDao classificacaoParceiroDao, GrupoParceiroDao grupoParceiroDao) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -110,6 +121,12 @@ public class ParceironegocioController {
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
+		this.categoriaParceiroDao = categoriaParceiroDao;
+		this.classificacaoParceiroDao = classificacaoParceiroDao;
+		this.grupoParceiroDao = grupoParceiroDao;
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
 
 	}
 
@@ -128,6 +145,10 @@ public class ParceironegocioController {
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
+		
+		result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
+		result.include("classificacoesParceiro",this.classificacaoParceiroDao.buscaAllClassificacaoParceiroByEmpOrg(1l, 1l));
+		result.include("gruposParceiro",this.grupoParceiroDao.buscaAllGrupoParceiroByEmpOrg(1l, 1l));
 
 	}
 
@@ -154,7 +175,7 @@ public class ParceironegocioController {
 				ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
 				ParceiroInfoBanco infoBanco = this.pnDao.buscaParceiroInfoBanco(parceiroNegocio);
 
-				infoBanco.setMeioPagamento(this.meioPagamentoDao.buscaMeioPagamentoByNome(infoBanco.getMeioPagamento().getNome()));
+				infoBanco.setMeioPagamento(this.meioPagamentoDao.buscaMeioPagamentoByNome(1l, 1l, infoBanco.getMeioPagamento().getNome()));
 
 				Localidade l = parceiroLocalidade.getLocalidade();
 
@@ -211,6 +232,10 @@ public class ParceironegocioController {
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("parceiroNegocio",parceiroNegocio);
+		
+		result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
+		result.include("classificacoesParceiro",this.classificacaoParceiroDao.buscaAllClassificacaoParceiroByEmpOrg(1l, 1l));
+		result.include("gruposParceiro",this.grupoParceiroDao.buscaAllGrupoParceiroByEmpOrg(1l, 1l));
 
 	}
 
@@ -240,6 +265,12 @@ public class ParceironegocioController {
 
 			try {
 
+				parceiroNegocio.setCreated(dataAtual);
+				parceiroNegocio.setUpdated(dataAtual);
+				parceiroNegocio.setCreatedBy(usuario);
+				parceiroNegocio.setUpdatedBy(usuario);				
+				parceiroNegocio.setIsActive(parceiroNegocio.getIsActive() == null ? false : true);
+				
 				this.parceiroNegocioDao.beginTransaction();
 				this.parceiroNegocioDao.adiciona(parceiroNegocio);
 				this.parceiroNegocioDao.commit();
@@ -269,6 +300,10 @@ public class ParceironegocioController {
 				f.setParceiroNegocio(parceiroNegocio);
 				f.setFuncao(funcionario.getFuncao());
 				f.setApelido(funcionario.getApelido());
+				f.setCreated(dataAtual);
+				f.setUpdated(dataAtual);
+				f.setCreatedBy(usuario);
+				f.setUpdatedBy(usuario);
 				f.setIsActive(parceiroNegocio.getIsActive());
 				
 				try {
@@ -300,8 +335,12 @@ public class ParceironegocioController {
 				u.setParceiroNegocio(parceiroNegocio);
 				u.setSenha("123456");
 				u.setNome(parceiroNegocio.getNome());
+				u.setCreated(dataAtual);
+				u.setUpdated(dataAtual);
+				u.setCreatedBy(usuario);
+				u.setUpdatedBy(usuario);
 				u.setIsActive(true);
-	
+
 				if(u.getUsuario_id() == null) {
 					this.usuarioDao.beginTransaction();
 					this.usuarioDao.adiciona(u);
@@ -316,6 +355,13 @@ public class ParceironegocioController {
 					parceiroContato.setEmpresa(empresa);
 					parceiroContato.setOrganizacao(organizacao);
 					parceiroContato.setParceiroNegocio(parceiroNegocio);
+
+					parceiroContato.setCreated(dataAtual);
+					parceiroContato.setUpdated(dataAtual);
+
+					parceiroContato.setCreatedBy(usuario);
+					parceiroContato.setUpdatedBy(usuario);
+
 					parceiroContato.setIsActive(true);
 		
 					this.parceiroContatoDao.beginTransaction();
@@ -326,11 +372,19 @@ public class ParceironegocioController {
 			}
 			
 			if(parceiroBeneficios != null){
+
 				for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
 	
 					parceiroBeneficio.setEmpresa(empresa);
 					parceiroBeneficio.setOrganizacao(organizacao);
 					parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
+
+					parceiroBeneficio.setCreated(dataAtual);
+					parceiroBeneficio.setUpdated(dataAtual);
+
+					parceiroBeneficio.setCreatedBy(usuario);
+					parceiroBeneficio.setUpdatedBy(usuario);
+
 					parceiroBeneficio.setIsActive(true);
 	
 					this.parceiroBeneficioDao.beginTransaction();
@@ -346,6 +400,13 @@ public class ParceironegocioController {
 	
 				localidade.setEmpresa(empresa);
 				localidade.setOrganizacao(organizacao);
+				
+				localidade.setCreated(dataAtual);
+				localidade.setUpdated(dataAtual);
+
+				localidade.setCreatedBy(usuario);
+				localidade.setUpdatedBy(usuario);
+
 				localidade.setIsActive(true);
 	
 				try {
@@ -382,8 +443,15 @@ public class ParceironegocioController {
 				pl.setNumero(parceiroLocalidade.getNumero());
 				pl.setComplemento(parceiroLocalidade.getComplemento());
 				pl.setPontoReferencia(parceiroLocalidade.getPontoReferencia());
+
+				pl.setCreated(dataAtual);
+				pl.setUpdated(dataAtual);
+
+				pl.setCreatedBy(usuario);
+				pl.setUpdatedBy(usuario);
+
 				pl.setIsActive(true);
-	
+
 				try{
 					
 					this.parceiroLocalidadeDao.beginTransaction();
@@ -408,7 +476,15 @@ public class ParceironegocioController {
 	
 				parceiroInfoBanco.setEmpresa(empresa);
 				parceiroInfoBanco.setOrganizacao(organizacao);
+				
+				parceiroInfoBanco.setCreated(dataAtual);
+				parceiroInfoBanco.setUpdated(dataAtual);
+
+				parceiroInfoBanco.setCreatedBy(usuario);
+				parceiroInfoBanco.setUpdatedBy(usuario);
+				
 				parceiroInfoBanco.setIsActive(true);
+
 				parceiroInfoBanco.setParceiroNegocio(parceiroNegocio);
 	
 				this.parceiroInfoBancoDao.beginTransaction();

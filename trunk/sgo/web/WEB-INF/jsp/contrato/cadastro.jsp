@@ -467,6 +467,15 @@ function historicoCoeficiente() {
 
 }
 
+function buscaPrazo() {
+	alert(banco_id + produto_id);
+	var banco_id = $("#contratoBanco").val();
+	var produto_id = $("#contratoProduto").val();
+
+	$("#contratoPrazoId").load('<c:url value="/contrato/prazobancoproduto" />',{'banco_id': banco_id,'produto_id': produto_id});
+
+}
+
 </script>
 
 <c:if test="${contrato.contrato_id  == null }">
@@ -491,21 +500,18 @@ function historicoCoeficiente() {
 					<div class="row-fluid">
 				
 						<div class="span3">
-
 							<label for="contratoBanco">Banco:</label>
-							<select id="contratoBanco" name="contrato.banco.banco_id" class="span12" required>
+							<select id="contratoBanco" name="contrato.banco.banco_id" class="span12" onChange="buscaPrazo();">
 								<option value="">Escolha um banco</option>
 								<c:forEach items="${bancos}" var="banco">
 									<option value="${banco.banco_id}" <c:if test="${contrato.banco.banco_id == banco.banco_id }">selected</c:if>>${banco.nome}</option>
 								</c:forEach>
 							</select>
-
-						</div>
-						
+						</div>						
 						<div class="span3">
 
 							<label for="contratoProduto">Produto:</label>
-							<select id="contratoProduto" name="contrato.produto.produto_id" class="span12" required>
+							<select class="span12" id="contratoProduto" onChange="buscaPrazo();" name="contrato.produto.produto_id">
 								<option value="">Escolha um produto</option>
 								<c:if test="${not empty contrato.contrato_id}">
 									<c:forEach items="${produtos}" var="produto">
@@ -526,10 +532,11 @@ function historicoCoeficiente() {
 								<c:if test="${not empty contrato.contrato_id}">
 									<c:forEach items="${coeficientes}" var="coeficiente">
 										<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id}" 
-										<c:if test="${contrato.coeficiente.valor eq coeficiente.valor}">SELECTED</c:if>>${coeficiente.valor} ${coeficiente.tabela.nome}</option>
+										<c:if test="${contrato.coeficiente.valor eq coeficiente.valor}">SELECTED</c:if>>${coeficiente.valor} <!-- ${coeficiente.tabela.nome} --></option>
 									</c:forEach>
 								</c:if>
 							</select>
+
 							<input id="coeficiente" type="hidden" name="contrato.coeficiente.coeficiente_id" value="${contrato.coeficiente.coeficiente_id}" />
 
 						</div>

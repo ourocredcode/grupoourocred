@@ -24,7 +24,7 @@ public class MeioPagamento implements Serializable {
 	@Id
 	@Column(name = "meiopagamento_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long meiopagamento_id;
+	private Long meioPagamento_id;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", updatable = true, nullable = false)
@@ -60,12 +60,12 @@ public class MeioPagamento implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
-	public Long getMeiopagamento_id() {
-		return meiopagamento_id;
+	public Long getMeioPagamento_id() {
+		return meioPagamento_id;
 	}
 
-	public void setMeiopagamento_id(Long meiopagamento_id) {
-		this.meiopagamento_id = meiopagamento_id;
+	public void setMeioPagamento_id(Long meioPagamento_id) {
+		this.meioPagamento_id = meioPagamento_id;
 	}
 
 	public Empresa getEmpresa() {
@@ -82,30 +82,6 @@ public class MeioPagamento implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
 	}
 
 	public Usuario getCreatedBy() {
@@ -148,4 +124,27 @@ public class MeioPagamento implements Serializable {
 		this.chave = chave;
 	}
 
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 }
