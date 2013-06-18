@@ -534,18 +534,6 @@ public class MenuController {
 
 		contador();
 	}
-	
-	@Post
-	@Path("/menu/busca/status")
-	public void busca(String status) {
-
-		contratos.clear();
-		
-		contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacaoUsuarioStatus(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),usuario.getUsuario_id(),status));
-		
-		contador();
-
-	}
 
 	@Get
 	@Path("/menu/cadastro")
