@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 import org.hibernate.Session;
 
@@ -142,6 +143,50 @@ public class ContratoDao extends Dao<Contrato> {
 		}
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contratos;
+	}
+	
+	public Collection<Contrato> buscaContratoByEmpresaOrganizacaoUsuarioStatus(Long empresa_id, Long organizacao_id, Long usuario_id , String status) {
+
+		String sql = sqlContrato;
+
+		if(empresa_id != null)
+			sql += " WHERE EMPRESA.empresa_id = ? ";
+		if(organizacao_id != null)
+			sql += " AND ORGANIZACAO.organizacao_id = ? ";
+		if(!status.equals(""))
+			sql += " AND ETAPA.nome like ? ";
+		if(usuario_id != null)
+			sql += " AND ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, status);
+
+			if(usuario_id != null){
+				this.stmt.setLong(4, usuario_id);
+				this.stmt.setLong(5, usuario_id);
+			}
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+				getFormulario(contratos);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contratos;
+
 	}
 	
 	public Collection<Contrato> buscaContratoByFormulario(Long formulario_id) {
@@ -672,6 +717,82 @@ public class ContratoDao extends Dao<Contrato> {
 		
 
 	}
+	
+	public HashMap<String,Integer> buscaContratosToCountEtapas(Long empresa_id , Long organizacao_id, Long usuario_id) {
+
+		String sql = " SELECT ETAPA.nome as etapa_nome, COUNT(ETAPA.nome) as etapaCount  " +
+				" FROM    " +
+				" (((((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) " +   
+				 " INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) " + 
+				 " INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id ) " +    
+				  " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.contrato_id = CONTRATO.contrato_id) " +  
+				  " LEFT JOIN TIPOLOGISTICA (NOLOCK) ON TIPOLOGISTICA.tipologistica_id = LOGISTICA.tipologistica_id " +  
+				  " LEFT JOIN PERIODO (NOLOCK) ON PERIODO.periodo_id = LOGISTICA.periodo_id " +  
+				  " LEFT JOIN CONTROLE (NOLOCK) ON CONTROLE.contrato_id = CONTRATO.contrato_id " +  
+				 " INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) " +    
+				 " INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id) " +    
+				 " INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " + 
+				 " INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +    
+				 " INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) " +     
+				 " INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) " +    
+				 " INNER JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) " +    
+				 " INNER JOIN BANCO AS B1 (NOLOCK) ON CONTRATO.banco_id = B1.banco_id " +    
+				 " INNER JOIN WORKFLOWETAPA (NOLOCK) ON CONTRATO.workflow_id = WORKFLOWETAPA.workflow_id " +  
+				 " INNER JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id  = WORKFLOWETAPA.etapa_id AND ETAPA.etapa_id = CONTRATO.etapa_id " +  
+				 " INNER JOIN USUARIO as SUPER (NOLOCK) ON USUARIO.supervisor_usuario_id = SUPER.usuario_id " +    
+				 " LEFT JOIN BANCO AS B2 (NOLOCK) ON CONTRATO.recompra_banco_id = B2.banco_id ";
+
+		if(empresa_id != null)
+			sql += " WHERE EMPRESA.empresa_id = ? ";
+
+		if(organizacao_id != null)
+			sql += " AND ORGANIZACAO.organizacao_id = ? ";
+		
+		if(usuario_id != null)
+			sql += " AND ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+
+		sql +=  " GROUP BY ETAPA.nome ";
+
+		this.conn = this.conexao.getConexao();
+		
+
+		HashMap<String,Integer> map = new HashMap<String,Integer>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			
+			if(usuario_id != null){
+				this.stmt.setLong(3, usuario_id);
+				this.stmt.setLong(4, usuario_id);
+				
+			}
+				
+
+			this.rsContrato = this.stmt.executeQuery();
+
+
+			while (rsContrato.next()) {
+				
+				String etapa_nome = rsContrato.getString("etapa_nome");
+				Integer etapaCount = rsContrato.getInt("etapaCount");
+
+				map.put(etapa_nome,etapaCount);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return map;
+	}
+	
+	
+	
 
 	private void getFormulario(Collection<Contrato> contratos)
 			throws SQLException {

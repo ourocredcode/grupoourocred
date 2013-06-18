@@ -18,6 +18,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.BancoDao;
+import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.EtapaDao;
@@ -31,6 +32,7 @@ import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
@@ -59,6 +61,7 @@ public class MenuController {
 	private final ProdutoDao produtoDao;
 	private final BancoDao bancoDao;
 	private final TipoControleDao tipoControleDao;
+	private final CoeficienteDao coeficienteDao;
 	private final UsuarioInfo usuarioInfo;
 	
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
@@ -67,12 +70,13 @@ public class MenuController {
 	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 	private Collection<Usuario> supervisores = new ArrayList<Usuario>();
 	private Collection<Usuario> consultoresAux = new ArrayList<Usuario>();
+	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
 
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
 
-	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,
+	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,CoeficienteDao coeficienteDao,
 			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,WorkflowDao workflowDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,
 			TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
@@ -89,6 +93,7 @@ public class MenuController {
 		this.workflowDao = workflowDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.produtoDao = produtoDao;
+		this.coeficienteDao = coeficienteDao;
 		this.bancoDao = bancoDao;
 		this.tipoControleDao = tipoControleDao;
 		this.empresa = usuarioInfo.getEmpresa();
@@ -121,14 +126,22 @@ public class MenuController {
 		Calendar calAprovadoInicio = null;
 		Calendar calAprovadoFim = null;
 
-		if(perfil.equals("Supervisor") || perfil.equals("Consultor"))
+		if(perfil.equals("Supervisor") || perfil.equals("Consultor")){
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
+			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id()));
+		}
 
-		if(perfil.equals("Administrativo"))
+		if(perfil.equals("Administrativo")){
 			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
+		}
 
-		if(perfil.equals("Gestor"))
+		if(perfil.equals("Gestor")){
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
+			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
+		}
+
+		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesByEmpOrg(empresa_id, organizacao_id));
 
 		contadorSeparado();
 
@@ -380,7 +393,7 @@ public class MenuController {
 	}
 
 	@Post
-	@Path("/menu/datasControle")
+	@Path("/menu/busca/controle")
 	public void busca(String tipoBusca,String previsaoInicio,String previsaoFim, String chegadaInicio,String chegadaFim,String vencimentoInicio,String vencimentoFim,
 							String proximaAtuacaoInicio,String proximaAtuacaoFim , String procedimento ,Collection<String> bancos, Collection<String> produtos, 
 							Collection<String> bancosComprados,Collection<String> status,Long consultor,String cliente, String documento,String empresa) {
@@ -522,6 +535,18 @@ public class MenuController {
 				cliente,documento,empresas));
 
 		contador();
+	}
+	
+	@Post
+	@Path("/menu/busca/status")
+	public void busca(String status) {
+
+		contratos.clear();
+		
+		contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacaoUsuarioStatus(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),usuario.getUsuario_id(),status));
+		
+		contador();
+
 	}
 
 	@Get

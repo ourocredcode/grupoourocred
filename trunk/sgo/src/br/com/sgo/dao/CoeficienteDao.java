@@ -126,6 +126,89 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		return coeficientes;
 
 	}
+	
+	public Collection<Coeficiente> buscaCoeficientesByEmpOrg(Long empresa_id, Long organizacao_id) {
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
+
+		String sql = " SELECT " +    
+					 " DISTINCT COEFICIENTE.empresa_id, EMPRESA.nome as empresa_nome, " +    
+					 " COEFICIENTE.organizacao_id, ORGANIZACAO.nome as organizacao_nome, " +    
+					 " COEFICIENTE.tabela_id, TABELA.nome as tabela_nome, COEFICIENTE.created, " +     
+					 " BANCO.banco_id, BANCO.nome as banco_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta " +    
+					 " FROM (((((COEFICIENTE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id) " +     
+					 " 		INNER JOIN ORGANIZACAO (NOLOCK) ON COEFICIENTE.organizacao_id = ORGANIZACAO.organizacao_id) " +     
+					 " 		INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id) " +    
+					 " 		INNER JOIN BANCOPRODUTOTABELA (NOLOCK) ON TABELA.tabela_id = dbo.BANCOPRODUTOTABELA.tabela_id) " +    
+					 "		INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTOTABELA.produto_id = PRODUTO.produto_id) " +    
+					 " 		INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id " +  
+					 " 			WHERE  COEFICIENTE.updated is null " +    
+					 "			AND BANCO.isactive = 1 " +    
+					 "			AND PRODUTO.isactive = 1 " +    
+					 "			AND TABELA.isactive = 1 AND EMPRESA.empresa_id = ? AND ORGANIZACAO.organizacao_id = ? " +   
+					 "				GROUP BY " +  
+					 "				COEFICIENTE.empresa_id, " +  
+					 "				EMPRESA.nome, " +    
+					 "				COEFICIENTE.organizacao_id, " +  
+					 "				ORGANIZACAO.nome, " +     
+					 "				COEFICIENTE.tabela_id, " +  
+					 "				TABELA.nome, COEFICIENTE.created, " +      
+					 "				BANCO.banco_id, BANCO.nome,  COEFICIENTE.coeficiente_id, COEFICIENTE.valor, " + 
+					 "				COEFICIENTE.percentualmeta  ORDER BY BANCO.nome, TABELA.nome ";
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1,empresa_id);
+			this.stmt.setLong(2,organizacao_id);
+
+			this.rsCoeficiente = this.stmt.executeQuery();
+			while (rsCoeficiente.next()) {
+
+				Empresa empresa = new Empresa();
+				empresa.setEmpresa_id(rsCoeficiente.getLong("empresa_id"));
+				empresa.setNome(rsCoeficiente.getString("empresa_nome"));
+
+				Organizacao organizacao = new Organizacao();
+				organizacao.setOrganizacao_id(rsCoeficiente.getLong("organizacao_id"));
+				organizacao.setNome(rsCoeficiente.getString("organizacao_nome"));
+				
+				Tabela tabela = new Tabela();
+				tabela.setTabela_id(rsCoeficiente.getLong("tabela_id"));
+				tabela.setNome(rsCoeficiente.getString("tabela_nome"));
+				
+				Banco banco = new Banco();
+				banco.setBanco_id(rsCoeficiente.getLong("tabela_id"));
+				banco.setNome(rsCoeficiente.getString("banco_nome"));
+
+				Coeficiente coeficiente = new Coeficiente();
+				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
+				coeficiente.setValor(rsCoeficiente.getDouble("valor"));
+				coeficiente.setPercentualMeta(rsCoeficiente.getDouble("percentualmeta"));
+				
+				Calendar created = new GregorianCalendar();
+				created.setTime(rsCoeficiente.getDate("created"));
+
+				coeficiente.setCreated(created);
+				coeficiente.setBanco(banco);
+				coeficiente.setEmpresa(empresa);
+				coeficiente.setOrganizacao(organizacao);
+				coeficiente.setTabela(tabela);
+
+				coeficientes.add(coeficiente);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsCoeficiente, stmt, conn);
+		return coeficientes;
+
+	}
 
 	public Collection<Coeficiente> buscaCoeficientesByBancoProduto(Long banco_id,Long produto_id) {
 		

@@ -84,6 +84,47 @@
 
 	<div class="container-fluid">
 		<div class="row-fluid">
+				
+			
+			<div class="span4">
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-tag"></i>
+						</span>
+						<h5>Coeficientes</h5>
+					</div>
+					<div class="widget-content">
+
+							<h3>Coeficientes</h3>
+							<table class="table table-bordered table-striped">
+							<thead>
+							  <tr>
+								<th>Data</th>
+								<th>Banco</th>
+								<th>Tabela</th>
+								<th>Valor</th>
+								<th>Meta</th>
+							  </tr>
+							</thead>
+							<tbody>
+								<c:forEach var="coeficiente" items="${coeficientes }">
+									<tr>
+										<td><fmt:formatDate value="${coeficiente.created.time}" pattern="dd/MM/yyyy" /></td>
+										<td>${coeficiente.banco.nome }</td>
+										<td>${coeficiente.tabela.nome }</td>
+										<td><fmt:formatNumber value="${coeficiente.valor}" pattern="0.00000" /></td>
+										<td><fmt:formatNumber value="${coeficiente.percentualMeta}" pattern="0%" /></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						  </table>
+
+					</div>
+				</div>
+			</div>	
+
 			<div class="span3">
 
 				<div class="widget-box">
@@ -99,127 +140,41 @@
 							<table class="table table-bordered table-striped">
 							<thead>
 							  <tr>
-								<th>Name</th>
-								<th>Example</th>
+								<th>Status</th>
+								<th>Quantidade</th>
 							  </tr>
 							</thead>
 							<tbody>
-							  <tr>
-								<td>
-								  Aguardando Status
-								</td>
-								<td>
-								  <span class="badge">1</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Qualidade e Pós Venda
-								</td>
-								<td>
-								  <span class="badge badge-success">2</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Em Assinatura
-								</td>
-								<td>
-								  <span class="badge badge-warning">4</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Em Conferência
-								</td>
-								<td>
-								  <span class="badge badge-important">6</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Em Análise
-								</td>
-								<td>
-								  <span class="badge badge-info">8</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Pendentes
-								</td>
-								<td>
-								  <span class="badge badge-inverse">10</span>
-								</td>
-							  </tr>
+								<c:forEach items="#{mapEtapas }" var="map">
+									<tr>
+										<td>
+										<form id="buscaStatusForm" action="<c:url value="/menu/busca/status"/>" method="POST">
+											<input type="hidden" name="status" value='${map.key }' />
+											<a href="#" onclick="submit();">${map.key }</a>
+										</form>
+										</td>
+										<c:choose>
+											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-success">${map.value }</span></td></c:when>
+											<c:when test="${map.key == 'Aguardando Status' }"><td><span class="badge">${map.value }</span></td></c:when>
+											<c:when test="${map.key == 'Pendente Administrativo' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
+											<c:when test="${map.key == 'Pendente Agendamento' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
+											<c:when test="${map.key == 'Pendente Banco' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
+											<c:when test="${map.key == 'Pendente Coeficiente' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
+											<c:when test="${map.key == 'Pendente Conferência' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
+											<c:when test="${map.key == 'Recalcular' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
+											<c:otherwise><td><span class="badge badge-info">${map.value }</span></td></c:otherwise>
+										</c:choose>
+									</tr>
+								
+								</c:forEach>
 							</tbody>
 						  </table>
 
 					</div>
 				</div>
-			
 			</div>
-			<div class="span3">
-			
-				<div class="widget-box">
-					<div class="widget-title">
-						<span class="icon">
-							<i class="icon-tag"></i>
-						</span>
-						<h5>Produtos</h5>
-					</div>
-					<div class="widget-content">
 
-							<h3>Produtos</h3>
-							<table class="table table-bordered table-striped">
-							<thead>
-							  <tr>
-								<th>Name</th>
-								<th>Example</th>
-							  </tr>
-							</thead>
-							<tbody>
-							  <tr>
-								<td>
-								  Margem Limpa
-								</td>
-								<td>
-								  <span class="badge">1</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Recompra Inss
-								</td>
-								<td>
-								  <span class="badge badge-success">2</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Recompra RMC
-								</td>
-								<td>
-								  <span class="badge badge-warning">4</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Refinanciamento
-								</td>
-								<td>
-								  <span class="badge badge-important">6</span>
-								</td>
-							  </tr>
-							</tbody>
-						  </table>
-
-					</div>
-				</div>
-
-			</div>
-			
-			<div class="span3">
+			<div class="span4">
 			
 				<div class="widget-box">
 					<div class="widget-title">
@@ -229,36 +184,13 @@
 						<h5>Controles</h5>
 					</div>
 					<div class="widget-content">
-
-							<h3>Controles</h3>
-							<table class="table table-bordered table-striped">
-							<thead>
-							  <tr>
-								<th>Tipo</th>
-								<th>Busca</th>
-							  </tr>
-							</thead>
-							<tbody>
-							  <tr>
-								<td>
-								 Boleto
-								</td>
-								<td>
-								  <span class="badge"><a href="/sgo/menu/contratos/boletos">1</a></span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  Averbação
-								</td>
-								<td>
-								  <span class="badge"><a href="/sgo/menu/contratos/averbacao">1</a></span>
-								</td>
-							  </tr>
-
-							</tbody>
-						  </table>
-
+						<div class="row-fluid">
+						<div class="span8">
+							<ul class="site-stats">
+								<li><i class="icon-arrow-right"></i><a href="/sgo/menu/contratos/boletos"><small>Boletos</small></a> </li>
+								<li><i class="icon-arrow-right"></i><a href="/sgo/menu/contratos/averbacao"><small>Averbação</small></a>  </li>
+							</ul>
+						</div>
 					</div>
 				</div>
 
@@ -266,5 +198,5 @@
 
 		</div>
 	</div>
-
+</div>
 <%@ include file="/footer.jspf"%>
