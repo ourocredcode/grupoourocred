@@ -35,7 +35,7 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 							 ", WORKFLOWETAPAPERFILACESSO.empresa_id, EMPRESA.nome as empresa_nome, WORKFLOWETAPAPERFILACESSO.organizacao_id "+
 							 ", ORGANIZACAO.nome as organizacao_nome, WORKFLOW.workflow_id, WORKFLOW.nome as workflow_nome "+
 							 ", WORKFLOWETAPAPERFILACESSO.etapa_id, ETAPA.nome as etapa_nome "+
-							 ", WORKFLOWETAPAPERFILACESSO.perfil_id, PERFIL.nome as perfil_nome "+
+							 ", WORKFLOWETAPAPERFILACESSO.perfil_id, PERFIL.nome as perfil_nome, WORKFLOWETAPAPERFILACESSO.isactive "+
 							 " FROM ((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
 							 " INNER JOIN WORKFLOWETAPAPERFILACESSO (NOLOCK) ON EMPRESA.empresa_id = WORKFLOWETAPAPERFILACESSO.empresa_id) ON ORGANIZACAO.organizacao_id = WORKFLOWETAPAPERFILACESSO.organizacao_id) "+   
 							 " INNER JOIN WORKFLOW (NOLOCK) ON WORKFLOW.workflow_id = WORKFLOWETAPAPERFILACESSO.workflow_id "+
