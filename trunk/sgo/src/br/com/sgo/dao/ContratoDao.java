@@ -145,9 +145,11 @@ public class ContratoDao extends Dao<Contrato> {
 		return contratos;
 	}
 	
-	public Collection<Contrato> buscaContratoByEmpresaOrganizacaoUsuarioStatus(Long empresa_id, Long organizacao_id, Long usuario_id , String status) {
+	public Collection<Contrato> buscaContratoByEmpresaOrganizacaoUsuarioStatus(Long empresa_id, Long organizacao_id, Collection<Usuario> consultores , String status) {
 
 		String sql = sqlContrato;
+		String clause = "";
+		int x = 0;
 
 		if(empresa_id != null)
 			sql += " WHERE EMPRESA.empresa_id = ? ";
@@ -155,8 +157,22 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " AND ORGANIZACAO.organizacao_id = ? ";
 		if(!status.equals(""))
 			sql += " AND ETAPA.nome like ? ";
-		if(usuario_id != null)
-			sql += " AND ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+
+		sql += " AND ( 1=1 ";
+
+		for(Usuario u : consultores){
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(u != null) {
+				sql += clause + " ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+				x++;
+				clause = "";
+			}
+				
+
+		}
+		
+		sql += " ) ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -165,13 +181,32 @@ public class ContratoDao extends Dao<Contrato> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3, status);
+			int curr = 1;
 
-			if(usuario_id != null){
-				this.stmt.setLong(4, usuario_id);
-				this.stmt.setLong(5, usuario_id);
+			if(empresa_id != null){
+				this.stmt.setLong(curr, empresa_id);
+				curr++;
+			}
+
+			if(organizacao_id != null){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+			
+			if(!status.equals("")){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+
+			for(Usuario u : consultores){
+
+				if(u != null) {
+					this.stmt.setLong(curr,u.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr,u.getUsuario_id());
+					curr++;
+				}
+
 			}
 
 			this.rsContrato = this.stmt.executeQuery();

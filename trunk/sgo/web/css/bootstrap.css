@@ -1051,6 +1051,8 @@ legend small {
   color: #999999;
 }
 
+ /* BUTTON SIZE */
+
 label,
 input,
 button,
@@ -1058,9 +1060,10 @@ select,
 textarea {
   font-size: 12px;
   font-weight: normal;
-  line-height: 16px; 
-  <!-- BUTTON SIZE --!>
+  line-height: 16px;  
 }
+
+ /* BUTTON SIZE */
 
 input,
 button,

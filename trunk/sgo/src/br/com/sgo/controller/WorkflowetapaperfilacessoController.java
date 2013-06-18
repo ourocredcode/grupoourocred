@@ -58,6 +58,9 @@ public class WorkflowetapaperfilacessoController {
 			if (this.workflowEtapaPerfilAcessoDao.buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()
 					,workflowEtapaPerfilAcesso.getWorkflow().getWorkflow_id(), workflowEtapaPerfilAcesso.getEtapa().getEtapa_id(), workflowEtapaPerfilAcesso.getPerfil().getPerfil_id()) == null) {			
 
+				workflowEtapaPerfilAcesso.setEmpresa(empresa);
+				workflowEtapaPerfilAcesso.setOrganizacao(organizacao);
+
 				workflowEtapaPerfilAcesso.setCreated(dataAtual);
 				workflowEtapaPerfilAcesso.setUpdated(dataAtual);
 
@@ -65,7 +68,7 @@ public class WorkflowetapaperfilacessoController {
 				workflowEtapaPerfilAcesso.setUpdatedBy(usuario);
 
 				workflowEtapaPerfilAcesso.setIsActive(workflowEtapaPerfilAcesso.getIsActive() == null || workflowEtapaPerfilAcesso.getIsActive() == false ? false : true);
-				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null || workflowEtapaPerfilAcesso.getIsUpload() == false ? false : true);
+				workflowEtapaPerfilAcesso.setIsLeituraEscrita(workflowEtapaPerfilAcesso.getIsLeituraEscrita() == null || workflowEtapaPerfilAcesso.getIsLeituraEscrita() == false ? false : true);
 				workflowEtapaPerfilAcesso.setIsUpload(workflowEtapaPerfilAcesso.getIsUpload() == null || workflowEtapaPerfilAcesso.getIsUpload() == false ? false : true);
 
 				this.workflowEtapaPerfilAcessoDao.insert(workflowEtapaPerfilAcesso);

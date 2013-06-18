@@ -30,7 +30,6 @@ import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
@@ -536,28 +535,14 @@ public class MenuController {
 
 		contador();
 	}
-	
-	@Post
-	@Path("/menu/busca/status")
-	public void busca(String status) {
-
-		contratos.clear();
-		
-		contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacaoUsuarioStatus(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),usuario.getUsuario_id(),status));
-		
-		contador();
-
-	}
 
 	@Get
-	@Public
 	@Path("/menu/cadastro")
 	public void cadastro() {
 
 	}
 
 	@Post
-	@Public
 	@Path("/menu/salva")
 	public void salva(Menu menu){
 
@@ -597,8 +582,8 @@ public class MenuController {
 
 	}
 
-	@Get @Path("/menu/busca.json")
-	@Public
+	@Get 
+	@Path("/menu/busca.json")
 	public void menus(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(menuDao.buscaMenus(empresa_id, organizacao_id, nome)).serialize();
 	}

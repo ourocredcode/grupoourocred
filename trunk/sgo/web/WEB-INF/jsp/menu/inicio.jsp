@@ -148,10 +148,7 @@
 								<c:forEach items="#{mapEtapas }" var="map">
 									<tr>
 										<td>
-										<form id="buscaStatusForm" action="<c:url value="/menu/busca/status"/>" method="POST">
-											<input type="hidden" name="status" value='${map.key }' />
-											<a href="#" onclick="submit();">${map.key }</a>
-										</form>
+											${map.key }
 										</td>
 										<c:choose>
 											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-success">${map.value }</span></td></c:when>

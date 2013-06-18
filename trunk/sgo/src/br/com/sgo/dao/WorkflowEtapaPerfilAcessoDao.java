@@ -12,7 +12,6 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
-import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Organizacao;
@@ -28,8 +27,6 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsWorkflowEtapaPerfilAcesso;
-	
-	private UsuarioInfo usuarioInfo;
 
 	private final String sqlWorkflowEtapaPerfilAcesso = "SELECT WORKFLOWETAPAPERFILACESSO.etapa_id, WORKFLOWETAPAPERFILACESSO.isleituraescrita, WORKFLOWETAPAPERFILACESSO.isactive "+
 							 ", WORKFLOWETAPAPERFILACESSO.empresa_id, EMPRESA.nome as empresa_nome, WORKFLOWETAPAPERFILACESSO.organizacao_id "+
@@ -42,11 +39,10 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 							 " INNER JOIN ETAPA (NOLOCK) ON WORKFLOWETAPAPERFILACESSO.etapa_id = ETAPA.etapa_id) "+
 							 " INNER JOIN PERFIL (NOLOCK) ON WORKFLOWETAPAPERFILACESSO.perfil_id = PERFIL.perfil_id ";
 
-	public WorkflowEtapaPerfilAcessoDao(Session session, ConnJDBC conexao, UsuarioInfo usuarioInfo) {
+	public WorkflowEtapaPerfilAcessoDao(Session session, ConnJDBC conexao) {
 
 		super(session, WorkflowEtapaPerfilAcesso.class);
 		this.conexao = conexao;
-		this.usuarioInfo = usuarioInfo;
 
 	}
 
@@ -180,8 +176,8 @@ public WorkflowEtapaPerfilAcesso buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganiz
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1, usuarioInfo.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(2, usuarioInfo.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(1, workflowEtapaPerfilAcesso.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(2, workflowEtapaPerfilAcesso.getOrganizacao().getOrganizacao_id());
 			this.stmt.setLong(3, workflowEtapaPerfilAcesso.getWorkflow().getWorkflow_id());
 			this.stmt.setLong(4, workflowEtapaPerfilAcesso.getEtapa().getEtapa_id());
 			this.stmt.setLong(5, workflowEtapaPerfilAcesso.getPerfil().getPerfil_id());

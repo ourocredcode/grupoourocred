@@ -56,15 +56,18 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			", HISCONBENEFICIO.workflow_id, PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.cpf " +    
 			", PARCEIRONEGOCIO.nome as parceironegocio_nome, ETAPA.etapa_id, ETAPA.nome AS etapa_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " +     
 			", HISCONBENEFICIO.dataadm, HISCONBENEFICIO.dataenvio, HISCONBENEFICIO.caminhoarquivo " +    
-			", HISCONBENEFICIO.isworkflow, HISCONBENEFICIO.isenviado, HISCONBENEFICIO.isimportado, HISCONBENEFICIO.ispadrao " +    
-			"FROM (((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) " +   
+			", HISCONBENEFICIO.isworkflow, HISCONBENEFICIO.isenviado, HISCONBENEFICIO.isimportado, HISCONBENEFICIO.ispadrao" +
+			", POSICAO.etapa_id as posicaoEtapa_id , POSICAO.nome as posicao_nome   " +    
+			"FROM (((PERFIL (NOLOCK) INNER JOIN (((((HISCONBENEFICIO (NOLOCK) " +   
 			"INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) " +    
 			"INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " +       
-			"INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id) " +   
+			"INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id)" +
+			"INNER JOIN USUARIO as SUPER (NOLOCK) ON USUARIO.supervisor_usuario_id = SUPER.usuario_id)  " +   
 			"INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = USUARIOPERFIL.perfil_id) AND (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id)) " +     
 			"INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) " +    
 			"INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +    
-			"INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id) ";  
+			"INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id) " +
+			"LEFT JOIN ETAPA AS POSICAO (NOLOCK) ON (HISCONBENEFICIO.etapaposicao_id = POSICAO.etapa_id) ";  
 
 	private String sqlCountHiscons = "SELECT COUNT(HISCONBENEFICIO.parceirobeneficio_id) AS quantidade_beneficio , PARCEIROBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.numerobeneficio, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id "+
 			" FROM ((PERFIL (NOLOCK) INNER JOIN ((((HISCONBENEFICIO (NOLOCK) "+
@@ -331,6 +334,152 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 		return hisconsBeneficio;
 	}
+	
+	public Collection<HisconBeneficio> buscaHisconsByFiltro(Empresa empresa, Organizacao organizacao,Collection<Usuario> consultores, Collection<String> status, 
+			Collection<String> posicoes, String cliente,String documento,Calendar calendarInicio,Calendar calendarFim) {
+
+		String sql = sqlHisconsExibe;
+		String clause = "";
+		int x = 0;
+
+		if (empresa != null)
+			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
+
+		if (organizacao != null)
+			sql += " AND HISCONBENEFICIO.organizacao_id = ? ";
+		
+		if(!cliente.equals(""))
+			sql += " AND PARCEIRONEGOCIO.nome like ? ";
+
+		if(!documento.equals(""))
+			sql += " AND ( PARCEIRONEGOCIO.cpf like ? OR PARCEIROBENEFICIO.numerobeneficio like ? ) ";
+		
+		sql += " AND ( 1=1 ";
+
+		for(String statusAux1 : status){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!statusAux1.equals("")){
+				sql += clause + " ( ETAPA.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(String posicoesAux1 : posicoes){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!posicoesAux1.equals("")){
+				sql += clause + " ( POSICAO.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(Usuario u : consultores){
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(u != null) {
+				sql += clause + " ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+		
+		sql += " ) ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<HisconBeneficio> hisconsBeneficio = new ArrayList<HisconBeneficio>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			System.out.println(sql);
+
+			int curr = 1;
+
+			if(empresa != null){
+				this.stmt.setLong(curr, empresa.getEmpresa_id());
+				curr++;
+			}
+
+			if(organizacao != null){
+				this.stmt.setLong(curr, organizacao.getOrganizacao_id());
+				curr++;
+			}
+			
+			if(!cliente.equals("")){
+				this.stmt.setString(curr, '%' + cliente + '%');
+				curr++;
+			}
+			
+			if(!documento.equals("")){
+				this.stmt.setString(curr, '%' + documento + '%');
+				curr++;
+				this.stmt.setString(curr, '%' + documento + '%');
+				curr++;
+			}
+			
+			for(String statusAux2 : status){
+
+				if(!statusAux2.equals("")) {
+					this.stmt.setString(curr, '%' + statusAux2 + '%');
+					curr++;
+				}
+
+			}
+
+			for(Usuario u : consultores){
+
+				if(u != null) {
+					this.stmt.setLong(curr,u.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr,u.getUsuario_id());
+					curr++;
+				}
+
+			}
+
+			this.rsHisconBeneficio = this.stmt.executeQuery();
+
+			while (rsHisconBeneficio.next()) {
+
+				getHisconsBeneficio(hisconsBeneficio);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rsHisconBeneficio != null || stmt != null || conn != null) {
+					this.conexao.closeConnection(rsHisconBeneficio, stmt, conn);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return hisconsBeneficio;
+
+	}
 
 	public Integer buscaCountHisconsBeneficios(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id) {
 
@@ -340,8 +489,9 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
 
 		if (organizacao_id != null)
-			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.created BETWEEN getDate() -20 and getDate() "+
-					" AND HISCONBENEFICIO.parceirobeneficio_id = ? GROUP BY PARCEIROBENEFICIO.numerobeneficio, PARCEIROBENEFICIO.parceirobeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id ";
+			sql += "  AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.created BETWEEN getDate() -20 and getDate() " +
+					" AND HISCONBENEFICIO.parceirobeneficio_id = ? GROUP BY PARCEIROBENEFICIO.numerobeneficio, PARCEIROBENEFICIO.parceirobeneficio_id, " +
+					" HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id ";
 
 		this.conn = this.conexao.getConexao();
 

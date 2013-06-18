@@ -8,7 +8,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.WorkflowEtapaDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
@@ -39,7 +38,6 @@ public class WorkflowetapaController {
 	}
 
 	@Get
-	@Public
 	@Path("/workflowetapa/cadastro")
 	public void cadastro() {
 
@@ -50,7 +48,6 @@ public class WorkflowetapaController {
 	}
 
 	@Post
-	@Public
 	@Path("/workflowetapa/salva")
 	public void salva(WorkflowEtapa workflowEtapa) {
 
@@ -94,14 +91,12 @@ public class WorkflowetapaController {
 	
 	@Get
 	@Path("/workflowetapa/busca.json")
-	@Public
 	public void workflowEtapa(Long empresa_id, Long organizacao_id, String nome) {	
 		result.include("workflowEtapas", this.workflowEtapaDao.buscaAllWorkflowEtapaByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));	
 	}
 
 	@Post
 	@Path("/workflowetapa/lista")
-	@Public
 	public void lista(Long empresa_id, Long organizacao_id) {
 
 		result.include("workflowEtapas", this.workflowEtapaDao.buscaAllWorkflowEtapaByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
