@@ -271,13 +271,15 @@ public class HisconbeneficioController {
 	}
 
 	@Get
-	@Path("/hisconbeneficio/consulta")
-	public void consulta() {
+	public void msg() {
 
 	}
-
+	
 	@Get
-	public void msg() {
+	@Path("/menu/hiscons/{tipo}")
+	public void hiscons(String tipo) {
+
+		System.out.println("busca hiscons " + tipo);
 
 	}
 
