@@ -17,16 +17,16 @@ import br.com.sgo.modelo.Funcao;
 @Component
 public class FuncaoDao extends Dao<Funcao> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsFuncoes;
 
 	public FuncaoDao(Session session, ConnJDBC conexao) {
+
 		super(session, Funcao.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public Collection<Funcao> buscaFuncoes(Long empresa_id, Long organizacao_id) {

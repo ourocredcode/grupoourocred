@@ -17,16 +17,16 @@ import br.com.sgo.modelo.FormulariosJanela;
 @Component
 public class FormulariosJanelaDao extends Dao<FormulariosJanela> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsFormulariosJanela;
 
 	public FormulariosJanelaDao(Session session, ConnJDBC conexao) {
+
 		super(session, FormulariosJanela.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public Collection<FormulariosJanela> buscaFomulariosJanela(Long empresa_id,

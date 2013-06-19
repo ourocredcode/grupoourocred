@@ -15,16 +15,16 @@ import br.com.sgo.modelo.TipoLocalidade;
 @Component
 public class TipoLocalidadeDao extends Dao<TipoLocalidade> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsTiposLocalidade;
 
 	public TipoLocalidadeDao(Session session, ConnJDBC conexao) {
+
 		super(session, TipoLocalidade.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public TipoLocalidade buscaPorNome(String nome) {

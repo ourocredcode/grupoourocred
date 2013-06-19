@@ -17,16 +17,16 @@ import br.com.sgo.modelo.Empresa;
 @Component
 public class EmpresaDao extends Dao<Empresa> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsEmpresas;
 
 	public EmpresaDao(Session session, ConnJDBC conexao) {
+
 		super(session, Empresa.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public Collection<Empresa> buscaEmpresas(String nome) {

@@ -17,16 +17,16 @@ import br.com.sgo.modelo.TabelaBd;
 @Component
 public class TabelaBdDao extends Dao<TabelaBd> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsTabelas;
 
 	public TabelaBdDao(Session session, ConnJDBC conexao) {
+
 		super(session, TabelaBd.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public Collection<TabelaBd> buscaTabelas(Long empresa_id,

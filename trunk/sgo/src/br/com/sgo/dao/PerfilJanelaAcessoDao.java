@@ -14,7 +14,6 @@ import br.com.sgo.modelo.PerfilJanelaAcesso;
 @Component
 public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -22,7 +21,6 @@ public class PerfilJanelaAcessoDao extends Dao<PerfilJanelaAcesso> {
 	public PerfilJanelaAcessoDao(Session session, ConnJDBC conexao) {
 
 		super(session, PerfilJanelaAcesso.class);
-		this.session = session;
 		this.conexao = conexao;
 
 	}
