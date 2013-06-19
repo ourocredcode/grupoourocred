@@ -31,7 +31,7 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 										", BANCOPRODUTOTABELA.organizacao_id, BANCOPRODUTOTABELA.banco_id, BANCOPRODUTOTABELA.prazo " +
 										", BANCOPRODUTOTABELA.produto_id, BANCOPRODUTOTABELA.tabela_id FROM BANCOPRODUTOTABELA ";
 
-	private final String sqlBancoProdutoTabelas = "SELECT BANCOPRODUTOTABELA.empresa_id, EMPRESA.nome as empresa_nome, BANCOPRODUTOTABELA.organizacao_id "+
+	private final String sqlBancoProdutoTabelas = "SELECT BANCOPRODUTOTABELA.bancoprodutotabela_id, BANCOPRODUTOTABELA.empresa_id, EMPRESA.nome as empresa_nome, BANCOPRODUTOTABELA.organizacao_id "+
 									", ORGANIZACAO.nome as organizacao_nome, BANCOPRODUTOTABELA.banco_id, BANCO.nome as banco_nome "+
 									", BANCOPRODUTOTABELA.produto_id, PRODUTO.nome as produto_nome, BANCOPRODUTOTABELA.tabela_id, TABELA.nome as tabela_nome " +
 									", BANCOPRODUTOTABELA.prazo, BANCOPRODUTOTABELA.isactive "+
@@ -217,6 +217,7 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 		bancoProdutoTabela.setBanco(banco);
 		bancoProdutoTabela.setProduto(produto);
 		bancoProdutoTabela.setTabela(tabela);
+		bancoProdutoTabela.setBancoProdutoTabela_id(rsBancoProdutoTabela.getLong("bancoprodutotabela_id"));
 		bancoProdutoTabela.setPrazo(rsBancoProdutoTabela.getInt("prazo"));
 		bancoProdutoTabela.setIsActive(rsBancoProdutoTabela.getBoolean("isactive"));
 

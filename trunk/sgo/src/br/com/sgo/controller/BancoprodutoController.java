@@ -111,10 +111,14 @@ public class BancoprodutoController {
 
 		this.bancoProduto.setUpdated(dataAtual);
 		this.bancoProduto.setUpdatedBy(usuario);
-
-		this.bancoProduto.setIsActive(bancoProduto.getIsActive() == null || bancoProduto.getIsActive() == false ? false : true);
-		this.bancoProduto.setIsWorkflow(bancoProduto.getIsWorkflow() == null || bancoProduto.getIsWorkflow() == false ? false : true);
 		
+		if(bancoProduto.getIsActive() != null){
+			this.bancoProduto.setIsActive(bancoProduto.getIsActive() == false ? false : true);
+		}
+		if(bancoProduto.getIsWorkflow() != null){
+			this.bancoProduto.setIsWorkflow(bancoProduto.getIsWorkflow() == false ? false : true);
+		}
+
 		bancoProdutoDao.beginTransaction();		
 		bancoProdutoDao.atualiza(this.bancoProduto);
 		bancoProdutoDao.commit();

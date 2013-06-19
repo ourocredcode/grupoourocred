@@ -25,13 +25,14 @@ public class BancoprodutotabelaController {
 	private final ProdutoDao produtoDao;
 
 	private final UsuarioInfo usuarioInfo;
+	private BancoProdutoTabela bancoProdutoTabela;
 	private Empresa empresa;	
 	private Organizacao organizacao;
 	private Usuario usuario;	
 	private Calendar dataAtual = Calendar.getInstance();
 
 	public BancoprodutotabelaController(Result result,UsuarioInfo usuarioInfo, Empresa empresa,Organizacao organizacao, Usuario usuario
-			, BancoDao bancoDao, ProdutoDao produtoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao){
+			, BancoDao bancoDao, ProdutoDao produtoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao, BancoProdutoTabela bancoProdutoTabela){
 
 		this.result = result;
 		this.bancoProdutoTabelaDao = bancoProdutoTabelaDao;
@@ -41,6 +42,7 @@ public class BancoprodutotabelaController {
 		this.empresa = this.usuarioInfo.getEmpresa();
 		this.organizacao = this.usuarioInfo.getOrganizacao();
 		this.usuario = this.usuarioInfo.getUsuario();
+		this.bancoProdutoTabela = bancoProdutoTabela;
 
 	}	
 
@@ -97,6 +99,30 @@ public class BancoprodutotabelaController {
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
+	}
+	
+	@Post
+	@Path("/bancoprodutotabela/altera")
+	public void altera(BancoProdutoTabela bancoProdutoTabela) {
+
+		String mensagem = "";
+
+		this.bancoProdutoTabela = this.bancoProdutoTabelaDao.load(bancoProdutoTabela.getBancoProdutoTabela_id());
+
+		this.bancoProdutoTabela.setUpdated(dataAtual);
+		this.bancoProdutoTabela.setUpdatedBy(usuario);
+
+		this.bancoProdutoTabela.setIsActive(bancoProdutoTabela.getIsActive() == null || bancoProdutoTabela.getIsActive() == false ? false : true);
+
+		bancoProdutoTabelaDao.beginTransaction();		
+		bancoProdutoTabelaDao.atualiza(this.bancoProdutoTabela);
+		bancoProdutoTabelaDao.commit();
+
+		mensagem = "Banco Produto Tabela adicionado com sucesso.";
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+
 	}
 
 	@Post
