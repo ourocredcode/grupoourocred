@@ -15,16 +15,16 @@ import br.com.sgo.modelo.ColunaBd;
 @Component
 public class ColunaBdDao extends Dao<ColunaBd> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsColunasBd;
 
 	public ColunaBdDao(Session session, ConnJDBC conexao) {
+
 		super(session, ColunaBd.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public ColunaBd buscaColunasBd(Long empresa_id, Long organizacao_id,

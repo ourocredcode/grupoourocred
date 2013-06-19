@@ -19,16 +19,16 @@ import br.com.sgo.modelo.TipoDadoBd;
 @Component
 public class TipoDadoBdDao extends Dao<TipoDadoBd> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsTiposDado;
 
 	public TipoDadoBdDao(Session session, ConnJDBC conexao) {
+
 		super(session, TipoDadoBd.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public Collection<TipoDadoBd> buscaTiposDado(String nome) {

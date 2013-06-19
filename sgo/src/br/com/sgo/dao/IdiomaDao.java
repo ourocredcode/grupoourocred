@@ -17,16 +17,16 @@ import br.com.sgo.modelo.Idioma;
 @Component
 public class IdiomaDao extends Dao<Idioma> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsIdioma;
 
 	public IdiomaDao(Session session, ConnJDBC conexao) {
+
 		super(session, Idioma.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public Collection<Idioma> buscaIdiomas(Long empresa_id,

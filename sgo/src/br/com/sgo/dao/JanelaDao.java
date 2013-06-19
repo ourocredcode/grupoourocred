@@ -17,16 +17,16 @@ import br.com.sgo.modelo.Janela;
 @Component
 public class JanelaDao extends Dao<Janela> {
 
-	private Session session;
 	private ConnJDBC conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsJanelas;
 
 	public JanelaDao(Session session, ConnJDBC conexao) {
+
 		super(session, Janela.class);
-		this.session = session;
 		this.conexao = conexao;
+
 	}
 
 	public Collection<Janela> buscaTabelas(Long empresa_id,
