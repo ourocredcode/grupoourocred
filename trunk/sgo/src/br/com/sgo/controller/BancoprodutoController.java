@@ -8,13 +8,13 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
-import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.dao.BancoProdutoDao;
+import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.BancoProduto;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Usuario;
-import br.com.sgo.modelo.BancoProduto;
 
 @Resource
 public class BancoprodutoController {
@@ -25,12 +25,13 @@ public class BancoprodutoController {
 	private final WorkflowDao workflowDao;
 	private final BancoDao bancoDao;
 
+	private BancoProduto bancoProduto;
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public BancoprodutoController(Result result, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, BancoProdutoDao bancoProdutoDao, BancoDao bancoDao) {
+	public BancoprodutoController(Result result, BancoProduto bancoProduto, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, BancoProdutoDao bancoProdutoDao, BancoDao bancoDao) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -40,6 +41,7 @@ public class BancoprodutoController {
 		this.empresa = this.usuarioInfo.getEmpresa();
 		this.organizacao = this.usuarioInfo.getOrganizacao();
 		this.usuario = this.usuarioInfo.getUsuario();
+		this.bancoProduto = bancoProduto;
 
 	}
 
@@ -98,12 +100,37 @@ public class BancoprodutoController {
 		result.redirectTo(this).cadastro();
 
 	}
+	
+	@Post
+	@Path("/bancoproduto/altera")
+	public void altera(BancoProduto bancoProduto) {
+
+		String mensagem = "";
+
+		this.bancoProduto = this.bancoProdutoDao.load(bancoProduto.getBancoProduto_id());
+
+		this.bancoProduto.setUpdated(dataAtual);
+		this.bancoProduto.setUpdatedBy(usuario);
+
+		this.bancoProduto.setIsActive(bancoProduto.getIsActive() == null || bancoProduto.getIsActive() == false ? false : true);
+		this.bancoProduto.setIsWorkflow(bancoProduto.getIsWorkflow() == null || bancoProduto.getIsWorkflow() == false ? false : true);
+		
+		bancoProdutoDao.beginTransaction();		
+		bancoProdutoDao.atualiza(this.bancoProduto);
+		bancoProdutoDao.commit();
+
+		mensagem = " Banco Produto alterado com sucesso.";
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+
+	}
 
 	@Post
 	@Path("/bancoproduto/lista")
 	public void lista(Long empresa_id, Long organizacao_id) {
 
-		result.include("workflowsProdutoBanco", this.bancoProdutoDao.buscaAllBancoProdutoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("bancoProdutos", this.bancoProdutoDao.buscaAllBancoProdutoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 

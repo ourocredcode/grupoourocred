@@ -7,74 +7,29 @@ jQuery(function($){
 		window.location.href = '<c:url value="/classificacaoparceiro/cadastro" />';
 	});
 
-	$('#classificacaoParceiroEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
 
-           		  if (!data || data.length == 0) {
-           	            $('#classificacaoParceiroEmpresa').val('');
-						$('#classificacaoParceiroEmpresaId').val('');
-           	        }
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#classificacaoParceiroEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
+	$('select').select2();
 
-        	 $('#classificacaoParceiroEmpresa').val(ui.item.label);
-             $('#classificacaoParceiroEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#classificacaoParceiroOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#classificacaoParceiroEmpresaId').val() == '' ? '0' :  $('#classificacaoParceiroEmpresaId').val(), org_nome : $('#classificacaoParceiroOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#classificacaoParceiroOrganizacao').val('');
-         	            $('#classificacaoParceiroOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#classificacaoParceiroOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#classificacaoParceiroOrganizacao').val(ui.item.label);
-             $('#classificacaoParceiroOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
 
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/classificacaoparceiro/cadastro" />';
@@ -145,46 +100,80 @@ function limpaForm() {
 
 				<div class="tab-pane fade active in" id="classificacaoparceiro-div">			
 
-						<form id="classificacaoParceiroForm" name="classificacaoParceiroForm" action="<c:url value="/classificacaoparceiro/salva"/>" method="POST">							
+					<form id="classificacaoParceiroForm" name="classificacaoParceiroForm" action="<c:url value="/classificacaoparceiro/salva"/>" method="POST">							
 
-							<div class="row-fluid">
-								<div class="span2">
-									<label for="classificacaoParceiroEmpresa">Empresa</label>								
-		      						<input class="span12" id="classificacaoParceiroEmpresa" name="classificacaoParceiro.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" required onChange="limpaForm();">
-		      						<input class="span1" id="classificacaoParceiroEmpresaId" name="classificacaoParceiro.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" >
-		    					</div>							
-								<div class="span2">
-									<label for="classificacaoParceiroOrganizacao">Organização</label>
-		      						<input class="span12" id="classificacaoParceiroOrganizacao" name="classificacaoParceiro.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" required onChange="limpaForm();">
-		      						<input class="span1" id="classificacaoParceiroOrganizacaoId" name="classificacaoParceiro.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }" >
-		    					</div>
-								<div class="span2">
-									<label for="classificacaoParceiroNome">Nome</label>
-									<input class="span12" type="text" id="classificacaoParceiroNome" name="classificacaoParceiro.nome" placeholder="Nome" value="${classificacaoParceiro.nome }" required>								
-								</div>
-								<div class="span2">
-									<label for="classificacaoParceiroDescricao">Descrição</label>
-									<input class="span12" type="text" id="classificacaoParceiroDescricao" name="classificacaoParceiro.descricao" placeholder="Descrição" value="${classificacaoParceiro.descricao }" required>
-								</div>
-								<div class="span1">
-									<label for="classificacaoParceiroIsActive">Ativo</label>
-									<input type="checkbox" id="classificacaoParceiroIsActive" name="classificacaoParceiro.isActive" checked="checked" value="1" >							
-								</div>
+						<div class="row-fluid">
+							<div class="span3">
+								<label for="classificacaoParceiroEmpresa">Empresa</label>								
+	      						<input class="input-xlarge" id="classificacaoParceiroEmpresa" name="classificacaoParceiro.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" readonly="readonly">
+	      						<input class="span1" id="classificacaoParceiroEmpresaId" name="classificacaoParceiro.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" >
+	    					</div>							
+							<div class="span3">
+								<label for="classificacaoParceiroOrganizacao">Organização</label>
+	      						<input class="input-xlarge" id="classificacaoParceiroOrganizacao" name="classificacaoParceiro.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" readonly="readonly">
+	      						<input class="span1" id="classificacaoParceiroOrganizacaoId" name="classificacaoParceiro.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }" >
+	    					</div>
+							<div class="span3">
+								<label for="classificacaoParceiroNome">Nome</label>
+								<input class="input-xlarge" type="text" id="classificacaoParceiroNome" name="classificacaoParceiro.nome" placeholder="Nome" value="${classificacaoParceiro.nome }" required>								
 							</div>
-						 	<div class="btn-group">
-								<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+							<div class="span1">
+								<label for="classificacaoParceiroIsActive">Ativo</label>
+								<input type="checkbox" id="classificacaoParceiroIsActive" name="classificacaoParceiro.isActive" checked="checked" value="1" >							
 							</div>
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
-							</div>
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
-							</div>
-						</form>
-					</div>						
-				</div>				
-			</div>
+						</div>
+					 	<div class="btn-group">
+							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+						</div>
+					</form>
+				</div>						
+			</div>				
 		</div>
+	</div>
 </div>
 
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Categoria Parceiro</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty classificacoesParceiro}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>organização</th>
+									<th>Nome</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${classificacoesParceiro }" var="classificacaoParceiro">
+									<tr>
+										<td>${classificacaoParceiro.empresa.nome }</td>
+										<td>${classificacaoParceiro.organizacao.nome }</td>
+										<td>${classificacaoParceiro.nome }</td>
+										<td>${classificacaoParceiro.isActive}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <%@ include file="/footer.jspf"%>

@@ -7,74 +7,29 @@ jQuery(function($){
 		window.location.href = '<c:url value="/categoriaparceiro/cadastro" />';
 	});
 
-	$('#categoriaParceiroEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
 
-           		  if (!data || data.length == 0) {
-           	            $('#categoriaParceiroEmpresa').val('');
-						$('#categoriaParceiroEmpresaId').val('');
-           	        }
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#categoriaParceiroEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
+	$('select').select2();
 
-        	 $('#categoriaParceiroEmpresa').val(ui.item.label);
-             $('#categoriaParceiroEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#categoriaParceiroOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#categoriaParceiroEmpresaId').val() == '' ? '0' :  $('#categoriaParceiroEmpresaId').val(), org_nome : $('#categoriaParceiroOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#categoriaParceiroOrganizacao').val('');
-         	            $('#categoriaParceiroOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#categoriaParceiroOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#categoriaParceiroOrganizacao').val(ui.item.label);
-             $('#categoriaParceiroOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
 
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/categoriaparceiro/cadastro" />';
@@ -111,31 +66,31 @@ function limpaForm() {
 	</div>
 </div>
 
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
-		<a href="#" class="current">Categoria Parceiro</a>
-	</div>
-	
-	<c:if test="${not empty notice}">
-		<c:choose>
-			<c:when test="${fn:contains(notice,'Erro:')}">
-					<div class="alert alert-error">
-						<strong>${notice }</strong>
-						<a href="#" data-dismiss="alert" class="close">×</a>
-					</div>
-			</c:when>
-			<c:otherwise>
-					<div class="alert alert-success">
-						<strong>${notice }</strong>
-						<a href="#" data-dismiss="alert" class="close">×</a>
-					</div>
-			</c:otherwise>
-		</c:choose>
-	</c:if>
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Categoria Parceiro</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span12">		
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="categoriaparceiro-li"><a href="#categoriaparceiro-div" data-toggle="tab" id="categoriaparceiro-li-a">Categoria Parceiro</a></li>				
@@ -144,27 +99,22 @@ function limpaForm() {
 			<div id="myTabContent" class="tab-content">
 
 				<div class="tab-pane fade active in" id="categoriaparceiro-div">
-
 					<form id="categoriaParceiroForm" name="categoriaParceiroForm" action="<c:url value="/categoriaparceiro/salva"/>" method="POST">
 						
 						<div class="row-fluid">
-							<div class="span2">
+							<div class="span3">
 								<label for="categoriaParceiroEmpresa">Empresa</label>
-								<input class="span10" id="categoriaParceiroEmpresa" name="categoriaParceiro.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" required onChange="limpaForm();" readonly="readonly">
+								<input class="input-xlarge" id="categoriaParceiroEmpresa" name="categoriaParceiro.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" readonly="readonly">
 	      						<input class="span1" id="categoriaParceiroEmpresaId" name="categoriaParceiro.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }">
     						</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="categoriaParceiroOrganizacao">Organização</label>
-								<input class="span10" id="categoriaParceiroOrganizacao" name="categoriaParceiro.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" required onChange="limpaForm();" readonly="readonly">
+								<input class="input-xlarge" id="categoriaParceiroOrganizacao" name="categoriaParceiro.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" readonly="readonly">
 		      					<input class="span1" id="categoriaParceiroOrganizacaoId" name="categoriaParceiro.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
 	    					</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="categoriaParceiroNome">Nome</label>
-								<input class="span12" type="text" id="categoriaParceiroNome" name="categoriaParceiro.nome" placeholder="Nome" value="${categoriaParceiro.nome }" required>
-							</div>
-							<div class="span2">
-								<label for="categoriaParceiroDescricao">Descrição</label>
-								<input class="span12" type="text" id="categoriaParceiroDescricao" name="categoriaParceiro.descricao" placeholder="Descrição" value="${categoriaParceiro.descricao }" required>
+								<input class="input-xlarge" type="text" id="categoriaParceiroNome" name="categoriaParceiro.nome" placeholder="Nome" value="${categoriaParceiro.nome }" required>
 							</div>
 							<div class="span1">
 								<label for="categoriaParceiroIsActive">Ativo</label>
@@ -182,12 +132,48 @@ function limpaForm() {
 						</div>
 					</form>
 				</div>
-						
-					</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Categoria Parceiro</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty categoriasParceiro}">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>organização</th>
+									<th>Nome</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${categoriasParceiro }" var="categoriaParceiro">
+									<tr>
+										<td>${categoriaParceiro.empresa.nome }</td>
+										<td>${categoriaParceiro.organizacao.nome }</td>
+										<td>${categoriaParceiro.nome }</td>
+										<td>${categoriaParceiro.isActive}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>

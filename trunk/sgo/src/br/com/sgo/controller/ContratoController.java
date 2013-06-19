@@ -165,7 +165,6 @@ public class ContratoController {
 	public void cadastro(Long id){
 
 		result.include("bancos", this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		//Collection<Banco> bancos = this.bancoDao.buscaBancoByGrupo("Tomadores");
 		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoByGrupo("Comprados");
 
 		contrato = contratoDao.load(id);
@@ -190,7 +189,6 @@ public class ContratoController {
 		Banco banco = bancoDao.buscaBancoById(contrato.getBanco().getBanco_id());
 		Collection<Produto> produtos = produtoDao.buscaProdutosByBanco(banco.getBanco_id());
 
-		//result.include("bancos",bancos);
 		result.include("recompraBancos",recompraBancos);
 		result.include("contrato",contrato);
 		result.include("banco",banco);

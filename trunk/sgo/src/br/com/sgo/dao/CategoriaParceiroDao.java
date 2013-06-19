@@ -76,7 +76,7 @@ public class CategoriaParceiroDao extends Dao<CategoriaParceiro> {
 		return categoriasParceiro;
 	}
 
-	public Collection<CategoriaParceiro> buscaCategoriaParceiroByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
+	public Collection<CategoriaParceiro> buscaCategoriasParceiroByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = sqlCategoriasParceiro;
 
@@ -122,6 +122,48 @@ public class CategoriaParceiroDao extends Dao<CategoriaParceiro> {
 		return categoriasparceiro;
 	}
 	
+	public CategoriaParceiro buscaCategoriaParceiroByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
+
+		String sql = sqlCategoriaParceiro;
+
+		if (empresa_id != null)
+			sql += " WHERE CATEGORIAPARCEIRO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND CATEGORIAPARCEIRO.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND CATEGORIAPARCEIRO.nome = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		CategoriaParceiro categoriaParceiro = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, nome);
+			
+			this.rsCategoriaParceiro = this.stmt.executeQuery();
+
+			while (rsCategoriaParceiro.next()) {
+
+				categoriaParceiro = new CategoriaParceiro();
+				categoriaParceiro.setCategoriaParceiro_id(rsCategoriaParceiro.getLong("categoriaparceiro_id"));
+				categoriaParceiro.setNome(rsCategoriaParceiro.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsCategoriaParceiro, stmt, conn);
+		return categoriaParceiro;
+	}
 
 	private void getCategoriaParceiro(Collection<CategoriaParceiro> categoriasParceiro)throws SQLException {
 
@@ -141,6 +183,7 @@ public class CategoriaParceiroDao extends Dao<CategoriaParceiro> {
 		
 		categoriaParceiro.setCategoriaParceiro_id(rsCategoriaParceiro.getLong("categoriaparceiro_id"));
 		categoriaParceiro.setNome(rsCategoriaParceiro.getString("categoriaparceiro_nome"));
+		categoriaParceiro.setIsActive(rsCategoriaParceiro.getBoolean("isactive"));
 
 		categoriasParceiro.add(categoriaParceiro);
 

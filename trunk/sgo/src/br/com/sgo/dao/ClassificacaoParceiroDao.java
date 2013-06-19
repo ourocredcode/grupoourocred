@@ -76,7 +76,7 @@ public class ClassificacaoParceiroDao extends Dao<ClassificacaoParceiro> {
 		return classificacoesParceiro;
 	}
 	
-	public Collection<ClassificacaoParceiro> buscaClassificacaoParceiro(Long empresa_id, Long organizacao_id, String nome) {
+	public Collection<ClassificacaoParceiro> buscaClassificacoesParceiro(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = sqlClassificacoesParceiro;
 
@@ -117,6 +117,49 @@ public class ClassificacaoParceiroDao extends Dao<ClassificacaoParceiro> {
 
 	}
 
+	public ClassificacaoParceiro buscaClassificacaoParceiroByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
+
+		String sql = sqlClassificacaoParceiro;
+
+		if (empresa_id != null)
+			sql += " WHERE CLASSIFICACAOPARCEIRO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND CLASSIFICACAOPARCEIRO.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND CLASSIFICACAOPARCEIRO.nome = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		ClassificacaoParceiro classificacaoParceiro = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, nome);
+			
+			this.rsClassificacaoParceiro = this.stmt.executeQuery();
+
+			while (rsClassificacaoParceiro.next()) {
+
+				classificacaoParceiro = new ClassificacaoParceiro();
+				classificacaoParceiro.setClassificacaoParceiro_id(rsClassificacaoParceiro.getLong("classificacaoparceiro_id"));
+				classificacaoParceiro.setNome(rsClassificacaoParceiro.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsClassificacaoParceiro, stmt, conn);
+		return classificacaoParceiro;
+	}
+
 	private void getClassificacaoParceiro(Collection<ClassificacaoParceiro> classificacoesParceiro)throws SQLException {
 
 		ClassificacaoParceiro classificacaoParceiro = new ClassificacaoParceiro();
@@ -135,6 +178,7 @@ public class ClassificacaoParceiroDao extends Dao<ClassificacaoParceiro> {
 		
 		classificacaoParceiro.setClassificacaoParceiro_id(rsClassificacaoParceiro.getLong("classificacaoparceiro_id"));
 		classificacaoParceiro.setNome(rsClassificacaoParceiro.getString("classificacaoparceiro_nome"));
+		classificacaoParceiro.setIsActive(rsClassificacaoParceiro.getBoolean("isactive"));
 
 		classificacoesParceiro.add(classificacaoParceiro);
 
