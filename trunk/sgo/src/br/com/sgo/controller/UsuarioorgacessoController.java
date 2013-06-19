@@ -11,7 +11,6 @@ import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.UsuarioOrgAcessoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
@@ -29,7 +28,8 @@ public class UsuarioorgacessoController {
 
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public UsuarioorgacessoController(Result result, UsuarioInfo usuarioInfo, Empresa empresa, Organizacao organizacao, EmpresaDao empresaDao,OrganizacaoDao organizacaoDao,UsuarioDao usuarioDao,UsuarioOrgAcessoDao usuarioOrgAcessoDao){
+	public UsuarioorgacessoController(Result result, UsuarioInfo usuarioInfo, Empresa empresa, Organizacao organizacao, EmpresaDao empresaDao
+			,OrganizacaoDao organizacaoDao,UsuarioDao usuarioDao,UsuarioOrgAcessoDao usuarioOrgAcessoDao){
 
 		this.usuarioInfo = usuarioInfo;
 		this.empresa = usuarioInfo.getEmpresa();
@@ -40,7 +40,6 @@ public class UsuarioorgacessoController {
 	}
 
 	@Get
-	@Public
 	@Path("/usuarioorgacesso/cadastro")
 	public void cadastro() {
 
@@ -49,7 +48,6 @@ public class UsuarioorgacessoController {
 	}
 
 	@Post
-	@Public
 	@Path("/usuarioorgacesso/salva")
 	public void salva(UsuarioOrgAcesso usuarioOrgAcesso){
 

@@ -6,7 +6,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.interceptor.Public;
 
 @Resource
 public class OrganizacaoController {
@@ -21,8 +20,8 @@ public class OrganizacaoController {
 
 	}	
 	
-	@Get @Path("/organizacao/busca.json")
-	@Public
+	@Get
+	@Path("/organizacao/busca.json")
 	public void organizacoes(Long empresa_id, String org_nome){
 
 		result.use(Results.json()).withoutRoot().from(organizacaoDao.buscaOrganizacoes(empresa_id, org_nome)).serialize();

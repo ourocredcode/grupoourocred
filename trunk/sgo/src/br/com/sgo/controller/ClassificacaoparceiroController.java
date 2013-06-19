@@ -7,11 +7,10 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
-import br.com.sgo.modelo.ClassificacaoParceiro;
+import br.com.sgo.dao.ClassificacaoParceiroDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.dao.ClassificacaoParceiroDao;
-import br.com.sgo.interceptor.Public;
+import br.com.sgo.modelo.ClassificacaoParceiro;
 
 @Resource
 public class ClassificacaoparceiroController {
@@ -33,14 +32,12 @@ public class ClassificacaoparceiroController {
 	}	
 
 	@Get
-	@Public
 	@Path("/classificacaoparceiro/cadastro")
 	public void cadastro(){
 
 	}
 
 	@Post
-	@Public
 	@Path("/classificacaoparceiro/salva")
 	public void salva(ClassificacaoParceiro classificacaoParceiro){
 		
@@ -79,8 +76,8 @@ public class ClassificacaoparceiroController {
 
 	}
 
-	@Get @Path("/classificacaoparceiro/busca.json")
-	@Public
+	@Get
+	@Path("/classificacaoparceiro/busca.json")
 	public void classificacaoParceiro(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(classificacaoParceiroDao.buscaClassificacaoParceiro(empresa_id, organizacao_id, nome)).serialize();
 	}

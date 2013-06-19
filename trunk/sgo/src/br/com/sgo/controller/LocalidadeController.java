@@ -2,7 +2,6 @@ package br.com.sgo.controller;
 
 import br.com.caelum.restfulie.RestClient;
 import br.com.caelum.restfulie.Restfulie;
-import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
@@ -12,7 +11,6 @@ import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.RegiaoDao;
 import br.com.sgo.dao.TipoLocalidadeDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.cep.BrazilianAddressFinder;
@@ -44,14 +42,12 @@ public class LocalidadeController {
 	}
 
 	@Post
-	@Public
 	@Path("/localidade/salva")
 	public void salva(){
 
 	}
 	
 	@Post
-	@Public
 	@Path("/localidade/busca.localidade")
 	public void buscalocalidade(String enderecoCEP) {
 

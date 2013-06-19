@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TipoWorkflowDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.TipoWorkflow;
 
@@ -34,14 +33,12 @@ public class TipoworkflowController {
 	}
 
 	@Get
-	@Public
 	@Path("/tipoworkflow/cadastro")
 	public void cadastro() {
 		
 	}
 
 	@Post
-	@Public
 	@Path("/tipoworkflow/salva")
 	public void salva(TipoWorkflow tipoWorkflow) {
 
@@ -83,7 +80,6 @@ public class TipoworkflowController {
 
 	@Get
 	@Path("/tipoworkflow/busca.json")
-	@Public
 	public void tipoworkflow(String nome) {	
 		result.use(Results.json()).withoutRoot().from(tipoWorkflowDao.buscaTipoWorkflowPorNome(nome)).serialize();
 	}
@@ -91,7 +87,6 @@ public class TipoworkflowController {
 	/*
 	@Get
 	@Path("/tipodadobd/busca.json")
-	@Public
 	public void tiposdadobd(String nome) {
 		result.use(Results.json()).withoutRoot().from(tipoDadoBdDao.buscaTiposDado(nome)).serialize();
 	}
@@ -99,7 +94,6 @@ public class TipoworkflowController {
 
 	@Post
 	@Path("/tipoworkflow/lista")
-	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
 		result.include("tiposWorkflow", this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
 	}

@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TipoDadoBdDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.TipoDadoBd;
 
 @Resource
@@ -33,14 +32,12 @@ public class TipodadobdController {
 	}	
 
 	@Get
-	@Public
 	@Path("/tipodadobd/cadastro")
 	public void cadastro(){
 		result.include("tiposDadosBd",this.tipoDadoBdDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
-	@Public
 	@Path("/tipodadobd/salva")
 	public void salva(TipoDadoBd tipoDadoBd){
 		
@@ -79,14 +76,14 @@ public class TipodadobdController {
 
 	}
 
-	@Get @Path("/tipodadobd/busca.json")
-	@Public
+	@Get 
+	@Path("/tipodadobd/busca.json")
 	public void tiposdadobd(String nome){
 		result.use(Results.json()).withoutRoot().from(tipoDadoBdDao.buscaTiposDado(nome)).serialize();
 	}
 	
-	@Post @Path("/tipodadobd/lista")
-	@Public
+	@Post
+	@Path("/tipodadobd/lista")
 	public void lista(Long empresa_id, Long organizacao_id, String nome){
 		result.include("tiposDadosBd",this.tipoDadoBdDao.buscaTiposDadosLista(empresa_id, organizacao_id, nome));
 	}

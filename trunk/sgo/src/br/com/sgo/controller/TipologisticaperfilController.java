@@ -8,7 +8,6 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.TipoLogisticaPerfilDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.TipoLogisticaPerfil;
 
@@ -29,14 +28,12 @@ public class TipologisticaperfilController {
 	}
 
 	@Get
-	@Public
 	@Path("/tipologisticaperfil/cadastro")
 	public void cadastro() {
 		result.include("tiposLogisticaPerfil", this.tipoLogisticaPerfilDao.buscaTodosTipoLogisticaPerfil());
 	}
 
 	@Post
-	@Public
 	@Path("/tipologisticaperfil/salva")
 	public void salva(TipoLogisticaPerfil tipoLogisticaPerfil) {
 

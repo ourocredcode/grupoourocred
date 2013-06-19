@@ -7,7 +7,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.GrupoBancoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.GrupoBanco;
 
 @Resource
@@ -64,8 +63,8 @@ public class GrupobancoController {
 
 	}
 
-	@Get @Path("/grupobanco/busca.json")
-	@Public
+	@Get
+	@Path("/grupobanco/busca.json")
 	public void grupoproduto(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(grupoBancoDao.buscaGrupoBanco(empresa_id, organizacao_id, nome)).serialize();
 	}

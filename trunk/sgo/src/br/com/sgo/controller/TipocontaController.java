@@ -7,7 +7,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TipoContaDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.TipoConta;
 
 @Resource
@@ -65,8 +64,8 @@ public class TipocontaController {
 
 	}
 
-	@Get @Path("/tipoconta/busca.json")
-	@Public
+	@Get
+	@Path("/tipoconta/busca.json")
 	public void tipoconta(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(tipoContaDao.buscaTipoContaByEmpOrgName(empresa_id, organizacao_id, nome)).serialize();
 	}

@@ -7,7 +7,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.ContaBancariaDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.ContaBancaria;
 
 @Resource
@@ -64,8 +63,8 @@ public class ContabancariaController {
 
 	}
 
-	@Get @Path("/contabancaria/busca.json")
-	@Public
+	@Get
+	@Path("/contabancaria/busca.json")
 	public void contabancaria(Long empresa_id, Long organizacao_id, Long banco_id, Long tipoconta_id, String numeroconta){
 		result.use(Results.json()).withoutRoot().from(contaBancariaDao.buscaContaBancariaByEmpOrgAgeTipNum(empresa_id, organizacao_id, banco_id, tipoconta_id, numeroconta)).serialize();
 	}

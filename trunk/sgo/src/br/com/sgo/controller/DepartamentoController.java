@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.DepartamentoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Departamento;
 
 @Resource
@@ -33,14 +32,12 @@ public class DepartamentoController {
 	}	
 
 	@Get
-	@Public
 	@Path("/departamento/cadastro")
 	public void cadastro(){
 		//result.include("departamento",this.departamentoDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
-	@Public
 	@Path("/departamento/salva")
 	public void salva(Departamento departamento){
 		
@@ -80,8 +77,8 @@ public class DepartamentoController {
 
 	}
 
-	@Get @Path("/departamento/busca.json")
-	@Public
+	@Get
+	@Path("/departamento/busca.json")
 	public void departamento(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(departamentoDao.buscaDepartamentos(empresa_id, organizacao_id, nome)).serialize();
 	}

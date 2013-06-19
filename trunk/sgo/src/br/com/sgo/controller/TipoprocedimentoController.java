@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TipoProcedimentoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.TipoProcedimento;
 
@@ -30,14 +29,12 @@ public class TipoprocedimentoController {
 	}	
 
 	@Get
-	@Public
 	@Path("/tipoprocedimento/cadastro")
 	public void cadastro(){
 		result.include("tipoProcedimentos", this.tipoProcedimentoDao.buscaAllTipoProcedimento(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 	}
 
 	@Post
-	@Public
 	@Path("/tipoprocedimento/salva")
 	public void salva(TipoProcedimento tipoProcedimento){
 
@@ -86,8 +83,8 @@ public class TipoprocedimentoController {
 
 	}
 
-	@Get @Path("/tipoprocedimento/busca.json")
-	@Public
+	@Get
+	@Path("/tipoprocedimento/busca.json")
 	public void tipoProcedimento(String nome){
 		result.use(Results.json()).withoutRoot().from(tipoProcedimentoDao.buscaTiposProcedimentosByNome(nome)).serialize();
 	}

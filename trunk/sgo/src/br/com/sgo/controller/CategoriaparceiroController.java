@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.CategoriaParceiroDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.CategoriaParceiro;
 
 @Resource
@@ -33,14 +32,12 @@ public class CategoriaparceiroController {
 	}	
 
 	@Get
-	@Public
 	@Path("/categoriaparceiro/cadastro")
 	public void cadastro(){
 		//result.include("categoriaParceiro",this.categoriaParceiroDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
-	@Public
 	@Path("/categoriaparceiro/salva")
 	public void salva(CategoriaParceiro categoriaParceiro){
 		
@@ -79,8 +76,8 @@ public class CategoriaparceiroController {
 
 	}
 
-	@Get @Path("/categoriaparceiro/busca.json")
-	@Public
+	@Get
+	@Path("/categoriaparceiro/busca.json")
 	public void categoriaparceiro(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(categoriaParceiroDao.buscaCategoriaParceiroByEmpOrgNome(1l, 1l, nome)).serialize();
 	}
