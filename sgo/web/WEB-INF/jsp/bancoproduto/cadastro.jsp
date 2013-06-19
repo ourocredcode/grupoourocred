@@ -104,15 +104,29 @@ jQuery(function($){
 
 });
 
-function altera(linha, id) {
+function altera(linha, atributo, id) {
 
-	var valor = linha.checked == true ? true : false ;
+	alert(linha.checked);
 
-	if (window.confirm("Deseja alterar o Banco do Produto selecionado?"))
-		$.post('<c:url value="/bancoproduto/altera" />', {
-			'bancoProduto.bancoProduto_id' : id, 'bancoProduto.isActive' : valor
-		});
+	if(atributo == 'isWorkflowLine'){
 
+		var isWorkflow = linha.checked == true ? true : false;
+		alert(isWorkflow);
+		if (window.confirm("Deseja alterar o Banco do Produto selecionado?"))
+			$.post('<c:url value="/bancoproduto/altera" />', {
+				'bancoProduto.bancoProduto_id' : id, 'bancoProduto.isWorkflow' : isWorkflow
+			});
+
+	}
+	
+	if(atributo=='isActiveLine'){
+
+		var isActive = linha.checked == true ? true : false;
+		alert(isActive);
+		if (window.confirm("Deseja alterar o Banco do Produto selecionado?"))
+			$.post('<c:url value="/bancoproduto/altera" />', {'bancoProduto.bancoProduto_id' : id, 'bancoProduto.isActive' : isActive});
+
+	}
 	return false;
 }
 
@@ -272,14 +286,14 @@ function limpaForm(){
 										<td>${bancoProduto.workflow.nome }</td>
 										<td>
 											<label class="checkbox inline">
-												<input type="checkbox" id="bancoProdutoIsWorkflowLine" name="bancoProduto.isWorkflow"
-												<c:if test="${bancoProduto.isWorkflow == true }"> checked="checked"</c:if> onchange="altera(this,'${bancoProduto.bancoProduto_id}');">
+												<input type="checkbox" id="isWorkflowLine" name="bancoProduto.isWorkflow"
+												<c:if test="${bancoProduto.isWorkflow == true }"> checked="checked"</c:if> onchange="altera(this,'isWorkflowLine','${bancoProduto.bancoProduto_id}');">
 											</label>
 										</td>
 										<td>
 											<label class="checkbox inline">
-												<input type="checkbox" id="bancoProdutoIsActiveLine" name="bancoProduto.isActive"
-												<c:if test="${bancoProduto.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${bancoProduto.bancoProduto_id}');">
+												<input type="checkbox" id="isActiveLine" name="bancoProduto.isActive"
+												<c:if test="${bancoProduto.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'isActiveLine','${bancoProduto.bancoProduto_id}');">
 											</label>
 										</td>						
 									</tr>

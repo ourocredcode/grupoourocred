@@ -42,76 +42,6 @@ jQuery(function($){
 			}
 		});
 	});
-	
-	$('#bancoProdutoTabelaEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
-
-           		  if (!data || data.length == 0) {
-           	            $('#bancoProdutoTabelaEmpresa').val('');
-						$('#bancoProdutoTabelaEmpresaId').val('');
-           	        }
-
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#bancoProdutoTabelaEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-
-        	 $('#bancoProdutoTabelaEmpresa').val(ui.item.label);
-             $('#bancoProdutoTabelaEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#bancoProdutoTabelaOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#bancoProdutoTabelaEmpresaId').val() == '' ? '0' :  $('#bancoProdutoTabelaEmpresaId').val(), 
-	        		  org_nome : $('#bancoProdutoTabelaOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#bancoProdutoTabelaOrganizacao').val('');
-         	            $('#bancoProdutoTabelaOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#bancoProdutoTabelaOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#bancoProdutoTabelaOrganizacao').val(ui.item.label);
-             $('#bancoProdutoTabelaOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
 
 	$('#bancoProdutoTabelaTabela').autocomplete({		
 		source: function( request, response ) {
@@ -181,6 +111,18 @@ function buscaProdutos(){
 	$("#bancoProdutoTabelaProdutoId").load('<c:url value="/bancoprodutotabela/produtos" />',			
 			{'empresa_id': empresa_id, 'organizacao_id' : organizacao_id, 'banco_id' : banco_id});
 
+}
+
+function altera(linha, id) {
+
+	var valor = linha.checked == true ? true : false ;
+
+	if (window.confirm("Deseja alterar o Banco Produto Tabela selecionado?"))
+		$.post('<c:url value="/bancoprodutotabela/altera" />', {
+			'bancoProdutoTabela.bancoProdutoTabela_id' : id, 'bancoProdutoTabela.isActive' : valor
+		});
+
+	return false;
 }
 
 </script>
@@ -325,7 +267,12 @@ function buscaProdutos(){
 										<td>${bancoProdutoTabela.produto.nome }</td>
 										<td>${bancoProdutoTabela.tabela.nome }</td>
 										<td>${bancoProdutoTabela.prazo }</td>
-										<td>${bancoProdutoTabela.isActive }</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="bancoProdutoTabelaIsActiveLine" name="bancoProdutoTabela.isActive"
+												<c:if test="${bancoProdutoTabela.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${bancoProdutoTabela.bancoProdutoTabela_id }');">
+											</label>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
