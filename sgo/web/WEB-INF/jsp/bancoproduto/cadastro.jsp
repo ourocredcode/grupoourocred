@@ -104,6 +104,18 @@ jQuery(function($){
 
 });
 
+function altera(linha, id) {
+
+	var valor = linha.checked == true ? true : false ;
+
+	if (window.confirm("Deseja alterar o Banco do Produto selecionado?"))
+		$.post('<c:url value="/bancoproduto/altera" />', {
+			'bancoProduto.bancoProduto_id' : id, 'bancoProduto.isActive' : valor
+		});
+
+	return false;
+}
+
 function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
 		document.bancoProdutoForm.reset();
@@ -248,7 +260,7 @@ function limpaForm(){
 									<th>Banco</th>
 									<th>Produto</th>
 									<th>Workflow</th>
-									<th>IsWflow</th>
+									<th>IsWorkflow</th>
 									<th>Ativo</th>
 								</tr>
 							</thead>
@@ -258,8 +270,18 @@ function limpaForm(){
 										<td>${bancoProduto.banco.nome }</td>
 										<td>${bancoProduto.produto.nome }</td>
 										<td>${bancoProduto.workflow.nome }</td>
-										<td>${bancoProduto.isWorkflow}</td>
-										<td>${bancoProduto.isActive}</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="bancoProdutoIsWorkflowLine" name="bancoProduto.isWorkflow"
+												<c:if test="${bancoProduto.isWorkflow == true }"> checked="checked"</c:if> onchange="altera(this,'${bancoProduto.bancoProduto_id}');">
+											</label>
+										</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="bancoProdutoIsActiveLine" name="bancoProduto.isActive"
+												<c:if test="${bancoProduto.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${bancoProduto.bancoProduto_id}');">
+											</label>
+										</td>						
 									</tr>
 								</c:forEach>
 							</tbody>

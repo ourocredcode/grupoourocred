@@ -24,9 +24,13 @@ public class GrupoParceiroDao extends Dao<GrupoParceiro> {
 	private Connection conn;
 	private ResultSet rsGrupoParceiro;
 
+	private final String sqlGrupoParceiro = "SELECT GRUPOPARCEIRO.grupoparceiro_id, GRUPOPARCEIRO.nome FROM GRUPOPARCEIRO (NOLOCK) ";
+
+	
 	private final String sqlGruposParceiro = "SELECT EMPRESA.empresa_id, EMPRESA.nome AS empresa_nome, ORGANIZACAO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
 								", GRUPOPARCEIRO.grupoparceiro_id, GRUPOPARCEIRO.nome AS grupoparceiro_nome, GRUPOPARCEIRO.isactive "+
-								" FROM ORGANIZACAO INNER JOIN (EMPRESA INNER JOIN GRUPOPARCEIRO ON EMPRESA.empresa_id = GRUPOPARCEIRO.empresa_id) ON ORGANIZACAO.organizacao_id = GRUPOPARCEIRO.organizacao_id ";
+								" FROM ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) INNER JOIN GRUPOPARCEIRO (NOLOCK) ON EMPRESA.empresa_id = GRUPOPARCEIRO.empresa_id) " +
+								" ON ORGANIZACAO.organizacao_id = GRUPOPARCEIRO.organizacao_id ";
 
 	public GrupoParceiroDao(Session session, ConnJDBC conexao) {
 
@@ -73,9 +77,16 @@ public class GrupoParceiroDao extends Dao<GrupoParceiro> {
 		return gruposParceiro;
 	}
 
-	public Collection<GrupoParceiro> buscaGrupoParceiroByEmpOrgNome(Long empresa_id,Long organizacao_id, String nome) {
+	public Collection<GrupoParceiro> buscaGruposParceiroByEmpOrgNome(Long empresa_id,Long organizacao_id, String nome) {
 
 		String sql = sqlGruposParceiro;
+
+		if (empresa_id != null)
+			sql += " WHERE GRUPOPARCEIRO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND GRUPOPARCEIRO.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND GRUPOPARCEIRO.nome like ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -102,9 +113,51 @@ public class GrupoParceiroDao extends Dao<GrupoParceiro> {
 		}
 
 		this.conexao.closeConnection(rsGrupoParceiro, stmt, conn);
-
 		return gruposParceiro;
 
+	}
+
+	public GrupoParceiro buscaGrupoParceiroByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
+
+		String sql = sqlGrupoParceiro;
+
+		if (empresa_id != null)
+			sql += " WHERE GRUPOPARCEIRO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND GRUPOPARCEIRO.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND GRUPOPARCEIRO.nome = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		GrupoParceiro classificacaoParceiro = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, nome);
+			
+			this.rsGrupoParceiro = this.stmt.executeQuery();
+
+			while (rsGrupoParceiro.next()) {
+
+				classificacaoParceiro = new GrupoParceiro();
+				classificacaoParceiro.setGrupoParceiro_id(rsGrupoParceiro.getLong("grupoparceiro_id"));
+				classificacaoParceiro.setNome(rsGrupoParceiro.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsGrupoParceiro, stmt, conn);
+		return classificacaoParceiro;
 	}
 
 	private void getGrupoParceiro(Collection<GrupoParceiro> gruposParceiro)throws SQLException {
@@ -125,6 +178,7 @@ public class GrupoParceiroDao extends Dao<GrupoParceiro> {
 		
 		grupoParceiro.setGrupoParceiro_id(rsGrupoParceiro.getLong("grupoparceiro_id"));
 		grupoParceiro.setNome(rsGrupoParceiro.getString("grupoparceiro_nome"));
+		grupoParceiro.setIsActive(rsGrupoParceiro.getBoolean("isactive"));
 
 		gruposParceiro.add(grupoParceiro);
 

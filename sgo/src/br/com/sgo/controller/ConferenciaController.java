@@ -32,25 +32,21 @@ public class ConferenciaController {
 	private final UsuarioInfo usuarioInfo;
 	private final TipoProcedimentoDao tipoProcedimentoDao;
 	private final ProcedimentoConferenciaDao procedimentoConferenciaDao;
-	private Contrato contrato;
-	private Conferencia conferencia;
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
 	private Collection<Conferencia> conferencias = new ArrayList<Conferencia>();
 
-	public ConferenciaController(Result result,UsuarioInfo usuarioInfo,Contrato contrato,ContratoDao contratoDao,
-			ConferenciaDao conferenciaDao,Conferencia conferencia,Empresa empresa,TipoProcedimentoDao tipoProcedimentoDao,ProcedimentoConferenciaDao procedimentoConferenciaDao,
+	public ConferenciaController(Result result,UsuarioInfo usuarioInfo, ContratoDao contratoDao,
+			ConferenciaDao conferenciaDao, Empresa empresa,TipoProcedimentoDao tipoProcedimentoDao,ProcedimentoConferenciaDao procedimentoConferenciaDao,
 			Organizacao organizacao,Usuario usuario){		
 
 		this.usuarioInfo = usuarioInfo;
 		this.result = result;
-		this.contrato = contrato;
 		this.contratoDao = contratoDao;
 		this.conferenciaDao = conferenciaDao;
 		this.tipoProcedimentoDao = tipoProcedimentoDao;
 		this.procedimentoConferenciaDao = procedimentoConferenciaDao;
-		this.conferencia = conferencia;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
@@ -75,9 +71,7 @@ public class ConferenciaController {
 			conferencias = new ArrayList<Conferencia>();
 			
 			Collection<ProcedimentoConferencia >procedimentos = this.procedimentoConferenciaDao.buscaProcedimentoConferenciaByEmpOrgTipoProcedimento(
-					empresa.getEmpresa_id(),
-					organizacao.getOrganizacao_id(), 
-					tipoProcedimento.getTipoProcedimento_id());
+					empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tipoProcedimento.getTipoProcedimento_id());
 
 			for(ProcedimentoConferencia procedimento : procedimentos){
 
