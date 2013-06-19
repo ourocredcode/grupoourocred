@@ -7,7 +7,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.ParceiroInfoBanco;
 
 @Resource
@@ -66,8 +65,8 @@ public class ParceiroinfobancoController {
 		}
 	}
 	
-	@Get @Path("/parceiroinfobanco/busca.json")
-	@Public
+	@Get
+	@Path("/parceiroinfobanco/busca.json")
 	public void parceiroinfobanco(Long empresa, Long organizacao, Long parceironegocio, Long banco, Long agencia, Long contabancaria){
 		result.use(Results.json()).withoutRoot().from(parceiroInfoBancoDao.buscaParceiroInfoBancoByEmOrPaBaAgCb(empresa, organizacao, parceironegocio, banco, agencia, contabancaria)).serialize();
 	}

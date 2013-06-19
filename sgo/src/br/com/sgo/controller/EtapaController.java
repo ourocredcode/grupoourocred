@@ -7,7 +7,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EtapaDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Etapa;
 
@@ -27,14 +26,12 @@ public class EtapaController {
 	}
 
 	@Get
-	@Public
 	@Path("/etapa/cadastro")
 	public void cadastro() {
 		result.include("etapas", this.etapaDao.buscaEtapasByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 	}
 
 	@Post
-	@Public
 	@Path("/etapa/salva")
 	public void salva(Etapa etapa) {
 
@@ -74,14 +71,12 @@ public class EtapaController {
 	
 	@Get
 	@Path("/etapa/busca.json")
-	@Public
 	public void etapa(Long empresa_id, Long organizacao_id, String nome) {	
 		result.use(Results.json()).withoutRoot().from(etapaDao.buscaEtapasByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome)).serialize();	
 	}
 
 	@Post
 	@Path("/etapa/lista")
-	@Public
 	public void lista(Long empresa_id, Long organizacao_id, String nome) {
 		result.include("etapas", this.etapaDao.buscaEtapasByEmpresaOrganizacaoNome(empresa_id, organizacao_id, nome));
 	}

@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TabelaBdDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.TabelaBd;
 
 @Resource
@@ -30,14 +29,12 @@ public class TabelabdController {
 	}
 	
 	@Get
-	@Public
 	@Path("/tabelabd/cadastro")
 	public void cadastro(){
 		
 	}
 
 	@Post
-	@Public
 	@Path("/tabelabd/salva")
 	public void salva(TabelaBd tabelaBd){
 
@@ -76,8 +73,8 @@ public class TabelabdController {
 
 	}
 	
-	@Get @Path("/tabelabd/busca.json")
-	@Public
+	@Get
+	@Path("/tabelabd/busca.json")
 	public void tabelas(Long empresa_id, Long organizacao_id, String nometabelabd){
 		result.use(Results.json()).withoutRoot().from(tabelaBdDao.buscaTabelas(empresa_id, organizacao_id,nometabelabd)).serialize();
 	}

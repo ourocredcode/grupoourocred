@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.FuncaoDao;
 import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Funcao;
 
 @Resource
@@ -33,14 +32,12 @@ public class FuncaoController {
 	}	
 
 	@Get
-	@Public
 	@Path("/funcao/cadastro")
 	public void cadastro(){
 		//result.include("funcao",this.funcaoDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
-	@Public
 	@Path("/funcao/salva")
 	public void salva(Funcao funcao){
 		
@@ -80,8 +77,8 @@ public class FuncaoController {
 
 	}
 
-	@Get @Path("/funcao/busca.json")
-	@Public
+	@Get
+	@Path("/funcao/busca.json")
 	public void funcao(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(funcaoDao.buscaFuncoes(empresa_id, organizacao_id, nome)).serialize();
 	}

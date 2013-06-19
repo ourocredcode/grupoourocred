@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TipoLogisticaDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.TipoLogistica;
 
@@ -87,8 +86,8 @@ public class TipologisticaController {
 
 	}
 
-	@Get @Path("/tipologistica/busca.json")
-	@Public
+	@Get
+	@Path("/tipologistica/busca.json")
 	public void tipoLogistica(Long empresa_id, Long organizacao_id, Long banco_id, String nome){
 		result.use(Results.json()).withoutRoot().from(tipoLogisticaDao.buscaTipoLogisticaByEmOrgNome(empresa_id, organizacao_id, nome)).serialize();
 	}

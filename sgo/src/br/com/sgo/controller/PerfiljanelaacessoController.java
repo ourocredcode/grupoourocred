@@ -10,7 +10,6 @@ import br.com.sgo.dao.JanelaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.PerfilJanelaAcessoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.PerfilJanelaAcesso;
 
 @Resource
@@ -36,14 +35,12 @@ public class PerfiljanelaacessoController {
 	}
 	
 	@Get
-	@Public
 	@Path("/perfiljanelaacesso/cadastro")
 	public void cadastro() {
 
 	}
 
 	@Post
-	@Public
 	@Path("/perfiljanelaacesso/salva")
 	public void salva(PerfilJanelaAcesso perfilJanelaAcesso){
 

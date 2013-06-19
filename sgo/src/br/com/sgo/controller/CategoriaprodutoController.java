@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.CategoriaProdutoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.CategoriaProduto;
 
 @Resource
@@ -31,14 +30,12 @@ public class CategoriaprodutoController {
 	}
 
 	@Get
-	@Public
 	@Path("/categoriaproduto/cadastro")
 	public void cadastro(){
 
 	}
 
 	@Post
-	@Public
 	@Path("/categoriaproduto/salva")
 	public void salva(CategoriaProduto categoriaProduto){
 
@@ -77,8 +74,8 @@ public class CategoriaprodutoController {
 
 	}
 
-	@Get @Path("/categoriaproduto/busca.json")
-	@Public
+	@Get
+	@Path("/categoriaproduto/busca.json")
 	public void categoriaproduto(String nome){
 		result.use(Results.json()).withoutRoot().from(categoriaProdutoDao.buscaCategoriaProdutos(nome)).serialize();
 	}

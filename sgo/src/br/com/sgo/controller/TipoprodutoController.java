@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TipoProdutoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.TipoProduto;
 
 @Resource
@@ -28,14 +27,12 @@ public class TipoprodutoController {
 	}
 
 	@Get
-	@Public
 	@Path("/tipoproduto/cadastro")
 	public void cadastro(){
 		result.include("tipoProduto",this.tipoProdutoDao.listaTudo("ASC","nome"));
 	}
 
 	@Post
-	@Public
 	@Path("/tipoproduto/salva")
 	public void salva(TipoProduto tipoProduto){
 
@@ -74,8 +71,8 @@ public class TipoprodutoController {
 
 	}
 
-	@Get @Path("/tipoproduto/busca.json")
-	@Public
+	@Get
+	@Path("/tipoproduto/busca.json")
 	public void tipoproduto(String nome){
 
 		result.use(Results.json()).withoutRoot().from(tipoProdutoDao.buscaTipoProdutosByEmpOrgNome(nome)).serialize();

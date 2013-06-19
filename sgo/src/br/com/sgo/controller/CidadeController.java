@@ -12,7 +12,6 @@ import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.RegiaoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Cidade;
 
 @Resource
@@ -39,14 +38,12 @@ public class CidadeController {
 	}	
 
 	@Get
-	@Public
 	@Path("/cidade/cadastro")
 	public void cadastro(){
 
 	}
 
 	@Post
-	@Public
 	@Path("/cidade/salva")
 	public void salva(Cidade cidade){
 
@@ -88,8 +85,8 @@ public class CidadeController {
 
 	}
 
-	@Get @Path("/cidade/busca.json")
-	@Public
+	@Get
+	@Path("/cidade/busca.json")
 	public void busca(String nome){
 		result.use(Results.json()).withoutRoot().from(cidadeDao.buscaPorNome(nome)).serialize();
 	}

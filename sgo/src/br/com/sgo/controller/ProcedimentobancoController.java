@@ -14,7 +14,6 @@ import br.com.sgo.dao.ProcedimentoBancoDao;
 import br.com.sgo.dao.ProcedimentoConferenciaDao;
 import br.com.sgo.dao.ProcedimentoDetalheDao;
 import br.com.sgo.dao.TipoProcedimentoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.ModeloProcedimento;
@@ -48,7 +47,6 @@ public class ProcedimentobancoController {
 	}	
 
 	@Get
-	@Public
 	@Path("/procedimentobanco/cadastro")
 	public void cadastro(){
 		result.include("procedimentosConferencia", this.procedimentoConferenciaDao.buscaProcedimentoConferenciaByEmpOrgTipoProcedimento(usuarioInfo.getEmpresa().getEmpresa_id(), 
@@ -82,7 +80,6 @@ public class ProcedimentobancoController {
 	}
 
 	@Post
-	@Public
 	@Path("/procedimentobanco/salva")
 	public void salva(ProcedimentoBanco procedimentoBanco){
 
@@ -120,8 +117,8 @@ public class ProcedimentobancoController {
 
 	}
 
-	@Get @Path("/procedimentobanco/busca.json")
-	@Public
+	@Get
+	@Path("/procedimentobanco/busca.json")
 	public void procedimentobanco(Long empresa_id, Long organizacao_id){
 		result.use(Results.json()).withoutRoot().from(procedimentoBancoDao.buscaAllProcedimentoBanco(empresa_id, organizacao_id)).serialize();
 	}

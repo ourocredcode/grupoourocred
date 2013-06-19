@@ -7,7 +7,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.PeriodoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Periodo;
@@ -26,14 +25,12 @@ public class PeriodoController {
 	}	
 
 	@Get
-	@Public
 	@Path("/periodo/cadastro")
 	public void cadastro(){
 		result.include("periodos", this.periodoDao.buscaAllPeriodos());
 	}
 
 	@Post
-	@Public
 	@Path("/periodo/salva")
 	public void salva(Periodo periodo){
 
@@ -70,8 +67,8 @@ public class PeriodoController {
 
 	}
 
-	@Get @Path("/periodo/busca.json")
-	@Public
+	@Get
+	@Path("/periodo/busca.json")
 	public void periodo(Empresa empresa, Organizacao organizacao, String nome){
 		result.use(Results.json()).withoutRoot().from(periodoDao.buscaPeriodosPorNome(empresa, organizacao, nome)).serialize();
 	}

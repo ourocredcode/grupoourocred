@@ -6,7 +6,6 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.ProcedimentoDetalheDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.ProcedimentoDetalhe;
 
@@ -26,14 +25,12 @@ public class ProcedimentodetalheController {
 	}	
 
 	@Get
-	@Public
 	@Path("/procedimentodetalhe/cadastro")
 	public void cadastro(){		
 		result.include("procedimentosoDetalhe", this.procedimentoDetalheDao.buscaAllProcedimentoDetalhe(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
 	}
 
 	@Post
-	@Public
 	@Path("/procedimentobancodetalhe/salva")
 	public void salva(ProcedimentoDetalhe procedimentoDetalhe){
 
@@ -72,8 +69,8 @@ public class ProcedimentodetalheController {
 
 	}
 
-	@Get @Path("/procedimentobancodetalhe/busca.json")
-	@Public
+	@Get
+	@Path("/procedimentobancodetalhe/busca.json")
 	public void procedimentobancodetalhe(long empresa_id, Long organizacao_id, Long procedimentoBanco_id, Long banco_id, Long modeloProcedimento_id, Integer acao){
 		//result.use(Results.json()).withoutRoot().from(procedimentoBancoDetalheDao.buscaProcedimentoBancoDetalheByEmpresaOrganizacaoProcedimentoAcao(empresa_id, organizacao_id, procedimentoBanco_id, banco_id, modeloProcedimento_id, acao)).serialize();
 	}

@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TipoSaqueDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.TipoSaque;
 
@@ -31,7 +30,6 @@ public class TiposaqueController {
 	}	
 
 	@Post
-	@Public
 	@Path("/tiposaque/salva")
 	public void salva(TipoSaque tipoSaque){
 
@@ -81,20 +79,19 @@ public class TiposaqueController {
 	}
 
 	@Get
-	@Public
 	@Path("/tiposaque/cadastro")
 	public void cadastro(){
 		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
 	}
 
-	@Get @Path("/tiposaque/busca.json")
-	@Public
+	@Get
+	@Path("/tiposaque/busca.json")
 	public void tiposdadobd(String nome){
 		result.use(Results.json()).withoutRoot().from(tipoSaqueDao.buscaTiposSaqueByNome(nome)).serialize();
 	}
 	
-	@Post @Path("/tiposaque/lista")
-	@Public
+	@Post 
+	@Path("/tiposaque/lista")
 	public void lista(){
 		result.include("tiposDadosBd",this.tipoSaqueDao.buscaAllTipoSaque());
 	}

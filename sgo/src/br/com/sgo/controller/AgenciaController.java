@@ -85,8 +85,8 @@ public class AgenciaController {
 
 	}
 
-	@Get @Path("/agencia/busca.json")
-	@Public
+	@Get
+	@Path("/agencia/busca.json")
 	public void agencia(Long empresa_id, Long organizacao_id, Long banco_id, String codigoagencia){
 		result.use(Results.json()).withoutRoot().from(agenciaDao.buscaAgenciaByEmOrBaCa(empresa_id, organizacao_id, banco_id, codigoagencia)).serialize();
 	}

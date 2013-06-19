@@ -12,7 +12,6 @@ import br.com.sgo.dao.ElementoBdDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TabelaBdDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.ColunaBd;
 
 @Resource
@@ -40,7 +39,6 @@ public class ColunabdController {
 	}
 
 	@Get
-	@Public
 	@Path("/colunabd/cadastro")
 	public void cadastro(){
 
@@ -48,7 +46,6 @@ public class ColunabdController {
 
 	
 	@Post
-	@Public
 	@Path("/colunabd/salva")
 	public void salva(ColunaBd colunaBd){
 
@@ -89,8 +86,8 @@ public class ColunabdController {
 
 	}
 
-	@Get @Path("/colunaBd/busca.json")
-	@Public
+	@Get
+	@Path("/colunaBd/busca.json")
 	public void colunas(Long empresa_id, Long organizacao_id, Long tabelaBd_id, Long elementoBd_id){
 		result.use(Results.json()).withoutRoot().from(this.colunaBdDao.buscaColunasBd(empresa_id, organizacao_id, tabelaBd_id, elementoBd_id)).serialize();
 	}

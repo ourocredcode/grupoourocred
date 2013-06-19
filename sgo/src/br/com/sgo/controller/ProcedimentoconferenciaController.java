@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.ProcedimentoConferenciaDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
@@ -97,8 +96,8 @@ public class ProcedimentoconferenciaController {
 
 	}
 
-	@Get @Path("/procedimentoconferencia/busca.json")
-	@Public
+	@Get
+	@Path("/procedimentoconferencia/busca.json")
 	public void procedimentoconferencia(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id, String nome){
 		result.use(Results.json()).withoutRoot().from(procedimentoConferenciaDao.buscaProcedimentoConferenciaTipoProcedimentoNome(empresa_id, organizacao_id, tipoProcedimento_id, nome)).serialize();
 	}

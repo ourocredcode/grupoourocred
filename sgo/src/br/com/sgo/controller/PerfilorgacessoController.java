@@ -9,7 +9,6 @@ import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.PerfilOrgAcessoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.PerfilOrgAcesso;
 
@@ -35,7 +34,6 @@ public class PerfilorgacessoController {
 	}
 	
 	@Get
-	@Public
 	@Path("/perfilorgacesso/cadastro")
 	public void cadastro() {
 		
@@ -44,7 +42,6 @@ public class PerfilorgacessoController {
 	}
 
 	@Post
-	@Public
 	@Path("/perfilorgacesso/salva")
 	public void salva(PerfilOrgAcesso perfilOrgAcesso){
 

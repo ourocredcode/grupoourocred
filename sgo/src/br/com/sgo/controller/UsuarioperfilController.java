@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.UsuarioPerfilDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
@@ -43,7 +42,6 @@ public class UsuarioperfilController {
 	}
 
 	@Get
-	@Public
 	@Path("/usuarioperfil/cadastro")
 	public void cadastro() {
 		
@@ -52,7 +50,6 @@ public class UsuarioperfilController {
 	}
 
 	@Post
-	@Public
 	@Path("/usuarioperfil/salva")
 	public void salva(UsuarioPerfil usuarioPerfil){
 

@@ -11,7 +11,6 @@ import br.com.sgo.dao.FormulariosJanelaDao;
 import br.com.sgo.dao.JanelaDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.TabelaBdDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.FormulariosJanela;
 
 @Resource
@@ -38,14 +37,12 @@ public class FormulariosjanelaController {
 	}	
 
 	@Get
-	@Public
 	@Path("/formulariosjanela/cadastro")
 	public void cadastro(){
 
 	}
 
 	@Post
-	@Public
 	@Path("/formulariosjanela/salva")
 	public void salva(FormulariosJanela formulariosJanela){
 
@@ -88,8 +85,8 @@ public class FormulariosjanelaController {
 
 	}
 
-	@Get @Path("/formulariosjanela/busca.json")
-	@Public
+	@Get
+	@Path("/formulariosjanela/busca.json")
 	public void formulariosjanela(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(formulariosJanelaDao.buscaFomulariosJanela(empresa_id, organizacao_id, nome)).serialize();
 	}

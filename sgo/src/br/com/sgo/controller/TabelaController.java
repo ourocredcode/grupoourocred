@@ -11,7 +11,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoTabelaDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
@@ -113,8 +112,8 @@ public class TabelaController {
 
 	}
 	
-	@Get @Path("/tabela/busca.json")
-	@Public
+	@Get
+	@Path("/tabela/busca.json")
 	public void tabelas(Long empresa_id, Long organizacao_id, String nome){
 
 		result.use(Results.json()).withoutRoot().from(tabelaDao.buscaTabelas(empresa_id, organizacao_id, nome)).serialize();

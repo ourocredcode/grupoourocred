@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.ElementoBdDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.ElementoBd;
 
@@ -32,14 +31,12 @@ public class ElementobdController {
 	}	
 
 	@Get
-	@Public
 	@Path("/elementobd/cadastro")
 	public void cadastro(){
 		result.include("elementosBd",this.elementoBdDao.buscaAllElementos());
 	}
 
 	@Post
-	@Public
 	@Path("/elementobd/salva")
 	public void salva(ElementoBd elementoBd){
 
@@ -88,14 +85,14 @@ public class ElementobdController {
 
 	}
 
-	@Get @Path("/elementobd/busca.json")
-	@Public
+	@Get
+	@Path("/elementobd/busca.json")
 	public void busca(Long empresa_id, Long organizacao_id, String nomeColunaBd){
 		result.use(Results.json()).withoutRoot().from(elementoBdDao.buscaElementosLista(empresa_id, organizacao_id, nomeColunaBd)).serialize();
 	}
 
-	@Post @Path("/elementobd/lista")
-	@Public
+	@Post
+	@Path("/elementobd/lista")
 	public void lista(Long empresa_id, Long organizacao_id, String nomeColunaBd){
 		result.include("elementosBd",this.elementoBdDao.buscaElementosLista(empresa_id, organizacao_id, nomeColunaBd));
 	}

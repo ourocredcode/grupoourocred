@@ -10,7 +10,6 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.JanelaDao;
 import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.modelo.Janela;
 
 @Resource
@@ -33,14 +32,12 @@ public class JanelaController {
 	}
 	
 	@Get
-	@Public
 	@Path("/janela/cadastro")
 	public void cadastro() {
 
 	}
 
 	@Post
-	@Public
 	@Path("/janela/salva")
 	public void salva(Janela janela){
 
@@ -80,8 +77,8 @@ public class JanelaController {
 
 	}
 
-	@Get @Path("/janela/busca.json")
-	@Public
+	@Get
+	@Path("/janela/busca.json")
 	public void janelas(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(janelaDao.buscaTabelas(empresa_id, organizacao_id, nome)).serialize();
 	}

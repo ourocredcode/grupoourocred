@@ -35,7 +35,6 @@ import br.com.sgo.dao.TipoEnderecoDao;
 import br.com.sgo.dao.TipoLocalidadeDao;
 import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.dao.UsuarioDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Funcionario;
@@ -253,7 +252,6 @@ public class ParceironegocioController {
 	}
 
 	@Post
-	@Public
 	@Path("/parceironegocio/salva")
 	public void salva(ParceiroNegocio parceiroNegocio,Funcionario funcionario, ParceiroLocalidade parceiroLocalidade,Collection<ParceiroContato> parceiroContatos,
 			Collection<ParceiroBeneficio> parceiroBeneficios,Localidade localidade, ParceiroInfoBanco parceiroInfoBanco){
@@ -508,7 +506,6 @@ public class ParceironegocioController {
 	
 	@Get 
 	@Path("/parceironegocio/busca.json")
-	@Public
 	public void parceironegocio(Long empresa_id, Long organizacao_id, String nome){
 		result.use(Results.json()).withoutRoot().from(this.parceiroNegocioDao.buscaParceiroNegocio(empresa_id, organizacao_id, nome)).serialize();
 	}

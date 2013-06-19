@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.UsuarioDao;
-import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
@@ -45,7 +44,6 @@ public class UsuarioController {
 	}
 
 	@Post
-	@Public
 	@Path("/usuario/salva")
 	public void salva(Usuario usuario){
 
@@ -94,8 +92,8 @@ public class UsuarioController {
 
 	}
 
-	@Get @Path("/usuarios/busca.json")
-	@Public
+	@Get 
+	@Path("/usuarios/busca.json")
 	public void usuarios(Long empresa_id, Long organizacao_id, String nome){
 		
 		result.use(Results.json()).withoutRoot().from(usuarioDao.buscaUsuarios(empresa_id, organizacao_id, nome)).serialize();
@@ -103,7 +101,6 @@ public class UsuarioController {
 	}	
 	
 	@Get
-	@Public
 	public void usuarioPerfil(Long usuarioId){
 		result.include("usuario",this.usuarioDao.load(usuarioId));
 	}
