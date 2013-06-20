@@ -34,6 +34,7 @@ import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PnDao;
 import br.com.sgo.dao.ProdutoDao;
+import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -77,6 +78,7 @@ public class FormularioController {
 	private final EtapaDao etapaDao;
 	private final PnDao pnDao;
 	private final MeioPagamentoDao meioPagamentoDao;
+	private final TabelaDao tabelaDao;
 
 	private HttpServletResponse response;
 	private Formulario formulario;
@@ -99,7 +101,7 @@ public class FormularioController {
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
 			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
-			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow, MeioPagamentoDao meioPagamentoDao){		
+			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow, MeioPagamentoDao meioPagamentoDao,TabelaDao tabelaDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -121,6 +123,8 @@ public class FormularioController {
 		this.workflowDao = workflowDao;
 		this.etapaDao = etapaDao;
 		this.pnDao = pnDao;
+		this.meioPagamentoDao = meioPagamentoDao;
+		this.tabelaDao = tabelaDao;
 		this.parceiroNegocio = parceiroNegocio;
 		this.parceiroLocalidade = parceiroLocalidade;
 		this.parceiroInfoBanco = parceiroInfoBanco;
@@ -131,7 +135,6 @@ public class FormularioController {
 		this.usuario = usuarioInfo.getUsuario();
 		this.perfil = usuarioInfo.getPerfil();
 		this.workflow = workflow;
-		this.meioPagamentoDao = meioPagamentoDao;
 
 	}
 
@@ -278,8 +281,8 @@ public class FormularioController {
 		contrato.setBanco(this.bancoDao.buscaBancoById(contrato.getBanco().getBanco_id()));
 		contrato.setProduto(this.produtoDao.buscaProdutoById(contrato.getProduto().getProduto_id()));
 		contrato.setCoeficiente(this.coeficienteDao.buscaCoeficienteById(contrato.getCoeficiente().getCoeficiente_id()));
-		//TODO
-		//contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
+	
+		contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
 		contrato.setNumeroBeneficio(this.formulario.getParceiroBeneficio().getNumeroBeneficio());
 
 		contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoProdutoBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
