@@ -135,10 +135,41 @@ function limpaForm(){
 
 </script>
 
-<div class="span9">
+<div id="content-header">
+	<h1>Cadastro Menu</h1>
+	<div class="btn-group">
+		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+		<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+		<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+	</div>
+</div>
 
-	<section id="tabs">
-		<div class="bs-docs-example">
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Menu</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="active" id="menu-li"><a href="#menu-div" data-toggle="tab" id="menu-li-a">Cadastro de Menus</a></li>
@@ -147,57 +178,49 @@ function limpaForm(){
 			<div id="myTabContent" class="tab-content">
 				
 				<div class="tab-pane fade active in" id="menu-div">
+					
 					<form id="menuForm" name="menuForm" action="<c:url value="/menu/salva"/>" method="POST">
 
 						<div class="control-group">
 							<label class="control-label" for="menuEmpresa">Empresa</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="menuEmpresa" name="menu.empresa.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="menuEmpresaId" name="menu.empresa.empresa_id" type="hidden">
-	    					</div>
+      						<input id="menuEmpresa" name="menu.empresa.nome" type="text" required onChange="limpaForm();" class="input-large">
+      						<input id="menuEmpresaId" name="menu.empresa.empresa_id" type="hidden">
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="menuOrganizacao">Organização</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="menuOrganizacao" name="menu.organizacao.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="menuOrganizacaoId" name="menu.organizacao.organizacao_id" type="hidden">
-	    					</div>
+							<input id="menuOrganizacao" name="menu.organizacao.nome" type="text" required onChange="limpaForm();" class="input-large">
+							<input id="menuOrganizacaoId" name="menu.organizacao.organizacao_id" type="hidden">
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="menuNome">Nome</label>
 							<div class="controls">
-								<input type="text" id="menuNome" name="menu.nome" placeholder="Nome" required>
+								<input type="text" id="menuNome" name="menu.nome" placeholder="Nome" required class="input-large">
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="menuDescricao">Descrição</label>
 							<div class="controls">
-								<input type="text" id="menuDescricao" name="menu.descricao" placeholder="Descrição" required>
+								<input type="text" id="menuDescricao" name="menu.descricao" placeholder="Descrição" required class="input-large">
 							</div>
 						</div>
-						</div>
+		
 						<div class="control-group">
 							<label class="control-label" for="menuIsActive">Ativo</label>
 							<div class="controls">
 								<input type="checkbox" id="menuIsActive" name="menu.isActive" checked="checked" value="1" >							
 							</div>							
 						</div>				
-						<div class="btn-toolbar">
+
 						<div class="control-group">
 							<label class="control-label" for="menuAcao">Ação</label>
 							<div class="controls">
-								<input type="text" id="menuAcao" name="menu.acao" placeholder="Ação" required>							
+								<input type="text" id="menuAcao" name="menu.acao" placeholder="Ação" required class="input-large">							
 							</div>							
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="menuJanela">Janela</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-plus-sign"></i></span>
-	      						<input class="span2" id="menuJanela" name="menu.janela.nome" type="text" required onChange="limpaForm();">
-	      						<input class="span2" id="menuJanelaId" name="menu.janela.janela_id" type="hidden">
-	    					</div>
+							<input id="menuJanela" name="menu.janela.nome" type="text" required onChange="limpaForm();" class="input-large">
+							<input id="menuJanelaId" name="menu.janela.janela_id" type="hidden">
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="menuIsSomenteLeitura">Somente Leitura</label>
@@ -215,14 +238,14 @@ function limpaForm(){
 								<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 							</div>
 						</div>
-
+						
 					</form>
 
 				</div>
 				
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 
 <%@ include file="/footer.jspf"%>

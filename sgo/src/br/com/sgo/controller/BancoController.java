@@ -162,7 +162,7 @@ public class BancoController {
 	@Path("/banco/busca.json")
 	public void grupoproduto(Long empresa_id, Long organizacao_id, String nome){
 
-		result.use(Results.json()).withoutRoot().from(bancoDao.buscaBancos(1l, 1l, nome)).serialize();
+		result.use(Results.json()).withoutRoot().from(bancoDao.buscaBancosByNome(1l, 1l, nome)).serialize();
 
 	}
 

@@ -69,6 +69,17 @@
 		   $('#bttNovo').click(function() {
 				window.location.href = '<c:url value="/parceironegocio/cadastro" />';
 			});
+		   
+		   
+		   $('#parceiroNegocioCpf').change(function () {
+
+			   if((!$('#parceiroNegocioCpf').validateCPF()) && ($('#parceiroNegocioCpf').val() != '')){
+				   alert("Cpf incorreto");
+				   $('#parceiroNegocioCpf').val('');
+				   $('#parceiroNegocioCpf').focus();
+			   }
+
+		   });
 	});
 	
 	function limpaForm(){
@@ -309,7 +320,7 @@
 			<div class="span12">
 
 					<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
-				
+
 						<input id="parceiroNegocioId" name="parceiroNegocio.parceiroNegocio_id" value="${parceiroNegocio.parceiroNegocio_id }" type="hidden"/>
 						<input id="parceiroNegocioPnId" name="parceiroNegocio.pn_id" value="${parceiroNegocio.pn_id }" type="hidden"/>
 
@@ -329,9 +340,9 @@
 								</label>
 							</div>
 						</div>
-						
+
 						<br/>
-				
+
 						<div class="row-fluid">
 							<div class="span2">
 								<label for="parceiroNegocioEmpresa">Empresa</label>
@@ -352,23 +363,6 @@
 									</c:forEach>
 								</select>
 							</div>
-							<!-- 
-							<div class="span2">
-								<label for="categoriaParceiro">Categoria</label>
-								<input  class="input-medium" id="parceiroNegocioCategoriaParceiro" name="parceiroNegocio.categoriaParceiro.nome" type="text" value="Serviço">
-								<input  class="input-medium" id="parceiroNegocioCategoriaParceiroId" name="parceiroNegocio.categoriaParceiro.categoriaParceiro_id" type="hidden" value="1">
-							</div>
-
-							<div class="span2">
-								<label for="parceiroNegocioClassificacaoParceiro">Classificação</label>
-								<input  class="input-medium" id="parceiroNegocioClassificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.nome" type="text" value="Normal">
-								<input  class="span1" id="parceiroNegocioClassificacaoParceiroId" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id" type="hidden" value="1">
-							</div>
-							<div class="span2">
-								<label for="parceiroNegocioGrupoParceiro">Grupo</label>
-								<input  class="input-medium" id="parceiroNegocioGrupoParceiro" name="parceiroNegocio.grupoParceiro.nome" type="text" value="Teste">
-								<input  class="span1" id="parceiroNegocioGrupoParceiroId" name="parceiroNegocio.grupoParceiro.grupoParceiro_id" type="hidden" value="1">
-							</div-->
 							<div class="span2">
 								<label for="classificacaoParceiro">Classificação</label>
 								<select class="input-medium" id="classificacaoParceiro" name="parceiroNegocio.classificacaoParceiro.classificacaoParceiro_id">
@@ -507,6 +501,7 @@
 												<table class="table table-striped table-bordered" id="lista">
 													<thead>
 														<tr>
+															<th>Banco</th>
 															<th>Conta</th>
 															<th>Agencia</th>
 															<th>Meio Pagamento</th>
@@ -514,11 +509,23 @@
 													</thead>
 													<tbody>	
 														<tr>
+															<td>
+																<select id="parceiroInfoBancoId" name="parceiroInfoBanco.banco.banco_id" class="input-small" >
+																	<option value="">Selecione o banco...</option>
+																	<c:forEach var="banco" items="${bancos }">
+																		<option value="${banco.banco_id }" <c:if test="${parceiroInfoBanco.banco.banco_id == banco.banco_id }">selected="selected"</c:if>>${banco.nome }</option>
+																	</c:forEach>
+																</select>
+															</td>
 															<td><input type="text" id="parceiroInfoBancoContacorrente" name="parceiroInfoBanco.contaCorrente" value="${parceiroInfoBanco.contaCorrente }" class="input-small" /></td>
 															<td><input type="text" id="parceiroInfoBancoAgenciaNumero" name="parceiroInfoBanco.agenciaNumero" value="${parceiroInfoBanco.agenciaNumero }" class="input-small" /></td>
 															<td>
-																<input type="text" id="parceiroInfoMeioPagamento" name="parceiroInfoBanco.meioPagamento.nome" value="${parceiroInfoBanco.meioPagamento.nome }" class="input-large" />
-																<input type="hidden" id="parceiroInfoMeioPagamentoId" name="parceiroInfoBanco.meioPagamento.meioPagamento_id" value="${parceiroInfoBanco.meioPagamento.meioPagamento_id }" />
+																<select id="parceiroInfoMeioPagamentoId" name="parceiroInfoBanco.meioPagamento.meioPagamento_id" class="input-small" >
+																	<option value="">Selecione o banco...</option>
+																	<c:forEach var="meioPagamento" items="${meiosPagamento }">
+																		<option value="${meioPagamento.meioPagamento_id }" <c:if test="${parceiroInfoBanco.meioPagamento.meioPagamento_id == meioPagamento.meioPagamento_id }">selected="selected"</c:if>>${meioPagamento.nome }</option>
+																	</c:forEach>
+																</select>
 															</td>
 															
 														</tr>
