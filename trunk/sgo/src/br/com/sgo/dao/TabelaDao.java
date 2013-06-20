@@ -255,10 +255,9 @@ public class TabelaDao extends Dao<Tabela> {
 	
 	public Tabela buscaTabelasByCoeficiente(Long coeficiente_id) {
 
-		String sql = " SELECT " +
-				"			COEFICIENTE.coeficiente_id, COEFICIENTE.tabela_id, TABELA.nome as tabela_nome, TABELA.prazo " +
-				"	FROM COEFICIENTE INNER JOIN TABELA ON COEFICIENTE.tabela_id = TABELA.tabela_id WHERE COEFICIENTE.coeficiente_id = ? ";
-		
+		String sql = " SELECT  COEFICIENTE.coeficiente_id, COEFICIENTE.tabela_id, TABELA.nome as tabela_nome " +
+				"			FROM COEFICIENTE INNER JOIN TABELA ON COEFICIENTE.tabela_id = TABELA.tabela_id WHERE COEFICIENTE.coeficiente_id = ? ";
+
 		this.conn = this.conexao.getConexao();
 
 		Tabela tabela = new Tabela();
@@ -274,8 +273,6 @@ public class TabelaDao extends Dao<Tabela> {
 
 				tabela.setTabela_id(rsTabelas.getLong("tabela_id"));
 				tabela.setNome(rsTabelas.getString("tabela_nome"));
-				//TODO
-				//tabela.setPrazo(rsTabelas.getInt("prazo"));
 
 			}
 

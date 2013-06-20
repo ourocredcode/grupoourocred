@@ -48,21 +48,18 @@ $(document).ready(function() {
 				this.disabled = false;
 		});
 	});
-	
+
 	$("#auxCoeficiente").change(function() {
 
 		var auxCoeficiente = document.getElementById("auxCoeficiente");	
 		var arrayCoeficiente = auxCoeficiente.value.split(',');
-		var coeficiente_id = arrayCoeficiente[2];
+		var tabela_id = arrayCoeficiente[3];
 
-		if(coeficiente_id != undefined){
-			$("#div-prazo").load('<c:url value="/contrato/prazo" />',{'coeficiente_id': coeficiente_id});	
+		if(tabela_id != undefined){
+			$("#div-prazo").load('<c:url value="/contrato/prazo" />',{'tabela_id': tabela_id});	
 		}
 
 	});
-	
-
-
 });
 
 function calculaContrato() {
@@ -467,15 +464,6 @@ function historicoCoeficiente() {
 
 }
 
-function buscaPrazo() {
-	alert(banco_id + produto_id);
-	var banco_id = $("#contratoBanco").val();
-	var produto_id = $("#contratoProduto").val();
-
-	$("#contratoPrazoId").load('<c:url value="/contrato/prazobancoproduto" />',{'banco_id': banco_id,'produto_id': produto_id});
-
-}
-
 </script>
 
 <c:if test="${contrato.contrato_id  == null }">
@@ -501,7 +489,7 @@ function buscaPrazo() {
 				
 						<div class="span3">
 							<label for="contratoBanco">Banco:</label>
-							<select id="contratoBanco" name="contrato.banco.banco_id" class="span12" onChange="buscaPrazo();">
+							<select id="contratoBanco" name="contrato.banco.banco_id" class="span12" required>
 								<option value="">Escolha um banco</option>
 								<c:forEach items="${bancos}" var="banco">
 									<option value="${banco.banco_id}" <c:if test="${contrato.banco.banco_id == banco.banco_id }">selected</c:if>>${banco.nome}</option>
@@ -511,7 +499,7 @@ function buscaPrazo() {
 						<div class="span3">
 
 							<label for="contratoProduto">Produto:</label>
-							<select class="span12" id="contratoProduto" onChange="buscaPrazo();" name="contrato.produto.produto_id">
+							<select class="span12" id="contratoProduto" name="contrato.produto.produto_id" required>
 								<option value="">Escolha um produto</option>
 								<c:if test="${not empty contrato.contrato_id}">
 									<c:forEach items="${produtos}" var="produto">
@@ -531,13 +519,14 @@ function buscaPrazo() {
 								</c:if>
 								<c:if test="${not empty contrato.contrato_id}">
 									<c:forEach items="${coeficientes}" var="coeficiente">
-										<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id}" 
-										<c:if test="${contrato.coeficiente.valor eq coeficiente.valor}">SELECTED</c:if>>${coeficiente.valor} <!-- ${coeficiente.tabela.nome} --></option>
+										<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id},${coeficiente.tabela.tabela_id}" 
+										<c:if test="${contrato.coeficiente.coeficiente_id eq coeficiente.coeficiente_id}">selected="selected"</c:if>>${coeficiente.valor} - ${coeficiente.tabela.nome}</option>
 									</c:forEach>
 								</c:if>
 							</select>
 
-							<input id="coeficiente" type="hidden" name="contrato.coeficiente.coeficiente_id" value="${contrato.coeficiente.coeficiente_id}" />
+							<input id="coeficiente" type="hidden" name="contrato.coeficiente.coeficiente_id" value="${contrato.coeficiente.coeficiente_id }" />
+							<input id="tabela" type="hidden" name="contrato.coeficiente.tabela.tabela_id" value="${contrato.coeficiente.tabela.tabela_id }" />
 
 						</div>
 						

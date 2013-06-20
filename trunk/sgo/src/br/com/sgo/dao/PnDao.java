@@ -208,6 +208,8 @@ public class PnDao {
 
 				String[] aux = rsParceiroNegocio.getString("clienteAgencia").split("-");
 
+				banco.setNome(rsParceiroNegocio.getString("clienteBanco"));
+
 				parceiroInfoBanco.setAgenciaNumero(aux[0]);
 				parceiroInfoBanco.setBanco(banco);
 				parceiroInfoBanco.setMeioPagamento(meioPagamento);

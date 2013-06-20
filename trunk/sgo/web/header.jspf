@@ -29,16 +29,18 @@
 		<link rel="stylesheet" href="<c:url value="/css/jquery.gritter.css"/>" />	
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.main.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.grey.css"/>" class="skin-color" />
-		
+
 		<script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/bootstrap.js"/>"></script>		
         <script type="text/javascript" src="<c:url value="/js/jquery.peity.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/js/jquery.uniform.js"/>"></script>        
+        <script type="text/javascript" src="<c:url value="/js/jquery.uniform.js"/>"></script>    
+        <script type="text/javascript" src="<c:url value="/js/jquery.validate.js"/>"></script>    
 		<script type="text/javascript" src="<c:url value="/js/jquery.wizard.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.dataTables.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.maskedinput-1.2.2.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.maskMoney.0.2.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.cpf-validate.1.0.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/unicorn.js"/>"></script>
 
@@ -50,7 +52,7 @@
 
 		<div id="search">
 			<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="post">
-				<input id="doc" name="doc" type="text" placeholder="Busca Parceiro..."/><button type="submit"><i class="icon-search icon-white"></i></button>
+				<input id="doc" name="doc" type="text" placeholder="Busca CPF..."/><button type="submit"><i class="icon-search icon-white"></i></button>
 			</form>
 		</div>
 

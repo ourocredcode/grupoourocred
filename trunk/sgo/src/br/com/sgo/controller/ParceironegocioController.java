@@ -11,6 +11,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CategoriaParceiroDao;
 import br.com.sgo.dao.CidadeDao;
 import br.com.sgo.dao.ClassificacaoParceiroDao;
@@ -36,6 +37,7 @@ import br.com.sgo.dao.TipoLocalidadeDao;
 import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Funcionario;
 import br.com.sgo.modelo.Localidade;
@@ -65,6 +67,7 @@ public class ParceironegocioController {
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 	private final ParceiroContatoDao parceiroContatoDao;
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
+	private final BancoDao bancoDao;
 	private final SexoDao sexoDao;
 	private final EstadoCivilDao estadoCivilDao;
 	private final TipoParceiroDao tipoParceiroDao;
@@ -91,7 +94,7 @@ public class ParceironegocioController {
 	
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
-			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,Usuario usuario,
+			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,Usuario usuario,BancoDao bancoDao,
 			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao,MeioPagamentoDao meioPagamentoDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao, CategoriaParceiroDao categoriaParceiroDao, ClassificacaoParceiroDao classificacaoParceiroDao, GrupoParceiroDao grupoParceiroDao) {
 
@@ -104,6 +107,7 @@ public class ParceironegocioController {
 		this.funcionarioDao = funcionarioDao;
 		this.localidadeDao = localidadeDao;
 		this.sexoDao = sexoDao;
+		this.bancoDao = bancoDao;
 		this.estadoCivilDao = estadoCivilDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
 		this.parceiroContatoDao = parceiroContatoDao;
@@ -133,21 +137,17 @@ public class ParceironegocioController {
 	@Path("/parceironegocio/cadastro")
 	public void cadastro(){
 
-		result.include("departamentos", this.departamentoDao.buscaDepartamentos(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
-					usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
-		result.include("funcoes", this.funcaoDao.buscaFuncoes(usuarioInfo.getUsuario().getEmpresa().getEmpresa_id(), 
-				usuarioInfo.getUsuario().getOrganizacao().getOrganizacao_id()));
-
+		result.include("departamentos", this.departamentoDao.buscaDepartamentos(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
+		result.include("funcoes", this.funcaoDao.buscaFuncoes(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("supervisores", this.parceiroNegocioDao.buscaParceiroNegocioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
-
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
-		
 		result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
 		result.include("classificacoesParceiro",this.classificacaoParceiroDao.buscaAllClassificacaoParceiroByEmpOrg(1l, 1l));
 		result.include("gruposParceiro",this.grupoParceiroDao.buscaAllGrupoParceiroByEmpOrg(1l, 1l));
+		
 
 	}
 
@@ -161,7 +161,7 @@ public class ParceironegocioController {
 		parceiroBeneficio = this.parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(doc);
 
 		if(parceiroBeneficio == null)
-			parceiroNegocio = this.parceiroNegocioDao.buscaParceiroNegocioByDocumento(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), doc);
+			parceiroNegocio = this.parceiroNegocioDao.buscaParceiroNegocioByDocumento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), doc);
 		else
 			parceiroNegocio = parceiroBeneficio.getParceiroNegocio();
 
@@ -175,6 +175,10 @@ public class ParceironegocioController {
 				ParceiroInfoBanco infoBanco = this.pnDao.buscaParceiroInfoBanco(parceiroNegocio);
 
 				infoBanco.setMeioPagamento(this.meioPagamentoDao.buscaMeioPagamentoByNome(1l, 1l, infoBanco.getMeioPagamento().getNome()));
+				
+				Banco b = this.bancoDao.buscaBancoByNome(1l, 1l, infoBanco.getBanco().getNome());
+
+				infoBanco.setBanco(b == null ? new Banco() : b);
 
 				Localidade l = parceiroLocalidade.getLocalidade();
 
@@ -183,11 +187,21 @@ public class ParceironegocioController {
 				String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
 
 				l.setPais(this.paisDao.buscaPais("Brasil"));
-				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
-				l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
-				l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-				l.setEndereco(resultado[1]);
-				l.setBairro(resultado[2]);
+
+				if(!resultado[4].equals(""))
+					l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+
+				if(!resultado[3].equals(""))
+					l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+
+				if(!resultado[0].equals(""))
+					l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+
+				if(!resultado[1].equals(""))
+					l.setEndereco(resultado[1]);
+
+				if(!resultado[2].equals(""))
+					l.setBairro(resultado[2]);
 
 				result.include("parceiroLocalidade",parceiroLocalidade);
 				result.include("localidade",parceiroLocalidade.getLocalidade());
@@ -195,9 +209,7 @@ public class ParceironegocioController {
 				result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
 				result.include("parceiroInfoBanco",infoBanco);
 
-				TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(
-						usuarioInfo.getEmpresa().getEmpresa_id(), 
-						usuarioInfo.getOrganizacao().getOrganizacao_id(),"Pessoa Física");
+				TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),"Pessoa Física");
 
 				parceiroNegocio.setTipoParceiro(tipoParceiro);
 				parceiroNegocio.setIsCliente(true);
@@ -231,7 +243,8 @@ public class ParceironegocioController {
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("parceiroNegocio",parceiroNegocio);
-		
+		result.include("bancos",this.bancoDao.buscaAllBancos());
+		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
 		result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
 		result.include("classificacoesParceiro",this.classificacaoParceiroDao.buscaAllClassificacaoParceiroByEmpOrg(1l, 1l));
 		result.include("gruposParceiro",this.grupoParceiroDao.buscaAllGrupoParceiroByEmpOrg(1l, 1l));
