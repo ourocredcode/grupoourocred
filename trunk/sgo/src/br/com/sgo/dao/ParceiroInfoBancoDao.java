@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
+import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.MeioPagamento;
 import br.com.sgo.modelo.ParceiroInfoBanco;
 
@@ -23,14 +24,13 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 	private Connection conn;
 	private ResultSet rsParceiroInfoBanco;
 
-	private final String sqlParceiroInfoBanco = "SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, PARCEIROINFOBANCO.organizacao_id, PARCEIROINFOBANCO.parceironegocio_id, PARCEIROINFOBANCO.banco_id, PARCEIROINFOBANCO.agencia_id, PARCEIROINFOBANCO.contabancaria_id, PARCEIROINFOBANCO.meiopagamento_id FROM PARCEIROINFOBANCO (NOLOCK) ";
+	private final String sqlParceiroInfoBanco = " SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, PARCEIROINFOBANCO.organizacao_id, PARCEIROINFOBANCO.parceironegocio_id, PARCEIROINFOBANCO.banco_id, PARCEIROINFOBANCO.agencia_id, PARCEIROINFOBANCO.contabancaria_id, PARCEIROINFOBANCO.meiopagamento_id FROM PARCEIROINFOBANCO (NOLOCK) ";
 
-	
 	private final String sqlParceiroInfoBancos =  "SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, EMPRESA.nome AS empresa_nome "+
 							", PARCEIROINFOBANCO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
 							", PARCEIROINFOBANCO.parceironegocio_id, PARCEIRONEGOCIO.nome AS parceironegocio_nome "+
 							", PARCEIROINFOBANCO.banco_id, BANCO.nome AS banco_nome, PARCEIROINFOBANCO.isactive "+
-							", PARCEIROINFOBANCO.meiopagamento_id, MEIOPAGAMENTO.nome as meiopagamento_nome, PARCEIROINFOBANCO.contacorrente, PARCEIROINFOBANCO.agencianumero "+
+							", PARCEIROINFOBANCO.meiopagamento_id, MEIOPAGAMENTO.nome as meiopagamento_nome "+
 							" FROM ((((PARCEIROINFOBANCO (NOLOCK) LEFT JOIN BANCO (NOLOCK) ON PARCEIROINFOBANCO.banco_id = BANCO.banco_id) "+
 							" INNER JOIN EMPRESA (NOLOCK) ON PARCEIROINFOBANCO.empresa_id = EMPRESA.empresa_id) "+
 							" INNER JOIN ORGANIZACAO (NOLOCK) ON PARCEIROINFOBANCO.organizacao_id = ORGANIZACAO.organizacao_id) "+
@@ -89,7 +89,6 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			
 			this.stmt.setLong(1, parceironegocio_id);
 
 			this.rsParceiroInfoBanco = this.stmt.executeQuery();
@@ -97,14 +96,18 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 			while (rsParceiroInfoBanco.next()) {
 
 				parceiroInfoBanco = new ParceiroInfoBanco();
-				
 				MeioPagamento meioPagamento = new MeioPagamento();
+				Banco banco = new Banco();
 
 				meioPagamento.setMeioPagamento_id(rsParceiroInfoBanco.getLong("meiopagamento_id"));
 				meioPagamento.setNome(rsParceiroInfoBanco.getString("meiopagamento_nome"));
 
+				banco.setBanco_id(rsParceiroInfoBanco.getLong("banco_id"));
+				banco.setNome(rsParceiroInfoBanco.getString("banco_nome"));
+
 				parceiroInfoBanco.setParceiroInfoBanco_id(rsParceiroInfoBanco.getLong("parceiroinfobanco_id"));
 				parceiroInfoBanco.setMeioPagamento(meioPagamento);
+				parceiroInfoBanco.setBanco(banco);
 				parceiroInfoBanco.setContaCorrente(rsParceiroInfoBanco.getString("contacorrente"));
 				parceiroInfoBanco.setAgenciaNumero(rsParceiroInfoBanco.getString("agencianumero"));
 
