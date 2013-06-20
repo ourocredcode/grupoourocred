@@ -85,6 +85,49 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 
 	}
 	
+	public Integer buscaPrazoByEmpOrgTabela(Long empresa_id, Long organizacao_id, Long tabela_id ) {
+
+		String sql = " SELECT BANCOPRODUTOTABELA.prazo FROM BANCOPRODUTOTABELA ";
+
+		if (empresa_id != null)
+			sql += " WHERE BANCOPRODUTOTABELA.empresa_id = ? ";
+		if (organizacao_id != null)
+			sql += " AND BANCOPRODUTOTABELA.organizacao_id = ? ";
+		if (tabela_id != null)
+			sql += " AND BANCOPRODUTOTABELA.tabela_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Integer prazo = 0;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, tabela_id);
+
+			this.rsBancoProdutoTabela= this.stmt.executeQuery();
+
+			while (rsBancoProdutoTabela.next()) {
+
+				prazo = rsBancoProdutoTabela.getInt("prazo");
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsBancoProdutoTabela, stmt, conn);
+
+		return prazo;
+
+	}
+	
 	public Collection<BancoProdutoTabela> buscaBancoProdutoTabelasByEmpOrgoBancoProdutoTabela(Long empresa_id, Long organizacao_id, Long banco_id, Long produto_id, Long tabela_id) {
 
 		String sql = sqlBancoProdutoTabela;

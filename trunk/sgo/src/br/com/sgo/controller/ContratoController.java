@@ -565,17 +565,12 @@ public class ContratoController {
 	}
 
 	@Post
- 	@Path("/contrato/prazobancoproduto")
-	public void prazobancoproduto(Long empresa_id, Long organizacao_id, Long banco_id, Long produto_id, Long tabela_id) {
-		
-		result.include("bancoProdutoTabelas", this.bancoProdutoTabelaDao.buscaBancoProdutoTabelasByEmpOrgoBancoProdutoTabela(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()
-				, 1l, 1l, 1l));
-		
-		//Tabela t = tabelaDao.buscaTabelasByCoeficiente(coeficiente_id);
-		//result.include("produtos",this.bancoProdutoTabelaDao.buscaPracoToContratoByEmpOrgoBancoProdutoTabela(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()
-		//		,produto_id, banco_id, tabela));		//TODO
-		//contrato.setPrazo(t.getPrazo());
-		//result.include("bancoProdutoTabela", bancoProdutoTabela);
+ 	@Path("/contrato/prazo")
+	public void prazo(Long tabela_id) {
+
+		contrato.setPrazo(bancoProdutoTabelaDao.buscaPrazoByEmpOrgTabela(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tabela_id));
+
+		result.include("contrato",contrato);
 
 	}
 	

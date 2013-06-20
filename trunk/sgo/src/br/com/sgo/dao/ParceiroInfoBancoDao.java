@@ -30,7 +30,7 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 							", PARCEIROINFOBANCO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
 							", PARCEIROINFOBANCO.parceironegocio_id, PARCEIRONEGOCIO.nome AS parceironegocio_nome "+
 							", PARCEIROINFOBANCO.banco_id, BANCO.nome AS banco_nome, PARCEIROINFOBANCO.isactive "+
-							", PARCEIROINFOBANCO.meiopagamento_id, MEIOPAGAMENTO.nome as meiopagamento_nome "+
+							", PARCEIROINFOBANCO.meiopagamento_id, MEIOPAGAMENTO.nome as meiopagamento_nome, PARCEIROINFOBANCO.contacorrente, PARCEIROINFOBANCO.agencianumero "+
 							" FROM ((((PARCEIROINFOBANCO (NOLOCK) LEFT JOIN BANCO (NOLOCK) ON PARCEIROINFOBANCO.banco_id = BANCO.banco_id) "+
 							" INNER JOIN EMPRESA (NOLOCK) ON PARCEIROINFOBANCO.empresa_id = EMPRESA.empresa_id) "+
 							" INNER JOIN ORGANIZACAO (NOLOCK) ON PARCEIROINFOBANCO.organizacao_id = ORGANIZACAO.organizacao_id) "+
