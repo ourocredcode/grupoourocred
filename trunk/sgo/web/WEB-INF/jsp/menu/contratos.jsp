@@ -294,7 +294,7 @@
 	 </script>
 
 	<div id="content-header">
-		<h1>Busca Contratos</h1>
+		<h1>Busca Contratos - ${fn:toUpperCase(tipobusca)}  </h1>
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Users" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
