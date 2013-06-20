@@ -34,75 +34,6 @@ jQuery(function($){
 			}
 		});
 	});
-
-	$('#bancoEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
-
-           		  if (!data || data.length == 0) {
-           	            $('#bancoEmpresa').val('');
-						$('#bancoEmpresaId').val('');
-           	        }
-
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#bancoEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-
-        	 $('#bancoEmpresa').val(ui.item.label);
-             $('#bancoEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#bancoOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#bancoEmpresaId').val() == '' ? '0' :  $('#bancoEmpresaId').val(), org_nome : $('#bancoOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#bancoOrganizacao').val('');
-         	            $('#bancoOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#bancoOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#bancoOrganizacao').val(ui.item.label);
-             $('#bancoOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
 	
 	$('#bancoGrupoBanco').autocomplete({
 		source: function( request, response ) {
@@ -138,13 +69,21 @@ jQuery(function($){
              return false;
          }
     });
-	
+
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/banco/cadastro" />';
 	});
 
 	$('#btnNovo').click(function() {
 		document.bancoForm.reset();
+	});
+
+	$("#bancoIsRecompra").change(function(e){
+		if(document.bancoForm.bancoIsRecompra.checked==true){
+			document.bancoForm.bancoIsRecompra.value=true;
+		}else{
+			document.bancoForm.bancoIsRecompra.value=false;
+		}
 	});
 
 	$("#bancoIsActive").change(function(e){
@@ -162,6 +101,23 @@ function limpaForm() {
 		document.bancoForm.reset();
 	}
 }
+
+function altera(linha, atributo, id) {
+	if(atributo == 'isCompradoLine'){
+		var isComprado = linha.checked == true ? true : false;
+		if (window.confirm("Deseja alterar o Banco selecionado?"))
+			$.post('<c:url value="/banco/altera" />', {
+				'banco.banco_id' : id, 'banco.isComprado' : isComprado
+			});
+	}	
+	if(atributo=='isActiveLine'){
+		var isActive = linha.checked == true ? true : false;
+		if (window.confirm("Deseja alterar o Banco selecionado?"))
+			$.post('<c:url value="/banco/altera" />', {'banco.banco_id' : id, 'banco.isActive' : isActive});
+	}
+	return false;
+}
+
 </script>
 
 <div id="content-header">
@@ -244,6 +200,10 @@ function limpaForm() {
 								<input class="input-xlarge" type="text" id="bancoNome" name="banco.nome" placeholder="Nome" value="${banco.nome }" required>
 							</div>
 							<div class="span1">
+								<label for="bancoIsComprado">Comprado</label>
+								<input type="checkbox" id="bancoIsComprado" name="banco.isComprado" checked="checked" value="1" >
+							</div>
+							<div class="span1">
 								<label for="bancoIsActive">Ativo</label>
 								<input type="checkbox" id="bancoIsActive" name="banco.isActive" checked="checked" value="1" >
 							</div>
@@ -283,6 +243,7 @@ function limpaForm() {
 									<th>Banco</th>
 									<th>Grupo Banco</th>
 									<th>Classificação Banco</th>
+									<th>Comprado</th>
 									<th>Ativo</th>
 								</tr>
 							</thead>
@@ -292,7 +253,18 @@ function limpaForm() {
 										<td>${banco.nome }</td>
 										<td>${banco.grupoBanco.nome }</td>
 										<td>${banco.classificacaoBanco.nome }</td>
-										<td>${banco.isActive }</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="isCompradoLine" name="banco.isComprado"
+												<c:if test="${banco.isComprado == true }"> checked="checked"</c:if> onchange="altera(this,'isCompradoLine','${banco.banco_id}');">
+											</label>
+										</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="isActiveLine" name="banco.isActive"
+												<c:if test="${banco.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'isActiveLine','${banco.banco_id}');">
+											</label>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>

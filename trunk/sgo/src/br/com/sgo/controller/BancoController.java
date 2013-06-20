@@ -20,26 +20,29 @@ import br.com.sgo.modelo.Usuario;
 @Resource
 public class BancoController {
 
-	private final Result result;
-	private final UsuarioInfo usuarioInfo;
+	private final Result result;	
 	private final BancoDao bancoDao;
 	private final ClassificacaoBancoDao classificacaoBancoDao;
 	private final GrupoBancoDao grupoBancoDao;
 	
+	private Banco banco;
 	private Empresa empresa;
 	private Organizacao organizacao;
-	private Usuario usuario;
+	private final UsuarioInfo usuarioInfo;
 
+	private Usuario usuario;
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public BancoController(Result result, Empresa empresa, Organizacao organizacao, Usuario usuario, UsuarioInfo usuarioInfo, ClassificacaoBancoDao classificacaoBancoDao, BancoDao bancoDao, GrupoBancoDao grupoBancoDao){
+	public BancoController(Result result, Usuario usuario, UsuarioInfo usuarioInfo, Empresa empresa, Organizacao organizacao
+			, ClassificacaoBancoDao classificacaoBancoDao, Banco banco, BancoDao bancoDao, GrupoBancoDao grupoBancoDao){
 
 		this.result = result;
+		this.empresa = empresa;
+		this.organizacao = organizacao;
 		this.usuarioInfo = usuarioInfo;
-		this.empresa = this.usuarioInfo.getEmpresa();
-		this.organizacao = this.usuarioInfo.getOrganizacao();
 		this.usuario = this.usuarioInfo.getUsuario();
 		this.classificacaoBancoDao = classificacaoBancoDao;
+		this.banco = banco;
 		this.bancoDao = bancoDao;
 		this.grupoBancoDao = grupoBancoDao;
 
@@ -62,41 +65,86 @@ public class BancoController {
 		String mensagem = "";
 
 		try {
-			
-			if (empresa.getNome().equals("SYSTEM") && organizacao.getNome().equals("SYSTEM")){
 
-				if (this.bancoDao.buscaBancoByEmpOrgGrupoClassificacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),
-						banco.getGrupoBanco().getGrupoBanco_id(), banco.getClassificacaoBanco().getClassificacaoBanco_id(), banco.getNome()) == null) {				
+			if (this.bancoDao.buscaBancoByEmpOrgGrupoClassificacaoNome(1l, 1l,
+					banco.getGrupoBanco().getGrupoBanco_id(), banco.getClassificacaoBanco().getClassificacaoBanco_id(), banco.getNome()) == null) {				
 
-					banco.setCreated(dataAtual);
-					banco.setUpdated(dataAtual);
+				banco.setCreated(dataAtual);
+				banco.setUpdated(dataAtual);
 
-					banco.setCreatedBy(usuario);
-					banco.setUpdatedBy(usuario);
+				banco.setCreatedBy(usuario);
+				banco.setUpdatedBy(usuario);
 
-					banco.setIsActive(banco.getIsActive() == null ? false : true);
+				banco.setChave(banco.getNome());
+				banco.setDescricao(banco.getNome());
 
-					this.bancoDao.beginTransaction();
-					this.bancoDao.adiciona(banco);
-					this.bancoDao.commit();
+				empresa.setEmpresa_id(1l);
+				organizacao.setOrganizacao_id(1l);
 
-					mensagem = "Banco " + banco.getNome() + " adicionado com sucesso.";
+				banco.setEmpresa(empresa);
+				banco.setOrganizacao(organizacao);
 
-				} else {
+				banco.setIsComprado(banco.getIsComprado() == null ? false : true);					
+				banco.setIsActive(banco.getIsActive() == null ? false : true);
 
-					mensagem = "Erro: Banco " + banco.getNome() + " já cadastrado.";
+				this.bancoDao.beginTransaction();
+				this.bancoDao.adiciona(banco);
+				this.bancoDao.commit();
 
-				}
+				mensagem = "Banco " + banco.getNome() + " adicionado com sucesso.";
 
 			} else {
 
-				mensagem = "Erro: Banco " + banco.getNome() + " não pode ser cadastrado nesta empresa.";
+				mensagem = "Erro: Banco " + banco.getNome() + " já cadastrado.";
 
 			}
 
 		} catch (Exception e) {
 
 			mensagem = "Erro: Falha ao adicionar o banco.";
+
+		} finally{
+
+			this.bancoDao.clear();
+			this.bancoDao.close();
+
+		}
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+
+	}
+
+	@Post
+	@Path("/banco/altera")
+	public void altera(Banco banco) {
+
+		String mensagem = "";
+
+		this.banco = this.bancoDao.load(banco.getBanco_id());
+
+		try {
+
+			this.banco.setUpdated(dataAtual);
+			this.banco.setUpdatedBy(usuario);
+		
+			if(banco.getIsActive() != null){
+				this.banco.setIsActive(banco.getIsActive() == false ? false : true);
+			}
+
+			if(banco.getIsComprado() != null){
+				this.banco.setIsComprado(banco.getIsComprado() == false ? false : true);
+			}
+
+			bancoDao.beginTransaction();		
+			bancoDao.atualiza(this.banco);
+			bancoDao.commit();
+	
+			mensagem = " Banco alterado com sucesso.";
+
+		} catch (Exception e) {
+
+			mensagem = "Erro: Falha ao alterar o banco.";
 
 		} finally{
 
