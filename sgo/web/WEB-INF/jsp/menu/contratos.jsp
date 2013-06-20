@@ -359,11 +359,10 @@
 								<option value="${banco.nome }">${banco.nome }</option>
 							</c:forEach>
 						</select>
-						
 						<label for="busca_BancoComprado">Banco Comprado</label>
 						<select id="busca_BancoComprado" name="busca_BancoComprado"  class="input-medium" MULTIPLE>
 							<option value="">Selecione um banco</option>
-							<c:forEach items="${bancosComprados }" var="bancoComprado">
+							<c:forEach items="${bancosComprado }" var="bancoComprado">
 								<option value="${bancoComprado.nome }">${bancoComprado.nome }</option>
 							</c:forEach>
 						</select>

@@ -24,16 +24,18 @@ public class BancoDao extends Dao<Banco> {
 	private Connection conn;
 	private ResultSet rsBanco;
 
-	private final String sqlBanco = "SELECT BANCO.banco_id, BANCO.nome from BANCO (NOLOCK) ";
+	private final String sqlBanco = "SELECT BANCO.banco_id, BANCO.nome, BANCO.iscomprado from BANCO (NOLOCK) ";
 
-	private final String sqlBancos = "SELECT BANCO.banco_id, BANCO.isactive, BANCO.nome AS banco_nome, BANCO.grupobanco_id "+
+	private final String sqlBancos = "SELECT BANCO.banco_id, BANCO.iscomprado, BANCO.isactive, BANCO.nome AS banco_nome, BANCO.grupobanco_id "+
 					", GRUPOBANCO.nome AS grupobanco_nome, BANCO.classificacaobanco_id, CLASSIFICACAOBANCO.nome AS classificacaobanco_nome "+
 					" FROM (BANCO (NOLOCK) INNER JOIN GRUPOBANCO (NOLOCK) ON BANCO.grupobanco_id = GRUPOBANCO.grupobanco_id) "+
 					" LEFT JOIN CLASSIFICACAOBANCO (NOLOCK) ON BANCO.classificacaobanco_id = CLASSIFICACAOBANCO.classificacaobanco_id ";
 
 	public BancoDao(Session session, ConnJDBC conexao) {
+
 		super(session, Banco.class);
 		this.conexao = conexao;
+
 	}
 
 	public Collection<Banco> buscaAllBancos() {
@@ -232,18 +234,25 @@ public class BancoDao extends Dao<Banco> {
 
 	}
 
-	public Collection<Banco> buscaBancoByGrupo(String grupo){
-		
-		String sql = "SELECT BANCO.banco_id, BANCO.nome FROM GRUPOBANCO INNER JOIN BANCO ON GRUPOBANCO.grupobanco_id = BANCO.grupobanco_id WHERE GRUPOBANCO.nome = ? ";
+	public Collection<Banco> buscaBancoCompradoByEmpOrg(Long empresa_id, Long organizacao_id){
+
+		String sql = sqlBanco;
+
+		if (empresa_id != null)
+			sql += " WHERE BANCO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND BANCO.organizacao_id = ? AND BANCO.iscomprado = 1";
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<Banco> bancos = new ArrayList<Banco>();
+		Collection<Banco> bancosComprado = new ArrayList<Banco>();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setString(1, grupo);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
 
 			this.rsBanco = this.stmt.executeQuery();
 
@@ -254,7 +263,7 @@ public class BancoDao extends Dao<Banco> {
 				banco.setBanco_id(rsBanco.getLong("banco_id"));
 				banco.setNome(rsBanco.getString("nome"));
 
-				bancos.add(banco);
+				bancosComprado.add(banco);
 
 			}
 
@@ -264,7 +273,7 @@ public class BancoDao extends Dao<Banco> {
 
 		this.conexao.closeConnection(rsBanco, stmt, conn);
 
-		return bancos;
+		return bancosComprado;
 
 	}
 	
@@ -284,6 +293,7 @@ public class BancoDao extends Dao<Banco> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+			
 			this.stmt.setLong(1, procedimento_id);
 
 			this.rsBanco = this.stmt.executeQuery();
@@ -325,6 +335,7 @@ public class BancoDao extends Dao<Banco> {
 		banco.setBanco_id(rsBanco.getLong("banco_id"));
 		banco.setNome(rsBanco.getString("banco_nome"));
 		banco.setIsActive(rsBanco.getBoolean("isactive"));
+		banco.setIsComprado(rsBanco.getBoolean("iscomprado"));
 
 		bancos.add(banco);
 

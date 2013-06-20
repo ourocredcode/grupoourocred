@@ -140,7 +140,7 @@ public class FormularioController {
 	public void cadastro(){
 
 		Collection<Banco> bancos = this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id());
-		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoByGrupo("Comprados");
+		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoCompradoByEmpOrg(1l, 1l);
 
 		this.formulario.setEmpresa(usuarioInfo.getEmpresa());
 		this.formulario.setOrganizacao(usuarioInfo.getOrganizacao());

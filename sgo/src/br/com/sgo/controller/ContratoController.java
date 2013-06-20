@@ -165,7 +165,7 @@ public class ContratoController {
 	public void cadastro(Long id){
 
 		result.include("bancos", this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoByGrupo("Comprados");
+		Collection<Banco> recompraBancos = this.bancoDao.buscaBancoCompradoByEmpOrg(1l, 1l);
 
 		contrato = contratoDao.load(id);
 

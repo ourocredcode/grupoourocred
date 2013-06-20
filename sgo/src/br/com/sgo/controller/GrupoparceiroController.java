@@ -27,7 +27,7 @@ public class GrupoparceiroController {
 
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public GrupoparceiroController(Result result, GrupoParceiroDao grupoParceiroDao, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, Usuario usuario){
+	public GrupoparceiroController(Result result, GrupoParceiroDao grupoParceiroDao, UsuarioInfo usuarioInfo, Empresa empresa, Organizacao organizacao, Usuario usuario){
 
 		this.result = result;
 		this.grupoParceiroDao = grupoParceiroDao;

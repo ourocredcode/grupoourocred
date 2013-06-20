@@ -29,8 +29,8 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 	private final String sqlParceiroInfoBancos =  "SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, EMPRESA.nome AS empresa_nome "+
 							", PARCEIROINFOBANCO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
 							", PARCEIROINFOBANCO.parceironegocio_id, PARCEIRONEGOCIO.nome AS parceironegocio_nome "+
-							" PARCEIROINFOBANCO.banco_id, BANCO.nome AS banco_nome, PARCEIROINFOBANCO.isactive "+
-							", PARCEIROINFOBANCO.meiopagamento_id, MEIOPAGAMENTO.nome as meiopagamento_nome "+
+							", PARCEIROINFOBANCO.banco_id, BANCO.nome AS banco_nome, PARCEIROINFOBANCO.isactive "+
+							", PARCEIROINFOBANCO.meiopagamento_id, MEIOPAGAMENTO.nome as meiopagamento_nome, PARCEIROINFOBANCO.contacorrente, PARCEIROINFOBANCO.agencianumero "+
 							" FROM ((((PARCEIROINFOBANCO (NOLOCK) LEFT JOIN BANCO (NOLOCK) ON PARCEIROINFOBANCO.banco_id = BANCO.banco_id) "+
 							" INNER JOIN EMPRESA (NOLOCK) ON PARCEIROINFOBANCO.empresa_id = EMPRESA.empresa_id) "+
 							" INNER JOIN ORGANIZACAO (NOLOCK) ON PARCEIROINFOBANCO.organizacao_id = ORGANIZACAO.organizacao_id) "+
@@ -77,7 +77,7 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 
 	public ParceiroInfoBanco buscaParceiroInfoBancoByParceiro(Long parceironegocio_id) {
 
-		String sql = sqlParceiroInfoBanco;
+		String sql = sqlParceiroInfoBancos;
 
 		if (parceironegocio_id != null)
 			sql += " WHERE PARCEIROINFOBANCO.parceironegocio_id = ?";
@@ -89,6 +89,7 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+			
 			this.stmt.setLong(1, parceironegocio_id);
 
 			this.rsParceiroInfoBanco = this.stmt.executeQuery();
@@ -96,10 +97,11 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 			while (rsParceiroInfoBanco.next()) {
 
 				parceiroInfoBanco = new ParceiroInfoBanco();
+				
 				MeioPagamento meioPagamento = new MeioPagamento();
 
 				meioPagamento.setMeioPagamento_id(rsParceiroInfoBanco.getLong("meiopagamento_id"));
-				meioPagamento.setNome(rsParceiroInfoBanco.getString("nome"));
+				meioPagamento.setNome(rsParceiroInfoBanco.getString("meiopagamento_nome"));
 
 				parceiroInfoBanco.setParceiroInfoBanco_id(rsParceiroInfoBanco.getLong("parceiroinfobanco_id"));
 				parceiroInfoBanco.setMeioPagamento(meioPagamento);

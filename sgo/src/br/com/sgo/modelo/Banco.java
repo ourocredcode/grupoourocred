@@ -68,6 +68,9 @@ public class Banco implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
+	@Column(name = "iscomprado")
+	private Boolean isComprado;
+
 	public Long getBanco_id() {
 		return banco_id;
 	}
@@ -170,6 +173,14 @@ public class Banco implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Boolean getIsComprado() {
+		return isComprado;
+	}
+
+	public void setIsComprado(Boolean isComprado) {
+		this.isComprado = isComprado;
 	}
 
 }
