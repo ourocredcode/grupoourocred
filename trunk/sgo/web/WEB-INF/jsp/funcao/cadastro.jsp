@@ -7,81 +7,36 @@ jQuery(function($){
 		window.location.href = '<c:url value="/funcao/cadastro" />';
 	});
 
-	$('#funcaoEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
-
-           		  if (!data || data.length == 0) {
-           	            $('#funcaoEmpresa').val('');
-						$('#funcaoEmpresaId').val('');
-           	        }
-
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#funcaoEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-
-        	 $('#funcaoEmpresa').val(ui.item.label);
-             $('#funcaoEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#funcaoOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#funcaoEmpresaId').val() == '' ? '0' :  $('#funcaoEmpresaId').val(), org_nome : $('#funcaoOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#funcaoOrganizacao').val('');
-         	            $('#funcaoOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#funcaoOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#funcaoOrganizacao').val(ui.item.label);
-             $('#funcaoOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
-
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/funcao/cadastro" />';
 	});
 
 	$('#btnNovo').click(function() {
 		limpaForm();
+	});
+
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
 	});
 
 	$("#funcaoIsActive").change(function(e){
@@ -99,6 +54,19 @@ function limpaForm() {
 		document.funcaoForm.reset();
 	}
 }
+
+
+function altera(linha, id) {
+	var valor = linha.checked == true ? true : false;
+	if (window.confirm("Deseja alterar o função selecionado?"))
+		$.post('<c:url value="/funcao/altera" />', {
+			'funcao.funcao_id' : id,
+			'funcao.isActive' : valor
+		});
+
+	return false;
+}
+
 </script>
 
 <div id="content-header">
@@ -111,27 +79,27 @@ function limpaForm() {
 	</div>
 </div>
 
-	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
-		<a href="#" class="current">Função</a>
-	</div>
-	
-	<c:if test="${not empty notice}">
-		<c:choose>
-			<c:when test="${fn:contains(notice,'Erro:')}">
-					<div class="alert alert-error">
-						<strong>${notice }</strong>
-						<a href="#" data-dismiss="alert" class="close">×</a>
-					</div>
-			</c:when>
-			<c:otherwise>
-					<div class="alert alert-success">
-						<strong>${notice }</strong>
-						<a href="#" data-dismiss="alert" class="close">×</a>
-					</div>
-			</c:otherwise>
-		</c:choose>
-	</c:if>
+<div id="breadcrumb">
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
+	<a href="#" class="current">Função</a>
+</div>
+
+<c:if test="${not empty notice}">
+	<c:choose>
+		<c:when test="${fn:contains(notice,'Erro:')}">
+				<div class="alert alert-error">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:when>
+		<c:otherwise>
+				<div class="alert alert-success">
+					<strong>${notice }</strong>
+					<a href="#" data-dismiss="alert" class="close">×</a>
+				</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <div class="container-fluid">
 	<div class="row-fluid">
@@ -150,24 +118,17 @@ function limpaForm() {
 						<div class="row-fluid">
 							<div class="span3">
 								<label for="funcaoEmpresa">Empresa</label>
-	      						<input class="span12" id="funcaoEmpresa" name="funcao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+	      						<input class="input-xlarge" id="funcaoEmpresa" name="funcao.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" readonly="readonly">
 	      						<input id="funcaoEmpresaId" name="funcao.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
     						</div>						
 							<div class="span3">
 								<label for="funcaoOrganizacao">Organização</label>
-								<input class="span12" id="funcaoOrganizacao" name="funcao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+								<input class="input-xlarge" id="funcaoOrganizacao" name="funcao.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" readonly="readonly">
 		      					<input id="funcaoOrganizacaoId" name="funcao.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
-						</div>						
-
-						<div class="row-fluid">
-							<div class="span5">
+							<div class="span3">
 								<label for="funcaoNome">Nome</label>								
-								<input class="span12"type="text" id="funcaoNome" name="funcao.nome" value="${funcao.nome }" placeholder="Nome" required>
-							</div>							
-							<div class="span5">
-								<label for="funcaoDescricao">Descrição</label>
-								<input class="span12" type="text" id="funcaoDescricao" name="funcao.descricao" value="${funcao.descricao }" placeholder="Descrição" required >								
+								<input class="input-xlarge"type="text" id="funcaoNome" name="funcao.nome" value="${funcao.nome }" placeholder="Nome" required>
 							</div>
 							<div class="span1">
 								<label for="funcaoIsActive">Ativo</label>
@@ -185,6 +146,50 @@ function limpaForm() {
 						</div>
 					</form>
 				</div>						
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Função</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty funcoes }">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Nome</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${funcoes }" var="funcao">
+									<tr>
+										<td>${funcao.empresa.nome }</td>
+										<td>${funcao.organizacao.nome }</td>
+										<td>${funcao.nome }</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="funcaoIsActiveLine" name="funcao.isActive"
+												<c:if test="${funcao.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${funcao.funcao_id}');">
+											</label>
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
+				</div>
 			</div>
 		</div>
 	</div>

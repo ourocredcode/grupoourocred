@@ -55,44 +55,43 @@ public class GrupoprodutoController {
 
 		try {
 
-			if(empresa.getNome().equals("SYSTEM") && organizacao.getNome().equals("SYSTEM")){
-				
-				if(this.grupoProdutoDao.buscaGrupoProdutoByNome(grupoProduto.getNome()) == null) {
-	
-					grupoProduto.setCreated(dataAtual);
-					grupoProduto.setUpdated(dataAtual);
-	
-					grupoProduto.setCreatedBy(usuario);
-					grupoProduto.setUpdatedBy(usuario);
-	
-					grupoProduto.setIsActive(grupoProduto.getIsActive() == null ? false : true);
-	
-					grupoProduto.setChave(grupoProduto.getNome());
-					grupoProduto.setDescricao(grupoProduto.getNome());
-	
-					this.grupoProdutoDao.beginTransaction();
-					this.grupoProdutoDao.adiciona(grupoProduto);
-					this.grupoProdutoDao.commit();
-	
-					mensagem = "Grupo adicionado com sucesso";
-	
-				} else {
-	
-					mensagem = "Erro: Grupo do produto já cadastrado.";
-	
-				}
+			if (this.grupoProdutoDao.buscaGrupoProdutoByEmpOrgNome(1l, 1l, grupoProduto.getNome()) == null) {				
+
+				grupoProduto.setCreated(dataAtual);
+				grupoProduto.setUpdated(dataAtual);
+
+				grupoProduto.setCreatedBy(usuario);
+				grupoProduto.setUpdatedBy(usuario);
+
+				grupoProduto.setChave(grupoProduto.getNome());
+				grupoProduto.setDescricao(grupoProduto.getNome());
+
+				empresa.setEmpresa_id(1l);
+				organizacao.setOrganizacao_id(1l);
+
+				grupoProduto.setEmpresa(empresa);
+				grupoProduto.setOrganizacao(organizacao);
+
+				grupoProduto.setIsActive(grupoProduto.getIsActive() == null ? false : true);
+
+				this.grupoProdutoDao.beginTransaction();
+				this.grupoProdutoDao.adiciona(grupoProduto);
+				this.grupoProdutoDao.commit();
+
+				mensagem = "Meio pagamento " + grupoProduto.getNome() + " adicionado com sucesso.";
+
 
 			} else {
 
-				mensagem = "Erro: Grupo não pode ser cadastrado nesta empresa.";
+				mensagem = "Erro: Meio pagamento já cadastrado.";
 
 			}
 
-		} catch(Exception e) {
+		} catch (Exception e) {
 
-			mensagem = "Erro: Falha ao adicionar o Grupo do Produto.";
+			mensagem = "Erro: Falha ao adicionar o Meio pagamento " + grupoProduto.getNome() + ".";
 
-		} finally {
+		} finally{
 
 			this.grupoProdutoDao.clear();
 			this.grupoProdutoDao.close();
@@ -104,9 +103,12 @@ public class GrupoprodutoController {
 
 	}
 
-	@Get @Path("/grupoproduto/busca.json")
+	@Get
+	@Path("/grupoproduto/busca.json")
 	public void grupoproduto(String nome){
+
 		result.use(Results.json()).withoutRoot().from(grupoProdutoDao.buscaGrupoProdutosByNome(nome)).serialize();
+
 	}
 	
 	@Get
