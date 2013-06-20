@@ -70,12 +70,16 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 
 	}
 	
-	public GrupoProduto buscaGrupoProdutoByNome(String nome) {
+	public GrupoProduto buscaGrupoProdutoByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = sqlGrupoProduto;
 
+		if (empresa_id != null)
+			sql += " WHERE GRUPOPRODUTO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND GRUPOPRODUTO.organizacao_id = ?";
 		if (nome != null)
-			sql += " WHERE GRUPOPRODUTO.nome = ? ";
+			sql += " AND GRUPOPRODUTO.nome = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -84,15 +88,16 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			
-			this.stmt.setString(1, nome);
 
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, nome);
+			
 			this.rsGrupoProdutos = this.stmt.executeQuery();
 
 			while (rsGrupoProdutos.next()) {
 
 				grupoProduto = new GrupoProduto();
-
 				grupoProduto.setGrupoProduto_id(rsGrupoProdutos.getLong("grupoproduto_id"));
 				grupoProduto.setNome(rsGrupoProdutos.getString("nome"));
 
@@ -105,9 +110,7 @@ public class GrupoProdutoDao extends Dao<GrupoProduto> {
 		}
 
 		this.conexao.closeConnection(rsGrupoProdutos, stmt, conn);
-
 		return grupoProduto;
-
 	}
 
 	public Collection<GrupoProduto> buscaGrupoProdutosByNome(String nome) {

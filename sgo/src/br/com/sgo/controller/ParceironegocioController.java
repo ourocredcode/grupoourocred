@@ -138,7 +138,7 @@ public class ParceironegocioController {
 	public void cadastro(){
 
 		result.include("departamentos", this.departamentoDao.buscaDepartamentos(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
-		result.include("funcoes", this.funcaoDao.buscaFuncoes(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
+		result.include("funcoes", this.funcaoDao.buscaAllFuncao(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("supervisores", this.parceiroNegocioDao.buscaParceiroNegocioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
@@ -235,7 +235,7 @@ public class ParceironegocioController {
 		}
 
 		result.include("departamentos", this.departamentoDao.buscaDepartamentos(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		result.include("funcoes", this.funcaoDao.buscaFuncoes(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("funcoes", this.funcaoDao.buscaAllFuncao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("supervisores", this.parceiroNegocioDao.buscaParceiroNegocioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
