@@ -106,12 +106,10 @@ jQuery(function($){
 
 function altera(linha, atributo, id) {
 
-	alert(linha.checked);
-
 	if(atributo == 'isWorkflowLine'){
 
 		var isWorkflow = linha.checked == true ? true : false;
-		alert(isWorkflow);
+
 		if (window.confirm("Deseja alterar o Banco do Produto selecionado?"))
 			$.post('<c:url value="/bancoproduto/altera" />', {
 				'bancoProduto.bancoProduto_id' : id, 'bancoProduto.isWorkflow' : isWorkflow
@@ -122,11 +120,12 @@ function altera(linha, atributo, id) {
 	if(atributo=='isActiveLine'){
 
 		var isActive = linha.checked == true ? true : false;
-		alert(isActive);
+
 		if (window.confirm("Deseja alterar o Banco do Produto selecionado?"))
 			$.post('<c:url value="/bancoproduto/altera" />', {'bancoProduto.bancoProduto_id' : id, 'bancoProduto.isActive' : isActive});
 
 	}
+
 	return false;
 }
 
