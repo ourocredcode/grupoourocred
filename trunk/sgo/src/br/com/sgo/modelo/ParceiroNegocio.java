@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.SessionScoped;
@@ -354,6 +355,27 @@ public class ParceiroNegocio implements Serializable {
 
 	public void setChave(String chave) {
 		this.chave = chave;
+	}
+	
+	public boolean equals(Object pn){
+
+		if ( pn == null )
+			return false;
+
+		ParceiroNegocio parceiroNegocio = (ParceiroNegocio) pn;
+
+		if (this.getParceiroNegocio_id() == parceiroNegocio.getParceiroNegocio_id())
+			return true;
+		else
+			return false;
+	}
+
+	@Transient
+	public int hashCode(){
+		if(this.getParceiroNegocio_id() != null)
+			return this.getParceiroNegocio_id().hashCode();
+		else
+			return 0;
 	}
 
 }

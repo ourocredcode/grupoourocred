@@ -73,14 +73,14 @@
 		});
 		$('#busca_DataVencimentoFim').datepicker({
 			dateFormat: 'dd/mm/y'
-		});
+		});	
 
 		$('.data-table').dataTable({
 			"bJQueryUI": true,
 			"sPaginationType": "full_numbers",
 			"sDom": '<""l>t<"F"fp>'
 		});
-		
+
 		$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 		
 		$('select').select2();
@@ -111,8 +111,6 @@
 		});
 
 	 });
-	 
-	 
 
 	 function buscaContratos(){
 
@@ -616,7 +614,7 @@
 					<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Contratos</h5></div>
 					<div id="resultado" class="widget-content">
 						<c:if test="${not empty contratos}">
-							<table class="table table-bordered table-striped table-hover data-table">
+							<table id="mytable" class="table table-bordered table-striped table-hover data-table">
 								<thead>	
 									<tr>
 										<th>
@@ -669,7 +667,7 @@
 										</th>
 									</tr>
 								</thead>
-								<tbody>		
+								<tbody>	
 									<c:forEach items="${contratos}" var="contrato">
 										<tr>
 											<td>
