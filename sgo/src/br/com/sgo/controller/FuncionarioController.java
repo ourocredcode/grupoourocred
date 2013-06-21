@@ -55,8 +55,24 @@ public class FuncionarioController {
 	@Path("/funcionario/equipe/{supervisor_id}")
 	public void equipe(Long supervisor_id) {
 
-		result.include("supervisores", this.funcionarioDao.buscaFuncionariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
-		result.include("funcionarios", this.funcionarioDao.buscaFuncionariosBySupervisor(empresa.getEmpresa_id(),  organizacao.getOrganizacao_id(), supervisor_id));
+		if(usuarioInfo.getPerfil().equals("Consultor") || usuarioInfo.getPerfil().equals("Supervisor")) {
+
+			result.include("supervisores", this.funcionarioDao.buscaFuncionariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+			result.include("funcionarios", this.funcionarioDao.buscaFuncionariosBySupervisor(empresa.getEmpresa_id(),  organizacao.getOrganizacao_id(), supervisor_id));
+
+		} else {
+
+			result.redirectTo(this).ramais(supervisor_id);
+
+		}
+
+	}
+	
+	@Get
+	@Path("/funcionario/ramais/{supervisor_id}")
+	public void ramais(Long supervisor_id) {
+
+		result.include("funcionarios", this.funcionarioDao.buscaFuncionariosByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 	

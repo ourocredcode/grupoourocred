@@ -43,6 +43,67 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		super(session, Funcionario.class);
 		this.conexao = conexao;
 	}
+	
+	public Collection<Funcionario> buscaFuncionariosByEmpOrg(Long empresa_id, Long organizacao_id) {
+
+		String sql = sqlFuncionario;
+
+		sql += " WHERE PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? ORDER BY SUPER.nome, FUNCIONARIO.nome  " ;
+
+		this.conn = this.conexao.getConexao();
+		
+		Collection<Funcionario> funcionarios = new ArrayList<Funcionario>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
+			this.rsFuncionario = this.stmt.executeQuery();
+
+			while (rsFuncionario.next()) {
+
+				ParceiroNegocio parceiro = new ParceiroNegocio();
+				ParceiroNegocio supervisor = new ParceiroNegocio();
+				Departamento d = new Departamento();
+				Funcao f = new Funcao();
+				Funcionario funcionario = new Funcionario();
+				
+
+				parceiro.setParceiroNegocio_id(rsFuncionario.getLong("parceironegocio_id"));
+				parceiro.setNome(rsFuncionario.getString("parceironegocio_nome"));
+				parceiro.setIsFuncionario(true);
+
+				d.setDepartamento_id(rsFuncionario.getLong("departamento_id"));
+				d.setNome(rsFuncionario.getString("departamento_nome"));
+
+				f.setFuncao_id(rsFuncionario.getLong("funcao_id"));
+				f.setNome(rsFuncionario.getString("funcao_nome"));
+
+				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
+				funcionario.setFuncao(f);
+				funcionario.setDepartamento(d);
+				funcionario.setParceiroNegocio(parceiro);
+				
+				supervisor.setParceiroNegocio_id(rsFuncionario.getLong("supervisor_funcionario_id"));
+				supervisor.setNome(rsFuncionario.getString("supervisor_nome"));
+				funcionario.setSupervisor(supervisor);
+				
+				funcionarios.add(funcionario);
+				
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsFuncionario, stmt, conn);
+
+		return funcionarios;
+
+	}
 
 	public Funcionario buscaFuncionarioPorParceiroNegocio(Long parceironegocio_id) {
 
