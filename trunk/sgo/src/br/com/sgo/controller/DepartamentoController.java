@@ -1,78 +1,131 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.DepartamentoDao;
-import br.com.sgo.dao.EmpresaDao;
-import br.com.sgo.dao.OrganizacaoDao;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Departamento;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Funcao;
+import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class DepartamentoController {
 
-	private final Result result;
-	private final Validator validator;
-	private final DepartamentoDao departamentoDao;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
-	
+	private final Result result;	
+	private final DepartamentoDao departamentoDao;	
 
-	public DepartamentoController(Result result, Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, DepartamentoDao departamentoDao){
-		this.departamentoDao = departamentoDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;		
+	private Departamento departamento;
+
+	private UsuarioInfo usuarioInfo;	
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
+
+	private Calendar dataAtual = Calendar.getInstance();
+
+	public DepartamentoController(Result result, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, Usuario usuario
+			,Departamento departamento, DepartamentoDao departamentoDao){
+
 		this.result = result;
-		this.validator = validator;
+		this.departamento = departamento;
+		this.departamentoDao = departamentoDao;
+		this.usuarioInfo = usuarioInfo;				
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
 
 	}	
 
 	@Get
 	@Path("/departamento/cadastro")
 	public void cadastro(){
-		//result.include("departamento",this.departamentoDao.listaTudo("ASC","nome"));
+
+		result.include("departamentos", this.departamentoDao.buscaAllDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+
 	}
 
 	@Post
 	@Path("/departamento/salva")
 	public void salva(Departamento departamento){
 		
-		validator.validate(departamento);
-		validator.onErrorUsePageOf(this).cadastro();
 
 		String mensagem = "";
 
 		try {
 
-			departamento.setEmpresa(this.empresaDao.load(departamento.getEmpresa().getEmpresa_id()));		
-			departamento.setOrganizacao(this.organizacaoDao.load(departamento.getOrganizacao().getOrganizacao_id()));			
-			departamento.setIsActive(departamento.getIsActive() == null ? false : true);
+			if (this.departamentoDao.buscaDepartamentoByEmpOrgNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), departamento.getNome()) == null) {				
 
-			this.departamentoDao.beginTransaction();
-			this.departamentoDao.adiciona(departamento);
-			this.departamentoDao.commit();
+				departamento.setCreated(dataAtual);
+				departamento.setUpdated(dataAtual);
 
-			mensagem = "Grupo de Parceiro " + departamento.getNome() + " adicionado com sucesso";			
+				departamento.setCreatedBy(usuario);
+				departamento.setUpdatedBy(usuario);
 
-		} catch(Exception e) {
-			
-			this.departamentoDao.rollback();
+				departamento.setChave(departamento.getNome());
+				departamento.setDescricao(departamento.getNome());
 
-			if (e.getCause().toString().indexOf("IX_DEPARTAMENTO_EMPORGNOME") != -1){
-				mensagem = "Erro: Tipo Parceiro " + departamento.getNome() + " já existente.";
+				departamento.setEmpresa(empresa);
+				departamento.setOrganizacao(organizacao);
+
+				departamento.setIsActive(departamento.getIsActive() == null ? false : true);
+
+				this.departamentoDao.beginTransaction();
+				this.departamentoDao.adiciona(departamento);
+				this.departamentoDao.commit();
+
+				mensagem = "Departamento " + departamento.getNome() + " adicionado com sucesso.";
+
+
 			} else {
-				mensagem = "Erro ao adicionar Departamento";
+
+				mensagem = "Erro: Departamento já cadastrado.";
+
 			}
+
+		} catch (Exception e) {
+
+			mensagem = "Erro: Falha ao adicionar a Departamento " + departamento.getNome() + ".";
+
+		} finally{
+
+			this.departamentoDao.clear();
+			this.departamentoDao.close();
 
 		}
 
-		this.departamentoDao.clear();
-		this.departamentoDao.close();
-		result.include("notice",mensagem);
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+
+	}
+	
+	@Post
+	@Path("/departamento/altera")
+	public void altera(Funcao departamento) {
+
+		String mensagem = "";
+
+		this.departamento = this.departamentoDao.load(departamento.getFuncao_id());
+
+		this.departamento.setUpdated(dataAtual);
+		this.departamento.setUpdatedBy(usuario);
+
+		this.departamento.setIsActive(departamento.getIsActive() == null || departamento.getIsActive() == false ? false : true);
+
+		departamentoDao.beginTransaction();		
+		departamentoDao.atualiza(this.departamento);
+		departamentoDao.commit();
+
+		mensagem = " Departamento alteterada com sucesso.";
+
+		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
 	}
@@ -80,7 +133,9 @@ public class DepartamentoController {
 	@Get
 	@Path("/departamento/busca.json")
 	public void departamento(Long empresa_id, Long organizacao_id, String nome){
+
 		result.use(Results.json()).withoutRoot().from(departamentoDao.buscaDepartamentos(empresa_id, organizacao_id, nome)).serialize();
+
 	}
 
 }

@@ -1,80 +1,12 @@
 <%@ include file="/header.jspf"%>
 
 <script type="text/javascript">
+
 jQuery(function($){
 
 	$('#departamento-li-a').click(function() {
 		window.location.href = '<c:url value="/departamento/cadastro" />';
 	});
-
-	$('#departamentoEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-              success : function(data) {  
-
-           		  if (!data || data.length == 0) {
-           	            $('#departamentoEmpresa').val('');
-						$('#departamentoEmpresaId').val('');
-           	        }
-
-            	  response($.map(data, function(empresa) {  
-            		  return {
-                          label: empresa.nome,
-                          value: empresa.empresa_id
-                      };
-                  }));  
-               }
-	        });
-         } ,
-         focus: function( event, ui ) {
-        	 $('#departamentoEmpresa').val(ui.item.label);
-             return false;
-         } ,
-         select: function( event, ui ) {
-
-        	 $('#departamentoEmpresa').val(ui.item.label);
-             $('#departamentoEmpresaId').val(ui.item.value);
-
-             return false;
-
-         }
-    });
-
-	$('#departamentoOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#departamentoEmpresaId').val() == '' ? '0' :  $('#departamentoEmpresaId').val(), org_nome : $('#departamentoOrganizacao').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#departamentoOrganizacao').val('');
-         	            $('#departamentoOrganizacaoId').val('');
-         	        }
-
-            	  response($.map(data, function(organizacao) {  
-            		  return {
-            			  label: organizacao.nome,
-            			  value: organizacao.organizacao_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#departamentoOrganizacao').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#departamentoOrganizacao').val(ui.item.label);
-             $('#departamentoOrganizacaoId').val(ui.item.value);
-             return false;
-         }
-    });
 
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/departamento/cadastro" />';
@@ -82,6 +14,31 @@ jQuery(function($){
 
 	$('#btnNovo').click(function() {
 		limpaForm();
+	});
+
+	
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
 	});
 
 	$("#departamentoIsActive").change(function(e){
@@ -99,6 +56,18 @@ function limpaForm() {
 		document.departamentoForm.reset();
 	}
 }
+
+function altera(linha, id) {
+	var valor = linha.checked == true ? true : false;
+	if (window.confirm("Deseja alterar o departamento selecionado?"))
+		$.post('<c:url value="/departamento/altera" />', {
+			'departamento.departamento_id' : id,
+			'departamento.isActive' : valor
+		});
+
+	return false;
+}
+
 </script>
 
 <div id="content-header">
@@ -137,7 +106,6 @@ function limpaForm() {
 		<div class="row-fluid">
 			<div class="span12">
 
-
 			<ul id="myTab" class="nav nav-tabs">
 				<li class="" id="departamento-li"><a href="#departamento-div" data-toggle="tab" id="departamento-li-a">Cadastro de Departamentos</a></li>				
 			</ul>
@@ -147,30 +115,25 @@ function limpaForm() {
 														
 					<form id="departamentoForm" name="departamentoForm" action="<c:url value="/departamento/salva"/>" method="POST">
 						<div class="row-fluid">
-							<div class="span2">
+							<div class="span3">
 								<label for="departamentoEmpresa">Empresa</label>
-		      					<input class="span12" id="departamentoEmpresa" name="departamento.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="input-xlarge" id="departamentoEmpresa" name="departamento.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" readonly="readonly">
 		      					<input class="span1" id="departamentoEmpresaId" name="departamento.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
 	    					</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="departamentoOrganizacao">Organização</label>
-		      					<input class="span12" id="departamentoOrganizacao" name="departamento.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required onChange="limpaForm();" readonly="readonly">
+		      					<input class="input-xlarge" id="departamentoOrganizacao" name="departamento.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" readonly="readonly">
 		      					<input class="span1" id="departamentoOrganizacaoId" name="departamento.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
-							<div class="span2">
+							<div class="span3">
 								<label for="departamentoNome">Nome</label>
-								<input class="span12" type="text" id="departamentoNome" name="departamento.nome" value="${departamento.nome }" placeholder="Nome" required>
-							</div>
-							<div class="span2">
-								<label for="departamentoDescricao">Descrição</label>
-								<input class="span12" type="text" id="departamentoDescricao" name="departamento.descricao" value="${departamento.descricao }" placeholder="Descrição" required>
-							</div>
+								<input class="input-xlarge" type="text" id="departamentoNome" name="departamento.nome" value="${departamento.nome }" placeholder="Nome" required>
+							</div>							
 							<div class="span1">
 								<label for="departamentoIsActive">Ativo</label>
 								<input type="checkbox" id="departamentoIsActive" name="departamento.isActive" checked="checked" value="1" >
 							</div>
 						</div>
-
 					 	<div class="btn-group">
 							<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
 						</div>
@@ -181,7 +144,50 @@ function limpaForm() {
 							<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
 						</div>
 					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>Função</h5>
+				</div>
+				<div id="resultado" class="widget-content">
+					<c:if test="${not empty departamentos }">
+						<table
+							class="table table-bordered table-striped table-hover data-table"
+							style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
+									<th>Nome</th>
+									<th>Ativo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${departamentos }" var="departamento">
+									<tr>
+										<td>${departamento.empresa.nome }</td>
+										<td>${departamento.organizacao.nome }</td>
+										<td>${departamento.nome }</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="departamentoIsActiveLine" name="departamento.isActive"
+												<c:if test="${departamento.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${departamento.departamento_id}');">
+											</label>
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</c:if>
 				</div>
 			</div>
 		</div>
