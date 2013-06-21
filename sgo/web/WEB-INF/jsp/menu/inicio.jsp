@@ -3,7 +3,7 @@
 	<script type="text/javascript" src="<c:url value="/js/unicorn.dashboard.js"/>"></script>
 
 	<div id="content-header">
-		<h1>DashBoard - ${usuarioInfo.usuario.nome } / Equipe : ${usuarioInfo.usuario.supervisorUsuario.nome }</h1>
+		<h1>DashBoard - ${usuarioInfo.usuario.nome } </h1>
 		
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
@@ -23,42 +23,71 @@
 			<div class="span12">
 
 				<div class="alert alert-info">
-					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas ! Perfil : ${usuarioInfo.perfil.chave }<a href="#" data-dismiss="alert" class="close">×</a>
+					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas !<a href="#" data-dismiss="alert" class="close">×</a>
 				</div>
 
 				<div class="widget-box">
 
 					<div class="widget-title">
 						<span class="icon"><i class="icon-signal"></i>
-						</span><h5>Vendas</h5>
+						</span><h5>Vendas - <fmt:formatDate value="${calInicio.time}" pattern="dd/MM/yyyy" /> até <fmt:formatDate value="${calFim.time}" pattern="dd/MM/yyyy" /></h5>
 						<div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-refresh"></i> Update stats</a></div>
 					</div>
 
 					<div class="widget-content">
 						<div class="row-fluid">
 							<div class="span12">
-								<div class="span12 center" style="text-align: center;">					
+								<div class="span12 center" style="text-align: center;font-size: 8px;">					
 									<ul class="stat-boxes">
 										
+										<li class="popover-users">
+											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
+											<div class="right" style="width: 120px;">
+												<strong><fmt:formatNumber type="NUMBER" value="${totalValorContratos}" minFractionDigits="2" /></strong>
+												T. Contratos 
+											</div>
+										</li>
+										
+										<li class="popover-users">
+											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
+											<div class="right" style="width: 120px;">
+												<strong><fmt:formatNumber type="NUMBER" value="${totalContratoLiquido}" minFractionDigits="2" /></strong>
+												T. C. Liquido
+											</div>
+										</li>
+										<li class="popover-users">
+											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
+											<div class="right" style="width: 120px;">
+												<strong><fmt:formatNumber type="NUMBER" value="${totalValorLiquido}" minFractionDigits="2" /></strong>
+												Vl Líquido
+											</div>
+										</li>
+										<li class="popover-users">
+											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
+											<div class="right" style="width: 120px;">
+												<strong><fmt:formatNumber type="NUMBER" value="${totalValorDivida}" minFractionDigits="2" /></strong>
+												Vl Dívida
+											</div>
+										</li>
+										<li class="popover-users">
+											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,${countClientes }</span>0%</div>
+											<div class="right"  style="width: 120px;">
+												<strong>${countClientes }</strong>
+												Clientes
+											</div>
+										</li>
 										<li class="popover-visits">
 											<div class="left peity_bar_good"><span>1,3,10,2,1,4,${countContratos}</span>10%</div>
-											<div class="right">
+											<div class="right"  style="width: 120px;">
 												<a href="#" onclick="javascript:window.location='/sgo/menu/contratos/${usuarioInfo.perfil.chave}'">
 													<strong>${countContratos}</strong>
 													Contratos
 												</a>
 											</div>
 										</li>
-										<li class="popover-users">
-											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,${countClientes }</span>0%</div>
-											<div class="right">
-												<strong>${countClientes }</strong>
-												Clientes
-											</div>
-										</li>
 										<li class="popover-orders">
-											<div class="left peity_bar_bad"><span>1030,480,200,5200,1200,250,${totalValorMeta }</span>0%</div>
-											<div class="right" style="width: auto;">
+											<div class="left peity_bar_good"><span>1030,480,200,5200,1200,250,${totalValorMeta }</span>0%</div>
+											<div class="right" style="width: 120px;">
 												<a href="#" onclick="javascript:window.location='/sgo/menu/contratos/aprovados'">
 													<strong><fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" /></strong>
 													Aprovados
@@ -66,8 +95,8 @@
 											</div>
 										</li>
 										<li class="popover-tickets">
-											<div class="left peity_line_good"><span>0,0,0,0,0,0,0</span>0%</div>
-											<div class="right">
+											<div class="left peity_bar_bad"><span>4,1,7,10,4,2,1</span>0%</div>
+											<div class="right"  style="width: 120px;">
 												<strong>0</strong>
 												Pendentes
 											</div>
@@ -78,6 +107,10 @@
 						</div>
 					</div>
 				</div>
+			
+			
+			
+			
 			</div>
 		</div>
 	</div>
@@ -147,9 +180,17 @@
 							<tbody>
 								<c:forEach items="#{mapEtapas }" var="map">
 									<tr>
-										<td>
-											${map.key }
-										</td>
+										<c:choose>
+											<c:when test="${map.key == 'Aprovado' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/aprovados'">${map.key }</a></td></c:when>
+											<c:when test="${map.key == 'Aguardando Status' }"><td>${map.key }</td></c:when>
+											<c:when test="${map.key == 'Pendente Administrativo' }"><td>${map.key }</td></c:when>
+											<c:when test="${map.key == 'Pendente Agendamento' }"><td>${map.key }</td></c:when>
+											<c:when test="${map.key == 'Pendente Banco' }"><td>${map.key }</td></c:when>
+											<c:when test="${map.key == 'Pendente Coeficiente' }"><td>${map.key }</td></c:when>
+											<c:when test="${map.key == 'Pendente Conferência' }"><td>${map.key }</td></c:when>
+											<c:when test="${map.key == 'Recalcular' }"><td>${map.key }</td></c:when>
+											<c:otherwise><td>${map.key }</td></c:otherwise>
+										</c:choose>
 										<c:choose>
 											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-success">${map.value }</span></td></c:when>
 											<c:when test="${map.key == 'Aguardando Status' }"><td><span class="badge">${map.value }</span></td></c:when>

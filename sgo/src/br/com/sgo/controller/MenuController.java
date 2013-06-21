@@ -141,6 +141,8 @@ public class MenuController {
 		}
 
 		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesByEmpOrg(empresa_id, organizacao_id));
+		result.include("calInicio", c1);
+		result.include("calFim", c2);
 
 		contadorSeparado();
 
@@ -228,6 +230,7 @@ public class MenuController {
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+
 
 		contador();
 
@@ -604,6 +607,7 @@ public class MenuController {
 		Double totalValorLiquido = 0.0;
 		Integer countContratos = 0;
 		Set<ParceiroNegocio> countClientes = new HashSet<ParceiroNegocio>();
+		Double totalContratoLiquido = 0.0;
 
 		for(Contrato cs : contratos){
 			countClientes.add(cs.getFormulario().getParceiroNegocio());
@@ -613,11 +617,18 @@ public class MenuController {
 			totalValorSeguro += cs.getValorSeguro();
 			totalValorLiquido += cs.getValorLiquido();
 			countContratos += 1;
+			
+			if(cs.getProduto().getNome().equals("MARGEM LIMPA") || cs.getProduto().getNome().equals("RECOMPRA INSS")  || cs.getProduto().getNome().equals("RECOMPRA RMC") )
+				totalContratoLiquido += cs.getValorContrato();
+			
+			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") || cs.getProduto().getNome().equals("RETENÇÃO"))
+				totalContratoLiquido += cs.getValorLiquido();
+			
 		}
 
 		result.include("contratos",contratos);
 		result.include("totalValorContratos",totalValorContratos);
-
+		result.include("totalContratoLiquido",totalContratoLiquido);
 		result.include("totalValorDivida",totalValorDivida);
 		result.include("totalValorSeguro",totalValorSeguro);
 		result.include("totalValorLiquido",totalValorLiquido);
@@ -634,6 +645,8 @@ public class MenuController {
 		Double totalValorDivida = 0.0;
 		Double totalValorSeguro = 0.0;
 		Double totalValorLiquido = 0.0;
+		Double totalContratoLiquido = 0.0;
+		
 		Integer countContratos = 0;
 		Set<ParceiroNegocio> countClientes = new HashSet<ParceiroNegocio>();
 		Etapa aprovado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNomeExato(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Aprovado");
@@ -650,6 +663,12 @@ public class MenuController {
 			if(cs.getEtapa().getEtapa_id().compareTo(aprovado.getEtapa_id()) == 0){
 				totalValorMeta += cs.getValorMeta();
 			}
+
+			if(cs.getProduto().getNome().equals("MARGEM LIMPA") || cs.getProduto().getNome().equals("RECOMPRA INSS")  || cs.getProduto().getNome().equals("RECOMPRA RMC") )
+				totalContratoLiquido += cs.getValorContrato();
+			
+			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") || cs.getProduto().getNome().equals("RETENÇÃO"))
+				totalContratoLiquido += cs.getValorLiquido();
 				
 
 			countContratos += 1;
@@ -658,7 +677,7 @@ public class MenuController {
 
 		result.include("contratos",contratos);
 		result.include("totalValorContratos",totalValorContratos);
-
+		result.include("totalContratoLiquido",totalContratoLiquido);
 		result.include("totalValorDivida",totalValorDivida);
 		result.include("totalValorSeguro",totalValorSeguro);
 		result.include("totalValorLiquido",totalValorLiquido);
