@@ -58,7 +58,7 @@ function limpaForm() {
 
 function altera(linha, id) {
 	var valor = linha.checked == true ? true : false;
-	if (window.confirm("Deseja alterar o função selecionado?"))
+	if (window.confirm("Deseja alterar a função selecionado?"))
 		$.post('<c:url value="/funcao/altera" />', {
 			'funcao.funcao_id' : id,
 			'funcao.isActive' : valor
