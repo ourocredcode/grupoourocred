@@ -60,6 +60,17 @@ public class Agente implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
+	@Column(name = "iscontrole")
+	private Boolean isControle;
+
+	public Boolean getIsControle() {
+		return isControle;
+	}
+
+	public void setIsControle(Boolean isControle) {
+		this.isControle = isControle;
+	}
+
 	public Long getAgente_id() {
 		return agente_id;
 	}

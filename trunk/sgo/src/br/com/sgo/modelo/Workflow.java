@@ -35,7 +35,7 @@ public class Workflow implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "tipoworkflow_id", updatable = true, nullable = false)
+	@JoinColumn(name = "tipoworkflow_id", updatable = true, nullable = true)
 	private TipoWorkflow tipoWorkflow;
 
 	@ManyToOne
