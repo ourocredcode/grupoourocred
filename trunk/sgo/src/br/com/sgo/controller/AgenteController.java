@@ -140,7 +140,7 @@ public class AgenteController {
 	@Path("/agente/busca.json")
 	public void agente(Long empresa_id, Long organizacao_id, String nome){
 
-		result.use(Results.json()).withoutRoot().from(agenteDao.buscaAllAgenteByEmpOrgNome(empresa_id, organizacao_id, nome)).serialize();
+		result.use(Results.json()).withoutRoot().from(agenteDao.buscaAgentesByEmpOrgNome(empresa_id, organizacao_id, nome)).serialize();
 
 	}
 
