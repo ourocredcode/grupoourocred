@@ -524,7 +524,7 @@ public class MenuController {
 			empresas.add(empresa);
 		}
 		
-		TipoControle tipoControle = this.tipoControleDao.buscaTipoControleByNome(tipoBusca);
+		TipoControle tipoControle = this.tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,tipoBusca);
 
 		contratos.clear();
 
