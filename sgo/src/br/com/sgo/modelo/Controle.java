@@ -39,8 +39,8 @@ public class Controle implements Serializable {
 	private Contrato contrato;
 
 	@ManyToOne
-	@JoinColumn(name = "usuario_id", updatable = true, nullable = true)
-	private Usuario usuario;
+	@JoinColumn(name = "proximoatuante_id", updatable = true, nullable = true)
+	private Usuario proximoAtuante;
 	
 	@ManyToOne
 	@JoinColumn(name = "perfil_id", updatable = true, nullable = true)
@@ -65,7 +65,11 @@ public class Controle implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "tipocontrole_id", updatable = true, nullable = true)
 	private TipoControle tipoControle;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "agente_id", updatable = true, nullable = true)
+	private Agente agente;
+
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
@@ -110,6 +114,14 @@ public class Controle implements Serializable {
 	@Column(name="datavencimento")
 	private Calendar dataVencimento;
 
+	public Agente getAgente() {
+		return agente;
+	}
+
+	public void setAgente(Agente agente) {
+		this.agente = agente;
+	}
+
 	public Long getControle_id() {
 		return controle_id;
 	}
@@ -142,12 +154,12 @@ public class Controle implements Serializable {
 		this.contrato = contrato;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public Usuario getProximoAtuante() {
+		return proximoAtuante;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setProximoAtuante(Usuario proximoAtuante) {
+		this.proximoAtuante = proximoAtuante;
 	}
 
 	public Perfil getPerfil() {
@@ -310,5 +322,4 @@ public class Controle implements Serializable {
 		this.dataVencimento = dataVencimento;
 	}
 
-	
 }

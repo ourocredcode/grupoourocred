@@ -35,15 +35,15 @@ public class BancoProduto implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
+	@JoinColumn(name = "banco_id", updatable = true, nullable = true)
 	private Banco banco;
 
 	@ManyToOne
-	@JoinColumn(name = "produto_id", updatable = true, nullable = false)
+	@JoinColumn(name = "produto_id", updatable = true, nullable = true)
 	private Produto produto;
 
 	@ManyToOne
-	@JoinColumn(name = "workflow_id", updatable = true, nullable = false)
+	@JoinColumn(name = "workflow_id", updatable = true, nullable = true)
 	private Workflow workflow;
 
 	@ManyToOne

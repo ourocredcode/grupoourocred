@@ -35,12 +35,12 @@ public class Coeficiente implements Serializable {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
-	private Banco banco;
+	@JoinColumn(name = "tabela_id", updatable = true, nullable = true)
+	private Tabela tabela;
 
 	@ManyToOne
-	@JoinColumn(name = "tabela_id", updatable = true, nullable = false)
-	private Tabela tabela;
+	@JoinColumn(name = "banco_id", updatable = true, nullable = true)
+	private Banco banco;
 	
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
