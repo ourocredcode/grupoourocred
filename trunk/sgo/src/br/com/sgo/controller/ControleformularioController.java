@@ -82,7 +82,7 @@ public class ControleformularioController {
 	public void posvenda(Long formulario_id){
 
 		formulario = formularioDao.load(formulario_id);
-		TipoControle tp = this.tipoControleDao.buscaTipoControleByNome("Pós Venda");
+		TipoControle tp = this.tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Pós Venda");
 
 		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario_id));
 
@@ -105,7 +105,7 @@ public class ControleformularioController {
 			posvenda = new ControleFormulario();
 
 		posvenda.setFormulario(formulario);
-		posvenda.setTipoControle(this.tipoControleDao.buscaTipoControleByNome("Pós Venda"));
+		posvenda.setTipoControle(this.tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Pós Venda"));
 		posvenda.setUsuario(usuario);
 		posvenda.setPerfil(perfil);
 

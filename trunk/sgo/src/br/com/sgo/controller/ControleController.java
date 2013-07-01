@@ -14,17 +14,17 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleDao;
+import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.TipoControleDao;
-import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Controle;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Usuario;
-import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class ControleController {
@@ -66,7 +66,7 @@ public class ControleController {
 	@Path("/controle/boleto")
 	public void boleto(Long contrato_id){
 
-		boleto = this.controleDao.buscaControleByContratoTipoControle(contrato_id, tipoControleDao.buscaTipoControleByNome("Boleto").getTipoControle_id());
+		boleto = this.controleDao.buscaControleByContratoTipoControle(contrato_id, tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Boleto").getTipoControle_id());
 		
 		if(boleto == null){
 			boleto = new Controle();
@@ -82,7 +82,7 @@ public class ControleController {
 	@Path("/controle/averbacao")
 	public void averbacao(Long contrato_id){
 
-		averbacao = this.controleDao.buscaControleByContratoTipoControle(contrato_id, tipoControleDao.buscaTipoControleByNome("Averbacao").getTipoControle_id());
+		averbacao = this.controleDao.buscaControleByContratoTipoControle(contrato_id, tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Averbacao").getTipoControle_id());
 
 		if(averbacao == null){
 			averbacao = new Controle();
@@ -107,7 +107,7 @@ public class ControleController {
 			this.averbacao = controleDao.load(averbacao.getControle_id());
 			this.averbacao.setDataAtuacao(GregorianCalendar.getInstance());
 			this.averbacao.setContrato(contratoDao.load(averbacao.getContrato().getContrato_id()));
-			this.averbacao.setUsuario(usuarioInfo.getUsuario());
+			this.averbacao.setProximoAtuante(usuarioInfo.getUsuario());
 
 			this.averbacao.setDataProximaAtuacao(this.averbacao.getDataProximaAtuacao() == null ? calInicial : this.averbacao.getDataProximaAtuacao());
 			averbacao.setDataProximaAtuacao(averbacao.getDataProximaAtuacao() == null ? calInicial : averbacao.getDataProximaAtuacao());
@@ -191,11 +191,11 @@ public class ControleController {
 			averbacao.setDataPrimeiraAtuacao(GregorianCalendar.getInstance());
 			averbacao.setDataAtuacao(GregorianCalendar.getInstance());
 			averbacao.setContrato(contratoDao.load(averbacao.getContrato().getContrato_id()));
-			averbacao.setUsuario(usuarioInfo.getUsuario());
+			averbacao.setProximoAtuante(usuarioInfo.getUsuario());
 			averbacao.setEmpresa(empresa);
 			averbacao.setOrganizacao(organizacao);
 			averbacao.setIsActive(true);
-			averbacao.setTipoControle(tipoControleDao.buscaTipoControleByNome("Averbacao"));
+			averbacao.setTipoControle(tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Averbacao"));
 
 			controleDao.beginTransaction();
 			controleDao.adiciona(averbacao);
@@ -244,7 +244,7 @@ public class ControleController {
 			this.boleto = controleDao.load(boleto.getControle_id());
 			this.boleto.setDataAtuacao(GregorianCalendar.getInstance());
 			this.boleto.setContrato(contratoDao.load(boleto.getContrato().getContrato_id()));
-			this.boleto.setUsuario(usuarioInfo.getUsuario());
+			this.boleto.setProximoAtuante(usuarioInfo.getUsuario());
 
 			this.boleto.setDataProximaAtuacao(this.boleto.getDataProximaAtuacao() == null ? calInicial : this.boleto.getDataProximaAtuacao());
 			boleto.setDataProximaAtuacao(boleto.getDataProximaAtuacao() == null ? calInicial : boleto.getDataProximaAtuacao());
@@ -378,11 +378,11 @@ public class ControleController {
 			boleto.setDataPrimeiraAtuacao(GregorianCalendar.getInstance());
 			boleto.setDataAtuacao(GregorianCalendar.getInstance());
 			boleto.setContrato(contratoDao.load(boleto.getContrato().getContrato_id()));
-			boleto.setUsuario(usuarioInfo.getUsuario());
+			boleto.setProximoAtuante(usuarioInfo.getUsuario());
 			boleto.setEmpresa(empresa);
 			boleto.setOrganizacao(organizacao);
 			boleto.setIsActive(true);
-			boleto.setTipoControle(tipoControleDao.buscaTipoControleByNome("Boleto"));
+			boleto.setTipoControle(tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Boleto"));
 
 			controleDao.beginTransaction();
 			controleDao.adiciona(boleto);
@@ -411,8 +411,6 @@ public class ControleController {
 			}
 
 		}
-		
-		
 
 		result.include("msg","Controle Boleto preenchido com sucesso.").redirectTo(this).msg();
 

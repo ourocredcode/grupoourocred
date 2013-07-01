@@ -213,8 +213,8 @@ public class ContratoController {
 		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
 		logisticas = logisticaDao.buscaLogisticaByContrato(id);
 		
-		boleto = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByNome("Boleto").getTipoControle_id());
-		averbacao = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByNome("Averbacao").getTipoControle_id());
+		boleto = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Boleto").getTipoControle_id());
+		averbacao = this.controleDao.buscaControleByContratoTipoControle(id, tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Averbacao").getTipoControle_id());
 
 		TipoProcedimento tipoProcedimento = this.tipoProcedimentoDao.buscaTipoProcedimentoByNome("Contrato");
 		

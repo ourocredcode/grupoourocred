@@ -169,7 +169,7 @@ public class FormularioController {
 
 		result.include("bancos", this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
-		TipoControle tp = this.tipoControleDao.buscaTipoControleByNome("Pós Venda");
+		TipoControle tp = this.tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Pós Venda");
 
 		ControleFormulario posvenda = controleFormularioDao.buscaControleByContratoTipoControle(formulario.getFormulario_id(), tp.getTipoControle_id());
 
