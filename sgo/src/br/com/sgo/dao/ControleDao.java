@@ -74,7 +74,7 @@ public class ControleDao extends Dao<Controle> {
 
 				controle.setControle_id(rsControle.getLong("controle_id"));
 				controle.setContrato(contrato);
-				controle.setUsuario(usuario);
+				controle.setProximoAtuante(usuario);
 
 				if(rsControle.getDate("dataatuacao") != null){
 					calendarAux.setTime(rsControle.getDate("dataatuacao"));
