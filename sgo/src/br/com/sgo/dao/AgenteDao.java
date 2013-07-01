@@ -75,7 +75,7 @@ public class AgenteDao extends Dao<Agente> {
 
 	}
 
-	public Collection<Agente> buscaAllAgenteByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
+	public Collection<Agente> buscaAgentesByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = sqlAgentes;
 		
