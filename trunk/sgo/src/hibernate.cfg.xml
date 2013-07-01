@@ -40,12 +40,14 @@
 		<mapping class="br.com.sgo.modelo.NaturezaProfissional" />
 		<mapping class="br.com.sgo.modelo.Seguro" />
 		<mapping class="br.com.sgo.modelo.Formulario" />
-		<mapping class="br.com.sgo.modelo.Controle" />
-		<mapping class="br.com.sgo.modelo.ControleFormulario" />
 		<mapping class="br.com.sgo.modelo.Logistica" />
 		<mapping class="br.com.sgo.modelo.Periodo" />
 		<mapping class="br.com.sgo.modelo.TipoLogistica" />
 		
+		<mapping class="br.com.sgo.modelo.Agente" />
+		<mapping class="br.com.sgo.modelo.Controle" />
+		<mapping class="br.com.sgo.modelo.ControleFormulario" />
+		<mapping class="br.com.sgo.modelo.TipoControle" />		
 		<mapping class="br.com.sgo.modelo.Conferencia" />		
 		<mapping class="br.com.sgo.modelo.ProcedimentoConferencia" />
 		<mapping class="br.com.sgo.modelo.TipoProcedimento" />
@@ -73,8 +75,7 @@
 		<mapping class="br.com.sgo.modelo.TipoParceiro" />
 		<mapping class="br.com.sgo.modelo.TipoProduto" />
 		<mapping class="br.com.sgo.modelo.TipoTabela" />
-		<mapping class="br.com.sgo.modelo.TipoContato" />
-		<mapping class="br.com.sgo.modelo.TipoControle" />
+		<mapping class="br.com.sgo.modelo.TipoContato" />		
 		<mapping class="br.com.sgo.modelo.TipoSaque" />
 		
 		<mapping class="br.com.sgo.modelo.Agencia" />
