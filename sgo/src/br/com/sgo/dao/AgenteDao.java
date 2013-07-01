@@ -75,6 +75,44 @@ public class AgenteDao extends Dao<Agente> {
 
 	}
 
+	public Collection<Agente> buscaAgenteToControleBancoByEmpOrg(Long empresa_id, Long organizacao_id) {
+
+		String sql = sqlAgentes;
+		
+		if (empresa_id != null)
+			sql += " WHERE AGENTE.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND AGENTE.organizacao_id = ? AND AGENTE.iscontrole ORDER BY AGENTE.nome";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Agente> agentes = new ArrayList<Agente>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
+			this.rsAgentes = this.stmt.executeQuery();
+
+			while (rsAgentes.next()) {
+
+				getAgente(agentes);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsAgentes, stmt, conn);
+
+		return agentes;
+
+	}
+
 	public Collection<Agente> buscaAgentesByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = sqlAgentes;
