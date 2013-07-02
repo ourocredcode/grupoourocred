@@ -77,7 +77,7 @@ function buscaByCalendar(){
 			<label class="control-label">Última Atuação :</label>
 			<div class="controls">
 			<c:if test="${not empty averbacao.controle_id }">
-				realizada por ${averbacao.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
+				realizada por ${averbacao.createdBy.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
 			</c:if>
 			<c:if test="${empty averbacao.controle_id }">
 				Ainda não realizado

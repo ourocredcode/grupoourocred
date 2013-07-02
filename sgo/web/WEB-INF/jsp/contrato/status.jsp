@@ -972,7 +972,7 @@ function openPopup(url) {
 										<div class="controls">
 										<c:if test="${not empty boleto.controle_id }">
 
-											realizada por ${boleto.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
+											realizada por ${boleto.createdBy.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
 
 											<div class="control-group">
 												<label class="control-label">Previsão de Chegada : <fmt:formatDate pattern="dd/MM/yyyy" value="${boleto.dataPrevisao.time }" /></label>
@@ -1040,7 +1040,7 @@ function openPopup(url) {
 									<div class="control-group">
 										<div class="controls">
 										<c:if test="${not empty averbacao.controle_id }">
-											realizada por ${averbacao.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
+											realizada por ${averbacao.createdBy.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
 											
 											<div class="control-group">
 												<label class="control-label">Próxima Atuação : <fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataProximaAtuacao.time }" /></label>

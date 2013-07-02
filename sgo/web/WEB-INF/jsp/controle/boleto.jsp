@@ -85,7 +85,7 @@ function validaForm(form) {
 				<label class="control-label">Última Atuação :</label>
 				<div class="controls">
 				<c:if test="${not empty boleto.controle_id }">
-					realizada por ${boleto.usuario.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
+					realizada por ${boleto.createdBy.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
 				</c:if>
 				<c:if test="${empty boleto.controle_id }">
 					Ainda não realizado

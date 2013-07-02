@@ -25,12 +25,12 @@ public class ControleDao extends Dao<Controle> {
 	private ResultSet rsControle;
 	
 	private String sqlControle = " SELECT CONTROLE.controle_id, CONTROLE.tipocontrole_id, TIPOCONTROLE.nome as tipocontrole_nome, " +
-			"							  CONTROLE.contrato_id, CONTROLE.usuario_id, USUARIO.nome as usuario_nome, CONTROLE.dataatuacao, " +
+			"							  CONTROLE.contrato_id, CONTROLE.createdby , USUARIO.nome as usuario_nome, CONTROLE.dataatuacao, " +
 			"							  CONTROLE.datachegada, CONTROLE.dataprevisao, CONTROLE.datavencimento, CONTROLE.dataprimeiraatuacao, " +
 			"							  CONTROLE.dataproximaatuacao FROM ((CONTROLE (NOLOCK)" +
 			"										INNER JOIN TIPOCONTROLE (NOLOCK) ON CONTROLE.tipocontrole_id = TIPOCONTROLE.tipocontrole_id) " +
 			"										INNER JOIN CONTRATO (NOLOCK) ON CONTROLE.contrato_id = CONTRATO.contrato_id) " +
-			"										INNER JOIN USUARIO (NOLOCK) ON CONTROLE.usuario_id = USUARIO.usuario_id ";
+			"										INNER JOIN USUARIO (NOLOCK) ON CONTROLE.createdby = USUARIO.usuario_id ";
 
 	public ControleDao(Session session, ConnJDBC conexao) {
 
@@ -69,7 +69,7 @@ public class ControleDao extends Dao<Controle> {
 				Contrato contrato = new Contrato();
 				Calendar calendarAux = new GregorianCalendar();
 
-				usuario.setUsuario_id(rsControle.getLong("usuario_id"));
+				usuario.setUsuario_id(rsControle.getLong("createdby"));
 				usuario.setNome(rsControle.getString("usuario_nome"));
 
 				controle.setControle_id(rsControle.getLong("controle_id"));
