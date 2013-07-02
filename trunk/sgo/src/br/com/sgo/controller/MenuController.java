@@ -126,12 +126,12 @@ public class MenuController {
 		Calendar calAprovadoFim = null;
 
 		if(perfil.equals("Supervisor") || perfil.equals("Consultor")){
-			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
+			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),c1,c2));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id()));
 		}
 
 		if(perfil.equals("Administrativo")){
-			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),c1,c2));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
 		}
 
@@ -173,7 +173,7 @@ public class MenuController {
 		Calendar calAprovadoFim = null;
 
 		if(tipo.equals("Supervisor") || tipo.equals("Consultor")){
-			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id()));
+			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),c1,c2));
 			
 			
 			result.include("function","buscaContratos();");
@@ -182,7 +182,7 @@ public class MenuController {
 		}
 	
 		if(tipo.equals("Administrativo")) {
-			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),c1,c2));
 			
 			
 			result.include("function","buscaContratos();");

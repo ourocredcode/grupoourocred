@@ -86,12 +86,15 @@ public class ContratoDao extends Dao<Contrato> {
 		this.conexao = conexao;
 	}
 
-	public Collection<Contrato> buscaContratoByUsuario(Long usuario_id) {
+	public Collection<Contrato> buscaContratoByUsuario(Long usuario_id,Calendar calInicio,Calendar calFim) {
 
 		String sql = sqlContrato;
 		
 		if(usuario_id != null)
 			sql += " WHERE ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+		
+		if(calInicio != null)
+			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -102,6 +105,25 @@ public class ContratoDao extends Dao<Contrato> {
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, usuario_id);
 			this.stmt.setLong(2, usuario_id);
+
+			int curr = 1;
+
+			if(usuario_id != null){
+				this.stmt.setLong(curr, usuario_id);
+				curr++;
+				this.stmt.setLong(curr, usuario_id);
+				curr++;
+			}
+
+			if(calInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(calInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(calFim.getTimeInMillis()));
+				curr++;
+
+			} 
 
 			this.rsContrato = this.stmt.executeQuery();
 
@@ -116,21 +138,44 @@ public class ContratoDao extends Dao<Contrato> {
 		return contratos;
 	}
 	
-	public Collection<Contrato> buscaContratoByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
+	public Collection<Contrato> buscaContratoByEmpresaOrganizacao(Long empresa_id, Long organizacao_id,Calendar calInicio,Calendar calFim) {
 
 		String sql = sqlContrato;
 
 		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
+		
+		if(calInicio != null)
+			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
 		Collection<Contrato> contratos = new ArrayList<Contrato>();
 
 		try {
+				
+			int curr = 1;
 
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setLong(1, empresa_id);
-			this.stmt.setLong(2, organizacao_id);
+
+			if(empresa_id != null){
+				this.stmt.setLong(curr, empresa_id);
+				curr++;
+			}
+
+			if(organizacao_id != null){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+			
+			if(calInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(calInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(calFim.getTimeInMillis()));
+				curr++;
+
+			} 
 
 			this.rsContrato = this.stmt.executeQuery();
 

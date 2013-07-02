@@ -24,7 +24,7 @@ public class TipoControleDao extends Dao<TipoControle> {
 	private Connection conn;
 	private ResultSet rsTipoControles;
 
-	private final String sqlTipoControle = "SELECT TIPOCONTROLE.tipocontrole_id, TIPOCONTROLE.empresa_id, TIPOCONTROLE.organizacao_id, TIPOCONTROLE.nome, TIPOCONTROLE.isactive FROM TIPOCONTROLE (NOLOCK) ";
+	private final String sqlTipoControle = "SELECT TIPOCONTROLE.tipocontrole_id, TIPOCONTROLE.empresa_id, TIPOCONTROLE.organizacao_id, TIPOCONTROLE.nome as tipocontrole_nome, TIPOCONTROLE.isactive FROM TIPOCONTROLE (NOLOCK) ";
 	
 	private final String sqlTipoControles = " SELECT TIPOCONTROLE.empresa_id, EMPRESA.nome AS empresa_nome, TIPOCONTROLE.organizacao_id, ORGANIZACAO.nome AS organizacao_nome " +
 				", TIPOCONTROLE.nome, TIPOCONTROLE.tipocontrole_id, TIPOCONTROLE.nome AS tipocontrole_nome, TIPOCONTROLE.isactive "+
