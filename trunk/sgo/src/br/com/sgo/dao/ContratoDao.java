@@ -22,13 +22,10 @@ import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
-import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
-import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.TipoControle;
-import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
 
@@ -39,62 +36,72 @@ public class ContratoDao extends Dao<Contrato> {
 	private PreparedStatement stmt;
 	private Connection conn;
 	private ResultSet rsContrato;
+	
+	private static final String sqlContrato = "SELECT CONTRATO.contrato_id, CONTRATO.empresa_id, CONTRATO.organizacao_id, CONTRATO.organizacaodigitacao_id " +
+			", CONTRATO.formulario_id, CONTRATO.coeficiente_id, CONTRATO.produto_id, CONTRATO.tabela_id, CONTRATO.banco_id, CONTRATO.seguro_id, CONTRATO.naturezaprofissional_id " +
+			", CONTRATO.recompra_banco_id, CONTRATO.modalidade_id, CONTRATO.convenio_id, CONTRATO.usuario_id, CONTRATO.workflow_id, CONTRATO.workflowpendencia_id " +
+			", CONTRATO.etapa_id, CONTRATO.etapapendencia_id, CONTRATO.meiopagamento_id, CONTRATO.tiposaque_id, CONTRATO.created, CONTRATO.createdby, CONTRATO.isactive " +
+			", CONTRATO.prazo, CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.valordivida, CONTRATO.valorliquido " +
+			", CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.numerobeneficio, CONTRATO.observacao, CONTRATO.datadigitacao, CONTRATO.dataconclusao, CONTRATO.valorquitacao " +
+			", CONTRATO.propostabanco, CONTRATO.contratobanco, CONTRATO.dataquitacao, CONTRATO.datastatusfinal, CONTRATO.dataagendado, CONTRATO.issaqueefetuado " +
+			" FROM CONTRATO ";
 
-	private static final String sqlContrato =  "SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome,   " +
-			"FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id,   " +
-			"CONTRATO.coeficiente_id, CONTRATO.workflow_id,  " +
-			"CONTRATO.produto_id, CONTRATO.tabela_id,   " +
-			"CONTRATO.banco_id, CONTRATO.recompra_banco_id,  " +
-			"CONTRATO.usuario_id,  " +
-			"USUARIO.nome as usuario_nome,  " +
-			"SUPER.usuario_id as usuario_super_id, " +
-			"SUPER.nome as usuario_super,  " +
-			"CONTRATO.prazo,   " +
-			"CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato,   " +
-			"CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao,   " +
-			"CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive,   " +
-			"B1.nome as banco_nome, B2.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor,   " +
-			"PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf,  " +
-			"CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome ," +
-			"ETAPA.etapa_id, ETAPA.nome as etapa_nome, LOGISTICA.dataassinatura, LOGISTICA.logistica_id ," +
-			"TIPOLOGISTICA.tipologistica_id, TIPOLOGISTICA.nome as tipologistica_nome  , PERIODO.periodo_id, PERIODO.nome as periodo_nome, " +
-			"CONTROLE.dataprevisao, CONTROLE.dataatuacao, CONTROLE.datachegada, CONTROLE.dataprimeiraatuacao," +
-			"CONTROLE.dataproximaatuacao, CONTROLE.datavencimento " +
-			"FROM   " +
-				"(((((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)  " +
-				 "INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id)" +
-				 "INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id )   " +
-				 " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.contrato_id = CONTRATO.contrato_id) " +
-				 " LEFT JOIN TIPOLOGISTICA (NOLOCK) ON TIPOLOGISTICA.tipologistica_id = LOGISTICA.tipologistica_id " +
-				 " LEFT JOIN PERIODO (NOLOCK) ON PERIODO.periodo_id = LOGISTICA.periodo_id " +
-				 " LEFT JOIN CONTROLE (NOLOCK) ON CONTROLE.contrato_id = CONTRATO.contrato_id " +
-				 "INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id)   " +
-				 "INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)   " +
-				 "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)" +
-				 "INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)   " +
-				 "INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id)   " +
-				 "INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id)   " +
-				 "INNER JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id)   " +
-				 "INNER JOIN BANCO AS B1 (NOLOCK) ON CONTRATO.banco_id = B1.banco_id   " +
-				 "INNER JOIN WORKFLOWETAPA (NOLOCK) ON CONTRATO.workflow_id = WORKFLOWETAPA.workflow_id " +
-				 "INNER JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id  = WORKFLOWETAPA.etapa_id AND ETAPA.etapa_id = CONTRATO.etapa_id " +
-				 "INNER JOIN USUARIO as SUPER (NOLOCK) ON USUARIO.supervisor_usuario_id = SUPER.usuario_id   " +
-				 "LEFT JOIN BANCO AS B2 (NOLOCK) ON CONTRATO.recompra_banco_id = B2.banco_id ";
+
+	private static final String sqlContratos = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
+			" FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
+			" CONTRATO.coeficiente_id, CONTRATO.workflow_id, "+
+			" CONTRATO.produto_id, CONTRATO.tabela_id, "+
+			" CONTRATO.banco_id, CONTRATO.recompra_banco_id, "+
+			" CONTRATO.usuario_id, "+
+			" USUARIO.nome as usuario_nome, "+
+			" USUARIO_SUPERVISOR.usuario_id as usuario_super_id, "+
+			" USUARIO_SUPERVISOR.nome as usuario_super, "+
+			" CONTRATO.prazo, "+
+			" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, "+
+			" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
+			" CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
+			" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, "+
+			" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
+			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
+			" ETAPA.etapa_id, ETAPA.nome as etapa_nome "+
+			" FROM " +
+			" (((((((((((((((((((CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
+			" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
+			" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) "+
+			" LEFT JOIN CONVENIO (NOLOCK) ON CONTRATO.convenio_id = CONVENIO.convenio_id) "+
+			" LEFT JOIN MODALIDADE (NOLOCK) ON CONTRATO.modalidade_id = MODALIDADE.modalidade_id) "+
+			" INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) "+
+			" INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) "+
+			" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id) "+
+			" INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) "+
+			" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) "+
+			" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) "+
+			" INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id) "+
+			" LEFT JOIN SEGURO (NOLOCK) ON CONTRATO.seguro_id = SEGURO.seguro_id) "+
+			" LEFT JOIN NATUREZAPROFISSIONAL (NOLOCK) ON CONTRATO.naturezaprofissional_id = NATUREZAPROFISSIONAL.naturezaprofissional_id) "+
+			" LEFT JOIN TIPOSAQUE (NOLOCK) ON CONTRATO.tiposaque_id = TIPOSAQUE.tiposaque_id) "+
+			" LEFT JOIN BANCO (NOLOCK) AS BANCO_1 ON CONTRATO.recompra_banco_id = BANCO_1.banco_id) "+
+			" LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id) "+
+			" LEFT JOIN WORKFLOW (NOLOCK) AS WORKFLOW_1 ON CONTRATO.workflowpendencia_id = WORKFLOW_1.workflow_id) "+
+			" LEFT JOIN ETAPA (NOLOCK) AS ETAPA_1 ON CONTRATO.etapapendencia_id = ETAPA_1.etapa_id) "+
+			" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id ";  
 
 	public ContratoDao(Session session, ConnJDBC conexao) {
+
 		super(session, Contrato.class);
 		this.conexao = conexao;
+
 	}
 
-	public Collection<Contrato> buscaContratoByUsuario(Long usuario_id,Calendar calInicio,Calendar calFim) {
+	public Collection<Contrato> buscaContratoByUsuario(Long usuario_id, Calendar calInicio, Calendar calFim) {
 
-		String sql = sqlContrato;
+		String sql = sqlContratos;
 		
 		if(usuario_id != null)
-			sql += " WHERE ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+			sql += " WHERE ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 		
 		if(calInicio != null)
-			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
+			sql += " AND (CONTRATO.created BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -128,24 +135,31 @@ public class ContratoDao extends Dao<Contrato> {
 			this.rsContrato = this.stmt.executeQuery();
 
 			while (rsContrato.next()) {
+
 				getFormulario(contratos);
+
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contratos;
 	}
+
 	
+
 	public Collection<Contrato> buscaContratoByEmpresaOrganizacao(Long empresa_id, Long organizacao_id,Calendar calInicio,Calendar calFim) {
 
-		String sql = sqlContrato;
+		String sql = sqlContratos;
 
 		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
 		
 		if(calInicio != null)
-			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
+			sql += " AND (CONTRATO.created BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -180,7 +194,9 @@ public class ContratoDao extends Dao<Contrato> {
 			this.rsContrato = this.stmt.executeQuery();
 
 			while (rsContrato.next()) {
+
 				getFormulario(contratos);
+
 			}
 
 		} catch (SQLException e) {
@@ -192,7 +208,8 @@ public class ContratoDao extends Dao<Contrato> {
 	
 	public Collection<Contrato> buscaContratoByEmpresaOrganizacaoUsuarioStatus(Long empresa_id, Long organizacao_id, Collection<Usuario> consultores , String status) {
 
-		String sql = sqlContrato;
+		String sql = sqlContratos;
+
 		String clause = "";
 		int x = 0;
 
@@ -209,7 +226,7 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(u != null) {
-				sql += clause + " ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+				sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 				x++;
 				clause = "";
 			}
@@ -271,7 +288,7 @@ public class ContratoDao extends Dao<Contrato> {
 	
 	public Collection<Contrato> buscaContratoByFormulario(Long formulario_id) {
 
-		String sql = sqlContrato;
+		String sql = sqlContratos;
 		
 		if(formulario_id != null)
 			sql += " WHERE FORMULARIO.formulario_id = ? ";
@@ -288,19 +305,24 @@ public class ContratoDao extends Dao<Contrato> {
 			this.rsContrato = this.stmt.executeQuery();
 
 			while (rsContrato.next()) {
+
 				getFormulario(contratos);
+
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contratos;
 	}
 
 	public Contrato buscaContratoById(Long contrato_id) {
 
-		String sql = sqlContrato;
+		String sql = sqlContratos;
 		
 		if(contrato_id != null)
 			sql += " WHERE CONTRATO.contrato_id = ? ";
@@ -312,18 +334,24 @@ public class ContratoDao extends Dao<Contrato> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, contrato_id);
 
 			this.rsContrato = this.stmt.executeQuery();
 
 			while (rsContrato.next()) {
+
 				contrato = new Contrato();
 				getFormulario(contrato);
+
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
+
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contrato;
 	}
@@ -332,7 +360,7 @@ public class ContratoDao extends Dao<Contrato> {
 			Calendar calAprovadoInicio,Calendar calAprovadoFim,String cliente, String documento, Collection<String> status,Collection<String> produtos,
 			Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores) {
 
-		String sql = sqlContrato;
+		String sql = sqlContratos;
 		String clause = "";
 		int x = 0;
 
@@ -383,7 +411,7 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(!bancosAux1.equals("")){
-				sql += clause + " ( B1.nome like ? ) ";
+				sql += clause + " ( BANCO.nome like ? ) ";
 				x++;
 				clause = "";
 			}
@@ -398,7 +426,7 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(!bancosCompradosAux1.equals("")) {
-				sql += clause + " ( B2.nome like ? ) ";
+				sql += clause + " ( BANCO_1.nome like ? ) ";
 				x++;
 				clause = "";
 			}
@@ -413,7 +441,7 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(u != null) {
-				sql += clause + " ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+				sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 				x++;
 				clause = "";
 			}
@@ -550,7 +578,8 @@ public class ContratoDao extends Dao<Contrato> {
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status, Collection<Usuario> consultores,String cliente,
 			String documento,Collection<String> empresas) {
 
-		String sql = sqlContrato;
+		String sql = sqlContratos;
+
 		String clause = "";
 		int x = 0;
 
@@ -604,7 +633,7 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(!bancosAux1.equals("")){
-				sql += clause + " ( B1.nome like ? ) ";
+				sql += clause + " ( BANCO.nome like ? ) ";
 				x++;
 				clause = "";
 			}
@@ -619,7 +648,7 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(!bancosCompradosAux1.equals("")) {
-				sql += clause + " ( B2.nome like ? ) ";
+				sql += clause + " ( BANCO_1.nome like ? ) ";
 				x++;
 				clause = "";
 			}
@@ -634,7 +663,7 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(u != null) {
-				sql += clause + " ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+				sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 				x++;
 				clause = "";
 			}
@@ -784,52 +813,36 @@ public class ContratoDao extends Dao<Contrato> {
 			this.rsContrato = this.stmt.executeQuery();
 
 			while (rsContrato.next()) {
+
 				getFormulario(contratos);
+
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contratos;
-		
-		
 
 	}
 	
 	public HashMap<String,Integer> buscaContratosToCountEtapas(Long empresa_id , Long organizacao_id, Long usuario_id) {
 
-		String sql = " SELECT ETAPA.nome as etapa_nome, COUNT(ETAPA.nome) as etapaCount  " +
-				" FROM    " +
-				" (((((((((((CONTRATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) " +   
-				 " INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) " + 
-				 " INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id ) " +    
-				  " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.contrato_id = CONTRATO.contrato_id) " +  
-				  " LEFT JOIN TIPOLOGISTICA (NOLOCK) ON TIPOLOGISTICA.tipologistica_id = LOGISTICA.tipologistica_id " +  
-				  " LEFT JOIN PERIODO (NOLOCK) ON PERIODO.periodo_id = LOGISTICA.periodo_id " +  
-				  " LEFT JOIN CONTROLE (NOLOCK) ON CONTROLE.contrato_id = CONTRATO.contrato_id " +  
-				 " INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) " +    
-				 " INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id) " +    
-				 " INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " + 
-				 " INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +    
-				 " INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) " +     
-				 " INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) " +    
-				 " INNER JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) " +    
-				 " INNER JOIN BANCO AS B1 (NOLOCK) ON CONTRATO.banco_id = B1.banco_id " +    
-				 " INNER JOIN WORKFLOWETAPA (NOLOCK) ON CONTRATO.workflow_id = WORKFLOWETAPA.workflow_id " +  
-				 " INNER JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id  = WORKFLOWETAPA.etapa_id AND ETAPA.etapa_id = CONTRATO.etapa_id " +  
-				 " INNER JOIN USUARIO as SUPER (NOLOCK) ON USUARIO.supervisor_usuario_id = SUPER.usuario_id " +    
-				 " LEFT JOIN BANCO AS B2 (NOLOCK) ON CONTRATO.recompra_banco_id = B2.banco_id ";
+		String sql = "SELECT ETAPA.nome as etapa_nome, COUNT(ETAPA.nome) as etapaCount " +
+					" FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
+					" INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
+					" INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id ";
 
-		if(empresa_id != null)
-			sql += " WHERE EMPRESA.empresa_id = ? ";
+			sql += " WHERE CONTRATO.empresa_id = ? ";
 
 		if(organizacao_id != null)
-			sql += " AND ORGANIZACAO.organizacao_id = ? ";
-		
+			sql += " AND CONTRATO.organizacao_id = ? ";
+
 		if(usuario_id != null)
-			sql += " AND ( USUARIO.usuario_id = ? OR SUPER.usuario_id = ? ) ";
+			sql += " AND (CONTRATO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 
 		sql +=  " GROUP BY ETAPA.nome ";
 
@@ -846,17 +859,16 @@ public class ContratoDao extends Dao<Contrato> {
 			this.stmt.setLong(2, organizacao_id);
 			
 			if(usuario_id != null){
+
 				this.stmt.setLong(3, usuario_id);
 				this.stmt.setLong(4, usuario_id);
 				
 			}
-				
 
 			this.rsContrato = this.stmt.executeQuery();
 
-
 			while (rsContrato.next()) {
-				
+
 				String etapa_nome = rsContrato.getString("etapa_nome");
 				Integer etapaCount = rsContrato.getInt("etapaCount");
 
@@ -870,15 +882,11 @@ public class ContratoDao extends Dao<Contrato> {
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return map;
 	}
-	
-	
-	
 
-	private void getFormulario(Collection<Contrato> contratos)
-			throws SQLException {
+	private void getFormulario(Collection<Contrato> contratos) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
-		Calendar dataAssinatura = new GregorianCalendar();
+		//Calendar dataAssinatura = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		Usuario supervisor = new Usuario();
@@ -888,9 +896,9 @@ public class ContratoDao extends Dao<Contrato> {
 		Produto produto = new Produto();
 		Workflow workflow = new Workflow();
 		Etapa etapa = new Etapa();
-		Logistica logistica = new Logistica();
-		Periodo periodo = new Periodo();
-		TipoLogistica tipoLogistica = new TipoLogistica();
+		//Logistica logistica = new Logistica();
+		//Periodo periodo = new Periodo();
+		//TipoLogistica tipoLogistica = new TipoLogistica();
 		Empresa empresa = new Empresa();
 		Organizacao organizacao = new Organizacao();
 		
@@ -938,20 +946,20 @@ public class ContratoDao extends Dao<Contrato> {
 		etapa.setEtapa_id(rsContrato.getLong("etapa_id"));
 		etapa.setNome(rsContrato.getString("etapa_nome"));
 
-		periodo.setPeriodo_id(rsContrato.getLong("periodo_id"));
-		periodo.setNome(rsContrato.getString("periodo_nome"));
+		//periodo.setPeriodo_id(rsContrato.getLong("periodo_id"));
+		//periodo.setNome(rsContrato.getString("periodo_nome"));
 
-		tipoLogistica.setTipoLogistica_id(rsContrato.getLong("tipologistica_id"));
-		tipoLogistica.setNome(rsContrato.getString("tipologistica_nome"));
+		//tipoLogistica.setTipoLogistica_id(rsContrato.getLong("tipologistica_id"));
+		//tipoLogistica.setNome(rsContrato.getString("tipologistica_nome"));
 
-		logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
-		logistica.setPeriodo(periodo);
-		logistica.setTipoLogistica(tipoLogistica);
+		//logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
+		//logistica.setPeriodo(periodo);
+		//logistica.setTipoLogistica(tipoLogistica);
 
-		if(rsContrato.getDate("dataassinatura") != null){
-			dataAssinatura.setTime(rsContrato.getDate("dataassinatura"));
-			logistica.setDataAssinatura(dataAssinatura);
-		}
+		//if(rsContrato.getDate("dataassinatura") != null){
+		//	dataAssinatura.setTime(rsContrato.getDate("dataassinatura"));
+		//	logistica.setDataAssinatura(dataAssinatura);
+		//}
 
 		formulario.setParceiroNegocio(parceiro);
 		contrato.setFormulario(formulario);
@@ -974,16 +982,15 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 		contrato.setPrazo(rsContrato.getInt("prazo"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
-		contrato.setLogistica(logistica);
+		//contrato.setLogistica(logistica);
 
 		contratos.add(contrato);
 	}
 	
-	private void getFormulario(Contrato contrato)
-			throws SQLException {
+	private void getFormulario(Contrato contrato) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
-		Calendar dataAssinatura = new GregorianCalendar();
+		//Calendar dataAssinatura = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		ParceiroNegocio parceiro = new ParceiroNegocio();
@@ -991,9 +998,9 @@ public class ContratoDao extends Dao<Contrato> {
 		Produto produto = new Produto();
 		Workflow workflow = new Workflow();
 		Etapa etapa = new Etapa();
-		Logistica logistica = new Logistica();
-		Periodo periodo = new Periodo();
-		TipoLogistica tipoLogistica = new TipoLogistica();
+		//Logistica logistica = new Logistica();
+		//Periodo periodo = new Periodo();
+		//TipoLogistica tipoLogistica = new TipoLogistica();
 		Empresa empresa = new Empresa();
 		Organizacao organizacao = new Organizacao();
 
@@ -1005,7 +1012,6 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		organizacao.setOrganizacao_id(rsContrato.getLong("organizacao_id"));
 		organizacao.setNome(rsContrato.getString("organizacao_nome"));
-
 
 		usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
 		usuario.setNome(rsContrato.getString("usuario_nome"));
@@ -1038,23 +1044,23 @@ public class ContratoDao extends Dao<Contrato> {
 		etapa.setEtapa_id(rsContrato.getLong("etapa_id"));
 		etapa.setNome(rsContrato.getString("etapa_nome"));
 
-		periodo.setPeriodo_id(rsContrato.getLong("periodo_id"));
-		periodo.setNome(rsContrato.getString("periodo_nome"));
+		//periodo.setPeriodo_id(rsContrato.getLong("periodo_id"));
+		//periodo.setNome(rsContrato.getString("periodo_nome"));
 
-		tipoLogistica.setTipoLogistica_id(rsContrato.getLong("tipologistica_id"));
-		tipoLogistica.setNome(rsContrato.getString("tipologistica_nome"));
+		//tipoLogistica.setTipoLogistica_id(rsContrato.getLong("tipologistica_id"));
+		//tipoLogistica.setNome(rsContrato.getString("tipologistica_nome"));
 
-		logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
-		logistica.setPeriodo(periodo);
-		logistica.setTipoLogistica(tipoLogistica);
+		//logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
+		//logistica.setPeriodo(periodo);
+		//logistica.setTipoLogistica(tipoLogistica);
 
 		
-		logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
+		//logistica.setLogistica_id(rsContrato.getLong("logistica_id"));
 
-		if(rsContrato.getDate("dataassinatura") != null){
-			dataAssinatura.setTime(rsContrato.getDate("dataassinatura"));
-			logistica.setDataAssinatura(dataAssinatura);
-		}
+		//if(rsContrato.getDate("dataassinatura") != null){
+		//	dataAssinatura.setTime(rsContrato.getDate("dataassinatura"));
+		//	logistica.setDataAssinatura(dataAssinatura);
+		//}
 
 		formulario.setParceiroNegocio(parceiro);
 		contrato.setEmpresa(empresa);
@@ -1077,8 +1083,35 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 		contrato.setPrazo(rsContrato.getInt("prazo"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
-		contrato.setLogistica(logistica);
+		//contrato.setLogistica(logistica);
 
 	}
+	
+	/*private void getContrato(Collection<Contrato> contratos)throws SQLException {
+
+		Contrato contrato = new Contrato();
+
+		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
+
+		contrato.setIsActive(rsContrato.getBoolean("isactive"));
+		contrato.setPrazo(rsContrato.getInt("prazo"));
+		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
+		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
+		contrato.setDesconto(rsContrato.getDouble("desconto"));
+		contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
+		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
+		contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
+		contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
+		contrato.setValorMeta(rsContrato.getDouble("valormeta"));
+		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
+		contrato.setObservacao(rsContrato.getString("observacao"));
+		contrato.setValorQuitacao(rsContrato.getDouble("valorquitacao"));
+		contrato.setPropostaBanco(rsContrato.getString("propostabanco"));
+		contrato.setContratoBanco(rsContrato.getString("contratobanco"));				
+		contrato.setIsSaqueEfetuado(rsContrato.getBoolean("issaqueefetuado"));
+
+		contratos.add(contrato);
+
+	}*/
 
 }

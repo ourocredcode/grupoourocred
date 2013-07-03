@@ -181,7 +181,7 @@ public class MenuController {
 			result.include("buscaAprovado","block");
 		}
 	
-		if(tipo.equals("Administrativo")) {
+		if(tipo.equals("Administrativo")  || tipo.equals("Administrador") ) {
 			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),c1,c2));
 			
 			
