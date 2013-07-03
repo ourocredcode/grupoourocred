@@ -78,10 +78,10 @@ jQuery(function($){
 	});
 
 	$("#coeficienteIsActive").change(function(e){
-		if(document.coeficienteForm.coeficienteIsActive.checked==true){
-			document.coeficienteForm.coeficienteIsActive.value=true;
+		if(document.coeficienteForm.isActive.checked==true){
+			document.coeficienteForm.isActive.value=true;
 		}else{
-			document.coeficienteForm.coeficienteIsActive.value=false;
+			document.coeficienteForm.isActive.value=false;
 		}
 	});
 
@@ -119,6 +119,8 @@ function limpaForm() {
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
+			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
 	</div>
 	
@@ -193,6 +195,10 @@ function limpaForm() {
 								<div class="span2">
 									<label for="percentualMeta">Percentual Meta</label>
 									<input class="span10" type="text" id="percentualMeta" name="coeficiente.percentualMeta" placeholder="Percentual" required>
+								</div>
+								<div class="span3">
+									<label for="isActive">Ativo</label>
+									<input id="isActive" name="coeficiente.isActive" type="checkbox" checked="checked" value="1" >
 								</div>
 							</div>
 		

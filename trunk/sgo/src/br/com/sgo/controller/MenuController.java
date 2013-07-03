@@ -140,7 +140,7 @@ public class MenuController {
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
 		}
 
-		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesByEmpOrg(empresa_id, organizacao_id));
+		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesToMenuByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("calInicio", c1);
 		result.include("calFim", c2);
 
