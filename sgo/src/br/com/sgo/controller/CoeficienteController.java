@@ -39,6 +39,8 @@ public class CoeficienteController {
 	private Organizacao organizacao;
 	private Usuario usuario;
 
+	private Calendar dataAtual = Calendar.getInstance();
+
 	public CoeficienteController(Result result,UsuarioInfo usuarioInfo,BancoDao bancoDao, CoeficienteDao coeficienteDao,TabelaDao tabelaDao, ProdutoDao produtoDao, Coeficiente coeficiente,
 			Empresa empresa, Organizacao organizacao, Usuario usuario){
 
@@ -51,14 +53,14 @@ public class CoeficienteController {
 		this.produtoDao = produtoDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
-		this.usuario = usuarioInfo.getUsuario();
+		this.usuario = this.usuarioInfo.getUsuario();
 
 	}
 
 	@Get
 	public void cadastro(){
 
-		coeficientes = coeficienteDao.buscaCoeficientes();
+		coeficientes = coeficienteDao.buscaAllCoeficientesByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id());
 
 		bancos = bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id());
 
@@ -111,7 +113,12 @@ public class CoeficienteController {
 
 		coeficiente.setTabela(tabelaDao.load(coeficiente.getTabela().getTabela_id()));
 		coeficiente.setBanco(bancoDao.load(coeficiente.getBanco().getBanco_id()));
-		coeficiente.setCreated(CustomDateUtil.getTimeAtual());
+		
+		coeficiente.setCreated(dataAtual);
+		coeficiente.setUpdated(dataAtual);
+
+		coeficiente.setCreatedBy(usuario);
+		coeficiente.setUpdatedBy(usuario);
 		
 		this.coeficiente.setIsActive(coeficiente.getIsActive() == null ? false : true);
 
