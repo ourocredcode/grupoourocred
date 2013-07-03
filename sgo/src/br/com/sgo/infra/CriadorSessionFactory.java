@@ -26,7 +26,7 @@ public class CriadorSessionFactory implements ComponentFactory<SessionFactory> {
 
 		  Configuration configuration = new Configuration();
 
-		  if (!computername.equals("SRVOUROPROD"))
+		  if (!computername.equals("SRVOUROSGO"))
 			  computername = "SRVOUROHOM";
 
 		  configuration.setProperty("hibernate.connection.url", "jdbc:jtds:sqlserver://" + computername + ":1433;DatabaseName=sgobd");
