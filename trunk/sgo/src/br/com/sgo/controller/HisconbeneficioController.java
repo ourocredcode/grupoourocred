@@ -359,18 +359,19 @@ public class HisconbeneficioController {
 		hiscons = new ArrayList<HisconBeneficio>();
 
 		for(HisconBeneficio h : hisconsAux){
+
 			h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), h.getParceiroBeneficio().getParceiroBeneficio_id()));
-			
+
 			h.setEtapas(etapaDao.buscaEtapaByHisconPerfil(
 					usuarioInfo.getEmpresa().getEmpresa_id(),
 					usuarioInfo.getOrganizacao().getOrganizacao_id(),
 					usuarioInfo.getPerfil().getPerfil_id(),
 					h.getHisconBeneficio_id()));
-		
+
 			h.getEtapas().add(h.getEtapa());
-			
-			
+
 			hiscons.add(h);
+
 		}
 
 		if(usuarioInfo.getPerfil().equals("Supervisor")){
