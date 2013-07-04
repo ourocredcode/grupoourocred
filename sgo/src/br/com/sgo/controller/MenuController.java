@@ -118,6 +118,7 @@ public class MenuController {
 		String cliente = "";
 		String documento = "";
 		Collection<String> status = new ArrayList<String>();
+		Collection<String> statusFinal = new ArrayList<String>();
 		Collection<String> produtos = new ArrayList<String>();
 		Collection<String> bancos = new ArrayList<String>();
 		Collection<String> bancosComprados = new ArrayList<String>();
@@ -136,11 +137,11 @@ public class MenuController {
 		}
 
 		if(perfil.equals("Gestor")){
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
 		}
 
-		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesToMenuByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesToMenuByEmpOrg(empresa_id, organizacao_id));
 		result.include("calInicio", c1);
 		result.include("calFim", c2);
 
@@ -165,12 +166,19 @@ public class MenuController {
 		String cliente = "";
 		String documento = "";
 		Collection<String> status = new ArrayList<String>();
+		Collection<String> statusFinal = new ArrayList<String>();
 		Collection<String> produtos = new ArrayList<String>();
 		Collection<String> bancos = new ArrayList<String>();
 		Collection<String> bancosComprados = new ArrayList<String>();
 		Collection<Usuario> consultores = new ArrayList<Usuario>();
 		Calendar calAprovadoInicio = null;
 		Calendar calAprovadoFim = null;
+		
+		if(tipo.equals("Supervisor")){
+
+			result.include("consultores",this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.usuario.getUsuario_id()));
+
+		}
 
 		if(tipo.equals("Supervisor") || tipo.equals("Consultor")){
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),c1,c2));
@@ -193,7 +201,7 @@ public class MenuController {
 			
 		
 		if(tipo.equals("Gestor")){
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			
 			result.include("function","buscaContratos();");
 			result.include("buscaBoleto","none");
@@ -202,7 +210,7 @@ public class MenuController {
 
 		if(tipo.equals("aprovados")){
 			status.add("Aprovado");
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status, produtos, bancos, bancosComprados, consultores));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			
 			result.include("function","buscaContratos();");
 			result.include("buscaBoleto","none");
@@ -230,6 +238,8 @@ public class MenuController {
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+		
+		
 
 
 		contador();
@@ -363,7 +373,7 @@ public class MenuController {
 			Usuario u = new Usuario();
 
 			if(consultor != null) {
-				u = usuarioInfo.getUsuario();
+				u = this.usuarioDao.load(consultor);
 			} else {
 				u = this.usuarioDao.load(usuario.getUsuario_id());
 			}
@@ -384,7 +394,7 @@ public class MenuController {
 		}
 
 		contratos.addAll(this.contratoDao.buscaContratoByFiltros(this.empresa.getEmpresa_id(), this.organizacao.getOrganizacao_id(), calInicio, calFim, 
-				calAprovadoInicio, calAprovadoFim ,cliente, documento, status,
+				calAprovadoInicio, calAprovadoFim ,cliente, documento, status,statusFinal,
 				produtos, bancos, bancosComprados,consultoresAux));
 
 		result.include("contratos",contratos);		
