@@ -231,7 +231,7 @@ public class MenuController {
 			result.include("buscaAprovado","none");
 		}
 
-		TipoWorkflow tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNome(1l, 1l, "Contrato");
+		TipoWorkflow tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
 
 		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("bancosComprado",this.bancoDao.buscaBancoCompradoByEmpOrg(1l, 1l));

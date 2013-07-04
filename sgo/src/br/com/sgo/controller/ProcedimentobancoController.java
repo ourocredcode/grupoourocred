@@ -47,7 +47,7 @@ public class ProcedimentobancoController {
 	}	
 
 	@Get
-	@Path("/procedimentobanco/cadastro")
+	@Path("/procedimentobanco")
 	public void cadastro(){
 		result.include("procedimentosConferencia", this.procedimentoConferenciaDao.buscaProcedimentoConferenciaByEmpOrgTipoProcedimento(usuarioInfo.getEmpresa().getEmpresa_id(), 
 					usuarioInfo.getOrganizacao().getOrganizacao_id(),this.tipoProcedimentoDao.buscaTipoProcedimentoByNome("Banco").getTipoProcedimento_id()));
@@ -56,8 +56,11 @@ public class ProcedimentobancoController {
 	@Get
 	@Path("/procedimentobanco/detalhebanco/{id}")
 	public void detalhebanco(Long id){		
+
 		Collection<Banco> bancos = this.bancoDao.buscaBancoByProcedimento(id);
+
 		result.include("bancos", bancos);
+
 	}
 
 	@Get
@@ -67,6 +70,7 @@ public class ProcedimentobancoController {
 		Banco banco = this.bancoDao.load(id);
 
 		Collection<ModeloProcedimento> modelosProcedimento = this.modeloProcedimentoDao.buscaModeloProcedimentoByBanco(id);
+
 		result.include("modelosProcedimento", modelosProcedimento);
 		result.include("banco",banco);
 		
@@ -75,8 +79,13 @@ public class ProcedimentobancoController {
 	@Get
 	@Path("/procedimentobanco/detalheprocedimento/{procedimento_id}/{banco_id}")
 	public void detalheprocedimento(Long procedimento_id, Long banco_id){
+
+		Banco banco = this.bancoDao.load(banco_id);
+		
 		Collection<ProcedimentoDetalhe> procedimentosDetalhes = this.procedimentoDetalheDao.buscaProcedimentoDetalheByBancoModeloProcedimento(procedimento_id,banco_id);
+
 		result.include("procedimentosDetalhes", procedimentosDetalhes);
+		result.include("banco",banco);
 	}
 
 	@Post

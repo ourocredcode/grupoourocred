@@ -30,7 +30,7 @@ public class EtapaDao extends Dao<Etapa> {
 			"							INNER JOIN EMPRESA (NOLOCK) ON EMPRESA.empresa_id = ETAPA.empresa_id " +
 			"							INNER JOIN ORGANIZACAO (NOLOCK) ON ORGANIZACAO.organizacao_id = ETAPA.organizacao_id  ";
 
-	private final String sqlEtapas = "SELECT ETAPA.etapa_id, ETAPA.nome AS etapa_nome, ETAPA.empresa_id " +
+	private final String sqlEtapas = " SELECT ETAPA.etapa_id, ETAPA.nome AS etapa_nome, ETAPA.empresa_id " +
 									 ", EMPRESA.NOME AS empresa_nome, ETAPA.organizacao_id, ORGANIZACAO.nome as organizacao_nome " + 
 									 ", ETAPA.isactive, ETAPA.ispadrao, ETAPA.ordemetapa  " +
 										"FROM ((((ETAPA (NOLOCK)  " +

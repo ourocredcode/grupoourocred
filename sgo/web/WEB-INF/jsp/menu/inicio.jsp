@@ -1,6 +1,43 @@
 <%@ include file="/header.jspf"%>
 
+	<script type="text/javascript">
+	
+	jQuery(function($){ 
+		
+		$('.data-table').dataTable({
+			"bJQueryUI": true,
+			"sPaginationType": "full_numbers",
+			"sDom": '<""l>t<"F"fp>',
+			"bFilter": false
+		});
+
+		$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+		
+		$('select').select2();
+
+		$("span.icon input:checkbox, th input:checkbox").click(function() {
+			var checkedStatus = this.checked;
+			var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');		
+			checkbox.each(function() {
+				this.checked = checkedStatus;
+				if (checkedStatus == this.checked) {
+					$(this).closest('.checker > span').removeClass('checked');
+				}
+				if (this.checked) {
+					$(this).closest('.checker > span').addClass('checked');
+				}
+			});
+		});
+		
+		
+		
+	});
+
+	</script>
+
 	<script type="text/javascript" src="<c:url value="/js/unicorn.dashboard.js"/>"></script>
+	
+	
 
 	<div id="content-header">
 		<h1>DashBoard - ${usuarioInfo.usuario.nome } </h1>
@@ -123,15 +160,13 @@
 
 				<div class="widget-box">
 					<div class="widget-title">
-						<span class="icon">
-							<i class="icon-tag"></i>
-						</span>
+						<span class="icon"><i class="icon-signal"></i> </span>
 						<h5>Coeficientes</h5>
 					</div>
 					<div class="widget-content">
 
 							<h3>Coeficientes</h3>
-							<table class="table table-bordered table-striped">
+							<table class="table table-bordered table-striped table-hover data-table" >
 							<thead>
 							  <tr>
 								<th>Data</th>
