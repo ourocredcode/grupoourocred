@@ -74,61 +74,124 @@
 
 				<li class="active"><a href="<c:url value="/menu/inicio/${usuarioInfo.perfil.chave }"/>"><i class="icon icon-home"></i> <span>Dashboard</span></a></li>
 
-				<li class="submenu">
-
-					<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
-
-					<ul class="cadastro">
-						<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
-						<li><a href="<c:url value="/funcao/cadastro"/>">Função</a></li>
-						<li><a href="<c:url value="/departamento/cadastro"/>">Departamento</a></li>
-						<li><a href="<c:url value="/perfil/cadastro"/>">Perfil</a></li>
-						<li><a href="<c:url value="/usuario/cadastro"/>">Usuário</a></li>
-					</ul>
-
-				</li>
-				<c:if test="${usuarioInfo.perfil.chave == 'ADMINISTRADOR' }">
-				<li class="submenu">
-					<a href="#"><i class="icon icon-pencil"></i> <span>Administrador</span> <span class="label">1</span></a>
-					<ul class="cadastro">
-						<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
-					</ul>
-				</li>
+				
+				<c:if test="${usuarioInfo.perfil.chave == 'Administrador' }">
+				
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
+	
+						<ul class="cadastro">
+							<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
+							<li><a href="<c:url value="/funcao/cadastro"/>">Função</a></li>
+							<li><a href="<c:url value="/departamento/cadastro"/>">Departamento</a></li>
+							<li><a href="<c:url value="/perfil/cadastro"/>">Perfil</a></li>
+							<li><a href="<c:url value="/usuario/cadastro"/>">Usuário</a></li>
+						</ul>
+	
+					</li>
+					
+					<li class="submenu">
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span> <span class="label">3</span></a>
+						<ul class="cadastro">
+							<li><a href="<c:url value="/banco/cadastro"/>">Banco</a></li>
+							<li><a href="<c:url value="/produto/cadastro"/>">Produto</a></li>
+							<li><a href="<c:url value="/tabela/cadastro"/>">Tabela</a></li>
+							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+						</ul>
+					</li>
+					
+					
+					<li class="submenu">
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrador</span> <span class="label">1</span></a>
+						<ul class="cadastro">
+							<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
+						</ul>
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+						</ul>
+				
+					</li>
+				
 				</c:if>
-
-				<li class="submenu">
-					<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span> <span class="label">3</span></a>
-					<ul class="cadastro">
-						<li><a href="<c:url value="/banco/cadastro"/>">Banco</a></li>
-						<li><a href="<c:url value="/produto/cadastro"/>">Produto</a></li>
-						<li><a href="<c:url value="/tabela/cadastro"/>">Tabela</a></li>
-						<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
-					</ul>
-				</li>
 				
-				<li class="submenu">
-
-					<a href="#"><i class="icon icon-pencil"></i> <span>Consultores</span> <span class="label">1</span></a>
-
-					<ul class="consultor">
-						<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">
-							<li><a href="<c:url value="/formulario/cadastro"/>">Formulário</a></li>
-						</c:if>
-						<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
-					</ul>
-
-				</li>
+				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor' }">
 				
-				<li class="submenu">
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
+	
+						<ul class="cadastro">
+							<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
+						</ul>
+	
+					</li>
+					
+					<li class="submenu">
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span> <span class="label">3</span></a>
+						<ul class="cadastro">
+							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+						</ul>
+					</li>
 
-					<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+						</ul>
 				
-					<ul class="consultor">
-						<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
-						<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
-					</ul>
-			
-				</li>
+					</li>
+				
+				</c:if>
+				
+				<c:if test="${usuarioInfo.perfil.chave == 'Supervisor' || usuarioInfo.perfil.chave == 'Consultor' }">
+				
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
+	
+						<ul class="cadastro">
+							<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
+						</ul>
+	
+					</li>
+				
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-pencil"></i> <span>Consultores</span> <span class="label">1</span></a>
+	
+						<ul class="consultor">
+							<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">
+								<li><a href="<c:url value="/formulario/cadastro"/>">Formulário</a></li>
+							</c:if>
+							<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
+						</ul>
+	
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+						</ul>
+				
+					</li>
+				
+				
+				</c:if>
 
 			</ul>
 		

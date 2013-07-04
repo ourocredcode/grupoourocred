@@ -73,6 +73,8 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		if (organizacao_id != null)
 			sql += " AND COEFICIENTE.organizacao_id = ?";
 		
+		sql += " AND COEFICIENTE.isactive = 1 ";
+		
 		this.conn = this.conexao.getConexao();
 
 		Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();

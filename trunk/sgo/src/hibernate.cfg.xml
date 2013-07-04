@@ -9,7 +9,7 @@
 		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
 		<property name="hibernate.connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>  
 		<property name="hibernate.connection.username">ouro_app_us</property>
-		<property name="hibernate.connection.password">ouro_app_pw</property>
+		<property name="hibernate.connection.password">ouro_app_psw</property>
 
 		<property name="hibernate.c3p0.min_size">1</property>
 		<property name="hibernate.c3p0.max_size">50</property>
