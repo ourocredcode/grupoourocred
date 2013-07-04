@@ -151,7 +151,7 @@ function limpaForm() {
 		<div class="span12">
 
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="active" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Produtos</a></li>
+				<li class="active" id="produto-li"><a href="#produto-div" data-toggle="tab" id="produto-li-a">Coeficientes</a></li>
 			</ul>
 			
 			<div id="myTabContent" class="tab-content">

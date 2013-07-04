@@ -119,6 +119,16 @@
 						</ul>
 				
 					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
+						</ul>
+				
+					</li>
 				
 				</c:if>
 				
@@ -148,6 +158,16 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
 						</ul>
 				
 					</li>
@@ -186,6 +206,16 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
 						</ul>
 				
 					</li>

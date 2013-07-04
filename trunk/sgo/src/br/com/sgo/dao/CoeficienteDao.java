@@ -33,7 +33,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 			", COEFICIENTE.createdby, COEFICIENTE.isactive, COEFICIENTE.chave, COEFICIENTE.nome, COEFICIENTE.descricao, COEFICIENTE.percentualmeta, COEFICIENTE.valor "+
 			" FROM COEFICIENTE ";
 
-	private String sqlCoeficientes = "SELECT TOP 1000 COEFICIENTE.empresa_id, EMPRESA.nome AS empresa_nome, COEFICIENTE.organizacao_id "+
+	private String sqlCoeficientes = "SELECT COEFICIENTE.empresa_id, EMPRESA.nome AS empresa_nome, COEFICIENTE.organizacao_id "+
 									", ORGANIZACAO.nome AS organizacao_nome, COEFICIENTE.banco_id, BANCO.nome AS banco_nome, COEFICIENTE.tabela_id "+
 									", TABELA.nome AS tabela_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.created, COEFICIENTE.updated, COEFICIENTE.isactive "+
 									", COEFICIENTE.percentualmeta, COEFICIENTE.valor "+
@@ -199,12 +199,11 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
 
 		sql += " WHERE " +
-				" COEFICIENTE.updated is null " +
-				" AND BANCO.isactive = 1 " +
-				" AND PRODUTO.isactive = 1 " +
+				" BANCO.isactive = 1 " +
 				" AND TABELA.isactive = 1 " +
 				" AND BANCO.banco_id = ? " +
-				" ORDER BY BANCO.nome, PRODUTO.nome, TABELA.nome ";
+				" AND COEFICIENTE.isactive = 1 " +
+				" ORDER BY BANCO.nome, TABELA.nome ";
 
 
 		try {

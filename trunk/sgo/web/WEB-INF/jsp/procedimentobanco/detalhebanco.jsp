@@ -11,7 +11,8 @@
 	
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current">Procedimentos</a>
+		<a href="<c:url value="/procedimentobanco" />" class="current">Procedimentos Bancos</a>
+		<a href="#" class="current">Detalhes Bancos</a>
 	</div>
 	
 	<c:if test="${not empty notice}">
