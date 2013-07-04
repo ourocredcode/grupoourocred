@@ -6,6 +6,13 @@
 		
 		$("#busca_DataInicio").mask("99/99/9999");
 		$("#busca_DataFim").mask("99/99/9999");
+		
+		$('#busca_DataInicio').datepicker({
+			dateFormat: 'dd/mm/yy'
+		});
+		$('#busca_DataFim').datepicker({
+			dateFormat: 'dd/mm/yy'
+		});
 
 		$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 
@@ -34,6 +41,14 @@
 			else
 				$('#busca_Consultor option').remove();
 
+		});
+		
+		$('#loading').ajaxStart(function() {
+			 $(this).show();
+			 $('#resultado').hide();
+			 }).ajaxStop(function() {
+			 $(this).hide();
+			 $('#resultado').fadeIn('fast');
 		});
 		
 		
@@ -176,28 +191,32 @@
 					
 					<div class="span2">
 						
-							<label for="busca_Data">Data Início</label>
-							<input id="busca_Data" name="busca_Data"  class="input-small" type="text" />
+							<label for="busca_DataInicio">Data Início</label>
+							<input id="busca_DataInicio" name="busca_DataInicio"  class="input-small" type="text" />
 							
-							<label for="busca_Supervisor">Supervisor</label>
-							<select id="busca_Supervisor" name="busca_Supervisor" class="input-medium">
-								<option value="">Todos</option>
-								<c:forEach items="${supervisores}" var="supervisor">
-									<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
-								</c:forEach>
-							</select>
+							<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor'}">
+								<label for="busca_Supervisor">Supervisor</label>
+								<select id="busca_Supervisor" name="busca_Supervisor" class="input-medium">
+									<option value="">Todos</option>
+									<c:forEach items="${supervisores}" var="supervisor">
+										<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
+									</c:forEach>
+								</select>	
+							</c:if>
 					
 					</div>
 					
 					<div class="span2">
-						
+
 							<label for="busca_DataFim">Data Fim</label>
 							<input id="busca_DataFim" name="busca_DataFim" class="input-small" type="text"  />
-							
-							<label for="busca_Consultor">Consultor</label>
-							<select id="busca_Consultor" name="busca_Consultor" class="input-medium">
-								<option value="">Selecione um Supervisor</option>
-							</select>
+
+							<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor'}">
+								<label for="busca_Consultor">Consultor</label>
+								<select id="busca_Consultor" name="busca_Consultor" class="input-medium">
+									<option value="">Selecione um Supervisor</option>
+								</select>
+							</c:if>
 					
 					</div>
 				
@@ -210,6 +229,8 @@
 	</div>
 	</div>
 	</div>
+	
+	<div id="loading" style="display:none;color:#1b5790; font-weight:bold;float:left;clear: both;margin-left: 600px;">CARREGANDO...</div>
 
 	<div class="container-fluid">
 		<div class="row-fluid">

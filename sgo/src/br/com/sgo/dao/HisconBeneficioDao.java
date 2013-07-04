@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -402,6 +403,9 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		}
 		
 		sql += " ) ";
+		
+		if(calendarInicio != null)
+			sql += " AND (HISCONBENEFICIO.created BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -412,6 +416,8 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			this.stmt = conn.prepareStatement(sql);
 
 			System.out.println(sql);
+			System.out.println(calendarInicio.getTime());
+			System.out.println(calendarFim.getTime());
 
 			int curr = 1;
 
@@ -455,6 +461,16 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 					curr++;
 				}
 
+			}
+			
+			if(calendarInicio != null) {
+				
+				this.stmt.setTimestamp(curr,new Timestamp(calendarInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(calendarFim.getTimeInMillis()));
+				curr++;
+				
 			}
 
 			this.rsHisconBeneficio = this.stmt.executeQuery();
@@ -639,7 +655,6 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		Etapa etapa = new Etapa();		
 		HisconBeneficio hisconBeneficio = new HisconBeneficio();		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.FFF");
-		Calendar created = new GregorianCalendar();
 
 		empresa.setEmpresa_id(rsHisconBeneficio.getLong("empresa_id"));
 		empresa.setNome(rsHisconBeneficio.getString("empresa_nome"));
@@ -675,23 +690,27 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		try {
 
 			if (rsHisconBeneficio.getDate("created") != null) {
+				Calendar created = new GregorianCalendar();
 				created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("created").toString()));
 				hisconBeneficio.setCreated(created);
 			}
 
 			if (rsHisconBeneficio.getDate("updated") != null){
-				created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("updated").toString()));
-				hisconBeneficio.setUpdated(sdf.getCalendar());
+				Calendar updated = new GregorianCalendar();
+				updated.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("updated").toString()));
+				hisconBeneficio.setUpdated(updated);
 			}
 
 			if (rsHisconBeneficio.getDate("dataadm") != null){
-				created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataadm").toString())); 
-				hisconBeneficio.setDataAdm(sdf.getCalendar());
+				Calendar dataadm = new GregorianCalendar();
+				dataadm.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataadm").toString())); 
+				hisconBeneficio.setDataAdm(dataadm);
 			}
 
 			if(rsHisconBeneficio.getDate("dataenvio")!=null){
-				created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataenvio").toString()));
-				hisconBeneficio.setDataEnvio(sdf.getCalendar());		
+				Calendar dataenvio = new GregorianCalendar();
+				dataenvio.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataenvio").toString()));
+				hisconBeneficio.setDataEnvio(dataenvio);		
 			}
 
 			if (rsHisconBeneficio.getString("caminhoarquivo") != null) {
@@ -717,7 +736,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		Workflow workflow = new Workflow();
 		Etapa etapa = new Etapa();			
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.FFF");
-		Calendar created = new GregorianCalendar();
+		
 
 		empresa.setEmpresa_id(rsHisconBeneficio.getLong("empresa_id"));
 		empresa.setNome(rsHisconBeneficio.getString("empresa_nome"));
@@ -759,23 +778,27 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		try {
 
 			if (rsHisconBeneficio.getDate("created") != null) {
+				Calendar created = new GregorianCalendar();
 				created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("created").toString()));
 				hisconBeneficio.setCreated(created);
 			}
 
 			if (rsHisconBeneficio.getDate("updated") != null){
-				created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("updated").toString()));
-				hisconBeneficio.setUpdated(sdf.getCalendar());
+				Calendar updated = new GregorianCalendar();
+				updated.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("updated").toString()));
+				hisconBeneficio.setUpdated(updated);
 			}
 
 			if (rsHisconBeneficio.getDate("dataadm") != null){
-				created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataadm").toString())); 
-				hisconBeneficio.setDataAdm(sdf.getCalendar());
+				Calendar dataadm = new GregorianCalendar();
+				dataadm.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataadm").toString())); 
+				hisconBeneficio.setDataAdm(dataadm);
 			}
 
 			if(rsHisconBeneficio.getDate("dataenvio")!=null){
-				created.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataenvio").toString()));
-				hisconBeneficio.setDataEnvio(sdf.getCalendar());		
+				Calendar dataenvio = new GregorianCalendar();
+				dataenvio.setTime(sdf.parse(rsHisconBeneficio.getTimestamp("dataenvio").toString()));
+				hisconBeneficio.setDataEnvio(dataenvio);		
 			}
 
 			if (rsHisconBeneficio.getString("caminhoarquivo") != null) {

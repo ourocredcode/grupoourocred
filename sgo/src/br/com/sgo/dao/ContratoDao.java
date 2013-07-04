@@ -357,8 +357,8 @@ public class ContratoDao extends Dao<Contrato> {
 	}
 
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
-			Calendar calAprovadoInicio,Calendar calAprovadoFim,String cliente, String documento, Collection<String> status,Collection<String> produtos,
-			Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores) {
+			Calendar calAprovadoInicio,Calendar calAprovadoFim,String cliente, String documento, Collection<String> status,Collection<String> statusFinal,
+			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores) {
 
 		String sql = sqlContratos;
 		String clause = "";
@@ -383,10 +383,37 @@ public class ContratoDao extends Dao<Contrato> {
 				x++;
 				clause = "";
 			}
+			
+			
 
 		}
 
 		sql += " ) ";
+
+		x = 0;
+
+		sql += " AND ( 1=1 ";
+		
+		for(String statusFinalAux1 : statusFinal){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!statusFinalAux1.equals("")){
+				sql += clause + " ( ETAPA.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+			
+			
+
+		}
+		
+		if(x == 0){
+			sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) ";
+		}
+
+		sql += " ) ";
+		
 		x = 0;
 		sql += " AND ( 1=1 ";
 
@@ -438,6 +465,7 @@ public class ContratoDao extends Dao<Contrato> {
 		sql += " AND ( 1=1 ";
 
 		for(Usuario u : consultores){
+
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(u != null) {
@@ -445,7 +473,6 @@ public class ContratoDao extends Dao<Contrato> {
 				x++;
 				clause = "";
 			}
-				
 
 		}
 		
@@ -464,8 +491,12 @@ public class ContratoDao extends Dao<Contrato> {
 		try {
 
 			System.out.println(sql);
+			
+			
+			
 
 			this.stmt = conn.prepareStatement(sql);
+			
 
 			int curr = 1;
 
@@ -495,6 +526,15 @@ public class ContratoDao extends Dao<Contrato> {
 
 				if(!statusAux2.equals("")) {
 					this.stmt.setString(curr, '%' + statusAux2 + '%');
+					curr++;
+				}
+
+			}
+
+			for(String statusFinalAux2 : statusFinal){
+
+				if(!statusFinalAux2.equals("")) {
+					this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
 					curr++;
 				}
 
@@ -534,6 +574,10 @@ public class ContratoDao extends Dao<Contrato> {
 					curr++;
 					this.stmt.setLong(curr,u.getUsuario_id());
 					curr++;
+
+					System.out.println(u.getUsuario_id());
+					System.out.println(u.getNome());
+
 				}
 
 			}

@@ -8,6 +8,8 @@
 		$("#busca_DataFim").mask("99/99/99");
 		$("#busca_DataAprovadoInicio").mask("99/99/9999");
 		$("#busca_DataAprovadoFim").mask("99/99/9999");
+		$("#busca_DataRecusadoInicio").mask("99/99/9999");
+		$("#busca_DataRecusadoFim").mask("99/99/9999");
 		$("#busca_DataConcluidoInicio").mask("99/99/9999");
 		$("#busca_DataConcluidoFim").mask("99/99/9999");
 		
@@ -48,6 +50,12 @@
 			dateFormat: 'dd/mm/y'
 		});
 		$('#busca_DataAprovadoFim').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataRecusadoInicio').datepicker({
+			dateFormat: 'dd/mm/y'
+		});
+		$('#busca_DataRecusadoFim').datepicker({
 			dateFormat: 'dd/mm/y'
 		});
 		$('#busca_DataPrevisaoInicio').datepicker({
@@ -108,6 +116,14 @@
 			else
 				$('#busca_Consultor option').remove();
 
+		});
+		
+		$('#loading').ajaxStart(function() {
+			 $(this).show();
+			 $('#resultado').hide();
+			 }).ajaxStop(function() {
+			 $(this).hide();
+			 $('#resultado').fadeIn('fast');
 		});
 
 	 });
@@ -288,6 +304,11 @@
 			}
 		
 	 }
+	 
+	 
+	 function limpa(){
+		 window.location.href = '<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}" />';
+	 }
 
 	 </script>
 
@@ -314,7 +335,8 @@
 			<div class="widget-box">
 			<div class="widget-title"><span class="icon">
 				<i class="icon-signal"></i></span><h5>Filtros</h5>
-				<div class="buttons"><a href="javascript:${function }" class="btn btn-mini"><i class="icon-refresh"></i> Busca</a></div>
+				<div class="buttons"><a href="javascript:${function }" class="btn btn-mini"><i class="icon-search"></i> Busca</a></div>
+				<div class="buttons"><a href="javascript:limpa();" class="btn btn-mini"><i class="icon-trash"></i> Limpa</a></div>
 			</div>
 			
 			<input type="hidden" id="busca_Tipo" name="busca_Tipo" value="${tipobusca }"/>
@@ -387,25 +409,38 @@
 		
 						</div>
 						
-						<div class="row-fluid">
-		
-							<div class="span6">								
-								<label for="busca_Supervisor">Supervisor</label>
-								<select id="busca_Supervisor" name="busca_Supervisor" class="input-small">
-									<option value="">Todos</option>
-									<c:forEach items="${supervisores}" var="supervisor">
-										<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
-									</c:forEach>
-								</select>
-							</div>
-							<div class="span6">
-								<label for="busca_Consultor">Consultor</label>
-								<select id="busca_Consultor" name="busca_Consultor" class="input-small">
-									<option value="">Selecione um Supervisor</option>
-								</select>
-							</div>
+						
+							<div class="row-fluid">
+								
+								<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor'}">
+									<div class="span6">								
+										<label for="busca_Supervisor">Supervisor</label>
+										<select id="busca_Supervisor" name="busca_Supervisor" class="input-small">
+											<option value="">Todos</option>
+											<c:forEach items="${supervisores}" var="supervisor">
+												<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</c:if>
 
-						</div>
+								<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Supervisor'}">
+									<div class="span6">
+										<label for="busca_Consultor">Consultor</label>
+										<select id="busca_Consultor" name="busca_Consultor" class="input-small">
+
+											<option value="">Selecione um Supervisor</option>
+											<c:if test="${usuarioInfo.perfil.chave == 'Supervisor'}">
+												<c:forEach items="${consultores }" var="consultor">
+													<option value="${consultor.usuario_id}">${consultor.nome}</option>
+												</c:forEach>
+											</c:if>
+										</select>
+									</div>
+								</c:if>
+	
+							</div>
+						
 					</div>
 
 	
@@ -604,7 +639,7 @@
 		</div>
 		</div>
 	
-	
+	<div id="loading" style="display:none;color:#1b5790; font-weight:bold;float:left;clear: both;margin-left: 600px;">CARREGANDO...</div>
 
 	<div class="container-fluid">
 		<div class="row-fluid">
