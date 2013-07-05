@@ -262,7 +262,7 @@ public class MenuController {
 		Calendar calRecusadoInicio = new GregorianCalendar();
 		Calendar calRecusadoFim = new GregorianCalendar();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		
 		Collection<String> statusFinal = new ArrayList<String>();
 		Collection<String> tiposPagamento = new ArrayList<String>();
@@ -416,7 +416,7 @@ public class MenuController {
 		Calendar calProximaAtuacaoInicio = new GregorianCalendar();
 		Calendar calProximaAtuacaoFim = new GregorianCalendar();
 		Collection<String> empresas = new ArrayList<String>();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 
 		Boolean isDataNUll = true;
 

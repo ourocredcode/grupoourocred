@@ -29,10 +29,6 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 	private Connection conn;
 	private ResultSet rsCoeficiente;
 
-	private String sqlCoeficiente = "SELECT COEFICIENTE.coeficiente_id, COEFICIENTE.empresa_id, COEFICIENTE.organizacao_id, COEFICIENTE.banco_id, COEFICIENTE.tabela_id " +
-			", COEFICIENTE.createdby, COEFICIENTE.isactive, COEFICIENTE.chave, COEFICIENTE.nome, COEFICIENTE.descricao, COEFICIENTE.percentualmeta, COEFICIENTE.valor "+
-			" FROM COEFICIENTE ";
-
 	private String sqlCoeficientes = "SELECT COEFICIENTE.empresa_id, EMPRESA.nome AS empresa_nome, COEFICIENTE.organizacao_id "+
 									", ORGANIZACAO.nome AS organizacao_nome, COEFICIENTE.banco_id, BANCO.nome AS banco_nome, COEFICIENTE.tabela_id "+
 									", TABELA.nome AS tabela_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.created, COEFICIENTE.updated, COEFICIENTE.isactive "+
@@ -41,21 +37,6 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 									" INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id) "+
 									" INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id) "+
 									" INNER JOIN ORGANIZACAO (NOLOCK) ON COEFICIENTE.organizacao_id = ORGANIZACAO.organizacao_id ";
-			
-			/*"	SELECT  " +
-									"		COEFICIENTE.empresa_id, EMPRESA.nome as empresa_nome, " +  
-									"		COEFICIENTE.organizacao_id, ORGANIZACAO.nome as organizacao_nome, " +   
-									"		COEFICIENTE.tabela_id, TABELA.nome as tabela_nome,COEFICIENTE.created, " +  
-									"		BANCOPRODUTOTABELA.produto_id, PRODUTO.nome as produto_nome , " +   
-									"		BANCOPRODUTOTABELA.banco_id, BANCO.nome as banco_nome, COEFICIENTE.coeficiente_id, " + 
-									"		COEFICIENTE.valor, COEFICIENTE.percentualmeta, COEFICIENTE.updated " +  
-									"	FROM (((((COEFICIENTE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id) " +   
-									"		INNER JOIN ORGANIZACAO (NOLOCK) ON COEFICIENTE.organizacao_id = ORGANIZACAO.organizacao_id) " +   
-									"		INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id) " +   
-									"		INNER JOIN BANCOPRODUTOTABELA (NOLOCK) ON TABELA.tabela_id = BANCOPRODUTOTABELA.tabela_id) " +   
-									"		INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTOTABELA.produto_id = PRODUTO.produto_id) " +   
-									"		INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id ";
-*/
 
 	public CoeficienteDao(Session session, ConnJDBC conexao) {
 
@@ -147,10 +128,15 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		String sql = " SELECT COEFICIENTE.tabela_id, TABELA.nome AS tabela_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta "+
 				" FROM (((BANCOPRODUTOTABELA (NOLOCK) INNER JOIN TABELA (NOLOCK) ON BANCOPRODUTOTABELA.tabela_id = TABELA.tabela_id) "+ 
 				" INNER JOIN COEFICIENTE (NOLOCK) ON TABELA.tabela_id = COEFICIENTE.tabela_id) "+ 
-				" INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id) "+
+				" INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id AND COEFICIENTE.banco_id = BANCO.banco_id) "+
 				" INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTOTABELA.produto_id = PRODUTO.produto_id "+
-				" WHERE COEFICIENTE.isactive = 1 AND BANCO.isactive = 1 " +" AND PRODUTO.isactive = 1 " +
-				" AND TABELA.isactive = 1 " +" AND PRODUTO.produto_id = ? AND BANCO.banco_id = ? " +
+				" WHERE " +
+				"	COEFICIENTE.isactive = 1 AND " +
+				"	BANCO.isactive = 1 AND " +
+				"	PRODUTO.isactive = 1 AND " +
+				"	TABELA.isactive = 1 AND " +
+				"	PRODUTO.produto_id = ? AND " +
+				"	BANCO.banco_id = ? " +
 				" ORDER BY BANCO.nome, PRODUTO.nome, TABELA.nome ";
 
 		this.conn = this.conexao.getConexao();
@@ -242,10 +228,9 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		sql += " WHERE " +
 				" COEFICIENTE.updated is null " +
 				" AND BANCO.isactive = 1 " +
-				" AND PRODUTO.isactive = 1 " +
 				" AND TABELA.isactive = 1 " +
 				" AND TABELA.tabela_id = ? " +
-				" ORDER BY BANCO.nome, PRODUTO.nome, TABELA.nome ";
+				" ORDER BY BANCO.nome, TABELA.nome ";
 
 
 		try {
@@ -274,7 +259,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 	public Collection<Coeficiente> buscaCoeficientesByBancoTabela(Long bancoId,Long tabelaId) {
 
-		String sql = sqlCoeficiente;
+		String sql = sqlCoeficientes;
 
 		this.conn = this.conexao.getConexao();
 
@@ -283,10 +268,9 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		sql += " WHERE " +
 				" COEFICIENTE.updated is null " +
 				" AND BANCO.isactive = 1 " +
-				" AND PRODUTO.isactive = 1 " +
 				" AND TABELA.isactive = 1 " +
 				" AND BANCO.banco_id = ? AND TABELA.tabela_id = ? " +
-				" ORDER BY BANCO.nome, PRODUTO.nome, TABELA.nome ";
+				" ORDER BY BANCO.nome, TABELA.nome ";
 
 		try {
 

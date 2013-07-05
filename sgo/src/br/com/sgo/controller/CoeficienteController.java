@@ -96,6 +96,7 @@ public class CoeficienteController {
 
 		this.coeficiente = this.coeficienteDao.load(coeficiente.getCoeficiente_id());
 		this.coeficiente.setUpdated(CustomDateUtil.getTimeAtual());
+		this.coeficiente.setUpdatedBy(usuario);
 
 		this.coeficiente.setIsActive(coeficiente.getIsActive() == null ? false : true);
 
@@ -113,13 +114,10 @@ public class CoeficienteController {
 
 		coeficiente.setTabela(tabelaDao.load(coeficiente.getTabela().getTabela_id()));
 		coeficiente.setBanco(bancoDao.load(coeficiente.getBanco().getBanco_id()));
-		
-		coeficiente.setCreated(dataAtual);
-		coeficiente.setUpdated(dataAtual);
 
+		coeficiente.setCreated(dataAtual);
 		coeficiente.setCreatedBy(usuario);
-		coeficiente.setUpdatedBy(usuario);
-		
+
 		this.coeficiente.setIsActive(coeficiente.getIsActive() == null ? false : true);
 
 		coeficienteDao.beginTransaction();
@@ -178,7 +176,6 @@ public class CoeficienteController {
 		Collection<Calendar> datas = this.coeficienteDao.buscaDatasInclusao(banco_id, produto_id);
 		Collection<Integer> anos = new HashSet<Integer>();
 		Collection<Integer> meses = new HashSet<Integer>();
-		//Collection<Tabela> tabelas = this.tabelaDao.buscaTabelasBanco(bancoNome, produtoNome);
 
 		for (Calendar ano : datas){
 			anos.add(ano.get(Calendar.YEAR));
@@ -192,7 +189,6 @@ public class CoeficienteController {
 		result.include("meses",meses);
 		result.include("bancoNome",this.bancoDao.load(banco_id).getNome());
 		result.include("produtoNome",this.produtoDao.load(produto_id).getNome());
-		//result.include("tabelas",tabelas);
 
 	}
 

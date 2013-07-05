@@ -132,7 +132,7 @@
 				
 				</c:if>
 				
-				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor' }">
+				<c:if test="${usuarioInfo.perfil.chave == 'Gestor' }">
 				
 					<li class="submenu">
 	
@@ -179,6 +179,56 @@
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/15"/>">Resultados</a></li>
+							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
+							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
+							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
+						</ul>
+				
+					</li>
+				
+				</c:if>
+				
+				
+				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
+				
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
+	
+						<ul class="cadastro">
+							<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
+						</ul>
+	
+					</li>
+
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>PDF</span> <span class="label">1</span></a>
+					
+						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
 							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
