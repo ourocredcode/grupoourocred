@@ -11,12 +11,14 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.infra.CustomFileUtil;
+import br.com.sgo.interceptor.Public;
 
 @Resource
 public class ScriptController {
 
 	private final Result result;
 	private HttpServletResponse response;
+	private ServletOutputStream responseOutputStream;
 
 	public ScriptController(Result result,HttpServletResponse response){		
 		this.result = result;
@@ -53,6 +55,7 @@ public class ScriptController {
 	
 	@Get
 	@Path("/visualizaScript/{caminhoPDF}")
+	@Public
 	public synchronized void visualiza(String caminhoPDF) {
 
 		String diretorio = "////localhost//sistemas//_repositorio//scripts//";
@@ -78,7 +81,8 @@ public class ScriptController {
             response.setContentLength(arquivo.length);
             response.getOutputStream().write(arquivo, 0, arquivo.length);
 
-            ServletOutputStream responseOutputStream = response.getOutputStream();
+            responseOutputStream = response.getOutputStream();
+            
 
             responseOutputStream.flush();
 			responseOutputStream.close();
