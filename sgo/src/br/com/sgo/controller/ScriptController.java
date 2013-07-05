@@ -53,7 +53,7 @@ public class ScriptController {
 	
 	@Get
 	@Path("/visualizaScript/{caminhoPDF}")
-	public void visualiza(String caminhoPDF) {
+	public synchronized void visualiza(String caminhoPDF) {
 
 		String diretorio = "////localhost//sistemas//_repositorio//scripts//";
 		String nomeFile = diretorio + caminhoPDF;
