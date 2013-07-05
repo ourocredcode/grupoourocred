@@ -184,7 +184,7 @@
 						<label for="busca_Cliente">Cliente</label>
 						<input id="busca_Cliente" name="busca_Cliente" class="input-large" type="text" />
 		
-						<label for="busca_Documento">Documento</label>
+						<label for="busca_Documento">Número Documento (Benefício/Cpf):</label>
 						<input id="busca_Documento" name="busca_Documento" class="input-large" type="text" />
 
 					</div>

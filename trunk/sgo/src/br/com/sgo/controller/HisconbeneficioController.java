@@ -84,6 +84,11 @@ public class HisconbeneficioController {
 	public void cadastro() {
 
 		this.hisconBeneficio = new HisconBeneficio();
+		
+		Calendar c1 = new GregorianCalendar();
+		Calendar c2 = new GregorianCalendar();
+
+		c1.add(Calendar.DAY_OF_MONTH, -20);
 
 		Collection<HisconBeneficio> hisconsAuxiliar = new ArrayList<HisconBeneficio>();
 
@@ -95,11 +100,7 @@ public class HisconbeneficioController {
 
 		} else {
 
-			hisconsAuxiliar = 
-					this.hisconBeneficioDao.buscaHisconBeneficiosByUsuarioPerfil(
-								usuarioInfo.getEmpresa(), 
-								usuarioInfo.getOrganizacao(),
-								usuarioInfo.getUsuario());
+			hisconsAuxiliar = this.hisconBeneficioDao.buscaHisconBeneficiosByUsuarioPerfil( usuarioInfo.getEmpresa(),  usuarioInfo.getOrganizacao(), usuarioInfo.getUsuario(), c1, c2);
 			
 		}
 		

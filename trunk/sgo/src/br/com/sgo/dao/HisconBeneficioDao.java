@@ -287,7 +287,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		return hisconBeneficio;
 	}
 
-	public Collection<HisconBeneficio> buscaHisconBeneficiosByUsuarioPerfil(Empresa empresa, Organizacao organizacao,Usuario usuario) {
+	public Collection<HisconBeneficio> buscaHisconBeneficiosByUsuarioPerfil(Empresa empresa, Organizacao organizacao,Usuario usuario, Calendar c1 , Calendar c2) {
 
 		String sql = sqlHisconsExibe;
 
@@ -299,12 +299,21 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 		if (usuario != null)
 			sql += " AND ( USUARIO.usuario_id = ? OR USUARIO.supervisor_usuario_id = ? )";
+		
+		if(c1 != null)
+			sql += " AND (HISCONBENEFICIO.created BETWEEN ? AND ? )";
+		
+		sql += " ORDER BY HISCONBENEFICIO.hisconbeneficio_id desc ";
 
 		this.conn = this.conexao.getConexao();
 
 		Collection<HisconBeneficio> hisconsBeneficio = new ArrayList<HisconBeneficio>();
 
 		try {
+			
+			System.out.println(sql);
+			System.out.println(c1.getTime());
+			System.out.println(c2.getTime());
 
 			this.stmt = conn.prepareStatement(sql);
 
@@ -312,6 +321,11 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			this.stmt.setLong(2, organizacao.getOrganizacao_id());
 			this.stmt.setLong(3, usuario.getUsuario_id());
 			this.stmt.setLong(4, usuario.getUsuario_id());
+			
+			if(c1 != null){
+				this.stmt.setTimestamp(5,new Timestamp(c1.getTimeInMillis()));
+				this.stmt.setTimestamp(6,new Timestamp(c2.getTimeInMillis()));
+			}
 
 			this.rsHisconBeneficio = this.stmt.executeQuery();
 
@@ -560,7 +574,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		if (empresa_id != null)
 			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
 		if (organizacao_id != null)
-			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.etapa_id = ?";
+			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.etapa_id = ? ORDER BY HISCONBENEFICIO.hisconbeneficio_id desc ";
 		
 		this.conn = this.conexao.getConexao();
 

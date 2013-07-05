@@ -34,53 +34,97 @@
 			var dataConcluidoFim = $("#busca_DataConcluidoFim").val();
 			var dataRecusadoInicio = $("#busca_DataRecusadoInicio").val();
 			var dataRecusadoFim = $("#busca_DataRecusadoFim").val();
-	
+			
+			if(dataAprovadoInicio == undefined || dataAprovadoInicio == '__/__/____')
+				dataAprovadoInicio = "";
+			if(dataAprovadoFim == undefined || dataAprovadoFim == '__/__/____')
+				dataAprovadoFim = "";
+			if(dataConcluidoInicio == undefined || dataConcluidoInicio == '__/__/____')
+				dataConcluidoInicio = "";
+			if(dataConcluidoFim == undefined || dataConcluidoFim == '__/__/____')
+				dataConcluidoFim = "";
+			if(dataRecusadoInicio == undefined || dataRecusadoInicio == '__/__/____')
+				dataRecusadoInicio = "";
+			if(dataRecusadoFim == undefined || dataRecusadoFim == '__/__/____')
+				dataRecusadoFim = "";
+
 			if(data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
 						  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
 				$(buscaContratos);
 			}
 
+			var previsaoInicio = $("#busca_DataPrevisaoInicio").val();
+			var previsaoFim = $("#busca_DataPrevisaoFim").val();
+			var chegadaInicio = $("#busca_DataChegadaInicio").val();
+			var chegadaFim = $("#busca_DataChegadaFim").val();
+			var vencimentoInicio = $("#busca_DataVencimentoInicio").val();
+			var vencimentoFim = $("#busca_DataVencimentoFim").val();
+			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
+			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
+			
+			if(previsaoInicio == undefined || previsaoInicio == '__/__/____')
+				previsaoInicio = "";
+			if(previsaoFim == undefined || previsaoFim == '__/__/____')
+				previsaoFim = "";
+			if(chegadaInicio == undefined || chegadaInicio == '__/__/____')
+				chegadaInicio = "";
+			if(chegadaFim == undefined || chegadaFim == '__/__/____')
+				chegadaFim = "";
+			if(vencimentoInicio == undefined || vencimentoInicio == '__/__/____')
+				vencimentoInicio = "";
+			if(vencimentoFim == undefined || vencimentoFim == '__/__/____')
+				vencimentoFim = "";
+			if(proximaAtuacaoInicio == undefined || proximaAtuacaoInicio == '__/__/____')
+				proximaAtuacaoInicio = "";
+			if(proximaAtuacaoFim == undefined || proximaAtuacaoFim == '__/__/____')
+				proximaAtuacaoFim = "";
+			
+			if(previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
+				|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != ''){
+				$(buscaDatasControle);
+			};
+
 		$('#busca_Data').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataFim').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataAprovadoInicio').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataAprovadoFim').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataRecusadoInicio').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataRecusadoFim').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataPrevisaoInicio').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataPrevisaoFim').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataProximaAtuacaoInicio').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataProximaAtuacaoFim').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataChegadaInicio').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataChegadaFim').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataVencimentoInicio').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataVencimentoFim').datepicker({
-			dateFormat: 'dd/mm/y'
+			dateFormat: 'dd/mm/yy'
 		});	
 
 		$('.data-table').dataTable({
@@ -217,12 +261,12 @@
 		if(data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
 			  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
 
-		 $("#resultado").load('<c:url value="/menu/busca" />',{'informacaoSaque': informacaoSaque,'tipoAprovado': tipoAprovado,'empresa':empresa,
-			 	'tipoPagamento': tipoPagamento ,'tipoRecusado': tipoRecusado,'justificativa': justificativa,'status': status, 
-				'cliente' : cliente , 'documento' : documento, 'data' : data, 'dataFim' : dataFim,
-				'dataAprovadoInicio' : dataAprovadoInicio, 'dataAprovadoFim' : dataAprovadoFim, 'dataConcluidoInicio' : dataConcluidoInicio, 'dataConcluidoFim' : dataConcluidoFim, 
-				'dataRecusadoInicio' : dataRecusadoInicio, 'dataRecusadoFim' : dataRecusadoFim, 'bancos' : bancos, 'produtos' : produtos, 'bancosComprados' : bancosComprados , 
-				'motivoPendencia' : motivoPendencia, 'consultor' : consultor});
+			 $("#resultado").load('<c:url value="/menu/busca" />',{'informacaoSaque': informacaoSaque,'tipoAprovado': tipoAprovado,'empresa':empresa,
+				 	'tipoPagamento': tipoPagamento ,'tipoRecusado': tipoRecusado,'justificativa': justificativa,'status': status, 
+					'cliente' : cliente , 'documento' : documento, 'data' : data, 'dataFim' : dataFim,
+					'dataAprovadoInicio' : dataAprovadoInicio, 'dataAprovadoFim' : dataAprovadoFim, 'dataConcluidoInicio' : dataConcluidoInicio, 'dataConcluidoFim' : dataConcluidoFim, 
+					'dataRecusadoInicio' : dataRecusadoInicio, 'dataRecusadoFim' : dataRecusadoFim, 'bancos' : bancos, 'produtos' : produtos, 'bancosComprados' : bancosComprados , 
+					'motivoPendencia' : motivoPendencia, 'consultor' : consultor});
 		 
 		} else {
 
