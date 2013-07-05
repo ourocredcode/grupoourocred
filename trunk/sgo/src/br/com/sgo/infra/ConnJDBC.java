@@ -22,7 +22,7 @@ public class ConnJDBC {
 			 if (!computername.equals("SRVOUROSGO"))
 				  computername = "SRVOUROHOM";
 
-			 return getConexao("net.sourceforge.jtds.jdbc.Driver", "jdbc:jtds:sqlserver://" + computername + ":1433;DatabaseName=sgobd", "ouro_app_us", "ouro_app_psw");
+			 return getConexao("net.sourceforge.jtds.jdbc.Driver", "jdbc:jtds:sqlserver://" + computername + ":1433;DatabaseName=sgobd", "ouro_app_us", "ouro_app_pw");
 
 		 } catch (Exception e) {
 
