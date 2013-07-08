@@ -124,12 +124,16 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			while (rsFuncionario.next()) {
 
 				ParceiroNegocio parceiro = new ParceiroNegocio();
+				ParceiroNegocio supervisor = new ParceiroNegocio();
 				Departamento d = new Departamento();
 				Funcao f = new Funcao();
 
 				parceiro.setParceiroNegocio_id(rsFuncionario.getLong("parceironegocio_id"));
 				parceiro.setNome(rsFuncionario.getString("parceironegocio_nome"));
 				parceiro.setIsFuncionario(true);
+				
+				supervisor.setParceiroNegocio_id(rsFuncionario.getLong("supervisor_funcionario_id"));
+				supervisor.setNome(rsFuncionario.getString("supervisor_nome"));
 
 				d.setDepartamento_id(rsFuncionario.getLong("departamento_id"));
 				d.setNome(rsFuncionario.getString("departamento_nome"));
@@ -141,6 +145,8 @@ public class FuncionarioDao extends Dao<Funcionario> {
 				funcionario.setFuncao(f);
 				funcionario.setDepartamento(d);
 				funcionario.setParceiroNegocio(parceiro);
+				funcionario.setSupervisor(supervisor);
+				funcionario.setApelido(rsFuncionario.getString("apelido"));
 
 			}
 

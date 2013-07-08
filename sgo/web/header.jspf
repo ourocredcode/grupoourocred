@@ -92,7 +92,7 @@
 					</li>
 					
 					<li class="submenu">
-						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span> <span class="label">3</span></a>
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
 						<ul class="cadastro">
 							<li><a href="<c:url value="/banco/cadastro"/>">Banco</a></li>
 							<li><a href="<c:url value="/produto/cadastro"/>">Produto</a></li>
@@ -103,7 +103,7 @@
 					
 					
 					<li class="submenu">
-						<a href="#"><i class="icon icon-pencil"></i> <span>Administrador</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrador</span></a>
 						<ul class="cadastro">
 							<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
 						</ul>
@@ -111,7 +111,7 @@
 					
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
@@ -122,7 +122,7 @@
 					
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
@@ -145,7 +145,7 @@
 					</li>
 					
 					<li class="submenu">
-						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span> <span class="label">3</span></a>
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
 						<ul class="cadastro">
 							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
 						</ul>
@@ -153,7 +153,7 @@
 
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
@@ -164,7 +164,7 @@
 					
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
@@ -175,7 +175,7 @@
 					
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-check"></i> <span>PDF</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-check"></i> <span>PDF</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/15"/>">Resultados</a></li>
@@ -204,7 +204,7 @@
 
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
@@ -215,7 +215,7 @@
 					
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
@@ -226,7 +226,7 @@
 					
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-check"></i> <span>PDF</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-check"></i> <span>PDF</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
@@ -253,7 +253,7 @@
 				
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-pencil"></i> <span>Consultores</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-pencil"></i> <span>Consultores</span></a>
 	
 						<ul class="consultor">
 							<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">
@@ -266,7 +266,7 @@
 					
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
@@ -277,7 +277,7 @@
 					
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
@@ -287,7 +287,7 @@
 
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-check"></i> <span>PDF</span> <span class="label">1</span></a>
+						<a href="#"><i class="icon icon-check"></i> <span>PDF</span></a>
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>

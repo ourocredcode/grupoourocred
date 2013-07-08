@@ -237,10 +237,7 @@ public class MenuController {
 		result.include("bancosComprado",this.bancoDao.buscaBancoCompradoByEmpOrg(1l, 1l));
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
-		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
-		
-		
-
+		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
 
 		contador();
 
@@ -396,6 +393,8 @@ public class MenuController {
 		contratos.addAll(this.contratoDao.buscaContratoByFiltros(this.empresa.getEmpresa_id(), this.organizacao.getOrganizacao_id(), calInicio, calFim, 
 				calAprovadoInicio, calAprovadoFim ,cliente, documento, status,statusFinal,
 				produtos, bancos, bancosComprados,consultoresAux));
+
+		contador();
 
 		result.include("contratos",contratos);		
 

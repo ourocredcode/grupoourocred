@@ -295,7 +295,7 @@ public class UsuarioDao extends Dao<Usuario> {
 		String sql = "SELECT EMPRESA.empresa_id, ORGANIZACAO.organizacao_id, USUARIO.usuario_id,   " +
 				"			 USUARIO.parceironegocio_id, SUPER.usuario_id as supervisor_id , " +
 				"			 USUARIO.isactive, USUARIO.chave, USUARIO.nome as usuario_nome , USUARIO.descricao, USUARIO.email,  " +
-				"			 USUARIO.senha, USUARIO.telefone FROM  (((USUARIO (NOLOCK)  " +
+				"			 USUARIO.senha, USUARIO.apelido, USUARIO.telefone FROM  (((USUARIO (NOLOCK)  " +
 				"	 INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON USUARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)  " +
 				"	 INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id)  " +
 				"	 INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id)  " +
@@ -346,6 +346,8 @@ public class UsuarioDao extends Dao<Usuario> {
 				usuario.setEmail(rsUsuarios.getString("email"));
 				usuario.setSenha(rsUsuarios.getString("senha"));
 				usuario.setTelefone(rsUsuarios.getString("telefone"));
+				usuario.setApelido(rsUsuarios.getString("apelido"));
+
 
 			}
 
@@ -407,14 +409,21 @@ public class UsuarioDao extends Dao<Usuario> {
 
 	}
 
-	public Collection<Usuario> buscaUsuariosByPerfil(Long empresa_id, Long organizacao_id, String perfil) {
+	public Collection<Usuario> buscaUsuariosByPerfilDepartamento(Long empresa_id, Long organizacao_id, String perfil, String departamento) {
 
-		String sql = " SELECT USUARIO.usuario_id, USUARIO.nome FROM  USUARIO (NOLOCK)  " +
-				"			INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id  " +
-				"			INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id	 " +
-				"			INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id " +
-				"			INNER JOIN PERFIL (NOLOCK) ON PERFIL.perfil_id = USUARIOPERFIL.perfil_id " +
-				"		WHERE  USUARIO.empresa_id = ?  AND USUARIO.organizacao_id = ?  AND PERFIL.nome like  ?  ";
+		String sql = " SELECT " +
+						" USUARIO.usuario_id, USUARIO.nome, DEPARTAMENTO.nome, USUARIO.parceironegocio_id FROM  USUARIO (NOLOCK) " +   
+						" INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id   " + 
+						" INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id " +	  
+						" INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id   " +
+						" INNER JOIN PERFIL (NOLOCK) ON PERFIL.perfil_id = USUARIOPERFIL.perfil_id  " +
+						" INNER JOIN FUNCIONARIO (NOLOCK) ON FUNCIONARIO.parceironegocio_id  = USUARIO.parceironegocio_id " +
+						" INNER JOIN DEPARTAMENTO (NOLOCK) ON DEPARTAMENTO.departamento_id = FUNCIONARIO.departamento_id " +
+					" WHERE   " +
+					" USUARIO.empresa_id = ? " +
+					" AND USUARIO.organizacao_id = ? " +  
+					" AND PERFIL.nome like ? " +
+					" AND DEPARTAMENTO.nome like ? AND USUARIO.isactive = 1 AND FUNCIONARIO.isactive = 1 ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -426,6 +435,7 @@ public class UsuarioDao extends Dao<Usuario> {
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + perfil + "%");
+			this.stmt.setString(4, "%" + departamento + "%");
 
 			this.rsUsuarios = this.stmt.executeQuery();
 
