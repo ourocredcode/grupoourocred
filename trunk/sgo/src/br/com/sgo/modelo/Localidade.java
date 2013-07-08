@@ -144,7 +144,7 @@ public class Localidade implements Serializable {
 	}
 
 	public String getCep() {
-		return cep;
+		return cep == null ? "" : cep;
 	}
 
 	public void setCep(String cep) {

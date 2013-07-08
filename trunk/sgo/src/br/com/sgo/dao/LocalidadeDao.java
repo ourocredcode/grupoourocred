@@ -57,10 +57,9 @@ public class LocalidadeDao extends Dao<Localidade> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setString(1,"%" + cep + "%");
-			
-			System.out.println(sql);
-			System.out.println(cep);
+			if (!cep.equals("")) {
+				this.stmt.setString(1,"%" + cep + "%");
+			}
 
 			this.rsLocalidades = this.stmt.executeQuery();
 

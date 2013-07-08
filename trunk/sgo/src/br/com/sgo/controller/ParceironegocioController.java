@@ -2,6 +2,7 @@ package br.com.sgo.controller;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 
 import br.com.caelum.restfulie.RestClient;
 import br.com.caelum.restfulie.Restfulie;
@@ -88,6 +89,8 @@ public class ParceironegocioController {
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
+	private ParceiroNegocio parceiroNegocio;
+	private Funcionario funcionario;
 
 	private Calendar dataAtual = Calendar.getInstance();
 	
@@ -96,7 +99,8 @@ public class ParceironegocioController {
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
 			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,Usuario usuario,BancoDao bancoDao,
 			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao,MeioPagamentoDao meioPagamentoDao,
-			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao, CategoriaParceiroDao categoriaParceiroDao, ClassificacaoParceiroDao classificacaoParceiroDao, GrupoParceiroDao grupoParceiroDao) {
+			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao, CategoriaParceiroDao categoriaParceiroDao, ClassificacaoParceiroDao classificacaoParceiroDao, GrupoParceiroDao grupoParceiroDao,
+			ParceiroNegocio parceiroNegocio,Funcionario funcionario) {
 
 		this.result = result;
 		this.parceiroNegocioDao = parceiroNegocioDao;
@@ -130,6 +134,8 @@ public class ParceironegocioController {
 		this.empresa = this.usuarioInfo.getEmpresa();
 		this.organizacao = this.usuarioInfo.getOrganizacao();
 		this.usuario = this.usuarioInfo.getUsuario();
+		this.parceiroNegocio = parceiroNegocio;
+		this.funcionario = funcionario;
 
 	}
 
@@ -310,11 +316,16 @@ public class ParceironegocioController {
 				f.setDepartamento(funcionario.getDepartamento());
 				f.setParceiroNegocio(parceiroNegocio);
 				f.setFuncao(funcionario.getFuncao());
+				f.setNome(parceiroNegocio.getNome());
+				f.setChave(parceiroNegocio.getNome());
+				f.setDescricao(parceiroNegocio.getNome());
 				f.setApelido(funcionario.getApelido());
+
 				f.setCreated(dataAtual);
 				f.setUpdated(dataAtual);
 				f.setCreatedBy(usuario);
 				f.setUpdatedBy(usuario);
+				
 				f.setIsActive(parceiroNegocio.getIsActive());
 				
 				try {
@@ -350,6 +361,7 @@ public class ParceironegocioController {
 				u.setUpdated(dataAtual);
 				u.setCreatedBy(usuario);
 				u.setUpdatedBy(usuario);
+				u.setApelido(funcionario.getApelido());
 				u.setIsActive(true);
 
 				if(u.getUsuario_id() == null) {
@@ -405,19 +417,14 @@ public class ParceironegocioController {
 				}
 			}
 	
-			localidade.setLocalidade_id(this.localidadeDao.buscaLocalidade(localidade.getCep()).getLocalidade_id());
-	
-			if(localidade.getLocalidade_id() == null)	{
+			Localidade l = this.localidadeDao.buscaLocalidade(localidade.getCep());
+
+			if(l.getLocalidade_id() == null)	{
 	
 				localidade.setEmpresa(empresa);
-				localidade.setOrganizacao(organizacao);
-				
+				localidade.setOrganizacao(organizacao);			
 				localidade.setCreated(dataAtual);
-				localidade.setUpdated(dataAtual);
-
 				localidade.setCreatedBy(usuario);
-				localidade.setUpdatedBy(usuario);
-
 				localidade.setIsActive(true);
 	
 				try {
@@ -435,9 +442,13 @@ public class ParceironegocioController {
 					} else {
 						mensagem = "Erro: Erro ao adicionar Localidade:";
 					}
-	
+
 				}
 	
+			} else {
+
+				localidade.setLocalidade_id(l.getLocalidade_id());
+
 			}
 	
 			Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
@@ -512,6 +523,73 @@ public class ParceironegocioController {
 
 		this.parceiroNegocioDao.clear();
 		this.parceiroNegocioDao.close();
+		result.include("notice",mensagem);
+		result.redirectTo(this).cadastro();
+
+	}
+	
+	@Post
+	@Path("/parceironegocio/altera")
+	public void altera(ParceiroNegocio parceiroNegocio,Funcionario funcionario){
+
+		String mensagem = "Alterado Com sucesso";
+
+		try{
+			
+			this.parceiroNegocio = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
+			
+			this.parceiroNegocio.setTipoParceiro(parceiroNegocio.getTipoParceiro());
+			this.parceiroNegocio.setNome(parceiroNegocio.getNome());
+			this.parceiroNegocio.setCpf(parceiroNegocio.getCpf());
+			this.parceiroNegocio.setRg(parceiroNegocio.getRg());
+			this.parceiroNegocio.setDataNascimento(parceiroNegocio.getDataNascimento());
+			this.parceiroNegocio.setSexo(parceiroNegocio.getSexo());
+			this.parceiroNegocio.setEstadoCivil(parceiroNegocio.getEstadoCivil());
+
+			this.parceiroNegocio.setUpdated(GregorianCalendar.getInstance());
+			this.parceiroNegocio.setUpdatedBy(usuario);
+
+			this.parceiroNegocioDao.beginTransaction();
+			this.parceiroNegocioDao.atualiza(this.parceiroNegocio);
+			this.parceiroNegocioDao.commit();
+			
+			
+			if(this.parceiroNegocio.getIsFuncionario()){
+				
+				this.funcionario = this.funcionarioDao.load(funcionario.getFuncionario_id());
+				
+				this.funcionario.setDepartamento(funcionario.getDepartamento());
+				this.funcionario.setFuncao(funcionario.getFuncao());
+				this.funcionario.setSupervisor(funcionario.getSupervisor());
+				this.funcionario.setApelido(funcionario.getApelido());
+				
+				this.funcionario.setUpdated(GregorianCalendar.getInstance());
+				this.funcionario.setUpdatedBy(usuario);
+				
+				this.funcionarioDao.beginTransaction();
+				this.funcionarioDao.atualiza(this.funcionario);
+				this.funcionarioDao.commit();
+				
+				Usuario usuario = this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.parceiroNegocio.getParceiroNegocio_id());
+
+				usuario.setApelido(this.funcionario.getApelido());
+				usuario.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.funcionario.getSupervisor().getParceiroNegocio_id()));
+				
+				usuario.setUpdated(GregorianCalendar.getInstance());
+				usuario.setUpdatedBy(usuario);
+
+				this.usuarioDao.beginTransaction();
+				this.usuarioDao.atualiza(usuario);
+				this.usuarioDao.commit();
+				
+			}
+
+			mensagem = " Parceiro Negócio : " + parceiroNegocio.getNome() + " atualizado com sucesso ";
+
+		}catch(Exception e){
+			mensagem = e.getMessage();
+		}
+
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 

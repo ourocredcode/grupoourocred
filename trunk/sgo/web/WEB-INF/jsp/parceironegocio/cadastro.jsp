@@ -80,6 +80,7 @@
 			   }
 
 		   });
+
 	});
 	
 	function limpaForm(){
@@ -312,22 +313,32 @@
 			</c:otherwise>
 		</c:choose>
 	</c:if>
+	
+	<c:if test="${parceiroNegocio.parceiroNegocio_id  == null }">
+		<c:set var="url" value="/parceironegocio/salva"></c:set>
+		<c:set var="descButton" value="Salva"></c:set>
+	</c:if>
+	<c:if test="${parceiroNegocio.parceiroNegocio_id != null }">
+		<c:set var="url" value="/parceironegocio/altera"></c:set>
+		<c:set var="descButton" value="Altera"></c:set>
+	</c:if>
 
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
 
-					<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="/parceironegocio/salva"/>" method="POST">
+					<form id="parceiroNegocioForm" name="parceiroNegocioForm" action="<c:url value="${url }"/>" method="POST">
 
 						<input id="parceiroNegocioId" name="parceiroNegocio.parceiroNegocio_id" value="${parceiroNegocio.parceiroNegocio_id }" type="hidden"/>
+						<input id="funcionarioId" name="funcionario.funcionario_id" value="${funcionario.funcionario_id }" type="hidden"/>
 						<input id="parceiroNegocioPnId" name="parceiroNegocio.pn_id" value="${parceiroNegocio.pn_id }" type="hidden"/>
 
 						<div class="control-group">
 							<div class="controls controls-row">
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"
 									<c:if test="${parceiroNegocio.isFuncionario }">checked="checked"</c:if>
-									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">disabled="disabled"</c:if>>Funcionário
-									
+									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">disabled="disabled"</c:if>
+									<c:if test="${usuarioInfo.perfil.chave == 'Supervisor' ||  usuarioInfo.perfil.chave == 'Gestor'}">checked="checked"</c:if>>Funcionário
 								</label>
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"
 									<c:if test="${parceiroNegocio.isCliente || usuarioInfo.perfil.chave == 'Consultor' }">checked="checked"</c:if>> Cliente
@@ -479,6 +490,11 @@
 											<option value="${supervisor.parceiroNegocio_id }" <c:if test="${funcionario.supervisor.parceiroNegocio_id eq supervisor.parceiroNegocio_id }"> selected="selected"</c:if>> ${supervisor.nome }</option>
 										</c:forEach>
 									</select>
+								</div>
+								
+								<div class="span2">
+									<label for="funcionarioApelido">Codinome</label>
+									<input id="funcionarioApelido" name="funcionario.apelido" type="text" placeholder="Codinome" value="${funcionario.apelido }" class="input-large">
 								</div>
 								
 				
@@ -727,7 +743,7 @@
 										<input  id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
 										<input  id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
 										<input  id="localidadePaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
-										<input  id="localidadeId" name="localidade.localidade_id" type="hidden"  value="${localidade.localidade_id }" />
+								
 									</div>
 				
 								</div>
@@ -754,8 +770,11 @@
 
 					<div class="btn-toolbar">
 						<div class="btn-group">
-							<c:if test="${empty parceiroNegocio.parceiroNegocio_id }">
-								<button type="submit" class="btn btn-primary">Salvar</button>
+							<c:if test="${( usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Administrador' ) && (parceiroNegocio.parceiroNegocio_id  != null)}">
+								<button type="submit" class="btn btn-primary">${descButton }</button>
+							</c:if>
+							<c:if test="${parceiroNegocio.parceiroNegocio_id  == null }">
+								<button type="submit" class="btn btn-primary">${descButton }</button>
 							</c:if>
 						</div>		
 						<div class="btn-group">

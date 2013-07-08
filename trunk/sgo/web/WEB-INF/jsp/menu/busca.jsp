@@ -42,7 +42,25 @@ $(document).ready(function() {
 
 
 <c:if test="${not empty contratos}">
-	<table class="table table-bordered table-striped table-hover data-table">
+	
+	<table class="table table-bordered table-striped table-hover" style="width: 500px;float: right;">
+		<tr>
+			<th >Total Contrato</th>
+			<th >Total C. Líquido</th>
+			<th >Total Dívida</th>
+			<th >Total Líquido</th>
+			<th >Total Meta</th>
+		</tr>
+		<tr>
+			<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorContratos}" minFractionDigits="2" /></td>
+			<td>R$ <fmt:formatNumber type="NUMBER" value="${totalContratoLiquido}" minFractionDigits="2" /></td>
+			<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorDivida}" minFractionDigits="2" /></td>
+			<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorLiquido}" minFractionDigits="2" /></td>
+			<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" /></td>
+		</tr>
+	</table>
+	
+	<table class="table table-bordered table-striped table-hover data-table"> 
 		<thead>	
 			<tr>
 				<th >
@@ -67,7 +85,7 @@ $(document).ready(function() {
 					Produto:
 				</th>
 				<th >
-					Banco Comprado:
+					Comprado:
 				</th>
 				<th >
 					Parcela
@@ -77,6 +95,12 @@ $(document).ready(function() {
 				</th>
 				<th >
 					Prazo
+				</th>
+				<th >
+					Vl Contrato
+				</th>
+				<th >
+					Vl C Liquido
 				</th>
 				<th >
 					Dívida
@@ -90,9 +114,6 @@ $(document).ready(function() {
 				<th >
 					Status
 				</th>
-				<th >
-					Pós Venda
-				</th>
 			</tr>
 		</thead>
 		<tbody>		
@@ -105,10 +126,10 @@ $(document).ready(function() {
 						${contrato.usuario.supervisorUsuario.nome }
 					</td>
 					<td >
-						${contrato.usuario.nome }
+						${fn:substring(contrato.usuario.nome, 0, 18)} ...
 					</td>
 					<td >
-						${contrato.formulario.parceiroNegocio.nome }
+						${fn:substring(contrato.formulario.parceiroNegocio.nome, 0, 18)} ...
 					</td>
 					<td >
 						${contrato.formulario.parceiroNegocio.cpf }
@@ -132,6 +153,19 @@ $(document).ready(function() {
 						${contrato.prazo }
 					</td>
 					<td >
+						${contrato.valorContrato }
+					</td>
+					<td class="${alert}">
+						<c:choose>
+							<c:when test="${contrato.produto.nome eq 'MARGEM LIMPA' || contrato.produto.nome eq 'RECOMPRA RMC' || contrato.produto.nome eq 'RECOMPRA INSS'}">
+								<fmt:formatNumber type="NUMBER" value="${contrato.valorContrato }" minFractionDigits="2" />
+							</c:when>
+							<c:when test="${contrato.produto.nome eq 'RETENÇÃO' || contrato.produto.nome eq 'REFINANCIAMENTO'}">
+								<fmt:formatNumber type="NUMBER" value="${contrato.valorLiquido }" minFractionDigits="2" />
+							</c:when>
+						</c:choose>
+					</td>
+					<td >
 						${contrato.valorDivida }
 					</td>
 					<td >
@@ -142,9 +176,6 @@ $(document).ready(function() {
 					</td>
 					<td >
 						<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
-					</td>
-					<td >
-						PÓS VENDA
 					</td>
 				</tr>
 			</c:forEach>

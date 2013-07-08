@@ -4,8 +4,8 @@
  
 	 $(document).ready(function() {
 
-		$("#busca_Data").mask("99/99/99");
-		$("#busca_DataFim").mask("99/99/99");
+		$("#busca_Data").mask("99/99/9999");
+		$("#busca_DataFim").mask("99/99/9999");
 		$("#busca_DataAprovadoInicio").mask("99/99/9999");
 		$("#busca_DataAprovadoFim").mask("99/99/9999");
 		$("#busca_DataRecusadoInicio").mask("99/99/9999");
@@ -386,7 +386,7 @@
 			<input type="hidden" id="busca_Tipo" name="busca_Tipo" value="${tipobusca }"/>
 			
 			
-			<div class="widget-content" style="padding: 8px;">
+			<div class="widget-content" style="padding: 6px;">
 				<div class="row-fluid">
 
 					<div class="span2">
@@ -459,7 +459,7 @@
 								<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor'}">
 									<div class="span6">								
 										<label for="busca_Supervisor">Supervisor</label>
-										<select id="busca_Supervisor" name="busca_Supervisor" class="input-small">
+										<select id="busca_Supervisor" name="busca_Supervisor" class="input-xlarge">
 											<option value="">Todos</option>
 											<c:forEach items="${supervisores}" var="supervisor">
 												<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
@@ -468,10 +468,14 @@
 									</div>
 								</c:if>
 
+							</div>
+							
+							<div class="row-fluid">
+							
 								<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Supervisor'}">
 									<div class="span6">
 										<label for="busca_Consultor">Consultor</label>
-										<select id="busca_Consultor" name="busca_Consultor" class="input-small">
+										<select id="busca_Consultor" name="busca_Consultor" class="input-xlarge">
 
 											<option value="">Selecione um Supervisor</option>
 											<c:if test="${usuarioInfo.perfil.chave == 'Supervisor'}">
@@ -482,7 +486,7 @@
 										</select>
 									</div>
 								</c:if>
-	
+
 							</div>
 						
 					</div>
@@ -683,16 +687,35 @@
 		</div>
 		</div>
 	
-	<div id="loading" style="display:none;color:#1b5790; font-weight:bold;float:left;clear: both;margin-left: 600px;">CARREGANDO...</div>
+	<div id="loading" style="display:none;color:#1b5790; font-weight:bold;float:left;clear: both;margin-left: 600px;margin-top: 1px;">CARREGANDO...</div>
 
 	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+		<div class="row-fluid" style="margin-top: 1px;">
+			<div class="span12" style="margin-top: 1px;">
 
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Contratos</h5></div>
 					<div id="resultado" class="widget-content">
 						<c:if test="${not empty contratos}">
+							
+							<table class="table table-bordered table-striped table-hover" style="width: 500px;float: right;">
+								<tr>
+									<th >Total Contrato</th>
+									<th >Total C. Líquido</th>
+									<th >Total Dívida</th>
+									<th >Total Líquido</th>
+									<th >Total Meta</th>
+								</tr>
+								<tr>
+									<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorContratos}" minFractionDigits="2" /></td>
+									<td>R$ <fmt:formatNumber type="NUMBER" value="${totalContratoLiquido}" minFractionDigits="2" /></td>
+									<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorDivida}" minFractionDigits="2" /></td>
+									<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorLiquido}" minFractionDigits="2" /></td>
+									<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" /></td>
+								</tr>
+							</table>
+							
+							
 							<table id="mytable" class="table table-bordered table-striped table-hover data-table">
 								<thead>	
 									<tr>
@@ -750,7 +773,7 @@
 									<c:forEach items="${contratos}" var="contrato">
 										<tr>
 											<td>
-												<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yyyy" />
+												<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM" />
 											</td>
 											<td >
 												${contrato.usuario.supervisorUsuario.nome }

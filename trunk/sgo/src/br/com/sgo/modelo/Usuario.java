@@ -63,6 +63,9 @@ public class Usuario implements Serializable {
 
 	@Column(name = "nome")
 	private String nome;
+	
+	@Column(name = "apelido")
+	private String apelido;
 
 	@Column(name = "descricao")
 	private String descricao;
@@ -205,6 +208,14 @@ public class Usuario implements Serializable {
 
 	public void setUpdated(Calendar updated) {
 		this.updated = updated;
+	}
+
+	public String getApelido() {
+		return apelido;
+	}
+
+	public void setApelido(String apelido) {
+		this.apelido = apelido;
 	}
 
 }
