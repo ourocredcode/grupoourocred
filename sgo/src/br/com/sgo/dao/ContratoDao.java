@@ -480,22 +480,19 @@ public class ContratoDao extends Dao<Contrato> {
 
 		try {
 
-			System.out.println(sql);
-			
-			
-			
-
 			this.stmt = conn.prepareStatement(sql);
 			
 
 			int curr = 1;
 
 			if(empresa_id != null){
+
 				this.stmt.setLong(curr, empresa_id);
 				curr++;
 			}
 			
 			if(organizacao_id != null){
+
 				this.stmt.setLong(curr, organizacao_id);
 				curr++;
 			}
@@ -564,10 +561,6 @@ public class ContratoDao extends Dao<Contrato> {
 					curr++;
 					this.stmt.setLong(curr,u.getUsuario_id());
 					curr++;
-
-					System.out.println(u.getUsuario_id());
-					System.out.println(u.getNome());
-
 				}
 
 			}
@@ -607,7 +600,8 @@ public class ContratoDao extends Dao<Contrato> {
 
 	}
 	
-	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,TipoControle tipoControle,Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
+	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,TipoControle tipoControle,Calendar calInicio,Calendar calFim,
+			Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
 			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,String procedimento,
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status, Collection<Usuario> consultores,String cliente,
 			String documento,Collection<String> empresas) {
@@ -755,14 +749,15 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		if(proximaAtuacaoInicio != null)
 			sql += " AND (CONTROLE.dataproximaatuacao BETWEEN ? AND ? )";
+		
+		if(calInicio != null)
+			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
 		Collection<Contrato> contratos = new ArrayList<Contrato>();
 
 		try {
-
-			System.out.println(sql);
 
 			this.stmt = conn.prepareStatement(sql);
 
@@ -881,6 +876,16 @@ public class ContratoDao extends Dao<Contrato> {
 				curr++;
 
 			}
+			
+			if(calInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(calInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(calFim.getTimeInMillis()));
+				curr++;
+
+			} 
 
 			this.rsContrato = this.stmt.executeQuery();
 
@@ -916,7 +921,8 @@ public class ContratoDao extends Dao<Contrato> {
 		if(usuario_id != null)
 			sql += " AND (CONTRATO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 
-		sql +=  " GROUP BY ETAPA.nome ";
+		
+		sql +=  " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome ";
 
 		this.conn = this.conexao.getConexao();
 		
@@ -954,11 +960,78 @@ public class ContratoDao extends Dao<Contrato> {
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return map;
 	}
+	
+	public HashMap<String,Integer> buscaContratosToCountEtapasStatusFinal(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
+
+		String sql = " SELECT ETAPA.nome as etapa_nome, COUNT(ETAPA.nome) as etapaCount " +
+					" FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
+					" INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
+					" INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
+					" INNER JOIN FORMULARIO ON FORMULARIO.formulario_id = CONTRATO.formulario_id ";
+
+			sql += " WHERE CONTRATO.empresa_id = ? ";
+
+		if(organizacao_id != null)
+			sql += " AND CONTRATO.organizacao_id = ? ";
+
+		if(usuario_id != null)
+			sql += " AND (CONTRATO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+
+		if(calInicio != null)
+			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
+		
+		sql +=  " AND ( ETAPA.NOME in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome ";
+
+		this.conn = this.conexao.getConexao();
+		
+
+		HashMap<String,Integer> map = new HashMap<String,Integer>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			int curr = 1;
+			
+			this.stmt.setLong(curr, empresa_id);
+			this.stmt.setLong(++curr, organizacao_id);
+			
+			if(usuario_id != null){
+
+				this.stmt.setLong(++curr, usuario_id);
+				this.stmt.setLong(++curr, usuario_id);
+				
+			}
+			
+			if(calInicio != null){
+
+				this.stmt.setTimestamp(++curr,new Timestamp(calInicio.getTimeInMillis()));
+
+				this.stmt.setTimestamp(++curr,new Timestamp(calFim.getTimeInMillis()));
+
+			}
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+
+				String etapa_nome = rsContrato.getString("etapa_nome");
+				Integer etapaCount = rsContrato.getInt("etapaCount");
+
+				map.put(etapa_nome,etapaCount);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return map;
+	}
 
 	private void getContratos(Collection<Contrato> contratos) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
-		Calendar dataAssinatura = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		Usuario supervisor = new Usuario();
@@ -1044,7 +1117,6 @@ public class ContratoDao extends Dao<Contrato> {
 	private void getContrato(Contrato contrato) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
-		Calendar dataAssinatura = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		ParceiroNegocio parceiro = new ParceiroNegocio();

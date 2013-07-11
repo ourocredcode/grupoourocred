@@ -67,7 +67,7 @@
 
 					<div class="widget-title">
 						<span class="icon"><i class="icon-signal"></i>
-						</span><h5>Vendas - <fmt:formatDate value="${calInicio.time}" pattern="dd/MM/yyyy" /> até <fmt:formatDate value="${calFim.time}" pattern="dd/MM/yyyy" /></h5>
+						</span><h5>Vendas - <fmt:formatDate value="${calInicio.time}" pattern="dd/MM" /> até <fmt:formatDate value="${calFim.time}" pattern="dd/MM" /></h5>
 						<div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-refresh"></i> Update stats</a></div>
 					</div>
 
@@ -165,7 +165,7 @@
 					</div>
 					<div class="widget-content">
 
-							<h3>Coeficientes</h3>
+							<h5>Coeficientes</h5>
 							<table class="table table-bordered table-striped table-hover data-table" >
 							<thead>
 							  <tr>
@@ -203,8 +203,33 @@
 						<h5>Contratos e Status</h5>
 					</div>
 					<div class="widget-content">
+							
+							<h5>Status Final <fmt:formatDate value="${calInicio.time}" pattern="dd/MM" /> até <fmt:formatDate value="${calFim.time}" pattern="dd/MM" /></h5>
+							<table class="table table-bordered table-striped">
+							<thead>
+							  <tr>
+								<th>Status</th>
+								<th>Quantidade</th>
+							  </tr>
+							</thead>
+							<tbody>
+								<c:forEach items="#{mapEtapasFinal }" var="map">
+									<tr>
+										<c:choose>
+											<c:when test="${map.key == 'Aprovado' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/aprovados'">${map.key }</a></td></c:when>
+											<c:otherwise><td>${map.key }</td></c:otherwise>
+										</c:choose>
+										<c:choose>
+											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-success">${map.value }</span></td></c:when>
+											<c:otherwise><td><span class="badge badge-info">${map.value }</span></td></c:otherwise>
+										</c:choose>
+									</tr>
+								
+								</c:forEach>
+							</tbody>
+						  </table>
 
-							<h3>Status</h3>
+							<h5>Status</h5>
 							<table class="table table-bordered table-striped">
 							<thead>
 							  <tr>
@@ -216,7 +241,6 @@
 								<c:forEach items="#{mapEtapas }" var="map">
 									<tr>
 										<c:choose>
-											<c:when test="${map.key == 'Aprovado' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/aprovados'">${map.key }</a></td></c:when>
 											<c:when test="${map.key == 'Aguardando Status' }"><td>${map.key }</td></c:when>
 											<c:when test="${map.key == 'Pendente Administrativo' }"><td>${map.key }</td></c:when>
 											<c:when test="${map.key == 'Pendente Agendamento' }"><td>${map.key }</td></c:when>
@@ -227,7 +251,6 @@
 											<c:otherwise><td>${map.key }</td></c:otherwise>
 										</c:choose>
 										<c:choose>
-											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-success">${map.value }</span></td></c:when>
 											<c:when test="${map.key == 'Aguardando Status' }"><td><span class="badge">${map.value }</span></td></c:when>
 											<c:when test="${map.key == 'Pendente Administrativo' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
 											<c:when test="${map.key == 'Pendente Agendamento' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>

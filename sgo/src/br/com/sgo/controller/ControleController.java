@@ -12,11 +12,15 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.sgo.dao.AgenteDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleDao;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.TipoControleDao;
+import br.com.sgo.dao.TipoWorkflowDao;
+import br.com.sgo.dao.UsuarioDao;
+import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Controle;
@@ -24,6 +28,7 @@ import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
 
 @Resource
@@ -35,7 +40,12 @@ public class ControleController {
 	private final ContratoDao contratoDao;
 	private final ControleDao controleDao;
 	private final HistoricoControleDao historicoControleDao;
+	private final EtapaDao etapaDao;
+	private final AgenteDao agenteDao;
 	private final TipoControleDao tipoControleDao;
+	private final TipoWorkflowDao tipoWorkflowDao;
+	private final WorkflowDao workflowDao;
+	private final UsuarioDao usuarioDao;
 
 	private Contrato contrato;
 	private Controle averbacao;
@@ -45,8 +55,9 @@ public class ControleController {
 	private Usuario usuario;
 	private Collection<Etapa> etapas;
 
-	public ControleController(Result result,Contrato contrato, ContratoDao contratoDao,EtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,ControleDao controleDao
-			,Empresa empresa,Organizacao organizacao,Usuario usuario,HistoricoControleDao historicoControleDao,TipoControleDao tipoControleDao){		
+	public ControleController(Result result,Contrato contrato, ContratoDao contratoDao,EtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,ControleDao controleDao,
+			TipoWorkflowDao tipoWorkflowDao, EtapaDao etapaDao ,Empresa empresa,Organizacao organizacao,Usuario usuario,HistoricoControleDao historicoControleDao,
+			TipoControleDao tipoControleDao,AgenteDao agenteDao,UsuarioDao usuarioDao,WorkflowDao workflowDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -54,11 +65,16 @@ public class ControleController {
 		this.contratoDao = contratoDao;
 		this.workFlowetapaDao = workFlowetapaDao;
 		this.controleDao = controleDao;
+		this.etapaDao = etapaDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
 		this.historicoControleDao = historicoControleDao;
 		this.tipoControleDao = tipoControleDao;
+		this.tipoWorkflowDao = tipoWorkflowDao;
+		this.agenteDao = agenteDao;
+		this.usuarioDao = usuarioDao;
+		this.workflowDao = workflowDao;
 
 	}
 
@@ -76,6 +92,12 @@ public class ControleController {
 
 		result.include("boleto",boleto);
 
+		TipoWorkflow t = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l,1l, "Controle Contrato");
+
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), t.getTipoWorkflow_id()));
+		result.include("agentes",this.agenteDao.buscaAgenteToControleBancoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("atuantes",this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));
+
 	}
 	
 	@Post
@@ -91,6 +113,12 @@ public class ControleController {
 		averbacao.setContrato(this.contratoDao.buscaContratoById(contrato_id));
 
 		result.include("averbacao",averbacao);
+		
+		TipoWorkflow t = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l,1l, "Controle Contrato");
+
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), t.getTipoWorkflow_id()));
+		result.include("agentes",this.agenteDao.buscaAgenteToControleBancoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("atuantes",this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));
 
 	}
 
@@ -160,6 +188,38 @@ public class ControleController {
 					this.averbacao.setDataProximaAtuacao(null);
 			}
 
+			if(averbacao.getEtapa().getEtapa_id() != null){
+
+				Etapa e = this.etapaDao.buscaEtapaById(averbacao.getEtapa().getEtapa_id());
+
+				if(this.averbacao.getEtapa() == null || (this.averbacao.getEtapa().getEtapa_id() != averbacao.getEtapa().getEtapa_id())){
+					this.averbacao.setEtapa(e);
+					log.add("Procedimento alterado para : " + e.getNome());
+				}
+			}
+			
+			if(averbacao.getEtapaProximo().getEtapa_id() != null){
+				
+				Etapa e = this.etapaDao.buscaEtapaById(averbacao.getEtapaProximo().getEtapa_id());
+				
+				if(this.averbacao.getEtapaProximo() == null || (this.averbacao.getEtapaProximo().getEtapa_id() != averbacao.getEtapaProximo().getEtapa_id())){
+					this.averbacao.setEtapaProximo(e);
+					log.add("Próximo Procedimento alterado para : " + e.getNome());
+				}
+			
+			}
+
+			if(averbacao.getProximoAtuante().getUsuario_id() != null){
+
+				Usuario u = this.usuarioDao.buscaUsuarioById(averbacao.getProximoAtuante().getUsuario_id());
+
+				if(this.averbacao.getProximoAtuante() == null || (this.averbacao.getProximoAtuante().getUsuario_id() != averbacao.getProximoAtuante().getUsuario_id()) ){
+					this.averbacao.setProximoAtuante(u);
+					log.add("Próximo Atuante alterado para : " + u.getNome());
+				}
+
+			}
+			
 			controleDao.beginTransaction();
 			controleDao.atualiza(this.averbacao);
 			controleDao.commit();
@@ -194,8 +254,15 @@ public class ControleController {
 			averbacao.setProximoAtuante(usuarioInfo.getUsuario());
 			averbacao.setEmpresa(empresa);
 			averbacao.setOrganizacao(organizacao);
+			averbacao.setCreated(GregorianCalendar.getInstance());
+			averbacao.setCreatedBy(usuario);
 			averbacao.setIsActive(true);
 			averbacao.setTipoControle(tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Averbacao"));
+			averbacao.setEtapa(averbacao.getEtapa().getEtapa_id() == null ? null : averbacao.getEtapa());
+			averbacao.setEtapaProximo(averbacao.getEtapaProximo().getEtapa_id() == null ? null : averbacao.getEtapaProximo());
+			averbacao.setProximoAtuante(averbacao.getProximoAtuante().getUsuario_id() == null ? null : averbacao.getProximoAtuante());
+			averbacao.setPerfil(usuarioInfo.getPerfil());
+			averbacao.setWorkflow(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Controle Averbação"));
 
 			controleDao.beginTransaction();
 			controleDao.adiciona(averbacao);
@@ -242,9 +309,8 @@ public class ControleController {
 		if(boleto.getControle_id() != null){
 
 			this.boleto = controleDao.load(boleto.getControle_id());
+
 			this.boleto.setDataAtuacao(GregorianCalendar.getInstance());
-			this.boleto.setContrato(contratoDao.load(boleto.getContrato().getContrato_id()));
-			this.boleto.setProximoAtuante(usuarioInfo.getUsuario());
 
 			this.boleto.setDataProximaAtuacao(this.boleto.getDataProximaAtuacao() == null ? calInicial : this.boleto.getDataProximaAtuacao());
 			boleto.setDataProximaAtuacao(boleto.getDataProximaAtuacao() == null ? calInicial : boleto.getDataProximaAtuacao());
@@ -347,6 +413,40 @@ public class ControleController {
 					this.boleto.setDataProximaAtuacao(null);
 			}
 
+			if(boleto.getEtapa().getEtapa_id() != null){
+
+				Etapa e = this.etapaDao.buscaEtapaById(boleto.getEtapa().getEtapa_id());
+
+				if(this.boleto.getEtapa() == null || (this.boleto.getEtapa().getEtapa_id() != boleto.getEtapa().getEtapa_id())){
+					this.boleto.setEtapa(e);
+					log.add("Procedimento alterado para : " + e.getNome());
+				}
+			}
+			
+			if(boleto.getEtapaProximo().getEtapa_id() != null){
+				
+				Etapa e = this.etapaDao.buscaEtapaById(boleto.getEtapaProximo().getEtapa_id());
+				
+				if(this.boleto.getEtapaProximo() == null || (this.boleto.getEtapaProximo().getEtapa_id() != boleto.getEtapaProximo().getEtapa_id())){
+					this.boleto.setEtapaProximo(e);
+					log.add("Próximo Procedimento alterado para : " + e.getNome());
+				}
+			
+			}
+
+			if(boleto.getProximoAtuante().getUsuario_id() != null){
+
+				Usuario u = this.usuarioDao.buscaUsuarioById(boleto.getProximoAtuante().getUsuario_id());
+
+				if(this.boleto.getProximoAtuante() == null || (this.boleto.getProximoAtuante().getUsuario_id() != boleto.getProximoAtuante().getUsuario_id()) ){
+					this.boleto.setProximoAtuante(u);
+					log.add("Próximo Atuante alterado para : " + u.getNome());
+				}
+
+			}
+
+			this.boleto.setAgente(boleto.getAgente().getAgente_id() == null ? null : boleto.getAgente());
+
 			controleDao.beginTransaction();
 			controleDao.atualiza(this.boleto);
 			controleDao.commit();
@@ -381,8 +481,16 @@ public class ControleController {
 			boleto.setProximoAtuante(usuarioInfo.getUsuario());
 			boleto.setEmpresa(empresa);
 			boleto.setOrganizacao(organizacao);
+			boleto.setCreated(GregorianCalendar.getInstance());
+			boleto.setCreatedBy(usuario);
 			boleto.setIsActive(true);
 			boleto.setTipoControle(tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Boleto"));
+			boleto.setAgente(boleto.getAgente().getAgente_id() == null ? null : boleto.getAgente());
+			boleto.setEtapa(boleto.getEtapa().getEtapa_id() == null ? null : boleto.getEtapa());
+			boleto.setEtapaProximo(boleto.getEtapaProximo().getEtapa_id() == null ? null : boleto.getEtapaProximo());
+			boleto.setProximoAtuante(boleto.getProximoAtuante().getUsuario_id() == null ? null : boleto.getProximoAtuante());
+			boleto.setPerfil(usuarioInfo.getPerfil());
+			boleto.setWorkflow(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Controle Boleto"));
 
 			controleDao.beginTransaction();
 			controleDao.adiciona(boleto);

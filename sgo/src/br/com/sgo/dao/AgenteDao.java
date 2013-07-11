@@ -82,7 +82,7 @@ public class AgenteDao extends Dao<Agente> {
 		if (empresa_id != null)
 			sql += " WHERE AGENTE.empresa_id = ?";
 		if (organizacao_id != null)
-			sql += " AND AGENTE.organizacao_id = ? AND AGENTE.iscontrole ORDER BY AGENTE.nome";
+			sql += " AND AGENTE.organizacao_id = ? AND AGENTE.iscontrole = 1 ORDER BY AGENTE.nome";
 
 		this.conn = this.conexao.getConexao();
 

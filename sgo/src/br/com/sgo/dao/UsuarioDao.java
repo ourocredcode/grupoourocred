@@ -47,6 +47,43 @@ public class UsuarioDao extends Dao<Usuario> {
 		return a.getUsuario_id();
 
 	}
+	
+	public Usuario buscaUsuarioById(Long usuario_id ) {
+
+		String sql = " SELECT USUARIO.usuario_id, USUARIO.nome, USUARIO.chave FROM USUARIO (NOLOCK) WHERE USUARIO.usuario_id = ? ";
+ 
+
+		Usuario usuario = null;
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, usuario_id);
+
+			this.rsUsuarios = this.stmt.executeQuery();
+
+			while (rsUsuarios.next()) {
+				
+				usuario = new Usuario();
+
+				usuario.setUsuario_id(rsUsuarios.getLong("usuario_id"));
+				usuario.setNome(rsUsuarios.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsUsuarios, stmt, conn);
+		return usuario;
+
+	}
 
 	public Collection<Usuario> buscaAllUsuariosByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
 

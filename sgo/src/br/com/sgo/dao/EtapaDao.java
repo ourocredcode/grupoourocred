@@ -362,6 +362,56 @@ public class EtapaDao extends Dao<Etapa> {
 		this.conexao.closeConnection(rsEtapa, stmt, conn);
 		return etapas;
 	}
+	
+public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(Long empresa_id, Long organizacao_id, Long tipoworkflow_id) {
+		
+		String sql = " SELECT DISTINCT ETAPA.etapa_id, ETAPA.nome AS etapa_nome, ETAPA.empresa_id  " +
+					 " ,EMPRESA.nome AS empresa_nome, ETAPA.organizacao_id, ORGANIZACAO.nome as organizacao_nome   " +
+					 " , ETAPA.isactive, ETAPA.ispadrao, ETAPA.ordemetapa " +   
+					 "		FROM ((((ETAPA (NOLOCK)   "  +
+					 " INNER JOIN WORKFLOWETAPA (NOLOCK) ON WORKFLOWETAPA.etapa_id = ETAPA.etapa_id) " +  
+					 " INNER JOIN WORKFLOW (NOLOCK) ON WORKFLOWETAPA.workflow_id = WORKFLOW.workflow_id)   " +
+					 " INNER JOIN TIPOWORKFLOW (NOLOCk) ON WORKFLOW.tipoworkflow_id = TIPOWORKFLOW.tipoworkflow_id) " +  
+					 " INNER JOIN EMPRESA (NOLOCK) ON ETAPA.empresa_id = EMPRESA.empresa_id) " +    
+					 " INNER JOIN ORGANIZACAO (NOLOCK) ON ETAPA.organizacao_id = ORGANIZACAO.organizacao_id  ";
+		
+		if (empresa_id != null)
+			sql += " WHERE ETAPA.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND ETAPA.organizacao_id = ?";
+		if (tipoworkflow_id != null)
+			sql += " AND TIPOWORKFLOW.tipoworkflow_id = ?";
+		
+		sql += " ORDER BY ETAPA.nome ";
+		
+		this.conn = this.conexao.getConexao();
+		
+		Collection<Etapa> etapas =  new ArrayList<Etapa>();
+
+		try {
+			
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, tipoworkflow_id);
+
+			this.rsEtapa = this.stmt.executeQuery();
+			
+			while (rsEtapa.next()) {
+
+				getEtapa(etapas);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsEtapa, stmt, conn);
+		return etapas;
+	}
 
 	public Collection<Etapa> buscaEtapasToTransicaoByWorkflowPerfil(Long empresa_id, Long organizacao_id, Long workflow_id, Long perfil_id) {
 		

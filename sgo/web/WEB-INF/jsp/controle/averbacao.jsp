@@ -67,36 +67,71 @@ function buscaByCalendar(){
 
 <div style="float: left;clear: both;">
 
-	<form id="averbacaoForm" name="averbacaoForm" action="<c:url value="/controle/averbacao/salva" />" method="post" class="form-horizontal">
+	<form id="averbacaoForm" name="averbacaoForm" action="<c:url value="/controle/averbacao/salva" />" method="post" >
 
 		<input type="hidden" id="tipoUser" name="tipoUser" value="${consultorInfo.consultor.tipo}" />
 		<input type="hidden" id="averbacao.controle_id" name="averbacao.controle_id" value="${averbacao.controle_id}" />
 		<input type="hidden" id="averbacao.contrato.contrato_id" name="averbacao.contrato.contrato_id" value="${averbacao.contrato.contrato_id}" />
 
 		<div class="control-group">
-			<label class="control-label">Última Atuação :</label>
 			<div class="controls">
-			<c:if test="${not empty averbacao.controle_id }">
-				realizada por ${averbacao.createdBy.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
-			</c:if>
-			<c:if test="${empty averbacao.controle_id }">
-				Ainda não realizado
-			</c:if> 
+				<label class="control-label">Última Atuação : 
+				<c:if test="${not empty averbacao.controle_id }">
+					 Realizada por ${averbacao.createdBy.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${averbacao.dataAtuacao.time }" />
+				</c:if>
+				<c:if test="${empty averbacao.controle_id }">
+					 Ainda não realizado
+				</c:if> 
+				</label>
 			</div>
 		 </div>
 		<div class="control-group">
-			<label class="control-label">Próxima Atuação :</label>
-			<div class="controls">
-				<input id="averbacaoDataProximaAtuacao" name="averbacao.dataProximaAtuacao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataProximaAtuacao.time }" />" class="input-medium" />
+			<div class="row-fluid">
+				<div class="span4">
+					<label class="control-label">Próxima Atuação :</label>
+					<div class="controls">
+						<input id="averbacaoDataProximaAtuacao" name="averbacao.dataProximaAtuacao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataProximaAtuacao.time }" />" class="input-medium" />
+					</div>
+				</div>
+				<div class="span4">
+					<label class="control-label">Próximo Procedimento :</label>
+					<select id="averbacaoEtapaProximoEtapaId" name="averbacao.etapaProximo.etapa_id" value="${averbacao.etapaProximo.etapa_id }" class="input-medium">
+						<option value="">Escolha...</option>
+						<c:forEach var="etapa" items="${etapas }">
+							<option value="${etapa.etapa_id }" <c:if test="${averbacao.etapaProximo.etapa_id == etapa.etapa_id }">selected="selected"</c:if>>${etapa.nome }</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="span4">
+					<label class="control-label">Próximo Atuante : </label>
+					<div class="controls">
+						<select id="averbacaoProximoAtuante" name="averbacao.proximoAtuante.usuario_id" value="${averbacao.proximoAtuante.usuario_id }"  class="input-medium">
+							<option value="">Escolha...</option>
+							<c:forEach var="atuante" items="${atuantes }">
+								<option value="${atuante.usuario_id }" <c:if test="${averbacao.proximoAtuante.usuario_id == atuante.usuario_id }">selected="selected"</c:if>>${atuante.nome }</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">Previsão de Chegada :</label>
+			<label class="control-label">Previsão de Liberação :</label>
 			<div class="controls">
 				<input id="averbacaoDataPrevisao" name="averbacao.dataPrevisao" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataPrevisao.time }" />" class="input-medium" />
 			</div>
 		</div>
-	
+		<div class="control-group">
+			<label class="control-label">Procedimento : </label>
+			<div class="controls">
+				<select id="averbacaoEtapaEtapaId" name="averbacao.etapa.etapa_id" value="${averbacao.etapa.etapa_id }"  class="input-medium">
+					<option value="">Escolha...</option>
+					<c:forEach var="etapa" items="${etapas }">
+						<option value="${etapa.etapa_id }" <c:if test="${averbacao.etapa.etapa_id == etapa.etapa_id }">selected="selected"</c:if>>${etapa.nome }</option>
+					</c:forEach>
+				</select>
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label">Observacao : </label>
 			<div class="controls">
