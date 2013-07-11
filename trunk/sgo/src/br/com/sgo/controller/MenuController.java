@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -29,16 +31,13 @@ import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
-import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.UsuarioInfo;
-import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
-import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.TipoControle;
 import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
@@ -55,7 +54,6 @@ public class MenuController {
 	private final UsuarioDao usuarioDao;
 	private final PerfilDao perfilDao;
 	private final EtapaDao etapaDao;
-	private final WorkflowDao workflowDao;
 	private final TipoWorkflowDao tipoWorkflowDao;
 	private final ProdutoDao produtoDao;
 	private final BancoDao bancoDao;
@@ -63,21 +61,19 @@ public class MenuController {
 	private final CoeficienteDao coeficienteDao;
 	private final UsuarioInfo usuarioInfo;
 	
+
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
-	private Collection<Etapa> etapas = new ArrayList<Etapa>();
-	private Collection<Produto> produtos = new ArrayList<Produto>();
 	private Collection<Usuario> consultores = new ArrayList<Usuario>();
-	private Collection<Usuario> supervisores = new ArrayList<Usuario>();
 	private Collection<Usuario> consultoresAux = new ArrayList<Usuario>();
-	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
 
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
+	private HttpSession session;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,CoeficienteDao coeficienteDao,
-			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,WorkflowDao workflowDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,
-			TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
+			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,
+			TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario,HttpSession session){
 
 		this.empresaDao = empresaDao;
 		this.usuarioDao = usuarioDao;
@@ -89,7 +85,6 @@ public class MenuController {
 		this.validator = validator;
 		this.contratoDao = contratoDao;
 		this.etapaDao = etapaDao;
-		this.workflowDao = workflowDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.produtoDao = produtoDao;
 		this.coeficienteDao = coeficienteDao;
@@ -98,6 +93,7 @@ public class MenuController {
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
+		this.session = session;
 
 	}
 	
@@ -134,11 +130,13 @@ public class MenuController {
 		if(perfil.equals("Administrativo")){
 			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),c1,c2));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
+			result.include("mapEtapasFinal", this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, c1, c2));
 		}
 
 		if(perfil.equals("Gestor")){
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
+			result.include("mapEtapasFinal", this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, c1, c2));
 		}
 
 		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesToMenuByEmpOrg(empresa_id, organizacao_id));
@@ -396,16 +394,21 @@ public class MenuController {
 
 		contador();
 
+		session.setAttribute("busca_consultor",consultor);
+
 		result.include("contratos",contratos);		
 
 	}
 
 	@Post
 	@Path("/menu/busca/controle")
-	public void busca(String tipoBusca,String previsaoInicio,String previsaoFim, String chegadaInicio,String chegadaFim,String vencimentoInicio,String vencimentoFim,
-							String proximaAtuacaoInicio,String proximaAtuacaoFim , String procedimento ,Collection<String> bancos, Collection<String> produtos, 
-							Collection<String> bancosComprados,Collection<String> status,Long consultor,String cliente, String documento,String empresa) {
+	public void busca(String tipoBusca,String data, String dataFim,String previsaoInicio,String previsaoFim, String chegadaInicio,String chegadaFim,String vencimentoInicio,
+							String vencimentoFim, String proximaAtuacaoInicio,String proximaAtuacaoFim , String procedimento ,Collection<String> bancos, 
+							Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Long consultor,String cliente, String documento,
+							String empresa) {
 
+		Calendar calInicio = new GregorianCalendar();
+		Calendar calFim = new GregorianCalendar();
 		Calendar calPrevisaoInicio = new GregorianCalendar();
 		Calendar calPrevisaoFim = new GregorianCalendar();
 		Calendar calChegadaInicio = new GregorianCalendar();
@@ -420,79 +423,97 @@ public class MenuController {
 		Boolean isDataNUll = true;
 
 		try {
-
-		if(previsaoFim.equals(""))
-			previsaoFim = previsaoInicio;
-
-		if(previsaoInicio.equals("")) {
-			calPrevisaoInicio = null;
-			calPrevisaoFim = null;
-		} else {
-			calPrevisaoInicio.setTime(sdf.parse(previsaoInicio));
-			calPrevisaoFim.setTime(sdf.parse(previsaoFim));
-
-			isDataNUll = false;
 			
-			if(tipoBusca.equals("boleto"))
-				result.include("buscaDtBoletoPrevisao",true);
-			if(tipoBusca.equals("averbacao"))
-				result.include("buscaDtAverbacaoPrevisao",true);
-		}
-		
-		if(chegadaFim.equals(""))
-			chegadaFim = chegadaInicio;
+			if(dataFim.equals(""))
+				dataFim = data;
 
-		if(chegadaInicio.equals("")) {
-			calChegadaInicio = null;
-			calChegadaFim = null;
-		} else {
-			calChegadaInicio.setTime(sdf.parse(chegadaInicio));
-			calChegadaFim.setTime(sdf.parse(chegadaFim));
-			
-			isDataNUll = false;
+			if(data.equals("")) {
 
-			result.include("buscaDtBoletoChegada",true);
+				calInicio = null;
+				calFim = null;
 
-		}
-		
-		if(vencimentoFim.equals(""))
-			vencimentoFim = vencimentoInicio;
+			} else {
 
-		if(vencimentoInicio.equals("")) {
-			calVencimentoInicio = null;
-			calVencimentoFim = null;
-		} else {
-			calVencimentoInicio.setTime(sdf.parse(vencimentoInicio));
-			calVencimentoFim.setTime(sdf.parse(vencimentoFim));
-			
-			isDataNUll = false;
+				calInicio.setTime(sdf.parse(data));
+				calFim.setTime(sdf.parse(dataFim));
 
-			result.include("buscaDtBoletoVencimento",true);
+				calInicio.set(Calendar.HOUR_OF_DAY,calInicio.getActualMinimum(Calendar.HOUR_OF_DAY));
+				calFim.set(Calendar.HOUR_OF_DAY,calInicio.getActualMaximum(Calendar.HOUR_OF_DAY));
+
+			}
+
+			if(previsaoFim.equals(""))
+				previsaoFim = previsaoInicio;
+	
+			if(previsaoInicio.equals("")) {
+				calPrevisaoInicio = null;
+				calPrevisaoFim = null;
+			} else {
+				calPrevisaoInicio.setTime(sdf.parse(previsaoInicio));
+				calPrevisaoFim.setTime(sdf.parse(previsaoFim));
+	
+				isDataNUll = false;
 				
-		}
-		
-		if(proximaAtuacaoFim.equals(""))
-			proximaAtuacaoFim = proximaAtuacaoInicio;
-
-		if(proximaAtuacaoInicio.equals("")) {
-			calProximaAtuacaoInicio = null;
-			calProximaAtuacaoFim = null;
-		} else {
-			calProximaAtuacaoInicio.setTime(sdf.parse(proximaAtuacaoInicio));
-			calProximaAtuacaoFim.setTime(sdf.parse(proximaAtuacaoFim));
+				if(tipoBusca.equals("boleto"))
+					result.include("buscaDtBoletoPrevisao",true);
+				if(tipoBusca.equals("averbacao"))
+					result.include("buscaDtAverbacaoPrevisao",true);
+			}
 			
-			isDataNUll = false;
+			if(chegadaFim.equals(""))
+				chegadaFim = chegadaInicio;
+	
+			if(chegadaInicio.equals("")) {
+				calChegadaInicio = null;
+				calChegadaFim = null;
+			} else {
+				calChegadaInicio.setTime(sdf.parse(chegadaInicio));
+				calChegadaFim.setTime(sdf.parse(chegadaFim));
+				
+				isDataNUll = false;
+	
+				result.include("buscaDtBoletoChegada",true);
+	
+			}
 			
-			if(tipoBusca.equals("boleto"))
-				result.include("buscaDtBoletoProximaAtuacao",true);
-			if(tipoBusca.equals("averbacao"))			
-				result.include("buscaDtAverbacaoProximaAtuacao",true);
-		}
-
+			if(vencimentoFim.equals(""))
+				vencimentoFim = vencimentoInicio;
+	
+			if(vencimentoInicio.equals("")) {
+				calVencimentoInicio = null;
+				calVencimentoFim = null;
+			} else {
+				calVencimentoInicio.setTime(sdf.parse(vencimentoInicio));
+				calVencimentoFim.setTime(sdf.parse(vencimentoFim));
+				
+				isDataNUll = false;
+	
+				result.include("buscaDtBoletoVencimento",true);
+					
+			}
+			
+			if(proximaAtuacaoFim.equals(""))
+				proximaAtuacaoFim = proximaAtuacaoInicio;
+	
+			if(proximaAtuacaoInicio.equals("")) {
+				calProximaAtuacaoInicio = null;
+				calProximaAtuacaoFim = null;
+			} else {
+				calProximaAtuacaoInicio.setTime(sdf.parse(proximaAtuacaoInicio));
+				calProximaAtuacaoFim.setTime(sdf.parse(proximaAtuacaoFim));
+				
+				isDataNUll = false;
+				
+				if(tipoBusca.equals("boleto"))
+					result.include("buscaDtBoletoProximaAtuacao",true);
+				if(tipoBusca.equals("averbacao"))			
+					result.include("buscaDtAverbacaoProximaAtuacao",true);
+			}
+	
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
+	
 		if(usuarioInfo.getPerfil().getChave().equals("Consultor") || usuarioInfo.getPerfil().getChave().equals("Supervisor")){
 
 			Usuario u = new Usuario();
@@ -537,7 +558,8 @@ public class MenuController {
 
 		contratos.clear();
 
-		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoControle,calPrevisaoInicio, 
+		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoControle,
+				calInicio, calFim, calPrevisaoInicio, 
 				calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
 				calProximaAtuacaoInicio,calProximaAtuacaoFim,procedimento,bancos,produtos,bancosComprados,status,consultoresAux,
 				cliente,documento,empresas));

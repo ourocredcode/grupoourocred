@@ -59,6 +59,10 @@ public class Controle implements Serializable {
 	private Etapa etapa;
 	
 	@ManyToOne
+	@JoinColumn(name = "etapaproximo_id", updatable = true, nullable = true)
+	private Etapa etapaProximo;
+	
+	@ManyToOne
 	@JoinColumn(name = "etapapendencia_id", updatable = true, nullable = true)
 	private Etapa etapaPendencia;
 
@@ -198,6 +202,14 @@ public class Controle implements Serializable {
 		return etapaPendencia;
 	}
 
+	public Etapa getEtapaProximo() {
+		return etapaProximo;
+	}
+
+	public void setEtapaProximo(Etapa etapaProximo) {
+		this.etapaProximo = etapaProximo;
+	}
+
 	public void setEtapaPendencia(Etapa etapaPendencia) {
 		this.etapaPendencia = etapaPendencia;
 	}
@@ -321,5 +333,4 @@ public class Controle implements Serializable {
 	public void setDataVencimento(Calendar dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
-
 }

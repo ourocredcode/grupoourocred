@@ -34,6 +34,14 @@
 			var dataConcluidoFim = $("#busca_DataConcluidoFim").val();
 			var dataRecusadoInicio = $("#busca_DataRecusadoInicio").val();
 			var dataRecusadoFim = $("#busca_DataRecusadoFim").val();
+			var previsaoInicio = $("#busca_DataPrevisaoInicio").val();
+			var previsaoFim = $("#busca_DataPrevisaoFim").val();
+			var chegadaInicio = $("#busca_DataChegadaInicio").val();
+			var chegadaFim = $("#busca_DataChegadaFim").val();
+			var vencimentoInicio = $("#busca_DataVencimentoInicio").val();
+			var vencimentoFim = $("#busca_DataVencimentoFim").val();
+			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
+			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
 			
 			if(dataAprovadoInicio == undefined || dataAprovadoInicio == '__/__/____')
 				dataAprovadoInicio = "";
@@ -47,21 +55,6 @@
 				dataRecusadoInicio = "";
 			if(dataRecusadoFim == undefined || dataRecusadoFim == '__/__/____')
 				dataRecusadoFim = "";
-
-			if(data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
-						  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
-				$(buscaContratos);
-			}
-
-			var previsaoInicio = $("#busca_DataPrevisaoInicio").val();
-			var previsaoFim = $("#busca_DataPrevisaoFim").val();
-			var chegadaInicio = $("#busca_DataChegadaInicio").val();
-			var chegadaFim = $("#busca_DataChegadaFim").val();
-			var vencimentoInicio = $("#busca_DataVencimentoInicio").val();
-			var vencimentoFim = $("#busca_DataVencimentoFim").val();
-			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
-			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
-			
 			if(previsaoInicio == undefined || previsaoInicio == '__/__/____')
 				previsaoInicio = "";
 			if(previsaoFim == undefined || previsaoFim == '__/__/____')
@@ -82,7 +75,10 @@
 			if(previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
 				|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != ''){
 				$(buscaDatasControle);
-			};
+			} else if (data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
+				  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ) {
+				$(buscaContratos);
+			}			
 
 		$('#busca_Data').datepicker({
 			dateFormat: 'dd/mm/yy'
@@ -287,6 +283,8 @@
 			var produtos = $("#busca_Produto").val();
 			var bancosComprados = $("#busca_BancoComprado").val();
 			var empresa = $("#busca_Empresa").val();
+			var data = $("#busca_Data").val();
+			var dataFim = $("#busca_DataFim").val();
 			var previsaoInicio = $("#busca_DataPrevisaoInicio").val();
 			var previsaoFim = $("#busca_DataPrevisaoFim").val();
 			var chegadaInicio = $("#busca_DataChegadaInicio").val();
@@ -334,9 +332,10 @@
 				bancosComprados[0] = "";
 			}
 
-			if(previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
+			if(data != '' || dataFim != '' || previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
 					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || procedimento != ''){
-				$("#resultado").load('<c:url value="/menu/busca/controle" />',{'tipoBusca': tipoBusca,'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
+				$("#resultado").load('<c:url value="/menu/busca/controle" />',{'tipoBusca': tipoBusca,'data' : data, 'dataFim' : dataFim,
+										'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
 										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
 										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'procedimento': procedimento,'bancos': bancos, 
 										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa});
