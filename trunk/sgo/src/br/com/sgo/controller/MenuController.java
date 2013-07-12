@@ -125,6 +125,7 @@ public class MenuController {
 		if(perfil.equals("Supervisor") || perfil.equals("Consultor")){
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),c1,c2));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id()));
+			result.include("mapEtapasFinal", this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id(), c1, c2));
 		}
 
 		if(perfil.equals("Administrativo")){
