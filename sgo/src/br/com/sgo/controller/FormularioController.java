@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -277,6 +278,9 @@ public class FormularioController {
 
 		contrato.setEmpresa(usuarioInfo.getEmpresa());
 		contrato.setOrganizacao(usuarioInfo.getOrganizacao());
+		contrato.setIsActive(true);
+		contrato.setCreated(GregorianCalendar.getInstance());
+		contrato.setCreatedBy(usuarioInfo.getUsuario());
 		contrato.setUsuario(usuarioInfo.getUsuario());
 		contrato.setBanco(this.bancoDao.buscaBancoById(contrato.getBanco().getBanco_id()));
 		contrato.setProduto(this.produtoDao.buscaProdutoById(contrato.getProduto().getProduto_id()));
@@ -285,7 +289,7 @@ public class FormularioController {
 		contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
 		contrato.setNumeroBeneficio(this.formulario.getParceiroBeneficio().getNumeroBeneficio());
 
-		contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoProdutoBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
+		contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProduto(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
 				contrato.getProduto().getProduto_id(), contrato.getBanco().getBanco_id()));
 
 		contrato.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),"Aguardando Status"));
@@ -293,8 +297,6 @@ public class FormularioController {
 		if(contrato.getRecompraBanco().getBanco_id() != null){
 			contrato.setRecompraBanco(this.bancoDao.buscaBancoById(contrato.getRecompraBanco().getBanco_id()));
 		}
-
-		contrato.setIsActive(true);
 
 		formulario.adicionaContrato(contrato);
 		result.redirectTo(FormularioController.class).cadastro();

@@ -348,18 +348,18 @@ public class WorkflowDao extends Dao<Workflow> {
 
 	}
 	
-	public Workflow buscaWorkflowByEmpresaOrganizacaoProdutoBanco(Long empresa_id, Long organizacao_id, Long produto_id, Long banco_id) {
+	public Workflow buscaWorkflowByEmpresaOrganizacaoBancoProduto(Long empresa_id, Long organizacao_id, Long banco_id , Long produto_id) {
 
-		String sql = " SELECT WORKFLOWPRODUTOBANCO.workflow_id FROM WORKFLOWPRODUTOBANCO ";
+		String sql = " SELECT BANCOPRODUTO.workflow_id FROM BANCOPRODUTO ";
 
 		if (empresa_id != null)
-			sql += " WHERE WORKFLOWPRODUTOBANCO.empresa_id = ?";
+			sql += " WHERE BANCOPRODUTO.empresa_id = ?";
 		if (organizacao_id != null)
-			sql += " AND WORKFLOWPRODUTOBANCO.organizacao_id = ?";
+			sql += " AND BANCOPRODUTO.organizacao_id = ?";
 		if (produto_id != null)
-			sql += " AND WORKFLOWPRODUTOBANCO.produto_id = ?";
+			sql += " AND BANCOPRODUTO.produto_id = ?";
 		if (banco_id != null)
-			sql += " AND WORKFLOWPRODUTOBANCO.banco_id = ?";
+			sql += " AND BANCOPRODUTO.banco_id = ?";
 
 		this.conn = this.conexao.getConexao();
 

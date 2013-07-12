@@ -849,6 +849,9 @@ function openPopup(url) {
 							    <h3 id="myModalLabel">Cadastro Logística</h3>
 							  </div>
 							  <form action="<c:url value='/logistica/salva'/>"  method="post">
+
+							  <input id="logisticaContratoId" name="logistica.contrato.contrato_id" value="${contrato.contrato_id }" type="hidden" />
+
 								  <div class="modal-body">
 									<div style="float: left;">
 							  			<div class="control-group">

@@ -55,11 +55,9 @@ public class ContratoDao extends Dao<Contrato> {
 			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
 			" ETAPA.etapa_id, ETAPA.nome as etapa_nome "+
 			" FROM " +
-			" (((((((((((((((((((CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
+			" (((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
 			" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
 			" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) "+
-			" LEFT JOIN CONVENIO (NOLOCK) ON CONTRATO.convenio_id = CONVENIO.convenio_id) "+
-			" LEFT JOIN MODALIDADE (NOLOCK) ON CONTRATO.modalidade_id = MODALIDADE.modalidade_id) "+
 			" INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) "+
 			" INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) "+
 			" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id) "+
@@ -67,14 +65,13 @@ public class ContratoDao extends Dao<Contrato> {
 			" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) "+
 			" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) "+
 			" INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id) "+
-			" LEFT JOIN SEGURO (NOLOCK) ON CONTRATO.seguro_id = SEGURO.seguro_id) "+
-			" LEFT JOIN NATUREZAPROFISSIONAL (NOLOCK) ON CONTRATO.naturezaprofissional_id = NATUREZAPROFISSIONAL.naturezaprofissional_id) "+
 			" LEFT JOIN TIPOSAQUE (NOLOCK) ON CONTRATO.tiposaque_id = TIPOSAQUE.tiposaque_id) "+
 			" LEFT JOIN BANCO (NOLOCK) AS BANCO_1 ON CONTRATO.recompra_banco_id = BANCO_1.banco_id) "+
 			" LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id) "+
 			" LEFT JOIN WORKFLOW (NOLOCK) AS WORKFLOW_1 ON CONTRATO.workflowpendencia_id = WORKFLOW_1.workflow_id) "+
 			" LEFT JOIN ETAPA (NOLOCK) AS ETAPA_1 ON CONTRATO.etapapendencia_id = ETAPA_1.etapa_id) "+
-			" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id ";  
+			" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +
+			" INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio";  
 
 	public ContratoDao(Session session, ConnJDBC conexao) {
 
@@ -91,13 +88,20 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " WHERE ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 		
 		if(calInicio != null)
-			sql += " AND (CONTRATO.created BETWEEN ? AND ? )";
+			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
 		Collection<Contrato> contratos = new ArrayList<Contrato>();
 
 		try {
+			
+			System.out.println("buscaContratoByUsuario INICIO");
+			System.out.println(sql);
+			System.out.println(calInicio.getTime());
+			System.out.println(calFim.getTime());
+			System.out.println(usuario_id);
+			System.out.println("buscaContratoByUsuario FIM");
 
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, usuario_id);
@@ -140,8 +144,6 @@ public class ContratoDao extends Dao<Contrato> {
 		return contratos;
 	}
 
-	
-
 	public Collection<Contrato> buscaContratoByEmpresaOrganizacao(Long empresa_id, Long organizacao_id,Calendar calInicio,Calendar calFim) {
 
 		String sql = sqlContratos;
@@ -149,7 +151,7 @@ public class ContratoDao extends Dao<Contrato> {
 		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
 		
 		if(calInicio != null)
-			sql += " AND (CONTRATO.created BETWEEN ? AND ? )";
+			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -347,7 +349,8 @@ public class ContratoDao extends Dao<Contrato> {
 	}
 
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
-			Calendar calAprovadoInicio,Calendar calAprovadoFim,String cliente, String documento, Collection<String> status,Collection<String> statusFinal,
+			Calendar calStatusFinalInicio,Calendar calStatusFinalFim,Calendar calConclusaoInicio,Calendar calConclusaoFim,
+			String cliente, String documento, Collection<String> status,Collection<String> statusFinal,
 			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores) {
 
 		String sql = sqlContratos;
@@ -471,8 +474,11 @@ public class ContratoDao extends Dao<Contrato> {
 		if(calInicio != null)
 			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
 		
-		if(calAprovadoInicio != null)
-			sql += " AND (CONTRATO.dataStatusFinal BETWEEN ? AND ? )";
+		if(calStatusFinalInicio != null)
+			sql += " AND (CONTRATO.datastatusfinal BETWEEN ? AND ? )";
+		
+		if(calConclusaoInicio != null)
+			sql += " AND (CONTRATO.dataconclusao BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -482,6 +488,8 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 			
+			System.out.println(sql);
+
 
 			int curr = 1;
 
@@ -575,12 +583,22 @@ public class ContratoDao extends Dao<Contrato> {
 
 			} 
 			
-			if(calAprovadoInicio != null){
+			if(calStatusFinalInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(calAprovadoInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(calStatusFinalInicio.getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(calAprovadoFim.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(calStatusFinalInicio.getTimeInMillis()));
+				curr++;
+
+			}
+			
+			if(calConclusaoInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(calConclusaoInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(calConclusaoFim.getTimeInMillis()));
 				curr++;
 
 			}
@@ -1019,6 +1037,9 @@ public class ContratoDao extends Dao<Contrato> {
 
 				String etapa_nome = rsContrato.getString("etapa_nome");
 				Double etapaCount = rsContrato.getDouble("metaCount");
+				
+				System.out.println(etapa_nome);
+				System.out.println(etapaCount);
 
 				map.put(etapa_nome,etapaCount);
 

@@ -92,6 +92,12 @@
 		$('#busca_DataAprovadoFim').datepicker({
 			dateFormat: 'dd/mm/yy'
 		});
+		$('#busca_DataConcluidoInicio').datepicker({
+			dateFormat: 'dd/mm/yy'
+		});
+		$('#busca_DataConcluidoFim').datepicker({
+			dateFormat: 'dd/mm/yy'
+		});
 		$('#busca_DataRecusadoInicio').datepicker({
 			dateFormat: 'dd/mm/yy'
 		});
