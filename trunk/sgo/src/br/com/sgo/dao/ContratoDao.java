@@ -43,9 +43,9 @@ public class ContratoDao extends Dao<Contrato> {
 			" CONTRATO.produto_id, CONTRATO.tabela_id, "+
 			" CONTRATO.banco_id, CONTRATO.recompra_banco_id, "+
 			" CONTRATO.usuario_id, "+
-			" USUARIO.nome as usuario_nome, "+
+			" USUARIO.nome as usuario_nome, USUARIO.apelido as usuario_apelido, "+
 			" USUARIO_SUPERVISOR.usuario_id as usuario_super_id, "+
-			" USUARIO_SUPERVISOR.nome as usuario_super, "+
+			" USUARIO_SUPERVISOR.nome as usuario_super, USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
 			" CONTRATO.prazo, "+
 			" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, "+
 			" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
@@ -612,9 +612,11 @@ public class ContratoDao extends Dao<Contrato> {
 				" CONTRATO.produto_id, CONTRATO.tabela_id, "+
 				" CONTRATO.banco_id, CONTRATO.recompra_banco_id, "+
 				" CONTRATO.usuario_id, "+
-				" USUARIO.nome as usuario_nome, "+
+				" USUARIO.nome as usuario_nome," +
+				" USUARIO.apelido as usuario_apelido, "+
 				" USUARIO_SUPERVISOR.usuario_id as usuario_super_id, "+
-				" USUARIO_SUPERVISOR.nome as usuario_super, "+
+				" USUARIO_SUPERVISOR.nome as usuario_super," +
+				" USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
 				" CONTRATO.prazo, "+
 				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, "+
 				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
@@ -961,9 +963,9 @@ public class ContratoDao extends Dao<Contrato> {
 		return map;
 	}
 	
-	public HashMap<String,Integer> buscaContratosToCountEtapasStatusFinal(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
+	public HashMap<String,Double> buscaContratosToCountEtapasStatusFinal(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
 
-		String sql = " SELECT ETAPA.nome as etapa_nome, COUNT(ETAPA.nome) as etapaCount " +
+		String sql = " SELECT ETAPA.nome as etapa_nome, SUM(CONTRATO.valormeta) as metaCount " +
 					" FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
 					" INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
 					" INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
@@ -985,7 +987,7 @@ public class ContratoDao extends Dao<Contrato> {
 		this.conn = this.conexao.getConexao();
 		
 
-		HashMap<String,Integer> map = new HashMap<String,Integer>();
+		HashMap<String,Double> map = new HashMap<String,Double>();
 
 		try {
 
@@ -1016,7 +1018,7 @@ public class ContratoDao extends Dao<Contrato> {
 			while (rsContrato.next()) {
 
 				String etapa_nome = rsContrato.getString("etapa_nome");
-				Integer etapaCount = rsContrato.getInt("etapaCount");
+				Double etapaCount = rsContrato.getDouble("metaCount");
 
 				map.put(etapa_nome,etapaCount);
 
@@ -1025,8 +1027,10 @@ public class ContratoDao extends Dao<Contrato> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return map;
+
 	}
 
 	private void getContratos(Collection<Contrato> contratos) throws SQLException {
@@ -1055,9 +1059,12 @@ public class ContratoDao extends Dao<Contrato> {
 
 		usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
 		usuario.setNome(rsContrato.getString("usuario_nome"));
+		usuario.setApelido(rsContrato.getString("usuario_apelido"));
 		supervisor.setUsuario_id(rsContrato.getLong("usuario_super_id"));
-		supervisor.setNome(rsContrato.getString("usuario_super"));
 		
+		supervisor.setNome(rsContrato.getString("usuario_super"));
+		supervisor.setApelido(rsContrato.getString("usuario_super_apelido"));
+
 		usuario.setSupervisorUsuario(supervisor);
 
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
@@ -1138,6 +1145,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 		usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
 		usuario.setNome(rsContrato.getString("usuario_nome"));
+		usuario.setApelido(rsContrato.getString("usuario_apelido"));
 
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
 		created.setTime(rsContrato.getDate("created"));

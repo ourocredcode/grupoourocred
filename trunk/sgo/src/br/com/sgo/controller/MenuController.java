@@ -146,7 +146,7 @@ public class MenuController {
 		contadorSeparado();
 
 	}
-	
+
 	@Get
 	@Path("/menu/contratos/{tipo}") 
 	public void contratos(String tipo) {
@@ -156,8 +156,12 @@ public class MenuController {
 		
 		Calendar c1 = new GregorianCalendar();
 		Calendar c2 = new GregorianCalendar();
-		c1.set(GregorianCalendar.DAY_OF_MONTH, c1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
-		c2.set(GregorianCalendar.DAY_OF_MONTH, c2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+		c1.set(GregorianCalendar.HOUR, c1.getActualMinimum(GregorianCalendar.HOUR));
+		c1.set(GregorianCalendar.MINUTE, c1.getActualMinimum(GregorianCalendar.MINUTE));
+		c1.set(GregorianCalendar.SECOND, c1.getActualMinimum(GregorianCalendar.SECOND));
+		c2.set(GregorianCalendar.HOUR, c2.getActualMaximum(GregorianCalendar.HOUR));
+		c2.set(GregorianCalendar.MINUTE, c2.getActualMaximum(GregorianCalendar.MINUTE));
+		c2.set(GregorianCalendar.SECOND, c2.getActualMaximum(GregorianCalendar.SECOND));
 
 		Long empresa_id = empresa.getEmpresa_id();
 		Long organizacao_id = organizacao.getOrganizacao_id();
@@ -393,8 +397,6 @@ public class MenuController {
 				produtos, bancos, bancosComprados,consultoresAux));
 
 		contador();
-
-		session.setAttribute("busca_consultor",consultor);
 
 		result.include("contratos",contratos);		
 

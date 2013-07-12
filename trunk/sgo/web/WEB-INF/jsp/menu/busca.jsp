@@ -120,13 +120,13 @@ $(document).ready(function() {
 			<c:forEach items="${contratos}" var="contrato">
 				<tr>
 					<td >
-						<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yyyy" />
+						<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM" />
 					</td>
 					<td >
-						${contrato.usuario.supervisorUsuario.nome }
+						${contrato.usuario.supervisorUsuario.apelido }
 					</td>
 					<td >
-						${fn:substring(contrato.usuario.nome, 0, 18)} ...
+						${fn:substring(contrato.usuario.apelido , 0, 18)} ...
 					</td>
 					<td >
 						${fn:substring(contrato.formulario.parceiroNegocio.nome, 0, 18)} ...
