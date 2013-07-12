@@ -79,7 +79,7 @@
 										
 										<li class="popover-users">
 											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
-											<div class="right" style="width: 120px;">
+											<div class="right" style="width: 135px;">
 												<strong><fmt:formatNumber type="NUMBER" value="${totalValorContratos}" minFractionDigits="2" /></strong>
 												T. Contratos 
 											</div>
@@ -87,55 +87,23 @@
 										
 										<li class="popover-users">
 											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
-											<div class="right" style="width: 120px;">
+											<div class="right" style="width: 135px;">
 												<strong><fmt:formatNumber type="NUMBER" value="${totalContratoLiquido}" minFractionDigits="2" /></strong>
 												T. C. Liquido
 											</div>
 										</li>
 										<li class="popover-users">
 											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
-											<div class="right" style="width: 120px;">
+											<div class="right" style="width: 135px;">
 												<strong><fmt:formatNumber type="NUMBER" value="${totalValorLiquido}" minFractionDigits="2" /></strong>
 												Vl Líquido
 											</div>
 										</li>
 										<li class="popover-users">
 											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
-											<div class="right" style="width: 120px;">
+											<div class="right" style="width: 135px;">
 												<strong><fmt:formatNumber type="NUMBER" value="${totalValorDivida}" minFractionDigits="2" /></strong>
 												Vl Dívida
-											</div>
-										</li>
-										<li class="popover-users">
-											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,${countClientes }</span>0%</div>
-											<div class="right"  style="width: 120px;">
-												<strong>${countClientes }</strong>
-												Clientes
-											</div>
-										</li>
-										<li class="popover-visits">
-											<div class="left peity_bar_good"><span>1,3,10,2,1,4,${countContratos}</span>10%</div>
-											<div class="right"  style="width: 120px;">
-												<a href="#" onclick="javascript:window.location='/sgo/menu/contratos/${usuarioInfo.perfil.chave}'">
-													<strong>${countContratos}</strong>
-													Contratos
-												</a>
-											</div>
-										</li>
-										<li class="popover-orders">
-											<div class="left peity_bar_good"><span>1030,480,200,5200,1200,250,${totalValorMeta }</span>0%</div>
-											<div class="right" style="width: 120px;">
-												<a href="#" onclick="javascript:window.location='/sgo/menu/contratos/aprovados'">
-													<strong><fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" /></strong>
-													Aprovados
-												</a>
-											</div>
-										</li>
-										<li class="popover-tickets">
-											<div class="left peity_bar_bad"><span>4,1,7,10,4,2,1</span>0%</div>
-											<div class="right"  style="width: 120px;">
-												<strong>0</strong>
-												Pendentes
 											</div>
 										</li>
 									</ul>
@@ -154,45 +122,7 @@
 
 	<div class="container-fluid">
 		<div class="row-fluid">
-				
-			
-			<div class="span4">
-
-				<div class="widget-box">
-					<div class="widget-title">
-						<span class="icon"><i class="icon-signal"></i> </span>
-						<h5>Coeficientes</h5>
-					</div>
-					<div class="widget-content">
-
-							<h5>Coeficientes</h5>
-							<table class="table table-bordered table-striped table-hover data-table" >
-							<thead>
-							  <tr>
-								<th>Data</th>
-								<th>Banco</th>
-								<th>Tabela</th>
-								<th>Valor</th>
-								<th>Meta</th>
-							  </tr>
-							</thead>
-							<tbody>
-								<c:forEach var="coeficiente" items="${coeficientes }">
-									<tr>
-										<td><fmt:formatDate value="${coeficiente.created.time}" pattern="dd/MM/yyyy" /></td>
-										<td>${coeficiente.banco.nome }</td>
-										<td>${coeficiente.tabela.nome }</td>
-										<td><fmt:formatNumber value="${coeficiente.valor}" pattern="0.00000" /></td>
-										<td><fmt:formatNumber value="${coeficiente.percentualMeta}" pattern="0%" /></td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						  </table>
-
-					</div>
-				</div>
-			</div>	
-
+		
 			<div class="span3">
 
 				<div class="widget-box">
@@ -209,7 +139,7 @@
 							<thead>
 							  <tr>
 								<th>Status</th>
-								<th>Quantidade</th>
+								<th>Total</th>
 							  </tr>
 							</thead>
 							<tbody>
@@ -220,8 +150,10 @@
 											<c:otherwise><td>${map.key }</td></c:otherwise>
 										</c:choose>
 										<c:choose>
-											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-success">${map.value }</span></td></c:when>
-											<c:otherwise><td><span class="badge badge-info">${map.value }</span></td></c:otherwise>
+											<c:when test="${map.key == 'Concluído' }"><td><span class="badge badge-success">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
+											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-info">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
+											<c:when test="${map.key == 'Recusado' }"><td><span class="badge badge-important">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
+											<c:otherwise><td><span class="badge badge-info">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:otherwise>
 										</c:choose>
 									</tr>
 								
@@ -269,6 +201,46 @@
 					</div>
 				</div>
 			</div>
+				
+			
+			<div class="span4">
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"><i class="icon-signal"></i> </span>
+						<h5>Coeficientes</h5>
+					</div>
+					<div class="widget-content">
+
+							<h5>Coeficientes</h5>
+							<table class="table table-bordered table-striped table-hover data-table" >
+							<thead>
+							  <tr>
+								<th>Data</th>
+								<th>Banco</th>
+								<th>Tabela</th>
+								<th>Valor</th>
+								<th>Meta</th>
+							  </tr>
+							</thead>
+							<tbody>
+								<c:forEach var="coeficiente" items="${coeficientes }">
+									<tr>
+										<td><fmt:formatDate value="${coeficiente.created.time}" pattern="dd/MM/yyyy" /></td>
+										<td>${coeficiente.banco.nome }</td>
+										<td>${coeficiente.tabela.nome }</td>
+										<td><fmt:formatNumber value="${coeficiente.valor}" pattern="0.00000" /></td>
+										<td><fmt:formatNumber value="${coeficiente.percentualMeta}" pattern="0%" /></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						  </table>
+
+					</div>
+				</div>
+			</div>	
+
+			
 
 			<div class="span4">
 			

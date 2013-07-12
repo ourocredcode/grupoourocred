@@ -775,10 +775,10 @@
 												<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM" />
 											</td>
 											<td >
-												${contrato.usuario.supervisorUsuario.nome }
+												${contrato.usuario.supervisorUsuario.apelido }
 											</td>
 											<td >
-												${contrato.usuario.nome }
+												${contrato.usuario.apelido }
 											</td>
 											<td >
 												${contrato.formulario.parceiroNegocio.nome }
