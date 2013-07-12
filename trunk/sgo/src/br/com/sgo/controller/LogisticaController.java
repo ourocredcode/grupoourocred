@@ -3,6 +3,7 @@ package br.com.sgo.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,72 +20,48 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
-import br.com.sgo.dao.CoeficienteDao;
+import br.com.sgo.dao.BancoProdutoTabelaDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.LogisticaDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
-import br.com.sgo.dao.BancoProdutoTabelaDao;
 import br.com.sgo.dao.ProdutoDao;
-import br.com.sgo.dao.TabelaDao;
-import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.jasper.CheckListDataSource;
-import br.com.sgo.modelo.Banco;
-import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
-import br.com.sgo.modelo.Produto;
-import br.com.sgo.modelo.Etapa;
 
 @Resource
 public class LogisticaController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
-	private final BancoDao bancoDao;
-	private final BancoProdutoTabelaDao produtoBancoDao;
-	private final ProdutoDao produtoDao;
-	private final CoeficienteDao coeficienteDao;
-	private final TabelaDao tabelaDao;
 	private final ContratoDao contratoDao;
 	private final FormularioDao formularioDao;
-	private final EtapaDao workFlowetapaDao;
 	private final LogisticaDao logisticaDao;
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 
-	private Contrato contrato;
-	private Formulario formulario;
+
+
 	private ParceiroNegocio parceiroNegocio;
 	private ParceiroLocalidade parceiroLocalidade;
-	private Collection<Banco> bancos;
-	private Collection<Produto> produtos;
-	private Collection<Coeficiente> coeficientes;
-	private Collection<Etapa> etapas;
+
+
 	private HttpServletResponse response;
 
-	public LogisticaController(Result result,BancoDao bancoDao,BancoProdutoTabelaDao produtoBancoDao,ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
-			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao workFlowetapaDao,UsuarioInfo usuarioInfo,
+	public LogisticaController(Result result,BancoDao bancoDao,ProdutoDao produtoDao,ContratoDao contratoDao,FormularioDao formularioDao,UsuarioInfo usuarioInfo,
 			LogisticaDao logisticaDao,HttpServletResponse response, ParceiroNegocioDao parceiroNegocioDao,ParceiroLocalidadeDao parceiroLocalidadeDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
-		this.contrato = contrato;
-		this.formulario = formulario;
-		this.bancoDao = bancoDao;
 		this.contratoDao = contratoDao;
-		this.produtoBancoDao = produtoBancoDao;
-		this.produtoDao = produtoDao;
-		this.coeficienteDao = coeficienteDao;
 		this.formularioDao = formularioDao;
-		this.tabelaDao = tabelaDao;
 		this.logisticaDao = logisticaDao;
-		this.workFlowetapaDao = workFlowetapaDao;
 		this.response = response;
 		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
@@ -103,15 +80,23 @@ public class LogisticaController {
 
 		for(Long id : contrato_ids){
 
+			Logistica l = new Logistica();
 			Contrato c = this.contratoDao.buscaContratoById(id);
 
-			logistica.setEmpresa(usuarioInfo.getEmpresa());
-			logistica.setOrganizacao(usuarioInfo.getOrganizacao());
-			logistica.setIsActive(true);
-			logistica.setContrato(c);
+			l.setEmpresa(usuarioInfo.getEmpresa());
+			l.setOrganizacao(usuarioInfo.getOrganizacao());
+			l.setIsActive(true);
+			l.setCreatedBy(usuarioInfo.getUsuario());
+			l.setCreated(GregorianCalendar.getInstance());
+
+			
+			l.setContrato(c);
+			l.setDataAssinatura(logistica.getDataAssinatura());
+			l.setTipoLogistica(logistica.getTipoLogistica());
+			l.setPeriodo(logistica.getPeriodo());
 
 			logisticaDao.beginTransaction();
-			logisticaDao.adiciona(logistica);
+			logisticaDao.adiciona(l);
 			logisticaDao.commit();
 
 		}

@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
-
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -34,7 +32,6 @@ import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
-import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
@@ -69,11 +66,10 @@ public class MenuController {
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
-	private HttpSession session;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,CoeficienteDao coeficienteDao,
 			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,
-			TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario,HttpSession session){
+			TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
 		this.usuarioDao = usuarioDao;
@@ -93,7 +89,6 @@ public class MenuController {
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
-		this.session = session;
 
 	}
 	
@@ -107,7 +102,13 @@ public class MenuController {
 		Calendar c1 = new GregorianCalendar();
 		Calendar c2 = new GregorianCalendar();
 		c1.set(GregorianCalendar.DAY_OF_MONTH, c1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
+		c1.set(GregorianCalendar.HOUR, c1.getActualMinimum(GregorianCalendar.HOUR));
+		c1.set(GregorianCalendar.MINUTE, c1.getActualMinimum(GregorianCalendar.MINUTE));
+		c1.set(GregorianCalendar.SECOND, c1.getActualMinimum(GregorianCalendar.SECOND));
 		c2.set(GregorianCalendar.DAY_OF_MONTH, c2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+		c2.set(GregorianCalendar.HOUR, c2.getActualMaximum(GregorianCalendar.HOUR));
+		c2.set(GregorianCalendar.MINUTE, c2.getActualMaximum(GregorianCalendar.MINUTE));
+		c2.set(GregorianCalendar.SECOND, c2.getActualMaximum(GregorianCalendar.SECOND));
 
 		Long empresa_id = empresa.getEmpresa_id();
 		Long organizacao_id = organizacao.getOrganizacao_id();
@@ -121,6 +122,8 @@ public class MenuController {
 		Collection<Usuario> consultores = new ArrayList<Usuario>();
 		Calendar calAprovadoInicio = null;
 		Calendar calAprovadoFim = null;
+		Calendar calConcluidoInicio = null;
+		Calendar calConcluidoFim = null;
 
 		if(perfil.equals("Supervisor") || perfil.equals("Consultor")){
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),c1,c2));
@@ -135,7 +138,8 @@ public class MenuController {
 		}
 
 		if(perfil.equals("Gestor")){
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, 
+					cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
 			result.include("mapEtapasFinal", this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, c1, c2));
 		}
@@ -157,10 +161,10 @@ public class MenuController {
 		
 		Calendar c1 = new GregorianCalendar();
 		Calendar c2 = new GregorianCalendar();
-		c1.set(GregorianCalendar.HOUR, c1.getActualMinimum(GregorianCalendar.HOUR));
+		c1.set(GregorianCalendar.HOUR_OF_DAY, c1.getActualMinimum(GregorianCalendar.HOUR_OF_DAY));
 		c1.set(GregorianCalendar.MINUTE, c1.getActualMinimum(GregorianCalendar.MINUTE));
 		c1.set(GregorianCalendar.SECOND, c1.getActualMinimum(GregorianCalendar.SECOND));
-		c2.set(GregorianCalendar.HOUR, c2.getActualMaximum(GregorianCalendar.HOUR));
+		c2.set(GregorianCalendar.HOUR_OF_DAY, c2.getActualMaximum(GregorianCalendar.HOUR_OF_DAY));
 		c2.set(GregorianCalendar.MINUTE, c2.getActualMaximum(GregorianCalendar.MINUTE));
 		c2.set(GregorianCalendar.SECOND, c2.getActualMaximum(GregorianCalendar.SECOND));
 
@@ -176,6 +180,8 @@ public class MenuController {
 		Collection<Usuario> consultores = new ArrayList<Usuario>();
 		Calendar calAprovadoInicio = null;
 		Calendar calAprovadoFim = null;
+		Calendar calConcluidoInicio = null;
+		Calendar calConcluidoFim = null;
 		
 		if(tipo.equals("Supervisor")){
 
@@ -184,12 +190,13 @@ public class MenuController {
 		}
 
 		if(tipo.equals("Supervisor") || tipo.equals("Consultor")){
+
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),c1,c2));
-			
-			
+
 			result.include("function","buscaContratos();");
 			result.include("buscaBoleto","none");
 			result.include("buscaAprovado","block");
+
 		}
 	
 		if(tipo.equals("Administrativo")  || tipo.equals("Administrador") ) {
@@ -204,7 +211,7 @@ public class MenuController {
 			
 		
 		if(tipo.equals("Gestor")){
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			
 			result.include("function","buscaContratos();");
 			result.include("buscaBoleto","none");
@@ -213,7 +220,7 @@ public class MenuController {
 
 		if(tipo.equals("aprovados")){
 			status.add("Aprovado");
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			
 			result.include("function","buscaContratos();");
 			result.include("buscaBoleto","none");
@@ -242,6 +249,10 @@ public class MenuController {
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
 
+		
+
+		result.include("contratos",contratos);
+
 		contador();
 
 	}
@@ -261,7 +272,9 @@ public class MenuController {
 		Calendar calConcluidoFim = new GregorianCalendar();
 		Calendar calRecusadoInicio = new GregorianCalendar();
 		Calendar calRecusadoFim = new GregorianCalendar();
-		
+		Calendar calStatusFinalInicio = null;
+		Calendar calStatusFinalFim = null;
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		
 		Collection<String> statusFinal = new ArrayList<String>();
@@ -324,12 +337,17 @@ public class MenuController {
 			}
 
 			if(calAprovadoInicio != null) {
+
 				if(tipoAprovado.equals("Todos")){
 					statusFinal.add("Aprovado");
 					statusFinal.add("Concluído");
 				} else {
 					statusFinal.add(tipoAprovado);
 				}
+
+				calStatusFinalInicio = calAprovadoInicio;
+				calStatusFinalFim = calAprovadoFim;
+
 			}
 
 			if(calConcluidoInicio != null) {
@@ -337,7 +355,12 @@ public class MenuController {
 			}
 
 			if(calRecusadoInicio != null) {
+
 				statusFinal.add("Recusado");
+
+				calStatusFinalInicio = calRecusadoInicio;
+				calStatusFinalFim = calRecusadoFim;
+
 			}
 			
 			if(tipoPagamento.equals("Todos")){
@@ -394,8 +417,9 @@ public class MenuController {
 		}
 
 		contratos.addAll(this.contratoDao.buscaContratoByFiltros(this.empresa.getEmpresa_id(), this.organizacao.getOrganizacao_id(), calInicio, calFim, 
-				calAprovadoInicio, calAprovadoFim ,cliente, documento, status,statusFinal,
+				calStatusFinalInicio, calStatusFinalFim ,calConcluidoInicio, calConcluidoFim,cliente, documento, status,statusFinal,
 				produtos, bancos, bancosComprados,consultoresAux));
+		
 
 		contador();
 
@@ -683,7 +707,7 @@ public class MenuController {
 		
 		Integer countContratos = 0;
 		Set<ParceiroNegocio> countClientes = new HashSet<ParceiroNegocio>();
-		Etapa aprovado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNomeExato(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Aprovado");
+		
 
 		for(Contrato cs : contratos){
 
@@ -693,10 +717,7 @@ public class MenuController {
 			totalValorDivida += cs.getValorDivida();
 			totalValorSeguro += cs.getValorSeguro();
 			totalValorLiquido += cs.getValorLiquido();
-
-			if(cs.getEtapa().getEtapa_id().compareTo(aprovado.getEtapa_id()) == 0){
-				totalValorMeta += cs.getValorMeta();
-			}
+			totalValorMeta += cs.getValorMeta();
 
 			if(cs.getProduto().getNome().equals("MARGEM LIMPA") || cs.getProduto().getNome().equals("RECOMPRA INSS")  || cs.getProduto().getNome().equals("RECOMPRA RMC") )
 				totalContratoLiquido += cs.getValorContrato();
