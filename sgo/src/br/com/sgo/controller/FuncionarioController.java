@@ -5,11 +5,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
-import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.FuncionarioDao;
-import br.com.sgo.dao.OrganizacaoDao;
-import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
@@ -22,27 +18,19 @@ public class FuncionarioController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
-	private final Validator validator;
 	private final UsuarioDao usuarioDao;
-	private final FuncionarioDao funcionarioDao;
-	private final EmpresaDao empresaDao;
-	private final OrganizacaoDao organizacaoDao;
-	private final ParceiroNegocioDao parceiroNegocioDao;
+	private final FuncionarioDao funcionarioDao;	
 	private Funcionario funcionario;
 	private Usuario usuario;
 	private Empresa empresa;
 	private Organizacao organizacao;
 
-	public FuncionarioController(Result result,UsuarioInfo usuarioInfo,Validator validator, UsuarioDao usuarioDao,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao, 
-			ParceiroNegocioDao parceiroNegocioDao, Usuario usuario,Empresa empresa,Organizacao organizacao,FuncionarioDao funcionarioDao,Funcionario funcionario){
+	public FuncionarioController(Result result,UsuarioInfo usuarioInfo, UsuarioDao usuarioDao, Usuario usuario,Empresa empresa
+			,Organizacao organizacao,FuncionarioDao funcionarioDao,Funcionario funcionario){
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
-		this.validator = validator;
 		this.usuarioDao = usuarioDao;
-		this.empresaDao = empresaDao;
-		this.organizacaoDao = organizacaoDao;
-		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.funcionarioDao = funcionarioDao;
 		this.funcionario = funcionario;
 		this.usuario = usuario;
