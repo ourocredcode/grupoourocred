@@ -96,12 +96,12 @@ public class ContratoDao extends Dao<Contrato> {
 
 		try {
 			
-			System.out.println("buscaContratoByUsuario INICIO");
-			System.out.println(sql);
-			System.out.println(calInicio.getTime());
-			System.out.println(calFim.getTime());
-			System.out.println(usuario_id);
-			System.out.println("buscaContratoByUsuario FIM");
+			//System.out.println("buscaContratoByUsuario INICIO");
+			//System.out.println(sql);
+			//System.out.println(calInicio.getTime());
+			//System.out.println(calFim.getTime());
+			//System.out.println(usuario_id);
+			//System.out.println("buscaContratoByUsuario FIM");
 
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, usuario_id);
@@ -488,7 +488,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 			
-			System.out.println(sql);
+			//System.out.println(sql);
 
 
 			int curr = 1;
@@ -1038,8 +1038,8 @@ public class ContratoDao extends Dao<Contrato> {
 				String etapa_nome = rsContrato.getString("etapa_nome");
 				Double etapaCount = rsContrato.getDouble("metaCount");
 				
-				System.out.println(etapa_nome);
-				System.out.println(etapaCount);
+				//System.out.println(etapa_nome);
+				//System.out.println(etapaCount);
 
 				map.put(etapa_nome,etapaCount);
 
@@ -1147,6 +1147,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Calendar created = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
+		Usuario supervisor = new Usuario();
 		ParceiroNegocio parceiro = new ParceiroNegocio();
 		Coeficiente coeficiente = new Coeficiente();
 		Produto produto = new Produto();
@@ -1164,9 +1165,13 @@ public class ContratoDao extends Dao<Contrato> {
 		organizacao.setOrganizacao_id(rsContrato.getLong("organizacao_id"));
 		organizacao.setNome(rsContrato.getString("organizacao_nome"));
 
+		supervisor.setUsuario_id(rsContrato.getLong("usuario_super_id"));
+		supervisor.setNome(rsContrato.getString("usuario_super"));
+
 		usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
 		usuario.setNome(rsContrato.getString("usuario_nome"));
 		usuario.setApelido(rsContrato.getString("usuario_apelido"));
+		usuario.setSupervisorUsuario(supervisor);
 
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
 		created.setTime(rsContrato.getDate("created"));

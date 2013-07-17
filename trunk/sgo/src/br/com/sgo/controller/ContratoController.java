@@ -31,10 +31,10 @@ import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PeriodoDao;
 import br.com.sgo.dao.ProdutoDao;
-import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoLogisticaDao;
 import br.com.sgo.dao.TipoProcedimentoDao;
+import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
@@ -69,7 +69,7 @@ public class ContratoController {
 	private final BancoProdutoTabelaDao bancoProdutoTabelaDao;
 	private final ProdutoDao produtoDao;
 	private final CoeficienteDao coeficienteDao;
-	private final TabelaDao tabelaDao;
+
 	private final ContratoDao contratoDao;
 	private final FormularioDao formularioDao;
 	private final EtapaDao etapaDao;
@@ -78,6 +78,7 @@ public class ContratoController {
 	private final TipoControleDao tipoControleDao;
 	private final TipoProcedimentoDao tipoProcedimentoDao;
 	private final LogisticaDao logisticaDao;
+	private final UsuarioDao usuarioDao;
 	private final HistoricoContratoDao historicoContratoDao;
 	private final HistoricoControleDao historicoControleDao;
 	private final ControleDao controleDao;
@@ -108,17 +109,18 @@ public class ContratoController {
 	private Collection<Logistica> logisticas;
 	private Collection<Contrato> contratos;
 	private Collection<HistoricoContrato> historico = new ArrayList<HistoricoContrato>();
+	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 	private Collection<HistoricoControle> historicoControleBoleto;
 	private Collection<HistoricoControle> historicoControleAverbacao;
 
 	public ContratoController(Result result,BancoDao bancoDao,OrganizacaoDao organizacaoDao, ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
-			Formulario formulario,TabelaDao tabelaDao,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
+			Formulario formulario,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
 			PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,LogisticaDao logisticaDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			ParceiroNegocio parceiroNegocio, ParceiroLocalidade parceiroLocalidade, ParceiroInfoBanco parceiroInfoBanco, ParceiroBeneficio parceiroBeneficio,
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
-			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao){		
+			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -135,7 +137,6 @@ public class ContratoController {
 		this.produtoDao = produtoDao;
 		this.coeficienteDao = coeficienteDao;
 		this.formularioDao = formularioDao;
-		this.tabelaDao = tabelaDao;
 		this.periodoDao = periodoDao;
 		this.tipoControleDao = tipoControleDao;
 		this.etapaDao = etapaDao;
@@ -157,6 +158,7 @@ public class ContratoController {
 		this.conferenciaDao = conferenciaDao;
 		this.tipoProcedimentoDao = tipoProcedimentoDao;
 		this.meioPagamentoDao = meioPagamentoDao;
+		this.usuarioDao = usuarioDao;
 
 	}
 
@@ -384,7 +386,9 @@ public class ContratoController {
 			log.add("Status alterado de : " + this.contrato.getEtapa().getNome() + " para : " + contrato.getEtapa().getNome());
 			this.contrato.setEtapa(contrato.getEtapa() == null ? null : contrato.getEtapa());
 		}
-		
+
+		this.contrato.setSupervisorStatusFinal(this.contrato.getEtapa().getNome().equals("Concluído") ? this.contrato.getUsuario().getSupervisorUsuario() : null);
+
 		this.contrato.setDataDigitacao(this.contrato.getDataDigitacao() == null ? calInicial : this.contrato.getDataDigitacao());
 		contrato.setDataDigitacao(contrato.getDataDigitacao() == null ? calInicial : contrato.getDataDigitacao());
 
@@ -553,6 +557,49 @@ public class ContratoController {
 	public void produtos(Long empresa_id, Long organizacao_id, Long banco_id) {
 
 		result.include("produtos",this.produtoDao.buscaProdutoBancoByEmpOrgBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), banco_id));
+
+	}
+	
+	@Post
+	@Path("/contrato/repasse")
+	public void repasse(Long id) {
+		
+		contrato = this.contratoDao.buscaContratoById(id);
+
+		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		result.include("consultores", this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), contrato.getUsuario().getSupervisorUsuario().getUsuario_id()));
+		result.include("contrato",contrato);
+
+	}
+	
+	@Post
+	@Path("/contrato/repasse/salva")
+	public void repasse(Contrato contrato) {
+
+		this.contrato = this.contratoDao.load(contrato.getContrato_id());
+
+		this.contrato.setUsuario(contrato.getUsuario());
+
+		if(this.contrato.getCreatedBy().getUsuario_id() != contrato.getUsuario().getUsuario_id())
+			this.contrato.setIsRepasse(true);
+		else
+			this.contrato.setIsRepasse(false);
+
+		this.contratoDao.beginTransaction();
+		this.contratoDao.atualiza(this.contrato);
+		this.contratoDao.commit();
+
+		this.result.redirectTo(this).status(contrato.getContrato_id());
+
+	}
+	
+	@Post
+ 	@Path("/contrato/consultores")
+	public void consultores(Long supervisor_id) {
+
+		consultores = this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), supervisor_id);
+
+		result.include("consultores",consultores);
 
 	}
 
