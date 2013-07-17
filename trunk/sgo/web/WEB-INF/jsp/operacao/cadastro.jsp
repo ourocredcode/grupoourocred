@@ -63,6 +63,18 @@ function limpaForm() {
 	}
 }
 
+function altera(linha, id) {
+
+	var valor = linha.checked == true ? true : false ;
+
+	if (window.confirm("Deseja alterar a Operação selecionado?"))
+		$.post('<c:url value="/operacao/altera" />', {
+			'operacao.operacao_id' : id, 'operacao.isActive' : valor
+		});
+
+	return false;
+}
+
 $(function() {
 
 // Invoke the plugin
@@ -134,14 +146,21 @@ $(function() {
 								<label for="organizacao">Organização</label>
 	      						<input class="input-xlarge" id="organizacao" name="operacao.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" readonly="readonly">
 	      						<input class="span1" id="organizacaoId" name="operacao.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
-	    					</div>						
+	    					</div>
+    					</div>
+    					<div class="row-fluid">    					
 							<div class="span3">
 								<label for="nome">Nome</label>
 								<input class="input-xlarge" id="nome" name="operacao.nome" placeholder="Nome" type="text" required>
 							</div>
-							<div class="span3">
+							
+							<div class="span2">
 								<label for="sala">Sala</label>
-								<input class="input-xlarge" id="sala" name="sala.nome" placeholder="Nome" type="text" required>
+								<select class="input-medim" id="salaId" name="sala.sala_id" >
+									<c:forEach var="sala" items="${salas }">
+									 	<option value="${sala.sala_id }" selected="selected"> ${sala.nome }</option>
+									</c:forEach>
+								</select>
 							</div>
 							<div class="span3">
 								<label for="isActive">Ativo</label>
@@ -195,7 +214,12 @@ $(function() {
 										<td>${operacao.empresa.nome }</td>
 										<td>${operacao.organizacao.nome }</td>
 										<td>${operacao.nome }</td>
-										<td>${operacao.isActive }</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="isActiveLine" name="operacao.isActive"
+												<c:if test="${operacao.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${operacao.operacao_id}');">
+											</label>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>

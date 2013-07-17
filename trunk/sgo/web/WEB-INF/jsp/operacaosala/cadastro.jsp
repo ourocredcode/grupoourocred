@@ -59,7 +59,7 @@ jQuery(function($){
 
 function limpaForm() {
 	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
-		document.operacaoForm.reset();
+		document.operacaoSalaForm.reset();
 	}
 }
 
@@ -82,7 +82,7 @@ $(function() {
 </script>
 
 <div id="content-header">
-	<h1>Cadastro Operação</h1>
+	<h1>Cadastro Operação-Salas</h1>
 	<div class="btn-group">
 		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
@@ -91,7 +91,7 @@ $(function() {
 
 <div id="breadcrumb">
 	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Cadastro</a>
-	<a href="#" class="current">Operação</a>
+	<a href="#" class="current">Operação-Salas</a>
 </div>
 <c:if test="${not empty notice}">
 	<c:choose>
@@ -137,11 +137,23 @@ $(function() {
 	      						<input class="input-xlarge" id="organizacao" name="operacaoSala.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" readonly="readonly">
 	      						<input class="span1" id="organizacaoId" name="operacaoSala.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
 	    					</div>						
-							<div class="span3">
-								<label for="nome">Nome</label>
-								<input class="input-xlarge" id="nome" name="operacaoSala.nome" placeholder="Nome" type="text" required>
+								<div class="span2">
+								<label for="operacao">Operacao</label>
+								<select class="input-medim" id="operacaoId" name="operacaoSala.operacao.operacao_id" >
+									<c:forEach var="operacao" items="${operacoes }">
+									 	<option value="${operacao.operacao_id }" selected="selected"> ${operacao.nome }</option>
+									</c:forEach>
+								</select>
 							</div>
-							<div class="span3">
+								<div class="span2">
+								<label for="sala">Sala</label>
+								<select class="input-medim" id="salaId" name="operacaoSala.sala.sala_id" >
+									<c:forEach var="sala" items="${salas }">
+									 	<option value="${sala.sala_id }" selected="selected"> ${sala.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="span1">
 								<label for="isActive">Ativo</label>
 								<input id="isActive" name="operacaoSala.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
@@ -180,17 +192,24 @@ $(function() {
 								<tr>
 									<th>Empresa</th>
 									<th>Organização</th>
-									<th>Nome</th>
+									<th>Operação</th>
+									<th>Sala</th>
 									<th>Ativo</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${operacoes }" var="operacao">
+								<c:forEach items="${operacaoSalas }" var="operacaoSala">
 									<tr>
-										<td>${operacao.empresa.nome }</td>
-										<td>${operacao.organizacao.nome }</td>
-										<td>${operacao.nome }</td>
-										<td>${operacao.isActive }</td>
+										<td>${operacaoSala.empresa.nome }</td>
+										<td>${operacaoSala.organizacao.nome }</td>
+										<td>${operacaoSala.operacao.nome }</td>
+										<td>${operacaoSala.sala.nome }</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="isActiveLine" name="operacaoSala.isActive"
+												<c:if test="${operacaoSala.isActive == true }"> checked="checked"</c:if>>
+											</label>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>

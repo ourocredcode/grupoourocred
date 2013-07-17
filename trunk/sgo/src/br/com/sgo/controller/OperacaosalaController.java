@@ -51,10 +51,10 @@ public class OperacaosalaController {
 	@Path("/operacaosala/cadastro")
 	public void cadastro() {
 
-		result.include("salas", this.salaDao.buscaAllSala(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		result.include("operacoes",this.operacaoDao.buscaAllOperacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("operacoes", this.operacaoDao.buscaAllOperacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("salas", this.salaDao.buscaAllSala(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));		
 		result.include("operacaoSalas", this.operacaoSalaDao.buscaAllOperacaoSalaByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		
+
 	}
 
 	@Post
@@ -64,6 +64,7 @@ public class OperacaosalaController {
 		String mensagem = "";
 
 		try {
+
 
 			if (this.operacaoSalaDao.buscaOperacaoSalaByEmpresaOrganizacaoOperacaoSala(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),
 					operacaoSala.getSala().getSala_id(), operacaoSala.getOperacao().getOperacao_id()) == null) {				

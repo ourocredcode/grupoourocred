@@ -29,13 +29,12 @@ public class OperacaoSalaDao extends Dao<OperacaoSala> {
 	
 	private final String sqlOperacaoSala = " SELECT OPERACAOSALA.empresa_id, OPERACAOSALA.organizacao_id, OPERACAOSALA.sala_id, OPERACAOSALA.operacao_id FROM OPERACAOSALA (NOLOCK) ";
 	
-	private final String sqlOperacaoSalas = "SELECT OPERACAOSALA.empresa_id, EMPRESA.nome, OPERACAOSALA.organizacao_id " +
-			", ORGANIZACAO.nome, OPERACAOSALA.operacao_id, OPERACAO.nome, OPERACAOSALA.sala_id " +
-			", SALA.nome, OPERACAOSALA.isactive, OPERACAOSALA.nome "+
-			" FROM (((EMPRESA INNER JOIN OPERACAOSALA ON EMPRESA.empresa_id = OPERACAOSALA.empresa_id) " +
-			" INNER JOIN ORGANIZACAO ON OPERACAOSALA.organizacao_id = ORGANIZACAO.organizacao_id) " +
-			" INNER JOIN OPERACAO ON OPERACAOSALA.operacao_id = OPERACAO.operacao_id) " +
-			" INNER JOIN SALA ON OPERACAOSALA.sala_id = SALA.sala_id ";
+	private final String sqlOperacaoSalas = "SELECT OPERACAOSALA.empresa_id, EMPRESA.nome AS empresa_nome, OPERACAOSALA.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
+			", OPERACAOSALA.operacao_id, OPERACAO.nome AS operacao_nome, OPERACAOSALA.sala_id, SALA.nome AS sala_nome, OPERACAOSALA.isactive "+
+			" FROM (((EMPRESA (NOLOCK) INNER JOIN OPERACAOSALA (NOLOCK) ON EMPRESA.empresa_id = OPERACAOSALA.empresa_id) "+
+			" INNER JOIN ORGANIZACAO (NOLOCK) ON OPERACAOSALA.organizacao_id = ORGANIZACAO.organizacao_id) "+
+			" INNER JOIN OPERACAO (NOLOCK) ON OPERACAOSALA.operacao_id = OPERACAO.operacao_id) "+
+			" INNER JOIN SALA (NOLOCK) ON OPERACAOSALA.sala_id = SALA.sala_id ";
 
 	public OperacaoSalaDao(Session session, ConnJDBC conexao) {
 
@@ -74,9 +73,9 @@ public class OperacaoSalaDao extends Dao<OperacaoSala> {
 
 			while (rsOperacaoSala.next()) {
 
-				operacaoSala = new OperacaoSala();				
+				operacaoSala = new OperacaoSala();
 				Operacao operacao = new Operacao();
-				operacao.setOperacao_id(rsOperacaoSala.getLong("operacao_id"));				
+				operacao.setOperacao_id(rsOperacaoSala.getLong("operacao_id"));
 				operacaoSala.setOperacao(operacao);
 
 			}
@@ -195,6 +194,7 @@ public class OperacaoSalaDao extends Dao<OperacaoSala> {
 		operacaoSala.setIsActive(rsOperacaoSala.getBoolean("isactive"));
 
 		operacaoSalas.add(operacaoSala);
+
 	}
 
 }

@@ -63,6 +63,18 @@ function limpaForm() {
 	}
 }
 
+function altera(linha, id) {
+
+	var valor = linha.checked == true ? true : false ;
+
+	if (window.confirm("Deseja alterar a Sala selecionado?"))
+		$.post('<c:url value="/sala/altera" />', {
+			'sala.sala_id' : id, 'sala.isActive' : valor
+		});
+
+	return false;
+}
+
 $(function() {
 
 // Invoke the plugin
@@ -126,21 +138,21 @@ $(function() {
 				<div class="tab-pane fade active in" id="sala-div">
 					<form id="salaForm" name="salaForm" action="<c:url value="/sala/salva"/>" method="POST">
 						<div class="row-fluid">
-							<div class="span3">
+							<div class="span2">
 								<label for="empresa">Empresa</label>
-	      						<input class="input-xlarge" id="empresa" name="sala.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" readonly="readonly">
+	      						<input class="input-medium" id="empresa" name="sala.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }" readonly="readonly">
 	      						<input class="span1" id="empresaId" name="sala.empresa.empresa_id" type="hidden" value="${usuarioInfo.empresa.empresa_id }" >
 							</div>
-							<div class="span3">
+							<div class="span2">
 								<label for="organizacao">Organização</label>
-	      						<input class="input-xlarge" id="organizacao" name="sala.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" readonly="readonly">
+	      						<input class="input-medium" id="organizacao" name="sala.organizacao.nome" type="text" value="${usuarioInfo.organizacao.nome }" readonly="readonly">
 	      						<input class="span1" id="organizacaoId" name="sala.organizacao.organizacao_id" type="hidden" value="${usuarioInfo.organizacao.organizacao_id }">
 	    					</div>						
 							<div class="span3">
 								<label for="nome">Nome</label>
 								<input class="input-xlarge" id="nome" name="sala.nome" placeholder="Nome" type="text" required>
 							</div>						
-							<div class="span3">
+							<div class="span1">
 								<label for="isActive">Ativo</label>
 								<input id="isActive" name="sala.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
@@ -190,7 +202,12 @@ $(function() {
 										<td>${sala.empresa.nome }</td>
 										<td>${sala.organizacao.nome }</td>
 										<td>${sala.nome }</td>
-										<td>${sala.isActive }</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="isActiveLine" name="sala.isActive"
+												<c:if test="${sala.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${sala.sala_id}');">
+											</label>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>

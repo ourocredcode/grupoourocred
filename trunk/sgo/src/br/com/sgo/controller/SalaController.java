@@ -21,6 +21,7 @@ public class SalaController {
 	private final Result result;
 	private final SalaDao salaDao;
 
+	private Sala sala;
 	private UsuarioInfo usuarioInfo;	
 	private Empresa empresa;
 	private Organizacao organizacao;
@@ -28,13 +29,14 @@ public class SalaController {
 
 	private Calendar dataAtual = Calendar.getInstance();	
 	
-	public SalaController(Result result, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, Usuario usuario, SalaDao salaDao){
+	public SalaController(Result result, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, Usuario usuario, SalaDao salaDao, Sala sala){
 
 		this.result = result;
+		this.sala = sala;
 		this.salaDao = salaDao;
 		this.usuarioInfo = usuarioInfo;				
-		this.empresa = empresa;
-		this.organizacao = organizacao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = this.usuarioInfo.getUsuario();
 
 	}	
@@ -43,7 +45,7 @@ public class SalaController {
 	@Path("/sala/cadastro")
 	public void cadastro(){
 
-		result.include("operacoes", this.salaDao.buscaAllSala(1l, 1l));
+		result.include("salas", this.salaDao.buscaAllSala(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 
@@ -55,7 +57,7 @@ public class SalaController {
 
 		try {
 
-			if (this.salaDao.buscaSalaByEmpOrgNome(1l, 1l, sala.getNome()) == null) {				
+			if (this.salaDao.buscaSalaByEmpOrgNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), sala.getNome()) == null) {				
 
 				sala.setCreated(dataAtual);
 				sala.setUpdated(dataAtual);
@@ -65,9 +67,6 @@ public class SalaController {
 
 				sala.setChave(sala.getNome());
 				sala.setDescricao(sala.getNome());
-
-				empresa.setEmpresa_id(1l);
-				organizacao.setOrganizacao_id(1l);
 
 				sala.setEmpresa(empresa);
 				sala.setOrganizacao(organizacao);
@@ -79,7 +78,6 @@ public class SalaController {
 				this.salaDao.commit();
 
 				mensagem = "Sala " + sala.getNome() + " adicionado com sucesso.";
-
 
 			} else {
 
@@ -103,11 +101,37 @@ public class SalaController {
 
 	}
 
+	@Post
+	@Path("/sala/altera")
+	public void altera(Sala sala) {
+
+		String mensagem = "";
+
+		this.sala = this.salaDao.load(sala.getSala_id());
+
+		this.sala.setUpdated(dataAtual);
+		this.sala.setUpdatedBy(usuario);
+
+		if(sala.getIsActive() != null){
+			this.sala.setIsActive(sala.getIsActive() == false ? false : true);
+		}
+
+		salaDao.beginTransaction();		
+		salaDao.atualiza(this.sala);
+		salaDao.commit();
+
+		mensagem = " Sala alterado com sucesso.";
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+		
+	}
+
 	@Get 
 	@Path("/sala/busca.json")
 	public void sala(Long empresa_id, Long organizacao_id, String nome){
 
-		result.use(Results.json()).withoutRoot().from(salaDao.buscasalas(empresa_id, organizacao_id, nome)).serialize();
+		result.use(Results.json()).withoutRoot().from(salaDao.buscaSalas(empresa_id, organizacao_id, nome)).serialize();
 
 	}
 

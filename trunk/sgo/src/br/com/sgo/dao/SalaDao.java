@@ -124,7 +124,7 @@ public class SalaDao extends Dao<Sala> {
 		return sala;
 	}
 
-	public Collection<Sala> buscasalas(Long empresa_id, Long organizacao_id, String nome) {
+	public Collection<Sala> buscaSalas(Long empresa_id, Long organizacao_id, String nome) {
 
 		String sql = sqlSalas;
 
