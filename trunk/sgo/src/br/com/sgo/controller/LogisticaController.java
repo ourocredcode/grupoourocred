@@ -20,7 +20,6 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
-import br.com.sgo.dao.BancoProdutoTabelaDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.LogisticaDao;
