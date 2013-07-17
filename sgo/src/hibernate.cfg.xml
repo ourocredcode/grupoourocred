@@ -50,6 +50,10 @@
 		<mapping class="br.com.sgo.modelo.Conferencia" />		
 		<mapping class="br.com.sgo.modelo.ProcedimentoConferencia" />
 		<mapping class="br.com.sgo.modelo.TipoProcedimento" />
+		
+		<mapping class="br.com.sgo.modelo.Operacao" />
+		<mapping class="br.com.sgo.modelo.Sala" />
+		<mapping class="br.com.sgo.modelo.OperacaoSala" />
 
 		<mapping class="br.com.sgo.modelo.ElementoBd" />
 		<mapping class="br.com.sgo.modelo.CampoFormulario" />

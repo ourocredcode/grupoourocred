@@ -32,7 +32,6 @@ public class OperacaoDao extends Dao<Operacao> {
 				" FROM (OPERACAO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON OPERACAO.empresa_id = EMPRESA.empresa_id) " +
 				" INNER JOIN ORGANIZACAO (NOLOCK) ON OPERACAO.organizacao_id = ORGANIZACAO.organizacao_id ";
 
-
 	public OperacaoDao(Session session, ConnJDBC conexao) {
 
 		super(session, Operacao.class);		
@@ -154,7 +153,7 @@ public class OperacaoDao extends Dao<Operacao> {
 				Operacao operacao = new Operacao();
 
 				operacao.setOperacao_id(rsOperacoes.getLong("operacao_id"));
-				operacao.setNome(rsOperacoes.getString("nome"));
+				operacao.setNome(rsOperacoes.getString("operacao_nome"));
 
 				operacoes.add(operacao);
 			}
