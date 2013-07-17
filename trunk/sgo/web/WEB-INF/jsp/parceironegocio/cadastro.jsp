@@ -97,6 +97,7 @@
 		var complemento = $("#parceirolocalidadeComplemento").val();
 		var pontoreferencia = $("#parceirolocalidadePontoReferencia").val();
 		var bairro = $("#localidadeBairro").val();
+		var tipoLocalidadeId = $("#localidadeTipoLocalidadeId").val();
 		var cidadeId = $("#localidadeCidadeId").val();
 		var regiaoId = $("#localidadeRegiaoId").val();
 		var parceiroId = $("#parceiroNegocioId").val();
@@ -114,6 +115,7 @@
 					'localidade.cidade.cidade_id' : cidadeId,
 					'localidade.regiao.regiao_id' : regiaoId,
 					'localidade.pais.pais_id' : paisId,
+					'localidade.tipoLocalidade.tipoLocalidade_id' : tipoLocalidadeId,
 					'localidade.localidade_id' : localidadeId,
 					'parceiroLocalidade.parceiroNegocio.parceiroNegocio_id': parceiroId}
 			, function(resposta) { 
@@ -671,6 +673,7 @@
 														<th>Cep</th>
 														<th>Bairro</th>
 														<th>Cidade</th>
+														<th>Tipo</th>
 														<th>Endereço</th>
 														<th>Número</th>
 														<th>Complemento</th>
@@ -684,6 +687,7 @@
 															<td>${parceiroLocalidade.localidade.cep }</td>
 															<td>${parceiroLocalidade.localidade.bairro }</td>
 															<td>${parceiroLocalidade.localidade.cidade.nome }</td>
+															<td>${parceiroLocalidade.localidade.tipoLocalidade.nome }</td>
 															<td>${parceiroLocalidade.localidade.endereco }</td>
 															<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-mini" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
 															<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-mini" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
@@ -709,16 +713,18 @@
 						</div>
 					</c:if>
 				
-					<div class="navbar" style="clear: both;width: 900px;">
+					<div class="navbar" style="clear: both;width: 920px;">
 							<div class="navbar-inner">
 								<div class="container">
 								
-								<div id="ajax_endereco" <c:if test="${not empty parceiroNegocio && !parceiroNegocio.isCliente}">style="display: none;"</c:if>>
-				
-									<div class="control-group"></div>
+								<div class="control-group"></div>
 									<div class="page-header">
 										<h2><small>Endereço</small></h2>
 									</div>
+								
+								<div id="ajax_endereco" <c:if test="${not empty parceiroNegocio && !parceiroNegocio.isCliente}">style="display: none;"</c:if>>
+				
+									
 									
 									<div class="input-append">
 										<input class="span10" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
@@ -726,11 +732,12 @@
 									</div>
 				
 									<div class="row-fluid">
+										<input class="span2" id="localidadeTipoLocalidade" name="localidade.tipoLocalidade.nome" type="text" placeholder="Tipo" value="${localidade.tipoLocalidade.nome }"/>
 										<input class="span5" id="localidadeEndereco" name="localidade.endereco" type="text" placeholder="Endereço" value="${localidade.endereco }"/>
 										<input class="span1" id="parceirolocalidadeNumero" name="parceiroLocalidade.numero" type="text" placeholder="Número" value="${parceiroLocalidade.numero }" />
 										<input class="span2" id="localidadeBairro" name="localidade.bairro" type="text" placeholder="Bairro" value="${localidade.bairro }" />
-										<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />
 										<input class="span1" id="localidadeRegiao" name="localidade.regiao" type="text" placeholder="UF"  value="${localidade.regiao.chave }"  />
+										<input class="span2" id="localidadeCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />
 									</div>
 				
 									<div id="alertCEP" style="position:absolute; float: right;width: 250px;margin-left: 100px;margin-top: -27px;"><i></i></div>
@@ -740,6 +747,7 @@
 										<input class="span2" id="parceirolocalidadeComplemento" name="parceiroLocalidade.complemento" type="text" placeholder="Complemento" value="${parceiroLocalidade.complemento }" />
 										<input class="span9" id="parceirolocalidadePontoReferencia" name="parceiroLocalidade.pontoReferencia" type="text" placeholder="Ponto de Referência" value="${parceiroLocalidade.pontoReferencia }" />
 				
+										<input  id="localidadeTipoLocalidadeId" name="localidade.tipoLocalidade.tipoLocalidade_id" type="hidden"  value="${localidade.tipoLocalidade.tipoLocalidade_id }" />
 										<input  id="localidadeCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
 										<input  id="localidadeRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
 										<input  id="localidadePaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
@@ -750,11 +758,13 @@
 								
 								<c:if test="${not empty parceiroNegocio }">
 									<div class="btn-toolbar" align="right">
-										<div class="btn-group">
-											<button type="button" class="btn btn-primary btn-mini" id="bttLocalidade" onClick="mostraEndereco();"><i class="icon-plus"></i></button>
-										</div>	
-										<div class="btn-group">
-											<button type="button" class="btn btn-primary btn-mini" id="bttCancelar" onClick="cancelaEndereco();"><i class="icon-remove"></i></button>
+										<div class="row-fluid">
+											<div class="btn-group">
+												<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="mostraEndereco();">Novo</button>
+											</div>	
+											<div class="btn-group">
+												<button type="button" class="btn" id="bttCancelar" onClick="cancelaEndereco();">Fechar</button>
+											</div>
 										</div>
 									</div>
 								</c:if>

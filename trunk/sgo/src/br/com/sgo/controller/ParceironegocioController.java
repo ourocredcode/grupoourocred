@@ -641,6 +641,10 @@ public class ParceironegocioController {
 		localidade.setEmpresa(empresa);
 		localidade.setOrganizacao(organizacao);
 
+		System.out.println(" salvaLocalidade : " + localidade.getCep());
+		System.out.println(" salvaLocalidade TipoLocalidade ID : " + localidade.getTipoLocalidade().getTipoLocalidade_id());
+
+
 		String mensagem = "";
 		
 		if(localidade.getLocalidade_id() == null)	{

@@ -2,6 +2,7 @@ package br.com.sgo.controller;
 
 import br.com.caelum.restfulie.RestClient;
 import br.com.caelum.restfulie.Restfulie;
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
@@ -62,7 +63,7 @@ public class LocalidadeController {
 
 			if(resultado[0].equals("")) {
 
-				result.nothing();
+				result.redirectTo(this).cadastro(enderecoCEP);
 
 			} else {
 
@@ -88,6 +89,26 @@ public class LocalidadeController {
 				result.include("localidade",l);
 
 		}
+	}
+	
+	@Get
+	@Path("/localidade/cadastro")
+	public void cadastro(String cep) {
+
+		Localidade localidade = new Localidade();
+		localidade.setCep(cep);
+
+		result.include("regioes",this.regiaoDao.listaTudo("ASC","nome"));
+		result.include("tiposLocalidade",this.tipoLocalidadeDao.listaTudo("ASC","nome"));
+		result.include("localidade",localidade);
+	}
+	
+	@Post
+	@Path("/localidade/busca.cidades")
+	public void cidades(Long regiao_id) {
+
+		result.include("cidades",this.cidadeDao.buscaCidadesByRegiao(regiao_id));
+
 	}
 
 }
