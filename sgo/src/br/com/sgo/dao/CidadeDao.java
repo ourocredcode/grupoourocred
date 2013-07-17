@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.hibernate.Session;
 
@@ -62,6 +64,46 @@ public class CidadeDao extends Dao<Cidade> {
 		this.conexao.closeConnection(rsCidade, stmt, conn);
 
 		return cidade;
+
+	}
+	
+	public Collection<Cidade> buscaCidadesByRegiao(Long regiao_id) {
+
+		String sql = sqlCidades;
+
+		if (regiao_id != null)
+			sql += " WHERE CIDADE.regiao_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Cidade> cidades = new ArrayList<Cidade>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, regiao_id);
+
+			this.rsCidade = this.stmt.executeQuery();
+
+			while (rsCidade.next()) {
+
+				Cidade cidade = new Cidade();
+
+				cidade.setCidade_id(rsCidade.getLong("cidade_id"));
+				cidade.setNome(rsCidade.getString("nome"));
+
+				cidades.add(cidade);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsCidade, stmt, conn);
+
+		return cidades;
 
 	}
 

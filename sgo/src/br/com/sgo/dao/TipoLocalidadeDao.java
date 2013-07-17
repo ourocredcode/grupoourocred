@@ -32,6 +32,7 @@ public class TipoLocalidadeDao extends Dao<TipoLocalidade> {
 		String sql = "select TIPOLOCALIDADE.tipolocalidade_id, TIPOLOCALIDADE.nome from TIPOLOCALIDADE (NOLOCK) where TIPOLOCALIDADE.nome like ?";
 
 		this.conn = this.conexao.getConexao();
+
 		TipoLocalidade tipoLocalidade = new TipoLocalidade();
 
 		try {
@@ -42,8 +43,7 @@ public class TipoLocalidadeDao extends Dao<TipoLocalidade> {
 
 			while (rsTiposLocalidade.next()) {
 
-				tipoLocalidade.setTipoLocalidade_id(rsTiposLocalidade
-						.getLong("tipolocalidade_id"));
+				tipoLocalidade.setTipoLocalidade_id(rsTiposLocalidade.getLong("tipolocalidade_id"));
 				tipoLocalidade.setNome(rsTiposLocalidade.getString("nome"));
 
 			}
