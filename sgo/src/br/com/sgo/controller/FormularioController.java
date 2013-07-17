@@ -298,6 +298,8 @@ public class FormularioController {
 			contrato.setRecompraBanco(this.bancoDao.buscaBancoById(contrato.getRecompraBanco().getBanco_id()));
 		}
 
+		contrato.setIsRepasse(false);
+
 		formulario.adicionaContrato(contrato);
 		result.redirectTo(FormularioController.class).cadastro();
 

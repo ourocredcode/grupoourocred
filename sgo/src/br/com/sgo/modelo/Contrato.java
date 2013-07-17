@@ -94,6 +94,10 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "etapapendencia_id", updatable = true, nullable = true)
 	private Etapa etapaPendencia;
+	
+	@ManyToOne
+	@JoinColumn(name = "supervisor_statusfinal_id", updatable = true, nullable = true)
+	private Usuario supervisorStatusFinal;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", updatable = true, nullable = true)
@@ -102,6 +106,10 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "tiposaque_id", updatable = true, nullable = true)
 	private TipoSaque tipoSaque;
+	
+	@ManyToOne
+	@JoinColumn(name = "supervisor_createdby_id", updatable = true, nullable = true)
+	private Usuario supervisorCreatedBy;
 
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
@@ -162,6 +170,9 @@ public class Contrato implements Serializable {
 	@Column(name = "issaqueefetuado")
 	private Boolean isSaqueEfetuado;
 	
+	@Column(name = "isrepasse")
+	private Boolean isRepasse;
+
 	@Column(name = "numerobeneficio")
 	private String numeroBeneficio;
 	
@@ -582,6 +593,30 @@ public class Contrato implements Serializable {
 
 	public void setEtapa(Etapa etapa) {
 		this.etapa = etapa;
+	}
+
+	public Boolean getIsRepasse() {
+		return isRepasse;
+	}
+
+	public void setIsRepasse(Boolean isRepasse) {
+		this.isRepasse = isRepasse;
+	}
+
+	public Usuario getSupervisorStatusFinal() {
+		return supervisorStatusFinal;
+	}
+
+	public void setSupervisorStatusFinal(Usuario supervisorStatusFinal) {
+		this.supervisorStatusFinal = supervisorStatusFinal;
+	}
+
+	public Usuario getSupervisorCreatedBy() {
+		return supervisorCreatedBy;
+	}
+
+	public void setSupervisorCreatedBy(Usuario supervisorCreatedBy) {
+		this.supervisorCreatedBy = supervisorCreatedBy;
 	}
 
 }

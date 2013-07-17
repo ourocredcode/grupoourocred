@@ -208,6 +208,17 @@ $(document).ready(function() {
 		dateFormat: 'dd/mm/y'
 	});
 	
+	$("#busca_Supervisor").change(function() {   
+		
+		var supervisor_id = $("#busca_Supervisor").val();
+
+		if(supervisor_id != '')
+			$("#busca_Consultor").load('<c:url value="/contrato/consultores" />', {'supervisor_id': supervisor_id});
+		else
+			$('#busca_Consultor option').remove();
+
+	});
+	
 });
 
 function verificaStatus() {
@@ -349,6 +360,10 @@ function mostra(id){
 	$('#divContrato').load('<c:url value="/contrato/cadastro"/>',{'id' : id});
 }
 
+function repasse(id){
+	$('#divRepasse').load('<c:url value="/contrato/repasse"/>',{'id' : id});
+}
+
 function conferencia(contrato_id){
 
 	$('#divConferencia').load('<c:url value="/conferencia/cadastro"/>',{'contrato_id' : contrato_id});
@@ -412,6 +427,8 @@ function validaForm(form) {
 
 };
 
+
+
 function openPopup(url) {
 	 window.open(url, "popup_id", "scrollbars,resizable,width=650,height=750");
  return false;
@@ -453,6 +470,43 @@ function openPopup(url) {
 			</c:otherwise>
 		</c:choose>
 	</c:if>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Dados Consultor</h5>
+						<c:if test="${usuarioInfo.perfil.chave == 'Gestor' }">
+							<div class="buttons"><a href="#" class="btn btn-mini" onclick="repasse('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Consultor</a></div>
+						</c:if>
+					</div>
+					<div class="widget-content padding">
+						<div class="row-fluid">
+							<div id="divRepasse">
+								<div class="span2">
+									<label for="contratoUsuarioSupervisorNome">Supervisor</label>
+									<input id="contratoUsuarioSupervisorNome"  name="contrato.usuario.supervisorUsuario.nome" value="${contrato.usuario.supervisorUsuario.nome }" type="text" class="input-medium" />	
+								</div>
+								<div class="span3">
+									<label for="contratoUsuarioNome">Consultor</label>
+									<input id="contratoUsuarioNome"  name="contrato.usuario.nome" value="${contrato.usuario.nome }" type="text" class="input-xlarge" />
+								</div>
+								<div class="span2">
+									<c:if test="${contrato.isRepasse }">
+										 <input type="checkbox" name="contrato.isRepasse" checked="checked" />Repasse
+									</c:if>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>						
+			</div>
+		</div>
+	</div>
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
