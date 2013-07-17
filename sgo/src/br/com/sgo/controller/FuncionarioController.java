@@ -5,7 +5,11 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
+import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.FuncionarioDao;
+import br.com.sgo.dao.OrganizacaoDao;
+import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
@@ -18,19 +22,27 @@ public class FuncionarioController {
 
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
+	private final Validator validator;
 	private final UsuarioDao usuarioDao;
-	private final FuncionarioDao funcionarioDao;	
+	private final FuncionarioDao funcionarioDao;
+	private final EmpresaDao empresaDao;
+	private final OrganizacaoDao organizacaoDao;
+	private final ParceiroNegocioDao parceiroNegocioDao;
 	private Funcionario funcionario;
 	private Usuario usuario;
 	private Empresa empresa;
 	private Organizacao organizacao;
 
-	public FuncionarioController(Result result,UsuarioInfo usuarioInfo, UsuarioDao usuarioDao, Usuario usuario,Empresa empresa
-			,Organizacao organizacao,FuncionarioDao funcionarioDao,Funcionario funcionario){
+	public FuncionarioController(Result result,UsuarioInfo usuarioInfo,Validator validator, UsuarioDao usuarioDao,EmpresaDao empresaDao,OrganizacaoDao organizacaoDao, 
+			ParceiroNegocioDao parceiroNegocioDao, Usuario usuario,Empresa empresa,Organizacao organizacao,FuncionarioDao funcionarioDao,Funcionario funcionario){
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
+		this.validator = validator;
 		this.usuarioDao = usuarioDao;
+		this.empresaDao = empresaDao;
+		this.organizacaoDao = organizacaoDao;
+		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.funcionarioDao = funcionarioDao;
 		this.funcionario = funcionario;
 		this.usuario = usuario;
@@ -43,7 +55,7 @@ public class FuncionarioController {
 	@Path("/funcionario/equipe/{supervisor_id}")
 	public void equipe(Long supervisor_id) {
 
-		if(usuarioInfo.getPerfil().equals("Consultor") || usuarioInfo.getPerfil().equals("Supervisor")) {
+		if(usuarioInfo.getPerfil().getNome().equals("Consultor") || usuarioInfo.getPerfil().getNome().equals("Supervisor")) {
 
 			result.include("supervisores", this.funcionarioDao.buscaFuncionariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 			result.include("funcionarios", this.funcionarioDao.buscaFuncionariosBySupervisor(empresa.getEmpresa_id(),  organizacao.getOrganizacao_id(), supervisor_id));
@@ -74,10 +86,15 @@ public class FuncionarioController {
 		if(funcionario.getApelido() != null) {
 
 			this.funcionario.setApelido(funcionario.getApelido());
+			this.usuario.setApelido(funcionario.getApelido());
 			
 			this.funcionarioDao.beginTransaction();
 			this.funcionarioDao.atualiza(this.funcionario);
 			this.funcionarioDao.commit();
+			
+			this.usuarioDao.beginTransaction();
+			this.usuarioDao.atualiza(usuario);
+			this.usuarioDao.commit();
 
 		} else if (funcionario.getSupervisor() != null) {
 
