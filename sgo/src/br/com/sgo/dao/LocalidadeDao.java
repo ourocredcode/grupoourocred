@@ -16,6 +16,7 @@ import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Pais;
 import br.com.sgo.modelo.Regiao;
+import br.com.sgo.modelo.TipoLocalidade;
 
 @Component
 public class LocalidadeDao extends Dao<Localidade> {
@@ -28,7 +29,7 @@ public class LocalidadeDao extends Dao<Localidade> {
 	private String sqlLocalidade = "SELECT LOCALIDADE.empresa_id, "
 			+ "			EMPRESA.nome as empresa_nome, LOCALIDADE.organizacao_id, ORGANIZACAO.nome as organizacao_nome, LOCALIDADE.pais_id, PAIS.nome as pais_nome, "
 			+ "			LOCALIDADE.cidade_id, CIDADE.nome as cidade_nome, LOCALIDADE.localidade_id, LOCALIDADE.regiao_id, REGIAO.chave as regiao_chave, LOCALIDADE.tipolocalidade_id, "
-			+ "			TIPOLOCALIDADE.nome, LOCALIDADE.endereco, LOCALIDADE.bairro, LOCALIDADE.cep "
+			+ "			TIPOLOCALIDADE.nome as tipolocalidade_nome, LOCALIDADE.endereco, LOCALIDADE.bairro, LOCALIDADE.cep "
 			+ "	  FROM ((((( LOCALIDADE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON LOCALIDADE.empresa_id = EMPRESA.empresa_id) "
 			+ "				INNER JOIN ORGANIZACAO (NOLOCK) ON LOCALIDADE.organizacao_id = ORGANIZACAO.organizacao_id) "
 			+ "				INNER JOIN REGIAO (NOLOCK) ON LOCALIDADE.regiao_id = REGIAO.regiao_id) "
@@ -84,6 +85,10 @@ public class LocalidadeDao extends Dao<Localidade> {
 				Cidade cidade = new Cidade();
 				cidade.setCidade_id(rsLocalidades.getLong("cidade_id"));
 				cidade.setNome(rsLocalidades.getString("cidade_nome"));
+				
+				TipoLocalidade tipoLocalidade = new TipoLocalidade();
+				tipoLocalidade.setTipoLocalidade_id(rsLocalidades.getLong("tipolocalidade_id"));
+				tipoLocalidade.setNome(rsLocalidades.getString("tipolocalidade_nome"));
 
 				localidade.setLocalidade_id(rsLocalidades.getLong("localidade_id"));
 				localidade.setEndereco(rsLocalidades.getString("endereco"));
@@ -92,6 +97,7 @@ public class LocalidadeDao extends Dao<Localidade> {
 				localidade.setCidade(cidade);
 				localidade.setRegiao(regiao);
 				localidade.setPais(pais);
+				localidade.setTipoLocalidade(tipoLocalidade);
 
 			}
 

@@ -45,6 +45,10 @@ public class Funcionario implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
+	
+	@ManyToOne
+	@JoinColumn(name = "operacao_id", updatable = true, nullable = true)
+	private Operacao operacao;
 
 	@ManyToOne
 	@JoinColumn(name = "funcao_id", updatable = true, nullable = false)
@@ -205,5 +209,13 @@ public class Funcionario implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Operacao getOperacao() {
+		return operacao;
+	}
+
+	public void setOperacao(Operacao operacao) {
+		this.operacao = operacao;
 	}
 }

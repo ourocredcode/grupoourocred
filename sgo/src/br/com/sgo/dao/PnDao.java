@@ -204,7 +204,7 @@ public class PnDao {
 				}
 
 				if (rsParceiroNegocio.getString("clienteTipoConta") != null)
-					meioPagamento.setNome(rsParceiroNegocio.getString("clienteTipoConta"));
+					meioPagamento.setNome(rsParceiroNegocio.getString("clienteTipoConta").equals("CONTA CORRENTE") ? "TED" : "OP");
 
 				String[] aux = rsParceiroNegocio.getString("clienteAgencia").split("-");
 

@@ -419,7 +419,6 @@ public class MenuController {
 		contratos.addAll(this.contratoDao.buscaContratoByFiltros(this.empresa.getEmpresa_id(), this.organizacao.getOrganizacao_id(), calInicio, calFim, 
 				calStatusFinalInicio, calStatusFinalFim ,calConcluidoInicio, calConcluidoFim,cliente, documento, status,statusFinal,
 				produtos, bancos, bancosComprados,consultoresAux));
-		
 
 		contador();
 

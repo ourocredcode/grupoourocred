@@ -15,6 +15,7 @@ import org.hibernate.Session;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
+import br.com.sgo.infra.CustomDateUtil;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
@@ -487,9 +488,8 @@ public class ContratoDao extends Dao<Contrato> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			
-			//System.out.println(sql);
 
+			//System.out.println(sql);
 
 			int curr = 1;
 
@@ -523,6 +523,8 @@ public class ContratoDao extends Dao<Contrato> {
 					this.stmt.setString(curr, '%' + statusAux2 + '%');
 					curr++;
 				}
+				
+				//System.out.println(" statusAux2 : " + statusAux2);
 
 			}
 
@@ -532,6 +534,8 @@ public class ContratoDao extends Dao<Contrato> {
 					this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
 					curr++;
 				}
+
+				//System.out.println(" statusFinalAux2 : " + statusFinalAux2);
 
 			}
 			
@@ -577,8 +581,10 @@ public class ContratoDao extends Dao<Contrato> {
 
 				this.stmt.setTimestamp(curr,new Timestamp(calInicio.getTimeInMillis()));
 				curr++;
+				
+				
 
-				this.stmt.setTimestamp(curr,new Timestamp(calFim.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
 				curr++;
 
 			} 
@@ -588,7 +594,7 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setTimestamp(curr,new Timestamp(calStatusFinalInicio.getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(calStatusFinalInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calStatusFinalFim).getTimeInMillis()));
 				curr++;
 
 			}
@@ -598,7 +604,7 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setTimestamp(curr,new Timestamp(calConclusaoInicio.getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(calConclusaoFim.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calConclusaoFim).getTimeInMillis()));
 				curr++;
 
 			}
@@ -606,7 +612,9 @@ public class ContratoDao extends Dao<Contrato> {
 			this.rsContrato = this.stmt.executeQuery();
 
 			while (rsContrato.next()) {
+
 				getContratos(contratos);
+
 			}
 
 		} catch (SQLException e) {
@@ -862,7 +870,7 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setTimestamp(curr,new Timestamp(previsaoInicio.getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(previsaoFim.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(previsaoFim).getTimeInMillis()));
 				curr++;
 
 			} 
@@ -872,7 +880,7 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setTimestamp(curr,new Timestamp(chegadaInicio.getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(chegadaFim.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(chegadaFim).getTimeInMillis()));
 				curr++;
 
 			} 
@@ -882,7 +890,7 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setTimestamp(curr,new Timestamp(vencimentoInicio.getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(vencimentoInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(vencimentoFim).getTimeInMillis()));
 				curr++;
 
 			}
@@ -892,7 +900,7 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setTimestamp(curr,new Timestamp(proximaAtuacaoInicio.getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(proximaAtuacaoInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(proximaAtuacaoFim).getTimeInMillis()));
 				curr++;
 
 			}
@@ -902,7 +910,7 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setTimestamp(curr,new Timestamp(calInicio.getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(calFim.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
 				curr++;
 
 			} 
