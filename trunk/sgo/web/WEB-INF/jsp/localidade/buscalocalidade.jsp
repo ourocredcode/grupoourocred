@@ -1,15 +1,58 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<script type="text/javascript">
+
+$(document).ready(function() { 
+
+	$("#localidadeCep").mask("99999999");
+
+	$("#localidadeCep").change(function(){
+		var enderecoCEP = $("#localidadeCep").val();
+		$.ajax({
+	           type: "POST",
+	           url: "/sgo/localidade/busca.localidade",
+	           data: "enderecoCEP=" + enderecoCEP,
+	           beforeSend: function() {
+	             $('#alertCEP').html('');
+	           },
+	           success: function(txt) {
+	              if(txt!='ERRO'){
+	            	  $('#ajax_endereco').html(txt);
+	            	  $('#alertCEP').html('');
+	              }else{
+	                  $('#alertCEP').html('');
+	              }
+	           },
+	           error: function(txt) {
+	             alert('Houve um problema interno. tente novamente mais tarde.');
+	           }
+	       });
+	});
+
+	 $('#loading').ajaxStart(function() {
+		 $(this).show();
+		 $('#resultado').hide();
+		 }).ajaxStop(function() {
+		 $(this).hide();
+		 $('#resultado').fadeIn('fast');
+	});
+
+});
+
+</script>
+
 <div id="ajax_endereco" style="display: block;width: 920px;">
 
-	<div class="control-group"></div>
-	<div class="page-header">
-		<h2><small>Endereço</small></h2>
-	</div>
-	
-	<div class="input-append">
-		<input  class="span10" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
-		<span class="add-on"><i class="icon-search"></i></span>
+	<div class="row-fluid">
+		<div class="span3">
+			<div class="input-append">
+				<input class="span10" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
+				<span class="add-on"><i class="icon-search"></i></span>
+			</div>
+		</div>
+		<div class="span2">
+			<div id="loading" style="display:none;color:#1b5790; font-weight:bold;float:right;clear: both;margin-left: 600px;margin-top: 1px;">BUSCANDO...</div>
+		</div>
 	</div>
 
 	<div class="row-fluid">

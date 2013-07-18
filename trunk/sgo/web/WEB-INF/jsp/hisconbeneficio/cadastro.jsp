@@ -82,7 +82,7 @@ function limpaForm() {
 				<input type="hidden" id="hisconBeneficioEmpresaId" name="empresa_id" value="${usuarioInfo.empresa.empresa_id }" />
 				<input type="hidden" id="hisconBeneficioOrganizacaoId" name="organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" />
 				<input type="text" class="input-medium" id="numeroBeneficio" name="numeroBeneficio" placeholder="Benefício"/>
-				<span class="add-on" onclick="submit();"><i class="icon-search"></i></span>
+				<button type="submit" class="btn btn-mini" style="height: 26px;">Busca</button>
 			</div>
 		</form>
 	</div>

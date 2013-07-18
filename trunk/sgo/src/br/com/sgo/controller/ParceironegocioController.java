@@ -23,6 +23,7 @@ import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.GrupoParceiroDao;
 import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.MeioPagamentoDao;
+import br.com.sgo.dao.OperacaoDao;
 import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroContatoDao;
@@ -75,6 +76,7 @@ public class ParceironegocioController {
 	private final TipoEnderecoDao tipoEnderecoDao;
 	private final TipoContatoDao tipoContatoDao;
 	private final MeioPagamentoDao meioPagamentoDao;
+	private final OperacaoDao operacaoDao;
 	private final PaisDao paisDao;
 	private final RegiaoDao regiaoDao;
 	private final CidadeDao cidadeDao;
@@ -98,7 +100,7 @@ public class ParceironegocioController {
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
 			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,Usuario usuario,BancoDao bancoDao,
-			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao,MeioPagamentoDao meioPagamentoDao,
+			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao,MeioPagamentoDao meioPagamentoDao,OperacaoDao operacaoDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao, CategoriaParceiroDao categoriaParceiroDao, ClassificacaoParceiroDao classificacaoParceiroDao, GrupoParceiroDao grupoParceiroDao,
 			ParceiroNegocio parceiroNegocio,Funcionario funcionario) {
 
@@ -121,6 +123,7 @@ public class ParceironegocioController {
 		this.tipoEnderecoDao = tipoEnderecoDao;
 		this.tipoContatoDao = tipoContatoDao;
 		this.meioPagamentoDao = meioPagamentoDao;
+		this.operacaoDao = operacaoDao;
 		this.paisDao = paisDao;
 		this.regiaoDao = regiaoDao;
 		this.cidadeDao = cidadeDao;
@@ -153,7 +156,7 @@ public class ParceironegocioController {
 		result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
 		result.include("classificacoesParceiro",this.classificacaoParceiroDao.buscaAllClassificacaoParceiroByEmpOrg(1l, 1l));
 		result.include("gruposParceiro",this.grupoParceiroDao.buscaAllGrupoParceiroByEmpOrg(1l, 1l));
-		
+		result.include("operacoes",this.operacaoDao.buscaOperacoes(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 
@@ -179,12 +182,20 @@ public class ParceironegocioController {
 
 				ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
 				ParceiroInfoBanco infoBanco = this.pnDao.buscaParceiroInfoBanco(parceiroNegocio);
+				
+				System.out.println(infoBanco.getMeioPagamento().getNome());
 
 				infoBanco.setMeioPagamento(this.meioPagamentoDao.buscaMeioPagamentoByNome(1l, 1l, infoBanco.getMeioPagamento().getNome()));
-				
+
 				Banco b = this.bancoDao.buscaBancoByNome(1l, 1l, infoBanco.getBanco().getNome());
 
-				infoBanco.setBanco(b == null ? new Banco() : b);
+				if(b != null){
+					infoBanco.setBanco(b);
+				} else {
+					b = new Banco();
+					b.setBanco_id(7L);
+					infoBanco.setBanco(b);
+				}
 
 				Localidade l = parceiroLocalidade.getLocalidade();
 
@@ -251,6 +262,7 @@ public class ParceironegocioController {
 		result.include("parceiroNegocio",parceiroNegocio);
 		result.include("bancos",this.bancoDao.buscaAllBancos());
 		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
+		result.include("operacoes",this.operacaoDao.buscaOperacoes(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
 		result.include("classificacoesParceiro",this.classificacaoParceiroDao.buscaAllClassificacaoParceiroByEmpOrg(1l, 1l));
 		result.include("gruposParceiro",this.grupoParceiroDao.buscaAllGrupoParceiroByEmpOrg(1l, 1l));
@@ -320,6 +332,7 @@ public class ParceironegocioController {
 				f.setChave(parceiroNegocio.getNome());
 				f.setDescricao(parceiroNegocio.getNome());
 				f.setApelido(funcionario.getApelido());
+				f.setOperacao(funcionario.getOperacao().getOperacao_id() == null ? null : funcionario.getOperacao());
 
 				f.setCreated(dataAtual);
 				f.setUpdated(dataAtual);
@@ -523,6 +536,7 @@ public class ParceironegocioController {
 
 		this.parceiroNegocioDao.clear();
 		this.parceiroNegocioDao.close();
+
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
 

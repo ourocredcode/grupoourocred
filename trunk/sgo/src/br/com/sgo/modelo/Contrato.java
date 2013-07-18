@@ -157,6 +157,9 @@ public class Contrato implements Serializable {
 
 	@Column(name = "valorliquido")
 	private Double valorLiquido;
+	
+	@Column(name = "valorContratoLiquido")
+	private Double valorContratoLiquido;
 
 	@Column(name = "valorparcela")
 	private Double valorParcela;
@@ -617,6 +620,14 @@ public class Contrato implements Serializable {
 
 	public void setSupervisorCreatedBy(Usuario supervisorCreatedBy) {
 		this.supervisorCreatedBy = supervisorCreatedBy;
+	}
+
+	public Double getValorContratoLiquido() {
+		return valorContratoLiquido;
+	}
+
+	public void setValorContratoLiquido(Double valorContratoLiquido) {
+		this.valorContratoLiquido = valorContratoLiquido;
 	}
 
 }

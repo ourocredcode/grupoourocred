@@ -6,6 +6,19 @@
 
 <script type="text/javascript">
 
+$(document).ready(function() { 
+	
+	$("#busca_Supervisor").change(function() {   
+
+		var supervisor_id = $("#busca_Supervisor").val();
+
+		if(supervisor_id != '')
+			$("#busca_Consultor").load('<c:url value="/contrato/consultores" />', {'supervisor_id': supervisor_id});
+
+	});
+	
+});
+
 function validaFormRepasse(form) {
 
 	if ($(form).validate().form() === true) {

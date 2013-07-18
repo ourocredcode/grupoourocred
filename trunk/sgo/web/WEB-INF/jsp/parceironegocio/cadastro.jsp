@@ -80,6 +80,14 @@
 			   }
 
 		   });
+		   
+		   $('#loading').ajaxStart(function() {
+				 $(this).show();
+				 $('#resultado').hide();
+				 }).ajaxStop(function() {
+				 $(this).hide();
+				 $('#resultado').fadeIn('fast');
+			});
 
 	});
 	
@@ -460,8 +468,9 @@
 								</div>
 							</div>
 				
-						<div id="parceiroNegocioFuncionario" class="row-fluid" 
-								<c:if test="${parceiroNegocio.isFuncionario }">style="display: block;"</c:if>
+						<div id="parceiroNegocioFuncionario" class="row-fluid"
+								<c:if test="${usuarioInfo.perfil.chave == 'Supervisor' ||  usuarioInfo.perfil.chave == 'Gestor'}">style="display: block;"</c:if>
+								<c:if test="${parceiroNegocio.isFuncionario eq false }">style="display: none;"</c:if>
 								<c:if test="${parceiroNegocio.isCliente || parceiroNegocio.isFornecedor ||  empty parceiroNegocio}">style="display: none;"</c:if>>
 				
 							<div class="controls controls-row">
@@ -471,6 +480,16 @@
 									<select  id="funcionarioDepartamentoId" name="funcionario.departamento.departamento_id" class="input-medium">
 										<c:forEach var="departamento" items="${departamentos }">
 											<option value="${departamento.departamento_id }" <c:if test="${funcionario.departamento.departamento_id eq departamento.departamento_id }"> selected="selected"</c:if>> ${departamento.nome }</option>
+										</c:forEach>
+									</select>
+								</div>
+								
+								<div class="span2">
+									<label for="funcionarioOperacaoId">Operação</label>
+									<select  id="funcionarioOperacaoId" name="funcionario.operacao.operacao_id" class="input-medium">
+										<option value=""></option>
+										<c:forEach var="operacao" items="${operacoes }">
+											<option value="${operacao.operacao_id }" <c:if test="${funcionario.operacao.operacao_id eq operacao.operacao_id }"> selected="selected"</c:if>> ${operacao.nome }</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -496,7 +515,7 @@
 								
 								<div class="span2">
 									<label for="funcionarioApelido">Codinome</label>
-									<input id="funcionarioApelido" name="funcionario.apelido" type="text" placeholder="Codinome" value="${funcionario.apelido }" class="input-large">
+									<input id="funcionarioApelido" name="funcionario.apelido" type="text" placeholder="Codinome" value="${funcionario.apelido }" class="input-medium">
 								</div>
 								
 				
@@ -725,10 +744,16 @@
 								<div id="ajax_endereco" <c:if test="${not empty parceiroNegocio && !parceiroNegocio.isCliente}">style="display: none;"</c:if>>
 				
 									
-									
-									<div class="input-append">
-										<input class="span10" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
-										<span class="add-on"><i class="icon-search"></i></span>
+									<div class="row-fluid">
+										<div class="span3">
+											<div class="input-append">
+												<input class="span10" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
+												<span class="add-on"><i class="icon-search"></i></span>
+											</div>
+										</div>
+										<div class="span2">
+											<div id="loading" style="display:none;color:#1b5790; font-weight:bold;float:right;clear: both;margin-left: 600px;margin-top: 1px;">BUSCANDO...</div>
+										</div>
 									</div>
 				
 									<div class="row-fluid">

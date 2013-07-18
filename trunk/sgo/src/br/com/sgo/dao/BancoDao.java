@@ -163,7 +163,7 @@ public class BancoDao extends Dao<Banco> {
 
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setString(3,nome);
+			this.stmt.setString(3,"%" + nome + "%");
 
 			this.rsBanco = this.stmt.executeQuery();
 

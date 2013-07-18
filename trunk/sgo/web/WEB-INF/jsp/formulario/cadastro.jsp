@@ -31,19 +31,20 @@
 	</c:if>
 
 	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
-
-				<div id="buscaParceiroDiv">
-					<form id="buscaParceiroForm" class="form-search" action="<c:url value="/formulario/cliente" />" method="POST">
-						<label for="numeroBeneficio">Busca Cliente</label>
-						<div class="input-append">
-							<input type="text" class="input-medium" id="numeroBeneficio" name="numeroBeneficio" placeholder="Benefício"/>
-							<span class="add-on" onclick="submit();"><i class="icon-search"></i></span>
-						</div>
-					</form>
+		
+		<div class="row-fluid">	
+			<form id="buscaParceiroForm" action="<c:url value="/formulario/cliente" />" method="post">
+				<div class="input-append">
+					<input id="numeroBeneficio" name="numeroBeneficio" type="text" placeholder="Busca Benefício..." class="input-large" />
+					<button type="submit" class="btn btn-mini" style="height: 26px;">Busca</button>
 				</div>
+			</form>
+		</div>
+
+		<div class="row-fluid">		
 				
+			<div class="span12">	
+
 				<div id="formCliente">
 				
 					<div class="row-fluid">

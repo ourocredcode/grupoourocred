@@ -317,6 +317,12 @@ public class FormularioController {
 
 			c.setFormulario(this.formulario);
 			c.setRecompraBanco(c.getRecompraBanco().getBanco_id() == null ? null : c.getRecompraBanco());
+			
+			if(c.getProduto().getNome().equals("MARGEM LIMPA") ||c.getProduto().getNome().equals("RECOMPRA INSS")  || c.getProduto().getNome().equals("RECOMPRA RMC") )
+				c.setValorContratoLiquido(c.getValorContrato());
+			
+			if(c.getProduto().getNome().equals("REFINANCIAMENTO") || c.getProduto().getNome().equals("RETENÇÃO"))
+				c.setValorContratoLiquido(c.getValorLiquido());
 
 			this.contratoDao.beginTransaction();
 			this.contratoDao.atualiza(c);
