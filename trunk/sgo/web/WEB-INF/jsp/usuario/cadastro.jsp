@@ -260,7 +260,7 @@ function limpaForm(){
 						</div>
 						<div class="row-fluid">
 							<div class="span2">
-								<label for="usuarioParceiroNegocio">Perceiro de Negócios</label>
+								<label for="usuarioParceiroNegocio">Parceiro de Negócios</label>
 	      						<input class="input-medium" id="usuarioParceiroNegocio" name="usuario.parceiroNegocio.nome" type="text" value="${usuario.parceiroNegocio.nome }" required>
 	      						<input class="span1" id="usuarioParceiroNegocioId" name="usuario.parceiroNegocio.parceiroNegocio_id" value="${usuario.parceiroNegocio.parceiroNegocio_id }" type="hidden">
 							</div>

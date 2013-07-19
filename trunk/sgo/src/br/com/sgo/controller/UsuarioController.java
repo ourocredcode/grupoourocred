@@ -91,6 +91,40 @@ public class UsuarioController {
 		result.redirectTo(this).cadastro();
 
 	}
+	
+	
+	@Get
+	@Path("/usuario/senha")
+	public void senha(){
+
+	}
+
+	@Post
+	@Path("/usuario/altera/senha")
+	public void senha(String cpf,String senha,String novasenha){
+
+		Usuario u = this.usuarioDao.find(cpf, senha);
+		String mensagem;
+
+		if (u == null) {
+
+			mensagem = "Erro: Usuário ou senha incorreto";
+
+		} else {
+
+			u = this.usuarioDao.load(u.getUsuario_id());
+
+			u.setSenha(novasenha);
+
+			usuarioDao.beginTransaction();
+			usuarioDao.atualiza(u);
+			usuarioDao.commit();
+
+			mensagem = "Senha alterada com sucesso";
+		}
+
+		result.include("notice",mensagem);
+	}
 
 	@Get 
 	@Path("/usuarios/busca.json")
