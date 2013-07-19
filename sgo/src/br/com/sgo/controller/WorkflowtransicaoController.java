@@ -11,8 +11,13 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.WorkflowDao;
+import br.com.sgo.dao.WorkflowEtapaPerfilAcessoDao;
 import br.com.sgo.dao.WorkflowTransicaoDao;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
+import br.com.sgo.modelo.WorkflowEtapaPerfilAcesso;
 import br.com.sgo.modelo.WorkflowTransicao;
 
 @Resource
@@ -21,13 +26,19 @@ public class WorkflowtransicaoController {
 	private final Result result;
 	
 	private final WorkflowTransicaoDao workflowTransicaoDao;
+	private final WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao;
 	private final WorkflowDao workflowDao;
 	private final EtapaDao etapaDao;
 	private final PerfilDao perfilDao;
 	private final UsuarioInfo usuarioInfo;
+	
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
 
-	public WorkflowtransicaoController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, WorkflowTransicaoDao workflowTransicaoDao, EtapaDao etapaDao, 
-			PerfilDao perfilDao) {
+	public WorkflowtransicaoController(Result result, UsuarioInfo usuarioInfo, WorkflowDao workflowDao, WorkflowTransicaoDao workflowTransicaoDao, 
+			WorkflowEtapaPerfilAcessoDao workflowEtapaPerfilAcessoDao, EtapaDao etapaDao, 
+			PerfilDao perfilDao, Empresa empresa, Organizacao organizacao, Usuario usuario) {
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -35,6 +46,10 @@ public class WorkflowtransicaoController {
 		this.workflowTransicaoDao = workflowTransicaoDao;
 		this.etapaDao = etapaDao;
 		this.perfilDao = perfilDao;
+		this.workflowEtapaPerfilAcessoDao = workflowEtapaPerfilAcessoDao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = usuarioInfo.getUsuario();
 
 	}
 
@@ -71,6 +86,33 @@ public class WorkflowtransicaoController {
 				this.workflowTransicaoDao.adiciona(workflowTransicao);
 				this.workflowTransicaoDao.commit();
 
+				WorkflowEtapaPerfilAcesso workflowetapaperfilAcesso = new WorkflowEtapaPerfilAcesso();
+
+				workflowetapaperfilAcesso.setEmpresa(empresa);
+				workflowetapaperfilAcesso.setOrganizacao(organizacao);
+				workflowetapaperfilAcesso.setWorkflow(workflowTransicao.getWorkflow());
+				workflowetapaperfilAcesso.setEtapa(workflowTransicao.getEtapa());
+				workflowetapaperfilAcesso.setPerfil(workflowTransicao.getPerfil());
+				workflowetapaperfilAcesso.setCreated(dataAtual);
+				workflowetapaperfilAcesso.setCreatedBy(usuario);
+				workflowetapaperfilAcesso.setIsActive(true);
+				workflowetapaperfilAcesso.setIsLeituraEscrita(true);
+				workflowetapaperfilAcesso.setIsUpload(false);
+
+				if(this.workflowEtapaPerfilAcessoDao.
+						buscaWorkflowEtapaPerfilAcessoPorEmpresaOrganizacaoWorkflowEtapaPerfil(
+									empresa.getEmpresa_id(), 
+									organizacao.getOrganizacao_id(), 
+									workflowetapaperfilAcesso.getWorkflow().getWorkflow_id(), 
+									workflowetapaperfilAcesso.getEtapa().getEtapa_id(), 
+									workflowetapaperfilAcesso.getPerfil().getPerfil_id()) == null) {
+
+
+					workflowEtapaPerfilAcessoDao.insert(workflowetapaperfilAcesso);
+
+
+				}
+
 				mensagem = "Etapa transição adicionado com sucesso.";				
 
 			} else {
@@ -80,6 +122,8 @@ public class WorkflowtransicaoController {
 			}
 
 		} catch (Exception e) {
+
+				System.out.println(e);
 
 				mensagem = "Erro: falha ao adicionar Workflow :";
 
