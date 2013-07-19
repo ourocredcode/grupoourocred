@@ -516,7 +516,19 @@ function openPopup(url) {
 						<span class="icon">
 							<i class="icon-align-justify"></i>									
 						</span>
+
 						<h5>Dados Cliente</h5>
+
+						<div class="buttons">
+							<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="post">
+								<input id="doc" name="doc" type="hidden" value="${formulario.parceiroNegocio.cpf }" />
+								<a href="#" class="btn btn-mini" onclick="submit();"><i class="icon-user"></i> Dados Cliente </a>
+							</form>
+						</div>
+						<div class="buttons">
+							<a href="<c:url value="/contrato/cliente/detalhamento/${formulario.parceiroBeneficio.numeroBeneficio }"/>" onclick="javascript:return openPopup(this.href);" class="btn btn-mini"><i class="icon-search"></i> Detalhamento </a>
+						</div>
+
 					</div>
 					<div class="widget-content padding">
 						<div class="row-fluid">
@@ -579,6 +591,63 @@ function openPopup(url) {
 			</div>
 		</div>
 	</div>
+	
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Hiscons</h5>
+					</div>
+					<div class="widget-content padding">
+							
+							<c:if test="${not empty hisconsBeneficio }">
+
+										<table class="table table-striped table-bordered">
+										<thead>
+											<tr>
+												<th>Imagem</th>
+												<th>Data solicitação</th>
+												<th>Data solicitação Adm</th>
+												<th>Consultor</th>
+												<th>Cliente</th>
+												<th>Cpf</th>
+												<th>Número Benefício</th>
+												<th>Status Atual</th>
+											</tr>
+										</thead>
+										<tbody>	
+											<c:forEach items="${hisconsBeneficio }" var="hiscon">
+												<tr>
+													<td>
+														<c:if test="${hiscon.isEnviado}">
+															<a href="<c:url value="/visualizaHiscon/${hiscon.hisconBeneficio_id}"/>"><img src='<c:url  value="/img/pdf.gif" />' border="0"/></a>
+														</c:if>
+													</td>
+													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
+													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>			
+													<td>${hiscon.usuario.nome }</td>									
+													<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
+													<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
+													<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>				
+													<td>${hiscon.etapa.nome }</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+
+							</c:if>
+
+					</div>
+				</div>						
+			</div>
+		</div>
+	</div>
+	
 
 	<div class="container-fluid">
 		<div class="row-fluid">

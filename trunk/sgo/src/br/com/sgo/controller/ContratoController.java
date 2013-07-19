@@ -20,6 +20,7 @@ import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleDao;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.FormularioDao;
+import br.com.sgo.dao.HisconBeneficioDao;
 import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.LogisticaDao;
@@ -30,6 +31,7 @@ import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PeriodoDao;
+import br.com.sgo.dao.PnDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoLogisticaDao;
@@ -81,6 +83,7 @@ public class ContratoController {
 	private final UsuarioDao usuarioDao;
 	private final HistoricoContratoDao historicoContratoDao;
 	private final HistoricoControleDao historicoControleDao;
+	private final HisconBeneficioDao hisconBeneficioDao;
 	private final ControleDao controleDao;
 	private final ConferenciaDao conferenciaDao;
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
@@ -88,6 +91,7 @@ public class ContratoController {
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 	private final MeioPagamentoDao meioPagamentoDao;	
+	private final PnDao pnDao;
 
 	private Contrato contrato;
 	private Empresa empresa;
@@ -120,7 +124,7 @@ public class ContratoController {
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
-			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao){		
+			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, PnDao pnDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -159,6 +163,8 @@ public class ContratoController {
 		this.tipoProcedimentoDao = tipoProcedimentoDao;
 		this.meioPagamentoDao = meioPagamentoDao;
 		this.usuarioDao = usuarioDao;
+		this.hisconBeneficioDao = hisconBeneficioDao;
+		this.pnDao = pnDao;
 
 	}
 
@@ -266,6 +272,7 @@ public class ContratoController {
 		result.include("historicoControleBoleto",historicoControleBoleto);
 		result.include("historicoControleAverbacao",historicoControleAverbacao);
 		result.include("organizacoes", this.organizacaoDao.buscaOrganizacoesByEmpresa(empresa.getEmpresa_id()));
+		result.include("hisconsBeneficio", this.hisconBeneficioDao.buscaHisconsBeneficioByParceiroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),parceiroBeneficio.getParceiroBeneficio_id()));
 		result.include("meiosPagamento",meiosPagamento);
 
 	}
@@ -660,6 +667,14 @@ public class ContratoController {
 
 		coeficientes.add(coeficienteDao.load(coeficienteId));
 		result.include("coeficientes",coeficientes);
+
+	}
+	
+	@Get
+	@Path("/contrato/cliente/detalhamento/{beneficio}")
+	public void detalhamento(String beneficio) {
+
+		result.include("detalhamento",this.pnDao.buscaDetalhamento(beneficio));
 
 	}
 
