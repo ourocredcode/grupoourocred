@@ -800,6 +800,36 @@ function openPopup(url) {
 			</div>
 		</div>
 	</div>
+	
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
+						<h5>Histórico</h5>
+					</div>
+					<div class="widget-content">
+					
+					<form id="contratoHistoricoForm" name="contratoHistoricoForm" action="<c:url value="/contrato/inclui/historico" />" method="post">
+
+						<input type="hidden" id="historicoContrato.contrato.contrato_id" name="historicoContrato.contrato.contrato_id" value="${contrato.contrato_id}" />
+
+						<textarea  style="width: 100%;" id="historicoContrato.observacao" name="historicoContrato.observacao" class="label_txt" rows="5" cols="120" maxlength="255"><c:out value="${historicoContrato.observacao}" /></textarea>
+
+						<button id="comunicacaoBtt" type="submit" class="btn" style="display: none;">Salvar</button>
+
+					</form>
+					
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>				
+
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">

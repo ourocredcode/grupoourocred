@@ -600,6 +600,26 @@ public class ContratoController {
 	}
 	
 	@Post
+	@Path("/contrato/inclui/historico")
+	public void incluihistorico(HistoricoContrato historicoContrato) {
+
+        historicoContrato.setEmpresa(empresa);
+        historicoContrato.setOrganizacao(organizacao);
+        historicoContrato.setPerfil(usuarioInfo.getPerfil());
+        historicoContrato.setCreatedBy(usuario);
+        historicoContrato.setIsActive(true);
+
+		historicoContrato.setCreated(GregorianCalendar.getInstance());
+
+		historicoContratoDao.beginTransaction();
+		historicoContratoDao.adiciona(historicoContrato);
+		historicoContratoDao.commit();
+
+		result.redirectTo(ContratoController.class).status(historicoContrato.getContrato().getContrato_id());
+
+	}
+	
+	@Post
  	@Path("/contrato/consultores")
 	public void consultores(Long supervisor_id) {
 
