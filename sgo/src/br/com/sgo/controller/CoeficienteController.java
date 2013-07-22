@@ -252,6 +252,14 @@ public class CoeficienteController {
 	}
 	
 	@Get
+	@Path("/coeficiente/coeficientes")
+	public void coeficientes(){
+
+		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesToMenuByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+
+	}
+	
+	@Get
 	public void listaAdd(Long tabelaId) {
 
 		coeficientes = coeficienteDao.buscaCoeficientesByTabela(tabelaId);

@@ -8,7 +8,22 @@
 			"bJQueryUI": true,
 			"sPaginationType": "full_numbers",
 			"sDom": '<""l>t<"F"fp>',
-			"bFilter": false
+			"bFilter": false,
+			"aoColumnDefs": [{
+				                "aTargets": [ 1 ],
+				                "bUseRendered": false,
+				                "fnRender": function ( o ) {
+				                    return  o.oSettings.fnFormatNumber( parseFloat( o.aData[ o.iDataColumn ] ) ) ;
+				                }
+				            },
+			                 {
+			                     "aTargets": [ 2,3,4 ],
+			                     "bUseRendered": false,
+			                     "fnRender": function ( o ) {
+			                         return 'R$ ' + o.oSettings.fnFormatNumber( parseFloat( o.aData[ o.iDataColumn ] ).toFixed(2) ).replace(',','.').replace(',','.').replace('..',',').replace(',.',',') ;
+			                     }
+			                 }
+			             ]
 		});
 
 		$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
@@ -29,9 +44,28 @@
 			});
 		});
 		
+		jQuery.fn.dataTableExt.oSort['formatted-num-asc'] = function(a,b) {
+			
+			/* Remove any formatting */
+			var x = a.match(/\d/) ? a.replace( /[^\d\-\.]/g, "" ) : 0;
+			var y = b.match(/\d/) ? b.replace( /[^\d\-\.]/g, "" ) : 0;
+
+			/* Parse and return */
+			return parseFloat(x) - parseFloat(y);
+			};
+
+		jQuery.fn.dataTableExt.oSort['formatted-num-desc'] = function(a,b) {
+			var x = a.match(/\d/) ? a.replace( /[^\d\-\.]/g, "" ) : 0;
+			var y = b.match(/\d/) ? b.replace( /[^\d\-\.]/g, "" ) : 0;
+
+			return parseFloat(y) - parseFloat(x);
+		};
+		
 		
 		
 	});
+	
+	
 
 	</script>
 
@@ -123,7 +157,7 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 		
-			<div class="span3">
+			<div class="span6">
 
 				<div class="widget-box">
 					<div class="widget-title">
@@ -134,7 +168,7 @@
 					</div>
 					<div class="widget-content">
 							
-							<h5>Status Final <fmt:formatDate value="${calInicio.time}" pattern="dd/MM" /> até <fmt:formatDate value="${calFim.time}" pattern="dd/MM" /></h5>
+							<h5>Status Aprovados e Recusados <fmt:formatDate value="${calInicio.time}" pattern="dd/MM" /> até <fmt:formatDate value="${calFim.time}" pattern="dd/MM" /></h5>
 							<table class="table table-bordered table-striped">
 							<thead>
 							  <tr>
@@ -161,38 +195,94 @@
 							</tbody>
 						  </table>
 
-							<h5>Status</h5>
-							<table class="table table-bordered table-striped">
+							<h5>Status Geral</h5>
+							<table class="table data-table">
 							<thead>
 							  <tr>
 								<th>Status</th>
 								<th>Quantidade</th>
+								<th>Contrato</th>
+								<th>C. Líquido</th>
+								<th>Meta</th>
 							  </tr>
 							</thead>
 							<tbody>
 								<c:forEach items="#{mapEtapas }" var="map">
-									<tr>
-										<c:choose>
-											<c:when test="${map.key == 'Aguardando Status' }"><td>${map.key }</td></c:when>
-											<c:when test="${map.key == 'Pendente Administrativo' }"><td>${map.key }</td></c:when>
-											<c:when test="${map.key == 'Pendente Agendamento' }"><td>${map.key }</td></c:when>
-											<c:when test="${map.key == 'Pendente Banco' }"><td>${map.key }</td></c:when>
-											<c:when test="${map.key == 'Pendente Coeficiente' }"><td>${map.key }</td></c:when>
-											<c:when test="${map.key == 'Pendente Conferência' }"><td>${map.key }</td></c:when>
-											<c:when test="${map.key == 'Recalcular' }"><td>${map.key }</td></c:when>
-											<c:otherwise><td>${map.key }</td></c:otherwise>
-										</c:choose>
-										<c:choose>
-											<c:when test="${map.key == 'Aguardando Status' }"><td><span class="badge">${map.value }</span></td></c:when>
-											<c:when test="${map.key == 'Pendente Administrativo' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
-											<c:when test="${map.key == 'Pendente Agendamento' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
-											<c:when test="${map.key == 'Pendente Banco' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
-											<c:when test="${map.key == 'Pendente Coeficiente' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
-											<c:when test="${map.key == 'Pendente Conferência' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
-											<c:when test="${map.key == 'Recalcular' }"><td><span class="badge badge-important">${map.value }</span></td></c:when>
-											<c:otherwise><td><span class="badge badge-info">${map.value }</span></td></c:otherwise>
-										</c:choose>
-									</tr>
+									
+									<c:choose>
+										<c:when test="${map.key == 'Aguardando Status' }">
+												<tr class="info">
+													<td>${map.key }</td>
+													<td>${map.value[0] }</td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+												</tr>
+										</c:when>
+										<c:when test="${map.key == 'Pendente Administrativo' }">
+												<tr class="error">
+													<td>${map.key }</td>
+													<td>${map.value[0] }</td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+												</tr>
+										</c:when>
+										<c:when test="${map.key == 'Pendente Agendamento' }">
+												<tr class="error">
+													<td>${map.key }</td>
+													<td>${map.value[0] }</td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+												</tr>
+										</c:when>
+										<c:when test="${map.key == 'Pendente Banco' }">
+												<tr class="error">
+													<td>${map.key }</td>
+													<td>${map.value[0] }</td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+												</tr>
+										</c:when>
+										<c:when test="${map.key == 'Pendente Coeficiente' }">
+												<tr class="error">
+													<td>${map.key }</td>
+													<td>${map.value[0] }</td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+												</tr>
+										</c:when>
+										<c:when test="${map.key == 'Pendente Conferência' }">
+												<tr class="error">
+													<td>${map.key }</td>
+													<td>${map.value[0] }</td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+												</tr>
+										</c:when>
+										<c:when test="${map.key == 'Recalcular' }">
+												<tr class="error">
+													<td>${map.key }</td>
+													<td>${map.value[0] }</td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+												</tr>
+										</c:when>
+										<c:otherwise>
+												<tr class="info">
+													<td>${map.key }</td>
+													<td>${map.value[0] }</td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+												</tr>
+										</c:otherwise>
+									</c:choose>
 								
 								</c:forEach>
 							</tbody>
@@ -201,46 +291,6 @@
 					</div>
 				</div>
 			</div>
-				
-			
-			<div class="span4">
-
-				<div class="widget-box">
-					<div class="widget-title">
-						<span class="icon"><i class="icon-signal"></i> </span>
-						<h5>Coeficientes</h5>
-					</div>
-					<div class="widget-content">
-
-							<h5>Coeficientes</h5>
-							<table class="table table-bordered table-striped table-hover data-table" >
-							<thead>
-							  <tr>
-								<th>Data</th>
-								<th>Banco</th>
-								<th>Tabela</th>
-								<th>Valor</th>
-								<th>Meta</th>
-							  </tr>
-							</thead>
-							<tbody>
-								<c:forEach var="coeficiente" items="${coeficientes }">
-									<tr>
-										<td><fmt:formatDate value="${coeficiente.created.time}" pattern="dd/MM/yyyy" /></td>
-										<td>${coeficiente.banco.nome }</td>
-										<td>${coeficiente.tabela.nome }</td>
-										<td><fmt:formatNumber value="${coeficiente.valor}" pattern="0.00000" /></td>
-										<td><fmt:formatNumber value="${coeficiente.percentualMeta}" pattern="0%" /></td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						  </table>
-
-					</div>
-				</div>
-			</div>	
-
-			
 
 			<div class="span4">
 			

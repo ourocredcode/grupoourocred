@@ -144,7 +144,6 @@ public class MenuController {
 			result.include("mapEtapasFinal", this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, c1, c2));
 		}
 
-		result.include("coeficientes", this.coeficienteDao.buscaCoeficientesToMenuByEmpOrg(empresa_id, organizacao_id));
 		result.include("calInicio", c1);
 		result.include("calFim", c2);
 
@@ -429,7 +428,8 @@ public class MenuController {
 	@Post
 	@Path("/menu/busca/controle")
 	public void busca(String tipoBusca,String data, String dataFim,String previsaoInicio,String previsaoFim, String chegadaInicio,String chegadaFim,String vencimentoInicio,
-							String vencimentoFim, String proximaAtuacaoInicio,String proximaAtuacaoFim , String procedimento ,Collection<String> bancos, 
+							String vencimentoFim, String proximaAtuacaoInicio,String proximaAtuacaoFim , String quitacaoInicio,String quitacaoFim , String assinaturaInicio,String assinaturaFim ,
+							String procedimento ,Collection<String> bancos, 
 							Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Long consultor,String cliente, String documento,
 							String empresa) {
 
@@ -443,6 +443,10 @@ public class MenuController {
 		Calendar calVencimentoFim = new GregorianCalendar();
 		Calendar calProximaAtuacaoInicio = new GregorianCalendar();
 		Calendar calProximaAtuacaoFim = new GregorianCalendar();
+		Calendar calQuitacaoInicio = new GregorianCalendar();
+		Calendar calQuitacaoFim = new GregorianCalendar();
+		Calendar calAssinaturaInicio = new GregorianCalendar();
+		Calendar calAssinaturaFim = new GregorianCalendar();
 		Collection<String> empresas = new ArrayList<String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 
@@ -535,6 +539,42 @@ public class MenuController {
 				if(tipoBusca.equals("averbacao"))			
 					result.include("buscaDtAverbacaoProximaAtuacao",true);
 			}
+			
+			if(quitacaoFim.equals(""))
+				quitacaoFim = quitacaoInicio;
+	
+			if(quitacaoInicio.equals("")) {
+				calQuitacaoInicio = null;
+				calQuitacaoFim = null;
+			} else {
+				calQuitacaoInicio.setTime(sdf.parse(quitacaoInicio));
+				calQuitacaoFim.setTime(sdf.parse(quitacaoFim));
+				
+				isDataNUll = false;
+				
+				if(tipoBusca.equals("boleto"))
+					result.include("buscaDtBoletoProximaAtuacao",true);
+				if(tipoBusca.equals("averbacao"))			
+					result.include("buscaDtAverbacaoProximaAtuacao",true);
+			}
+			
+			if(assinaturaFim.equals(""))
+				assinaturaFim = assinaturaInicio;
+	
+			if(assinaturaInicio.equals("")) {
+				calAssinaturaInicio = null;
+				calAssinaturaFim = null;
+			} else {
+				calAssinaturaInicio.setTime(sdf.parse(assinaturaInicio));
+				calAssinaturaFim.setTime(sdf.parse(assinaturaFim));
+				
+				isDataNUll = false;
+				
+				if(tipoBusca.equals("boleto"))
+					result.include("buscaDtBoletoProximaAtuacao",true);
+				if(tipoBusca.equals("averbacao"))			
+					result.include("buscaDtAverbacaoProximaAtuacao",true);
+			}
 	
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -587,7 +627,8 @@ public class MenuController {
 		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoControle,
 				calInicio, calFim, calPrevisaoInicio, 
 				calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
-				calProximaAtuacaoInicio,calProximaAtuacaoFim,procedimento,bancos,produtos,bancosComprados,status,consultoresAux,
+				calProximaAtuacaoInicio,calProximaAtuacaoFim,calQuitacaoInicio,calQuitacaoFim,calAssinaturaInicio,calAssinaturaFim, 
+				procedimento,bancos,produtos,bancosComprados,status,consultoresAux,
 				cliente,documento,empresas));
 
 		contador();
