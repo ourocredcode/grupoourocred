@@ -12,7 +12,8 @@
 		$("#busca_DataRecusadoFim").mask("99/99/9999");
 		$("#busca_DataConcluidoInicio").mask("99/99/9999");
 		$("#busca_DataConcluidoFim").mask("99/99/9999");
-		
+
+
 		//BOLETOS e AVERBACAO
 		$("#busca_DataPrevisaoInicio").mask("99/99/9999");
 		$("#busca_DataPrevisaoFim").mask("99/99/9999");
@@ -23,6 +24,11 @@
 		$("#busca_DataChegadaFim").mask("99/99/9999");
 		$("#busca_DataVencimentoInicio").mask("99/99/9999");
 		$("#busca_DataVencimentoFim").mask("99/99/9999");
+		
+		$("#busca_DataQuitacaoInicio").mask("99/99/9999");
+		$("#busca_DataQuitacaoFim").mask("99/99/9999");
+		$("#busca_DataAssinaturaInicio").mask("99/99/9999");
+		$("#busca_DataAssinaturaFim").mask("99/99/9999");
 
 			var cliente = $("#busca_Cliente").val();
 			var documento = $("#busca_Documento").val();
@@ -42,6 +48,10 @@
 			var vencimentoFim = $("#busca_DataVencimentoFim").val();
 			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
 			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
+			var quitacaoInicio = $("#busca_DataQuitacaoInicio").val();
+			var quitacaoFim = $("#busca_DataQuitacaoFim").val();
+			var assinaturaInicio = $("#busca_DataAssinaturaInicio").val();
+			var assinaturaFim = $("#busca_DataAssinaturaFim").val();
 			
 			if(dataAprovadoInicio == undefined || dataAprovadoInicio == '__/__/____')
 				dataAprovadoInicio = "";
@@ -71,9 +81,17 @@
 				proximaAtuacaoInicio = "";
 			if(proximaAtuacaoFim == undefined || proximaAtuacaoFim == '__/__/____')
 				proximaAtuacaoFim = "";
+			if(quitacaoInicio == undefined || quitacaoInicio == '__/__/____')
+				quitacaoInicio = "";
+			if(quitacaoFim == undefined || quitacaoFim == '__/__/____')
+				quitacaoFim = "";
+			if(assinaturaInicio == undefined || assinaturaInicio == '__/__/____')
+				assinaturaInicio = "";
+			if(assinaturaFim == undefined || assinaturaFim == '__/__/____')
+				assinaturaFim = "";
 			
 			if(previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
-				|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != ''){
+				|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || quitacaoInicio != '' || quitacaoFim != '' || assinaturaInicio != '' || assinaturaFim != ''){
 				$(buscaDatasControle);
 			} else if (data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
 				  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ) {
@@ -126,6 +144,18 @@
 			dateFormat: 'dd/mm/yy'
 		});
 		$('#busca_DataVencimentoFim').datepicker({
+			dateFormat: 'dd/mm/yy'
+		});	
+		$('#busca_DataQuitacaoInicio').datepicker({
+			dateFormat: 'dd/mm/yy'
+		});
+		$('#busca_DataQuitacaoFim').datepicker({
+			dateFormat: 'dd/mm/yy'
+		});	
+		$('#busca_DataAssinaturaInicio').datepicker({
+			dateFormat: 'dd/mm/yy'
+		});
+		$('#busca_DataAssinaturaFim').datepicker({
 			dateFormat: 'dd/mm/yy'
 		});	
 
@@ -300,6 +330,10 @@
 			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
 			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
 			var procedimento = $("#busca_Procedimento").val();
+			var quitacaoInicio = $("#busca_DataQuitacaoInicio").val();
+			var quitacaoFim = $("#busca_DataQuitacaoFim").val();
+			var assinaturaInicio = $("#busca_DataAssinaturaInicio").val();
+			var assinaturaFim = $("#busca_DataAssinaturaFim").val();
 
 			var tipoBusca = $("#busca_Tipo").val();
 			
@@ -339,11 +373,12 @@
 			}
 
 			if(data != '' || dataFim != '' || previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
-					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || procedimento != ''){
+					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || quitacaoInicio != '' || quitacaoFim != '' || procedimento != ''){
 				$("#resultado").load('<c:url value="/menu/busca/controle" />',{'tipoBusca': tipoBusca,'data' : data, 'dataFim' : dataFim,
 										'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
 										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
-										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'procedimento': procedimento,'bancos': bancos, 
+										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'quitacaoInicio': quitacaoInicio,'quitacaoFim': quitacaoFim,
+										'assinaturaInicio': assinaturaInicio,'assinaturaFim': assinaturaFim,'procedimento': procedimento,'bancos': bancos, 
 										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa});
 
 			} else {
@@ -563,6 +598,34 @@
 								<label class="control-label">Venc. Fim</label>
 								<div class="controls">
 									<input id="busca_DataVencimentoFim" name="busca_DataVencimentoFim" type="text" class="input-small"/>
+								</div>
+							</div>
+						</div>
+						<div class="span2">
+							<div class="control-group">
+								<label class="control-label">Quitação Início</label>
+								<div class="controls">
+									<input id="busca_DataQuitacaoInicio" name="busca_DataQuitacaoInicio" type="text" class="input-small"/>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Assinatura Início</label>
+								<div class="controls">
+									<input id="busca_DataAssinaturaInicio" name="busca_DataAssinaturaInicio" type="text" class="input-small"/>
+								</div>
+							</div>
+						</div>
+						<div class="span2">
+							<div class="control-group">
+								<label class="control-label">Quitação Fim</label>
+								<div class="controls">
+									<input id="busca_DataQuitacaoFim" name="busca_DataQuitacaoFim" type="text" class="input-small"/>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Assinatura Fim</label>
+								<div class="controls">
+									<input id="busca_DataAssinaturaFim" name="busca_DataAssinaturaFim" type="text" class="input-small"/>
 								</div>
 							</div>
 						</div>

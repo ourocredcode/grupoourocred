@@ -628,7 +628,9 @@ public class ContratoDao extends Dao<Contrato> {
 	
 	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,TipoControle tipoControle,Calendar calInicio,Calendar calFim,
 			Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
-			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,String procedimento,
+			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,
+			Calendar quitacaoInicio,Calendar quitacaoFim,Calendar assinaturaInicio,Calendar assinaturaFim,
+			String procedimento,
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status, Collection<Usuario> consultores,String cliente,
 			String documento,Collection<String> empresas) {
 
@@ -664,7 +666,7 @@ public class ContratoDao extends Dao<Contrato> {
 				" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) "+
 				" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) "+
 				" INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id) "+
-				" LEFT JOIN SEGURO (NOLOCK) ON CONTRATO.seguro_id = SEGURO.seguro_id) "+
+				" LEFT JOIN LOGISTICA (NOLOCK) ON CONTRATO.contrato_id = LOGISTICA.contrato_id) "+
 				" LEFT JOIN NATUREZAPROFISSIONAL (NOLOCK) ON CONTRATO.naturezaprofissional_id = NATUREZAPROFISSIONAL.naturezaprofissional_id) "+
 				" LEFT JOIN TIPOSAQUE (NOLOCK) ON CONTRATO.tiposaque_id = TIPOSAQUE.tiposaque_id) "+
 				" LEFT JOIN BANCO (NOLOCK) AS BANCO_1 ON CONTRATO.recompra_banco_id = BANCO_1.banco_id) "+
@@ -780,6 +782,12 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		if(calInicio != null)
 			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
+		
+		if(quitacaoInicio != null)
+			sql += " AND (CONTRATO.dataquitacao BETWEEN ? AND ? )";
+		
+		if(assinaturaInicio != null)
+			sql += " AND (LOGISTICA.dataassinatura BETWEEN ? AND ? )";
 
 		this.conn = this.conexao.getConexao();
 
@@ -914,6 +922,26 @@ public class ContratoDao extends Dao<Contrato> {
 				curr++;
 
 			} 
+			
+			if(quitacaoInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(quitacaoInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(quitacaoFim).getTimeInMillis()));
+				curr++;
+
+			} 
+			
+			if(assinaturaInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(assinaturaInicio.getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(assinaturaFim).getTimeInMillis()));
+				curr++;
+
+			} 
 
 			this.rsContrato = this.stmt.executeQuery();
 
@@ -934,12 +962,17 @@ public class ContratoDao extends Dao<Contrato> {
 
 	}
 	
-	public HashMap<String,Integer> buscaContratosToCountEtapas(Long empresa_id , Long organizacao_id, Long usuario_id) {
+	public HashMap<String,Double[]> buscaContratosToCountEtapas(Long empresa_id , Long organizacao_id, Long usuario_id) {
 
-		String sql = "SELECT ETAPA.nome as etapa_nome, COUNT(ETAPA.nome) as etapaCount " +
-					" FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
-					" INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
-					" INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id ";
+		String sql = " SELECT " +
+				"		 ETAPA.nome as etapa_nome, " +
+				"		 COUNT(ETAPA.nome) as etapaCount, " +
+				"		 SUM(CONTRATO.valormeta) as metaCount, " +
+				"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
+				" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
+				" FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
+				" INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
+				" INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id ";
 
 			sql += " WHERE CONTRATO.empresa_id = ? ";
 
@@ -949,26 +982,24 @@ public class ContratoDao extends Dao<Contrato> {
 		if(usuario_id != null)
 			sql += " AND (CONTRATO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 
-		
-		sql +=  " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome ";
+		sql +=  " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome ORDER BY ETAPA.nome ASC ";
 
 		this.conn = this.conexao.getConexao();
-		
 
-		HashMap<String,Integer> map = new HashMap<String,Integer>();
+		HashMap<String,Double[]> map = new HashMap<String,Double[]>();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			
+
 			if(usuario_id != null){
 
 				this.stmt.setLong(3, usuario_id);
 				this.stmt.setLong(4, usuario_id);
-				
+
 			}
 
 			this.rsContrato = this.stmt.executeQuery();
@@ -976,17 +1007,30 @@ public class ContratoDao extends Dao<Contrato> {
 			while (rsContrato.next()) {
 
 				String etapa_nome = rsContrato.getString("etapa_nome");
-				Integer etapaCount = rsContrato.getInt("etapaCount");
+				Double etapaCount = rsContrato.getDouble("etapaCount");
+				Double contratoCount = rsContrato.getDouble("contratoCount");
+				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
+				Double metaCount = rsContrato.getDouble("metaCount");
 
-				map.put(etapa_nome,etapaCount);
+				Double[] values = new Double[4];
+
+				values[0] = etapaCount;
+				values[1] = contratoCount;
+				values[2] = contLiquidoCount;
+				values[3] = metaCount;
+
+				map.put(etapa_nome,values);
 
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		this.conexao.closeConnection(rsContrato, stmt, conn);
+
 		return map;
+
 	}
 	
 	public HashMap<String,Double> buscaContratosToCountEtapasStatusFinal(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
