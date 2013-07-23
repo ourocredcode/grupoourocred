@@ -1085,10 +1085,16 @@ public class ContratoDao extends Dao<Contrato> {
 
 	}
 	
-	public HashMap<String,Double> buscaContratosToCountEtapasStatusFinal(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
+	public HashMap<String,Object[]> buscaContratosToCountEtapasStatusFinal(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
 
-		String sql = " SELECT ETAPA.nome as etapa_nome, SUM(CONTRATO.valormeta) as metaCount " +
-					" FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
+		String sql = " SELECT " +
+					"		 ETAPA.nome as etapa_nome," +
+					"		 ETAPA.etapa_id , " +
+					"		 COUNT(ETAPA.nome) as etapaCount, " +
+					"		 SUM(CONTRATO.valormeta) as metaCount, " +
+					"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
+					" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
+					" FROM (( CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
 					" INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
 					" INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
 					" INNER JOIN FORMULARIO ON FORMULARIO.formulario_id = CONTRATO.formulario_id ";
@@ -1104,12 +1110,12 @@ public class ContratoDao extends Dao<Contrato> {
 		if(calInicio != null)
 			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
 		
-		sql +=  " AND ( ETAPA.NOME in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome ";
+		sql +=  " AND ( ETAPA.NOME in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome, ETAPA.etapa_id ";
 
 		this.conn = this.conexao.getConexao();
 		
 
-		HashMap<String,Double> map = new HashMap<String,Double>();
+		HashMap<String,Object[]> map = new HashMap<String,Object[]>();
 
 		try {
 
@@ -1140,12 +1146,21 @@ public class ContratoDao extends Dao<Contrato> {
 			while (rsContrato.next()) {
 
 				String etapa_nome = rsContrato.getString("etapa_nome");
-				Double etapaCount = rsContrato.getDouble("metaCount");
-				
-				//System.out.println(etapa_nome);
-				//System.out.println(etapaCount);
+				Long etapa_id = rsContrato.getLong("etapa_id");
+				Double etapaCount = rsContrato.getDouble("etapaCount");
+				Double contratoCount = rsContrato.getDouble("contratoCount");
+				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
+				Double metaCount = rsContrato.getDouble("metaCount");
 
-				map.put(etapa_nome,etapaCount);
+				Object[] values = new Object[5];
+
+				values[0] = etapa_id;
+				values[1] = etapaCount;
+				values[2] = contratoCount;
+				values[3] = contLiquidoCount;
+				values[4] = metaCount;
+
+				map.put(etapa_nome,values);
 
 			}
 
