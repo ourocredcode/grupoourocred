@@ -11,6 +11,7 @@ import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.FuncionarioDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.OrganizacaoInfoDao;
+import br.com.sgo.dao.TipoOrganizacaoDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
@@ -26,18 +27,21 @@ public class OrganizacaoController {
 	private final FuncionarioDao funcionarioDao;
 	private final OrganizacaoDao organizacaoDao;
 	private final OrganizacaoInfoDao organizacaoInfoDao;
+	private final TipoOrganizacaoDao tipoOrganizacaoDao;
 
 	private Organizacao organizacao;
 	private UsuarioInfo usuarioInfo;
 	private Empresa empresa;	
 	private Usuario usuario;
 	
-	public OrganizacaoController(Result result, UsuarioInfo usuarioInfo, Empresa empresa, OrganizacaoDao organizacaoDao, Organizacao organizacao, OrganizacaoInfoDao organizacaoInfoDao, Usuario usuario, FuncionarioDao funcionarioDao){
+	public OrganizacaoController(Result result, UsuarioInfo usuarioInfo, Empresa empresa, OrganizacaoDao organizacaoDao, Organizacao organizacao,
+			TipoOrganizacaoDao tipoOrganizacaoDao, OrganizacaoInfoDao organizacaoInfoDao, Usuario usuario, FuncionarioDao funcionarioDao){
 
 		this.result = result;
 		this.funcionarioDao = funcionarioDao;		
 		this.organizacaoDao = organizacaoDao;
 		this.organizacaoInfoDao = organizacaoInfoDao;
+		this.tipoOrganizacaoDao = tipoOrganizacaoDao;
 		this.usuarioInfo = usuarioInfo;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
@@ -52,6 +56,7 @@ public class OrganizacaoController {
 
 		result.include("organizacoes", this.organizacaoDao.buscaAllOrganizacaoByEmp(empresa.getEmpresa_id()));
 		result.include("funcionarios", this.funcionarioDao.buscaFuncionarioToFillCombosByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("tiposOrganizacao", this.tipoOrganizacaoDao.buscaTipoOrganizacaoToFillCombosByEmpOrg(1l, 1l));
 
 	}
 
@@ -83,18 +88,13 @@ public class OrganizacaoController {
 				this.organizacaoDao.commit();
 
 					OrganizacaoInfo oi = new OrganizacaoInfo();
-	
+					System.out.println(organizacaoInfo.getOrganizacaoPai());
 					oi.setEmpresa(organizacao.getEmpresa());
 					oi.setOrganizacao_id(organizacao.getOrganizacao_id());
-					
-					//f.setOperacao(funcionario.getOperacao().getOperacao_id() == null ? null : funcionario.getOperacao());
 					oi.setTipoOrganizacao(organizacaoInfo.getTipoOrganizacao().getTipoOrganizacao_id()== null ? null : organizacaoInfo.getTipoOrganizacao());
-					
-					//oi.setTipoOrganizacao(organizacaoInfo.getTipoOrganizacao());
 					oi.setLocalidade(organizacaoInfo.getLocalidade());
 					oi.setCalendario(organizacaoInfo.getCalendario());
 					oi.setOrganizacaoPai(organizacaoInfo.getOrganizacaoPai());
-					System.out.println("organizacaoInfo.getSupervisorOrganizacao()" + organizacaoInfo.getSupervisorOrganizacao());
 					oi.setSupervisorOrganizacao(organizacaoInfo.getSupervisorOrganizacao());
 					oi.setChave(organizacao.getNome());
 					oi.setNome(organizacao.getNome());

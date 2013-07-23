@@ -170,14 +170,14 @@ $(function() {
 											<label for="tipoOrganizacaoId">Tipo de Organização</label>
 											<select  id="tipoOrganizacaoId" name="organizacaoInfo.tipoOrganizacao.tipoOrganizacao_id" class="input-medium">
 												<option value="">Selecione o Tipo organização</option>
-												<c:forEach items="${tipoOrganizacoes }" var="tipoOrganizacao">
-													<option value="${tipoorganizacao.tipoOrganizacao_id }"> ${tipoOrganizacao.nome }</option>
+												<c:forEach items="${tiposOrganizacao }" var="tipoOrganizacao">
+													<option value="${tipoOrganizacao.tipoOrganizacao_id }"> ${tipoOrganizacao.nome }</option>
 												</c:forEach>
 											</select>
 										</div>
 										<div class="span2">
 											<label for="organizacaoPaiId">Organização Pai</label>
-											<select  id="organizacaoPaiId" name="organizacaoInfo.organizacao.organizacaoPai_id" class="input-medium">
+											<select  id="organizacaoPaiId" name="organizacaoInfo.organizacaoPai.organizacao_id" class="input-medium">
 												<option value="">Selecione a organização</option>
 												<c:forEach items="${organizacoes }" var="organizacao">
 													<option value="${organizacao.organizacao_id }"> ${organizacao.nome }</option>
