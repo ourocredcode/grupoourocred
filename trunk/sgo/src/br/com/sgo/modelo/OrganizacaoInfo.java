@@ -5,8 +5,6 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,8 +20,7 @@ public class OrganizacaoInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "organizacao_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "organizacao_id")	
 	private Long organizacao_id;
 
 	@ManyToOne
@@ -43,12 +40,12 @@ public class OrganizacaoInfo implements Serializable {
 	private Calendario calendario;
 
 	@ManyToOne
-	@JoinColumn(name = "pai_org_id", updatable = true, nullable = false)
-	private Organizacao paiOrg;
+	@JoinColumn(name = "organizacaopai_id", updatable = true, nullable = false)
+	private Organizacao organizacaoPai;
 
 	@ManyToOne
-	@JoinColumn(name = "supervisor_user_id", updatable = true, nullable = false)
-	private Usuario supervisorUser;
+	@JoinColumn(name = "supervisor_organizacao_id", updatable = true, nullable = false)
+	private Funcionario supervisorOrganizacao;
 
 	@ManyToOne
 	@JoinColumn(name = "logo_imagem_id", updatable = true, nullable = false)
@@ -62,11 +59,20 @@ public class OrganizacaoInfo implements Serializable {
 	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
 	private Usuario updatedBy;
 
+	@Column(name = "dddfone1")
+	private String dddFone1;
+
 	@Column(name = "telefone1")
 	private String telefone1;
 
+	@Column(name = "dddfone2")
+	private String dddFone2;
+
 	@Column(name = "telefone2")
 	private String telefone2;
+	
+	@Column(name = "dddfax")
+	private String dddFax;
 
 	@Column(name = "fax")
 	private String fax;
@@ -144,20 +150,20 @@ public class OrganizacaoInfo implements Serializable {
 		this.calendario = calendario;
 	}
 
-	public Organizacao getPaiOrg() {
-		return paiOrg;
+	public Organizacao getOrganizacaoPai() {
+		return organizacaoPai;
 	}
 
-	public void setPaiOrg(Organizacao paiOrg) {
-		this.paiOrg = paiOrg;
+	public void setOrganizacaoPai(Organizacao organizacaoPai) {
+		this.organizacaoPai = organizacaoPai;
 	}
 
-	public Usuario getSupervisorUser() {
-		return supervisorUser;
+	public Funcionario getSupervisorOrganizacao() {
+		return supervisorOrganizacao;
 	}
 
-	public void setSupervisorUser(Usuario supervisorUser) {
-		this.supervisorUser = supervisorUser;
+	public void setSupervisorOrganizacao(Funcionario supervisorOrganizacao) {
+		this.supervisorOrganizacao = supervisorOrganizacao;
 	}
 
 	public Imagem getLogoImagem() {
@@ -168,20 +174,28 @@ public class OrganizacaoInfo implements Serializable {
 		this.logoImagem = logoImagem;
 	}
 
-	public String getNome() {
-		return nome;
+	public Usuario getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setCreatedBy(Usuario createdBy) {
+		this.createdBy = createdBy;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public Usuario getUpdatedBy() {
+		return updatedBy;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setUpdatedBy(Usuario updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public String getDddFone1() {
+		return dddFone1;
+	}
+
+	public void setDddFone1(String dddFone1) {
+		this.dddFone1 = dddFone1;
 	}
 
 	public String getTelefone1() {
@@ -192,12 +206,28 @@ public class OrganizacaoInfo implements Serializable {
 		this.telefone1 = telefone1;
 	}
 
+	public String getDddFone2() {
+		return dddFone2;
+	}
+
+	public void setDddFone2(String dddFone2) {
+		this.dddFone2 = dddFone2;
+	}
+
 	public String getTelefone2() {
 		return telefone2;
 	}
 
 	public void setTelefone2(String telefone2) {
 		this.telefone2 = telefone2;
+	}
+
+	public String getDddFax() {
+		return dddFax;
+	}
+
+	public void setDddFax(String dddFax) {
+		this.dddFax = dddFax;
 	}
 
 	public String getFax() {
@@ -248,22 +278,6 @@ public class OrganizacaoInfo implements Serializable {
 		this.nomeFantasia = nomeFantasia;
 	}
 
-	public Usuario getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Usuario createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Usuario getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(Usuario updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
 	public Calendar getCreated() {
 		return created;
 	}
@@ -286,6 +300,22 @@ public class OrganizacaoInfo implements Serializable {
 
 	public void setChave(String chave) {
 		this.chave = chave;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public Boolean getIsActive() {

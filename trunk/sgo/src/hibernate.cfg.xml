@@ -29,6 +29,9 @@
 		<!-- SGO -->
 		<mapping class="br.com.sgo.modelo.Empresa" />
 		<mapping class="br.com.sgo.modelo.Organizacao" />
+		<mapping class="br.com.sgo.modelo.OrganizacaoInfo" />
+		<mapping class="br.com.sgo.modelo.TipoOrganizacao" />
+		<mapping class="br.com.sgo.modelo.Imagem" />
 		<mapping class="br.com.sgo.modelo.Banco" />
 		<mapping class="br.com.sgo.modelo.BancoProduto" />
 		<mapping class="br.com.sgo.modelo.BancoProdutoTabela" />

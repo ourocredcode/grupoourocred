@@ -25,7 +25,10 @@ public class FuncionarioDao extends Dao<Funcionario> {
 	private Connection conn;
 	private ResultSet rsFuncionario;
 	
-	private String sqlFuncionario =  " SELECT FUNCIONARIO.empresa_id,  EMPRESA.nome, FUNCIONARIO.organizacao_id, ORGANIZACAO.nome, PARCEIRONEGOCIO.parceironegocio_id,  " +
+	private String sqlFuncionario = "SELECT FUNCIONARIO.funcionario_id, FUNCIONARIO.empresa_id, FUNCIONARIO.organizacao_id, FUNCIONARIO.funcao_id, FUNCIONARIO.departamento_id " +
+			", FUNCIONARIO.parceironegocio_id, FUNCIONARIO.nome, FUNCIONARIO.isactive FROM FUNCIONARIO (NOLOCK) "; 
+			
+	private String sqlFuncionarios =  " SELECT FUNCIONARIO.empresa_id,  EMPRESA.nome, FUNCIONARIO.organizacao_id, ORGANIZACAO.nome, PARCEIRONEGOCIO.parceironegocio_id,  " +
 			"	PARCEIRONEGOCIO.cpf, FUNCIONARIO.apelido, " +
 			"   PARCEIRONEGOCIO.nome as parceironegocio_nome, FUNCIONARIO.funcao_id, FUNCAO.nome as funcao_nome, FUNCIONARIO.departamento_id, FUNCIONARIO.funcionario_id, " +
 			"	DEPARTAMENTO.nome as departamento_nome, FUNCIONARIO.supervisor_funcionario_id, SUPER.nome as supervisor_nome FROM  " +
@@ -46,7 +49,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 	
 	public Collection<Funcionario> buscaFuncionariosByEmpOrg(Long empresa_id, Long organizacao_id) {
 
-		String sql = sqlFuncionario;
+		String sql = sqlFuncionarios;
 
 		sql += " WHERE PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? ORDER BY SUPER.nome, FUNCIONARIO.nome  " ;
 
@@ -57,6 +60,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 
@@ -105,9 +109,52 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 	}
 
-	public Funcionario buscaFuncionarioPorParceiroNegocio(Long parceironegocio_id) {
+	public Collection<Funcionario> buscaFuncionarioToFillCombosByEmpOrg(Long empresa_id, Long organizacao_id) {
 
 		String sql = sqlFuncionario;
+
+		if (empresa_id != null)
+			sql += " WHERE FUNCIONARIO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND FUNCIONARIO.organizacao_id = ? AND FUNCIONARIO.isactive = 1";
+
+		this.conn = this.conexao.getConexao();
+		
+		Collection<Funcionario> funcionarios = new ArrayList<Funcionario>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
+			this.rsFuncionario = this.stmt.executeQuery();
+
+			while (rsFuncionario.next()) {
+
+				Funcionario funcionario = new Funcionario();
+
+				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
+				funcionario.setNome(rsFuncionario.getString("nome"));
+
+				funcionarios.add(funcionario);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsFuncionario, stmt, conn);
+		return funcionarios;
+	}
+
+	public Funcionario buscaFuncionarioPorParceiroNegocio(Long parceironegocio_id) {
+
+		String sql = sqlFuncionarios;
 
 		sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ?  " ;
 
@@ -162,7 +209,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 	public Collection<Funcionario> buscaFuncionariosBySupervisor(Long empresa_id , Long organizacao_id, Long supervisor_id) {
 
-		String sql = sqlFuncionario;
+		String sql = sqlFuncionarios;
 
 		sql += " WHERE EMPRESA.empresa_id = ? AND ORGANIZACAO.organizacao_id = ? AND USUARIO.supervisor_usuario_id = ? " ;
 
@@ -214,7 +261,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 	
 	public Collection<Funcionario> buscaFuncionariosByPerfil(Long empresa_id, Long organizacao_id, String perfil) {
 
-		String sql = sqlFuncionario;
+		String sql = sqlFuncionarios;
 
 		sql += " WHERE USUARIO.empresa_id = ?  AND USUARIO.organizacao_id = ?  AND PERFIL.nome like  ? " ;
 
