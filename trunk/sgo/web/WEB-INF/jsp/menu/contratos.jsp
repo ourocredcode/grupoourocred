@@ -13,7 +13,6 @@
 		$("#busca_DataConcluidoInicio").mask("99/99/9999");
 		$("#busca_DataConcluidoFim").mask("99/99/9999");
 
-
 		//BOLETOS e AVERBACAO
 		$("#busca_DataPrevisaoInicio").mask("99/99/9999");
 		$("#busca_DataPrevisaoFim").mask("99/99/9999");
@@ -329,13 +328,15 @@
 			var vencimentoFim = $("#busca_DataVencimentoFim").val();
 			var proximaAtuacaoInicio = $("#busca_DataProximaAtuacaoInicio").val();
 			var proximaAtuacaoFim = $("#busca_DataProximaAtuacaoFim").val();
-			var procedimento = $("#busca_Procedimento").val();
 			var quitacaoInicio = $("#busca_DataQuitacaoInicio").val();
 			var quitacaoFim = $("#busca_DataQuitacaoFim").val();
 			var assinaturaInicio = $("#busca_DataAssinaturaInicio").val();
 			var assinaturaFim = $("#busca_DataAssinaturaFim").val();
+			var procedimento = $("#busca_Procedimento").val();
+			var proximoProcedimento = $("#busca_ProximoProcedimento").val();
+			var atuante = $("#busca_Atuante").val();
 
-			var tipoBusca = $("#busca_Tipo").val();
+			var tipoControle = $("#busca_TipoControle").val();
 			
 			if(consultor == undefined)
 				consultor = "";
@@ -374,12 +375,14 @@
 
 			if(data != '' || dataFim != '' || previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
 					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || quitacaoInicio != '' || quitacaoFim != '' || procedimento != ''){
-				$("#resultado").load('<c:url value="/menu/busca/controle" />',{'tipoBusca': tipoBusca,'data' : data, 'dataFim' : dataFim,
+				$("#resultado").load('<c:url value="/menu/busca/controle" />',{'tipoControle': tipoControle,'data' : data, 'dataFim' : dataFim,
 										'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
 										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
 										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'quitacaoInicio': quitacaoInicio,'quitacaoFim': quitacaoFim,
-										'assinaturaInicio': assinaturaInicio,'assinaturaFim': assinaturaFim,'procedimento': procedimento,'bancos': bancos, 
-										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa});
+										'assinaturaInicio': assinaturaInicio,'assinaturaFim': assinaturaFim,'bancos': bancos, 
+										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa,
+										'procedimento': procedimento,'proximoProcedimento': proximoProcedimento,
+										'atuante':atuante,});
 
 			} else {
 
@@ -391,13 +394,21 @@
 	 
 	 
 	 function limpa(){
-		 window.location.href = '<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}" />';
+
+		 var tipoControle = $("#busca_TipoControle").val();
+
+		 if(tipoControle == '')
+		 	window.location.href = '<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}" />';
+		 
+		 if(tipoControle != '')
+			 window.location.href = '<c:url value="/menu/contratos/datascontrole" />';
+	
 	 }
 
 	 </script>
 
 	<div id="content-header">
-		<h1>Busca Contratos ${fn:toUpperCase(tipobusca)}  </h1>
+		<h1>Busca Contratos</h1>
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Users" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
@@ -423,7 +434,7 @@
 				<div class="buttons"><a href="javascript:limpa();" class="btn btn-mini"><i class="icon-trash"></i> Limpa</a></div>
 			</div>
 			
-			<input type="hidden" id="busca_Tipo" name="busca_Tipo" value="${tipobusca }"/>
+			
 			
 			
 			<div class="widget-content" style="padding: 6px;">
@@ -532,7 +543,7 @@
 					</div>
 
 	
-					<div id="consultaBoleto" class="span7" style="display: ${buscaBoleto};">
+					<div id="consultaBoleto" class="span7" style="display: ${buscaDatasControle};">
 
 						<div class="span2">
 							<div class="control-group">
@@ -548,14 +559,11 @@
 								</div>
 							</div>
 							<div class="control-group">
-								<label class="control-label">Procedimento</label>
-								<select  id="busca_Procedimento" name="busca_Procedimento" class="input-medium">
-									<option value="">Apoio Agregado</option>
-									<option value="">Apoio Agregado</option>
-									<option value="">Apoio Agregado</option>
-									<option value="">Apoio Agregado</option>
-									<option value="">Apoio Agregado</option>
-									<option value="">Apoio Agregado</option>
+								<label class="control-label">Tipo Controle</label>
+								<select id="busca_TipoControle" name="busca_Tipo" class="input-small" >
+									<option value=""></option>
+									<option value="1">Averbação</option>
+									<option value="2">Boleto</option>
 								</select>
 							</div>
 						</div>
@@ -572,6 +580,24 @@
 									<input id="busca_DataChegadaInicio" name="busca_DataChegadaInicio" type="text" class="input-small"/>
 								</div>
 							</div>
+							<div class="control-group">
+								<label class="control-label">Procedimento</label>
+								<select  id="busca_Procedimento" name="busca_Procedimento" class="input-medium">
+									<option value=""></option>
+									<c:forEach items="${procedimentos }" var="procedimento">
+										<option value="${procedimento.etapa_id }">${procedimento.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Próximo Procedimento</label>
+								<select  id="busca_ProximoProcedimento" name="busca_ProximoProcedimento" class="input-medium">
+									<option value=""></option>
+									<c:forEach items="${procedimentos }" var="procedimento">
+										<option value="${procedimento.etapa_id }">${procedimento.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
 						</div>
 						<div class="span2">
 							<div class="control-group">
@@ -586,6 +612,7 @@
 									<input id="busca_DataVencimentoInicio" name="busca_DataVencimentoInicio" type="text" class="input-small"/>
 								</div>
 							</div>
+							
 						</div>
 						<div class="span2">
 							<div class="control-group">
@@ -599,6 +626,15 @@
 								<div class="controls">
 									<input id="busca_DataVencimentoFim" name="busca_DataVencimentoFim" type="text" class="input-small"/>
 								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Atuante</label>
+								<select  id="busca_Atuante" name="busca_Atuante" class="input-medium">
+									<option value=""></option>
+									<c:forEach items="${atuantes }" var="atuante">
+										<option value="${atuante.usuario_id }">${atuante.nome }</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						<div class="span2">
@@ -614,6 +650,7 @@
 									<input id="busca_DataAssinaturaInicio" name="busca_DataAssinaturaInicio" type="text" class="input-small"/>
 								</div>
 							</div>
+							
 						</div>
 						<div class="span2">
 							<div class="control-group">

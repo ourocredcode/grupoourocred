@@ -35,7 +35,6 @@ import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
-import br.com.sgo.modelo.TipoControle;
 import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
 
@@ -193,7 +192,7 @@ public class MenuController {
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),c1,c2));
 
 			result.include("function","buscaContratos();");
-			result.include("buscaBoleto","none");
+			result.include("buscaDatasControle","none");
 			result.include("buscaAprovado","block");
 
 		}
@@ -203,7 +202,7 @@ public class MenuController {
 			
 			
 			result.include("function","buscaContratos();");
-			result.include("buscaBoleto","none");
+			result.include("buscaDatasControle","none");
 			result.include("buscaAprovado","block");
 			
 		}
@@ -213,7 +212,7 @@ public class MenuController {
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			
 			result.include("function","buscaContratos();");
-			result.include("buscaBoleto","none");
+			result.include("buscaDatasControle","none");
 			result.include("buscaAprovado","block");
 		}
 
@@ -222,29 +221,29 @@ public class MenuController {
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
 			
 			result.include("function","buscaContratos();");
-			result.include("buscaBoleto","none");
+			result.include("buscaDatasControle","none");
 			result.include("buscaAprovado","block");
 		}
 
-		if(tipo.equals("boletos")){
-			result.include("tipobusca","boleto");
+		if(tipo.equals("datascontrole")){
+			result.include("tipobusca","datascontrole");
 			result.include("function","buscaDatasControle();");
-			result.include("buscaBoleto","block");
+			result.include("buscaDatasControle","block");
 			result.include("buscaAprovado","none");
 		} 
-		
-		if(tipo.equals("averbacao")) {
-			result.include("tipobusca","averbacao");
-			result.include("function","buscaDatasControle();");
-			result.include("buscaBoleto","block");
-			result.include("buscaAprovado","none");
-		}
 
-		TipoWorkflow tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
+		TipoWorkflow tw;
+
+		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
+		
+		
+		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Controle Contrato");
+		result.include("procedimentos",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
 
 		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("bancosComprado",this.bancoDao.buscaBancoCompradoByEmpOrg(1l, 1l));
-		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));		 
+		result.include("atuantes",this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
 
@@ -427,11 +426,11 @@ public class MenuController {
 
 	@Post
 	@Path("/menu/busca/controle")
-	public void busca(String tipoBusca,String data, String dataFim,String previsaoInicio,String previsaoFim, String chegadaInicio,String chegadaFim,String vencimentoInicio,
+	public void busca(Long tipoControle,String data, String dataFim,String previsaoInicio,String previsaoFim, String chegadaInicio,String chegadaFim,String vencimentoInicio,
 							String vencimentoFim, String proximaAtuacaoInicio,String proximaAtuacaoFim , String quitacaoInicio,String quitacaoFim , String assinaturaInicio,String assinaturaFim ,
-							String procedimento ,Collection<String> bancos, 
+							Collection<String> bancos, 
 							Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Long consultor,String cliente, String documento,
-							String empresa) {
+							String empresa,Long procedimento , Long proximoProcedimento, Long atuante) {
 
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();
@@ -449,8 +448,6 @@ public class MenuController {
 		Calendar calAssinaturaFim = new GregorianCalendar();
 		Collection<String> empresas = new ArrayList<String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-
-		Boolean isDataNUll = true;
 
 		try {
 			
@@ -481,13 +478,7 @@ public class MenuController {
 			} else {
 				calPrevisaoInicio.setTime(sdf.parse(previsaoInicio));
 				calPrevisaoFim.setTime(sdf.parse(previsaoFim));
-	
-				isDataNUll = false;
-				
-				if(tipoBusca.equals("boleto"))
-					result.include("buscaDtBoletoPrevisao",true);
-				if(tipoBusca.equals("averbacao"))
-					result.include("buscaDtAverbacaoPrevisao",true);
+
 			}
 			
 			if(chegadaFim.equals(""))
@@ -499,11 +490,7 @@ public class MenuController {
 			} else {
 				calChegadaInicio.setTime(sdf.parse(chegadaInicio));
 				calChegadaFim.setTime(sdf.parse(chegadaFim));
-				
-				isDataNUll = false;
-	
-				result.include("buscaDtBoletoChegada",true);
-	
+
 			}
 			
 			if(vencimentoFim.equals(""))
@@ -515,11 +502,7 @@ public class MenuController {
 			} else {
 				calVencimentoInicio.setTime(sdf.parse(vencimentoInicio));
 				calVencimentoFim.setTime(sdf.parse(vencimentoFim));
-				
-				isDataNUll = false;
-	
-				result.include("buscaDtBoletoVencimento",true);
-					
+
 			}
 			
 			if(proximaAtuacaoFim.equals(""))
@@ -531,13 +514,7 @@ public class MenuController {
 			} else {
 				calProximaAtuacaoInicio.setTime(sdf.parse(proximaAtuacaoInicio));
 				calProximaAtuacaoFim.setTime(sdf.parse(proximaAtuacaoFim));
-				
-				isDataNUll = false;
-				
-				if(tipoBusca.equals("boleto"))
-					result.include("buscaDtBoletoProximaAtuacao",true);
-				if(tipoBusca.equals("averbacao"))			
-					result.include("buscaDtAverbacaoProximaAtuacao",true);
+
 			}
 			
 			if(quitacaoFim.equals(""))
@@ -549,13 +526,7 @@ public class MenuController {
 			} else {
 				calQuitacaoInicio.setTime(sdf.parse(quitacaoInicio));
 				calQuitacaoFim.setTime(sdf.parse(quitacaoFim));
-				
-				isDataNUll = false;
-				
-				if(tipoBusca.equals("boleto"))
-					result.include("buscaDtBoletoProximaAtuacao",true);
-				if(tipoBusca.equals("averbacao"))			
-					result.include("buscaDtAverbacaoProximaAtuacao",true);
+
 			}
 			
 			if(assinaturaFim.equals(""))
@@ -567,13 +538,7 @@ public class MenuController {
 			} else {
 				calAssinaturaInicio.setTime(sdf.parse(assinaturaInicio));
 				calAssinaturaFim.setTime(sdf.parse(assinaturaFim));
-				
-				isDataNUll = false;
-				
-				if(tipoBusca.equals("boleto"))
-					result.include("buscaDtBoletoProximaAtuacao",true);
-				if(tipoBusca.equals("averbacao"))			
-					result.include("buscaDtAverbacaoProximaAtuacao",true);
+
 			}
 	
 		} catch (ParseException e) {
@@ -605,31 +570,19 @@ public class MenuController {
 
 		}
 
-		if(isDataNUll){
-			if(tipoBusca.equals("boleto"))
-				result.include("buscaDtBoletoAtua",true);
-			
-			if(tipoBusca.equals("averbacao"))
-				result.include("buscaDtAverbacaoAtua",true);
-			
-		}
-		
 		if(empresa.equals("Todos")){
 			empresas.add("");
 		} else {
 			empresas.add(empresa);
 		}
-		
-		TipoControle tipoControle = this.tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,tipoBusca);
 
 		contratos.clear();
 
 		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoControle,
 				calInicio, calFim, calPrevisaoInicio, 
 				calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
-				calProximaAtuacaoInicio,calProximaAtuacaoFim,calQuitacaoInicio,calQuitacaoFim,calAssinaturaInicio,calAssinaturaFim, 
-				procedimento,bancos,produtos,bancosComprados,status,consultoresAux,
-				cliente,documento,empresas));
+				calProximaAtuacaoInicio,calProximaAtuacaoFim,calQuitacaoInicio,calQuitacaoFim,calAssinaturaInicio,calAssinaturaFim,bancos,produtos,bancosComprados,
+				status,consultoresAux,cliente,documento,empresas,procedimento,proximoProcedimento, atuante));
 
 		contador();
 	}

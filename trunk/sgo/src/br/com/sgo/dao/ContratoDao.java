@@ -26,7 +26,6 @@ import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Produto;
-import br.com.sgo.modelo.TipoControle;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
 
@@ -626,13 +625,12 @@ public class ContratoDao extends Dao<Contrato> {
 
 	}
 	
-	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,TipoControle tipoControle,Calendar calInicio,Calendar calFim,
+	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,Long tipoControle,Calendar calInicio,Calendar calFim,
 			Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
 			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,
 			Calendar quitacaoInicio,Calendar quitacaoFim,Calendar assinaturaInicio,Calendar assinaturaFim,
-			String procedimento,
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status, Collection<Usuario> consultores,String cliente,
-			String documento,Collection<String> empresas) {
+			String documento,Collection<String> empresas, Long procedimento, Long proximoProcedimento, Long atuante) {
 
 		String sql = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 				" FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
@@ -788,6 +786,15 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		if(assinaturaInicio != null)
 			sql += " AND (LOGISTICA.dataassinatura BETWEEN ? AND ? )";
+		
+		if(procedimento != null)
+			sql += " AND ( CONTROLE.etapa_id = ? ) ";
+		
+		if(proximoProcedimento != null)
+			sql += "  AND ( CONTROLE.etapaproximo_id = ? ) ";
+		
+		if(atuante != null)
+			sql += "  AND ( CONTROLE.proximoatuante_id = ? ) ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -796,6 +803,8 @@ public class ContratoDao extends Dao<Contrato> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
+			//System.out.println(sql);
 
 			int curr = 1;
 
@@ -810,7 +819,7 @@ public class ContratoDao extends Dao<Contrato> {
 			}
 
 			if(tipoControle != null){
-				this.stmt.setLong(curr, tipoControle.getTipoControle_id());
+				this.stmt.setLong(curr, tipoControle);
 				curr++;
 			}
 
@@ -942,6 +951,29 @@ public class ContratoDao extends Dao<Contrato> {
 				curr++;
 
 			} 
+			
+			if(procedimento != null) {
+
+				this.stmt.setLong(curr, procedimento);
+				curr++;
+
+			}
+			
+			if(proximoProcedimento != null) {
+
+				this.stmt.setLong(curr, proximoProcedimento);
+				curr++;
+
+				
+			}
+			
+			if(atuante != null) {
+				
+				this.stmt.setLong(curr, atuante);
+				curr++;
+
+				
+			}
 
 			this.rsContrato = this.stmt.executeQuery();
 
