@@ -51,7 +51,7 @@ public class TipoSaqueDao extends Dao<TipoSaque> {
 
 				TipoSaque tipoSaque = new TipoSaque();
 				tipoSaque.setTipoSaque_id(rsTipoSaque.getLong("tipoSaque_id"));
-				tipoSaque.setNome(rsTipoSaque.getString("nome"));
+				tipoSaque.setNome(rsTipoSaque.getString("tiposaque_nome"));
 				tiposSaque.add(tipoSaque);
 
 			}

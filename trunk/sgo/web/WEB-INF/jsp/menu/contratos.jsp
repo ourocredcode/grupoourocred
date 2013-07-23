@@ -757,9 +757,9 @@
 									<option value="true">Fora da Planilha</option>
 								</select>
 							</div>
-							<div class="span5">
+							<div class="span6">
 								<label for="busca_Justificativa">Justificativa</label>
-								<select id="busca_Justificativa" name="busca_Justificativa" class="input-small">
+								<select id="busca_Justificativa" name="busca_Justificativa" class="input-medium">
 									<option value="Todos">Todos</option>
 									<option value="Cliente com pendência de documentos">Cliente com pendência de documentos</option>
 									<option value="Cliente desistiu">Cliente desistiu</option>

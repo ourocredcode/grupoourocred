@@ -36,6 +36,7 @@ import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoLogisticaDao;
 import br.com.sgo.dao.TipoProcedimentoDao;
+import br.com.sgo.dao.TipoSaqueDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
@@ -71,6 +72,7 @@ public class ContratoController {
 	private final BancoProdutoTabelaDao bancoProdutoTabelaDao;
 	private final ProdutoDao produtoDao;
 	private final CoeficienteDao coeficienteDao;
+	private final TipoSaqueDao tipoSaqueDao;
 
 	private final ContratoDao contratoDao;
 	private final FormularioDao formularioDao;
@@ -124,7 +126,7 @@ public class ContratoController {
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
-			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, PnDao pnDao){		
+			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, PnDao pnDao,TipoSaqueDao tipoSaqueDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -165,6 +167,7 @@ public class ContratoController {
 		this.usuarioDao = usuarioDao;
 		this.hisconBeneficioDao = hisconBeneficioDao;
 		this.pnDao = pnDao;
+		this.tipoSaqueDao = tipoSaqueDao;
 
 	}
 
@@ -274,6 +277,7 @@ public class ContratoController {
 		result.include("organizacoes", this.organizacaoDao.buscaOrganizacoesByEmpresa(empresa.getEmpresa_id()));
 		result.include("hisconsBeneficio", this.hisconBeneficioDao.buscaHisconsBeneficioByParceiroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),parceiroBeneficio.getParceiroBeneficio_id()));
 		result.include("meiosPagamento",meiosPagamento);
+		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
 
 	}
 	
@@ -538,6 +542,24 @@ public class ContratoController {
 				log.add("Valor Quitação alterado de : " + this.contrato.getValorQuitacao() + " para : " + contrato.getValorQuitacao());
 				this.contrato.setValorQuitacao(contrato.getValorQuitacao() == null ? null : contrato.getValorQuitacao());
 			}
+		}
+		
+		
+		if(contrato.getTipoSaque() != null){
+
+			contrato.setTipoSaque(this.tipoSaqueDao.load(contrato.getTipoSaque().getTipoSaque_id()));
+
+			if(this.contrato.getTipoSaque() != null){
+				if(this.contrato.getTipoSaque().getTipoSaque_id() != contrato.getTipoSaque().getTipoSaque_id())
+					log.add("Tipo Saque alterado de : " + this.contrato.getTipoSaque().getNome() + " para : " + contrato.getTipoSaque().getNome() );
+					this.contrato.setTipoSaque(contrato.getTipoSaque());
+			}
+
+			if(this.contrato.getTipoSaque() == null){
+				log.add("Tipo Saque alterado para : " + contrato.getTipoSaque().getNome() );
+				this.contrato.setTipoSaque(contrato.getTipoSaque());
+			}
+
 		}
 
 		this.contratoDao.beginTransaction();
