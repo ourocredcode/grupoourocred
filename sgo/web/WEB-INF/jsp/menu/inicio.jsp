@@ -292,29 +292,6 @@
 				</div>
 			</div>
 
-			<div class="span4">
-			
-				<div class="widget-box">
-					<div class="widget-title">
-						<span class="icon">
-							<i class="icon-tag"></i>
-						</span>
-						<h5>Controles</h5>
-					</div>
-					<div class="widget-content">
-						<div class="row-fluid">
-						<div class="span8">
-							<ul class="site-stats">
-								<li><i class="icon-arrow-right"></i><a href="/sgo/menu/contratos/boletos"><small>Boletos</small></a> </li>
-								<li><i class="icon-arrow-right"></i><a href="/sgo/menu/contratos/averbacao"><small>Averbação</small></a>  </li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-		</div>
 	</div>
 </div>
 <%@ include file="/footer.jspf"%>
