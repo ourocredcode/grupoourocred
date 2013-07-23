@@ -34,6 +34,7 @@ import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
@@ -60,12 +61,9 @@ public class MenuController {
 	private final TipoSaqueDao tipoSaqueDao;
 	private final MeioPagamentoDao meioPagamentoDao;
 	private final UsuarioInfo usuarioInfo;
-	
-
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
 	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 	private Collection<Usuario> consultoresAux = new ArrayList<Usuario>();
-
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
@@ -204,9 +202,9 @@ public class MenuController {
 		}
 	
 		if(tipo.equals("Administrativo")  || tipo.equals("Administrador") ) {
+
 			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),c1,c2));
-			
-			
+
 			result.include("function","buscaContratos();");
 			result.include("buscaDatasControle","none");
 			result.include("buscaAprovado","block");
@@ -215,28 +213,158 @@ public class MenuController {
 			
 		
 		if(tipo.equals("Gestor")){
+
+			if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
+				consultores.add(usuario);
+
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
-			
+
 			result.include("function","buscaContratos();");
 			result.include("buscaDatasControle","none");
 			result.include("buscaAprovado","block");
 		}
 
 		if(tipo.equals("aprovados")){
-			status.add("Aprovado");
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
-			
+
+			if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
+				consultores.add(usuario);
+
+			c1.set(GregorianCalendar.DAY_OF_MONTH, c1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
+			c1.set(GregorianCalendar.HOUR, c1.getActualMinimum(GregorianCalendar.HOUR));
+			c1.set(GregorianCalendar.MINUTE, c1.getActualMinimum(GregorianCalendar.MINUTE));
+			c1.set(GregorianCalendar.SECOND, c1.getActualMinimum(GregorianCalendar.SECOND));
+			c2.set(GregorianCalendar.DAY_OF_MONTH, c2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+			c2.set(GregorianCalendar.HOUR, c2.getActualMaximum(GregorianCalendar.HOUR));
+			c2.set(GregorianCalendar.MINUTE, c2.getActualMaximum(GregorianCalendar.MINUTE));
+			c2.set(GregorianCalendar.SECOND, c2.getActualMaximum(GregorianCalendar.SECOND));
+
+			statusFinal.add("Aprovado");
+
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,null,null,c1,c2,null,null, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
+
 			result.include("function","buscaContratos();");
 			result.include("buscaDatasControle","none");
 			result.include("buscaAprovado","block");
+
+		}
+		
+		if(tipo.equals("concluidos")){
+
+			if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
+				consultores.add(usuario);
+
+			c1.set(GregorianCalendar.DAY_OF_MONTH, c1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
+			c1.set(GregorianCalendar.HOUR, c1.getActualMinimum(GregorianCalendar.HOUR));
+			c1.set(GregorianCalendar.MINUTE, c1.getActualMinimum(GregorianCalendar.MINUTE));
+			c1.set(GregorianCalendar.SECOND, c1.getActualMinimum(GregorianCalendar.SECOND));
+			c2.set(GregorianCalendar.DAY_OF_MONTH, c2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+			c2.set(GregorianCalendar.HOUR, c2.getActualMaximum(GregorianCalendar.HOUR));
+			c2.set(GregorianCalendar.MINUTE, c2.getActualMaximum(GregorianCalendar.MINUTE));
+			c2.set(GregorianCalendar.SECOND, c2.getActualMaximum(GregorianCalendar.SECOND));
+
+			statusFinal.add("Concluído");
+
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,null,null,c1,c2,null,null, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
+
+			result.include("function","buscaContratos();");
+			result.include("buscaDatasControle","none");
+			result.include("buscaAprovado","block");
+
+		}
+		
+		if(tipo.equals("recusados")){
+
+			if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
+				consultores.add(usuario);
+
+			c1.set(GregorianCalendar.DAY_OF_MONTH, c1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
+			c1.set(GregorianCalendar.HOUR, c1.getActualMinimum(GregorianCalendar.HOUR));
+			c1.set(GregorianCalendar.MINUTE, c1.getActualMinimum(GregorianCalendar.MINUTE));
+			c1.set(GregorianCalendar.SECOND, c1.getActualMinimum(GregorianCalendar.SECOND));
+			c2.set(GregorianCalendar.DAY_OF_MONTH, c2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+			c2.set(GregorianCalendar.HOUR, c2.getActualMaximum(GregorianCalendar.HOUR));
+			c2.set(GregorianCalendar.MINUTE, c2.getActualMaximum(GregorianCalendar.MINUTE));
+			c2.set(GregorianCalendar.SECOND, c2.getActualMaximum(GregorianCalendar.SECOND));
+
+			statusFinal.add("Recusado");
+
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,null,null,c1,c2,null,null, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
+
+			result.include("function","buscaContratos();");
+			result.include("buscaDatasControle","none");
+			result.include("buscaAprovado","block");
+
 		}
 
 		if(tipo.equals("datascontrole")){
+
 			result.include("tipobusca","datascontrole");
 			result.include("function","buscaDatasControle();");
 			result.include("buscaDatasControle","block");
 			result.include("buscaAprovado","none");
+
 		} 
+
+		TipoWorkflow tw;
+
+		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
+		
+		
+		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Controle Contrato");
+		result.include("procedimentos",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
+
+		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+		result.include("bancosComprado",this.bancoDao.buscaBancoCompradoByEmpOrg(1l, 1l));
+		result.include("atuantes",this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));		 
+		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
+		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
+		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
+
+		result.include("contratos",contratos);
+
+		contador();
+
+	}
+	
+	@Get
+	@Path("/menu/contratos/etapas/{etapa_id}") 
+	public void contratos(Long etapa_id) {
+
+		usuarioDao.refresh(usuarioInfo.getUsuario());
+		perfilDao.refresh(usuarioInfo.getPerfil());
+
+		Long empresa_id = empresa.getEmpresa_id();
+		Long organizacao_id = organizacao.getOrganizacao_id();
+		String cliente = "";
+		String documento = "";
+		Collection<String> status = new ArrayList<String>();
+		Collection<String> statusFinal = new ArrayList<String>();
+		Collection<String> produtos = new ArrayList<String>();
+		Collection<String> bancos = new ArrayList<String>();
+		Collection<String> bancosComprados = new ArrayList<String>();
+		Collection<Usuario> consultores = new ArrayList<Usuario>();
+		Calendar calAprovadoInicio = null;
+		Calendar calAprovadoFim = null;
+		Calendar calConcluidoInicio = null;
+		Calendar calConcluidoFim = null;
+		Calendar c1 = new GregorianCalendar();
+		Calendar c2 = new GregorianCalendar();
+
+		if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
+			consultores.add(usuario);
+
+		Etapa e = this.etapaDao.buscaEtapaById(etapa_id);
+		status.add(e.getNome());
+		c1 = null;
+		c2 = null;
+
+		contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
+
+		result.include("function","buscaContratos();");
+		result.include("buscaDatasControle","none");
+		result.include("buscaAprovado","block");
 
 		TipoWorkflow tw;
 
