@@ -1,6 +1,5 @@
 package br.com.sgo.modelo;
 
-import java.awt.Image;
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -59,7 +58,7 @@ public class Imagem implements Serializable {
 	private String descricao;
 
 	@Column(name = "imagem")
-	private Image imagem;
+	private Byte imagem;
 
 	@Column(name = "isactive")
 	private Boolean isActive;
@@ -86,38 +85,6 @@ public class Imagem implements Serializable {
 
 	public void setOrganizacao(Organizacao organizacao) {
 		this.organizacao = organizacao;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Image getImagem() {
-		return imagem;
-	}
-
-	public void setImagem(Image imagem) {
-		this.imagem = imagem;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
 	}
 
 	public Usuario getCreatedBy() {
@@ -159,4 +126,37 @@ public class Imagem implements Serializable {
 	public void setChave(String chave) {
 		this.chave = chave;
 	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Byte getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(Byte imagem) {
+		this.imagem = imagem;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
 }
