@@ -80,6 +80,7 @@ $(document).ready(function() {
 	var propostaBanco = document.getElementById("propostaBanco");
 	var contratoBanco = document.getElementById("contratoBanco");
 	var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
+	var informacaoSaque = document.getElementById("informacaoSaque");
 	var valorQuitacao = document.getElementById("valorQuitacao");
 	var bairro = document.getElementById("bairro");
 	var cidade = document.getElementById("cidade");
@@ -149,6 +150,11 @@ $(document).ready(function() {
 	if(organizacaoDigitacao != undefined) {
 		if(organizacaoDigitacao.value == "")
 			desabilita(organizacaoDigitacao);	
+	}
+	
+	if(informacaoSaque != undefined) {
+		if(informacaoSaque.value == "")
+			desabilita(informacaoSaque);	
 	}
 
 	if(valorQuitacao != undefined) {
@@ -246,6 +252,7 @@ function verificaStatus() {
 	if(status == 'Aprovado') {
 		habilita(dataStatusFinal);
 		$("#dataStatusFinal").val(getCurrentDate());
+		verificaPagamento();
 	}
 	
 	if(status == 'Concluído') {
@@ -427,6 +434,20 @@ function validaForm(form) {
 
 };
 
+function verificaPagamento() {
+
+	var tipoPagamento = document.getElementById("tipoPagamento");
+	var informacaoSaque = document.getElementById("informacaoSaque");
+
+	if(tipoPagamento.value == "OP"){
+		habilita(informacaoSaque);
+	} else {
+		desabilita(informacaoSaque);
+		informacaoSaque.value = "";
+	}
+
+}
+
 
 
 function openPopup(url) {
@@ -571,18 +592,9 @@ function openPopup(url) {
 									<label for="Conta">Conta</label>
 									<input type="text" class="input-medium" id="Conta" name="Conta" value="${formulario.parceiroInfoBanco.contaCorrente }" />
 								</div>
-								<div class="span2">
-									<label for="TipoConta">Tipo Conta</label>
-									<input type="text" class="input-medium" id="TipoConta" name="TipoConta" value="${formulario.parceiroInfoBanco.contaBancaria.tipoConta  }" />
-								</div>
 								<div class="span3">
-									<label for="meioPagamento">Tipo Pagamento</label>
-									<select class="input-medium" id="meioPagamento" name="formulario.parceiroInfoBanco.meioPagamento.meioPagamento_id">
-										<option value="">Escolha Tipo Pagamento</option>
-										<c:forEach items="${meiosPagamento }" var="meioPagamento">
-											<option value="${meioPagamento.meioPagamento_id }">${meioPagamento.nome }</option>
-										</c:forEach>
-									</select>
+									<label for="MeioPagamento">Tipo Pagamento</label>
+									<input id="MeioPagamento" type="text" value="${formulario.parceiroInfoBanco.meioPagamento.nome }" class="input-medium"/>
 								</div>								
 							</div>
 						</div>
@@ -796,6 +808,25 @@ function openPopup(url) {
 								<label for="dataQuitacao">Data Quitação</label>
 								<input id="dataQuitacao" type="text" name="contrato.dataQuitacao" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataQuitacao.time}" />" class="input-medium"/>
 							</div>
+						</div>
+						
+						<div class="row-fluid"> 
+							
+							<div class="span2">
+								<label for="tipoPagamento">Tipo Pagamento</label>
+								<input id="tipoPagamento" type="text" value="${formulario.parceiroInfoBanco.meioPagamento.nome }" class="input-medium"/>
+							</div>
+
+							<div class="span2">
+								<label for="informacaoSaque">Informação Saque</label>	
+								<select id="informacaoSaque" name="contrato.tipoSaque.tipoSaque_id" class="input-medium" >
+									<option value="">Selecione</option>
+									<c:forEach var="tipoSaque" items="${tiposSaque }">
+										<option value="${tipoSaque.tipoSaque_id }" <c:if test="${tipoSaque.tipoSaque_id == contrato.tipoSaque.tipoSaque_id }">selected="selected" </c:if>>${tipoSaque.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
+
 						</div>
 						
 						<div class="row-fluid">

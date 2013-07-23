@@ -182,8 +182,6 @@ public class ParceironegocioController {
 
 				ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
 				ParceiroInfoBanco infoBanco = this.pnDao.buscaParceiroInfoBanco(parceiroNegocio);
-				
-				System.out.println(infoBanco.getMeioPagamento().getNome());
 
 				infoBanco.setMeioPagamento(this.meioPagamentoDao.buscaMeioPagamentoByNome(1l, 1l, infoBanco.getMeioPagamento().getNome()));
 
@@ -654,10 +652,6 @@ public class ParceironegocioController {
 		localidade.setIsActive(true);
 		localidade.setEmpresa(empresa);
 		localidade.setOrganizacao(organizacao);
-
-		System.out.println(" salvaLocalidade : " + localidade.getCep());
-		System.out.println(" salvaLocalidade TipoLocalidade ID : " + localidade.getTipoLocalidade().getTipoLocalidade_id());
-
 
 		String mensagem = "";
 		
