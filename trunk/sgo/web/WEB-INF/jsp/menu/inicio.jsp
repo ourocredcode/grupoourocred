@@ -173,26 +173,45 @@
 							<thead>
 							  <tr>
 								<th>Status</th>
-								<th>Total</th>
+								<th>Quantidade</th>
+								<th>Contrato</th>
+								<th>C. Líquido</th>
+								<th>Meta</th>
 							  </tr>
 							</thead>
 							<tbody>
 								<c:forEach items="#{mapEtapasFinal }" var="map">
 									<tr>
 										<c:choose>
-											<c:when test="${map.key == 'Aprovado' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/aprovados'">${map.key }</a></td></c:when>
-											<c:when test="${map.key == 'Concluído' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/concluidos'">${map.key }</a></td></c:when>
-											<c:when test="${map.key == 'Recusado' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/recusados'">${map.key }</a></td></c:when>
-											<c:otherwise><td>${map.key }</td></c:otherwise>
-										</c:choose>
-										<c:choose>
-											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-info">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
-											<c:when test="${map.key == 'Concluído' }"><td><span class="badge badge-success">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
-											<c:when test="${map.key == 'Recusado' }"><td><span class="badge badge-important">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
-											<c:otherwise><td><span class="badge badge-info">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:otherwise>
+											<c:when test="${map.key == 'Aprovado' }">
+													<tr class="success">
+														<td><a href="<c:url value="/menu/contratos/aprovados" />">${map.key }</a></td>
+														<td><fmt:formatNumber value="${map.value[1] }" type="number" maxFractionDigits="0" /></td>
+														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[4] }" type="currency" /></td>
+													</tr>
+											</c:when>
+											<c:when test="${map.key == 'Concluído' }">
+													<tr class="success">
+														<td><a href="<c:url value="/menu/contratos/concluidos" />">${map.key }</a></td>
+														<td><fmt:formatNumber value="${map.value[1] }" type="number" maxFractionDigits="0" /></td>
+														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[4] }" type="currency" /></td>
+													</tr>
+											</c:when>
+											<c:when test="${map.key == 'Recusado' }">
+													<tr class="error">
+														<td><a href="<c:url value="/menu/contratos/recusados" />">${map.key }</a></td>
+														<td><fmt:formatNumber value="${map.value[1] }" type="number" maxFractionDigits="0" /></td>
+														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[4] }" type="currency" /></td>
+													</tr>
+											</c:when>
 										</c:choose>
 									</tr>
-								
 								</c:forEach>
 							</tbody>
 						  </table>
