@@ -55,7 +55,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
 			" ETAPA.etapa_id, ETAPA.nome as etapa_nome "+
 			" FROM " +
-			" (((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
+			" ((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
 			" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
 			" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) "+
 			" INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) "+
@@ -71,7 +71,8 @@ public class ContratoDao extends Dao<Contrato> {
 			" LEFT JOIN WORKFLOW (NOLOCK) AS WORKFLOW_1 ON CONTRATO.workflowpendencia_id = WORKFLOW_1.workflow_id) "+
 			" LEFT JOIN ETAPA (NOLOCK) AS ETAPA_1 ON CONTRATO.etapapendencia_id = ETAPA_1.etapa_id) "+
 			" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +
-			" INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio";  
+			" INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio) " +
+			" LEFT JOIN PARCEIROINFOBANCO (NOLOCK) ON PARCEIROINFOBANCO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id ";  
 
 	public ContratoDao(Session session, ConnJDBC conexao) {
 
@@ -351,7 +352,7 @@ public class ContratoDao extends Dao<Contrato> {
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
 			Calendar calStatusFinalInicio,Calendar calStatusFinalFim,Calendar calConclusaoInicio,Calendar calConclusaoFim,
 			String cliente, String documento, Collection<String> status,Collection<String> statusFinal,
-			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores) {
+			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores,Long tipoPagamento, Long informacaoSaque) {
 
 		String sql = sqlContratos;
 		String clause = "";
@@ -364,6 +365,12 @@ public class ContratoDao extends Dao<Contrato> {
 
 		if(!documento.equals(""))
 			sql += " AND ( PARCEIRONEGOCIO.cpf like ? OR PARCEIROBENEFICIO.numerobeneficio like ? ) ";
+
+		if(informacaoSaque != null)
+			sql += " AND ( CONTRATO.tiposaque_id = ? ) ";
+		
+		if(tipoPagamento != null)
+			sql += " AND ( PARCEIROINFOBANCO.meiopagamento_id = ? ) ";
 
 		sql += " AND ( 1=1 ";
 
@@ -515,6 +522,20 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setString(curr, '%' + documento + '%');
 				curr++;
 			}
+			
+			if(informacaoSaque != null) {
+
+				this.stmt.setLong(curr, informacaoSaque);
+				curr++;
+
+			}
+			
+			if(tipoPagamento != null) {
+
+				this.stmt.setLong(curr, tipoPagamento);
+				curr++;
+
+			}
 
 			for(String statusAux2 : status){
 
@@ -522,8 +543,6 @@ public class ContratoDao extends Dao<Contrato> {
 					this.stmt.setString(curr, '%' + statusAux2 + '%');
 					curr++;
 				}
-				
-				//System.out.println(" statusAux2 : " + statusAux2);
 
 			}
 
@@ -533,8 +552,6 @@ public class ContratoDao extends Dao<Contrato> {
 					this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
 					curr++;
 				}
-
-				//System.out.println(" statusFinalAux2 : " + statusFinalAux2);
 
 			}
 			

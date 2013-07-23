@@ -22,11 +22,13 @@ import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.EtapaDao;
+import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TipoControleDao;
+import br.com.sgo.dao.TipoSaqueDao;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
@@ -55,6 +57,8 @@ public class MenuController {
 	private final BancoDao bancoDao;
 	private final TipoControleDao tipoControleDao;
 	private final CoeficienteDao coeficienteDao;
+	private final TipoSaqueDao tipoSaqueDao;
+	private final MeioPagamentoDao meioPagamentoDao;
 	private final UsuarioInfo usuarioInfo;
 	
 
@@ -67,8 +71,8 @@ public class MenuController {
 	private Usuario usuario;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,CoeficienteDao coeficienteDao,
-			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,
-			TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
+			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,TipoSaqueDao tipoSaqueDao,
+			MeioPagamentoDao meioPagamentoDao,TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
 		this.usuarioDao = usuarioDao;
@@ -82,6 +86,8 @@ public class MenuController {
 		this.etapaDao = etapaDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.produtoDao = produtoDao;
+		this.tipoSaqueDao = tipoSaqueDao;
+		this.meioPagamentoDao = meioPagamentoDao;
 		this.coeficienteDao = coeficienteDao;
 		this.bancoDao = bancoDao;
 		this.tipoControleDao = tipoControleDao;
@@ -138,7 +144,7 @@ public class MenuController {
 
 		if(perfil.equals("Gestor")){
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, 
-					cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
+					cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
 			result.include("mapEtapasFinal", this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, c1, c2));
 		}
@@ -209,7 +215,7 @@ public class MenuController {
 			
 		
 		if(tipo.equals("Gestor")){
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
 			
 			result.include("function","buscaContratos();");
 			result.include("buscaDatasControle","none");
@@ -218,7 +224,7 @@ public class MenuController {
 
 		if(tipo.equals("aprovados")){
 			status.add("Aprovado");
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
 			
 			result.include("function","buscaContratos();");
 			result.include("buscaDatasControle","none");
@@ -246,8 +252,8 @@ public class MenuController {
 		result.include("atuantes",this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
-
-		
+		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
+		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
 
 		result.include("contratos",contratos);
 
@@ -257,7 +263,7 @@ public class MenuController {
 	
 	@Post
 	@Path("/menu/busca") 
-	public void busca(String informacaoSaque,String tipoAprovado,String empresa,String tipoPagamento,String tipoRecusado,String justificativa, Collection<String> status,
+	public void busca(Long informacaoSaque,String tipoAprovado,String empresa,Long tipoPagamento,String tipoRecusado,String justificativa, Collection<String> status,
 			String cliente, String documento,String data, String dataFim,String dataAprovadoInicio, String dataAprovadoFim,String dataConcluidoInicio, String dataConcluidoFim,
 			String dataRecusadoInicio, String dataRecusadoFim,Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados, String motivoPendencia,
 			Long consultor) {
@@ -278,7 +284,6 @@ public class MenuController {
 		Collection<String> statusFinal = new ArrayList<String>();
 		Collection<String> tiposPagamento = new ArrayList<String>();
 		Collection<String> empresas = new ArrayList<String>();
-		Collection<String> informacoesSaque = new ArrayList<String>();
 		Collection<String> justificativas = new ArrayList<String>();
 		
 		try {
@@ -360,19 +365,7 @@ public class MenuController {
 				calStatusFinalFim = calRecusadoFim;
 
 			}
-			
-			if(tipoPagamento.equals("Todos")){
-				tiposPagamento.add("");
-			} else {
-				tiposPagamento.add(tipoPagamento);
-			}
 
-			if(informacaoSaque.equals("Todos")){
-				informacoesSaque.add("");
-			} else {
-				informacoesSaque.add(informacaoSaque);
-			}
-			
 			if(empresa.equals("Todos")){
 				empresas.add("");
 			} else {
@@ -416,7 +409,7 @@ public class MenuController {
 
 		contratos.addAll(this.contratoDao.buscaContratoByFiltros(this.empresa.getEmpresa_id(), this.organizacao.getOrganizacao_id(), calInicio, calFim, 
 				calStatusFinalInicio, calStatusFinalFim ,calConcluidoInicio, calConcluidoFim,cliente, documento, status,statusFinal,
-				produtos, bancos, bancosComprados,consultoresAux));
+				produtos, bancos, bancosComprados,consultoresAux,tipoPagamento,informacaoSaque));
 
 		contador();
 

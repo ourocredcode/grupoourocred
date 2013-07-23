@@ -252,8 +252,6 @@
 			tipoAprovado = "";
 		if(empresa == undefined)
 			empresa = "";
-		if(informacaoSaque == undefined)
-			informacaoSaque = "";
 		if(motivoPendencia == undefined)
 			motivoPendencia = "";
 		if(supervisor == undefined)
@@ -710,22 +708,25 @@
 								<div class="span4">								
 									
 									<label for="busca_TipoPagamento">Tipo Pagamento</label>
-									<select id="busca_TipoPagamento" name="busca_TipoPagamento" style="width:100px" >
-										<option value="Todos">Todos</option>
-										<option value="OP">OP</option>
-										<option value="TED">TED</option>
+									<select id="busca_TipoPagamento" name="busca_TipoPagamento" class="input-small" >
+										<option value="">Todos</option>
+										<c:forEach var="meioPagamento" items="${meiosPagamento }">
+											<option value="${meioPagamento.meioPagamento_id }">${meioPagamento.nome }</option>
+										</c:forEach>
+										
 									</select>
 									
 								</div>
 								<div class="span4">
-									
+
 									<label for="busca_InformacaoSaque">Info Saque</label>
-									<select id="busca_InformacaoSaque" name="busca_InformacaoSaque" style="width:100px" >
-										<option value="Todos">Todos</option>
-										<option value="Aguardando Saque">Aguardando Saque</option>
-										<option value="Saque Efetuado">Saque Efetuado</option>
+									<select id="busca_InformacaoSaque" name="busca_InformacaoSaque" class="input-medium" >
+										<option value="">Todos</option>
+										<c:forEach var="tipoSaque" items="${tiposSaque }">
+											<option value="${tipoSaque.tipoSaque_id }">${tipoSaque.nome }</option>
+										</c:forEach>
 									</select>
-									
+
 								</div>
 			
 							</div>
