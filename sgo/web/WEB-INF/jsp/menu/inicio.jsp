@@ -181,11 +181,13 @@
 									<tr>
 										<c:choose>
 											<c:when test="${map.key == 'Aprovado' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/aprovados'">${map.key }</a></td></c:when>
+											<c:when test="${map.key == 'Concluído' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/concluidos'">${map.key }</a></td></c:when>
+											<c:when test="${map.key == 'Recusado' }"><td><a href="#" onclick="javascript:window.location='/sgo/menu/contratos/recusados'">${map.key }</a></td></c:when>
 											<c:otherwise><td>${map.key }</td></c:otherwise>
 										</c:choose>
 										<c:choose>
-											<c:when test="${map.key == 'Concluído' }"><td><span class="badge badge-success">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
 											<c:when test="${map.key == 'Aprovado' }"><td><span class="badge badge-info">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
+											<c:when test="${map.key == 'Concluído' }"><td><span class="badge badge-success">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
 											<c:when test="${map.key == 'Recusado' }"><td><span class="badge badge-important">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:when>
 											<c:otherwise><td><span class="badge badge-info">R$ <fmt:formatNumber type="NUMBER" value="${map.value }" minFractionDigits="2" /></span></td></c:otherwise>
 										</c:choose>
@@ -212,74 +214,74 @@
 									<c:choose>
 										<c:when test="${map.key == 'Aguardando Status' }">
 												<tr class="info">
-													<td>${map.key }</td>
-													<td>${map.value[0] }</td>
+													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
 												</tr>
 										</c:when>
 										<c:when test="${map.key == 'Pendente Administrativo' }">
 												<tr class="error">
-													<td>${map.key }</td>
-													<td>${map.value[0] }</td>
+													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
 												</tr>
 										</c:when>
 										<c:when test="${map.key == 'Pendente Agendamento' }">
 												<tr class="error">
-													<td>${map.key }</td>
-													<td>${map.value[0] }</td>
+													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
 												</tr>
 										</c:when>
 										<c:when test="${map.key == 'Pendente Banco' }">
 												<tr class="error">
-													<td>${map.key }</td>
-													<td>${map.value[0] }</td>
+													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
 												</tr>
 										</c:when>
 										<c:when test="${map.key == 'Pendente Coeficiente' }">
 												<tr class="error">
-													<td>${map.key }</td>
-													<td>${map.value[0] }</td>
+													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
 												</tr>
 										</c:when>
 										<c:when test="${map.key == 'Pendente Conferência' }">
 												<tr class="error">
-													<td>${map.key }</td>
-													<td>${map.value[0] }</td>
+													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
 												</tr>
 										</c:when>
 										<c:when test="${map.key == 'Recalcular' }">
 												<tr class="error">
-													<td>${map.key }</td>
-													<td>${map.value[0] }</td>
+													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
 												</tr>
 										</c:when>
 										<c:otherwise>
 												<tr class="info">
-													<td>${map.key }</td>
-													<td>${map.value[0] }</td>
+													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
 												</tr>
 										</c:otherwise>
 									</c:choose>

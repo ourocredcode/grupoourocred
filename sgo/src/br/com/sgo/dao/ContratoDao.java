@@ -1011,10 +1011,11 @@ public class ContratoDao extends Dao<Contrato> {
 
 	}
 	
-	public HashMap<String,Double[]> buscaContratosToCountEtapas(Long empresa_id , Long organizacao_id, Long usuario_id) {
+	public HashMap<String,Object[]> buscaContratosToCountEtapas(Long empresa_id , Long organizacao_id, Long usuario_id) {
 
 		String sql = " SELECT " +
-				"		 ETAPA.nome as etapa_nome, " +
+				"		 ETAPA.nome as etapa_nome," +
+				"		 ETAPA.etapa_id , " +
 				"		 COUNT(ETAPA.nome) as etapaCount, " +
 				"		 SUM(CONTRATO.valormeta) as metaCount, " +
 				"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
@@ -1031,11 +1032,11 @@ public class ContratoDao extends Dao<Contrato> {
 		if(usuario_id != null)
 			sql += " AND (CONTRATO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 
-		sql +=  " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome ORDER BY ETAPA.nome ASC ";
+		sql +=  " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome, ETAPA.etapa_id ORDER BY ETAPA.nome ASC ";
 
 		this.conn = this.conexao.getConexao();
 
-		HashMap<String,Double[]> map = new HashMap<String,Double[]>();
+		HashMap<String,Object[]> map = new HashMap<String,Object[]>();
 
 		try {
 
@@ -1056,17 +1057,19 @@ public class ContratoDao extends Dao<Contrato> {
 			while (rsContrato.next()) {
 
 				String etapa_nome = rsContrato.getString("etapa_nome");
+				Long etapa_id = rsContrato.getLong("etapa_id");
 				Double etapaCount = rsContrato.getDouble("etapaCount");
 				Double contratoCount = rsContrato.getDouble("contratoCount");
 				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
 
-				Double[] values = new Double[4];
+				Object[] values = new Object[5];
 
-				values[0] = etapaCount;
-				values[1] = contratoCount;
-				values[2] = contLiquidoCount;
-				values[3] = metaCount;
+				values[0] = etapa_id;
+				values[1] = etapaCount;
+				values[2] = contratoCount;
+				values[3] = contLiquidoCount;
+				values[4] = metaCount;
 
 				map.put(etapa_nome,values);
 
