@@ -9,13 +9,19 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.FuncionarioDao;
+import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.OrganizacaoInfoDao;
+import br.com.sgo.dao.OrganizacaoLocalidadeDao;
+import br.com.sgo.dao.TipoEnderecoDao;
 import br.com.sgo.dao.TipoOrganizacaoDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.OrganizacaoInfo;
+import br.com.sgo.modelo.OrganizacaoLocalidade;
+import br.com.sgo.modelo.TipoEndereco;
 import br.com.sgo.modelo.Usuario;
 
 @Resource
@@ -28,20 +34,27 @@ public class OrganizacaoController {
 	private final OrganizacaoDao organizacaoDao;
 	private final OrganizacaoInfoDao organizacaoInfoDao;
 	private final TipoOrganizacaoDao tipoOrganizacaoDao;
-
+	private final LocalidadeDao localidadeDao;
+	private final OrganizacaoLocalidadeDao organizacaoLocalidadeDao;
+	private final TipoEnderecoDao tipoEnderecoDao;
+	
 	private Organizacao organizacao;
 	private UsuarioInfo usuarioInfo;
 	private Empresa empresa;	
 	private Usuario usuario;
 	
-	public OrganizacaoController(Result result, UsuarioInfo usuarioInfo, Empresa empresa, OrganizacaoDao organizacaoDao, Organizacao organizacao,
-			TipoOrganizacaoDao tipoOrganizacaoDao, OrganizacaoInfoDao organizacaoInfoDao, Usuario usuario, FuncionarioDao funcionarioDao){
+	public OrganizacaoController(Result result, UsuarioInfo usuarioInfo, Empresa empresa, OrganizacaoDao organizacaoDao, Organizacao organizacao, OrganizacaoLocalidadeDao organizacaoLocalidadeDao,
+			TipoOrganizacaoDao tipoOrganizacaoDao, OrganizacaoInfoDao organizacaoInfoDao, Usuario usuario, FuncionarioDao funcionarioDao, LocalidadeDao localidadeDao,
+			TipoEnderecoDao tipoEnderecoDao){
 
 		this.result = result;
 		this.funcionarioDao = funcionarioDao;		
 		this.organizacaoDao = organizacaoDao;
 		this.organizacaoInfoDao = organizacaoInfoDao;
 		this.tipoOrganizacaoDao = tipoOrganizacaoDao;
+		this.localidadeDao = localidadeDao;
+		this.tipoEnderecoDao = tipoEnderecoDao;
+		this.organizacaoLocalidadeDao = organizacaoLocalidadeDao;
 		this.usuarioInfo = usuarioInfo;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
@@ -57,16 +70,17 @@ public class OrganizacaoController {
 		result.include("organizacoes", this.organizacaoDao.buscaAllOrganizacaoByEmp(empresa.getEmpresa_id()));
 		result.include("funcionarios", this.funcionarioDao.buscaFuncionarioToFillCombosByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("tiposOrganizacao", this.tipoOrganizacaoDao.buscaTipoOrganizacaoToFillCombosByEmpOrg(1l, 1l));
+		result.include("tiposEndereco", this.tipoEnderecoDao.buscaTipoEnderecoToFillCombosByEmpOrg(1l, 1l));
 
 	}
 
 	@Post
 	@Path("/organizacao/salva")
-	public void salva(Organizacao organizacao, OrganizacaoInfo organizacaoInfo){
+	public void salva(Organizacao organizacao, OrganizacaoInfo organizacaoInfo, Localidade localidade, OrganizacaoLocalidade organizacaoLocalidade, TipoEndereco tipoEndereco){
 
 		String mensagem = "";
 
-		try {
+		//try {
 
 			if (this.organizacaoDao.buscaOrganizacaoByEmpNome(empresa.getEmpresa_id(), organizacao.getNome()) == null) {				
 
@@ -92,8 +106,8 @@ public class OrganizacaoController {
 					oi.setEmpresa(organizacao.getEmpresa());
 					oi.setOrganizacao_id(organizacao.getOrganizacao_id());
 					oi.setTipoOrganizacao(organizacaoInfo.getTipoOrganizacao().getTipoOrganizacao_id()== null ? null : organizacaoInfo.getTipoOrganizacao());
-					oi.setLocalidade(organizacaoInfo.getLocalidade().getLocalidade_id() == null ? null : organizacaoInfo.getLocalidade());
-					oi.setCalendario(organizacaoInfo.getCalendario().getCalendario_id() == null ? null : organizacaoInfo.getCalendario());
+					//oi.setLocalidade(organizacaoInfo.getLocalidade().getLocalidade_id() == null ? null : organizacaoInfo.getLocalidade());
+					//oi.setCalendario(organizacaoInfo.getCalendario().getCalendario_id() == null ? null : organizacaoInfo.getCalendario());
 					oi.setOrganizacaoPai(organizacaoInfo.getOrganizacaoPai().getOrganizacao_id() == null ? null : organizacaoInfo.getOrganizacaoPai());
 					oi.setSupervisorOrganizacao(organizacaoInfo.getSupervisorOrganizacao().getFuncionario_id() == null ? null : organizacaoInfo.getSupervisorOrganizacao());
 					oi.setChave(organizacao.getNome());
@@ -126,6 +140,83 @@ public class OrganizacaoController {
 						this.organizacaoInfoDao.commit();
 
 					}
+					
+					Localidade l = this.localidadeDao.buscaLocalidade(localidade.getCep());
+
+					if(l.getLocalidade_id() == null)	{
+			
+						localidade.setEmpresa(empresa);
+						localidade.setOrganizacao(organizacao);			
+						localidade.setCreated(dataAtual);
+						localidade.setCreatedBy(usuario);
+						localidade.setIsActive(true);
+			
+						try {
+			
+							this.localidadeDao.beginTransaction();
+							this.localidadeDao.adiciona(localidade);
+							this.localidadeDao.commit();
+						
+						} catch(Exception e) {
+			
+							this.localidadeDao.rollback();
+			
+							if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
+								mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
+							} else {
+								mensagem = "Erro: Erro ao adicionar Localidade:";
+							}
+
+						}
+			
+					} else {
+
+						localidade.setLocalidade_id(l.getLocalidade_id());
+
+					}
+					
+					//Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
+					
+					//for(TipoEndereco tipoEndereco : tiposEndereco){
+			
+						OrganizacaoLocalidade ol = new OrganizacaoLocalidade();
+			
+						ol.setEmpresa(empresa);
+						ol.setOrganizacao(organizacao);
+						ol.setLocalidade(localidade);
+						ol.setTipoEndereco(tipoEndereco);
+						ol.setNumero(organizacaoLocalidade.getNumero());
+						ol.setComplemento(organizacaoLocalidade.getComplemento());
+						ol.setPontoReferencia(organizacaoLocalidade.getPontoReferencia());
+
+						ol.setCreated(dataAtual);
+						ol.setUpdated(dataAtual);
+
+						ol.setCreatedBy(usuario);
+						ol.setUpdatedBy(usuario);
+
+						ol.setIsActive(true);
+
+						try {
+							
+							this.organizacaoLocalidadeDao.beginTransaction();
+							this.organizacaoLocalidadeDao.adiciona(ol);
+							this.organizacaoLocalidadeDao.commit();
+							
+						} catch(Exception e) {
+			
+							this.organizacaoLocalidadeDao.rollback();
+			
+							if (e.getCause().toString().indexOf("PK__PARCEIROLOCALIDADE") != -1){
+								mensagem = "Erro: Parceiro Localidade já existente.";
+							} else {
+								mensagem = "Erro: Erro ao adicionar Parceiro Localidade :";
+							}
+			
+						}
+			
+					//}
+					
 
 				mensagem = "Organização adicionado com sucesso.";
 
@@ -135,16 +226,16 @@ public class OrganizacaoController {
 
 			}
 
-		} catch (Exception e) {
+		//} catch (Exception e) {
 
-			mensagem = "Erro: Falha ao adicionar a Organização.";
+			//mensagem = "Erro: Falha ao adicionar a Organização.";
 
-		} finally{
+		//} finally{
 
 			this.organizacaoDao.clear();
 			this.organizacaoDao.close();
 
-		}
+//		}
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
