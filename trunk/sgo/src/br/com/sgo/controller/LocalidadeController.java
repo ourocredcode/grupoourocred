@@ -91,6 +91,49 @@ public class LocalidadeController {
 		}
 	}
 	
+	@Post
+	@Path("/localidade/organizacao/busca.localidade")
+	public void buscalocalidadeOrg(String enderecoCEP) {
+
+		restfulie = Restfulie.custom();
+		addressFinder = new BrazilianAddressFinder(restfulie);
+
+		Localidade l = this.localidadeDao.buscaLocalidade(enderecoCEP);
+
+		if(l.getLocalidade_id() == null) {
+
+			String[] resultado = addressFinder.findAddressByZipCode(enderecoCEP).asAddressArray();
+
+			if(resultado[0].equals("")) {
+
+				result.redirectTo(this).cadastro(enderecoCEP);
+
+			} else {
+
+				l = new Localidade();
+
+				l.setEmpresa(usuarioInfo.getEmpresa());
+				l.setOrganizacao(usuarioInfo.getOrganizacao());
+				l.setIsActive(true);
+				l.setPais(this.paisDao.buscaPais("Brasil"));
+				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+				l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+				l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+				l.setEndereco(resultado[1]);
+				l.setBairro(resultado[2]);
+				l.setCep(enderecoCEP);
+
+				result.include("localidade",l);
+
+			}
+
+		} else {				
+
+				result.include("localidade",l);
+
+		}
+	}
+	
 	@Get
 	@Path("/localidade/cadastro")
 	public void cadastro(String cep) {
