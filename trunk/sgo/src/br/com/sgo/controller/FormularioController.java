@@ -30,6 +30,7 @@ import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoControleFormularioDao;
 import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
+import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
@@ -67,6 +68,7 @@ public class FormularioController {
 	private final ParceiroBeneficioDao parceiroBeneficioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
+	private final ParceiroContatoDao parceiroContatoDao;
 	private final ControleFormularioDao controleFormularioDao;
 	private final HistoricoControleFormularioDao historicoControleFormularioDao;
 	private final TipoControleDao tipoControleDao;
@@ -102,7 +104,8 @@ public class FormularioController {
 			ParceiroBeneficioDao parceiroBeneficioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroNegocio parceiroNegocio,ParceiroLocalidade parceiroLocalidade,
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
 			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
-			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow, MeioPagamentoDao meioPagamentoDao,TabelaDao tabelaDao){		
+			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow, MeioPagamentoDao meioPagamentoDao,TabelaDao tabelaDao,
+			ParceiroContatoDao parceiroContatoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -113,6 +116,7 @@ public class FormularioController {
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
 		this.controleFormularioDao = controleFormularioDao;
 		this.parceiroInfoBancoDao = parceiroInfoBancoDao;
+		this.parceiroContatoDao = parceiroContatoDao;
 		this.historicoControleFormularioDao = historicoControleFormularioDao;
 		this.coeficienteDao = coeficienteDao;
 		this.tipoControleDao = tipoControleDao;
@@ -166,6 +170,9 @@ public class FormularioController {
 	public void visualiza(Long id){
 
 		formulario = formularioDao.load(id);
+		parceiroNegocio = parceiroNegocioDao.load(formulario.getParceiroNegocio().getParceiroNegocio_id());
+		parceiroInfoBanco = parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(formulario.getParceiroNegocio().getParceiroNegocio_id());
+
 		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario.getFormulario_id()));
 
 		result.include("bancos", this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
@@ -211,6 +218,7 @@ public class FormularioController {
 		}
 
 		result.include("formulario",formulario);
+		result.include("parceiroContatos", this.parceiroContatoDao.buscaParceiroContatos(formulario.getParceiroNegocio().getParceiroNegocio_id()));
 
 	}
 	

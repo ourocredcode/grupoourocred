@@ -119,67 +119,112 @@ function mostra(formulario_id){
 		</c:choose>
 	</c:if>
 
+	
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-align-justify"></i>									
+						</span>
 
-				<div id="formCliente">
-				
-					<div class="row-fluid">
-						<div class="span2">
-							<label for="formularioParceiroNegocioNome">Nome</label>
-							<input type="text" class="input-medium" id="formularioParceiroNegocioNome" name="formulario.parceiroNegocio.nome" value="${formulario.parceiroNegocio.nome }"/>	
+						<h5>Dados Cliente</h5>
+
+					</div>
+					<div class="widget-content padding">
+						<div class="row-fluid">
+							<div id="formCliente">
+								<div class="span2">
+									<label for="formularioParceiroNegocioNome">Nome</label>
+									<input type="text" class="input-medium" id="formularioParceiroNegocioNome" name="formulario.parceiroNegocio.nome" value="${formulario.parceiroNegocio.nome }"/>	
+								</div>
+								<div class="span2">
+									<label for="formularioParceiroNegocioCpf">Cpf</label>
+									<input type="text" class="input-medium" id="formularioParceiroNegocioCpf" name="formulario.parceiroNegocio.cpf" value="${formulario.parceiroNegocio.cpf }" />
+								</div>
+								<div class="span2">
+									<label for="parceiroBeneficioNumeroBeneficio">Beneficio</label>
+									<input type="text" class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio" value="${formulario.parceiroBeneficio.numeroBeneficio }" />
+								</div>
+								<div class="span2">
+									<label for="formularioParceiroNegocioDataNascimento">Dt Nascimento</label>
+									<input type="text" class="input-medium" id="formularioParceiroNegocioDataNascimento" name="formulario.parceiroNegocio.dataNascimento"  placeholder="Nasc." 
+									value="<fmt:formatDate pattern="dd/MM/yyyy" value="${formulario.parceiroNegocio.dataNascimento.time }" />">
+								</div>
+								<div class="span2">
+									<label for="parceiroLocalidadeLocalidadeCep">CEP</label>
+									<input  class="input-medium" id="parceiroLocalidadeLocalidadeCep" name="parceiroLocalidade.localidade.cep" type="text" value="${formulario.parceiroLocalidade.localidade.cep }" />
+								</div>
+							</div>
 						</div>
-						<div class="span2">
-							<label for="formularioParceiroNegocioCpf">Cpf</label>
-							<input type="text" class="input-medium" id="formularioParceiroNegocioCpf" name="formulario.parceiroNegocio.cpf" value="${formulario.parceiroNegocio.cpf }" />
-						</div>
-						<div class="span2">
-							<label for="parceiroBeneficioNumeroBeneficio">Beneficio</label>
-							<input type="text" class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" />
-						</div>
-						<div class="span2">
-							<label for="formularioParceiroNegocioDataNascimento">Dt Nascimento</label>
-							<input type="text" class="input-medium" id="formularioParceiroNegocioDataNascimento" name="formulario.parceiroNegocio.dataNascimento"  placeholder="Nasc." 
-							value="<fmt:formatDate pattern="dd/MM/yyyy" value="${formulario.parceiroNegocio.dataNascimento.time }" />">
-						</div>
-						<div class="span2">
-							<label for="parceiroLocalidadeLocalidadeCep">CEP</label>
-							<input  class="input-medium" id="parceiroLocalidadeLocalidadeCep" name="parceiroLocalidade.localidade.cep" type="text" value="${parceiroLocalidade.localidade.cep }" />
+						<div class="row-fluid">
+							<div id="formDadosPagamento">
+								<div class="span2">
+									<label for="Banco">Banco</label>
+									<input type="text" class="input-medium" id="Banco" name="Banco" value="${formulario.parceiroInfoBanco.banco.nome }"/>
+									<input type="hidden" class="span1" id="BancoId" name="BancoId" value="${formulario.parceiroInfoBanco.banco.banco_id }"/>
+								</div>
+								<div class="span2">
+									<label for="Agencia">Agencia</label>
+									<input type="text" class="input-medium" id="Agencia" name="Agencia" value="${formulario.parceiroInfoBanco.agenciaNumero }" />
+								</div>
+								<div class="span2">
+									<label for="Conta">Conta</label>
+									<input type="text" class="input-medium" id="Conta" name="Conta" value="${formulario.parceiroInfoBanco.contaCorrente }" />
+								</div>							
+							</div>
 						</div>
 					</div>
-
-				</div>
-
-				<div id="formDadosPagamento">
-					<div class="row-fluid">
-						<div class="span2">
-							<label for="Banco">Banco</label>
-							<input type="text" class="input-medium" id="Banco" name="Banco" value="${parceiroInfoBanco.banco.nome }"/>	
+				</div>						
+			</div>
+		</div>
+	</div>
+	
+	
+	<c:if test="${not empty parceiroContatos}">	
+		
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="widget-box">
+						<div class="widget-title">
+							<span class="icon">
+								<i class="icon-align-justify"></i>									
+							</span>
+	
+							<h5>Contatos</h5>
+	
 						</div>
-						<div class="span2">
-							<label for="Agencia">Agencia</label>
-							<input type="text" class="input-medium" id="Agencia" name="Agencia" value="${parceiroInfoBanco.agencia.nome }" />
-						</div>
-						<div class="span2">
-							<label for="Conta">Conta</label>
-							<input type="text" class="input-medium" id="Conta" name="Conta" value="${parceiroInfoBanco.contaBancaria }" />
-						</div>
-						<div class="span2">
-							<label for="TipoConta">Tipo Conta</label>
-							<input type="text" class="input-medium" id="TipoConta" name="TipoConta" value="${parceiroInfoBanco.contaBancaria.tipoConta }" />
-						</div>
-						<div class="span3">
-							<label for="meioPagamento">Tipo Pagamento</label>
-							<select class="input-medium" id="meioPagamento" name="formulario.parceiroInfoBanco.meioPagamento.meioPagamento_id">
-								<option value="">Escolha Tipo Pagamento</option>
-								<c:forEach items="${meiosPagamento }" var="meioPagamento">
-									<option value="${meioPagamento.meioPagamento_id }">${meioPagamento.nome }</option>
+						<div class="widget-content padding">
+						
+							<table class="table table-striped table-bordered" id="lista" style="width: 100px;">
+							<thead>
+								<tr>
+									<th>TipoContato</th>
+									<th>Contato</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${parceiroContatos}" var="parceiroContato" varStatus="status">
+									<tr>
+										<td><input type="text" id="parceiroContatoNome" value="${parceiroContato.tipoContato.nome }" class="input-small" /></td>
+										<td><input type="text" id="parceiroContatoNomeLista" value="${parceiroContato.nome }" class="input-small" /></td>
+									</tr>
 								</c:forEach>
-							</select>
+							</tbody>
+							</table>
+
 						</div>
-					</div>
+					</div>						
 				</div>
+			</div>
+		</div>
+	</c:if>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
 
 				<div id="div-contratos" style="float: none;clear:both;">
 

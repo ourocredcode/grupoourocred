@@ -112,8 +112,7 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 	}
 
-	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByParceiroNegocio(
-			Long parceironegocio_id) {
+	public Collection<ParceiroBeneficio> buscaParceiroBeneficioByParceiroNegocio( Long parceironegocio_id ) {
 
 		String sql = sqlParceiroBeneficio;
 

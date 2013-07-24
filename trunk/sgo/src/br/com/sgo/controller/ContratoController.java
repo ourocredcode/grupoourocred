@@ -50,7 +50,6 @@ import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoContrato;
 import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Logistica;
-import br.com.sgo.modelo.MeioPagamento;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroInfoBanco;
@@ -104,7 +103,6 @@ public class ContratoController {
 	private ParceiroLocalidade parceiroLocalidade;
 	private ParceiroInfoBanco parceiroInfoBanco;
 	private ParceiroBeneficio parceiroBeneficio;
-	private Collection<MeioPagamento> meiosPagamento;
 	private Controle boleto;
 	private Controle averbacao;
 	private Collection<Conferencia> conferencias;
@@ -253,8 +251,6 @@ public class ContratoController {
 			}
 
 		}
-		
-		meiosPagamento = meioPagamentoDao.buscaAllMeioPagamento(1L, 1L);
 
 		formulario.setParceiroNegocio(parceiroNegocio);
 		formulario.setParceiroBeneficio(parceiroBeneficio);
@@ -276,7 +272,7 @@ public class ContratoController {
 		result.include("historicoControleAverbacao",historicoControleAverbacao);
 		result.include("organizacoes", this.organizacaoDao.buscaOrganizacoesByEmpresa(empresa.getEmpresa_id()));
 		result.include("hisconsBeneficio", this.hisconBeneficioDao.buscaHisconsBeneficioByParceiroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),parceiroBeneficio.getParceiroBeneficio_id()));
-		result.include("meiosPagamento",meiosPagamento);
+		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1L, 1L));
 		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
 
 	}
@@ -542,6 +538,23 @@ public class ContratoController {
 				log.add("Valor Quitação alterado de : " + this.contrato.getValorQuitacao() + " para : " + contrato.getValorQuitacao());
 				this.contrato.setValorQuitacao(contrato.getValorQuitacao() == null ? null : contrato.getValorQuitacao());
 			}
+		}
+		
+		if(contrato.getMeioPagamento() != null){
+
+			contrato.setMeioPagamento(this.meioPagamentoDao.load(contrato.getMeioPagamento().getMeioPagamento_id()));
+
+			if(this.contrato.getMeioPagamento() != null){
+				if(this.contrato.getMeioPagamento().getMeioPagamento_id() != contrato.getMeioPagamento().getMeioPagamento_id())
+					log.add("Meio Pagamento alterado de : " + this.contrato.getMeioPagamento().getNome() + " para : " + contrato.getMeioPagamento().getNome() );
+					this.contrato.setMeioPagamento(contrato.getMeioPagamento());
+			}
+
+			if(this.contrato.getMeioPagamento() == null){
+				log.add("Meio Pagamento alterado para : " + contrato.getMeioPagamento().getNome() );
+				this.contrato.setMeioPagamento(contrato.getMeioPagamento());
+			}
+
 		}
 		
 		
