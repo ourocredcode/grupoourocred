@@ -37,9 +37,7 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
-	$('select').select2();
-	
+
 	$('#Banco').autocomplete({
 		source: function( request, response ) {
 	        $.ajax({
@@ -85,6 +83,7 @@ $(document).ready(function() {
 	var contratoBanco = document.getElementById("contratoBanco");
 	var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
 	var informacaoSaque = document.getElementById("informacaoSaque");
+	var meioPagamento = document.getElementById("meioPagamento");
 	var valorQuitacao = document.getElementById("valorQuitacao");
 	var bairro = document.getElementById("bairro");
 	var cidade = document.getElementById("cidade");
@@ -159,6 +158,11 @@ $(document).ready(function() {
 	if(informacaoSaque != undefined) {
 		if(informacaoSaque.value == "")
 			desabilita(informacaoSaque);	
+	}
+
+	if(meioPagamento != undefined) {
+		if(meioPagamento.value == "")
+			desabilita(meioPagamento);	
 	}
 
 	if(valorQuitacao != undefined) {
@@ -242,7 +246,7 @@ function verificaStatus() {
 	var dataConcluido = document.getElementById("dataConcluido");
 	var dataQuitacao = document.getElementById("dataQuitacao");
 	var dataDigitacao = document.getElementById("dataDigitacao");
-
+    var meioPagamento = document.getElementById("meioPagamento");
 	var propostaBanco = document.getElementById("propostaBanco");
 	var contratoBanco = document.getElementById("contratoBanco");
 	var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
@@ -254,11 +258,15 @@ function verificaStatus() {
 	var numero = document.getElementById("numero");
 
 	if(status == 'Aprovado') {
+
 		habilita(dataStatusFinal);
+
 		$("#dataStatusFinal").val(getCurrentDate());
-		verificaPagamento();
+
+		habilita(meioPagamento);
+
 	}
-	
+
 	if(status == 'Concluído') {
 		habilita(dataConcluido);
 		$("#dataConcluido").val(dataStatusFinal.value);
@@ -440,10 +448,11 @@ function validaForm(form) {
 
 function verificaPagamento() {
 
-	var tipoPagamento = document.getElementById("tipoPagamento");
+	var meioPagamentoId = document.getElementById("meioPagamento");
+	var meioPagamento = meioPagamentoId.options[meioPagamentoId.selectedIndex].text;
 	var informacaoSaque = document.getElementById("informacaoSaque");
 
-	if(tipoPagamento.value == "OP"){
+	if(meioPagamento == "OP"){
 		habilita(informacaoSaque);
 	} else {
 		desabilita(informacaoSaque);
@@ -595,11 +604,7 @@ function openPopup(url) {
 								<div class="span2">
 									<label for="Conta">Conta</label>
 									<input type="text" class="input-medium" id="Conta" name="Conta" value="${formulario.parceiroInfoBanco.contaCorrente }" />
-								</div>
-								<div class="span3">
-									<label for="MeioPagamento">Tipo Pagamento</label>
-									<input id="MeioPagamento" type="text" value="${formulario.parceiroInfoBanco.meioPagamento.nome }" class="input-medium"/>
-								</div>								
+								</div>							
 							</div>
 						</div>
 					</div>
@@ -817,8 +822,13 @@ function openPopup(url) {
 						<div class="row-fluid"> 
 							
 							<div class="span2">
-								<label for="tipoPagamento">Tipo Pagamento</label>
-								<input id="tipoPagamento" type="text" value="${formulario.parceiroInfoBanco.meioPagamento.nome }" class="input-medium"/>
+								<label for="meioPagamento">Meio Pagamento</label>	
+								<select id="meioPagamento" name="contrato.meioPagamento.meioPagamento_id" class="input-medium" onchange="verificaPagamento();" >
+									<option value="">Selecione</option>
+									<c:forEach var="meioPagamento" items="${meiosPagamento }">
+										<option value="${meioPagamento.meioPagamento_id }" <c:if test="${meioPagamento.meioPagamento_id == contrato.meioPagamento.meioPagamento_id }">selected="selected" </c:if>>${meioPagamento.nome }</option>
+									</c:forEach>
+								</select>
 							</div>
 
 							<div class="span2">
@@ -1156,7 +1166,7 @@ function openPopup(url) {
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
-							<div class="span6">
+							<div class="span5">
 								<div id="divBoleto" style="margin-left: 50px">	
 									<div class="control-group">
 
@@ -1188,7 +1198,7 @@ function openPopup(url) {
 									 </div>
 								</div>
 							</div>
-							<div class="span6">
+							<div class="span7">
 								<c:if test="${not empty historicoControleBoleto }">
 									<table class="table table-bordered table-striped table-hover data-table" id="lista">
 										<thead>
@@ -1201,7 +1211,8 @@ function openPopup(url) {
 										<tbody>	
 											<c:forEach items="${historicoControleBoleto}" var="historico">
 												<tr>
-													<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${historico.created.time }" /></td>
+													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${historico.created.time }" /></td>
+													
 													<td>${historico.createdBy.nome }</td>
 													<td>${historico.observacao }</td>
 												</tr>
@@ -1227,7 +1238,7 @@ function openPopup(url) {
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
-							<div class="span6">
+							<div class="span5">
 								<div id="divAverbacao" style="margin-left: 50px">	
 									<div class="control-group">
 										<div class="controls">
@@ -1252,7 +1263,7 @@ function openPopup(url) {
 									
 								</div>
 							</div>
-							<div class="span6">
+							<div class="span7">
 								<c:if test="${not empty historicoControleAverbacao }">
 									<table class="table table-bordered table-striped table-hover data-table" id="lista">
 										<thead>
@@ -1265,7 +1276,7 @@ function openPopup(url) {
 										<tbody>	
 											<c:forEach items="${historicoControleAverbacao}" var="historico">
 												<tr>
-													<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${historico.created.time }" /></td>
+													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${historico.created.time }" /></td>
 													<td>${historico.createdBy.nome }</td>
 													<td>${historico.observacao }</td>
 												</tr>

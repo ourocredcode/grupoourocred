@@ -69,9 +69,9 @@ public class HistoricoControleDao extends Dao<HistoricoControle> {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 				historicoControle.setHistoricoControle_id(rsHistoricoControle.getLong("historicocontrole_id"));
+
 				createdBy.setUsuario_id(rsHistoricoControle.getLong("createdby"));
 				createdBy.setNome(rsHistoricoControle.getString("usuario_nome"));
-				created.setTime(rsHistoricoControle.getDate("created"));
 				created.setTime(sdf.parse(rsHistoricoControle.getTimestamp("created").toString()));
 
 				historicoControle.setObservacao(rsHistoricoControle.getString("observacao"));

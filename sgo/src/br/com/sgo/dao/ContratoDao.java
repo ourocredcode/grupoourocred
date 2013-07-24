@@ -55,7 +55,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
 			" ETAPA.etapa_id, ETAPA.nome as etapa_nome "+
 			" FROM " +
-			" ((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
+			" (((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
 			" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
 			" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) "+
 			" INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) "+
@@ -71,8 +71,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" LEFT JOIN WORKFLOW (NOLOCK) AS WORKFLOW_1 ON CONTRATO.workflowpendencia_id = WORKFLOW_1.workflow_id) "+
 			" LEFT JOIN ETAPA (NOLOCK) AS ETAPA_1 ON CONTRATO.etapapendencia_id = ETAPA_1.etapa_id) "+
 			" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +
-			" INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio) " +
-			" LEFT JOIN PARCEIROINFOBANCO (NOLOCK) ON PARCEIROINFOBANCO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id ";  
+			" INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio " ;  
 
 	public ContratoDao(Session session, ConnJDBC conexao) {
 
@@ -371,7 +370,7 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " AND ( CONTRATO.tiposaque_id = ? ) ";
 		
 		if(tipoPagamento != null)
-			sql += " AND ( PARCEIROINFOBANCO.meiopagamento_id = ? ) ";
+			sql += " AND ( CONTRATO.meiopagamento_id = ? ) ";
 
 		sql += " AND ( 1=1 ";
 
@@ -539,7 +538,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			System.out.println(sql);
+			//System.out.println(sql);
 
 			int curr = 1;
 
@@ -865,7 +864,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			System.out.println(sql);
+			//System.out.println(sql);
 
 			int curr = 1;
 

@@ -102,6 +102,10 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", updatable = true, nullable = true)
 	private Usuario usuario;
+	
+	@ManyToOne
+	@JoinColumn(name = "meiopagamento_id", updatable = true, nullable = true)
+	private MeioPagamento meioPagamento;
 
 	@ManyToOne
 	@JoinColumn(name = "tiposaque_id", updatable = true, nullable = true)
@@ -628,6 +632,14 @@ public class Contrato implements Serializable {
 
 	public void setValorContratoLiquido(Double valorContratoLiquido) {
 		this.valorContratoLiquido = valorContratoLiquido;
+	}
+
+	public MeioPagamento getMeioPagamento() {
+		return meioPagamento;
+	}
+
+	public void setMeioPagamento(MeioPagamento meioPagamento) {
+		this.meioPagamento = meioPagamento;
 	}
 
 }
