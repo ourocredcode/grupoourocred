@@ -3,6 +3,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
+	
 	$("#dataStatusFinal").mask("99/99/9999");
 	$("#logisticaDataAssinatura").mask("99/99/9999");
 	$("#dataConcluido").mask("99/99/9999");
@@ -17,9 +18,10 @@ $(document).ready(function() {
 		"bJQueryUI": true,
 		"sPaginationType": "full_numbers",
 		"sDom": '<""l>t<"F"fp>',
+		"bFilter": false,
 		"aaSorting": []
 	});
-	
+
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 
 	$("span.icon input:checkbox, th input:checkbox").click(function() {
@@ -35,6 +37,8 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	$('select').select2();
 	
 	$('#Banco').autocomplete({
 		source: function( request, response ) {
@@ -941,7 +945,7 @@ function openPopup(url) {
 						<h5>Histórico</h5>
 					</div>
 					<div class="widget-content">
-						<table class="table table-bordered table-striped table-hover data-table">
+						<table class="table table-bordered table-striped table-hover data-table" id="histTable">
 							<c:if test="${not empty historico}">
 							<thead>	
 								<tr>
@@ -1148,7 +1152,7 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Boleto</h5>
-						<div class="buttons"><a href="#" class="btn btn-mini" onclick="javascript:return boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
@@ -1186,7 +1190,7 @@ function openPopup(url) {
 							</div>
 							<div class="span6">
 								<c:if test="${not empty historicoControleBoleto }">
-									<table class="table table-striped table-bordered" id="lista">
+									<table class="table table-bordered table-striped table-hover data-table" id="lista">
 										<thead>
 											<tr>
 												<th>Data</th>
@@ -1219,7 +1223,7 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Averbacao</h5>
-						<div class="buttons"><a href="#" class="btn btn-mini" onclick="javascript:return averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
@@ -1250,7 +1254,7 @@ function openPopup(url) {
 							</div>
 							<div class="span6">
 								<c:if test="${not empty historicoControleAverbacao }">
-									<table class="table table-striped table-bordered" id="lista">
+									<table class="table table-bordered table-striped table-hover data-table" id="lista">
 										<thead>
 											<tr>
 												<th>Data</th>
