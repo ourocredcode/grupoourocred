@@ -357,6 +357,7 @@ public class ContratoDao extends Dao<Contrato> {
 		String sql = sqlContratos;
 		String clause = "";
 		int x = 0;
+		Boolean comboSearch = false;
 
 		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
 
@@ -388,32 +389,57 @@ public class ContratoDao extends Dao<Contrato> {
 
 		}
 
-		sql += " ) ";
+		if ( x == 0 ){
 
-		x = 0;
+			sql += " ) ";
 
-		sql += " AND ( 1=1 ";
-		
-		for(String statusFinalAux1 : statusFinal){
+			sql += " AND ( 1=1 ";
+			
+			for(String statusFinalAux1 : statusFinal){
 
-			clause = x <= 0 ? "AND" : "OR";
+				clause = x <= 0 ? "AND" : "OR";
 
-			if(!statusFinalAux1.equals("")){
-				sql += clause + " ( ETAPA.nome like ? ) ";
-				x++;
-				clause = "";
+				if(!statusFinalAux1.equals("")){
+					sql += clause + " ( ETAPA.nome like ? ) ";
+					x++;
+					clause = "";
+				}
+				
+				
+
 			}
 			
+			if(x == 0){
+				sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) ";
+			}
+
+			sql += " ) ";
+		
+		} else {
+
+			x = 0;
+			comboSearch = true;
+
+			for(String statusFinalAux1 : statusFinal){
+
+				clause = " OR ";
+
+				if(!statusFinalAux1.equals("")){
+					sql += clause + " ( ETAPA.nome like ? ) ";
+					x++;
+					clause = "";
+				}
+
+			}
 			
+			if(x == 0){
+				sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) ";
+			}
+
+			sql += " ) ";
 
 		}
-		
-		if(x == 0){
-			sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) ";
-		}
 
-		sql += " ) ";
-		
 		x = 0;
 		sql += " AND ( 1=1 ";
 
@@ -478,14 +504,32 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		sql += " ) ";
 
+		sql += " AND ( 1=1  ";
+		
 		if(calInicio != null)
 			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
 		
-		if(calStatusFinalInicio != null)
-			sql += " AND (CONTRATO.datastatusfinal BETWEEN ? AND ? )";
+		if(calStatusFinalInicio != null) {
+
+			if(comboSearch)
+				sql += " OR (CONTRATO.datastatusfinal BETWEEN ? AND ? )";
+			else
+				sql += " AND (CONTRATO.datastatusfinal BETWEEN ? AND ? )";
+
+		}
+			
 		
-		if(calConclusaoInicio != null)
-			sql += " AND (CONTRATO.dataconclusao BETWEEN ? AND ? )";
+		if(calConclusaoInicio != null) {
+
+			if(comboSearch)
+				sql += " OR (CONTRATO.dataconclusao BETWEEN ? AND ? )";
+			else
+				sql += " AND (CONTRATO.dataconclusao BETWEEN ? AND ? )";
+
+		}
+		
+		sql += " ) ";
+			
 
 		this.conn = this.conexao.getConexao();
 
@@ -495,7 +539,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//System.out.println(sql);
+			System.out.println(sql);
 
 			int curr = 1;
 
@@ -821,7 +865,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//System.out.println(sql);
+			System.out.println(sql);
 
 			int curr = 1;
 

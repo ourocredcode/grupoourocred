@@ -481,9 +481,9 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			System.out.println(sql);
-			System.out.println(calendarInicio.getTime());
-			System.out.println(calendarFim.getTime());
+			//System.out.println(sql);
+			//System.out.println(calendarInicio.getTime());
+			//System.out.println(calendarFim.getTime());
 
 			int curr = 1;
 

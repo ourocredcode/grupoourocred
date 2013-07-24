@@ -575,7 +575,7 @@
 							<div class="control-group">
 								<label class="control-label">Chegada Fim</label>
 								<div class="controls">
-									<input id="busca_DataChegadaInicio" name="busca_DataChegadaInicio" type="text" class="input-small"/>
+									<input id="busca_DataChegadaFim" name="busca_DataChegadaFim" type="text" class="input-small"/>
 								</div>
 							</div>
 							<div class="control-group">
@@ -825,70 +825,73 @@
 							<table id="mytable" class="table table-bordered table-striped table-hover data-table">
 								<thead>	
 									<tr>
-										<th>
+										<th >
 											Data
 										</th>
-										<th>
+										<th >
 											Supervisor
 										</th>
-										<th>
+										<th >
 											Consultor
 										</th>
-										<th>
+										<th >
 											Cliente
 										</th>
-										<th>
+										<th >
 											Cpf
 										</th>
-										<th>
+										<th >
 											Banco:
 										</th>
-										<th>
+										<th >
 											Produto:
 										</th>
-										<th>
-											Banco Comprado:
+										<th >
+											Comprado:
 										</th>
-										<th>
+										<th >
 											Parcela
 										</th>
-										<th>
+										<th >
 											Coeficiente
 										</th>
-										<th>
+										<th >
 											Prazo
 										</th>
-										<th>
+										<th >
+											Vl Contrato
+										</th>
+										<th >
+											Vl C Liquido
+										</th>
+										<th >
 											Dívida
 										</th>
-										<th>
+										<th >
 											Liquido
 										</th>
-										<th>
+										<th >
 											Meta
 										</th>
-										<th>
+										<th >
 											Status
-										</th>
-										<th>
-											Pós Venda
 										</th>
 									</tr>
 								</thead>
-								<tbody>	
+								<tbody>		
 									<c:forEach items="${contratos}" var="contrato">
 										<tr>
-											<td>
+											<td >
 												<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM" />
 											</td>
 											<td >
 												${contrato.usuario.supervisorUsuario.apelido }
 											</td>
 											<td >
-												${contrato.usuario.apelido }
+												${fn:substring(contrato.usuario.apelido , 0, 18)} ...
 											</td>
 											<td >
-												${contrato.formulario.parceiroNegocio.nome }
+												${fn:substring(contrato.formulario.parceiroNegocio.nome, 0, 18)} ...
 											</td>
 											<td >
 												${contrato.formulario.parceiroNegocio.cpf }
@@ -912,6 +915,19 @@
 												${contrato.prazo }
 											</td>
 											<td >
+												${contrato.valorContrato }
+											</td>
+											<td class="${alert}">
+												<c:choose>
+													<c:when test="${contrato.produto.nome eq 'MARGEM LIMPA' || contrato.produto.nome eq 'RECOMPRA RMC' || contrato.produto.nome eq 'RECOMPRA INSS'}">
+														<fmt:formatNumber type="NUMBER" value="${contrato.valorContrato }" minFractionDigits="2" />
+													</c:when>
+													<c:when test="${contrato.produto.nome eq 'RETENÇÃO' || contrato.produto.nome eq 'REFINANCIAMENTO'}">
+														<fmt:formatNumber type="NUMBER" value="${contrato.valorLiquido }" minFractionDigits="2" />
+													</c:when>
+												</c:choose>
+											</td>
+											<td >
 												${contrato.valorDivida }
 											</td>
 											<td >
@@ -922,9 +938,6 @@
 											</td>
 											<td >
 												<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
-											</td>
-											<td >
-												PÓS VENDA
 											</td>
 										</tr>
 									</c:forEach>
