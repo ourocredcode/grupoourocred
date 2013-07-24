@@ -67,22 +67,6 @@ function limpaForm() {
 	}
 }
 
-$(function() {
-
-// Invoke the plugin
-	$('input, textarea').placeholder();
-	// That's it, really.
-	// Now display a message if the browser supports placeholder natively
-	var html;
-	if ($.fn.placeholder.input && $.fn.placeholder.textarea) {
-		html = '<strong>Your current browser natively supports <code>placeholder</code> for <code>input</code> and <code>textarea</code> elements.</strong> The plugin wont run in this case, since its not needed. If you want to test the plugin, use an older browser ;)';
-	} else if ($.fn.placeholder.input) {
-		html = '<strong>Your current browser natively supports <code>placeholder</code> for <code>input</code> elements, but not for <code>textarea</code> elements.</strong> The plugin will only do its thang on the <code>textarea</code>s.';
-	}
-	if (html) {
-		$('<p class="note">' + html + '</p>').insertAfter('form');
-	}
-});
 </script>
 
 <div id="content-header">
