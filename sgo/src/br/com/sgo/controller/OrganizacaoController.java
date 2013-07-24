@@ -66,9 +66,9 @@ public class OrganizacaoController {
 
 		String mensagem = "";
 
-		//try {
+		try {
 
-			//if (this.organizacaoDao.buscaOrganizacaoByEmpNome(empresa.getEmpresa_id(), organizacao.getNome()) == null) {				
+			if (this.organizacaoDao.buscaOrganizacaoByEmpNome(empresa.getEmpresa_id(), organizacao.getNome()) == null) {				
 
 				organizacao.setCreated(dataAtual);
 				organizacao.setUpdated(dataAtual);
@@ -88,14 +88,14 @@ public class OrganizacaoController {
 				this.organizacaoDao.commit();
 
 					OrganizacaoInfo oi = new OrganizacaoInfo();
-					System.out.println(organizacaoInfo.getOrganizacaoPai());
+
 					oi.setEmpresa(organizacao.getEmpresa());
 					oi.setOrganizacao_id(organizacao.getOrganizacao_id());
 					oi.setTipoOrganizacao(organizacaoInfo.getTipoOrganizacao().getTipoOrganizacao_id()== null ? null : organizacaoInfo.getTipoOrganizacao());
-					oi.setLocalidade(organizacaoInfo.getLocalidade());
-					oi.setCalendario(organizacaoInfo.getCalendario());
-					oi.setOrganizacaoPai(organizacaoInfo.getOrganizacaoPai());
-					oi.setSupervisorOrganizacao(organizacaoInfo.getSupervisorOrganizacao());
+					oi.setLocalidade(organizacaoInfo.getLocalidade().getLocalidade_id() == null ? null : organizacaoInfo.getLocalidade());
+					oi.setCalendario(organizacaoInfo.getCalendario().getCalendario_id() == null ? null : organizacaoInfo.getCalendario());
+					oi.setOrganizacaoPai(organizacaoInfo.getOrganizacaoPai().getOrganizacao_id() == null ? null : organizacaoInfo.getOrganizacaoPai());
+					oi.setSupervisorOrganizacao(organizacaoInfo.getSupervisorOrganizacao().getFuncionario_id() == null ? null : organizacaoInfo.getSupervisorOrganizacao());
 					oi.setChave(organizacao.getNome());
 					oi.setNome(organizacao.getNome());
 					oi.setDescricao(organizacao.getNome());
@@ -127,24 +127,24 @@ public class OrganizacaoController {
 
 					}
 
-				//mensagem = "Organização adicionado com sucesso.";
+				mensagem = "Organização adicionado com sucesso.";
 
-			//} else {
+			} else {
 
-				//mensagem = "Erro: Organização já cadastrado.";
+				mensagem = "Erro: Organização já cadastrado.";
 
-			//}
+			}
 
-		//} catch (Exception e) {
+		} catch (Exception e) {
 
-	//		mensagem = "Erro: Falha ao adicionar a Organização.";
+			mensagem = "Erro: Falha ao adicionar a Organização.";
 
-		//} finally{
+		} finally{
 
 			this.organizacaoDao.clear();
 			this.organizacaoDao.close();
 
-		//}
+		}
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
