@@ -3,7 +3,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
-	
 	$("#dataStatusFinal").mask("99/99/9999");
 	$("#logisticaDataAssinatura").mask("99/99/9999");
 	$("#dataConcluido").mask("99/99/9999");

@@ -20,6 +20,7 @@ import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
+import br.com.sgo.modelo.Controle;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
@@ -346,6 +347,78 @@ public class ContratoDao extends Dao<Contrato> {
 
 		this.conexao.closeConnection(rsContrato, stmt, conn);
 		return contrato;
+	}
+
+	public Collection<Contrato> buscaContratosByProposta(Long empresa_id, Long organizacao_id, String proposta, String contrato, Usuario usuario) {
+
+		String sql = sqlContratos;
+
+		if(empresa_id != null)
+			sql += " WHERE EMPRESA.empresa_id = ? ";
+		if(organizacao_id != null)
+			sql += " AND ORGANIZACAO.organizacao_id = ? ";
+		if(!proposta.equals(""))
+			sql += " AND CONTRATO.propostabanco like ?  ";
+		if(!contrato.equals(""))
+			sql += " AND CONTRATO.contratobanco like ? ";
+		if(usuario != null)
+			sql += " AND ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+
+		this.conn = this.conexao.getConexao();
+
+		 Collection<Contrato> contratos = new ArrayList<Contrato>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			//System.out.println(sql);
+			
+			int curr = 1;
+
+			if(empresa_id != null){
+				this.stmt.setLong(curr, empresa_id);
+				curr++;
+			}
+
+			if(organizacao_id != null){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+			
+			if(!proposta.equals("")){
+				this.stmt.setString(curr,"%" + proposta + "%");
+				curr++;
+			}
+
+			if(!contrato.equals("")){
+				this.stmt.setString(curr,"%" + contrato + "%");
+				curr++;
+			}
+
+			if(usuario != null) {
+				this.stmt.setLong(curr,usuario.getUsuario_id());
+				curr++;
+				this.stmt.setLong(curr,usuario.getUsuario_id());
+				curr++;
+			}
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+
+				getContratos(contratos);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contratos;
 	}
 
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
@@ -710,7 +783,9 @@ public class ContratoDao extends Dao<Contrato> {
 				" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, "+
 				" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 				" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
-				" ETAPA.etapa_id, ETAPA.nome as etapa_nome "+
+				" ETAPA.etapa_id, ETAPA.nome as etapa_nome, CONTROLE.controle_id, CONTROLE.tipocontrole_id, CONTROLE.dataatuacao,CONTROLE.datachegada," +
+				" CONTROLE.dataprevisao,CONTROLE.datavencimento," +
+				" CONTROLE.dataprimeiraatuacao, CONTROLE.dataproximaatuacao "+
 				" FROM " +
 				" (((((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
 				" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
@@ -1039,7 +1114,143 @@ public class ContratoDao extends Dao<Contrato> {
 
 			while (rsContrato.next()) {
 
-				getContratos(contratos);
+				Calendar created = new GregorianCalendar();
+				Formulario formulario = new Formulario();
+				Usuario usuario = new Usuario();
+				Usuario supervisor = new Usuario();
+				Contrato contrato = new Contrato();
+				ParceiroNegocio parceiro = new ParceiroNegocio();
+				Coeficiente coeficiente = new Coeficiente();
+				Produto produto = new Produto();
+				Workflow workflow = new Workflow();
+				Etapa etapa = new Etapa();
+				Empresa empresa = new Empresa();
+				Organizacao organizacao = new Organizacao();
+				Controle controle = new Controle();
+				
+				Banco b1 = new Banco();
+				Banco b2 = new Banco();
+				
+				empresa.setEmpresa_id(rsContrato.getLong("empresa_id"));
+				empresa.setNome(rsContrato.getString("empresa_nome"));
+				
+				organizacao.setOrganizacao_id(rsContrato.getLong("organizacao_id"));
+				organizacao.setNome(rsContrato.getString("organizacao_nome"));
+
+				usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
+				usuario.setNome(rsContrato.getString("usuario_nome"));
+				usuario.setApelido(rsContrato.getString("usuario_apelido"));
+				supervisor.setUsuario_id(rsContrato.getLong("usuario_super_id"));
+				
+				supervisor.setNome(rsContrato.getString("usuario_super"));
+				supervisor.setApelido(rsContrato.getString("usuario_super_apelido"));
+
+				usuario.setSupervisorUsuario(supervisor);
+
+				formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
+				created.setTime(rsContrato.getDate("created"));
+				formulario.setCreated(created);
+
+				controle.setControle_id(rsContrato.getLong("controle_id"));
+
+				if(rsContrato.getDate("dataatuacao") != null) {
+					Calendar dataatuacao = new GregorianCalendar();
+					
+					dataatuacao.setTime(rsContrato.getDate("dataatuacao"));
+					controle.setDataAtuacao(dataatuacao);
+				}
+				
+				if(rsContrato.getDate("datachegada") != null) {
+					
+					Calendar datachegada = new GregorianCalendar();
+					
+					datachegada.setTime(rsContrato.getDate("datachegada"));
+					controle.setDataChegada(datachegada);
+				}
+				
+				
+				if(rsContrato.getDate("dataprevisao") != null) {
+					
+					Calendar dataprevisao = new GregorianCalendar();
+					
+					dataprevisao.setTime(rsContrato.getDate("dataprevisao"));
+					controle.setDataPrevisao(dataprevisao);
+				}
+				
+				if(rsContrato.getDate("dataprimeiraatuacao") != null) {
+					
+					Calendar dataprimeiraatuacao = new GregorianCalendar();
+					
+					dataprimeiraatuacao.setTime(rsContrato.getDate("dataprimeiraatuacao"));
+					controle.setDataPrimeiraAtuacao(dataprimeiraatuacao);
+				}
+				
+				if(rsContrato.getDate("dataproximaatuacao") != null) {
+					
+					Calendar dataproximaatuacao = new GregorianCalendar();
+					
+					dataproximaatuacao.setTime(rsContrato.getDate("dataproximaatuacao"));
+					controle.setDataProximaAtuacao(dataproximaatuacao);
+				}
+				
+				if(rsContrato.getDate("datavencimento") != null) {
+					
+					Calendar datavencimento = new GregorianCalendar();
+					
+					datavencimento.setTime(rsContrato.getDate("datavencimento"));
+					controle.setDataVencimento(datavencimento);
+				}
+
+				contrato.setControle(controle);
+
+				contrato.setContrato_id(rsContrato.getLong("contrato_id"));
+
+				
+				parceiro.setParceiroNegocio_id(rsContrato.getLong("parceironegocio_id"));
+				parceiro.setNome(rsContrato.getString("parceiro_nome"));
+				parceiro.setCpf(rsContrato.getString("parceiro_cpf"));
+				
+				coeficiente.setCoeficiente_id(rsContrato.getLong("coeficiente_id"));
+				coeficiente.setValor(rsContrato.getDouble("valor"));
+				
+				produto.setProduto_id(rsContrato.getLong("produto_id"));
+				produto.setNome(rsContrato.getString("produto_nome"));
+				
+				b1.setBanco_id(rsContrato.getLong("banco_id"));
+				b1.setNome(rsContrato.getString("banco_nome"));
+				
+				b2.setBanco_id(rsContrato.getLong("recompra_banco_id"));
+				b2.setNome(rsContrato.getString("bancoRecompra_nome"));
+				
+				workflow.setWorkflow_id(rsContrato.getLong("workflow_id"));
+				workflow.setNome(rsContrato.getString("workflow_nome"));
+
+				etapa.setEtapa_id(rsContrato.getLong("etapa_id"));
+				etapa.setNome(rsContrato.getString("etapa_nome"));
+
+				formulario.setParceiroNegocio(parceiro);
+				contrato.setFormulario(formulario);
+				contrato.setCoeficiente(coeficiente);
+				contrato.setEmpresa(empresa);
+				contrato.setOrganizacao(organizacao);
+				contrato.setProduto(produto);
+				contrato.setUsuario(usuario);
+				contrato.setBanco(b1);
+				contrato.setRecompraBanco(b2);
+				contrato.setEtapa(etapa);
+				contrato.setWorkflow(workflow);
+				contrato.setIsActive(rsContrato.getBoolean("isactive"));
+				contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
+				contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
+				contrato.setValorDivida(rsContrato.getDouble("valordivida"));
+				contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
+				contrato.setValorMeta(rsContrato.getDouble("valormeta"));
+				contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
+				contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
+				contrato.setPrazo(rsContrato.getInt("prazo"));
+				contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
+
+				contratos.add(contrato);
 
 			}
 
@@ -1253,8 +1464,9 @@ public class ContratoDao extends Dao<Contrato> {
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
 		created.setTime(rsContrato.getDate("created"));
 		formulario.setCreated(created);
-
+		
 		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
+
 		
 		parceiro.setParceiroNegocio_id(rsContrato.getLong("parceironegocio_id"));
 		parceiro.setNome(rsContrato.getString("parceiro_nome"));

@@ -209,6 +209,9 @@ public class Contrato implements Serializable {
 
 	@Transient
 	private Logistica logistica;
+	
+	@Transient
+	private Controle controle;
 
 	public Long getContrato_id() {
 		return contrato_id;
@@ -642,4 +645,11 @@ public class Contrato implements Serializable {
 		this.meioPagamento = meioPagamento;
 	}
 
+	public Controle getControle() {
+		return controle;
+	}
+
+	public void setControle(Controle controle) {
+		this.controle = controle;
+	}
 }
