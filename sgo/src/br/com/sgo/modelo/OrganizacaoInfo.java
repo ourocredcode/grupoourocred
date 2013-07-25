@@ -32,10 +32,6 @@ public class OrganizacaoInfo implements Serializable {
 	private TipoOrganizacao tipoOrganizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "localidade_id", updatable = true, nullable = false)
-	private Localidade localidade;
-
-	@ManyToOne
 	@JoinColumn(name = "calendario_id", updatable = true, nullable = false)
 	private Calendario calendario;
 
@@ -132,14 +128,6 @@ public class OrganizacaoInfo implements Serializable {
 
 	public void setTipoOrganizacao(TipoOrganizacao tipoOrganizacao) {
 		this.tipoOrganizacao = tipoOrganizacao;
-	}
-
-	public Localidade getLocalidade() {
-		return localidade;
-	}
-
-	public void setLocalidade(Localidade localidade) {
-		this.localidade = localidade;
 	}
 
 	public Calendario getCalendario() {
