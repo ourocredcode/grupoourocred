@@ -23,7 +23,7 @@ public class TipoOrganizacaoDao extends Dao<TipoOrganizacao> {
 	private ResultSet rsTipoOrganizacao;
 
 	private final String sqlTipoOrganizacao = "SELECT TIPOORGANIZACAO.tipoorganizacao_id, TIPOORGANIZACAO.nome, TIPOORGANIZACAO.empresa_id"
-			+ ", TIPOORGANIZACAO.organizacao_id FROM TIPOORGANIZACAO (NOLOCK)";
+			+ ", TIPOORGANIZACAO.organizacao_id FROM TIPOORGANIZACAO (NOLOCK) ";
 
 	public TipoOrganizacaoDao(Session session, ConnJDBC conexao) {
 		super(session, TipoOrganizacao.class);
@@ -74,7 +74,7 @@ public class TipoOrganizacaoDao extends Dao<TipoOrganizacao> {
 			sql += " AND TIPOORGANIZACAO.organizacao_id = ? AND TIPOORGANIZACAO.isactive = 1";
 
 		this.conn = this.conexao.getConexao();
-		
+
 		Collection<TipoOrganizacao> tiposOrganizacao = new ArrayList<TipoOrganizacao>();
 
 		try {
