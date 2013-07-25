@@ -160,7 +160,7 @@ public class MenuController {
 
 		usuarioDao.refresh(usuarioInfo.getUsuario());
 		perfilDao.refresh(usuarioInfo.getPerfil());
-		
+
 		Calendar c1 = new GregorianCalendar();
 		Calendar c2 = new GregorianCalendar();
 		c1.set(GregorianCalendar.HOUR_OF_DAY, c1.getActualMinimum(GregorianCalendar.HOUR_OF_DAY));
@@ -305,11 +305,15 @@ public class MenuController {
 
 		} 
 
+		if(tipo.equals("proposta")){
+			result.redirectTo(this).buscaproposta();
+		}
+
 		TipoWorkflow tw;
 
 		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
-		
+
 		
 		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Controle Contrato");
 		result.include("procedimentos",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
@@ -327,7 +331,12 @@ public class MenuController {
 		contador();
 
 	}
-	
+
+	@Get
+	public void buscaproposta() {
+
+	}
+
 	@Get
 	@Path("/menu/contratos/etapas/{etapa_id}") 
 	public void contratos(Long etapa_id) {
@@ -410,7 +419,6 @@ public class MenuController {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		
 		Collection<String> statusFinal = new ArrayList<String>();
-		Collection<String> tiposPagamento = new ArrayList<String>();
 		Collection<String> empresas = new ArrayList<String>();
 		Collection<String> justificativas = new ArrayList<String>();
 		
@@ -704,6 +712,23 @@ public class MenuController {
 				calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
 				calProximaAtuacaoInicio,calProximaAtuacaoFim,calQuitacaoInicio,calQuitacaoFim,calAssinaturaInicio,calAssinaturaFim,bancos,produtos,bancosComprados,
 				status,consultoresAux,cliente,documento,empresas,procedimento,proximoProcedimento, atuante));
+
+		contador();
+
+	}
+	
+	@Post
+	@Path("/menu/contrato/propostaContrato")
+	public void busca(String propostaBanco, String contratoBanco) {
+
+		contratos.clear();
+
+		Usuario u = null;
+
+		if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
+			u = usuarioInfo.getUsuario();
+
+		contratos.addAll(this.contratoDao.buscaContratosByProposta(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),propostaBanco, contratoBanco, u));
 
 		contador();
 	}

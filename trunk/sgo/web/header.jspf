@@ -29,6 +29,7 @@
 		<link rel="stylesheet" href="<c:url value="/css/jquery.gritter.css"/>" />	
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.main.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/unicorn.grey.css"/>" class="skin-color" />
+		<link rel="stylesheet" href="<c:url value="/css/ColVis.css"/>" class="skin-color" />
 
 		<script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
@@ -44,6 +45,7 @@
 		<script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/unicorn.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/funcs.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/ColVis.js"/>"></script>
 
 	</head>
 	<body>
@@ -166,6 +168,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
 						</ul>
@@ -283,6 +286,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
 						</ul>

@@ -78,7 +78,6 @@ public class ControleDao extends Dao<Controle> {
 
 				Usuario usuario = new Usuario();
 				Contrato contrato = new Contrato();
-				Calendar calendarAux = new GregorianCalendar();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.FFF");
 				Etapa etapa = new Etapa();
 				Etapa etapaProximo = new Etapa();
@@ -111,34 +110,57 @@ public class ControleDao extends Dao<Controle> {
 				try {
 					
 					if(rsControle.getDate("dataatuacao") != null){
-						calendarAux.setTime(sdf.parse(rsControle.getTimestamp("dataatuacao").toString()));
+
+						Calendar dataatuacao = new GregorianCalendar();
+
+						dataatuacao.setTime(sdf.parse(rsControle.getTimestamp("dataatuacao").toString()));
 						
-						controle.setDataAtuacao(calendarAux);
+						controle.setDataAtuacao(dataatuacao);
 					}
 					
-					if(rsControle.getDate("dataChegada") != null){
-						calendarAux.setTime(sdf.parse(rsControle.getTimestamp("dataChegada").toString()));
-						controle.setDataChegada(calendarAux);
+					if(rsControle.getDate("datachegada") != null){
+						
+						Calendar dataChegada = new GregorianCalendar();
+						
+						dataChegada.setTime(sdf.parse(rsControle.getTimestamp("datachegada").toString()));
+						controle.setDataChegada(dataChegada);
+
 					}
 					
-					if(rsControle.getDate("dataPrevisao") != null){
-						calendarAux.setTime(sdf.parse(rsControle.getTimestamp("dataPrevisao").toString()));
-						controle.setDataPrevisao(calendarAux);
+					if(rsControle.getDate("dataprevisao") != null){
+
+						Calendar dataPrevisao = new GregorianCalendar();
+
+						dataPrevisao.setTime(sdf.parse(rsControle.getTimestamp("dataprevisao").toString()));
+						controle.setDataPrevisao(dataPrevisao);
+
 					}
 					
-					if(rsControle.getDate("dataPrimeiraAtuacao") != null){
-						calendarAux.setTime(sdf.parse(rsControle.getTimestamp("dataPrimeiraAtuacao").toString()));
-						controle.setDataPrimeiraAtuacao(calendarAux);
+					if(rsControle.getDate("dataprimeiraatuacao") != null){
+
+						Calendar dataPrimeiraAtuacao = new GregorianCalendar();
+
+						dataPrimeiraAtuacao.setTime(sdf.parse(rsControle.getTimestamp("dataprimeiraatuacao").toString()));
+						controle.setDataPrimeiraAtuacao(dataPrimeiraAtuacao);
+
 					}
 					
-					if(rsControle.getDate("dataProximaAtuacao") != null){
-						calendarAux.setTime(sdf.parse(rsControle.getTimestamp("dataProximaAtuacao").toString()));
-						controle.setDataProximaAtuacao(calendarAux);
+					if(rsControle.getDate("dataproximaatuacao") != null){
+
+						Calendar dataProximaAtuacao = new GregorianCalendar();
+
+						dataProximaAtuacao.setTime(sdf.parse(rsControle.getTimestamp("dataproximaatuacao").toString()));
+						controle.setDataProximaAtuacao(dataProximaAtuacao);
+
 					}
 					
-					if(rsControle.getDate("dataVencimento") != null){
-						calendarAux.setTime(sdf.parse(rsControle.getTimestamp("dataVencimento").toString()));
-						controle.setDataVencimento(calendarAux);
+					if(rsControle.getDate("datavencimento") != null){
+
+						Calendar dataVencimento = new GregorianCalendar();
+
+						dataVencimento.setTime(sdf.parse(rsControle.getTimestamp("datavencimento").toString()));
+						controle.setDataVencimento(dataVencimento);
+
 					}
 					
 				} catch (ParseException e) {
