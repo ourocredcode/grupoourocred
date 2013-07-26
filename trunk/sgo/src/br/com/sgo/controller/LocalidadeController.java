@@ -106,7 +106,7 @@ public class LocalidadeController {
 
 			if(resultado[0].equals("")) {
 
-				result.redirectTo(this).cadastro(enderecoCEP);
+				result.redirectTo(this).cadastroorg(enderecoCEP);
 
 			} else {
 
@@ -144,8 +144,22 @@ public class LocalidadeController {
 		result.include("regioes",this.regiaoDao.listaTudo("ASC","nome"));
 		result.include("tiposLocalidade",this.tipoLocalidadeDao.listaTudo("ASC","nome"));
 		result.include("localidade",localidade);
+
 	}
 	
+	@Get
+	@Path("/localidade/cadastroorg")
+	public void cadastroorg(String cep) {
+
+		Localidade localidade = new Localidade();
+		localidade.setCep(cep);
+
+		result.include("regioes",this.regiaoDao.listaTudo("ASC","nome"));
+		result.include("tiposLocalidade",this.tipoLocalidadeDao.listaTudo("ASC","nome"));
+		result.include("localidade",localidade);
+
+	}
+
 	@Post
 	@Path("/localidade/busca.cidades")
 	public void cidades(Long regiao_id) {

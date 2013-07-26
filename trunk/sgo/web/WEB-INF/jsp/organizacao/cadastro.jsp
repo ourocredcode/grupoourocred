@@ -107,9 +107,9 @@ function salvaLocalidade() {
 	
 	var cep = $("#localidadeCep").val();
 	var endereco = $("#localidadeEndereco").val();
-	var numero = $("#parceirolocalidadeNumero").val();
-	var complemento = $("#parceirolocalidadeComplemento").val();
-	var pontoreferencia = $("#parceirolocalidadePontoReferencia").val();
+	var numero = $("#organizacaoNumero").val();
+	var complemento = $("#organizacaoComplemento").val();
+	var pontoreferencia = $("#organizacaoPontoReferencia").val();
 	var bairro = $("#localidadeBairro").val();
 	var tipoLocalidadeId = $("#localidadeTipoLocalidadeId").val();
 	var cidadeId = $("#localidadeCidadeId").val();
@@ -309,86 +309,79 @@ function cancelaEndereco() {
 											<input id="isActive" name="organizacao.isActive" type="checkbox" checked="checked" value="1" >
 										</div>
 										
-						<div class="navbar" style="clear: both;width: 920px;">
-							<div class="navbar-inner">
-								<div class="container">
-								
-								<div class="control-group"></div>
-									<div class="page-header">
-										<h2><small>Endereço</small></h2>
-										<div class="row-fluid">
-										<div class="span2">
-											<label for="tipoEnderecoId">Tipo de Endereço</label>
-											<select  id="tipoEnderecoId" name="tipoEndereco.tipoEndereco_id" class="input-medium">
-												<option value="">Selecione o Tipo De Endereço</option>
-												<c:forEach items="${tiposEndereco }" var="tipoEndereco">
-													<option value="${tipoEndereco.tipoEndereco_id }"> ${tipoEndereco.nome }</option>
-												</c:forEach>
-											</select>
-										</div>
-										</div>
-									</div>
-										
-								<div id="ajax_endereco">
-									<div class="row-fluid">
-										<div class="span3">
-											<div class="input-append">
-												<input class="span10" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
-												<span class="add-on"><i class="icon-search"></i></span>
+										<div class="navbar" style="clear: both;width: 920px;">
+											<div class="navbar-inner">
+												<div class="container">
+												
+													<div class="control-group"></div>
+													<div class="page-header">
+														<h2><small>Endereço</small></h2>
+														<div class="row-fluid">
+														<div class="span2">
+															<label for="tipoEnderecoId">Tipo de Endereço</label>
+															<select  id="tipoEnderecoId" name="tipoEndereco.tipoEndereco_id" class="input-medium">
+																<option value="">Selecione o Tipo De Endereço</option>
+																<c:forEach items="${tiposEndereco }" var="tipoEndereco">
+																	<option value="${tipoEndereco.tipoEndereco_id }"> ${tipoEndereco.nome }</option>
+																</c:forEach>
+															</select>
+														</div>
+														</div>
+													</div>
+														
+													<div id="ajax_endereco">
+														<div class="row-fluid">
+															<div class="span3">
+																<div class="input-append">
+																	<input class="span10" id="localidadeCep" name="localidade.cep" type="text" placeholder="Busca Cep" value="${localidade.cep }" />
+																	<span class="add-on"><i class="icon-search"></i></span>
+																</div>
+															</div>
+															<div class="span2">
+																<div id="loading" style="display:none;color:#1b5790; font-weight:bold;float:right;clear: both;margin-left: 600px;margin-top: 1px;">BUSCANDO...</div>
+															</div>
+														</div>
+									
+														<div class="row-fluid">
+															<input class="span2" id="organizacaoTipoLocalidade" name="localidade.tipoLocalidade.nome" type="text" placeholder="Tipo" value="${localidade.tipoLocalidade.nome }"/>
+															<input class="span5" id="organizacaoEndereco" name="localidade.endereco" type="text" placeholder="Endereço" value="${localidade.endereco }"/>										
+															<input class="span1" id="organizacaoNumero" name="organizacaoLocalidade.numero" type="text" placeholder="Número" value="${organizacaoLocalidade.numero }" />
+															<input class="span2" id="organizacaoBairro" name="localidade.bairro" type="text" placeholder="Bairro" value="${localidade.bairro }" />
+															<input class="span1" id="organizacaoRegiao" name="localidade.regiao" type="text" placeholder="UF"  value="${localidade.regiao.chave }"  />
+															<input class="span2" id="organizacaoCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />										
+														</div>
+									
+														<div id="alertCEP" style="position:absolute; float: right; width: 250px; margin-left: 100px; margin-top: -27px;"><i></i></div>
+									
+														<div class="row-fluid">		
+									
+															<input class="span2" id="organizacaoComplemento" name="organizacaoLocalidade.complemento" type="text" placeholder="Complemento" value="${organizacaoLocalidade.complemento }" />
+															<input class="span9" id="organizacaoPontoReferencia" name="organizacaoLocalidade.pontoReferencia" type="text" placeholder="Ponto de Referência" value="${organizacaoLocalidade.pontoReferencia }" />
+															
+															<input  id="organizacaoTipoLocalidadeId" name="localidade.tipoLocalidade.tipoLocalidade_id" type="hidden"  value="${localidade.tipoLocalidade.tipoLocalidade_id }" />
+															<input  id="organizacaoCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
+															<input  id="organizacaoRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
+															<input  id="organizacaoPaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
+													
+														</div>
+									
+													</div>
+												
+													<c:if test="${not empty organizacao }">
+														<div class="btn-toolbar" align="right">
+															<div class="row-fluid">
+																<div class="btn-group">
+																	<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="mostraEndereco();">Novo</button>
+																</div>	
+																<div class="btn-group">
+																	<button type="button" class="btn" id="bttCancelar" onClick="cancelaEndereco();">Fechar</button>
+																</div>
+															</div>
+														</div>
+													</c:if>
+												</div>
 											</div>
-										</div>
-										<div class="span2">
-											<div id="loading" style="display:none;color:#1b5790; font-weight:bold;float:right;clear: both;margin-left: 600px;margin-top: 1px;">BUSCANDO...</div>
-										</div>
-									</div>
-				
-									<div class="row-fluid">
-										<input class="span2" id="organizacaoTipoLocalidade" name="localidade.tipoLocalidade.nome" type="text" placeholder="Tipo" value="${localidade.tipoLocalidade.nome }"/>
-										<input class="span5" id="organizacaoEndereco" name="localidade.endereco" type="text" placeholder="Endereço" value="${localidade.endereco }"/>										
-										<input class="span1" id="organizacaoNumero" name="organizacaoLocalidade.numero" type="text" placeholder="Número" value="${organizacaoLocalidade.numero }" />
-										<input class="span2" id="organizacaoBairro" name="localidade.bairro" type="text" placeholder="Bairro" value="${localidade.bairro }" />
-										<input class="span1" id="organizacaoRegiao" name="localidade.regiao" type="text" placeholder="UF"  value="${localidade.regiao.chave }"  />
-										<input class="span2" id="organizacaoCidade" name="localidade.cidade" type="text" placeholder="Cidade" value="${localidade.cidade.nome }" />										
-									</div>
-				
-									<div id="alertCEP" style="position:absolute; float: right; width: 250px; margin-left: 100px; margin-top: -27px;"><i></i></div>
-				
-									<div class="row-fluid">		
-				
-										<input class="span2" id="organizacaoComplemento" name="organizacaoLocalidade.complemento" type="text" placeholder="Complemento" value="${organizacaoLocalidade.complemento }" />
-										<input class="span9" id="organizacaoPontoReferencia" name="organizacaoLocalidade.pontoReferencia" type="text" placeholder="Ponto de Referência" value="${organizacaoLocalidade.pontoReferencia }" />
-										
-										<input  id="organizacaoTipoLocalidadeId" name="localidade.tipoLocalidade.tipoLocalidade_id" type="hidden"  value="${localidade.tipoLocalidade.tipoLocalidade_id }" />
-										<input  id="organizacaoCidadeId" name="localidade.cidade.cidade_id" type="hidden"  value="${localidade.cidade.cidade_id }" />
-										<input  id="organizacaoRegiaoId" name="localidade.regiao.regiao_id" type="hidden" value="${localidade.regiao.regiao_id }" />
-										<input  id="organizacaoPaisId" name="localidade.pais.pais_id" type="hidden"  value="${localidade.pais.pais_id }" />
-								
-									</div>
-				
-								</div>
-								
-								<c:if test="${not empty organizacao }">
-									<div class="btn-toolbar" align="right">
-										<div class="row-fluid">
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary" id="bttLocalidade" onClick="mostraEndereco();">Novo</button>
-											</div>	
-											<div class="btn-group">
-												<button type="button" class="btn" id="bttCancelar" onClick="cancelaEndereco();">Fechar</button>
-											</div>
-										</div>
-									</div>
-								</c:if>
-							</div>
-						</div>
-					</div>
-					
-					
-					
-										
-										
-										
-										
+										</div>										
 									</div>
 								</div>
 							</div>
