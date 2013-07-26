@@ -100,13 +100,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsFuncionario, stmt, conn);
-
 		return funcionarios;
-
 	}
 
 	public Collection<Funcionario> buscaFuncionarioToFillCombosByEmpOrg(Long empresa_id, Long organizacao_id) {
@@ -152,6 +152,42 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		return funcionarios;
 	}
 
+	public Funcionario buscaFuncionarioById(Long funcionario_id) {
+
+		String sql = sqlFuncionario;
+
+		if (funcionario_id != null)
+			sql += " WHERE FUNCIONARIO.funcionario_id = ?";
+
+		this.conn = this.conexao.getConexao();
+
+		Funcionario funcionario = null;
+
+		try {
+			
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, funcionario_id);
+
+			this.rsFuncionario = this.stmt.executeQuery();			
+
+			while (rsFuncionario.next()) {
+
+				funcionario = new Funcionario();				
+				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsFuncionario, stmt, conn);
+		return funcionario;
+	}
+
 	public Funcionario buscaFuncionarioPorParceiroNegocio(Long parceironegocio_id) {
 
 		String sql = sqlFuncionarios;
@@ -159,11 +195,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ?  " ;
 
 		this.conn = this.conexao.getConexao();
+
 		Funcionario funcionario = new Funcionario();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, parceironegocio_id);
 
 			this.rsFuncionario = this.stmt.executeQuery();
@@ -198,13 +236,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsFuncionario, stmt, conn);
-
 		return funcionario;
-
 	}
 
 	public Collection<Funcionario> buscaFuncionariosBySupervisor(Long empresa_id , Long organizacao_id, Long supervisor_id) {
@@ -220,6 +258,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, supervisor_id);
@@ -250,13 +289,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsFuncionario, stmt, conn);
-
 		return funcionarios;
-
 	}
 	
 	public Collection<Funcionario> buscaFuncionariosByPerfil(Long empresa_id, Long organizacao_id, String perfil) {
@@ -272,6 +311,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + perfil + "%");
@@ -295,13 +335,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsFuncionario, stmt, conn);
-
 		return funcionarios;
-
 	}
 
 }
