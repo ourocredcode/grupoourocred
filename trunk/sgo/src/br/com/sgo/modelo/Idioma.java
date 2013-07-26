@@ -31,10 +31,6 @@ public class Idioma implements Serializable {
 	private Empresa empresa;
 
 	@ManyToOne
-	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
-	private Organizacao organizacao;
-
-	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
@@ -74,14 +70,6 @@ public class Idioma implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
-	}
-
-	public Organizacao getOrganizacao() {
-		return organizacao;
-	}
-
-	public void setOrganizacao(Organizacao organizacao) {
-		this.organizacao = organizacao;
 	}
 
 	public String getNome() {

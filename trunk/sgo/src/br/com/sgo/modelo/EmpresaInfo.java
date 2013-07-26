@@ -5,8 +5,6 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,19 +14,14 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Entity
 @Component
-@Table(name = "IMAGEM")
+@Table(name = "EMPRESAINFO")
 public class EmpresaInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "empresa_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long empresa_id;
-
-	@ManyToOne
-	@JoinColumn(name = "organizacao_id", updatable = true, nullable = false)
-	private Organizacao organizacao;
 
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
@@ -53,9 +46,6 @@ public class EmpresaInfo implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
-	@Column(name = "descricao")
-	private Imagem imagem;
-
 	@Column(name = "isactive")
 	private Boolean isActive;
 
@@ -65,14 +55,6 @@ public class EmpresaInfo implements Serializable {
 
 	public void setEmpresa_id(Long empresa_id) {
 		this.empresa_id = empresa_id;
-	}
-
-	public Organizacao getOrganizacao() {
-		return organizacao;
-	}
-
-	public void setOrganizacao(Organizacao organizacao) {
-		this.organizacao = organizacao;
 	}
 
 	public String getNome() {
@@ -89,14 +71,6 @@ public class EmpresaInfo implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public Imagem getImagem() {
-		return imagem;
-	}
-
-	public void setImagem(Imagem imagem) {
-		this.imagem = imagem;
 	}
 
 	public Boolean getIsActive() {
