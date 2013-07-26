@@ -80,7 +80,7 @@ public class OrganizacaoController {
 
 		String mensagem = "";
 
-		//try {
+		try {
 
 			if (this.organizacaoDao.buscaOrganizacaoByEmpNome(empresa.getEmpresa_id(), organizacao.getNome()) == null) {				
 
@@ -106,7 +106,6 @@ public class OrganizacaoController {
 					oi.setEmpresa(organizacao.getEmpresa());
 					oi.setOrganizacao_id(organizacao.getOrganizacao_id());
 					oi.setTipoOrganizacao(organizacaoInfo.getTipoOrganizacao().getTipoOrganizacao_id()== null ? null : organizacaoInfo.getTipoOrganizacao());
-					//oi.setLocalidade(organizacaoInfo.getLocalidade().getLocalidade_id() == null ? null : organizacaoInfo.getLocalidade());
 					//oi.setCalendario(organizacaoInfo.getCalendario().getCalendario_id() == null ? null : organizacaoInfo.getCalendario());
 					oi.setOrganizacaoPai(organizacaoInfo.getOrganizacaoPai().getOrganizacao_id() == null ? null : organizacaoInfo.getOrganizacaoPai());
 					oi.setSupervisorOrganizacao(organizacaoInfo.getSupervisorOrganizacao().getFuncionario_id() == null ? null : organizacaoInfo.getSupervisorOrganizacao());
@@ -145,8 +144,15 @@ public class OrganizacaoController {
 
 					if(l.getLocalidade_id() == null)	{
 			
+						Empresa empresa = new Empresa();
+						Organizacao organizacao2 = new Organizacao();
+						
+						empresa.setEmpresa_id(1l);
+						organizacao2.setOrganizacao_id(1l);
+
 						localidade.setEmpresa(empresa);
-						localidade.setOrganizacao(organizacao);			
+						localidade.setOrganizacao(organizacao2);
+
 						localidade.setCreated(dataAtual);
 						localidade.setCreatedBy(usuario);
 						localidade.setIsActive(true);
@@ -174,50 +180,43 @@ public class OrganizacaoController {
 						localidade.setLocalidade_id(l.getLocalidade_id());
 
 					}
-					
-					//Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
-					
-					//for(TipoEndereco tipoEndereco : tiposEndereco){
-			
-						OrganizacaoLocalidade ol = new OrganizacaoLocalidade();
-			
-						ol.setEmpresa(empresa);
-						ol.setOrganizacao(organizacao);
-						ol.setLocalidade(localidade);
-						ol.setTipoEndereco(tipoEndereco);
-						ol.setNumero(organizacaoLocalidade.getNumero());
-						ol.setComplemento(organizacaoLocalidade.getComplemento());
-						ol.setPontoReferencia(organizacaoLocalidade.getPontoReferencia());
 
-						ol.setCreated(dataAtual);
-						ol.setUpdated(dataAtual);
+					OrganizacaoLocalidade ol = new OrganizacaoLocalidade();
+		
+					ol.setEmpresa(empresa);
+					ol.setOrganizacao(organizacao);
+					ol.setLocalidade(localidade);
+					ol.setTipoEndereco(tipoEndereco);
+					ol.setNumero(organizacaoLocalidade.getNumero());
+					ol.setComplemento(organizacaoLocalidade.getComplemento());
+					ol.setPontoReferencia(organizacaoLocalidade.getPontoReferencia());
 
-						ol.setCreatedBy(usuario);
-						ol.setUpdatedBy(usuario);
+					ol.setCreated(dataAtual);
+					ol.setUpdated(dataAtual);
 
-						ol.setIsActive(true);
+					ol.setCreatedBy(usuario);
+					ol.setUpdatedBy(usuario);
 
-						try {
-							
-							this.organizacaoLocalidadeDao.beginTransaction();
-							this.organizacaoLocalidadeDao.adiciona(ol);
-							this.organizacaoLocalidadeDao.commit();
-							
+					ol.setIsActive(true);
+
+					try {
+						
+						this.organizacaoLocalidadeDao.beginTransaction();
+						this.organizacaoLocalidadeDao.adiciona(ol);
+						this.organizacaoLocalidadeDao.commit();
+						
 						} catch(Exception e) {
-			
-							this.organizacaoLocalidadeDao.rollback();
-			
-							if (e.getCause().toString().indexOf("PK__PARCEIROLOCALIDADE") != -1){
-								mensagem = "Erro: Parceiro Localidade já existente.";
-							} else {
-								mensagem = "Erro: Erro ao adicionar Parceiro Localidade :";
-							}
-			
+		
+						this.organizacaoLocalidadeDao.rollback();
+		
+						if (e.getCause().toString().indexOf("PK__PARCEIROLOCALIDADE") != -1){
+							mensagem = "Erro: Parceiro Localidade já existente.";
+						} else {
+							mensagem = "Erro: Erro ao adicionar Parceiro Localidade :";
 						}
-			
-					//}
-					
-
+		
+					}
+	
 				mensagem = "Organização adicionado com sucesso.";
 
 			} else {
@@ -226,16 +225,16 @@ public class OrganizacaoController {
 
 			}
 
-		//} catch (Exception e) {
+		} catch (Exception e) {
 
-			//mensagem = "Erro: Falha ao adicionar a Organização.";
+			mensagem = "Erro: Falha ao adicionar a Organização.";
 
-		//} finally{
+		} finally{
 
 			this.organizacaoDao.clear();
 			this.organizacaoDao.close();
 
-//		}
+		}
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
