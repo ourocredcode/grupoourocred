@@ -63,13 +63,13 @@ public class OrganizacaoDao extends Dao<Organizacao> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsOrganizacoes, stmt, conn);
-
 		return organizacoes;
-
 	}
 
 	public Organizacao buscaOrganizacaoByEmpNome(Long empresa_id, String nome) {
@@ -117,31 +117,39 @@ public class OrganizacaoDao extends Dao<Organizacao> {
 
 		String sql = "SELECT ORGANIZACAO.organizacao_id, ORGANIZACAO.nome from ORGANIZACAO (NOLOCK) "
 				+ "	WHERE ORGANIZACAO.empresa_id = ? AND ORGANIZACAO.nome like ? ";
+
 		this.conn = this.conexao.getConexao();
+
 		Collection<Organizacao> organizacoes = new ArrayList<Organizacao>();
+
 		try {
+
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setString(2, "%" + org_nome + "%");
+
 			this.rsOrganizacoes = this.stmt.executeQuery();
 
 			while (rsOrganizacoes.next()) {
+
 				Organizacao organizacao = new Organizacao();
 
 				organizacao.setOrganizacao_id(rsOrganizacoes.getLong("organizacao_id"));
 				organizacao.setNome(rsOrganizacoes.getString("nome"));
 
 				organizacoes.add(organizacao);
+
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsOrganizacoes, stmt, conn);
-
 		return organizacoes;
-
 	}
 
 	public Collection<Organizacao> buscaOrganizacoesByEmpresa(Long empresa_id) {
@@ -172,13 +180,13 @@ public class OrganizacaoDao extends Dao<Organizacao> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsOrganizacoes, stmt, conn);
-
 		return organizacoes;
-
 	}
 	
 	private void getOrganizacao(Collection<Organizacao> organizacoes) throws SQLException {

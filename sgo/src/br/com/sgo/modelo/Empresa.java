@@ -27,6 +27,10 @@ public class Empresa implements Serializable {
 	private Long empresa_id;
 
 	@ManyToOne
+	@JoinColumn(name = "idioma", updatable = true, nullable = true)
+	private Idioma idioma;
+
+	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
@@ -49,6 +53,9 @@ public class Empresa implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
+	@Column(name = "isactive")
+	private Boolean isActive;
+
 	public Long getEmpresa_id() {
 		return empresa_id;
 	}
@@ -57,20 +64,12 @@ public class Empresa implements Serializable {
 		this.empresa_id = empresa_id;
 	}
 
-	public String getNome() {
-		return nome;
+	public Idioma getIdioma() {
+		return idioma;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setIdioma(Idioma idioma) {
+		this.idioma = idioma;
 	}
 
 	public Usuario getCreatedBy() {
@@ -112,4 +111,29 @@ public class Empresa implements Serializable {
 	public void setChave(String chave) {
 		this.chave = chave;
 	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
 }
