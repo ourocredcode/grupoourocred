@@ -27,7 +27,7 @@ public class Empresa implements Serializable {
 	private Long empresa_id;
 
 	@ManyToOne
-	@JoinColumn(name = "idioma", updatable = true, nullable = true)
+	@JoinColumn(name = "idioma_id", updatable = true, nullable = true)
 	private Idioma idioma;
 
 	@ManyToOne
