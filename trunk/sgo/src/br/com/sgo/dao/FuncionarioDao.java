@@ -15,6 +15,7 @@ import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Departamento;
 import br.com.sgo.modelo.Funcao;
 import br.com.sgo.modelo.Funcionario;
+import br.com.sgo.modelo.Operacao;
 import br.com.sgo.modelo.ParceiroNegocio;
 
 @Component
@@ -31,8 +32,8 @@ public class FuncionarioDao extends Dao<Funcionario> {
 	private String sqlFuncionarios =  " SELECT FUNCIONARIO.empresa_id,  EMPRESA.nome, FUNCIONARIO.organizacao_id, ORGANIZACAO.nome, PARCEIRONEGOCIO.parceironegocio_id,  " +
 			"	PARCEIRONEGOCIO.cpf, FUNCIONARIO.apelido, " +
 			"   PARCEIRONEGOCIO.nome as parceironegocio_nome, FUNCIONARIO.funcao_id, FUNCAO.nome as funcao_nome, FUNCIONARIO.departamento_id, FUNCIONARIO.funcionario_id, " +
-			"	DEPARTAMENTO.nome as departamento_nome, FUNCIONARIO.supervisor_funcionario_id, SUPER.nome as supervisor_nome FROM  " +
-			"	(((((((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) " +
+			"	DEPARTAMENTO.nome as departamento_nome, FUNCIONARIO.supervisor_funcionario_id, SUPER.nome as supervisor_nome, FUNCIONARIO.operacao_id, OPERACAO.nome as operacao_nome  FROM  " +
+			"	((((((( ( ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) " +
 			"								INNER JOIN PARCEIRONEGOCIO (NOLOCK)   ON EMPRESA.empresa_id = PARCEIRONEGOCIO.empresa_id)  ON ORGANIZACAO.organizacao_id = PARCEIRONEGOCIO.organizacao_id)   " +
 			"								INNER JOIN FUNCIONARIO (NOLOCK) ON PARCEIRONEGOCIO.parceironegocio_id = FUNCIONARIO.parceironegocio_id)   " +
 			"								LEFT JOIN PARCEIRONEGOCIO AS SUPER (NOLOCK) ON FUNCIONARIO.supervisor_funcionario_id = SUPER.parceironegocio_id) " +
@@ -40,7 +41,8 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			"								INNER JOIN USUARIO (NOLOCK) ON USUARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)  " +
 			"								INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) " +
 			"								INNER JOIN PERFIL (NOLOCK) ON PERFIL.perfil_id = USUARIOPERFIL.perfil_id) " +
-			"								INNER JOIN FUNCAO (NOLOCK) ON FUNCIONARIO.funcao_id = FUNCAO.funcao_id   ";
+			"								INNER JOIN FUNCAO (NOLOCK) ON FUNCIONARIO.funcao_id = FUNCAO.funcao_id )" +
+			"								LEFT JOIN OPERACAO (NOLOCK) ON FUNCIONARIO.operacao_id = OPERACAO.operacao_id    ";
 
 	public FuncionarioDao(Session session, ConnJDBC conexao) {
 		super(session, Funcionario.class);
@@ -100,13 +102,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			}
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
-
 		}
 
 		this.conexao.closeConnection(rsFuncionario, stmt, conn);
+
 		return funcionarios;
+
 	}
 
 	public Collection<Funcionario> buscaFuncionarioToFillCombosByEmpOrg(Long empresa_id, Long organizacao_id) {
@@ -152,42 +154,6 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		return funcionarios;
 	}
 
-	public Funcionario buscaFuncionarioById(Long funcionario_id) {
-
-		String sql = sqlFuncionario;
-
-		if (funcionario_id != null)
-			sql += " WHERE FUNCIONARIO.funcionario_id = ?";
-
-		this.conn = this.conexao.getConexao();
-
-		Funcionario funcionario = null;
-
-		try {
-			
-			this.stmt = conn.prepareStatement(sql);
-
-			this.stmt.setLong(1, funcionario_id);
-
-			this.rsFuncionario = this.stmt.executeQuery();			
-
-			while (rsFuncionario.next()) {
-
-				funcionario = new Funcionario();				
-				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
-
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-
-		}
-
-		this.conexao.closeConnection(rsFuncionario, stmt, conn);
-		return funcionario;
-	}
-
 	public Funcionario buscaFuncionarioPorParceiroNegocio(Long parceironegocio_id) {
 
 		String sql = sqlFuncionarios;
@@ -195,13 +161,11 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ?  " ;
 
 		this.conn = this.conexao.getConexao();
-
 		Funcionario funcionario = new Funcionario();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-
 			this.stmt.setLong(1, parceironegocio_id);
 
 			this.rsFuncionario = this.stmt.executeQuery();
@@ -212,6 +176,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 				ParceiroNegocio supervisor = new ParceiroNegocio();
 				Departamento d = new Departamento();
 				Funcao f = new Funcao();
+				Operacao o = new Operacao();
 
 				parceiro.setParceiroNegocio_id(rsFuncionario.getLong("parceironegocio_id"));
 				parceiro.setNome(rsFuncionario.getString("parceironegocio_nome"));
@@ -225,10 +190,14 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 				f.setFuncao_id(rsFuncionario.getLong("funcao_id"));
 				f.setNome(rsFuncionario.getString("funcao_nome"));
+				
+				o.setOperacao_id(rsFuncionario.getLong("operacao_id"));
+				o.setNome(rsFuncionario.getString("operacao_nome"));
 
 				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
 				funcionario.setFuncao(f);
 				funcionario.setDepartamento(d);
+				funcionario.setOperacao(o);
 				funcionario.setParceiroNegocio(parceiro);
 				funcionario.setSupervisor(supervisor);
 				funcionario.setApelido(rsFuncionario.getString("apelido"));
@@ -236,13 +205,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			}
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
-
 		}
 
 		this.conexao.closeConnection(rsFuncionario, stmt, conn);
+
 		return funcionario;
+
 	}
 
 	public Collection<Funcionario> buscaFuncionariosBySupervisor(Long empresa_id , Long organizacao_id, Long supervisor_id) {
@@ -258,7 +227,6 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, supervisor_id);
@@ -289,13 +257,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			}
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
-
 		}
 
 		this.conexao.closeConnection(rsFuncionario, stmt, conn);
+
 		return funcionarios;
+
 	}
 	
 	public Collection<Funcionario> buscaFuncionariosByPerfil(Long empresa_id, Long organizacao_id, String perfil) {
@@ -311,7 +279,6 @@ public class FuncionarioDao extends Dao<Funcionario> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + perfil + "%");
@@ -335,13 +302,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 			}
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
-
 		}
 
 		this.conexao.closeConnection(rsFuncionario, stmt, conn);
+
 		return funcionarios;
+
 	}
 
 }
