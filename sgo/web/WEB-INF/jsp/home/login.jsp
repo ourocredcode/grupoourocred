@@ -135,7 +135,7 @@
 
 							<div class="control-group">
 								<label class="control-label" for="usuarioPerfil">Perfil</label>
-								<select id="usuarioPerfil" name="usuarioPerfil.perfil.perfil_id">	
+								<select id="usuarioPerfil" name="usuarioPerfil.perfil.perfil_id" required>	
 									<option value="">Selecione o perfil</option>
 								</select>
 							</div>
@@ -143,7 +143,7 @@
 							<div class="control-group">
 								<label class="control-label" for="usuarioPerfilEmpresa">Empresa</label>
 								<div class="controls">
-									<select id="usuarioPerfilEmpresa" name="usuarioPerfil.empresa.empresa_id">	
+									<select id="usuarioPerfilEmpresa" name="usuarioPerfil.empresa.empresa_id" required>	
 										<option value="">Selecione a empresa</option>
 									</select>
 								</div>
@@ -152,7 +152,7 @@
 							<div class="control-group">
 								<label class="control-label" for="usuarioPerfilOrganizacao">Organiza&ccedil;&atilde;o</label>
 								<div class="controls">
-									<select id="usuarioPerfilOrganizacao" name="usuarioPerfil.organizacao.organizacao_id">	
+									<select id="usuarioPerfilOrganizacao" name="usuarioPerfil.organizacao.organizacao_id" required>	
 										<option value="">Selecione a organizacao</option>
 									</select>
 								</div>

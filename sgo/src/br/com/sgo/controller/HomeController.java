@@ -57,7 +57,7 @@ public class HomeController {
 	}
 	
 	@Get
-	@Path("/home")
+	@Path("/")
 	public void home() {
 
 	}	

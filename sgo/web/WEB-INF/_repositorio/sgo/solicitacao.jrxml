@@ -1,0 +1,917 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="solicitacao" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="formulario.id" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countContratos" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countContratos}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countMargemLimpa" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countMargemLimpa}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countRecompraINSS" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countRecompraINSS}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countRecompraRMC" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countRecompraRMC}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countRefinanciamento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countRefinanciamento}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="detalhamentoCC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{detalhamentoCC}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+formulario.dt_data as formularioData,
+formulario.nm_observacao as formularioObs,
+consultor.nm_nome as consultorNome,
+consultor.nm_cpf as consultorCpf,
+consultor.nm_supervisor as consultorSupervisor,
+cliente.nm_nome as clienteNome,
+contrato.nm_produto as contratoProduto,
+contrato.nm_banco as contratoBanco,
+cliente.nm_cpf as clienteCpf,
+cliente.dt_nascimento as clienteNascimento,
+cliente.nm_beneficio as clienteBeneficio,
+cliente.nm_senha as clienteSenha,
+cliente.nm_cep as clienteCep,
+cliente.nm_telefoneRes as clienteTelRes,
+cliente.nm_telefoneCel as clienteTelCel,
+cliente.nm_banco as clienteBanco,
+cliente.nm_agencia as clienteAgencia,
+cliente.nm_conta as clienteConta,
+cliente.nm_tipoConta as clienteTipoConta,
+cliente.nm_tipoPagamento as clienteTipoPagamento,
+contrato.nm_bancoComprado as contratoBancoComprado,
+contrato.vl_parcelasAberto as contratoParcelaAberto,
+contrato.vl_contrato as contratoValor,
+contrato.vl_parcela as contratoParcela,
+contrato.vl_prazo as contratoPrazo,
+contrato.vl_divida as contratoDivida,
+contrato.vl_desconto as contratoDesconto,
+contrato.vl_liquido as contratoLiquido,
+contrato.vl_coeficiente as contratoCoeficiente,
+contrato.nm_observacao as contratoObs
+from
+dbo.SOLICITACAO_CONSULTOR consultor,
+dbo.SOLICITACAO_FORMULARIO formulario,
+dbo.SOLICITACAO_FORMULARIO_CONTRATO fc,
+dbo.SOLICITACAO_CONTRATO contrato,
+dbo.SOLICITACAO_CLIENTE cliente
+where
+formulario.fk_consultor = consultor.nm_login
+and formulario.fk_cliente = cliente.nm_beneficio
+and fc.fk_contrato = contrato.id
+and fc.fk_formulario = formulario.id
+and formulario.id = $P{formulario.id}]]>
+	</queryString>
+	<field name="formularioData" class="java.sql.Timestamp"/>
+	<field name="formularioObs" class="java.lang.String"/>
+	<field name="consultorNome" class="java.lang.String"/>
+	<field name="consultorCpf" class="java.lang.String"/>
+	<field name="consultorSupervisor" class="java.lang.String"/>
+	<field name="clienteNome" class="java.lang.String"/>
+	<field name="contratoProduto" class="java.lang.String"/>
+	<field name="contratoBanco" class="java.lang.String"/>
+	<field name="clienteCpf" class="java.lang.String"/>
+	<field name="clienteNascimento" class="java.sql.Timestamp"/>
+	<field name="clienteBeneficio" class="java.lang.String"/>
+	<field name="clienteSenha" class="java.lang.String"/>
+	<field name="clienteCep" class="java.lang.String"/>
+	<field name="clienteTelRes" class="java.lang.String"/>
+	<field name="clienteTelCel" class="java.lang.String"/>
+	<field name="clienteBanco" class="java.lang.String"/>
+	<field name="clienteAgencia" class="java.lang.String"/>
+	<field name="clienteConta" class="java.lang.String"/>
+	<field name="clienteTipoConta" class="java.lang.String"/>
+	<field name="clienteTipoPagamento" class="java.lang.String"/>
+	<field name="contratoBancoComprado" class="java.lang.String"/>
+	<field name="contratoParcelaAberto" class="java.lang.Integer"/>
+	<field name="contratoValor" class="java.lang.Double"/>
+	<field name="contratoParcela" class="java.lang.Double"/>
+	<field name="contratoPrazo" class="java.lang.Integer"/>
+	<field name="contratoDivida" class="java.lang.Double"/>
+	<field name="contratoDesconto" class="java.lang.Double"/>
+	<field name="contratoLiquido" class="java.lang.Double"/>
+	<field name="contratoCoeficiente" class="java.lang.Double"/>
+	<field name="contratoObs" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="15" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="13" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="713" splitType="Stretch">
+			<staticText>
+				<reportElement x="317" y="33" width="100" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Produto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="7" width="199" height="17"/>
+				<textElement>
+					<font size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[OUROCRED ASSESSORIA FINANCEIRA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="78" width="529" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="3" y="68" width="100" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="208" y="43" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="317" y="43" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="420" y="43" width="112" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="420" y="33" width="100" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Banco:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="184" y="65" width="100" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Dados do Cliente]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="112" width="129" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="3" y="100" width="129" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="139" y="112" width="122" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="139" y="100" width="100" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nascimento:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="271" y="112" width="151" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="271" y="100" width="100" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Benefício]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="432" y="112" width="100" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="432" y="100" width="100" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[RF/Senha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="137" width="129" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CEP Residencial:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="150" width="129" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="139" y="150" width="178" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="139" y="137" width="178" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Telefone Residencial:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="331" y="137" width="129" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Telefone Celular::]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="331" y="150" width="201" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="185" y="208" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Dados do Contrato]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="244" width="97" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="3" y="228" width="97" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Vlr Contrato:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="228" width="79" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Vlr Parcela:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="105" y="244" width="79" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="191" y="228" width="46" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Prazo]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="191" y="244" width="46" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="246" y="228" width="79" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Vlr Dívida]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="246" y="244" width="79" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="331" y="244" width="59" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="331" y="228" width="59" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Desc %]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="401" y="244" width="59" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="401" y="228" width="59" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Vlr Liquido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="228" width="59" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Coeficiente]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="473" y="244" width="59" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="184" y="263" width="133" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Dados para Pagamento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="270" width="97" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Banco:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="284" width="97" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="105" y="284" width="97" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="105" y="270" width="97" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Agencia]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="208" y="284" width="97" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="270" width="97" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Conta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="317" y="270" width="97" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tipo de Conta]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="317" y="284" width="97" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="435" y="284" width="97" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="435" y="270" width="97" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Pagamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="311" width="112" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Qtd total de Contratos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="330" width="112" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Recompra Cartão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="184" y="311" width="83" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Recompra INSS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="184" y="330" width="83" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[REFIN INSS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="330" width="97" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Data Hiscon:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="311" width="97" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Contrato Novo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="346" width="414" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[OBS:Todas as informações acima são do mesmo grau de importância para que seja dado andamento no contrato]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="366" width="526" height="41"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="183" y="407" width="159" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Para uso do administrativo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="426" width="112" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[XEROX de RG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="446" width="112" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Xerox de CPF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="466" width="112" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Comprovante Bancário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="486" width="112" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Comprovante de Endereço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="505" width="112" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Cartão Quebrado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="426" width="43" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(          )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="446" width="43" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(          )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="466" width="43" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(          )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="483" width="43" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(          )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="503" width="43" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(          )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="524" width="112" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Análise de assinatura:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="524" width="66" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(    ) Procede]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="524" width="66" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(     ) Diverge]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="544" width="112" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CPF Receita Federal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="544" width="66" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(    ) Regular]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="544" width="172" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(     ) Pendente de Reguralarização]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="564" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Ctt. recepcionado: ___/ ___/ ___]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="564" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Sol. de Pendência: ___/ ___/ ___]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="584" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Planilha: ___/ ___/ ___]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="584" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Pendencia Corrigida: ___/ ___/ ___]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="564" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Mg. Econsig: _______________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="584" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Mg Manual: _________________]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="620" width="526" height="27"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="7" y="663" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Ctt. recepcionado: ___/ ___/ ___]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="7" y="686" width="526" height="27"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="132" y="663" width="139" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Parcela Original: _______________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="284" y="663" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Mg. Econsig: _______________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="183" y="647" width="78" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Análise de Hiscon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="599" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Digitação: ___/ ___/ ___]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="600" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Redigitação: ___/ ___/ ___]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="619" width="112" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Observação (Conferência)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="683" width="112" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Observação (Análise)]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="43" width="100" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="33" width="100" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Consultor(a):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="33" width="100" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Supervisor(a):]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="47" width="98" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{consultorNome}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="210" y="47" width="111" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{consultorSupervisor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="319" y="47" width="100" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoProduto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="423" y="47" width="100" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoBanco}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="115" width="100" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteCpf}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="146" y="115" width="115" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteNascimento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="273" y="115" width="151" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteBeneficio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="435" y="115" width="100" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteSenha}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="154" width="125" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteCep}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="146" y="154" width="171" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteTelRes}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="335" y="154" width="197" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteTelCel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="290" width="92" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteBanco}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="108" y="290" width="94" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteAgencia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="211" y="290" width="97" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteConta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="321" y="290" width="111" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteTipoConta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="439" y="290" width="129" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteTipoPagamento}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="3" y="6" width="100" height="20"/>
+			</rectangle>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="8" y="11" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{formularioData}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="175" width="129" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Banco Comprado:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="354" y="189" width="178" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="354" y="176" width="178" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Parcelas em Aberto:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="189" width="339" height="20"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="194" width="333" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoBancoComprado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="360" y="194" width="172" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoParcelaAberto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="249" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoValor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="106" y="249" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoParcela}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="193" y="249" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoPrazo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="249" y="249" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoDivida}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="336" y="249" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoDesconto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="402" y="249" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoLiquido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00000" isBlankWhenNull="true">
+				<reportElement x="474" y="249" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoCoeficiente}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="84" width="512" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteNome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="406" y="7" width="149" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Proposta:____________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="184" y="427" width="349" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Documento Pendente: ________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="184" y="467" width="351" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Documento Recebido por: _____________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="504" width="370" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Número do Cartão: ___________________________________________________________]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="365" width="524" height="42"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratoObs}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="313" width="100" height="19"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{countContratos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="426" y="313" width="100" height="19"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{countMargemLimpa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="313" width="100" height="19"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{countRecompraINSS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="332" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{countRecompraRMC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="331" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{countRefinanciamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="239" y="624" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{detalhamentoCC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="118" y="620" width="121" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Conta Corrente (Detalhamento) :]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="106" y="43" width="97" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="106" y="32" width="100" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Cpf:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="108" y="47" width="129" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{consultorCpf}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<break>
+				<reportElement x="0" y="8" width="100" height="1"/>
+			</break>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="15" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="13" splitType="Stretch"/>
+	</summary>
+</jasperReport>

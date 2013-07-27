@@ -21,6 +21,7 @@ import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Controle;
+import br.com.sgo.modelo.ControleFormulario;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
@@ -54,14 +55,16 @@ public class ContratoDao extends Dao<Contrato> {
 			" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, "+
 			" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
-			" ETAPA.etapa_id, ETAPA.nome as etapa_nome "+
+			" ETAPA.etapa_id, ETAPA.nome as etapa_nome, ETAPACONTROLE.etapa_id as etapacontrole_id, ETAPACONTROLE.nome as etapacontrole_nome  "+
 			" FROM " +
-			" (((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
+			" (((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
 			" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
 			" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) "+
 			" INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) "+
 			" INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) "+
-			" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id) "+
+			" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)" +
+			" LEFT JOIN CONTROLEFORMULARIO (NOLOCK) ON CONTROLEFORMULARIO.formulario_id = FORMULARIO.formulario_id)" +
+			" LEFT JOIN ETAPA AS ETAPACONTROLE (NOLOCK) ON CONTROLEFORMULARIO.etapa_id = ETAPACONTROLE.etapa_id) "+
 			" INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) "+
 			" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) "+
 			" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) "+
@@ -611,7 +614,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//System.out.println(sql);
+			//System.out.println(" CONSULTA POR FILTRO : " +  sql);
 
 			int curr = 1;
 
@@ -1349,8 +1352,8 @@ public class ContratoDao extends Dao<Contrato> {
 					"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
 					" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 					" FROM (( CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
-					" INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
-					" INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
+					" LEFT JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
+					" LEFT JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
 					" INNER JOIN FORMULARIO ON FORMULARIO.formulario_id = CONTRATO.formulario_id ";
 
 			sql += " WHERE CONTRATO.empresa_id = ? ";
@@ -1362,9 +1365,9 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " AND (CONTRATO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
 
 		if(calInicio != null)
-			sql += " AND (FORMULARIO.created BETWEEN ? AND ? )";
+			sql += " AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? )";
 		
-		sql +=  " AND ( ETAPA.NOME in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome, ETAPA.etapa_id ";
+		sql +=  " AND ( ETAPA.NOME in ('Aprovado','Recusado') ) GROUP BY ETAPA.nome, ETAPA.etapa_id ";
 
 		this.conn = this.conexao.getConexao();
 		
@@ -1374,7 +1377,9 @@ public class ContratoDao extends Dao<Contrato> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			
+
+			//System.out.println( " CONSULTA DASHBOARD " + sql);
+
 			int curr = 1;
 			
 			this.stmt.setLong(curr, empresa_id);
@@ -1390,8 +1395,107 @@ public class ContratoDao extends Dao<Contrato> {
 			if(calInicio != null){
 
 				this.stmt.setTimestamp(++curr,new Timestamp(calInicio.getTimeInMillis()));
+				
+				//System.out.println(" CONSULTA DASHBOARD " + calInicio.getTime());
 
-				this.stmt.setTimestamp(++curr,new Timestamp(calFim.getTimeInMillis()));
+				this.stmt.setTimestamp(++curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+				
+				//System.out.println(" CONSULTA DASHBOARD " + CustomDateUtil.getCalendarFim(calFim).getTime());
+
+			}
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+
+				String etapa_nome = rsContrato.getString("etapa_nome");
+				Long etapa_id = rsContrato.getLong("etapa_id");
+				Double etapaCount = rsContrato.getDouble("etapaCount");
+				Double contratoCount = rsContrato.getDouble("contratoCount");
+				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
+				Double metaCount = rsContrato.getDouble("metaCount");
+
+				Object[] values = new Object[5];
+
+				values[0] = etapa_id;
+				values[1] = etapaCount;
+				values[2] = contratoCount;
+				values[3] = contLiquidoCount;
+				values[4] = metaCount;
+
+				map.put(etapa_nome,values);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return map;
+
+	}
+	
+	
+	public HashMap<String,Object[]> buscaContratosToCountEtapasConcluído(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
+
+		String sql = " SELECT " +
+					"		 ETAPA.nome as etapa_nome," +
+					"		 ETAPA.etapa_id , " +
+					"		 COUNT(ETAPA.nome) as etapaCount, " +
+					"		 SUM(CONTRATO.valormeta) as metaCount, " +
+					"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
+					" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
+					" FROM (( CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
+					" LEFT JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
+					" LEFT JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
+					" INNER JOIN FORMULARIO ON FORMULARIO.formulario_id = CONTRATO.formulario_id ";
+
+			sql += " WHERE CONTRATO.empresa_id = ? ";
+
+		if(organizacao_id != null)
+			sql += " AND CONTRATO.organizacao_id = ? ";
+
+		if(usuario_id != null)
+			sql += " AND (CONTRATO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+
+		if(calInicio != null)
+			sql += " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? )";
+		
+		sql +=  " AND ( ETAPA.NOME in ('Concluído') ) GROUP BY ETAPA.nome, ETAPA.etapa_id ";
+
+		this.conn = this.conexao.getConexao();
+		
+
+		HashMap<String,Object[]> map = new HashMap<String,Object[]>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			//System.out.println( " CONSULTA DASHBOARD CONCLUIDO " + sql);
+
+			int curr = 1;
+			
+			this.stmt.setLong(curr, empresa_id);
+			this.stmt.setLong(++curr, organizacao_id);
+			
+			if(usuario_id != null){
+
+				this.stmt.setLong(++curr, usuario_id);
+				this.stmt.setLong(++curr, usuario_id);
+				
+			}
+			
+			if(calInicio != null){
+
+				this.stmt.setTimestamp(++curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+				
+				//System.out.println( " CONSULTA DASHBOARD CONCLUIDO " + CustomDateUtil.getCalendarInicio(calInicio).getTime());
+
+				this.stmt.setTimestamp(++curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+				
+				//System.out.println( " CONSULTA DASHBOARD CONCLUIDO " + CustomDateUtil.getCalendarFim(calFim).getTime());
 
 			}
 
@@ -1439,9 +1543,11 @@ public class ContratoDao extends Dao<Contrato> {
 		Produto produto = new Produto();
 		Workflow workflow = new Workflow();
 		Etapa etapa = new Etapa();
+		Etapa etapacontrole = new Etapa();
 		Empresa empresa = new Empresa();
 		Organizacao organizacao = new Organizacao();
-		
+		ControleFormulario posvenda = new ControleFormulario();
+
 		Banco b1 = new Banco();
 		Banco b2 = new Banco();
 		
@@ -1490,7 +1596,14 @@ public class ContratoDao extends Dao<Contrato> {
 		etapa.setEtapa_id(rsContrato.getLong("etapa_id"));
 		etapa.setNome(rsContrato.getString("etapa_nome"));
 
+		etapacontrole.setEtapa_id(rsContrato.getLong("etapacontrole_id"));
+		etapacontrole.setNome(rsContrato.getString("etapacontrole_nome"));
+
+		posvenda.setEtapa(etapacontrole);
+
+		formulario.setPosvenda(posvenda);
 		formulario.setParceiroNegocio(parceiro);
+
 		contrato.setFormulario(formulario);
 		contrato.setCoeficiente(coeficiente);
 		contrato.setEmpresa(empresa);
