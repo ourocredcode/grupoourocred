@@ -571,10 +571,11 @@ public class ParceironegocioController {
 				this.funcionario = this.funcionarioDao.load(funcionario.getFuncionario_id());
 				
 				this.funcionario.setDepartamento(funcionario.getDepartamento());
+				this.funcionario.setOperacao(funcionario.getOperacao());
 				this.funcionario.setFuncao(funcionario.getFuncao());
 				this.funcionario.setSupervisor(funcionario.getSupervisor());
 				this.funcionario.setApelido(funcionario.getApelido());
-				
+
 				this.funcionario.setUpdated(GregorianCalendar.getInstance());
 				this.funcionario.setUpdatedBy(usuario);
 				

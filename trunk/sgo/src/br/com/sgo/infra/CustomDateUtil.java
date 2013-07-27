@@ -43,4 +43,18 @@ public class CustomDateUtil {
 
 		return calendarFim;
 	}
+	
+	public static Calendar getCalendarInicio(Calendar calendarInicio) {
+
+		Calendar c1 = new GregorianCalendar();
+
+		c1.setTime(calendarInicio.getTime());
+
+		c1.set(Calendar.HOUR_OF_DAY,c1.getActualMinimum(Calendar.HOUR_OF_DAY));
+		c1.set(Calendar.MINUTE,c1.getActualMinimum(Calendar.MINUTE));
+		c1.set(Calendar.SECOND,c1.getActualMinimum(Calendar.SECOND));
+		c1.set(Calendar.MILLISECOND, c1.getActualMinimum(Calendar.MILLISECOND)); 
+
+		return c1;
+	}
 }

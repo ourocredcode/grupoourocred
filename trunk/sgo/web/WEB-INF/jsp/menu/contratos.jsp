@@ -181,7 +181,8 @@
 				  			/* 17 - Data Chegada */     { "bVisible":    false },
 				  			/* 18 - Data Previsão */     { "bVisible":    false },
 				  			/* 19 - Data Vencimento */     { "bVisible":    false },
-				  			/* 20 - Data Próx Atuação */     { "bVisible":    false }
+				  			/* 20 - Data Próx Atuação */     { "bVisible":    false },
+				  			/* 21 - Pós Venda */     { "bVisible":    false }
 				  		] ,
 			
 			"sDom": 'C<"clear">lfrtip',
@@ -862,7 +863,7 @@
 						<div class="widget-content">
 							
 		
-								<table id="mytable" class="table table-bordered table-striped table-hover data-table" style="font-size: 11px;">
+								<table id="mytable" class="table table-bordered table-hover data-table" style="font-size: 11px;">
 									<thead>	
 										<tr>
 											<th >
@@ -928,11 +929,20 @@
 											<th >
 												Próxima Atuação
 											</th>
+											<th >
+												Pós Venda
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
 										<c:forEach items="${contratos}" var="contrato">
-											<tr>
+											<tr <c:if test="${contrato.formulario.posvenda.etapa.nome eq 'Pendente' || 
+															  contrato.etapa.nome eq 'Pendente Administrativo' ||
+															  contrato.etapa.nome eq 'Pendente Agendamento' ||
+															  contrato.etapa.nome eq 'Pendente Banco' ||
+															  contrato.etapa.nome eq 'Pendente Coeficiente' ||
+															  contrato.etapa.nome eq 'Pendente Conferência' ||
+															  contrato.etapa.nome eq 'Recalcular' }">class="error"</c:if>>
 												<td >
 													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
 												</td>
@@ -1002,6 +1012,9 @@
 												</td>
 												<td >
 													<fmt:formatDate value="${contrato.controle.dataProximaAtuacao.time }" pattern="dd/MM" />
+												</td>
+												<td >
+													${contrato.formulario.posvenda.etapa.nome }
 												</td>
 											</tr>
 										</c:forEach>

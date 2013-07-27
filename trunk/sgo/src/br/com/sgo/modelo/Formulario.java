@@ -83,6 +83,9 @@ public class Formulario implements Serializable {
 
 	@Transient
 	private Collection<ParceiroContato> parceiroContatos = new ArrayList<ParceiroContato>();
+	
+	@Transient
+	private ControleFormulario posvenda;
 
 	public Long getFormulario_id() {
 		return formulario_id;
@@ -222,5 +225,13 @@ public class Formulario implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public ControleFormulario getPosvenda() {
+		return posvenda;
+	}
+
+	public void setPosvenda(ControleFormulario posvenda) {
+		this.posvenda = posvenda;
 	}
 }

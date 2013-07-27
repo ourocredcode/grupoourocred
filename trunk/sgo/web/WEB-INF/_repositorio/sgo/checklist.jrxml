@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="checklist" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="formulario.id" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[select
+consultor.nm_nome as consultorNome,
+consultor.nm_supervisor as consultorSupervisor,
+cliente.nm_nome as clienteNome,
+cliente.nm_cpf as clienteCpf,
+cliente.nm_telefoneRes as clienteTelRes,
+cliente.nm_telefoneCel as clienteTelCel,
+sts.dt_dataAssinatura as dataAssinatura,
+cliente.nm_endereco as clienteEndereco,
+cliente.nm_numero as clienteNumero,
+cliente.nm_cep as clienteCep,
+cliente.nm_bairro as clienteBairro,
+cliente.nm_cidade as clienteCidade,
+sts.nm_periodoAssinatura as periodoAssinatura
+from
+dbo.SOLICITACAO_CONSULTOR consultor,
+dbo.SOLICITACAO_FORMULARIO formulario,
+dbo.SOLICITACAO_FORMULARIO_CONTRATO fc,
+dbo.SOLICITACAO_CONTRATO contrato,
+dbo.SOLICITACAO_CLIENTE cliente,
+dbo.SOLICITACAO_CONTRATO_STATUS sts
+where
+formulario.fk_consultor = consultor.nm_login
+and formulario.fk_cliente = cliente.nm_beneficio
+and fc.fk_contrato = contrato.id
+and fc.fk_formulario = formulario.id
+and contrato.id = sts.fk_contrato
+and sts.dt_dataAssinatura is not null
+and sts.nm_periodoAssinatura is not null
+and formulario.id = $P{formulario.id}]]>
+	</queryString>
+	<field name="consultorNome" class="java.lang.String"/>
+	<field name="consultorSupervisor" class="java.lang.String"/>
+	<field name="clienteNome" class="java.lang.String"/>
+	<field name="clienteCpf" class="java.lang.String"/>
+	<field name="clienteTelRes" class="java.lang.String"/>
+	<field name="clienteTelCel" class="java.lang.String"/>
+	<field name="dataAssinatura" class="java.sql.Timestamp"/>
+	<field name="clienteEndereco" class="java.lang.String"/>
+	<field name="clienteNumero" class="java.lang.String"/>
+	<field name="clienteCep" class="java.lang.String"/>
+	<field name="clienteBairro" class="java.lang.String"/>
+	<field name="clienteCidade" class="java.lang.String"/>
+	<field name="periodoAssinatura" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="3" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="1" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="760" splitType="Stretch">
+			<rectangle>
+				<reportElement x="5" y="5" width="539" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="163" y="8" width="99" height="17"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHECK LIST]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="220" y="28" width="100" height="14"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consultorNome}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="28" width="107" height="14"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consultorSupervisor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="46" width="347" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteNome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="27" width="52" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Supervisor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="27" width="48" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Consultor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="45" width="52" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="56" y="42" width="110" height="1"/>
+			</line>
+			<line>
+				<reportElement x="218" y="42" width="100" height="1"/>
+			</line>
+			<line>
+				<reportElement x="57" y="59" width="349" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="413" y="46" width="28" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="276" y="61" width="39" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Tel Res:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="61" width="22" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Cel:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="445" y="45" width="65" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteCpf}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="321" y="60" width="85" height="14"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteTelRes}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="445" y="60" width="96" height="14"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteTelCel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="343" y="9" width="115" height="16"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDEM DO SERVIÇO :]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="5" y="77" width="539" height="14"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="163" y="79" width="230" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DOCUMENTOS SOLICITADOS PELO CONSULTOR]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="19" y="97" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="36" y="97" width="140" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CÓPIA RG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="112" width="140" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CÓPIA CPF]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="19" y="112" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="19" y="127" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="36" y="127" width="239" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[COMPROVANTE DE ENDEREÇO COM CEP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="143" width="237" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[COMP BANCÁRIO OU CARTÃO PREVIDENCIÁRIO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="19" y="143" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="19" y="159" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="36" y="159" width="237" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[BOLETO OU EXTRATO SALDO DEVEDOR]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="283" y="143" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="300" y="159" width="145" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[OUTRO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="127" width="232" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[LAUDO MÉDICO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="143" width="232" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CERTIDÂO DE NASCIMENTO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="283" y="159" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="283" y="112" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="300" y="97" width="244" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[RG E CPF DAS TESTEMUNHAS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="283" y="97" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="283" y="127" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="300" y="112" width="232" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CARTÃO QUEBRADO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="58" y="190" width="110" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="5" y="175" width="52" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Conferido por:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="201" y="175" width="122" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Documento(s) pendente(s):]]></text>
+			</staticText>
+			<line>
+				<reportElement x="331" y="190" width="110" height="1"/>
+			</line>
+			<rectangle>
+				<reportElement x="5" y="198" width="539" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="163" y="201" width="230" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORMAÇÕES PARA COLHER A ASSINATURA:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="5" y="234" width="69" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="223" width="57" height="21"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="84" y="234" width="383" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="84" y="223" width="57" height="21"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Endereço:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="475" y="234" width="69" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="475" y="223" width="57" height="21"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Número:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="5" y="262" width="69" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="251" width="57" height="21"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="84" y="262" width="171" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="84" y="251" width="57" height="21"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Bairro:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="273" y="262" width="194" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="273" y="251" width="57" height="21"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="475" y="262" width="69" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="475" y="251" width="57" height="21"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Horário:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="5" y="343" width="539" height="54"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="344" width="94" height="14"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Observações:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="7" y="407" width="539" height="19"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="163" y="412" width="199" height="19"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARA USO DO REPRESENTANTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="431" width="68" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Horário Chegada:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="74" y="446" width="110" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="176" y="431" width="68" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Horário Saída:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="242" y="446" width="110" height="1"/>
+			</line>
+			<line>
+				<reportElement x="431" y="444" width="110" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="365" y="429" width="68" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Espera:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="455" width="47" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Executado:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="56" y="455" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="73" y="455" width="19" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="455" width="19" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="92" y="455" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="73" y="473" width="19" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="473" width="47" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Assinado:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="56" y="473" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="92" y="473" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="109" y="473" width="19" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="455" width="19" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="455" width="117" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Documentação completa:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="301" y="455" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="337" y="455" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="354" y="455" width="19" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="354" y="473" width="19" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="301" y="473" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="180" y="473" width="117" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Assinatura confere:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="473" width="19" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="337" y="473" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="503" width="145" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CONTRATO SEM X]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="503" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="6" y="519" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="519" width="145" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CLIENTE AUSENTE]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="536" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="536" width="145" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CLIENTE COM DÚVIDAS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="552" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="552" width="145" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ENDEREÇO SEM REFERÊNCIA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="568" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="568" width="248" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CONTRATO TOTALMENTE EM BRANCO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="584" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="584" width="248" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CLIENTE SEM XEROX DOS DOCUMENTOS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="600" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="600" width="250" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[REPRESENTANTE TIROU XEROX DOS DOCUMENTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="615" width="339" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[HORÁRIO MARCADO COM O CLIENTE SEM NECESSSIDADE]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="615" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="6" y="630" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="630" width="444" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CLIENTE SEM CONHECIMENTO SOBRE A VISITA DO MOTOBOY PARA ASSINATURA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="646" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="646" width="489" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ASSINATURA NO SÁBADO - CLIENTE COM DÚVIDAS , SUPERVISOR NÃO ATENDEU CELULAR]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="661" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="661" width="489" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CONTRATO CANCELADO PELO CLIENTE , CONSULTOR CIENTE , REPRESENTANTE NÃO AVISADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="676" width="489" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CONSULTOR NÃO FEZ CONTATO COM CLIENTE ANTES DO REP. CHEGAR NO LOCAL DA ASSINATURA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="676" width="14" height="13"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="23" y="691" width="489" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[EM CONTATO OU OPERADOR, CLIENTE DESISTIU DE ASSINAR CONTRATO (INFORMAR MOTIVO NA OBS.)]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="6" y="691" width="14" height="13"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="5" y="711" width="539" height="43"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="711" width="69" height="16"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Observações:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="5" y="284" width="539" height="54"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="285" width="94" height="16"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Ponto de Referência:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="477" y="264" width="115" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{periodoAssinatura}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="477" y="235" width="101" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteNumero}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="235" width="379" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteEndereco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="7" y="235" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dataAssinatura}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="7" y="264" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteCep}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="264" width="174" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteBairro}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="275" y="264" width="192" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clienteCidade}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="445" y="59" width="96" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="4" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="3" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="4" splitType="Stretch"/>
+	</summary>
+</jasperReport>
