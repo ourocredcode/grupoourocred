@@ -39,9 +39,9 @@ public class FormularioDataSource implements JRDataSource {
 				if("formularioData".equals(campo.getName())) {
 					valor = new Timestamp(formulario.getCreated().getTime().getTime());
 				}else if("consultorNome".equals(campo.getName())){
-					valor = c.getUsuario().getNome();
+					valor = c.getUsuario().getApelido();
 				}else if("consultorSupervisor".equals(campo.getName())){
-					valor = c.getUsuario().getSupervisorUsuario();
+					valor = c.getUsuario().getSupervisorUsuario().getApelido();
 				}else if("clienteNome".equals(campo.getName())){
 					valor = formulario.getParceiroNegocio().getNome();
 				}else if("clienteBeneficio".equals(campo.getName())){
