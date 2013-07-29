@@ -25,6 +25,7 @@ import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.HistoricoControleDao;
 import br.com.sgo.dao.LogisticaDao;
 import br.com.sgo.dao.MeioPagamentoDao;
+import br.com.sgo.dao.OperacaoDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
@@ -91,7 +92,8 @@ public class ContratoController {
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
-	private final MeioPagamentoDao meioPagamentoDao;	
+	private final MeioPagamentoDao meioPagamentoDao;
+	private final OperacaoDao operacaoDao;
 	private final PnDao pnDao;
 
 	private Contrato contrato;
@@ -124,7 +126,8 @@ public class ContratoController {
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
-			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, PnDao pnDao,TipoSaqueDao tipoSaqueDao){		
+			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, 
+			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -166,6 +169,7 @@ public class ContratoController {
 		this.hisconBeneficioDao = hisconBeneficioDao;
 		this.pnDao = pnDao;
 		this.tipoSaqueDao = tipoSaqueDao;
+		this.operacaoDao = operacaoDao;
 
 	}
 
@@ -632,6 +636,8 @@ public class ContratoController {
 			this.contrato.setIsRepasse(true);
 		else
 			this.contrato.setIsRepasse(false);
+
+		this.contrato.setOperacao(this.operacaoDao.buscaOperacaoByEmpOrgUsuario(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),contrato.getUsuario().getUsuario_id()));
 
 		this.contratoDao.beginTransaction();
 		this.contratoDao.atualiza(this.contrato);

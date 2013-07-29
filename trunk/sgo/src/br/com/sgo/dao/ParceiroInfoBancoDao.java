@@ -26,7 +26,7 @@ public class ParceiroInfoBancoDao extends Dao<ParceiroInfoBanco> {
 
 	private final String sqlParceiroInfoBanco = " SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, PARCEIROINFOBANCO.organizacao_id, PARCEIROINFOBANCO.parceironegocio_id, PARCEIROINFOBANCO.banco_id, PARCEIROINFOBANCO.agencia_id, PARCEIROINFOBANCO.contabancaria_id, PARCEIROINFOBANCO.meiopagamento_id FROM PARCEIROINFOBANCO (NOLOCK) ";
 
-	private final String sqlParceiroInfoBancos =  "SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, EMPRESA.nome AS empresa_nome "+
+	private final String sqlParceiroInfoBancos =  " SELECT PARCEIROINFOBANCO.parceiroinfobanco_id, PARCEIROINFOBANCO.empresa_id, EMPRESA.nome AS empresa_nome "+
 							", PARCEIROINFOBANCO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
 							", PARCEIROINFOBANCO.parceironegocio_id, PARCEIRONEGOCIO.nome AS parceironegocio_nome "+
 							", PARCEIROINFOBANCO.banco_id, BANCO.nome AS banco_nome, PARCEIROINFOBANCO.isactive "+

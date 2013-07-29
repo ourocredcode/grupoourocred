@@ -106,6 +106,10 @@ public class Contrato implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "meiopagamento_id", updatable = true, nullable = true)
 	private MeioPagamento meioPagamento;
+	
+	@ManyToOne
+	@JoinColumn(name = "operacao_id", updatable = true, nullable = true)
+	private Operacao operacao;
 
 	@ManyToOne
 	@JoinColumn(name = "tiposaque_id", updatable = true, nullable = true)
@@ -651,5 +655,13 @@ public class Contrato implements Serializable {
 
 	public void setControle(Controle controle) {
 		this.controle = controle;
+	}
+
+	public Operacao getOperacao() {
+		return operacao;
+	}
+
+	public void setOperacao(Operacao operacao) {
+		this.operacao = operacao;
 	}
 }

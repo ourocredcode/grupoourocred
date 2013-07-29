@@ -44,8 +44,7 @@ public class TipoParceiroDao extends Dao<TipoParceiro> {
 			while (rsTipoParceiro.next()) {
 
 				TipoParceiro tipoParceiro = new TipoParceiro();
-				tipoParceiro.setTipoParceiro_id(rsTipoParceiro
-						.getLong("tipoparceiro_id"));
+				tipoParceiro.setTipoParceiro_id(rsTipoParceiro.getLong("tipoparceiro_id"));
 				tipoParceiro.setNome(rsTipoParceiro.getString("nome"));
 
 				tiposParceiro.add(tipoParceiro);
@@ -81,8 +80,7 @@ public class TipoParceiroDao extends Dao<TipoParceiro> {
 
 			while (rsTipoParceiro.next()) {
 
-				tipoparceiro.setTipoParceiro_id(rsTipoParceiro
-						.getLong("tipoparceiro_id"));
+				tipoparceiro.setTipoParceiro_id(rsTipoParceiro.getLong("tipoparceiro_id"));
 				tipoparceiro.setNome(rsTipoParceiro.getString("nome"));
 
 			}
