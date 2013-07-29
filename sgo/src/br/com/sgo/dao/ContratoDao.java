@@ -614,7 +614,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//System.out.println(" CONSULTA POR FILTRO : " +  sql);
+			System.out.println(" CONSULTA POR FILTRO : " +  sql);
 
 			int curr = 1;
 
@@ -714,7 +714,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			if(calInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(calInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
 				curr++;
 				
 				
@@ -726,7 +726,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(calStatusFinalInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(calStatusFinalInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calStatusFinalInicio).getTimeInMillis()));
 				curr++;
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calStatusFinalFim).getTimeInMillis()));
@@ -736,11 +736,15 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(calConclusaoInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(calConclusaoInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calConclusaoInicio).getTimeInMillis()));
 				curr++;
+				
+				System.out.println(CustomDateUtil.getCalendarInicio(calConclusaoInicio).getTime());
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calConclusaoFim).getTimeInMillis()));
 				curr++;
+				
+				System.out.println(CustomDateUtil.getCalendarFim(calConclusaoFim).getTime());
 
 			}
 
@@ -1022,7 +1026,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(previsaoInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(previsaoInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(previsaoInicio).getTimeInMillis()));
 				curr++;
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(previsaoFim).getTimeInMillis()));
@@ -1032,7 +1036,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(chegadaInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(chegadaInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(chegadaInicio).getTimeInMillis()));
 				curr++;
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(chegadaFim).getTimeInMillis()));
@@ -1042,7 +1046,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(vencimentoInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(vencimentoInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(vencimentoInicio).getTimeInMillis()));
 				curr++;
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(vencimentoFim).getTimeInMillis()));
@@ -1052,7 +1056,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(proximaAtuacaoInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(proximaAtuacaoInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(proximaAtuacaoInicio).getTimeInMillis()));
 				curr++;
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(proximaAtuacaoFim).getTimeInMillis()));
@@ -1062,7 +1066,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(calInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(calInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
 				curr++;
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
@@ -1072,7 +1076,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(quitacaoInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(quitacaoInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(quitacaoInicio).getTimeInMillis()));
 				curr++;
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(quitacaoFim).getTimeInMillis()));
@@ -1082,7 +1086,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(assinaturaInicio != null){
 
-				this.stmt.setTimestamp(curr,new Timestamp(assinaturaInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(assinaturaInicio).getTimeInMillis()));
 				curr++;
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(assinaturaFim).getTimeInMillis()));
@@ -1394,7 +1398,7 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(calInicio != null){
 
-				this.stmt.setTimestamp(++curr,new Timestamp(calInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(++curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
 				
 				//System.out.println(" CONSULTA DASHBOARD " + calInicio.getTime());
 

@@ -101,7 +101,7 @@
 
 					<div class="widget-title">
 						<span class="icon"><i class="icon-signal"></i>
-						</span><h5>Vendas - <fmt:formatDate value="${calInicio.time}" pattern="dd/MM" /> até <fmt:formatDate value="${calFim.time}" pattern="dd/MM" /></h5>
+						</span><h5>Vendas - <fmt:formatDate value="${calInicio.time}" pattern="dd/MM/yyyy" /></h5>
 						<div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-refresh"></i> Update stats</a></div>
 					</div>
 
@@ -168,7 +168,7 @@
 					</div>
 					<div class="widget-content">
 							
-							<h5>Status Aprovados e Recusados <fmt:formatDate value="${calInicio.time}" pattern="dd/MM" /> até <fmt:formatDate value="${calFim.time}" pattern="dd/MM" /></h5>
+							<h5>Status Aprovados e Recusados <fmt:formatDate value="${calMesInicio.time}" pattern="dd/MM" /> até <fmt:formatDate value="${calMesFim.time}" pattern="dd/MM" /></h5>
 							<table class="table table-bordered table-striped">
 							<thead>
 							  <tr>

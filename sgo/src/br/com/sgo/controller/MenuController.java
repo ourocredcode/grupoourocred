@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -100,20 +101,34 @@ public class MenuController {
 	@Path("/menu/inicio/{perfil}") 
 	public void inicio(String perfil) {
 
+		Date d1 = new GregorianCalendar().getTime();
+		Calendar dataInicial = Calendar.getInstance(); 
+		dataInicial.setTime(d1);    
+		
 		usuarioDao.refresh(usuarioInfo.getUsuario());
 		perfilDao.refresh(usuarioInfo.getPerfil());
 
-		Calendar c1 = new GregorianCalendar();
-		Calendar c2 = new GregorianCalendar();
+		Calendar dia1 = new GregorianCalendar();
+		Calendar dia2 = new GregorianCalendar();
 
-		c1.set(GregorianCalendar.DAY_OF_MONTH, c1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
-		c1.set(GregorianCalendar.HOUR_OF_DAY,c1.getActualMinimum(GregorianCalendar.HOUR_OF_DAY));
-		c1.set(GregorianCalendar.MINUTE,c1.getActualMinimum(GregorianCalendar.MINUTE));
-		c1.set(GregorianCalendar.SECOND,c1.getActualMinimum(GregorianCalendar.SECOND));
-		c2.set(GregorianCalendar.DAY_OF_MONTH, c2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
-		c2.set(GregorianCalendar.HOUR_OF_DAY, c2.getActualMaximum(GregorianCalendar.HOUR));
-		c2.set(GregorianCalendar.MINUTE, c2.getActualMaximum(GregorianCalendar.MINUTE));
-		c2.set(GregorianCalendar.SECOND, c2.getActualMaximum(GregorianCalendar.SECOND));
+		dia1.set(GregorianCalendar.HOUR_OF_DAY,dia1.getActualMinimum(GregorianCalendar.HOUR_OF_DAY));
+		dia1.set(GregorianCalendar.MINUTE,dia1.getActualMinimum(GregorianCalendar.MINUTE));
+		dia1.set(GregorianCalendar.SECOND,dia1.getActualMinimum(GregorianCalendar.SECOND));
+		dia2.set(GregorianCalendar.HOUR_OF_DAY, dia2.getActualMaximum(GregorianCalendar.HOUR));
+		dia2.set(GregorianCalendar.MINUTE, dia2.getActualMaximum(GregorianCalendar.MINUTE));
+		dia2.set(GregorianCalendar.SECOND, dia2.getActualMaximum(GregorianCalendar.SECOND));
+		
+		Calendar mes1 = new GregorianCalendar();
+		Calendar mes2 = new GregorianCalendar();
+
+		mes1.set(GregorianCalendar.DAY_OF_MONTH, mes1.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
+		mes1.set(GregorianCalendar.HOUR_OF_DAY,mes1.getActualMinimum(GregorianCalendar.HOUR_OF_DAY));
+		mes1.set(GregorianCalendar.MINUTE,mes1.getActualMinimum(GregorianCalendar.MINUTE));
+		mes1.set(GregorianCalendar.SECOND,mes1.getActualMinimum(GregorianCalendar.SECOND));
+		mes2.set(GregorianCalendar.DAY_OF_MONTH, mes2.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+		mes2.set(GregorianCalendar.HOUR_OF_DAY, mes2.getActualMaximum(GregorianCalendar.HOUR));
+		mes2.set(GregorianCalendar.MINUTE, mes2.getActualMaximum(GregorianCalendar.MINUTE));
+		mes2.set(GregorianCalendar.SECOND, mes2.getActualMaximum(GregorianCalendar.SECOND));
 
 		Long empresa_id = empresa.getEmpresa_id();
 		Long organizacao_id = organizacao.getOrganizacao_id();
@@ -133,44 +148,54 @@ public class MenuController {
 		Calendar calConcluidoFim = null;
 
 		if(perfil.equals("Supervisor") || perfil.equals("Consultor")){
-			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),c1,c2));
+
+			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),dia1,dia2));
+
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id()));
 
-			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id(), c1, c2));
-			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id(), c1, c2));
+			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id(), mes1, mes2));
+			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id(), mes1, mes2));
 
 			result.include("mapEtapasFinal",contratosStatusFinal);
 
 		}
 
 		if(perfil.equals("Administrativo")){
-			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),c1,c2));
+
+			contratos.addAll(this.contratoDao.buscaContratoByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),dia1,dia2));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
 			
-			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, c1, c2));
-			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, null, c1, c2));
+			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, mes1, mes2));
+			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, null, mes1, mes2));
 
 			result.include("mapEtapasFinal",contratosStatusFinal);
-			
-			
+
 		}
 
 		if(perfil.equals("Gestor")){
 
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,dia1,dia2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
 			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, null));
 
-			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, c1, c2));
-			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, null, c1, c2));
+			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, null, mes1, mes2));
+			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, null, mes1, mes2));
 
 			result.include("mapEtapasFinal",contratosStatusFinal);
 
 		}
 
-		result.include("calInicio", c1);
-		result.include("calFim", c2);
+		result.include("calInicio", dia1);
+		result.include("calFim", dia2);
+		
+		result.include("calMesInicio", mes1);
+		result.include("calMesFim", mes2);
 
 		contadorSeparado();
+
+		long diferenca = System.currentTimeMillis() - dataInicial.getTimeInMillis();  
+		long diferencaSeg = diferenca /1000;    //DIFERENCA EM SEGUNDOS   
+
+		System.out.println(" Tempo : " + diferencaSeg + " s ");
 
 	}
 
@@ -284,7 +309,7 @@ public class MenuController {
 
 			statusFinal.add("Concluído");
 
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,null,null,c1,c2,null,null, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,null,null,null,null,c1,c2, cliente, documento, status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
 
 			result.include("function","buscaContratos();");
 			result.include("buscaDatasControle","none");
