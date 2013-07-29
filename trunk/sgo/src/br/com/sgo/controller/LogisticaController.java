@@ -105,7 +105,7 @@ public class LogisticaController {
 	}
 	
 	@Get
- 	@Path("/checklist/{id}")
+ 	@Path("/logistica/checklist/{id}")
 	public void checklist(Long id) {
 
 		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
@@ -119,7 +119,7 @@ public class LogisticaController {
 		List<Formulario> forms = new ArrayList<Formulario>();
 		Formulario form = this.formularioDao.load(id);
 
-		Collection<Contrato> contratos = this.contratoDao.buscaContratoByFormulario(form.getFormulario_id());
+		Collection<Contrato> contratos = this.contratoDao.buscaContratoToCheckList(form.getFormulario_id());
 		form.setContratos(contratos);
 
 		parceiroNegocio = parceiroNegocioDao.buscaParceiroNegocioById(form.getParceiroNegocio().getParceiroNegocio_id());

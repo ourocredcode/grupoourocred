@@ -35,9 +35,9 @@ public class CheckListDataSource implements JRDataSource {
 				Contrato c = (Contrato) it.next();
 
 				if("consultorNome".equals(campo.getName())){
-					valor = c.getUsuario().getNome();
+					valor = c.getUsuario().getApelido();
 				}else if("consultorSupervisor".equals(campo.getName())){
-					valor = c.getUsuario().getSupervisorUsuario().getNome();
+					valor = c.getUsuario().getSupervisorUsuario().getApelido();
 				}else if("clienteNome".equals(campo.getName())){
 					valor = formulario.getParceiroNegocio().getNome();
 				}else if("clienteCpf".equals(campo.getName())){
