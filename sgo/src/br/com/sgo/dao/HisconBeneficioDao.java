@@ -363,9 +363,9 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 		try {
 			
-			System.out.println(sql);
-			System.out.println(c1.getTime());
-			System.out.println(c2.getTime());
+			//System.out.println(sql);
+			//System.out.println(c1.getTime());
+			//System.out.println(c2.getTime());
 
 			this.stmt = conn.prepareStatement(sql);
 

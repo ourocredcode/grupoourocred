@@ -195,6 +195,9 @@ public class MenuController {
 		long diferenca = System.currentTimeMillis() - dataInicial.getTimeInMillis();  
 		long diferencaSeg = diferenca /1000;    //DIFERENCA EM SEGUNDOS   
 
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		System.out.println(" Acesso : " + usuarioInfo.getUsuario().getNome() + " em :  " + sdf.format(Calendar.getInstance().getTime()) );
 		System.out.println(" Tempo : " + diferencaSeg + " s ");
 
 	}

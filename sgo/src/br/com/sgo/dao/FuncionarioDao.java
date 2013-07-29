@@ -53,7 +53,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 		String sql = sqlFuncionarios;
 
-		sql += " WHERE PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? ORDER BY SUPER.nome, FUNCIONARIO.nome  " ;
+		sql += " WHERE PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? AND USUARIO.isactive = 1 ORDER BY SUPER.nome, FUNCIONARIO.nome   " ;
 
 		this.conn = this.conexao.getConexao();
 		
@@ -218,7 +218,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 		String sql = sqlFuncionarios;
 
-		sql += " WHERE EMPRESA.empresa_id = ? AND ORGANIZACAO.organizacao_id = ? AND USUARIO.supervisor_usuario_id = ? " ;
+		sql += " WHERE EMPRESA.empresa_id = ? AND ORGANIZACAO.organizacao_id = ? AND USUARIO.supervisor_usuario_id = ? AND USUARIO.isactive = 1 " ;
 
 		this.conn = this.conexao.getConexao();
 		
@@ -270,7 +270,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 		String sql = sqlFuncionarios;
 
-		sql += " WHERE USUARIO.empresa_id = ?  AND USUARIO.organizacao_id = ?  AND PERFIL.nome like  ? " ;
+		sql += " WHERE USUARIO.empresa_id = ?  AND USUARIO.organizacao_id = ?  AND PERFIL.nome like  ? AND USUARIO.isactive = 1 " ;
 
 		this.conn = this.conexao.getConexao();
 		
