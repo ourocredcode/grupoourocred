@@ -27,10 +27,12 @@ public class OperacaoDao extends Dao<Operacao> {
 	private final String sqlOperacao = "SELECT OPERACAO.operacao_id, OPERACAO.empresa_id, OPERACAO.organizacao_id" +
 			", OPERACAO.isactive, OPERACAO.nome FROM OPERACAO (NOLOCK) ";
 	
-	private final String sqlOperacoes = " SELECT OPERACAO.empresa_id, EMPRESA.nome AS empresa_nome, OPERACAO.organizacao_id "+
-				", ORGANIZACAO.nome AS organizacao_nome, OPERACAO.operacao_id, OPERACAO.nome AS operacao_nome, OPERACAO.isactive "+
-				" FROM (OPERACAO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON OPERACAO.empresa_id = EMPRESA.empresa_id) " +
-				" INNER JOIN ORGANIZACAO (NOLOCK) ON OPERACAO.organizacao_id = ORGANIZACAO.organizacao_id ";
+	private final String sqlOperacoes = " SELECT " +
+				"		OPERACAO.empresa_id, EMPRESA.nome AS empresa_nome, OPERACAO.organizacao_id, "+
+				"		ORGANIZACAO.nome AS organizacao_nome, OPERACAO.operacao_id, OPERACAO.nome AS operacao_nome, OPERACAO.isactive "+
+				" FROM (OPERACAO (NOLOCK) " +
+				"	INNER JOIN EMPRESA (NOLOCK) ON OPERACAO.empresa_id = EMPRESA.empresa_id) " +
+				"	INNER JOIN ORGANIZACAO (NOLOCK) ON OPERACAO.organizacao_id = ORGANIZACAO.organizacao_id ";
 
 	public OperacaoDao(Session session, ConnJDBC conexao) {
 
@@ -121,6 +123,55 @@ public class OperacaoDao extends Dao<Operacao> {
 
 		this.conexao.closeConnection(rsOperacoes, stmt, conn);
 		return operacao;
+	}
+	
+	public Operacao buscaOperacaoByEmpOrgUsuario(Long empresa_id, Long organizacao_id, Long usuario_id) {
+
+		String sql = " select OPERACAO.operacao_id, OPERACAO.nome as operacao_nome from OPERACAO  " +
+						" INNER JOIN FUNCIONARIO AS F ON F.operacao_id = OPERACAO.operacao_id " +
+						" INNER JOIN PARCEIRONEGOCIO AS P ON P.parceironegocio_id = F.parceironegocio_id " +
+						" INNER JOIN USUARIO ON USUARIO.parceironegocio_id = P.parceironegocio_id " ;
+
+		if (empresa_id != null)
+			sql += " WHERE OPERACAO.empresa_id = ? ";
+		if (organizacao_id != null)
+			sql += " AND OPERACAO.organizacao_id = ? ";
+		if (usuario_id != null)
+			sql += " AND USUARIO.usuario_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Operacao operacao = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, usuario_id);
+			
+			this.rsOperacoes = this.stmt.executeQuery();
+
+			while (rsOperacoes.next()) {
+
+				operacao = new Operacao();
+
+				operacao.setOperacao_id(rsOperacoes.getLong("operacao_id"));
+				operacao.setNome(rsOperacoes.getString("operacao_nome"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsOperacoes, stmt, conn);
+
+		return operacao;
+
 	}
 
 	public Collection<Operacao> buscaOperacoes(Long empresa_id, Long organizacao_id, String nome) {

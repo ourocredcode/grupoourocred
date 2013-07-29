@@ -29,6 +29,7 @@ import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoControleFormularioDao;
 import br.com.sgo.dao.MeioPagamentoDao;
+import br.com.sgo.dao.OperacaoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
@@ -82,6 +83,7 @@ public class FormularioController {
 	private final PnDao pnDao;
 	private final MeioPagamentoDao meioPagamentoDao;
 	private final TabelaDao tabelaDao;
+	private final OperacaoDao operacaoDao;
 
 	private HttpServletResponse response;
 	private Formulario formulario;
@@ -105,7 +107,7 @@ public class FormularioController {
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
 			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow, MeioPagamentoDao meioPagamentoDao,TabelaDao tabelaDao,
-			ParceiroContatoDao parceiroContatoDao){		
+			ParceiroContatoDao parceiroContatoDao,OperacaoDao operacaoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -130,6 +132,7 @@ public class FormularioController {
 		this.pnDao = pnDao;
 		this.meioPagamentoDao = meioPagamentoDao;
 		this.tabelaDao = tabelaDao;
+		this.operacaoDao = operacaoDao;
 		this.parceiroNegocio = parceiroNegocio;
 		this.parceiroLocalidade = parceiroLocalidade;
 		this.parceiroInfoBanco = parceiroInfoBanco;
@@ -307,6 +310,8 @@ public class FormularioController {
 		}
 
 		contrato.setIsRepasse(false);
+
+		contrato.setOperacao(this.operacaoDao.buscaOperacaoByEmpOrgUsuario(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),usuarioInfo.getUsuario().getUsuario_id()));
 
 		formulario.adicionaContrato(contrato);
 		result.redirectTo(FormularioController.class).cadastro();

@@ -224,7 +224,7 @@ public class ParceironegocioController {
 				result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
 				result.include("parceiroInfoBanco",infoBanco);
 
-				TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),"Pessoa Física");
+				TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(1L,1L,"Pessoa Física");
 
 				parceiroNegocio.setTipoParceiro(tipoParceiro);
 				parceiroNegocio.setIsCliente(true);

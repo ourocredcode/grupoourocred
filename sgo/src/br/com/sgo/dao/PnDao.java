@@ -105,8 +105,7 @@ public class PnDao {
 
 	}
 
-	public ParceiroLocalidade buscaParceiroLocalidade(
-			ParceiroNegocio parceiroNegocio) {
+	public ParceiroLocalidade buscaParceiroLocalidade(ParceiroNegocio parceiroNegocio) {
 
 		String sql = sqlPN;
 
@@ -133,24 +132,19 @@ public class PnDao {
 			while (rsParceiroNegocio.next()) {
 
 				if (rsParceiroNegocio.getString("clienteCep") != null)
-					localidade
-							.setCep(rsParceiroNegocio.getString("clienteCep"));
+					localidade.setCep(rsParceiroNegocio.getString("clienteCep"));
 
 				if (rsParceiroNegocio.getString("clienteEndereco") != null)
-					localidade.setEndereco(rsParceiroNegocio
-							.getString("clienteEndereco"));
+					localidade.setEndereco(rsParceiroNegocio.getString("clienteEndereco"));
 
 				if (rsParceiroNegocio.getString("clienteBairro") != null)
-					localidade.setBairro(rsParceiroNegocio
-							.getString("clienteBairro"));
+					localidade.setBairro(rsParceiroNegocio.getString("clienteBairro"));
 
 				if (rsParceiroNegocio.getString("clienteComplemento") != null)
-					parceiroLocalidade.setComplemento(rsParceiroNegocio
-							.getString("clienteComplemento"));
+					parceiroLocalidade.setComplemento(rsParceiroNegocio.getString("clienteComplemento"));
 
 				if (rsParceiroNegocio.getString("clienteNumero") != null)
-					parceiroLocalidade.setNumero(rsParceiroNegocio
-							.getString("clienteNumero"));
+					parceiroLocalidade.setNumero(rsParceiroNegocio.getString("clienteNumero"));
 
 				parceiroLocalidade.setLocalidade(localidade);
 				parceiroLocalidade.setParceiroNegocio(parceiroNegocio);

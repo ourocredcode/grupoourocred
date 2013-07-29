@@ -29,10 +29,10 @@
 							Nome
 						</th>
 						<th>
-							Login/CPF
+							Codinome
 						</th>
 						<th>
-							Apelido
+							Operação
 						</th>
 					</tr>
 				</thead>
@@ -46,12 +46,11 @@
 								${funcionario.parceiroNegocio.nome }
 							</td>
 							<td>
-								${funcionario.parceiroNegocio.cpf }
-							</td>
-							<td>
 								${funcionario.apelido }
 							</td>
-							
+							<td>
+								${funcionario.operacao.nome }
+							</td>
 						</tr>					
 
 					</c:forEach>

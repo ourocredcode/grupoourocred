@@ -32,7 +32,8 @@ public class FuncionarioDao extends Dao<Funcionario> {
 	private String sqlFuncionarios =  " SELECT FUNCIONARIO.empresa_id,  EMPRESA.nome, FUNCIONARIO.organizacao_id, ORGANIZACAO.nome, PARCEIRONEGOCIO.parceironegocio_id,  " +
 			"	PARCEIRONEGOCIO.cpf, FUNCIONARIO.apelido, " +
 			"   PARCEIRONEGOCIO.nome as parceironegocio_nome, FUNCIONARIO.funcao_id, FUNCAO.nome as funcao_nome, FUNCIONARIO.departamento_id, FUNCIONARIO.funcionario_id, " +
-			"	DEPARTAMENTO.nome as departamento_nome, FUNCIONARIO.supervisor_funcionario_id, SUPER.nome as supervisor_nome, FUNCIONARIO.operacao_id, OPERACAO.nome as operacao_nome  FROM  " +
+			"	DEPARTAMENTO.nome as departamento_nome, FUNCIONARIO.supervisor_funcionario_id, " +
+			"	SUPER.nome as supervisor_nome, FUNCIONARIO.operacao_id, OPERACAO.nome as operacao_nome  FROM  " +
 			"	((((((( ( ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) " +
 			"								INNER JOIN PARCEIRONEGOCIO (NOLOCK)   ON EMPRESA.empresa_id = PARCEIRONEGOCIO.empresa_id)  ON ORGANIZACAO.organizacao_id = PARCEIRONEGOCIO.organizacao_id)   " +
 			"								INNER JOIN FUNCIONARIO (NOLOCK) ON PARCEIRONEGOCIO.parceironegocio_id = FUNCIONARIO.parceironegocio_id)   " +
@@ -75,6 +76,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 				Departamento d = new Departamento();
 				Funcao f = new Funcao();
 				Funcionario funcionario = new Funcionario();
+				Operacao operacao = new Operacao();
 				
 
 				parceiro.setParceiroNegocio_id(rsFuncionario.getLong("parceironegocio_id"));
@@ -86,16 +88,23 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 				f.setFuncao_id(rsFuncionario.getLong("funcao_id"));
 				f.setNome(rsFuncionario.getString("funcao_nome"));
+				
 
 				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
 				funcionario.setFuncao(f);
 				funcionario.setDepartamento(d);
 				funcionario.setParceiroNegocio(parceiro);
-				
+
+				funcionario.setApelido(rsFuncionario.getString("apelido") == null ? "" : rsFuncionario.getString("apelido"));
+
 				supervisor.setParceiroNegocio_id(rsFuncionario.getLong("supervisor_funcionario_id"));
 				supervisor.setNome(rsFuncionario.getString("supervisor_nome"));
+
+				operacao.setNome(rsFuncionario.getString("operacao_nome") == null ? "" : rsFuncionario.getString("operacao_nome"));
+
 				funcionario.setSupervisor(supervisor);
-				
+				funcionario.setOperacao(operacao);
+
 				funcionarios.add(funcionario);
 				
 
@@ -238,6 +247,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 				ParceiroNegocio parceiro = new ParceiroNegocio();
 				ParceiroNegocio supervisor = new ParceiroNegocio();
 				Funcionario funcionario = new Funcionario();
+				Operacao operacao = new Operacao();
 
 				parceiro.setParceiroNegocio_id(rsFuncionario.getLong("parceironegocio_id"));
 				parceiro.setNome(rsFuncionario.getString("parceironegocio_nome"));
@@ -246,10 +256,13 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 				supervisor.setParceiroNegocio_id(rsFuncionario.getLong("supervisor_funcionario_id"));
 				supervisor.setNome(rsFuncionario.getString("supervisor_nome"));
+				operacao.setNome(rsFuncionario.getString("operacao_nome") == null ? "" : rsFuncionario.getString("operacao_nome"));
+				
 				funcionario.setSupervisor(supervisor);
-
+				funcionario.setOperacao(operacao);
 				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
-				funcionario.setApelido(rsFuncionario.getString("apelido"));
+				funcionario.setApelido(rsFuncionario.getString("apelido") == null ? "" : rsFuncionario.getString("apelido"));
+
 				funcionario.setParceiroNegocio(parceiro);
 
 				funcionarios.add(funcionario);

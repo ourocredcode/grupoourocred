@@ -198,11 +198,11 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 		String sql = sqlParceiroBeneficioToHiscon;
 
 		if (numeroBeneficio != null)
-			sql += " WHERE PARCEIROBENEFICIO.empresa_id = ?";		
+			sql += " WHERE PARCEIROBENEFICIO.empresa_id = ? ";		
 		if (numeroBeneficio != null)
-			sql += " AND PARCEIROBENEFICIO.organizacao_id = ?";
+			sql += " AND PARCEIROBENEFICIO.organizacao_id = ? ";
 		if (numeroBeneficio != null)
-			sql += " AND PARCEIROBENEFICIO.numerobeneficio = ?";
+			sql += " AND PARCEIROBENEFICIO.numerobeneficio = ? ";
 
 		this.conn = this.conexao.getConexao();
 
