@@ -16,20 +16,25 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import br.com.caelum.restfulie.RestClient;
+import br.com.caelum.restfulie.Restfulie;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.sgo.dao.BancoDao;
+import br.com.sgo.dao.CidadeDao;
 import br.com.sgo.dao.CoeficienteDao;
 import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ControleFormularioDao;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoControleFormularioDao;
+import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.OperacaoDao;
+import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
@@ -37,8 +42,11 @@ import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.PnDao;
 import br.com.sgo.dao.ProdutoDao;
+import br.com.sgo.dao.RegiaoDao;
 import br.com.sgo.dao.TabelaDao;
 import br.com.sgo.dao.TipoControleDao;
+import br.com.sgo.dao.TipoEnderecoDao;
+import br.com.sgo.dao.TipoLocalidadeDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.jasper.FormularioDataSource;
@@ -49,6 +57,7 @@ import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoControleFormulario;
+import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.MeioPagamento;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
@@ -57,8 +66,10 @@ import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.TipoControle;
+import br.com.sgo.modelo.TipoEndereco;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
+import br.com.sgo.modelo.cep.BrazilianAddressFinder;
 
 @Resource
 public class FormularioController {
@@ -84,7 +95,15 @@ public class FormularioController {
 	private final MeioPagamentoDao meioPagamentoDao;
 	private final TabelaDao tabelaDao;
 	private final OperacaoDao operacaoDao;
-
+	private final PaisDao paisDao;
+	private final CidadeDao cidadeDao;
+	private final RegiaoDao regiaoDao;
+	private final TipoLocalidadeDao tipoLocalidadeDao;
+	private final LocalidadeDao localidadeDao;
+	private final TipoEnderecoDao tipoEnderecoDao;
+	
+	private BrazilianAddressFinder addressFinder;
+	private RestClient restfulie;
 	private HttpServletResponse response;
 	private Formulario formulario;
 	private ParceiroNegocio parceiroNegocio;
@@ -100,6 +119,8 @@ public class FormularioController {
 	private Collection<Etapa> etapas;
 	private Collection<Etapa> motivos;
 	private Collection<MeioPagamento> meiosPagamento;
+	
+	private Calendar dataAtual = Calendar.getInstance();
 
 	public FormularioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,FormularioDao formularioDao,ContratoDao contratoDao,
 			CoeficienteDao coeficienteDao,PnDao pnDao,HttpServletResponse response,TipoControleDao tipoControleDao,ParceiroInfoBancoDao parceiroInfoBancoDao,
@@ -107,7 +128,8 @@ public class FormularioController {
 			ParceiroInfoBanco parceiroInfoBanco,ParceiroBeneficio parceiroBeneficio,Formulario formulario,BancoDao bancoDao,ProdutoDao produtoDao,List<Contrato> contratos,
 			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow, MeioPagamentoDao meioPagamentoDao,TabelaDao tabelaDao,
-			ParceiroContatoDao parceiroContatoDao,OperacaoDao operacaoDao){		
+			ParceiroContatoDao parceiroContatoDao,OperacaoDao operacaoDao,PaisDao paisDao,CidadeDao cidadeDao,RegiaoDao regiaoDao,TipoLocalidadeDao tipoLocalidadeDao,
+			LocalidadeDao localidadeDao,TipoEnderecoDao tipoEnderecoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -133,6 +155,12 @@ public class FormularioController {
 		this.meioPagamentoDao = meioPagamentoDao;
 		this.tabelaDao = tabelaDao;
 		this.operacaoDao = operacaoDao;
+		this.paisDao = paisDao;
+		this.regiaoDao = regiaoDao;
+		this.cidadeDao = cidadeDao;
+		this.localidadeDao = localidadeDao;
+		this.tipoLocalidadeDao = tipoLocalidadeDao;
+		this.tipoEnderecoDao = tipoEnderecoDao;
 		this.parceiroNegocio = parceiroNegocio;
 		this.parceiroLocalidade = parceiroLocalidade;
 		this.parceiroInfoBanco = parceiroInfoBanco;
@@ -392,16 +420,102 @@ public class FormularioController {
 
 			parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
 
-			for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
+			if( parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id() ).size() == 0 ){
 
-				if(pl.getTipoEndereco().getNome().equals("Assinatura")){
-					parceiroLocalidade = pl;
+				String cep = this.pnDao.buscaCepByParceiroNegocio(parceiroNegocio);
+
+				Localidade l = this.localidadeDao.buscaLocalidade(cep);
+
+				if (l.getLocalidade_id() == null) {
+					
+					restfulie = Restfulie.custom();
+					addressFinder = new BrazilianAddressFinder(restfulie);
+					String[] resultado = addressFinder.findAddressByZipCode(cep).asAddressArray();
+					
+					l.setEmpresa(empresa);
+					l.setOrganizacao(organizacao);
+					l.setIsActive(true);
+					l.setCep(cep);
+					l.setCreated(dataAtual);
+					l.setCreatedBy(usuario);
+					
+					l.setPais(this.paisDao.buscaPais("Brasil"));
+
+					if(!resultado[4].equals(""))
+						l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+
+					if(!resultado[3].equals(""))
+						l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+
+					if(!resultado[0].equals(""))
+						l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+
+					if(!resultado[1].equals(""))
+						l.setEndereco(resultado[1]);
+
+					if(!resultado[2].equals(""))
+						l.setBairro(resultado[2]);
+
+					this.localidadeDao.beginTransaction();
+					this.localidadeDao.adiciona(l);
+					this.localidadeDao.commit();
+					
+				}
+
+				Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
+
+				for(TipoEndereco tipoEndereco : tiposEndereco){
+
+					ParceiroLocalidade pl = new ParceiroLocalidade();
+
+					pl.setEmpresa(empresa);
+					pl.setOrganizacao(organizacao);
+					pl.setParceiroNegocio(parceiroNegocio);
+					pl.setLocalidade(l);
+					pl.setTipoEndereco(tipoEndereco);
+					pl.setNumero(this.pnDao.buscaNumeroByParceiroNegocio(parceiro));
+					pl.setComplemento(this.pnDao.buscaComplementoByParceiroNegocio(parceiro));
+					pl.setPontoReferencia(null);
+
+					pl.setCreated(dataAtual);
+					pl.setUpdated(dataAtual);
+
+					pl.setCreatedBy(usuario);
+					pl.setUpdatedBy(usuario);
+
+					pl.setIsActive(true);
+
+					try{
+
+						this.parceiroLocalidadeDao.beginTransaction();
+						this.parceiroLocalidadeDao.adiciona(pl);
+						this.parceiroLocalidadeDao.commit();
+
+					} catch(Exception e) {
+
+						this.parceiroLocalidadeDao.rollback();
+
+					}
+					
+					if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+						parceiroLocalidade = pl;
+					}
+		
+				}
+
+			} else {
+
+				for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
+
+					if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+						parceiroLocalidade = pl;
+					}
+
 				}
 
 			}
-			
+
 			formulario.setParceiroBeneficio(parceiroBeneficio);
-			formulario.setParceiroLocalidade(parceiroLocalidade);
 			formulario.setParceiroLocalidade(parceiroLocalidade);
 			formulario.setParceiroInfoBanco(parceiroInfoBanco);
 
