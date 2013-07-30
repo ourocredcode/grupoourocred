@@ -18,7 +18,7 @@ $(document).ready(function() {
 			, type: $(this).attr('method')
 			, url: $(this).attr('action')
 			, success: function(response) {
-				alert(response);
+				window.location.reload(true);
 			}
 		});
 		return false;

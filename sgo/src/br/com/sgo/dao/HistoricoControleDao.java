@@ -45,6 +45,8 @@ public class HistoricoControleDao extends Dao<HistoricoControle> {
 			sql += " WHERE HISTORICOCONTROLE.contrato_id = ? ";
 		if (controle_id != null)
 			sql += " AND HISTORICOCONTROLE.controle_id = ? ";
+		
+		sql += " ORDER BY HISTORICOCONTROLE.created DESC ";
 
 		this.conn = this.conexao.getConexao();
 		

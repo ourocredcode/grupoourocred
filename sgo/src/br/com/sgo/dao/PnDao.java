@@ -161,6 +161,111 @@ public class PnDao {
 		return parceiroLocalidade;
 
 	}
+	
+	public String buscaCepByParceiroNegocio(ParceiroNegocio parceiroNegocio) {
+
+		String sql = sqlPN;
+
+		if (parceiroNegocio != null)
+			sql += " WHERE str_nrdocumento= ?  ";
+
+		this.conn = this.conexao.getConexao();
+		
+		String cep = "";
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1, parceiroNegocio.getCpf());
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				if (rsParceiroNegocio.getString("clienteCep") != null)
+					cep = rsParceiroNegocio.getString("clienteCep");
+			}
+
+			this.conexao.closeConnection(conn);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return cep;
+
+	}
+	
+	public String buscaNumeroByParceiroNegocio(ParceiroNegocio parceiroNegocio) {
+
+		String sql = sqlPN;
+
+		if (parceiroNegocio != null)
+			sql += " WHERE str_nrdocumento= ?  ";
+
+		this.conn = this.conexao.getConexao();
+		
+		String numero = "";
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1, parceiroNegocio.getCpf());
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				if (rsParceiroNegocio.getString("clienteNumero") != null)
+					numero = rsParceiroNegocio.getString("clienteNumero");
+			}
+
+			this.conexao.closeConnection(conn);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return numero;
+
+	}
+	
+	public String buscaComplementoByParceiroNegocio(ParceiroNegocio parceiroNegocio) {
+
+		String sql = sqlPN;
+
+		if (parceiroNegocio != null)
+			sql += " WHERE str_nrdocumento= ?  ";
+
+		this.conn = this.conexao.getConexao();
+		
+		String complemento = "";
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setString(1, parceiroNegocio.getCpf());
+
+			this.rsParceiroNegocio = this.stmt.executeQuery();
+
+			while (rsParceiroNegocio.next()) {
+
+				if (rsParceiroNegocio.getString("clienteComplemento") != null)
+					complemento = rsParceiroNegocio.getString("clienteComplemento");
+			}
+
+			this.conexao.closeConnection(conn);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return complemento;
+
+	}
 
 	public ParceiroInfoBanco buscaParceiroInfoBanco(ParceiroNegocio parceiroNegocio) {
 
@@ -341,59 +446,34 @@ public class PnDao {
 
 			while (rsDetalhamento.next()) {
 
-				detalhamento.setMatricula(String.valueOf(rsDetalhamento
-						.getLong("nr_matricula")));
-				detalhamento.setCompetencia(rsDetalhamento.getString(
-						"str_competencia").substring(0, 2)
-						+ "/"
-						+ rsDetalhamento.getString("str_competencia")
-								.substring(2, 6));
+				detalhamento.setMatricula(String.valueOf(rsDetalhamento.getLong("nr_matricula")));
+				detalhamento.setCompetencia(rsDetalhamento.getString("str_competencia").substring(0, 2)+ "/"+ rsDetalhamento.getString("str_competencia").substring(2, 6));
 				detalhamento.setNome(rsDetalhamento.getString("str_nome"));
-				detalhamento
-						.setEspecie(rsDetalhamento.getString("str_especie"));
-				detalhamento.setDescespecie(rsDetalhamento
-						.getString("str_descespecie"));
-				detalhamento.setPeriodoinicial(rsDetalhamento
-						.getDate("dt_periodoinicial"));
-				detalhamento.setPeriodofinal(rsDetalhamento
-						.getDate("dt_periodofinal"));
-				detalhamento.setDispinicial(rsDetalhamento
-						.getDate("dt_dispinicial"));
-				detalhamento.setDispfinal(rsDetalhamento
-						.getDate("dt_dispfinal"));
-				detalhamento.setContacorrente(rsDetalhamento
-						.getString("str_contacorrente"));
+				detalhamento.setEspecie(rsDetalhamento.getString("str_especie"));
+				detalhamento.setDescespecie(rsDetalhamento.getString("str_descespecie"));
+				detalhamento.setPeriodoinicial(rsDetalhamento.getDate("dt_periodoinicial"));
+				detalhamento.setPeriodofinal(rsDetalhamento.getDate("dt_periodofinal"));
+				detalhamento.setDispinicial(rsDetalhamento.getDate("dt_dispinicial"));
+				detalhamento.setDispfinal(rsDetalhamento.getDate("dt_dispfinal"));
+				detalhamento.setContacorrente(rsDetalhamento.getString("str_contacorrente"));
 				detalhamento.setBanco(rsDetalhamento.getString("str_banco"));
 
-				String[] aux = rsDetalhamento.getString("str_agencia").split(
-						"-");
+				String[] aux = rsDetalhamento.getString("str_agencia").split("-");
 
 				detalhamento.setCodbanco(aux[0]);
 				detalhamento.setAgencia(aux[1]);
 
-				detalhamento.setEnderecobanco(rsDetalhamento
-						.getString("str_enderecobanco"));
-				detalhamento.setMeio_pgtodesc(rsDetalhamento
-						.getString("str_meio_pgtodesc"));
+				detalhamento.setEnderecobanco(rsDetalhamento.getString("str_enderecobanco"));
+				detalhamento.setMeio_pgtodesc(rsDetalhamento.getString("str_meio_pgtodesc"));
 				detalhamento.setStatus(rsDetalhamento.getString("str_status"));
 
 				if (rsDetalhamento.getString("str_sinal").equals("-")) {
-					debitos.put(
-							countDebito
-									+ ": "
-									+ rsDetalhamento
-											.getString("str_descrubrica"),
-							rsDetalhamento.getDouble("n_valor"));
+					debitos.put(countDebito + ": " + rsDetalhamento.getString("str_descrubrica"),rsDetalhamento.getDouble("n_valor"));
 					countDebito++;
 				}
 
 				if (rsDetalhamento.getString("str_sinal").equals("+")) {
-					creditos.put(
-							countCredito
-									+ ": "
-									+ rsDetalhamento
-											.getString("str_descrubrica"),
-							rsDetalhamento.getDouble("n_valor"));
+					creditos.put(countCredito + ": " + rsDetalhamento.getString("str_descrubrica"),rsDetalhamento.getDouble("n_valor"));
 					countCredito++;
 				}
 

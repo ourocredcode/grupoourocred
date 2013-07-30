@@ -1165,7 +1165,7 @@ function openPopup(url) {
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
-							<div class="span5">
+							<div class="span6">
 								<div id="divBoleto" style="margin-left: 50px">	
 									<div class="control-group">
 
@@ -1197,7 +1197,7 @@ function openPopup(url) {
 									 </div>
 								</div>
 							</div>
-							<div class="span7">
+							<div class="span6">
 								<c:if test="${not empty historicoControleBoleto }">
 									<table class="table table-bordered table-striped table-hover data-table" id="lista">
 										<thead>
@@ -1237,7 +1237,7 @@ function openPopup(url) {
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
-							<div class="span5">
+							<div class="span6">
 								<div id="divAverbacao" style="margin-left: 50px">	
 									<div class="control-group">
 										<div class="controls">
@@ -1262,7 +1262,7 @@ function openPopup(url) {
 									
 								</div>
 							</div>
-							<div class="span7">
+							<div class="span6">
 								<c:if test="${not empty historicoControleAverbacao }">
 									<table class="table table-bordered table-striped table-hover data-table" id="lista">
 										<thead>

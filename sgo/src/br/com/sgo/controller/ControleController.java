@@ -291,10 +291,8 @@ public class ControleController {
 			}
 
 		}
-		
-		
 
-		result.include("msg","Controle averbacao preenchido com sucesso.").redirectTo(this).msg();
+		result.include("msg","ok").redirectTo(this).msg();
 
 	}
 	
@@ -519,8 +517,8 @@ public class ControleController {
 			}
 
 		}
-
-		result.include("msg","Controle Boleto preenchido com sucesso.").redirectTo(this).msg();
+		
+		result.include("msg","ok").redirectTo(this).msg();
 
 	}
 	

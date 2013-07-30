@@ -101,9 +101,9 @@ public class MenuController {
 	@Path("/menu/inicio/{perfil}") 
 	public void inicio(String perfil) {
 
-		Date d1 = new GregorianCalendar().getTime();
-		Calendar dataInicial = Calendar.getInstance(); 
-		dataInicial.setTime(d1);    
+		//Date d1 = new GregorianCalendar().getTime();
+		//Calendar dataInicial = Calendar.getInstance(); 
+		//dataInicial.setTime(d1);    
 		
 		usuarioDao.refresh(usuarioInfo.getUsuario());
 		perfilDao.refresh(usuarioInfo.getPerfil());
@@ -192,13 +192,13 @@ public class MenuController {
 
 		contadorSeparado();
 
-		long diferenca = System.currentTimeMillis() - dataInicial.getTimeInMillis();  
-		long diferencaSeg = diferenca /1000;    //DIFERENCA EM SEGUNDOS   
+		//long diferenca = System.currentTimeMillis() - dataInicial.getTimeInMillis();  
+		//long diferencaSeg = diferenca /1000;    //DIFERENCA EM SEGUNDOS   
 
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		System.out.println(" Acesso : " + usuarioInfo.getUsuario().getNome() + " em :  " + sdf.format(Calendar.getInstance().getTime()) );
-		System.out.println(" Tempo : " + diferencaSeg + " s ");
+		//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		//System.out.println(" Acesso : " + usuarioInfo.getUsuario().getNome() + " em :  " + sdf.format(Calendar.getInstance().getTime()) );
+		//System.out.println(" Tempo : " + diferencaSeg + " s ");
 
 	}
 
