@@ -114,7 +114,6 @@ public class LogisticaController {
 			l.setPeriodo(logistica.getPeriodo());
 
 			log.add(" Data de Assinatura alterada para : " + dateFormat.format(l.getDataAssinatura().getTime()));
-			log.add(" Período de Assinatura alterado para : " + l.getPeriodo().getNome());
 
 			logisticaDao.beginTransaction();
 			logisticaDao.adiciona(l);
@@ -123,7 +122,7 @@ public class LogisticaController {
 			
 			if(c.getEtapa().getNome().equals("Aguardando Status")){
 
-				Etapa e = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNomeExato(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),"Em Assinatura");
+				Etapa e = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNomeExato(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),"Aguardando Qualidade");
 
 				log.add("Status alterado de : " +c.getEtapa().getNome() + " para : " + e.getNome());
 
