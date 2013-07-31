@@ -3,10 +3,8 @@
 <div id="content-header">
 		<h1>Equipe - ${usuarioInfo.usuario.nome }</h1>
 		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+			<a class="btn btn-large tip-bottom" title="Arquivos"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Usuários"><i class="icon-user"></i></a>
 		</div>
 	</div>
 	

@@ -292,7 +292,7 @@
 	
 						<ul class="consultor">
 							<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">
-								<li><a href="<c:url value="/formulario/cadastro"/>">Formulário</a></li>
+								<li><a href="<c:url value="/formulario/cadastro"/>">Contrato</a></li>
 							</c:if>
 							<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
 						</ul>
