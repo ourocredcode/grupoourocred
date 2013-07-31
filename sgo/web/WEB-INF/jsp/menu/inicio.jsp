@@ -77,8 +77,8 @@
 		<h1>DashBoard - ${usuarioInfo.usuario.nome } </h1>
 		
 		<div class="btn-group">
-			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Users" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
+			<a class="btn btn-large tip-bottom" title="Arquivos"><i class="icon-file"></i></a>
+			<a class="btn btn-large tip-bottom" title="Usuários" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
 		</div>
 
 	</div>

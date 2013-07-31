@@ -371,7 +371,7 @@ public class FormularioController {
 
 		}
 
-		result.redirectTo(this).cadastro();
+		result.redirectTo(this).visualiza(this.formulario.getFormulario_id());
 
 	}
 

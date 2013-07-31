@@ -17,8 +17,7 @@ $(document).ready(function() {
 		"bJQueryUI": true,
 		"sPaginationType": "full_numbers",
 		"sDom": '<""l>t<"F"fp>',
-		"bFilter": false,
-		"aaSorting": []
+		"bFilter": false
 	});
 
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
@@ -36,41 +35,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-
-	$('#Banco').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/banco/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#agenciaEmpresaId').val() == '' ? '0' :  $('#agenciaEmpresaId').val(), 
-	        		  organizacao_id: $('#agenciaOrganizacaoId').val() == '' ? '0' :  $('#agenciaOrganizacaoId').val(),
-	        		  nome : $('#Banco').val()},
-              success : function(data) {  
-
-            	  if (!data || data.length == 0) {
-         	            $('#Banco').val('');
-         	           $('#BancoId').val('');
-         	        }
-
-            	  response($.map(data, function(banco) {  
-            		  return {
-            			  label: banco.nome,
-            			  value: banco.banco_id
-                      };
-                  }));  
-               }
-	        });
-         },
-         focus: function( event, ui ) {
-          	 $('#Banco').val(ui.item.label);
-               return false;
-           } ,
-         select: function( event, ui ) {
-             $('#Banco').val(ui.item.label);
-             $('#BancoId').val(ui.item.value);
-             return false;
-         }
-    });
 
 	var justificativa = document.getElementById("justificativa");
 	var dataQuitacao = document.getElementById("dataQuitacao");
@@ -504,6 +468,8 @@ function openPopup(url) {
 		</c:choose>
 	</c:if>
 	
+	
+	
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
@@ -633,7 +599,11 @@ function openPopup(url) {
 												<th>Imagem</th>
 												<th>Data solicitação</th>
 												<th>Data solicitação Adm</th>
-												<th>Consultor</th>
+												
+												<c:if test="${usuarioInfo.perfil.chave != 'Consultor' }">
+													<th>Consultor</th>
+												</c:if>
+												
 												<th>Cliente</th>
 												<th>Cpf</th>
 												<th>Número Benefício</th>
@@ -650,7 +620,11 @@ function openPopup(url) {
 													</td>
 													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
 													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>			
-													<td>${hiscon.usuario.nome }</td>									
+
+													<c:if test="${usuarioInfo.perfil.chave != 'Consultor' }">
+														<td>${hiscon.usuario.nome }</td>
+													</c:if>									
+
 													<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
 													<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 													<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>				
@@ -983,6 +957,22 @@ function openPopup(url) {
 										</td>
 									</tr>
 								</c:forEach>
+							</tbody>	
+							</c:if>
+							<c:if test="${empty historico}">
+							<thead>	
+								<tr>
+									<th scope="col">
+										
+									</th>
+								</tr>
+							</thead>
+							<tbody>		
+								<tr>
+									<td>
+										Nenhuma alteração realizada
+									</td>
+								</tr>
 							</tbody>	
 							</c:if>
 						</table>
