@@ -83,8 +83,11 @@ public class HisconbeneficioController {
 	@Path("/hisconbeneficio/cadastro")
 	public void cadastro() {
 
+		this.hisconBeneficio.setHisconBeneficio_id(null);
+		this.hisconBeneficio.setParceiroBeneficio(null);
+		this.hisconBeneficio.setCreated(null);
 		this.hisconBeneficio = new HisconBeneficio();
-		
+
 		Calendar c1 = new GregorianCalendar();
 		Calendar c2 = new GregorianCalendar();
 
@@ -94,7 +97,7 @@ public class HisconbeneficioController {
 
 		Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),"Aguardando Adm");
 
-		if(usuarioInfo.getPerfil().getNome().equals("Administrativo") || usuarioInfo.getPerfil().getNome().equals("Hiscon")){
+		if(usuarioInfo.getPerfil().getNome().equals("Hiscon")){
 
 			hisconsAuxiliar = this.hisconBeneficioDao.buscaHisconsToUpload(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),etapaAguardandoAdm.getEtapa_id());
 
@@ -301,11 +304,18 @@ public class HisconbeneficioController {
 
 		Workflow w = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Hiscon");
 		Workflow posicao = this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Posicao Hiscon");
+		
+		Collection<Usuario> supervisores = new ArrayList<Usuario>();
 
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), w.getWorkflow_id()));
 		result.include("posicoes",this.etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), posicao.getWorkflow_id()));
-		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
-		
+
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Administrativo"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Apoio Comercial"));
+
+		result.include("supervisores", supervisores);
+
 		if(tipo.equals("Supervisor")){
 
 			result.include("consultores",this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.usuario.getUsuario_id()));

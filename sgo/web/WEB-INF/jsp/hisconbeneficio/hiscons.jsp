@@ -199,7 +199,7 @@
 								<select id="busca_Supervisor" name="busca_Supervisor" class="input-medium">
 									<option value="">Todos</option>
 									<c:forEach items="${supervisores}" var="supervisor">
-										<option value="${supervisor.usuario_id}">${supervisor.apelido }</option>
+										<option value="${supervisor.usuario_id}">${supervisor.nome }</option>
 									</c:forEach>
 								</select>	
 							</c:if>
