@@ -229,6 +229,16 @@
 					</li>
 					
 					<li class="submenu">
+
+						<a href="#"><i class="icon icon-pencil"></i> <span>Solicitação</span></a>
+
+						<ul class="consultor">
+							<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
+						</ul>
+
+					</li>
+					
+					<li class="submenu">
 	
 						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
@@ -268,7 +278,7 @@
 				
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-pencil"></i> <span>Consultores</span></a>
+						<a href="#"><i class="icon icon-pencil"></i> <span>Solicitação</span></a>
 	
 						<ul class="consultor">
 							<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">
@@ -317,6 +327,20 @@
 					</li>
 				
 				
+				</c:if>
+				
+				<c:if test="${usuarioInfo.perfil.chave == 'Hiscon' }">
+
+					<li class="submenu">
+
+						<a href="#"><i class="icon icon-pencil"></i> <span>Solicitação</span></a>
+
+						<ul class="consultor">
+							<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
+						</ul>
+
+					</li>
+
 				</c:if>
 
 			</ul>

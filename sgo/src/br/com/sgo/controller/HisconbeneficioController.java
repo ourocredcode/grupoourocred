@@ -94,14 +94,14 @@ public class HisconbeneficioController {
 
 		Etapa etapaAguardandoAdm = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),"Aguardando Adm");
 
-		if(usuarioInfo.getPerfil().getNome().equals("Administrativo")){
+		if(usuarioInfo.getPerfil().getNome().equals("Administrativo") || usuarioInfo.getPerfil().getNome().equals("Hiscon")){
 
 			hisconsAuxiliar = this.hisconBeneficioDao.buscaHisconsToUpload(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),etapaAguardandoAdm.getEtapa_id());
 
 		} else {
 
 			hisconsAuxiliar = this.hisconBeneficioDao.buscaHisconBeneficiosByUsuarioPerfil( usuarioInfo.getEmpresa(),  usuarioInfo.getOrganizacao(), usuarioInfo.getUsuario(), c1, c2);
-			
+
 		}
 		
 

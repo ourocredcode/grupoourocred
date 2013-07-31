@@ -1,7 +1,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<table class="table table-striped table-bordered">
+<table class="table table-bordered">
 	<thead>
 		<tr>
 			<th>Imagem</th>
@@ -18,7 +18,7 @@
 	</thead>
 	<tbody>	
 		<c:forEach items="${hisconsBeneficio}" var="hiscon">
-			<tr>
+			<tr <c:if test="${hiscon.countHiscons >= 3 }"> class="error"</c:if>>
 				<td>
 					<c:if test="${hiscon.isEnviado}">
 						<a href="<c:url value="/visualizaHiscon/${hiscon.hisconBeneficio_id}"/>"><img src='<c:url  value="/img/pdf.gif" />' border="0"/></a>
@@ -44,7 +44,9 @@
 						</c:forEach>
 					</select>
 				</td>
-				<td><a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'>${hiscon.countHiscons }</a></td>
+				<td style="text-align: center;">
+					<a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'><h3><small>${hiscon.countHiscons }</small></h3></a>
+				</td>
 			</tr>
 		</c:forEach>
 	</tbody>
