@@ -53,7 +53,7 @@
 		
 		
 		var status = $("#busca_Etapas").val();
-		var posicao = $("#busca_Posicao").val();
+		var posicao = $("#busca_Posicoes").val();
 		var cliente = $("#busca_Cliente").val();
 		var documento = $("#busca_Documento").val();
 		var dataInicio = $("#busca_DataInicio").val();
@@ -83,7 +83,7 @@
 	function buscaHiscons(){
 
 		var status = $("#busca_Etapas").val();
-		var posicao = $("#busca_Posicao").val();
+		var posicao = $("#busca_Posicoes").val();
 		var cliente = $("#busca_Cliente").val();
 		var documento = $("#busca_Documento").val();
 		var dataInicio = $("#busca_DataInicio").val();
@@ -190,22 +190,32 @@
 					</div>
 					
 					<div class="span2">
-						
+
 							<label for="busca_DataInicio">Data Início</label>
 							<input id="busca_DataInicio" name="busca_DataInicio"  class="input-small" type="text" />
-							
+
 							<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor'}">
 								<label for="busca_Supervisor">Supervisor</label>
 								<select id="busca_Supervisor" name="busca_Supervisor" class="input-medium">
 									<option value="">Todos</option>
 									<c:forEach items="${supervisores}" var="supervisor">
-										<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
+										<option value="${supervisor.usuario_id}">${supervisor.apelido }</option>
 									</c:forEach>
 								</select>	
 							</c:if>
-					
+
+							<c:if test="${usuarioInfo.perfil.chave == 'Supervisor'}">
+								<label for="busca_Consultor">Consultor</label>
+								<select id="busca_Consultor" name="busca_Consultor" class="input-medium">
+									<option value="">Selecione um Consultor</option>
+									<c:forEach var="consultor" items="${consultores }">
+										<option value="${consultor.usuario_id }">${consultor.nome }</option>
+									</c:forEach>
+								</select>
+							</c:if>
+
 					</div>
-					
+
 					<div class="span2">
 
 							<label for="busca_DataFim">Data Fim</label>
@@ -217,6 +227,7 @@
 									<option value="">Selecione um Supervisor</option>
 								</select>
 							</c:if>
+							
 					
 					</div>
 				

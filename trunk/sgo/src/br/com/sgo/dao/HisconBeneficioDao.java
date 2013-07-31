@@ -16,6 +16,7 @@ import org.hibernate.Session;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
+import br.com.sgo.infra.CustomDateUtil;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
@@ -355,7 +356,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		if(c1 != null)
 			sql += " AND (HISCONBENEFICIO.created BETWEEN ? AND ? )";
 		
-		sql += " ORDER BY HISCONBENEFICIO.hisconbeneficio_id desc ";
+		sql += " ORDER BY HISCONBENEFICIO.etapa_id , HISCONBENEFICIO.created DESC ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -517,6 +518,15 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 				}
 
 			}
+			
+			for(String posicoesAux2 : posicoes){
+
+				if(!posicoesAux2.equals("")) {
+					this.stmt.setString(curr, '%' + posicoesAux2 + '%');
+					curr++;
+				}
+
+			}
 
 			for(Usuario u : consultores){
 
@@ -531,10 +541,10 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			
 			if(calendarInicio != null) {
 				
-				this.stmt.setTimestamp(curr,new Timestamp(calendarInicio.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calendarInicio).getTimeInMillis()));
 				curr++;
 
-				this.stmt.setTimestamp(curr,new Timestamp(calendarFim.getTimeInMillis()));
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calendarFim).getTimeInMillis()));
 				curr++;
 				
 			}
@@ -626,7 +636,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		if (empresa_id != null)
 			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
 		if (organizacao_id != null)
-			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.etapa_id = ? ORDER BY HISCONBENEFICIO.hisconbeneficio_id desc ";
+			sql += " AND HISCONBENEFICIO.organizacao_id = ? AND HISCONBENEFICIO.etapa_id = ? ORDER BY HISCONBENEFICIO.dataadm desc ";
 		
 		this.conn = this.conexao.getConexao();
 
@@ -718,7 +728,9 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
 		ParceiroNegocio parceiro = new ParceiroNegocio();
 		Usuario usuario = new Usuario();
-		Etapa etapa = new Etapa();		
+		Etapa etapa = new Etapa();	
+		Etapa etapaPosicao = new Etapa();
+
 		HisconBeneficio hisconBeneficio = new HisconBeneficio();		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.FFF");
 
@@ -739,6 +751,9 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 		etapa.setEtapa_id(rsHisconBeneficio.getLong("etapa_id"));
 		etapa.setNome(rsHisconBeneficio.getString("etapa_nome"));
+
+		etapaPosicao.setEtapa_id(rsHisconBeneficio.getLong("posicaoEtapa_id"));
+		etapaPosicao.setNome(rsHisconBeneficio.getString("posicao_nome"));
 		
 		usuario.setUsuario_id(rsHisconBeneficio.getLong("usuario_id"));
 		usuario.setNome(rsHisconBeneficio.getString("usuario_nome"));
@@ -748,8 +763,8 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		hisconBeneficio.setOrganizacao(organizacao);
 		hisconBeneficio.setParceiroBeneficio(parceiroBeneficio);
 		hisconBeneficio.setEtapa(etapa);
+		hisconBeneficio.setEtapaPosicao(etapaPosicao);
 		hisconBeneficio.setIsEnviado(rsHisconBeneficio.getBoolean("isenviado"));
-
 
 		hisconBeneficio.setUsuario(usuario);
 
