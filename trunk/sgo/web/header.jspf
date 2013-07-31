@@ -160,6 +160,16 @@
 							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
 						</ul>
 					</li>
+					
+					<li class="submenu">
+
+						<a href="#"><i class="icon icon-pencil"></i> <span>Solicitação</span></a>
+
+						<ul class="consultor">
+							<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
+						</ul>
+
+					</li>
 
 					<li class="submenu">
 	
