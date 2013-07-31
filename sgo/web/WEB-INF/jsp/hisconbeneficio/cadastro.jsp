@@ -15,10 +15,6 @@ jQuery(function($){
 		}
 	});
 
-	$('#btnNovo').click(function() {		
-		limpaForm();
-	});
-
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/hisconbeneficio/cadastro" />';
 	});
@@ -37,12 +33,6 @@ function altera(atributo, id, valor) {
 
 	eval(temp);
 
-}
-
-function limpaForm() {
-	if (!(navigator.userAgent.indexOf("Firefox") != -1)) {
-		document.hisconBeneficioForm.reset();
-	}
 }
 </script>
 
@@ -118,19 +108,32 @@ function limpaForm() {
 							<input  class="input-medium" id="hisconBeneficioParceiroBeneficioId" name="hisconBeneficio.parceiroBeneficio.parceiroBeneficio_id" type="hidden" value="${hisconBeneficio.parceiroBeneficio.parceiroBeneficio_id }">
 						</div>
 					</div>
-					<br>
 
-					<br>
-				 	<div class="btn-group">
-						<input type="button" value="Voltar" id="btnSalvar" onClick="history.go(-1)" class="btn btn-primary" style="width: 100px;">
-					</div>
-					<div class="btn-group">
-						<button type="button" class="btn btn-primary" id="btnNovo" >Limpar</button>
-					</div>
-
-					<br><br>		
-									
 				</form>
+				
+				<div class="row-fluid">
+
+					<div class="span1">
+						<div class="btn-group">
+							<form action="<c:url value="/hisconbeneficio/limpar"/>" method="POST" >
+								<input type="submit" value="Limpar" class="btn"/>
+							</form>
+						</div>
+					</div>
+					<div class="span1">
+						<c:if test="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id != null}">
+							<div class="btn-group">
+								<form action="<c:url value="/hisconbeneficio/salva"/>" method="POST">
+									<button type="submit" class="btn btn-primary" id="btnSalvar" value="Solicitar Hiscon">Solicitar Hiscon</button>									
+								</form>
+							</div>
+						</c:if>
+					</div>
+				</div>
+				
+				 	
+					
+				
 
 				<c:if test="${usuarioInfo.perfil.chave == 'ADM'}">
 					<form action="<c:url value="/uploadHiscon"/>" enctype="multipart/form-data" method="post">	
@@ -150,13 +153,7 @@ function limpaForm() {
 					</form>	
 				</c:if>
 
-				<c:if test="${hisconBeneficio.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id != null}">
-					<td style="width: 200px;">
-						<form action="<c:url value="/hisconbeneficio/salva"/>" method="POST">
-							<button type="submit" class="btn btn-primary" id="btnSalvar" value="Solicitar Hiscon">Solicitar Hiscon</button>									
-						</form>
-					</td>
-				</c:if>
+				
 				
 				<br><br>
 				<table class="table table-striped table-bordered" id="lista">

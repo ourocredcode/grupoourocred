@@ -610,6 +610,53 @@ public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(Lon
 
 	}
 	
+	public Collection<Etapa> buscaPosicaoByHisconPerfil(Long empresa_id, Long organizacao_id, Long perfil_id, Long hisconbeneficio_id) {
+
+		String sql = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, ETAPA.nome as etapa_nome," +
+				" WORKFLOWTRANSICAO.etapaproximo_id " +
+				" FROM ETAPA (NOLOCK) INNER JOIN (((HISCONBENEFICIO (NOLOCK) " +
+				" INNER JOIN EMPRESA (NOLOCK) ON HISCONBENEFICIO.empresa_id = EMPRESA.empresa_id) " +
+				" INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " +
+				" INNER JOIN (PERFIL (NOLOCK) INNER JOIN WORKFLOWTRANSICAO (NOLOCK) ON PERFIL.perfil_id = WORKFLOWTRANSICAO.perfil_id) " +
+				" ON HISCONBENEFICIO.etapaposicao_id = WORKFLOWTRANSICAO.etapa_id) " +
+				" ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id " +
+				" WHERE HISCONBENEFICIO.hisconbeneficio_id = ? AND HISCONBENEFICIO.empresa_id = ? AND HISCONBENEFICIO.organizacao_id = ? AND PERFIL.perfil_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Etapa> workflowsEtapa = new ArrayList<Etapa>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, hisconbeneficio_id);
+			this.stmt.setLong(2, empresa_id);
+			this.stmt.setLong(3, organizacao_id);
+			this.stmt.setLong(4, perfil_id);
+
+			this.rsEtapa = this.stmt.executeQuery();
+
+			while (rsEtapa.next()) {
+
+				Etapa etapa = new Etapa();
+
+				etapa.setEtapa_id(rsEtapa.getLong("etapaproximo_id"));
+				etapa.setNome(rsEtapa.getString("etapa_nome"));
+
+				workflowsEtapa.add(etapa);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsEtapa, stmt, conn);
+
+		return workflowsEtapa;
+
+	}
+	
 	public Collection<Etapa> buscaEtapaByPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
 
 		String sql = "SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, HISCONBENEFICIO.organizacao_id, ETAPA.nome as etapa_nome " +

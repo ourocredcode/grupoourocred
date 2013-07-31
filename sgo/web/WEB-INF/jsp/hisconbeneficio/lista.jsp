@@ -12,6 +12,7 @@
 			<th>Cpf</th>
 			<th>Número Benefício</th>
 			<th>Status Atual</th>
+			<th>Posição</th>
 			<th>Quantidade</th>
 		</tr>
 	</thead>
@@ -36,7 +37,14 @@
 						</c:forEach>
 					</select>
 				</td>
-				<td>${hiscon.countHiscons }</td>
+				<td>
+					<select id="hisconBeneficioPosicoes" class="input-medium" onchange="return altera('etapaPosicao.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+						<c:forEach var="etapaPosicao" items="${hiscon.posicoes }">
+							<option value="${etapaPosicao.etapa_id }" <c:if test="${etapaPosicao.etapa_id == hiscon.etapaPosicao.etapa_id}">selected</c:if>>${etapaPosicao.nome }</option>
+						</c:forEach>
+					</select>
+				</td>
+				<td><a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'>${hiscon.countHiscons }</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

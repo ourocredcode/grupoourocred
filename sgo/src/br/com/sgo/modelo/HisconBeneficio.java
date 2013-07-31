@@ -116,6 +116,9 @@ public class HisconBeneficio implements Serializable {
 
 	@Transient
 	private Collection<Etapa> etapas = new ArrayList<Etapa>();
+	
+	@Transient
+	private Collection<Etapa> posicoes = new ArrayList<Etapa>();
 
 	@Transient
 	private Integer countHiscons;
@@ -338,5 +341,13 @@ public class HisconBeneficio implements Serializable {
 
 	public void setEtapas(Collection<Etapa> etapas) {
 		this.etapas = etapas;
+	}
+
+	public Collection<Etapa> getPosicoes() {
+		return posicoes;
+	}
+
+	public void setPosicoes(Collection<Etapa> posicoes) {
+		this.posicoes = posicoes;
 	}
 }
