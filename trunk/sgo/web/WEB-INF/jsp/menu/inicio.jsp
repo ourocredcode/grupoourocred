@@ -79,8 +79,6 @@
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Users" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
 
 	</div>
@@ -102,7 +100,7 @@
 					<div class="widget-title">
 						<span class="icon"><i class="icon-signal"></i>
 						</span><h5>Vendas - <fmt:formatDate value="${calInicio.time}" pattern="dd/MM/yyyy" /></h5>
-						<div class="buttons"><a href="#" class="btn btn-mini"><i class="icon-refresh"></i> Update stats</a></div>
+						<div class="buttons"><a href="javascript:window.location.reload()" class="btn btn-mini"><i class="icon-refresh"></i> Atualiza Status</a></div>
 					</div>
 
 					<div class="widget-content">

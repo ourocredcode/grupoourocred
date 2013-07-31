@@ -130,12 +130,8 @@ function altera(atributo, id, valor) {
 						</c:if>
 					</div>
 				</div>
-				
-				 	
-					
-				
 
-				<c:if test="${usuarioInfo.perfil.chave == 'ADM'}">
+				<c:if test="${usuarioInfo.perfil.chave == 'Hiscon'}">
 					<form action="<c:url value="/uploadHiscon"/>" enctype="multipart/form-data" method="post">	
 						<table id="myform">
 							<tr>
@@ -143,20 +139,18 @@ function altera(atributo, id, valor) {
 									Carregar Hiscon:
 								</td>
 								<td>
-									<input type="file" name="zip" class="span10"/>
+									<input type="file" name="zip" class="btn" />
 								</td>
 								<td>
-									<input type="submit" class="form_button_vertical" value="Carregar"/>	
+									<input type="submit" class="btn" value="Carregar"/>	
 								</td>
 							</tr>
 						</table>
 					</form>	
 				</c:if>
 
-				
-				
 				<br><br>
-				<table class="table table-striped table-bordered" id="lista">
+				<table class="table table-bordered" id="lista">
 					<thead>
 						<tr>
 							<th>Imagem</th>
@@ -172,7 +166,7 @@ function altera(atributo, id, valor) {
 					</thead>
 					<tbody>	
 						<c:forEach items="${hiscons}" var="hiscon">
-							<tr>
+							<tr <c:if test="${hiscon.countHiscons >= 3 }"> class="error"</c:if>>
 								<td>
 									<c:if test="${hiscon.isEnviado}">
 										<a href="<c:url value="/visualizaHiscon/${hiscon.hisconBeneficio_id}"/>"><img src="../img/pdf.gif" border="0"/></a>
@@ -191,7 +185,9 @@ function altera(atributo, id, valor) {
 										</c:forEach>
 									</select>
 								</td>
-								<td>${hiscon.countHiscons }</td>
+								<td style="text-align: center;">
+									<a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'><h3><small>${hiscon.countHiscons }</small></h3></a>
+								</td>
 							</tr>
 
 						</c:forEach>
