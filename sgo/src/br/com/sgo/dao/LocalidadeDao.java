@@ -43,7 +43,7 @@ public class LocalidadeDao extends Dao<Localidade> {
 	}
 
 	public Localidade buscaLocalidade(String cep) {
-		
+
 		String sql = sqlLocalidade;
 
 		if (!cep.equals("")) {
@@ -59,7 +59,9 @@ public class LocalidadeDao extends Dao<Localidade> {
 			this.stmt = conn.prepareStatement(sql);
 
 			if (!cep.equals("")) {
+
 				this.stmt.setString(1,"%" + cep + "%");
+
 			}
 
 			this.rsLocalidades = this.stmt.executeQuery();
@@ -102,13 +104,13 @@ public class LocalidadeDao extends Dao<Localidade> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsLocalidades, stmt, conn);
-
 		return localidade;
-
 	}
 
 }
