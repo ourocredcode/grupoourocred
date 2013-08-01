@@ -12,14 +12,14 @@ import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.RegiaoDao;
 import br.com.sgo.dao.TipoLocalidadeDao;
-import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Localidade;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.cep.BrazilianAddressFinder;
 
 @Resource
 public class LocalidadeController {
 
-	private final UsuarioInfo usuarioInfo;
 	private final Result result;
 	private final RegiaoDao regiaoDao;
 	private final CidadeDao cidadeDao;
@@ -29,8 +29,7 @@ public class LocalidadeController {
 	private BrazilianAddressFinder addressFinder;
 	private RestClient restfulie;
 
-	public LocalidadeController(Result result, UsuarioInfo usuarioInfo,RegiaoDao regiaoDao,CidadeDao cidadeDao,TipoLocalidadeDao tipoLocalidadeDao,PaisDao paisDao
-			,LocalidadeDao localidadeDao) {
+	public LocalidadeController(Result result, RegiaoDao regiaoDao, CidadeDao cidadeDao, TipoLocalidadeDao tipoLocalidadeDao, PaisDao paisDao, LocalidadeDao localidadeDao) {
 
 		this.result = result;
 		this.regiaoDao = regiaoDao;
@@ -38,7 +37,6 @@ public class LocalidadeController {
 		this.paisDao = paisDao;
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
 		this.localidadeDao = localidadeDao;
-		this.usuarioInfo = usuarioInfo;
 
 	}
 
@@ -52,13 +50,12 @@ public class LocalidadeController {
 	@Path("/localidade/busca.localidade")
 	public void buscalocalidade(String enderecoCEP) {
 
-		restfulie = Restfulie.custom();
-		addressFinder = new BrazilianAddressFinder(restfulie);
-
 		Localidade l = this.localidadeDao.buscaLocalidade(enderecoCEP);
 
 		if(l.getLocalidade_id() == null) {
 
+			restfulie = Restfulie.custom();
+			addressFinder = new BrazilianAddressFinder(restfulie);
 			String[] resultado = addressFinder.findAddressByZipCode(enderecoCEP).asAddressArray();
 
 			if(resultado[0].equals("")) {
@@ -69,8 +66,15 @@ public class LocalidadeController {
 
 				l = new Localidade();
 
-				l.setEmpresa(usuarioInfo.getEmpresa());
-				l.setOrganizacao(usuarioInfo.getOrganizacao());
+				Empresa emp = new Empresa();
+				Organizacao org = new Organizacao();
+
+				emp.setEmpresa_id(1l);
+				org.setOrganizacao_id(1l);
+
+				l.setEmpresa(emp);
+				l.setOrganizacao(org);
+
 				l.setIsActive(true);
 				l.setPais(this.paisDao.buscaPais("Brasil"));
 				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
@@ -95,12 +99,12 @@ public class LocalidadeController {
 	@Path("/localidade/organizacao/busca.localidade")
 	public void buscalocalidadeOrg(String enderecoCEP) {
 
-		restfulie = Restfulie.custom();
-		addressFinder = new BrazilianAddressFinder(restfulie);
-
 		Localidade l = this.localidadeDao.buscaLocalidade(enderecoCEP);
 
 		if(l.getLocalidade_id() == null) {
+
+			restfulie = Restfulie.custom();
+			addressFinder = new BrazilianAddressFinder(restfulie);
 
 			String[] resultado = addressFinder.findAddressByZipCode(enderecoCEP).asAddressArray();
 
@@ -112,8 +116,15 @@ public class LocalidadeController {
 
 				l = new Localidade();
 
-				l.setEmpresa(usuarioInfo.getEmpresa());
-				l.setOrganizacao(usuarioInfo.getOrganizacao());
+				Empresa emp = new Empresa();
+				Organizacao org = new Organizacao();
+
+				emp.setEmpresa_id(1l);
+				org.setOrganizacao_id(1l);
+
+				l.setEmpresa(emp);
+				l.setOrganizacao(org);
+
 				l.setIsActive(true);
 				l.setPais(this.paisDao.buscaPais("Brasil"));
 				l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
