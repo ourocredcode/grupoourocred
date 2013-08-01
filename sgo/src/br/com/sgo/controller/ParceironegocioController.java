@@ -197,26 +197,30 @@ public class ParceironegocioController {
 
 				Localidade l = parceiroLocalidade.getLocalidade();
 
-				restfulie = Restfulie.custom();
-				addressFinder = new BrazilianAddressFinder(restfulie);
-				String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
+				if (l.getLocalidade_id() == null){
 
-				l.setPais(this.paisDao.buscaPais("Brasil"));
+					restfulie = Restfulie.custom();
+					addressFinder = new BrazilianAddressFinder(restfulie);
+					String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
 
-				if(!resultado[4].equals(""))
-					l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+					l.setPais(this.paisDao.buscaPais("Brasil"));
+	
+					if(!resultado[4].equals(""))
+						l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+	
+					if(!resultado[3].equals(""))
+						l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+	
+					if(!resultado[0].equals(""))
+						l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+	
+					if(!resultado[1].equals(""))
+						l.setEndereco(resultado[1]);
+	
+					if(!resultado[2].equals(""))
+						l.setBairro(resultado[2]);
 
-				if(!resultado[3].equals(""))
-					l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
-
-				if(!resultado[0].equals(""))
-					l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-
-				if(!resultado[1].equals(""))
-					l.setEndereco(resultado[1]);
-
-				if(!resultado[2].equals(""))
-					l.setBairro(resultado[2]);
+				}
 
 				result.include("parceiroLocalidade",parceiroLocalidade);
 				result.include("localidade",parceiroLocalidade.getLocalidade());
@@ -228,13 +232,12 @@ public class ParceironegocioController {
 
 				parceiroNegocio.setTipoParceiro(tipoParceiro);
 				parceiroNegocio.setIsCliente(true);
-				
+
 			} else {
 
 				result.include("notice","Erro: Parceiro Negócio não encontrado. ");
 
 			}
-			
 
 		} else {
 
@@ -270,14 +273,18 @@ public class ParceironegocioController {
 	@Get
 	@Path("/parceironegocio/parceiroLocalidades")
 	public void parceiroLocalidades(Long parceironegocio_id){
+
 		result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceironegocio_id));
+
 	}
 
 	@Get
 	@Path("/parceironegocio/parceiroContatos")
 	public void parceiroContatos(Long parceironegocio_id){
+
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
 		result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceironegocio_id));
+
 	}
 
 	@Post
@@ -432,8 +439,15 @@ public class ParceironegocioController {
 
 			if(l.getLocalidade_id() == null)	{
 	
-				localidade.setEmpresa(empresa);
-				localidade.setOrganizacao(organizacao);			
+				Empresa emp = new Empresa();
+				Organizacao org = new Organizacao();
+				
+				emp.setEmpresa_id(1l);
+				org.setOrganizacao_id(1l);
+
+				localidade.setEmpresa(emp);
+				localidade.setOrganizacao(org);
+				
 				localidade.setCreated(dataAtual);
 				localidade.setCreatedBy(usuario);
 				localidade.setIsActive(true);
@@ -599,19 +613,22 @@ public class ParceironegocioController {
 
 			mensagem = " Parceiro Negócio : " + parceiroNegocio.getNome() + " atualizado com sucesso ";
 
-		}catch(Exception e){
+		} catch(Exception e){
+
 			mensagem = e.getMessage();
+
 		}
 
 		result.include("notice",mensagem);
 		result.redirectTo(this).cadastro();
-
 	}
 	
 	@Get 
 	@Path("/parceironegocio/busca.json")
 	public void parceironegocio(Long empresa_id, Long organizacao_id, String nome){
+
 		result.use(Results.json()).withoutRoot().from(this.parceiroNegocioDao.buscaParceiroNegocio(empresa_id, organizacao_id, nome)).serialize();
+
 	}
 
 	@Post
@@ -651,8 +668,15 @@ public class ParceironegocioController {
 	public void salvaLocalidade(Localidade localidade, ParceiroLocalidade parceiroLocalidade){
 
 		localidade.setIsActive(true);
-		localidade.setEmpresa(empresa);
-		localidade.setOrganizacao(organizacao);
+		
+		Empresa emp = new Empresa();
+		Organizacao o = new Organizacao();
+		
+		emp.setEmpresa_id(1l);
+		o.setOrganizacao_id(1l);
+
+		localidade.setEmpresa(emp);
+		localidade.setOrganizacao(o);
 
 		String mensagem = "";
 		
@@ -720,13 +744,12 @@ public class ParceironegocioController {
 			} else {
 				
 				mensagem = "Erro : Localidade do tipo " + pl.getTipoEndereco().getNome() + " já existente. ";
-			}
 
+			}
 		}
 
 		result.include("notice",mensagem);
 		result.redirectTo(this).parceiroLocalidades(parceiroLocalidade.getParceiroNegocio().getParceiroNegocio_id());
-
 	}
 
 	@Post
@@ -750,17 +773,19 @@ public class ParceironegocioController {
 			this.parceiroContatoDao.rollback();
 
 			if (e.getCause().toString().indexOf("PK_PARCEIROCONTATO") != -1){
+
 				mensagem = "Erro: Contato " + parceiroContato.getNome() + " já existente.";
+
 			} else {
+
 				mensagem = "Erro ao adicionar Contato:";
+
 			}
 
 			result.include("msg",mensagem).redirectTo(this).msg();
-
 		}
 
 		result.redirectTo(this).parceiroContatos(parceiroContato.getParceiroNegocio().getParceiroNegocio_id());
-
 	}
 	
 	@Post
