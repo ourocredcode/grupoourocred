@@ -5,8 +5,12 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	
+
 	$('select').select2();
+
+	
+	
+	
 	$("#valorContrato").maskMoney({symbol:"",decimal:".",thousands:""});
 	$("#valorParcela").maskMoney({symbol:"",decimal:".",thousands:""});
 	$("#valorDivida").maskMoney({symbol:"",decimal:".",thousands:""});
@@ -22,6 +26,9 @@ $(document).ready(function() {
 
 		var banco_id = $("#contratoBanco").val();
 
+		$("#contratoProduto").select2('val','');
+		$("#auxCoeficiente").select2('val','');
+
 		$("#contratoProduto").load('<c:url value="/contrato/produtos" />',{'banco_id': banco_id});
 
 	});
@@ -30,6 +37,9 @@ $(document).ready(function() {
 
 		var produto_id = $("#contratoProduto").val();    
 		var banco_id = $("#contratoBanco").val();
+
+		$("#auxCoeficiente").select2('val','');
+		$("#bancoComprado").select2('val','');
 
 		$("#auxCoeficiente").load('<c:url value="/contrato/coeficientes" />',{'banco_id': banco_id,'produto_id': produto_id}); 
 		
@@ -428,6 +438,15 @@ function habilita(campo){
 }
 
 function validaForm(form) {
+	
+	$.each($(".select2-container"), function (i, n) {
+        $(n).next().show().fadeTo(0, 0).height("0px").css("left", "auto"); // make the original select visible for validation engine and hidden for us
+        $(n).prepend($(n).next());
+        $(n).delay(500).queue(function () {
+            $(this).removeClass("validate[required]"); //remove the class name from select2 container(div), so that validation engine dose not validate it
+            $(this).dequeue();
+        });
+    });
 
 	if ($(form).validate().form() === true) {
 		$(form).submit();
@@ -448,10 +467,13 @@ function preencheZero(campo) {
 }
 
 function fechar() {
-	
+
 	var contratoId = document.getElementById("contratoId");
 
-	window.location.href = "<c:url value='/contrato/status/" + contratoId.value + "' />";
+	if(contratoId.value != '')
+		window.location.href = "<c:url value='/contrato/status/" + contratoId.value + "' />";
+	else
+		window.location.href = "<c:url value='/formulario/cadastro' />";				
 
 }
 
@@ -496,7 +518,7 @@ function historicoCoeficiente() {
 								</c:forEach>
 							</select>
 						</div>						
-						<div class="span3">
+						<div class="span3" id="selProduto" >
 
 							<label for="contratoProduto">Produto:</label>
 							<select class="span12" id="contratoProduto" name="contrato.produto.produto_id" required>
@@ -513,7 +535,7 @@ function historicoCoeficiente() {
 						<div class="span3">
 
 							<label for="auxCoeficiente">Coeficiente Cadastro:</label>
-							<select id="auxCoeficiente" name="contratoCoeficiente" onChange="calculaContrato();" class="span12" required>
+							<select id="auxCoeficiente" name="contratoCoeficiente" onChange="calculaContrato();" class="span12" required="required">
 								<c:if test="${empty contrato.contrato_id}">
 									<option value="">Selecione um produto...</option>
 								</c:if>
