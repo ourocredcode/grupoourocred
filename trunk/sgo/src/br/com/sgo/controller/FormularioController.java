@@ -400,6 +400,7 @@ public class FormularioController {
 		Integer countRecompraRMC = new Integer(0);
 		Integer countRefinanciamento = new Integer(0);
 		String cc = "";
+		Boolean localidadeInsert = true;
 
 		for (Iterator<Contrato> it  = contratos.iterator(); it.hasNext();) {
 
@@ -420,8 +421,9 @@ public class FormularioController {
 
 			parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
 
-			if( parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id() ).size() == 0 ){
+			if( ( parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id() ).size() == 0 ) && localidadeInsert ){
 
+				localidadeInsert = false;
 				String cep = this.pnDao.buscaCepByParceiroNegocio(parceiroNegocio);
 
 				Localidade l = this.localidadeDao.buscaLocalidade(cep);
@@ -510,6 +512,8 @@ public class FormularioController {
 					}
 		
 				}
+				
+				
 
 			} else {
 

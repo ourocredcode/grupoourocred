@@ -460,19 +460,23 @@ public class PnDao {
 
 				String[] aux = rsDetalhamento.getString("str_agencia").split("-");
 
+				int s = aux.length;
+
 				detalhamento.setCodbanco(aux[0]);
-				detalhamento.setAgencia(aux[1]);
+
+				if(s > 1)
+					detalhamento.setAgencia(aux[1]);
 
 				detalhamento.setEnderecobanco(rsDetalhamento.getString("str_enderecobanco"));
 				detalhamento.setMeio_pgtodesc(rsDetalhamento.getString("str_meio_pgtodesc"));
 				detalhamento.setStatus(rsDetalhamento.getString("str_status"));
 
-				if (rsDetalhamento.getString("str_sinal").equals("-")) {
+				if(rsDetalhamento.getString("str_sinal").equals("-")) {
 					debitos.put(countDebito + ": " + rsDetalhamento.getString("str_descrubrica"),rsDetalhamento.getDouble("n_valor"));
 					countDebito++;
-				}
+				}	
 
-				if (rsDetalhamento.getString("str_sinal").equals("+")) {
+				if(rsDetalhamento.getString("str_sinal").equals("+")) {
 					creditos.put(countCredito + ": " + rsDetalhamento.getString("str_descrubrica"),rsDetalhamento.getDouble("n_valor"));
 					countCredito++;
 				}

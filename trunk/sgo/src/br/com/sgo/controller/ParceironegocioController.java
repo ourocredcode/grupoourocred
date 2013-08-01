@@ -793,7 +793,7 @@ public class ParceironegocioController {
 	public void alteraParceiroLocalidade(ParceiroLocalidade parceiroLocalidade){
 
 		ParceiroLocalidade pl = this.parceiroLocalidadeDao.load(parceiroLocalidade.getParceiroLocalidade_id());
-		ParceiroNegocio parceiroNegocio = this.parceiroNegocioDao.load(parceiroLocalidade.getParceiroNegocio().getParceiroNegocio_id());
+		ParceiroNegocio parceiroNegocio = this.parceiroNegocioDao.load(pl.getParceiroNegocio().getParceiroNegocio_id());
 
 		if(parceiroLocalidade.getNumero() != null)
 			pl.setNumero(parceiroLocalidade.getNumero());
@@ -803,7 +803,7 @@ public class ParceironegocioController {
 			pl.setTipoEndereco(this.tipoEnderecoDao.load(parceiroLocalidade.getTipoEndereco().getTipoEndereco_id()));
 
 		if(this.parceiroLocalidadeDao.buscaParceiroLocalidadeNum(parceiroNegocio.getEmpresa().getEmpresa_id(),parceiroNegocio.getOrganizacao().getOrganizacao_id(), 
-				parceiroNegocio.getParceiroNegocio_id(),parceiroLocalidade.getLocalidade().getLocalidade_id(), parceiroLocalidade.getTipoEndereco().getTipoEndereco_id(),
+				parceiroNegocio.getParceiroNegocio_id(),pl.getLocalidade().getLocalidade_id(), pl.getTipoEndereco().getTipoEndereco_id(),
 				pl.getNumero()) == null){
 
 			this.parceiroLocalidadeDao.beginTransaction();

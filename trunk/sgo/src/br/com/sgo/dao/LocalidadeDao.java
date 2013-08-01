@@ -32,10 +32,10 @@ public class LocalidadeDao extends Dao<Localidade> {
 			+ "			TIPOLOCALIDADE.nome as tipolocalidade_nome, LOCALIDADE.endereco, LOCALIDADE.bairro, LOCALIDADE.cep "
 			+ "	  FROM ((((( LOCALIDADE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON LOCALIDADE.empresa_id = EMPRESA.empresa_id) "
 			+ "				INNER JOIN ORGANIZACAO (NOLOCK) ON LOCALIDADE.organizacao_id = ORGANIZACAO.organizacao_id) "
-			+ "				INNER JOIN REGIAO (NOLOCK) ON LOCALIDADE.regiao_id = REGIAO.regiao_id) "
-			+ "				INNER JOIN CIDADE (NOLOCK) ON LOCALIDADE.cidade_id = CIDADE.cidade_id) "
-			+ "				INNER JOIN PAIS (NOLOCK) ON LOCALIDADE.pais_id = PAIS.pais_id) "
-			+ "				INNER JOIN TIPOLOCALIDADE (NOLOCK) ON LOCALIDADE.tipolocalidade_id = TIPOLOCALIDADE.tipolocalidade_id ";
+			+ "				LEFT JOIN REGIAO (NOLOCK) ON LOCALIDADE.regiao_id = REGIAO.regiao_id) "
+			+ "				LEFT JOIN CIDADE (NOLOCK) ON LOCALIDADE.cidade_id = CIDADE.cidade_id) "
+			+ "				LEFT JOIN PAIS (NOLOCK) ON LOCALIDADE.pais_id = PAIS.pais_id) "
+			+ "				LEFT JOIN TIPOLOCALIDADE (NOLOCK) ON LOCALIDADE.tipolocalidade_id = TIPOLOCALIDADE.tipolocalidade_id ";
 
 	public LocalidadeDao(Session session, ConnJDBC conexao) {
 		super(session, Localidade.class);
