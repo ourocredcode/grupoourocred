@@ -521,7 +521,7 @@ function openPopup(url) {
 						<div class="buttons">
 							<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="post">
 								<input id="doc" name="doc" type="hidden" value="${formulario.parceiroNegocio.cpf }" />
-								<a href="#" class="btn btn-mini" onclick="submit();"><i class="icon-user"></i> Dados Cliente </a>
+								<button type="submit" class="btn btn-mini" ><i class="icon-user icon-black"></i> Dados Cliente</button>
 							</form>
 						</div>
 						<div class="buttons">
