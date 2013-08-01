@@ -945,16 +945,16 @@
 													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
 												</td>
 												<td >
-													<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM" />
+													<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yy" />
 												</td>
 												<td >
 													${contrato.usuario.supervisorUsuario.apelido }
 												</td>
 												<td >
-													${fn:substring(contrato.usuario.apelido , 0, 18)} ...
+													${fn:substring(contrato.usuario.apelido , 0, 18)}
 												</td>
 												<td >
-													${fn:substring(contrato.formulario.parceiroNegocio.nome, 0, 18)} ...
+													${fn:substring(contrato.formulario.parceiroNegocio.nome, 0, 18)}
 												</td>
 												<td >
 													${contrato.formulario.parceiroNegocio.cpf }

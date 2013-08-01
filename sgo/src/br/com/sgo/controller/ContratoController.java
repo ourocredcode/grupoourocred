@@ -288,7 +288,18 @@ public class ContratoController {
 		List<String> log = new ArrayList<String>();
 
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
-		contrato.setCoeficiente(coeficienteDao.load(contrato.getCoeficiente().getCoeficiente_id()));
+		
+		if(contrato.getCoeficiente().getCoeficiente_id() != null)
+			contrato.setCoeficiente(coeficienteDao.load(contrato.getCoeficiente().getCoeficiente_id()));
+		
+		if(contrato.getBanco().getBanco_id() != null)
+			contrato.setBanco(bancoDao.load(contrato.getBanco().getBanco_id()));
+		
+		if(contrato.getProduto().getProduto_id() != null)
+			contrato.setProduto(produtoDao.load(contrato.getProduto().getProduto_id()));
+		
+		if(contrato.getRecompraBanco().getBanco_id() != null)
+			contrato.setRecompraBanco(bancoDao.load(contrato.getRecompraBanco().getBanco_id()));
 
 		if(this.contrato.getBanco().getBanco_id() != contrato.getBanco().getBanco_id()){
 			log.add("Banco alterado de : " + this.contrato.getBanco().getNome() + " para: " + contrato.getBanco().getNome());
