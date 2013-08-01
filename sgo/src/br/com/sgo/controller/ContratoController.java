@@ -217,8 +217,17 @@ public class ContratoController {
 		contrato = contratoDao.load(id);
 		formulario = formularioDao.buscaFormularioByContrato(id);
 
-		etapas = etapaDao.buscaEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
-		etapas.add(contrato.getEtapa());
+		if(usuarioInfo.getPerfil().getChave().equals("Gestor")){
+
+			etapas = etapaDao.buscaEtapasByEmpresaOrganizacaoWorkflow(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), contrato.getWorkflow().getWorkflow_id());
+
+		} else {
+			
+			etapas = etapaDao.buscaEtapaByContratoPerfil(id, usuarioInfo.getPerfil().getPerfil_id());
+			etapas.add(contrato.getEtapa());
+
+		}
+		
 		
 		periodos = periodoDao.buscaAllPeriodos();
 		historico.addAll(historicoContratoDao.buscaHistoricoByContrato(id));

@@ -300,6 +300,11 @@ public class EtapaDao extends Dao<Etapa> {
 			
 			this.stmt = conn.prepareStatement(sql);
 			
+			//System.out.println(sql);
+			//System.out.println(empresa_id);
+			//System.out.println(organizacao_id);
+			//System.out.println(workflow_id);
+			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, workflow_id);
