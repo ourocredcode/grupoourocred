@@ -431,9 +431,15 @@ public class FormularioController {
 					restfulie = Restfulie.custom();
 					addressFinder = new BrazilianAddressFinder(restfulie);
 					String[] resultado = addressFinder.findAddressByZipCode(cep).asAddressArray();
-					
-					l.setEmpresa(empresa);
-					l.setOrganizacao(organizacao);
+
+					Empresa emp = new Empresa();
+					Organizacao org = new Organizacao();
+
+					emp.setEmpresa_id(1l);
+					org.setOrganizacao_id(1l);
+
+					l.setEmpresa(emp);
+					l.setOrganizacao(org);
 					l.setIsActive(true);
 					l.setCep(cep);
 					l.setCreated(dataAtual);
@@ -498,7 +504,9 @@ public class FormularioController {
 					}
 					
 					if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+
 						parceiroLocalidade = pl;
+
 					}
 		
 				}
@@ -542,6 +550,7 @@ public class FormularioController {
 		parametros.put("detalhamentoCC", cc);
 		
 		try{
+
 			response.setHeader("Cache-Control", "no-store");
 			response.setHeader("Pragma", "no-cache");
 			response.setDateHeader("Expires", 0);
@@ -560,14 +569,17 @@ public class FormularioController {
 			responseOutputStream.close();
 
 		} catch(IOException e) {
+
 			System.out.println("Erro:" + e);
+
 		} catch(JRException e) {
+
 			e.printStackTrace();
 			System.out.println("Erro:" + e.getMessage());
+
 		}
 
 		result.nothing();
-
 	}
 	
 	public static Collection<Contrato> separaContrato(Contrato contrato) {
@@ -577,5 +589,4 @@ public class FormularioController {
 
 		return contratos;
 	}
-
 }
