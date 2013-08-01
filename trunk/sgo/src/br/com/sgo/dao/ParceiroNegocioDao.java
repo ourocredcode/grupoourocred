@@ -51,6 +51,7 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + nome + "%");
@@ -58,6 +59,7 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			this.rsParceiroNegocio = this.stmt.executeQuery();
 
 			while (rsParceiroNegocio.next()) {
+
 				ParceiroNegocio parceiro = new ParceiroNegocio();
 
 				parceiro.setParceiroNegocio_id(rsParceiroNegocio.getLong("parceironegocio_id"));
@@ -91,6 +93,7 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, doc);
@@ -102,19 +105,19 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 
 				parceiro = new ParceiroNegocio();
 
-				parceiro.setParceiroNegocio_id(rsParceiroNegocio
-						.getLong("parceironegocio_id"));
+				parceiro.setParceiroNegocio_id(rsParceiroNegocio.getLong("parceironegocio_id"));
 				parceiro.setNome(rsParceiroNegocio.getString("nome"));
 
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsParceiroNegocio, stmt, conn);
 		return parceiro;
-
 	}
 
 	public ParceiroNegocio buscaParceiroNegocioById(Long parceiro_id) {
@@ -125,11 +128,13 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ?";
 
 		this.conn = this.conexao.getConexao();
+
 		ParceiroNegocio parceiro = null;
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, parceiro_id);
 
 			this.rsParceiroNegocio = this.stmt.executeQuery();
@@ -144,13 +149,13 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsParceiroNegocio, stmt, conn);
-
 		return parceiro;
-
 	}
 
 	public Collection<ParceiroNegocio> buscaParceiroNegocioByPerfil(Long empresa_id, Long organizacao_id, String perfil) {
@@ -177,6 +182,7 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + perfil + "%");
@@ -195,7 +201,9 @@ public class ParceiroNegocioDao extends Dao<ParceiroNegocio> {
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsParceiroNegocio, stmt, conn);
