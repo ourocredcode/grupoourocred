@@ -440,8 +440,6 @@ function openPopup(url) {
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 			<a class="btn btn-large tip-bottom" title="Manage Users" href="<c:url value="/funcionario/equipe/${usuarioInfo.usuario.usuario_id }"/>"><i class="icon-user"></i></a>
-			<a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-			<a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
 		</div>
 	</div>
 	
