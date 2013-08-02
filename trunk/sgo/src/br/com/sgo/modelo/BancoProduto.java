@@ -47,6 +47,10 @@ public class BancoProduto implements Serializable {
 	private Workflow workflow;
 
 	@ManyToOne
+	@JoinColumn(name = "convenio_id", updatable = true, nullable = true)
+	private Convenio convenio;
+
+	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
 
@@ -74,6 +78,9 @@ public class BancoProduto implements Serializable {
 
 	@Column(name = "isworkflow")
 	private Boolean isWorkflow;
+
+	@Column(name = "isconvencio")
+	private Boolean isConvenio;
 
 	public Long getBancoProduto_id() {
 		return bancoProduto_id;
@@ -193,6 +200,22 @@ public class BancoProduto implements Serializable {
 
 	public void setIsWorkflow(Boolean isWorkflow) {
 		this.isWorkflow = isWorkflow;
+	}
+
+	public Convenio getConvenio() {
+		return convenio;
+	}
+
+	public void setConvenio(Convenio convenio) {
+		this.convenio = convenio;
+	}
+
+	public Boolean getIsConvenio() {
+		return isConvenio;
+	}
+
+	public void setIsConvenio(Boolean isConvenio) {
+		this.isConvenio = isConvenio;
 	}
 
 }
