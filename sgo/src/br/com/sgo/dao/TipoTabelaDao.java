@@ -64,6 +64,7 @@ public class TipoTabelaDao extends Dao<TipoTabela> {
 			while (rsTiposTabela.next()) {
 				
 				getTipoTabela(tiposTabela);
+
 			}
 
 		} catch (SQLException e) {
@@ -71,9 +72,7 @@ public class TipoTabelaDao extends Dao<TipoTabela> {
 		}
 
 		this.conexao.closeConnection(rsTiposTabela, stmt, conn);
-
 		return tiposTabela;
-
 	}
 
 	public TipoTabela buscaTipoTabelaByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {

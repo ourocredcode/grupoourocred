@@ -120,11 +120,11 @@ public class ConvenioDao extends Dao<Convenio> {
 		String sql = sqlConvenio;
 
 		if (empresa_id != null)
-			sql += " WHERE TIPOTABELA.empresa_id = ? ";
+			sql += " WHERE CONVENIO.empresa_id = ? ";
 		if (organizacao_id != null)
-			sql += " AND TIPOTABELA.organizacao_id = ? ";
+			sql += " AND CONVENIO.organizacao_id = ? ";
 		if (nome != null)
-			sql += " AND TIPOTABELA.nome = ? ";
+			sql += " AND CONVENIO.nome = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -159,10 +159,16 @@ public class ConvenioDao extends Dao<Convenio> {
 		return convenio;
 	}
 
-	public Collection<Convenio> buscaConvenio(Long empresa_id, Long organizacao_id, String nome) {
+	public Collection<Convenio> buscaConveniosByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
 
-		String sql = "select TIPOTABELA.convenio_id, TIPOTABELA.nome from TIPOTABELA (NOLOCK) "
-				+ "	WHERE TIPOTABELA.empresa_id = ? AND TIPOTABELA.organizacao_id = ? AND TIPOTABELA.nome like ?";
+		String sql = sqlConvenio;
+		
+		if (empresa_id != null)
+			sql += " WHERE CONVENIO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND CONVENIO.organizacao_id = ?";
+		if (nome != null)
+			sql += " AND CONVENIO.nome like ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -171,7 +177,7 @@ public class ConvenioDao extends Dao<Convenio> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-
+			
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, "%" + nome + "%");
@@ -180,22 +186,18 @@ public class ConvenioDao extends Dao<Convenio> {
 
 			while (rsConvenio.next()) {
 
-				Convenio convenio = new Convenio();
+				getConvenio(convenios);
 
-				convenio.setConvenio_id(rsConvenio.getLong("convenio_id"));
-				convenio.setNome(rsConvenio.getString("nome"));
-
-				convenios.add(convenio);
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
+
 		}
 
 		this.conexao.closeConnection(rsConvenio, stmt, conn);
-
 		return convenios;
-
 	}
 
 	private void getConvenio(Collection<Convenio> convenios)throws SQLException {
