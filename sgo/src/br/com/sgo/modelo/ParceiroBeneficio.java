@@ -37,10 +37,11 @@ public class ParceiroBeneficio implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
-
-	@Column(name = "numerobeneficio")
-	private String numeroBeneficio;
 	
+	@ManyToOne
+	@JoinColumn(name = "convenio_id", updatable = true, nullable = false)
+	private Convenio convenio;
+
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
@@ -48,6 +49,9 @@ public class ParceiroBeneficio implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "updatedby", updatable = true, nullable = true)
 	private Usuario updatedBy;
+
+	@Column(name = "numerobeneficio")
+	private String numeroBeneficio;
 
 	@Column(name = "created")
 	private Calendar created;
@@ -63,6 +67,9 @@ public class ParceiroBeneficio implements Serializable {
 
 	@Column(name = "descricao")
 	private String descricao;
+
+	@Column(name = "senha")
+	private String senha;
 
 	@Column(name = "isactive")
 	private Boolean isActive;
@@ -169,6 +176,22 @@ public class ParceiroBeneficio implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Convenio getConvenio() {
+		return convenio;
+	}
+
+	public void setConvenio(Convenio convenio) {
+		this.convenio = convenio;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 }
