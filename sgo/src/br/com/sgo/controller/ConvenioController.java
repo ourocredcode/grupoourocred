@@ -10,9 +10,9 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.com.sgo.dao.ConvenioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
-import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Usuario;
 
 @Resource
@@ -25,7 +25,8 @@ public class ConvenioController {
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
-
+	private Convenio convenio;
+	
 	private Calendar dataAtual = Calendar.getInstance();	
 	
 	public ConvenioController(Result result, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, Usuario usuario, ConvenioDao convenioDao){
@@ -43,7 +44,7 @@ public class ConvenioController {
 	@Path("/convenio/cadastro")
 	public void cadastro(){
 
-		result.include("tiposTabela", this.convenioDao.buscaAllConvenio(1l, 1l));
+		result.include("convenios", this.convenioDao.buscaAllConvenio(1l, 1l));
 
 	}
 
@@ -101,6 +102,30 @@ public class ConvenioController {
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
 
+	}
+	
+	@Post
+	@Path("/convenio/altera")
+	public void altera(Convenio convenio) {
+
+		String mensagem = "";
+
+		this.convenio = this.convenioDao.load(convenio.getConvenio_id());
+
+		this.convenio.setUpdated(dataAtual);
+		this.convenio.setUpdatedBy(usuario);
+
+		this.convenio.setIsActive(convenio.getIsActive() == null || convenio.getIsActive() == false ? false : true);
+
+		convenioDao.beginTransaction();		
+		convenioDao.atualiza(this.convenio);
+		convenioDao.commit();
+
+		mensagem = " Convênio adicionado com sucesso.";
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
+		
 	}
 
 	@Get 
