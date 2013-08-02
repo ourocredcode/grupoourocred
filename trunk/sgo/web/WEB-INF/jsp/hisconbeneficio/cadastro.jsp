@@ -161,7 +161,9 @@ function altera(atributo, id, valor) {
 							<th>Cpf</th>
 							<th>Número Benefício</th>
 							<th>Status Atual</th>
-							<th>Quantidade</th>
+							<c:if test="${usuarioInfo.perfil.chave != 'Consultor'}">
+								<th>Quantidade</th>
+							</c:if>
 						</tr>
 					</thead>
 					<tbody>	
@@ -185,9 +187,11 @@ function altera(atributo, id, valor) {
 										</c:forEach>
 									</select>
 								</td>
-								<td style="text-align: center;">
-									<a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'><h3><small>${hiscon.countHiscons }</small></h3></a>
-								</td>
+								<c:if test="${usuarioInfo.perfil.chave != 'Consultor' }">
+									<td style="text-align: center;">
+										<a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'><h3><small>${hiscon.countHiscons }</small></h3></a>
+									</td>
+								</c:if>
 							</tr>
 
 						</c:forEach>
