@@ -79,7 +79,7 @@ public class BancoProduto implements Serializable {
 	@Column(name = "isworkflow")
 	private Boolean isWorkflow;
 
-	@Column(name = "isconvencio")
+	@Column(name = "isconvenio")
 	private Boolean isConvenio;
 
 	public Long getBancoProduto_id() {
