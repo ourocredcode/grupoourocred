@@ -108,7 +108,7 @@ public class ContratoController {
 	private Controle boleto;
 	private Controle averbacao;
 	private Collection<Conferencia> conferencias;
-	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();;
+	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
 	private Collection<Etapa> etapas;
 	private Collection<Periodo> periodos;
 	private Collection<TipoLogistica> tiposLogistica;

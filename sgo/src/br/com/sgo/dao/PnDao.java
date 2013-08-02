@@ -17,6 +17,7 @@ import java.util.TreeMap;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConexaoPN;
 import br.com.sgo.modelo.Banco;
+import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Detalhamento;
 import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.MeioPagamento;
@@ -76,10 +77,13 @@ public class PnDao {
 
 					Calendar cal = new GregorianCalendar();
 					SimpleDateFormat formater1 = new SimpleDateFormat("yyyy-MM-dd");
-					String data = formater1.format(rsParceiroNegocio.getDate("clienteNascimento"));
-					cal.setTime(new Date(formater1.parse(data).getTime()));
 
-					parceiroNegocio.setDataNascimento(cal);
+					if(rsParceiroNegocio.getDate("clienteNascimento") != null){
+						String data = formater1.format(rsParceiroNegocio.getDate("clienteNascimento"));
+						cal.setTime(new Date(formater1.parse(data).getTime()));
+						parceiroNegocio.setDataNascimento(cal);
+					}
+
 					parceiroNegocio.setNome(rsParceiroNegocio.getString("clienteNome"));
 					parceiroNegocio.setCpf(rsParceiroNegocio.getString("cpf"));
 					parceiroNegocio.setPn_id(rsParceiroNegocio.getLong("id_ent"));
@@ -350,8 +354,7 @@ public class PnDao {
 
 				ParceiroContato parceiroContato = new ParceiroContato();
 
-				parceiroContato
-						.setNome(rsParceiroNegocio.getString("str_fone"));
+				parceiroContato.setNome(rsParceiroNegocio.getString("str_fone"));
 				parceiroContato.setParceiroNegocio(parceiroNegocio);
 				parceiroContato.setTipoContato(tipoContato);
 
@@ -369,16 +372,14 @@ public class PnDao {
 
 	}
 
-	public Collection<ParceiroBeneficio> buscaParceiroBeneficios(
-			ParceiroNegocio parceiroNegocio) {
+	public Collection<ParceiroBeneficio> buscaParceiroBeneficios(ParceiroNegocio parceiroNegocio) {
 
-		String sql = "SELECT doc.str_nrdocumento as beneficio "
-				+ "		FROM public.tb_ent ent "
-				+ "		LEFT JOIN public.tb_ent_doc doc ON ent.id_ent = doc.id_ent	"
-				+ "		LEFT JOIN public.tb_ent_end endereco ON ent.id_ent = endereco.id_ent "
-				+ "		LEFT JOIN public.bairros bairro ON bairro.dne = endereco.id_bairro "
-				+ "		LEFT JOIN public.cidade cidade ON cidade.id_cidade = endereco.id_cidade "
-				+ "			WHERE doc.id_ent= ? and doc.id_tp_doc=3";
+		String sql = " SELECT doc.str_nrdocumento as beneficio, tipoent.str_descricao as tipo " +
+						" FROM public.tb_ent ent  " +
+						" LEFT JOIN public.tb_ent_doc doc ON ent.id_ent = doc.id_ent " +	
+						" LEFT JOIN public.tb_ent_tipo tipo ON tipo.id_ent = ent.id_ent " +
+						" LEFT JOIN public.tb_tp_ent tipoent on tipoent.id_tp_ent = tipo.id_tp_ent " +
+						" WHERE doc.id_ent= ? and doc.id_tp_doc = 3 ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -387,6 +388,8 @@ public class PnDao {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+			
+			System.out.println(sql);
 
 			this.stmt.setLong(1, parceiroNegocio.getPn_id());
 
@@ -395,9 +398,14 @@ public class PnDao {
 			while (rsParceiroNegocio.next()) {
 
 				ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
+				Convenio convenio = new Convenio();
+				convenio.setNome(rsParceiroNegocio.getString("tipo"));
 
-				parceiroBeneficio.setNumeroBeneficio(rsParceiroNegocio
-						.getString("beneficio"));
+				System.out.println(" CONVENIO " + parceiroNegocio.getPn_id());
+				System.out.println(" CONVENIO " + convenio.getNome());
+
+				parceiroBeneficio.setNumeroBeneficio(rsParceiroNegocio.getString("beneficio"));
+				parceiroBeneficio.setConvenio(convenio);
 
 				parceiroBeneficios.add(parceiroBeneficio);
 
