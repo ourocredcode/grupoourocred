@@ -16,6 +16,7 @@ import br.com.sgo.dao.BancoDao;
 import br.com.sgo.dao.CategoriaParceiroDao;
 import br.com.sgo.dao.CidadeDao;
 import br.com.sgo.dao.ClassificacaoParceiroDao;
+import br.com.sgo.dao.ConvenioDao;
 import br.com.sgo.dao.DepartamentoDao;
 import br.com.sgo.dao.EstadoCivilDao;
 import br.com.sgo.dao.FuncaoDao;
@@ -40,6 +41,7 @@ import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
+import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Funcionario;
 import br.com.sgo.modelo.Localidade;
@@ -70,6 +72,7 @@ public class ParceironegocioController {
 	private final ParceiroContatoDao parceiroContatoDao;
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
 	private final BancoDao bancoDao;
+	private final ConvenioDao convenioDao;
 	private final SexoDao sexoDao;
 	private final EstadoCivilDao estadoCivilDao;
 	private final TipoParceiroDao tipoParceiroDao;
@@ -99,7 +102,7 @@ public class ParceironegocioController {
 	
 	public ParceironegocioController(Result result, UsuarioInfo usuarioInfo,ParceiroNegocioDao parceiroNegocioDao,PnDao pnDao,PaisDao paisDao,RegiaoDao regiaoDao, CidadeDao cidadeDao,
 			DepartamentoDao departamentoDao,FuncaoDao funcaoDao,FuncionarioDao funcionarioDao,LocalidadeDao localidadeDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ParceiroContatoDao parceiroContatoDao,
-			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,Usuario usuario,BancoDao bancoDao,
+			SexoDao sexoDao,EstadoCivilDao estadoCivilDao,TipoParceiroDao tipoParceiroDao,TipoEnderecoDao tipoEnderecoDao,Usuario usuario,BancoDao bancoDao,ConvenioDao convenioDao,
 			TipoLocalidadeDao tipoLocalidadeDao,TipoContatoDao tipoContatoDao,ParceiroBeneficioDao parceiroBeneficioDao,UsuarioDao usuarioDao,MeioPagamentoDao meioPagamentoDao,OperacaoDao operacaoDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,Empresa empresa,Organizacao organizacao, CategoriaParceiroDao categoriaParceiroDao, ClassificacaoParceiroDao classificacaoParceiroDao, GrupoParceiroDao grupoParceiroDao,
 			ParceiroNegocio parceiroNegocio,Funcionario funcionario) {
@@ -128,6 +131,7 @@ public class ParceironegocioController {
 		this.regiaoDao = regiaoDao;
 		this.cidadeDao = cidadeDao;
 		this.usuarioDao = usuarioDao;
+		this.convenioDao = convenioDao;
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
@@ -262,6 +266,7 @@ public class ParceironegocioController {
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("parceiroNegocio",parceiroNegocio);
 		result.include("bancos",this.bancoDao.buscaAllBancos());
+		result.include("convenios",this.convenioDao.buscaAllConvenio());
 		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
 		result.include("operacoes",this.operacaoDao.buscaOperacoes(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
@@ -284,6 +289,15 @@ public class ParceironegocioController {
 
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
 		result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceironegocio_id));
+
+	}
+	
+	@Get
+	@Path("/parceironegocio/parceiroBeneficios")
+	public void parceiroBeneficios(Long parceironegocio_id){
+
+		result.include("convenios",this.convenioDao.buscaAllConvenio());
+		result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceironegocio_id));
 
 	}
 
@@ -389,10 +403,10 @@ public class ParceironegocioController {
 				}
 	
 			}
-
+	
 			if(parceiroContatos != null){
 				for(ParceiroContato parceiroContato : parceiroContatos){
-
+	
 					parceiroContato.setEmpresa(empresa);
 					parceiroContato.setOrganizacao(organizacao);
 					parceiroContato.setParceiroNegocio(parceiroNegocio);
@@ -404,21 +418,29 @@ public class ParceironegocioController {
 					parceiroContato.setUpdatedBy(usuario);
 
 					parceiroContato.setIsActive(true);
-
+		
 					this.parceiroContatoDao.beginTransaction();
 					this.parceiroContatoDao.adiciona(parceiroContato);
 					this.parceiroContatoDao.commit();
-
+		
 				}
 			}
-
+			
 			if(parceiroBeneficios != null){
 
 				for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
 
+					Convenio convenio = this.convenioDao.buscaConvenioByEmpresaOrganizacaoNome(1L,1L,parceiroBeneficio.getConvenio().getNome());
+
+					if(convenio == null){
+						convenio = new Convenio();
+						convenio.setConvenio_id(1l);
+					}
+
 					parceiroBeneficio.setEmpresa(empresa);
 					parceiroBeneficio.setOrganizacao(organizacao);
 					parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
+					parceiroBeneficio.setConvenio(convenio);
 
 					parceiroBeneficio.setCreated(dataAtual);
 					parceiroBeneficio.setUpdated(dataAtual);
@@ -427,59 +449,59 @@ public class ParceironegocioController {
 					parceiroBeneficio.setUpdatedBy(usuario);
 
 					parceiroBeneficio.setIsActive(true);
-
+	
 					this.parceiroBeneficioDao.beginTransaction();
 					this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
 					this.parceiroBeneficioDao.commit();
-
+	
 				}
 			}
-			
-			Localidade l = this.localidadeDao.buscaLocalidade(localidade.getCep());
 
-			if(l.getLocalidade_id() == null)	{
-	
-				Empresa emp = new Empresa();
-				Organizacao org = new Organizacao();
+			if(! localidade.getCep().equals("") ){
 				
-				emp.setEmpresa_id(1l);
-				org.setOrganizacao_id(1l);
+				Localidade l = this.localidadeDao.buscaLocalidade(localidade.getCep());
 
-				localidade.setEmpresa(emp);
-				localidade.setOrganizacao(org);
-				
-				localidade.setCreated(dataAtual);
-				localidade.setCreatedBy(usuario);
-				localidade.setIsActive(true);
-	
-				try {
-	
-					this.localidadeDao.beginTransaction();
-					this.localidadeDao.adiciona(localidade);
-					this.localidadeDao.commit();
-				
-				} catch(Exception e) {
-	
-					this.localidadeDao.rollback();
-	
-					if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
-						mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
-					} else {
-						mensagem = "Erro: Erro ao adicionar Localidade:";
+				if(l.getLocalidade_id() == null)	{
+		
+					Empresa emp = new Empresa();
+					Organizacao org = new Organizacao();
+					
+					emp.setEmpresa_id(1l);
+					org.setOrganizacao_id(1l);
+
+					localidade.setEmpresa(emp);
+					localidade.setOrganizacao(org);
+					
+					localidade.setCreated(dataAtual);
+					localidade.setCreatedBy(usuario);
+					localidade.setIsActive(true);
+		
+					try {
+		
+						this.localidadeDao.beginTransaction();
+						this.localidadeDao.adiciona(localidade);
+						this.localidadeDao.commit();
+					
+					} catch(Exception e) {
+		
+						this.localidadeDao.rollback();
+		
+						if (e.getCause().toString().indexOf("PK_LOCALIDADE") != -1){
+							mensagem = "Erro: Localidade " + localidade.getCep() + " já existente.";
+						} else {
+							mensagem = "Erro: Erro ao adicionar Localidade:";
+						}
+
 					}
+		
+				} else {
+
+					localidade.setLocalidade_id(l.getLocalidade_id());
 
 				}
-	
-			} else {
-
-				localidade.setLocalidade_id(l.getLocalidade_id());
-
-			}
-
-			if(localidade.getCep() != null) { // parceiroNegocio.getIsFuncionario().equals(false) ){
-
+		
 				Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
-	
+		
 				for(TipoEndereco tipoEndereco : tiposEndereco){
 		
 					ParceiroLocalidade pl = new ParceiroLocalidade();
@@ -492,16 +514,16 @@ public class ParceironegocioController {
 					pl.setNumero(parceiroLocalidade.getNumero());
 					pl.setComplemento(parceiroLocalidade.getComplemento());
 					pl.setPontoReferencia(parceiroLocalidade.getPontoReferencia());
-	
+
 					pl.setCreated(dataAtual);
 					pl.setUpdated(dataAtual);
-	
+
 					pl.setCreatedBy(usuario);
 					pl.setUpdatedBy(usuario);
-	
+
 					pl.setIsActive(true);
-	
-					try {
+
+					try{
 						
 						this.parceiroLocalidadeDao.beginTransaction();
 						this.parceiroLocalidadeDao.adiciona(pl);
@@ -520,9 +542,10 @@ public class ParceironegocioController {
 					}
 		
 				}
-			
+				
 			}
-
+			
+	
 			if(parceiroInfoBanco != null){
 	
 				parceiroInfoBanco.setEmpresa(empresa);
@@ -790,6 +813,44 @@ public class ParceironegocioController {
 		}
 
 		result.redirectTo(this).parceiroContatos(parceiroContato.getParceiroNegocio().getParceiroNegocio_id());
+	}
+	
+	@Post
+	@Path("/parceironegocio/salvaBeneficio")
+	public void salvaBeneficio(ParceiroBeneficio parceiroBeneficio){
+
+		parceiroBeneficio.setIsActive(true);
+		parceiroBeneficio.setEmpresa(empresa);
+		parceiroBeneficio.setOrganizacao(organizacao);
+
+		String mensagem = "";
+
+		try {
+
+			this.parceiroBeneficioDao.beginTransaction();
+			this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
+			this.parceiroBeneficioDao.commit();
+		
+		} catch(Exception e) {
+
+			this.parceiroBeneficioDao.rollback();
+
+			if (e.getCause().toString().indexOf("PK_PARCEIROBENEFICIO") != -1){
+
+				mensagem = "Erro: Contato " + parceiroBeneficio.getNumeroBeneficio() + " já existente.";
+
+			} else {
+
+				mensagem = "Erro ao adicionar Matrícula:";
+
+			}
+
+			result.include("msg",mensagem).redirectTo(this).msg();
+
+		}
+
+		result.redirectTo(this).parceiroBeneficios(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
+
 	}
 	
 	@Post
