@@ -266,7 +266,7 @@ public class ParceironegocioController {
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("parceiroNegocio",parceiroNegocio);
 		result.include("bancos",this.bancoDao.buscaAllBancos());
-		result.include("convenios",this.convenioDao.buscaAllConvenio());
+		result.include("convenios",this.convenioDao.buscaConvenioToFillComboByEmpOrg(1l, 1l));
 		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
 		result.include("operacoes",this.operacaoDao.buscaOperacoes(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
@@ -296,7 +296,7 @@ public class ParceironegocioController {
 	@Path("/parceironegocio/parceiroBeneficios")
 	public void parceiroBeneficios(Long parceironegocio_id){
 
-		result.include("convenios",this.convenioDao.buscaAllConvenio());
+		result.include("convenios",this.convenioDao.buscaConvenioToFillComboByEmpOrg(1l,1l));
 		result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceironegocio_id));
 
 	}
@@ -430,7 +430,7 @@ public class ParceironegocioController {
 
 				for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
 
-					Convenio convenio = this.convenioDao.buscaConvenioByEmpresaOrganizacaoNome(1L,1L,parceiroBeneficio.getConvenio().getNome());
+					Convenio convenio = this.convenioDao.buscaConvenioByEmpOrgNome(1L,1L,parceiroBeneficio.getConvenio().getNome());
 
 					if(convenio == null){
 						convenio = new Convenio();
