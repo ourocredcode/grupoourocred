@@ -39,7 +39,7 @@ public class ParceiroBeneficio implements Serializable {
 	private ParceiroNegocio parceiroNegocio;
 	
 	@ManyToOne
-	@JoinColumn(name = "convenio_id", updatable = true, nullable = false)
+	@JoinColumn(name = "convenio_id", updatable = true, nullable = true)
 	private Convenio convenio;
 
 	@ManyToOne

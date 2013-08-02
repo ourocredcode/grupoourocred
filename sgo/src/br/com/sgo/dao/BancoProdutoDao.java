@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Banco;
+import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.Produto;
@@ -29,16 +30,17 @@ public class BancoProdutoDao extends Dao<BancoProduto> {
 
 	private final String sqlBancoProduto = "SELECT BANCOPRODUTO.bancoproduto_id, BANCOPRODUTO.empresa_id, BANCOPRODUTO.organizacao_id, BANCOPRODUTO.produto_id, BANCOPRODUTO.banco_id, BANCOPRODUTO.workflow_id, BANCOPRODUTO.isworkflow, BANCOPRODUTO.nome, BANCOPRODUTO.isactive FROM BANCOPRODUTO ";
 
-	private final String sqlBancoProdutos = "SELECT BANCOPRODUTO.bancoproduto_id, BANCOPRODUTO.isactive, BANCOPRODUTO.isworkflow "+
-							", BANCOPRODUTO.empresa_id, EMPRESA.nome AS empresa_nome "+
-							", BANCOPRODUTO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
-							", BANCOPRODUTO.workflow_id, WORKFLOW.nome AS workflow_nome "+
-							", BANCOPRODUTO.produto_id, PRODUTO.nome AS produto_nome, BANCOPRODUTO.banco_id, BANCO.nome AS banco_nome "+
-							" FROM ((((BANCOPRODUTO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON BANCOPRODUTO.empresa_id = EMPRESA.empresa_id) "+
-							" INNER JOIN ORGANIZACAO (NOLOCK) ON BANCOPRODUTO.organizacao_id = ORGANIZACAO.organizacao_id) "+
-							" INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTO.banco_id = BANCO.banco_id) "+
-							" INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTO.produto_id = PRODUTO.produto_id) "+
-							" INNER JOIN WORKFLOW (NOLOCK) ON BANCOPRODUTO.workflow_id = WORKFLOW.workflow_id ";
+	private final String sqlBancoProdutos = " SELECT BANCOPRODUTO.bancoproduto_id, BANCOPRODUTO.isactive, BANCOPRODUTO.isworkflow, BANCOPRODUTO.isconvenio "+ 
+											", BANCOPRODUTO.empresa_id, EMPRESA.nome AS empresa_nome "+
+											", BANCOPRODUTO.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+ 
+											", BANCOPRODUTO.workflow_id, WORKFLOW.nome AS workflow_nome, BANCOPRODUTO.convenio_id, CONVENIO.nome AS convenio_nome "+
+											", BANCOPRODUTO.produto_id, PRODUTO.nome AS produto_nome, BANCOPRODUTO.banco_id, BANCO.nome AS banco_nome "+  
+											" FROM (((((BANCOPRODUTO (NOLOCK) INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTO.banco_id = BANCO.banco_id) "+ 
+											" INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTO.produto_id = PRODUTO.produto_id) "+
+											" LEFT JOIN CONVENIO (NOLOCK) ON BANCOPRODUTO.convenio_id = CONVENIO.convenio_id) "+ 
+											" INNER JOIN EMPRESA (NOLOCK) ON BANCOPRODUTO.empresa_id = EMPRESA.empresa_id) "+
+											" INNER JOIN ORGANIZACAO (NOLOCK) ON BANCOPRODUTO.organizacao_id = ORGANIZACAO.organizacao_id) "+ 
+											" LEFT JOIN WORKFLOW (NOLOCK) ON BANCOPRODUTO.workflow_id = WORKFLOW.workflow_id ";
 
 	public BancoProdutoDao(Session session, ConnJDBC conexao) {
 
@@ -117,7 +119,7 @@ public class BancoProdutoDao extends Dao<BancoProduto> {
 		return bancoProdutos;
 	}
 
-	public BancoProduto buscaBancoProdutoByEmpresaOrganizacaoProdutoBancoWorkflow(Long empresa_id, Long organizacao_id, Long produto_id, Long banco_id, Long workflow_id ) {
+	public BancoProduto buscaBancoProdutoByEmpresaOrganizacaoProdutoBancoWorkflow(Long empresa_id, Long organizacao_id, Long produto_id, Long banco_id, Long workflow_id, Long convenio_id) {
 
 		String sql = sqlBancoProduto;
 
@@ -131,6 +133,8 @@ public class BancoProdutoDao extends Dao<BancoProduto> {
 			sql += " AND BANCOPRODUTO.banco_id = ?";
 		if (workflow_id != null)
 			sql += " AND BANCOPRODUTO.workflow_id = ?";
+		if (convenio_id != null)
+			sql += " AND BANCOPRODUTO.convenio_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -145,6 +149,7 @@ public class BancoProdutoDao extends Dao<BancoProduto> {
 			this.stmt.setLong(3, produto_id);
 			this.stmt.setLong(4, banco_id);
 			this.stmt.setLong(5, workflow_id);
+			this.stmt.setLong(6, convenio_id);
 			
 			this.rsBancoProduto = this.stmt.executeQuery();
 
@@ -215,11 +220,12 @@ public class BancoProdutoDao extends Dao<BancoProduto> {
 	private void getBancoProduto(Collection<BancoProduto> bancoProdutos)throws SQLException {
 
 		Empresa empresa = new Empresa();
-		Organizacao organizacao = new Organizacao();
-		Workflow workflow = new Workflow();
+		Organizacao organizacao = new Organizacao();		
 		BancoProduto bancoProduto = new BancoProduto();
 		Banco banco = new Banco();
 		Produto produto = new Produto();
+		Workflow workflow = new Workflow();
+		Convenio convenio = new Convenio();
 		
 		empresa.setEmpresa_id(rsBancoProduto.getLong("empresa_id"));
 		empresa.setNome(rsBancoProduto.getString("empresa_nome"));
@@ -236,15 +242,20 @@ public class BancoProdutoDao extends Dao<BancoProduto> {
 		produto.setProduto_id(rsBancoProduto.getLong("produto_id"));
 		produto.setNome(rsBancoProduto.getString("produto_nome"));
 		
+		convenio.setConvenio_id(rsBancoProduto.getLong("convenio_id"));
+		convenio.setNome(rsBancoProduto.getString("convenio_nome"));
 
 		bancoProduto.setEmpresa(empresa);
 		bancoProduto.setOrganizacao(organizacao);
-		bancoProduto.setWorkflow(workflow);
 		bancoProduto.setBanco(banco);
 		bancoProduto.setProduto(produto);
+		bancoProduto.setWorkflow(workflow);
+		bancoProduto.setConvenio(convenio);
 		bancoProduto.setBancoProduto_id(rsBancoProduto.getLong("bancoproduto_id"));
-		bancoProduto.setIsActive(rsBancoProduto.getBoolean("isactive"));
+		
 		bancoProduto.setIsWorkflow(rsBancoProduto.getBoolean("isworkflow"));
+		bancoProduto.setIsConvenio(rsBancoProduto.getBoolean("isconvenio"));
+		bancoProduto.setIsActive(rsBancoProduto.getBoolean("isactive"));		
 
 		bancoProdutos.add(bancoProduto);
 

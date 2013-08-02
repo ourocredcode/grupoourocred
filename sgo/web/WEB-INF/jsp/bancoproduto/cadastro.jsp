@@ -86,19 +86,27 @@ jQuery(function($){
 		limpaForm();
 	});
 
-	$("#bancoProdutoIsActive").change(function(e){
-		if(document.bancoProdutoForm.bancoProdutoIsActive.checked==true){
-			document.bancoProdutoForm.bancoProdutoIsActive.value=true;
-		}else{
-			document.bancoProdutoForm.bancoProdutoIsActive.value=false;
-		}
-	});
-
 	$("#bancoProdutoIsWorkflow").change(function(e){
 		if(document.bancoProdutoForm.bancoProdutoIsWorkflow.checked==true){
 			document.bancoProdutoForm.bancoProdutoIsWorkflow.value=true;
 		}else{
 			document.bancoProdutoForm.bancoProdutoIsWorkflow.value=false;
+		}
+	});
+
+	$("#isConvenio").change(function(e){
+		if(document.bancoProdutoForm.isConvenio.checked==true){
+			document.bancoProdutoForm.isConvenio.value=true;
+		}else{
+			document.bancoProdutoForm.isConvenio.value=false;
+		}
+	});
+
+	$("#bancoProdutoIsActive").change(function(e){
+		if(document.bancoProdutoForm.bancoProdutoIsActive.checked==true){
+			document.bancoProdutoForm.bancoProdutoIsActive.value=true;
+		}else{
+			document.bancoProdutoForm.bancoProdutoIsActive.value=false;
 		}
 	});
 
@@ -116,7 +124,18 @@ function altera(linha, atributo, id) {
 			});
 
 	}
-	
+
+	if(atributo == 'isConvenioLine'){
+
+		var isConvenio = linha.checked == true ? true : false;
+
+		if (window.confirm("Deseja alterar o Banco do Produto selecionado?"))
+			$.post('<c:url value="/bancoproduto/altera" />', {
+				'bancoProduto.bancoProduto_id' : id, 'bancoProduto.isConvenio' : isConvenio
+			});
+
+	}
+
 	if(atributo=='isActiveLine'){
 
 		var isActive = linha.checked == true ? true : false;
@@ -223,13 +242,28 @@ function limpaForm(){
 									</c:forEach>
 								</select>
 							</div>
-							<div class="span1">
-								<label for="bancoProdutoIsActive">Ativo</label>
-								<input class="span1" id="bancoProdutoIsActive" name="bancoProduto.isActive" type="checkbox" checked="checked" value="1" >
+							<div class="span3">
+								<label for="convenio">Convênio</label>
+								<select class="input-medium" id="convenio" name="bancoProduto.convenio.convenio_id" required>
+									<option value=""></option>
+									<c:forEach var="convenio" items="${convenios }">
+									 	<option value="${convenio.convenio_id }">${convenio.nome }</option>
+									</c:forEach>
+								</select>
 							</div>
+						</div>
+						<div class="row-fluid">							
 							<div class="span1">
 								<label for="bancoProdutoIsWorkflow">Workflow</label>
 								<input class="span1" id="bancoProdutoIsWorkflow" name="bancoProduto.isWorkflow" type="checkbox" checked="checked" value="1" >
+							</div>
+							<div class="span1">
+								<label for="isConvenio">Convenio</label>
+								<input class="span1" id="isConvenio" name="bancoProduto.isConvenio" type="checkbox" checked="checked" value="1" >
+							</div>
+							<div class="span1">
+								<label for="bancoProdutoIsActive">Ativo</label>
+								<input class="span1" id="bancoProdutoIsActive" name="bancoProduto.isActive" type="checkbox" checked="checked" value="1" >
 							</div>
 						</div>
 						<div class="btn-toolbar">
@@ -271,7 +305,9 @@ function limpaForm(){
 									<th>Banco</th>
 									<th>Produto</th>
 									<th>Workflow</th>
+									<th>Convênio</th>
 									<th>IsWorkflow</th>
+									<th>IsConvênio</th>
 									<th>Ativo</th>
 								</tr>
 							</thead>
@@ -281,10 +317,17 @@ function limpaForm(){
 										<td>${bancoProduto.banco.nome }</td>
 										<td>${bancoProduto.produto.nome }</td>
 										<td>${bancoProduto.workflow.nome }</td>
+										<td>${bancoProduto.convenio.nome }</td>
 										<td>
 											<label class="checkbox inline">
 												<input type="checkbox" id="isWorkflowLine" name="bancoProduto.isWorkflow"
 												<c:if test="${bancoProduto.isWorkflow == true }"> checked="checked"</c:if> onchange="altera(this,'isWorkflowLine','${bancoProduto.bancoProduto_id}');">
+											</label>
+										</td>
+										<td>
+											<label class="checkbox inline">
+												<input type="checkbox" id="isConvenioLine" name="bancoProduto.isConvenio"
+												<c:if test="${bancoProduto.isConvenio == true }"> checked="checked"</c:if> onchange="altera(this,'isConvenioLine','${bancoProduto.bancoProduto_id}');">
 											</label>
 										</td>
 										<td>
