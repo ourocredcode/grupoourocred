@@ -55,7 +55,7 @@
 
 		<div id="search">
 			<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="post">
-				<input id="doc" name="doc" type="text" placeholder="Busca CPF..."/><button type="submit"><i class="icon-search icon-white"></i></button>
+				<input id="doc" name="doc" type="text" placeholder="Busca CPF..." required /><button type="submit"><i class="icon-search icon-white"></i></button>
 			</form>
 		</div>
 
