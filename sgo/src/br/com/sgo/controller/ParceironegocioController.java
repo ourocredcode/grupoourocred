@@ -435,8 +435,7 @@ public class ParceironegocioController {
 				}
 			}
 			
-			Localidade l = null;
-			l = this.localidadeDao.buscaLocalidade(localidade.getCep());
+			Localidade l = this.localidadeDao.buscaLocalidade(localidade.getCep());
 
 			if(l.getLocalidade_id() == null)	{
 	
