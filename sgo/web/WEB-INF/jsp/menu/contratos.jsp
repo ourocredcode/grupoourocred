@@ -235,6 +235,7 @@
 
 	 function buscaContratos(){
 
+		var convenios = $("#busca_Convenio").val();
 		var status = $("#busca_Status").val();
 		var tipoRecusado = $("#busca_TipoRecusado").val();
 		var justificativa = $("#busca_Justificativa").val();
@@ -296,6 +297,11 @@
 				consultor = supervisor;
 			}
 		}
+		
+		if(convenios == null){
+			convenios = new Array();
+			convenios[0] = "";
+		}
 		 
 		if(status == null){
 			status = new Array();
@@ -321,7 +327,7 @@
 			  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
 
 			 $("#resultado").load('<c:url value="/menu/busca" />',{'informacaoSaque': informacaoSaque,'tipoAprovado': tipoAprovado,'empresa':empresa,
-				 	'tipoPagamento': tipoPagamento ,'tipoRecusado': tipoRecusado,'justificativa': justificativa,'status': status, 
+				 	'tipoPagamento': tipoPagamento ,'tipoRecusado': tipoRecusado,'justificativa': justificativa,'status': status, 'convenios': convenios,
 					'cliente' : cliente , 'documento' : documento, 'data' : data, 'dataFim' : dataFim,
 					'dataAprovadoInicio' : dataAprovadoInicio, 'dataAprovadoFim' : dataAprovadoFim, 'dataConcluidoInicio' : dataConcluidoInicio, 'dataConcluidoFim' : dataConcluidoFim, 
 					'dataRecusadoInicio' : dataRecusadoInicio, 'dataRecusadoFim' : dataRecusadoFim, 'bancos' : bancos, 'produtos' : produtos, 'bancosComprados' : bancosComprados , 
@@ -337,6 +343,7 @@
 	 
 	 function buscaDatasControle(){
 
+			var convenios = $("#busca_Convenio").val();
 			var status = $("#busca_Status").val();
 			var cliente = $("#busca_Cliente").val();
 			var documento = $("#busca_Documento").val();
@@ -380,6 +387,11 @@
 					consultor = supervisor;
 				}
 			}
+			
+			if(convenios == null){
+				convenios = new Array();
+				convenios[0] = "";
+			}
 
 			if(status == null){
 				status = new Array();
@@ -408,7 +420,8 @@
 										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
 										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'quitacaoInicio': quitacaoInicio,'quitacaoFim': quitacaoFim,
 										'assinaturaInicio': assinaturaInicio,'assinaturaFim': assinaturaFim,'bancos': bancos, 
-										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa,
+										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'convenios': convenios,
+										'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa,
 										'procedimento': procedimento,'proximoProcedimento': proximoProcedimento,
 										'atuante':atuante,});
 
@@ -461,12 +474,18 @@
 			</div>
 			
 			
-			
-			
 			<div class="widget-content" style="padding: 6px;">
 				<div class="row-fluid">
 
 					<div class="span2">
+
+						<label for="busca_Convenio">Convenio</label>
+	  					<select id="busca_Convenio" name="busca_Convenio" class="input-medium" MULTIPLE >
+							<option value="">Todos...</option>
+							<c:forEach items="${convenios }" var="convenio">
+								<option value="${convenio.convenio_id }">${convenio.nome }</option>
+							</c:forEach>
+						</select>
 
 						<label for="busca_Status">Status</label>
 	  					<select id="busca_Status" name="busca_Status" class="input-medium" MULTIPLE >

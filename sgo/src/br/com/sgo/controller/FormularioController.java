@@ -59,6 +59,8 @@ import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoControleFormulario;
 import br.com.sgo.modelo.Localidade;
 import br.com.sgo.modelo.MeioPagamento;
+import br.com.sgo.modelo.Modalidade;
+import br.com.sgo.modelo.NaturezaProfissional;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroInfoBanco;
@@ -264,6 +266,7 @@ public class FormularioController {
 			parceiroBeneficio.setParceiroBeneficio_id(pb.getParceiroBeneficio_id());
 			parceiroBeneficio.setNumeroBeneficio(pb.getNumeroBeneficio());
 			parceiroBeneficio.setParceiroNegocio(pb.getParceiroNegocio());
+			parceiroBeneficio.setConvenio(pb.getConvenio());
 
 			parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
 			parceiroInfoBanco = parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
@@ -324,12 +327,22 @@ public class FormularioController {
 		contrato.setBanco(this.bancoDao.buscaBancoById(contrato.getBanco().getBanco_id()));
 		contrato.setProduto(this.produtoDao.buscaProdutoById(contrato.getProduto().getProduto_id()));
 		contrato.setCoeficiente(this.coeficienteDao.buscaCoeficienteById(contrato.getCoeficiente().getCoeficiente_id()));
-	
+
+		Modalidade modalidade = new Modalidade();
+		modalidade.setModalidade_id(1l);
+
+		NaturezaProfissional natureza = new NaturezaProfissional();
+		natureza.setNaturezaProfissional_id(1l);
+
 		contrato.setTabela(this.tabelaDao.buscaTabelasByCoeficiente(contrato.getCoeficiente().getCoeficiente_id()));
 		contrato.setNumeroBeneficio(this.formulario.getParceiroBeneficio().getNumeroBeneficio());
 
-		contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProduto(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
-				contrato.getProduto().getProduto_id(), contrato.getBanco().getBanco_id()));
+		contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
+				contrato.getProduto().getProduto_id(), contrato.getBanco().getBanco_id(),this.formulario.getParceiroBeneficio().getConvenio().getConvenio_id()));
+
+		contrato.setConvenio(this.formulario.getParceiroBeneficio().getConvenio());
+		contrato.setModalidade(modalidade);
+		contrato.setNaturezaProfissional(natureza);
 
 		contrato.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),"Aguardando Status"));
 
@@ -355,6 +368,8 @@ public class FormularioController {
 		this.formularioDao.commit();
 
 		for(Contrato c : this.formulario.getContratos()){
+
+			System.out.println("SALVA FORMULARIO " + c.getConvenio().getConvenio_id());
 
 			c.setFormulario(this.formulario);
 			c.setRecompraBanco(c.getRecompraBanco().getBanco_id() == null ? null : c.getRecompraBanco());
