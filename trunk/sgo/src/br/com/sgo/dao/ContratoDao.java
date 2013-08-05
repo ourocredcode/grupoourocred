@@ -573,7 +573,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
 			Calendar calStatusFinalInicio,Calendar calStatusFinalFim,Calendar calConclusaoInicio,Calendar calConclusaoFim,
-			String cliente, String documento, Collection<String> status,Collection<String> statusFinal,
+			String cliente, String documento, Collection<Long> convenios,Collection<String> status,Collection<String> statusFinal,
 			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores,Long tipoPagamento, Long informacaoSaque) {
 
 		String sql = sqlContratos;
@@ -661,6 +661,23 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " ) ";
 
 		}
+		
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(Long convenioAux : convenios){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(convenioAux != null) {
+				sql += clause + " ( CONTRATO.convenio_id = ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
 
 		x = 0;
 		sql += " AND ( 1=1 ";
@@ -751,7 +768,6 @@ public class ContratoDao extends Dao<Contrato> {
 		}
 		
 		sql += " ) ";
-			
 
 		this.conn = this.conexao.getConexao();
 
@@ -816,6 +832,15 @@ public class ContratoDao extends Dao<Contrato> {
 
 				if(!statusFinalAux2.equals("")) {
 					this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
+					curr++;
+				}
+
+			}
+			
+			for(Long convenioAux2 : convenios){
+
+				if(convenioAux2 != null ) {
+					this.stmt.setLong(curr, convenioAux2);
 					curr++;
 				}
 
@@ -916,7 +941,8 @@ public class ContratoDao extends Dao<Contrato> {
 			Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
 			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,
 			Calendar quitacaoInicio,Calendar quitacaoFim,Calendar assinaturaInicio,Calendar assinaturaFim,
-			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status, Collection<Usuario> consultores,String cliente,
+			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Collection<Long> convenios, 
+			Collection<Usuario> consultores,String cliente,
 			String documento,Collection<String> empresas, Long procedimento, Long proximoProcedimento, Long atuante) {
 
 		String sql = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
@@ -992,6 +1018,25 @@ public class ContratoDao extends Dao<Contrato> {
 		}
 
 		sql += " ) ";
+		
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(Long convenioAux1 : convenios){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(convenioAux1 != null) {
+				sql += clause + " ( CONTRATO.convenio_id = ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		
+		
 		x = 0;
 		sql += " AND ( 1=1 ";
 
@@ -1008,6 +1053,7 @@ public class ContratoDao extends Dao<Contrato> {
 		}
 
 		sql += " ) ";
+		
 		x = 0;
 		sql += " AND ( 1=1 ";
 
@@ -1128,6 +1174,15 @@ public class ContratoDao extends Dao<Contrato> {
 
 				if(!statusAux2.equals("")) {
 					this.stmt.setString(curr, '%' + statusAux2 + '%');
+					curr++;
+				}
+
+			}
+			
+			for(Long conveniosAux2 : convenios){
+
+				if(conveniosAux2 != null) {
+					this.stmt.setLong(curr, conveniosAux2);
 					curr++;
 				}
 

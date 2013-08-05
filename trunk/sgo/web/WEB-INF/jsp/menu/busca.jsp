@@ -70,6 +70,23 @@ $(document).ready(function() {
 </script>
 
 
+<c:if test="${empty contratos}">
+
+		<div class="container-fluid">
+			<div class="row-fluid" style="margin-top: 1px;">
+				<div class="span12" style="margin-top: 1px;">
+					<table class="table table-bordered table-striped table-hover" style="width: 100%;float: left;font-size: 11px;">
+						<tr>
+							<th> Não foram encontrados resultados para a pesquisa. </th>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>			
+
+</c:if>
+
+
 <c:if test="${not empty contratos}">
 	
 	

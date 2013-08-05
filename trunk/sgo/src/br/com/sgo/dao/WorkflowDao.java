@@ -348,7 +348,7 @@ public class WorkflowDao extends Dao<Workflow> {
 
 	}
 	
-	public Workflow buscaWorkflowByEmpresaOrganizacaoBancoProduto(Long empresa_id, Long organizacao_id, Long banco_id , Long produto_id) {
+	public Workflow buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(Long empresa_id, Long organizacao_id, Long banco_id , Long produto_id, Long convenio_id) {
 
 		String sql = " SELECT BANCOPRODUTO.workflow_id FROM BANCOPRODUTO ";
 
@@ -360,6 +360,8 @@ public class WorkflowDao extends Dao<Workflow> {
 			sql += " AND BANCOPRODUTO.produto_id = ?";
 		if (banco_id != null)
 			sql += " AND BANCOPRODUTO.banco_id = ?";
+		if (banco_id != null)
+			sql += " AND BANCOPRODUTO.convenio_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -369,11 +371,19 @@ public class WorkflowDao extends Dao<Workflow> {
 
 			this.stmt = conn.prepareStatement(sql);
 
+			//System.out.println(sql);
+			//System.out.println(empresa_id);
+			//System.out.println(organizacao_id);
+			//System.out.println(produto_id);
+			//System.out.println(banco_id);
+			//System.out.println(convenio_id);
+
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setLong(3, produto_id);
 			this.stmt.setLong(4, banco_id);
-			
+			this.stmt.setLong(5, convenio_id);
+
 			this.rsWorkflow = this.stmt.executeQuery();
 
 			while (rsWorkflow.next()) {

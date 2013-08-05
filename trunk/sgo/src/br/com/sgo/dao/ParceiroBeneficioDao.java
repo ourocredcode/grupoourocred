@@ -79,6 +79,7 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 		ParceiroBeneficio parceiroBeneficio = null;
 		ParceiroNegocio parceiroNegocio = null;
+		Convenio convenio = null;
 
 		if (numeroBeneficio != null)
 			sql += " WHERE PARCEIROBENEFICIO.numerobeneficio = ?";
@@ -95,12 +96,17 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 				parceiroBeneficio = new ParceiroBeneficio();
 				parceiroNegocio = new ParceiroNegocio();
+				convenio = new Convenio();
 
 				parceiroNegocio.setParceiroNegocio_id(rsParceiroBeneficio.getLong("parceironegocio_id"));
+				
+				convenio.setConvenio_id(rsParceiroBeneficio.getLong("convenio_id"));
+				convenio.setNome(rsParceiroBeneficio.getString("convenio_nome"));
 
 				parceiroBeneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
 				parceiroBeneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
 				parceiroBeneficio.setParceiroNegocio(parceiroNegocio);
+				parceiroBeneficio.setConvenio(convenio);
 
 			}
 
