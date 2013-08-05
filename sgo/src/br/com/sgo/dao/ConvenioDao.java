@@ -158,6 +158,51 @@ public class ConvenioDao extends Dao<Convenio> {
 		this.conexao.closeConnection(rsConvenio, stmt, conn);
 		return convenio;
 	}
+	
+	public Convenio buscaConvenioByEmpOrgId(Long empresa_id, Long organizacao_id, Long convenio_id) {
+
+		String sql = sqlConvenio;
+
+		if (empresa_id != null)
+			sql += " WHERE CONVENIO.empresa_id = ? ";
+		if (organizacao_id != null)
+			sql += " AND CONVENIO.organizacao_id = ? ";
+		if (convenio_id != null)
+			sql += " AND CONVENIO.convenio_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Convenio convenio = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, organizacao_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, convenio_id);
+			
+			this.rsConvenio = this.stmt.executeQuery();
+
+			while (rsConvenio.next()) {
+
+				convenio = new Convenio();
+
+				convenio.setConvenio_id(rsConvenio.getLong("convenio_id"));
+				convenio.setNome(rsConvenio.getString("nome"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsConvenio, stmt, conn);
+		return convenio;
+	}
+
 
 	public Collection<Convenio> buscaConveniosByEmpOrgNome(Long empresa_id, Long organizacao_id, String nome) {
 

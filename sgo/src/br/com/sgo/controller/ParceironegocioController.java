@@ -430,7 +430,7 @@ public class ParceironegocioController {
 
 				for(ParceiroBeneficio parceiroBeneficio : parceiroBeneficios){
 
-					Convenio convenio = this.convenioDao.buscaConvenioByEmpOrgNome(1L,1L,parceiroBeneficio.getConvenio().getNome());
+					Convenio convenio = this.convenioDao.buscaConvenioByEmpOrgId(1L,1L,parceiroBeneficio.getConvenio().getConvenio_id());
 
 					if(convenio == null){
 						convenio = new Convenio();
@@ -910,6 +910,27 @@ public class ParceironegocioController {
 			result.include("msg","Erro : Parceiro Contato já existente.").redirectTo(this).msg();
 
 		}
+
+	}
+	
+	@Post
+	@Path("/parceironegocio/alteraParceiroBeneficio")
+	public void alteraParceiroBeneficio(ParceiroBeneficio parceiroBeneficio){
+
+		ParceiroBeneficio pb = this.parceiroBeneficioDao.load(parceiroBeneficio.getParceiroBeneficio_id());
+
+		if(parceiroBeneficio.getNumeroBeneficio() != null)
+			pb.setNumeroBeneficio(parceiroBeneficio.getNumeroBeneficio());
+		
+		if(parceiroBeneficio.getSenha() != null)
+			pb.setSenha(parceiroBeneficio.getSenha());
+
+		if(parceiroBeneficio.getConvenio() != null)
+			pb.setConvenio(this.convenioDao.load(parceiroBeneficio.getConvenio().getConvenio_id()));
+
+		this.parceiroBeneficioDao.beginTransaction();
+		this.parceiroBeneficioDao.atualiza(pb);
+		this.parceiroBeneficioDao.commit();
 
 	}
 
