@@ -29,7 +29,7 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 	private final String sqlParceiroBeneficio = " SELECT "
 			+ "	PARCEIROBENEFICIO.parceirobeneficio_id, PARCEIROBENEFICIO.empresa_id, EMPRESA.nome,  "
 			+ "	PARCEIROBENEFICIO.organizacao_id, ORGANIZACAO.nome, PARCEIROBENEFICIO.parceironegocio_id, "
-			+ "	PARCEIROBENEFICIO.numerobeneficio,PARCEIROBENEFICIO.convenio_id, CONVENIO.nome as convenio_nome FROM (( PARCEIROBENEFICIO (NOLOCK) "
+			+ "	PARCEIROBENEFICIO.numerobeneficio,PARCEIROBENEFICIO.senha, PARCEIROBENEFICIO.convenio_id, CONVENIO.nome as convenio_nome FROM (( PARCEIROBENEFICIO (NOLOCK) "
 			+ "		INNER JOIN EMPRESA (NOLOCK) ON PARCEIROBENEFICIO.empresa_id = EMPRESA.empresa_id) "
 			+ "		INNER JOIN ORGANIZACAO (NOLOCK) ON PARCEIROBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) "
 			+ "		INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id " +
@@ -143,6 +143,7 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 				beneficio.setParceiroBeneficio_id(rsParceiroBeneficio.getLong("parceirobeneficio_id"));
 				beneficio.setNumeroBeneficio(rsParceiroBeneficio.getString("numeroBeneficio"));
+				beneficio.setSenha(rsParceiroBeneficio.getString("senha"));
 				
 				Convenio convenio = new Convenio();
 				convenio.setConvenio_id(rsParceiroBeneficio.getLong("convenio_id"));

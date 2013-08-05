@@ -166,10 +166,12 @@
 		var parceiroId = $("#parceiroNegocioId").val();
 		var convenioId = $("#parceiroBeneficioConvenio").val();
 		var numeroBeneficio = $("#parceiroBeneficioNumeroNovo").val();
+		var senha = $("#parceiroBeneficioSenhaNovo").val();
 	
 		if (window.confirm("Deseja salvar o número do benefício?"))
 			$.post('<c:url value='/parceironegocio/salvaBeneficio' />',{
 					'parceiroBeneficio.numeroBeneficio' : numeroBeneficio,
+					'parceiroBeneficio.senha' : senha,
 					'parceiroBeneficio.convenio.convenio_id' : convenioId,
 					'parceiroBeneficio.parceiroNegocio.parceiroNegocio_id ' : parceiroId}
 			, function(resposta) { 
@@ -291,6 +293,40 @@
 			});
 	
 		return false;
+	}
+	
+	function alteraBeneficio(linha, atributo,parceiroBeneficio_id,valor) {
+
+		if(atributo == 'numeroBeneficio'){
+			var attr = {'parceiroBeneficio.parceiroBeneficio_id' : parceiroBeneficio_id ,
+					 'parceiroBeneficio.numeroBeneficio' : valor };
+		}
+
+		if(atributo == 'senha'){
+			var attr = {'parceiroBeneficio.parceiroBeneficio_id' : parceiroBeneficio_id ,
+					 'parceiroBeneficio.senha' : valor} ;
+		}
+
+		if(atributo == 'convenio.convenio_id'){
+			var attr = {'parceiroBeneficio.parceiroBeneficio_id' : parceiroBeneficio_id ,
+					 'parceiroBeneficio.convenio.convenio_id' : valor} ;
+		}
+
+		if (window.confirm("Deseja realmente alterar a Matrícula do Cliente?"))
+			$.post('<c:url value='/parceironegocio/alteraParceiroBeneficio' />'
+			, attr , function(resposta) { 
+	
+					if(resposta.indexOf("Erro") != -1){
+						alert(resposta);
+						window.location.reload();
+					} else {
+						alert(resposta);	
+					};
+					
+			});
+
+		return false;
+
 	}
 	
 	</script>
@@ -637,7 +673,7 @@
 							</c:if>
 	
 							<c:if test="${not empty parceiroBeneficios}">
-								<div class="navbar" style="width: 400px;float: left;">
+								<div class="navbar" style="width: 500px;float: left;">
 									
 								<div class="navbar-inner" >
 								
@@ -650,14 +686,22 @@
 														<tr>
 															<th>Convênio</th>
 															<th>Matrícula</th>
+															<th>Senha</th>
 															<th>Excluir</th>
 														</tr>
 													</thead>
 													<tbody>	
 														<c:forEach items="${parceiroBeneficios}" var="parceiroBeneficio" varStatus="status">
 															<tr>
-																<td><input type="text" id="parceiroConvenioNome" name="parceiroBeneficios[${status.index}].convenio.nome" value="${parceiroBeneficio.convenio.nome }" class="input-small" onChange="return alteraBeneficio(this,'convenio.convenio_id','${parceiroBeneficio.convenio.convenio_id }', this.value);"/></td>
-																<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficio(this,'nome','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
+																<td>
+																<select type="text" id="parceiroConvenioNome" name="parceiroBeneficios[${status.index}].convenio.convenio_id"  class="input-small" onChange="return alteraBeneficio(this,'convenio.convenio_id','${parceiroBeneficio.parceiroBeneficio_id }', this.value);">
+																	<c:forEach items="${convenios }" var="convenio">
+																		<option value="${convenio.convenio_id }" <c:if test="${parceiroBeneficio.convenio.convenio_id eq convenio.convenio_id}">selected="selected"</c:if>>${convenio.nome }</option>
+																	</c:forEach>
+																</select>
+																</td>
+																<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficio(this,'numeroBeneficio','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
+																<td><input type="text" id="parceiroBeneficioSenhaLista" name="parceiroBeneficios[${status.index}].senha" value="${parceiroBeneficio.senha }" class="input-small" onChange="return alteraBeneficio(this,'senha','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
 																<td style="text-align: center;">
 																	<button type="button" class="btn btn-danger btn-mini" onClick="return excluiBeneficio(this,'${parceiroBeneficio.parceiroBeneficio_id}');">Excluir</button>
 																</td>
@@ -672,7 +716,8 @@
 																		</c:forEach>
 																	</select>
 																</td>
-																<td><input type="text" id="parceiroBeneficioNumeroNovo" value="${parceiroBeneficio.numeroBeneficio }" class="input-medium" /></td>
+																<td><input type="text" id="parceiroBeneficioNumeroNovo" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" /></td>
+																<td><input type="text" id="parceiroBeneficioSenhaNovo" value="${parceiroBeneficio.senha }" class="input-small" /></td>
 																<td style="text-align: center;">
 																	<button type="button" class="btn btn-mini" id="bttParceiroBeneficioNovo" onClick="return salvaBeneficio();">Novo</button>
 																</td>

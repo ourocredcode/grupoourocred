@@ -389,7 +389,7 @@ public class PnDao {
 
 			this.stmt = conn.prepareStatement(sql);
 			
-			System.out.println(sql);
+			//System.out.println(sql);
 
 			this.stmt.setLong(1, parceiroNegocio.getPn_id());
 
@@ -400,9 +400,7 @@ public class PnDao {
 				ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
 				Convenio convenio = new Convenio();
 				convenio.setNome(rsParceiroNegocio.getString("tipo"));
-
-				System.out.println(" CONVENIO " + parceiroNegocio.getPn_id());
-				System.out.println(" CONVENIO " + convenio.getNome());
+				convenio.setConvenio_id(rsParceiroNegocio.getString("tipo").equals("PM_SP") ? 2L : 1L);
 
 				parceiroBeneficio.setNumeroBeneficio(rsParceiroNegocio.getString("beneficio"));
 				parceiroBeneficio.setConvenio(convenio);
