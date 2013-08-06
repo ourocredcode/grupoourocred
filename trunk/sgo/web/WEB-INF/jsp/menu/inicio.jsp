@@ -106,11 +106,11 @@
 					<div class="widget-content">
 						<div class="row-fluid">
 							<div class="span12">
-								<div class="span12 center" style="text-align: center;font-size: 8px;">					
+								<div class="span12 center" style="text-align: center;font-size: 7px;">					
 									<ul class="stat-boxes">
 										
 										<li class="popover-users">
-											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
+											
 											<div class="right" style="width: 135px;">
 												<strong><fmt:formatNumber type="NUMBER" value="${totalValorContratos}" minFractionDigits="2" /></strong>
 												T. Contratos 
@@ -118,21 +118,21 @@
 										</li>
 										
 										<li class="popover-users">
-											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
+											
 											<div class="right" style="width: 135px;">
 												<strong><fmt:formatNumber type="NUMBER" value="${totalContratoLiquido}" minFractionDigits="2" /></strong>
 												T. C. Liquido
 											</div>
 										</li>
 										<li class="popover-users">
-											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
+											
 											<div class="right" style="width: 135px;">
 												<strong><fmt:formatNumber type="NUMBER" value="${totalValorLiquido}" minFractionDigits="2" /></strong>
 												Vl Líquido
 											</div>
 										</li>
 										<li class="popover-users">
-											<div class="left peity_bar_neutral"><span>1,2,10,2,4,1,5,10</span>0%</div>
+											
 											<div class="right" style="width: 135px;">
 												<strong><fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" /></strong>
 												Vl Meta
