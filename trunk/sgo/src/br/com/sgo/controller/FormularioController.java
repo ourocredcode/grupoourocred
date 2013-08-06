@@ -53,6 +53,7 @@ import br.com.sgo.jasper.FormularioDataSource;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.ControleFormulario;
+import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
@@ -324,6 +325,7 @@ public class FormularioController {
 		contrato.setCreated(GregorianCalendar.getInstance());
 		contrato.setCreatedBy(usuarioInfo.getUsuario());
 		contrato.setUsuario(usuarioInfo.getUsuario());
+		contrato.setSupervisorCreatedBy(usuarioInfo.getUsuario().getSupervisorUsuario());
 		contrato.setBanco(this.bancoDao.buscaBancoById(contrato.getBanco().getBanco_id()));
 		contrato.setProduto(this.produtoDao.buscaProdutoById(contrato.getProduto().getProduto_id()));
 		contrato.setCoeficiente(this.coeficienteDao.buscaCoeficienteById(contrato.getCoeficiente().getCoeficiente_id()));
@@ -341,6 +343,7 @@ public class FormularioController {
 				contrato.getProduto().getProduto_id(), contrato.getBanco().getBanco_id(),this.formulario.getParceiroBeneficio().getConvenio().getConvenio_id()));
 
 		contrato.setConvenio(this.formulario.getParceiroBeneficio().getConvenio());
+
 		contrato.setModalidade(modalidade);
 		contrato.setNaturezaProfissional(natureza);
 
