@@ -182,7 +182,9 @@
 				  			/* 18 - Data Previsão */     { "bVisible":    false },
 				  			/* 19 - Data Vencimento */     { "bVisible":    false },
 				  			/* 20 - Data Próx Atuação */     { "bVisible":    false },
-				  			/* 21 - Pós Venda */     { "bVisible":    false }
+				  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
+				  			/* 22 - Data Quitação */     { "bVisible":    false },
+				  			/* 23 - Pós Venda */     { "bVisible":    false }
 				  		] ,
 			
 			"sDom": 'C<"clear">lfrtip',
@@ -407,14 +409,15 @@
 				bancos = new Array();
 				bancos[0] = "";
 			}
-			
+
 			if(bancosComprados == null){
 				bancosComprados = new Array();
 				bancosComprados[0] = "";
 			}
 
 			if(data != '' || dataFim != '' || previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
-					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || quitacaoInicio != '' || quitacaoFim != '' || procedimento != ''){
+					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || quitacaoInicio != '' || quitacaoFim != '' || assinaturaInicio != '' || assinaturaFim != '' || procedimento != ''){
+
 				$("#resultado").load('<c:url value="/menu/busca/controle" />',{'tipoControle': tipoControle,'data' : data, 'dataFim' : dataFim,
 										'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
 										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
@@ -947,6 +950,12 @@
 												Próxima Atuação
 											</th>
 											<th >
+												Última Atuação
+											</th>
+											<th >
+												Dt Quitação
+											</th>
+											<th >
 												Pós Venda
 											</th>
 										</tr>
@@ -1029,6 +1038,12 @@
 												</td>
 												<td >
 													<fmt:formatDate value="${contrato.controle.dataProximaAtuacao.time }" pattern="dd/MM" />
+												</td>
+												<td >
+													<fmt:formatDate value="${contrato.controle.dataAtuacao.time }" pattern="dd/MM" />
+												</td>
+												<td >
+													<fmt:formatDate value="${contrato.dataQuitacao.time }" pattern="dd/MM" />
 												</td>
 												<td >
 													${contrato.formulario.posvenda.etapa.nome }
