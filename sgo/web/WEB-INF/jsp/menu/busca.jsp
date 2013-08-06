@@ -33,7 +33,9 @@ $(document).ready(function() {
 			  			/* 18 - Data Previsão */     { "bVisible":    false },
 			  			/* 19 - Data Vencimento */     { "bVisible":    false },
 			  			/* 20 - Data Próx Atuação */     { "bVisible":    false },
-			  			/* 21 - Pós Venda */     { "bVisible":    false }
+			  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
+			  			/* 22 - Data Quitação */     { "bVisible":    false },
+			  			/* 23 - Pós Venda */     { "bVisible":    false }
 			  		] ,
 		
 		"sDom": 'C<"clear">lfrtip',
@@ -189,6 +191,12 @@ $(document).ready(function() {
 												Próxima Atuação
 											</th>
 											<th >
+												Última Atuação
+											</th>
+											<th >
+												Dt Quitação
+											</th>
+											<th >
 												Pós Venda
 											</th>
 										</tr>
@@ -271,6 +279,12 @@ $(document).ready(function() {
 												</td>
 												<td >
 													<fmt:formatDate value="${contrato.controle.dataProximaAtuacao.time }" pattern="dd/MM" />
+												</td>
+												<td >
+													<fmt:formatDate value="${contrato.controle.dataAtuacao.time }" pattern="dd/MM" />
+												</td>
+												<td >
+													<fmt:formatDate value="${contrato.dataQuitacao.time }" pattern="dd/MM" />
 												</td>
 												<td >
 													${contrato.formulario.posvenda.etapa.nome }

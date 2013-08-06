@@ -936,7 +936,7 @@ public class ContratoDao extends Dao<Contrato> {
 		return contratos;
 
 	}
-	
+
 	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,Long tipoControle,Calendar calInicio,Calendar calFim,
 			Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,
 			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,
@@ -956,14 +956,14 @@ public class ContratoDao extends Dao<Contrato> {
 				" USUARIO_SUPERVISOR.usuario_id as usuario_super_id, "+
 				" USUARIO_SUPERVISOR.nome as usuario_super," +
 				" USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
-				" CONTRATO.prazo, "+
+				" CONTRATO.prazo, CONTRATO.dataquitacao, "+
 				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, "+
 				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
 				" CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
 				" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, "+
 				" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 				" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
-				" ETAPA.etapa_id, ETAPA.nome as etapa_nome, CONTROLE.controle_id, CONTROLE.tipocontrole_id, CONTROLE.dataatuacao,CONTROLE.datachegada," +
+				" ETAPA.etapa_id, ETAPA.nome as etapa_nome, CONTROLE.controle_id, CONTROLE.tipocontrole_id, CONTROLE.dataatuacao, CONTROLE.datachegada," +
 				" CONTROLE.dataprevisao,CONTROLE.datavencimento," +
 				" CONTROLE.dataprimeiraatuacao, CONTROLE.dataproximaatuacao "+
 				" FROM " +
@@ -1403,11 +1403,21 @@ public class ContratoDao extends Dao<Contrato> {
 				}
 				
 				if(rsContrato.getDate("datavencimento") != null) {
-					
+
 					Calendar datavencimento = new GregorianCalendar();
-					
+
 					datavencimento.setTime(rsContrato.getDate("datavencimento"));
 					controle.setDataVencimento(datavencimento);
+
+				}
+				
+				if(rsContrato.getDate("dataquitacao") != null) {
+
+					Calendar dataQuitacao = new GregorianCalendar();
+
+					dataQuitacao.setTime(rsContrato.getDate("dataquitacao"));
+					contrato.setDataQuitacao(dataQuitacao);
+
 				}
 
 				contrato.setControle(controle);

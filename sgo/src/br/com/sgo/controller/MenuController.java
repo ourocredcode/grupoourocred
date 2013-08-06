@@ -40,6 +40,7 @@ import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
+import br.com.sgo.modelo.TipoControle;
 import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
 
@@ -418,16 +419,43 @@ public class MenuController {
 		if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
 			consultores.add(usuario);
 
+		TipoControle tipoControle = new TipoControle();
 		Etapa e = this.etapaDao.buscaEtapaById(etapa_id);
 		status.add(e.getNome());
 		c1 = null;
 		c2 = null;
+		
+		if(e.getNome().equals("Enviado DataPrev")){
 
-		contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
+			tipoControle.setTipoControle_id(1l);
+			contratos.addAll(this.contratoDao.buscaDatasControle(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tipoControle.getTipoControle_id(), c1, c2, null, null, null, null, null, null, null, null, null, null, null, null, bancos, produtos, bancosComprados, status, convenios, consultores, cliente, documento, null, null, null, null));
+			
+			result.include("tipobusca","datascontrole");
+			result.include("function","buscaDatasControle();");
+			result.include("buscaDatasControle","block");
+			result.include("buscaAprovado","none");
 
-		result.include("function","buscaContratos();");
-		result.include("buscaDatasControle","none");
-		result.include("buscaAprovado","block");
+		} else if(e.getNome().equals("Aguardando Apoio Comercial") || e.getNome().equals("Aguardando Boleto")){
+		
+			tipoControle.setTipoControle_id(2l);
+			contratos.addAll(this.contratoDao.buscaDatasControle(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tipoControle.getTipoControle_id(), c1, c2, null, null, null, null, null, null, null, null, null, null, null, null, bancos, produtos, bancosComprados, status, convenios, consultores, cliente, documento, null, null, null, null));
+			
+			result.include("tipobusca","datascontrole");
+			result.include("function","buscaDatasControle();");
+			result.include("buscaDatasControle","block");
+			result.include("buscaAprovado","none");
+		
+		} else {
+		
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal, produtos, bancos, bancosComprados, consultores,null,null));
+		
+			result.include("function","buscaContratos();");
+			result.include("buscaDatasControle","none");
+			result.include("buscaAprovado","block");
+			
+		}
+
+		
 
 		TipoWorkflow tw;
 
