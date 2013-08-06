@@ -83,11 +83,6 @@ public class HisconbeneficioController {
 	@Path("/hisconbeneficio/cadastro")
 	public void cadastro() {
 
-		this.hisconBeneficio.setHisconBeneficio_id(null);
-		this.hisconBeneficio.setParceiroBeneficio(null);
-		this.hisconBeneficio.setCreated(null);
-		this.hisconBeneficio = new HisconBeneficio();
-
 		Calendar c1 = new GregorianCalendar();
 		Calendar c2 = new GregorianCalendar();
 
@@ -143,13 +138,13 @@ public class HisconbeneficioController {
 	public void cadastro(Long empresa_id, Long organizacao_id, String numeroBeneficio) {
 
 		String mensagem = "";
+		SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
 		ParceiroBeneficio pb = this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa_id, organizacao_id, numeroBeneficio);
 
 			if (pb != null){
 
-				HisconBeneficio hb = this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficio(pb.getEmpresa().getEmpresa_id(),
-						pb.getOrganizacao().getOrganizacao_id(),pb.getParceiroBeneficio_id());
+				HisconBeneficio hb = this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficio(pb.getEmpresa().getEmpresa_id(),pb.getOrganizacao().getOrganizacao_id(),pb.getParceiroBeneficio_id());
 
 				if (hb != null){
 
@@ -164,8 +159,13 @@ public class HisconbeneficioController {
 
 					} else {
 
-						mensagem = "Erro: Hiscon em aberto solicitado por " + hb.getUsuario().getNome() + " em ";
+						mensagem = "Erro: Hiscon em aberto solicitado por " + hb.getUsuario().getNome() + " em " + formater.format(hb.getCreated().getTime());
 						result.include("notice", mensagem);
+						
+						this.hisconBeneficio.setHisconBeneficio_id(null);
+						this.hisconBeneficio.setParceiroBeneficio(null);
+						this.hisconBeneficio.setCreated(null);
+						this.hisconBeneficio = new HisconBeneficio();
 
 					}
 
@@ -232,6 +232,11 @@ public class HisconbeneficioController {
 			this.hisconBeneficioDao.close();
 
 		}
+		
+		this.hisconBeneficio.setHisconBeneficio_id(null);
+		this.hisconBeneficio.setParceiroBeneficio(null);
+		this.hisconBeneficio.setCreated(null);
+		this.hisconBeneficio = new HisconBeneficio();
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
