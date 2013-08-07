@@ -77,7 +77,6 @@ public class FuncionarioDao extends Dao<Funcionario> {
 				Funcao f = new Funcao();
 				Funcionario funcionario = new Funcionario();
 				Operacao operacao = new Operacao();
-				
 
 				parceiro.setParceiroNegocio_id(rsFuncionario.getLong("parceironegocio_id"));
 				parceiro.setNome(rsFuncionario.getString("parceironegocio_nome"));
@@ -88,7 +87,6 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 				f.setFuncao_id(rsFuncionario.getLong("funcao_id"));
 				f.setNome(rsFuncionario.getString("funcao_nome"));
-				
 
 				funcionario.setFuncionario_id(rsFuncionario.getLong("funcionario_id"));
 				funcionario.setFuncao(f);

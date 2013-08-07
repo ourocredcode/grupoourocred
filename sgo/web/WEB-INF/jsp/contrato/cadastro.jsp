@@ -309,7 +309,7 @@ function verificaProduto() {
 
 		case 'REFINANCIAMENTO':
 
-			bancoComprado.value = contratoBanco.value;
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
@@ -320,6 +320,8 @@ function verificaProduto() {
 			desabilita(prazo);
 			observacao.value = "";
 
+			
+
 			if(valorContrato.value != '')
 				calculaContrato();
 
@@ -327,7 +329,7 @@ function verificaProduto() {
 			
 		case 'REFIN C.E.F':
 
-			bancoComprado.value = contratoBanco.value;
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
 			desabilita(bancoComprado);
 			habilita(parcelasAberto);
@@ -344,7 +346,7 @@ function verificaProduto() {
 			
 		case 'RETENÇÃO':
 
-			bancoComprado.value = contratoBanco.value;
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
 			desabilita(bancoComprado);
 			habilita(parcelasAberto);

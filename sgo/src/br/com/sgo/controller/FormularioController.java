@@ -53,7 +53,6 @@ import br.com.sgo.jasper.FormularioDataSource;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.ControleFormulario;
-import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
@@ -318,6 +317,8 @@ public class FormularioController {
 	@Post
 	@Path("/formulario/adicionaContrato")
 	public void adicionaContrato(Contrato contrato) {
+		
+		System.out.println(" adiciona contrato ");
 
 		contrato.setEmpresa(usuarioInfo.getEmpresa());
 		contrato.setOrganizacao(usuarioInfo.getOrganizacao());
@@ -340,7 +341,7 @@ public class FormularioController {
 		contrato.setNumeroBeneficio(this.formulario.getParceiroBeneficio().getNumeroBeneficio());
 
 		contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
-				contrato.getProduto().getProduto_id(), contrato.getBanco().getBanco_id(),this.formulario.getParceiroBeneficio().getConvenio().getConvenio_id()));
+				contrato.getBanco().getBanco_id(), contrato.getProduto().getProduto_id() ,this.formulario.getParceiroBeneficio().getConvenio().getConvenio_id()));
 
 		contrato.setConvenio(this.formulario.getParceiroBeneficio().getConvenio());
 
@@ -371,8 +372,6 @@ public class FormularioController {
 		this.formularioDao.commit();
 
 		for(Contrato c : this.formulario.getContratos()){
-
-			System.out.println("SALVA FORMULARIO " + c.getConvenio().getConvenio_id());
 
 			c.setFormulario(this.formulario);
 			c.setRecompraBanco(c.getRecompraBanco().getBanco_id() == null ? null : c.getRecompraBanco());
