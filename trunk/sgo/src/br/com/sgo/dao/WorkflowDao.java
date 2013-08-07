@@ -356,10 +356,10 @@ public class WorkflowDao extends Dao<Workflow> {
 			sql += " WHERE BANCOPRODUTO.empresa_id = ?";
 		if (organizacao_id != null)
 			sql += " AND BANCOPRODUTO.organizacao_id = ?";
-		if (produto_id != null)
-			sql += " AND BANCOPRODUTO.produto_id = ?";
 		if (banco_id != null)
 			sql += " AND BANCOPRODUTO.banco_id = ?";
+		if (produto_id != null)
+			sql += " AND BANCOPRODUTO.produto_id = ?";
 		if (banco_id != null)
 			sql += " AND BANCOPRODUTO.convenio_id = ?";
 
@@ -374,14 +374,14 @@ public class WorkflowDao extends Dao<Workflow> {
 			//System.out.println(sql);
 			//System.out.println(empresa_id);
 			//System.out.println(organizacao_id);
-			//System.out.println(produto_id);
 			//System.out.println(banco_id);
+			//System.out.println(produto_id);
 			//System.out.println(convenio_id);
 
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, produto_id);
-			this.stmt.setLong(4, banco_id);
+			this.stmt.setLong(3, banco_id);
+			this.stmt.setLong(4, produto_id);
 			this.stmt.setLong(5, convenio_id);
 
 			this.rsWorkflow = this.stmt.executeQuery();
