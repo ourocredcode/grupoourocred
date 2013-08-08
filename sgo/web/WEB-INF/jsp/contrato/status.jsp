@@ -525,6 +525,15 @@ function openPopup(url) {
 						<div class="buttons">
 							<a href="<c:url value="/contrato/cliente/detalhamento/${formulario.parceiroBeneficio.numeroBeneficio }"/>" onclick="javascript:return openPopup(this.href);" class="btn btn-mini"><i class="icon-search"></i> Detalhamento </a>
 						</div>
+						
+						<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor' }">
+							<div class="buttons">
+								<form id="buscaHistoricoCliente" action="<c:url value="/contrato/cliente/historico" />" method="post">
+									<input id="doc" name="doc" type="hidden" value="${formulario.parceiroNegocio.cpf }" />
+									<button type="submit" class="btn btn-mini" ><i class="icon-align-justify icon-black"></i> Histórico </button>
+								</form>
+							</div>
+						</c:if>
 
 					</div>
 					<div class="widget-content padding">
@@ -742,7 +751,7 @@ function openPopup(url) {
 											</td>
 											<td class="label_txt" style="text-align: center">
 												<c:if test="${not empty contrato.observacao}">
-													<a href="#" onclick="return showObs('${contrato.observacao}');" style="border: 0"><img src="../img/lupa.gif" border="0"/></a>
+													<a href="#" onclick="return showObs('${contrato.observacao}');" style="border: 0"><img src="<c:url  value="/img/lupa.gif" />" border="0"/></a>
 												</c:if>
 											</td>
 										</tr>
