@@ -42,7 +42,7 @@ public class ContratoDao extends Dao<Contrato> {
 	private ResultSet rsContrato;
 
 	private static final String sqlContratos = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
-			" FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
+			" FORMULARIO.created,CONTRATO.created as contratoCreated ,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
 			" CONTRATO.coeficiente_id, CONTRATO.workflow_id, "+
 			" CONTRATO.produto_id, CONTRATO.tabela_id, "+
 			" CONTRATO.banco_id, CONTRATO.recompra_banco_id, "+
@@ -89,10 +89,10 @@ public class ContratoDao extends Dao<Contrato> {
 	public Collection<Contrato> buscaContratoByUsuario(Long usuario_id, Calendar calInicio, Calendar calFim) {
 
 		String sql = sqlContratos;
-		
+
 		if(usuario_id != null)
 			sql += " WHERE ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
-		
+
 		if(calInicio != null)
 			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? )";
 
@@ -101,7 +101,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Collection<Contrato> contratos = new ArrayList<Contrato>();
 
 		try {
-			
+
 			//System.out.println("buscaContratoByUsuario INICIO");
 			//System.out.println(sql);
 			//System.out.println(calInicio.getTime());
@@ -155,7 +155,7 @@ public class ContratoDao extends Dao<Contrato> {
 		String sql = sqlContratos;
 
 		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
-		
+
 		if(calInicio != null)
 			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? )";
 
@@ -299,6 +299,40 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 			this.stmt.setLong(1, formulario_id);
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+
+				getContratos(contratos);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contratos;
+	}
+	
+	public Collection<Contrato> buscaContratoByParceiroNegocio(Long parceiro_id) {
+
+		String sql = sqlContratos;
+		
+		if(parceiro_id != null)
+			sql += " WHERE FORMULARIO.parceironegocio_id = ? ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, parceiro_id);
 
 			this.rsContrato = this.stmt.executeQuery();
 
@@ -1750,6 +1784,7 @@ public class ContratoDao extends Dao<Contrato> {
 	private void getContratos(Collection<Contrato> contratos) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
+		Calendar contratoCreated = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		Usuario supervisor = new Usuario();
@@ -1777,19 +1812,21 @@ public class ContratoDao extends Dao<Contrato> {
 		usuario.setNome(rsContrato.getString("usuario_nome"));
 		usuario.setApelido(rsContrato.getString("usuario_apelido"));
 		supervisor.setUsuario_id(rsContrato.getLong("usuario_super_id"));
-		
+
 		supervisor.setNome(rsContrato.getString("usuario_super"));
 		supervisor.setApelido(rsContrato.getString("usuario_super_apelido"));
 
 		usuario.setSupervisorUsuario(supervisor);
 
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
+
 		created.setTime(rsContrato.getDate("created"));
 		formulario.setCreated(created);
-		
+		contratoCreated.setTime(rsContrato.getDate("contratoCreated"));
+		contrato.setCreated(contratoCreated);
+
 		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
 
-		
 		parceiro.setParceiroNegocio_id(rsContrato.getLong("parceironegocio_id"));
 		parceiro.setNome(rsContrato.getString("parceiro_nome"));
 		parceiro.setCpf(rsContrato.getString("parceiro_cpf"));
@@ -1848,6 +1885,7 @@ public class ContratoDao extends Dao<Contrato> {
 	private void getContrato(Contrato contrato) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
+		Calendar contratoCreated = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		Usuario supervisor = new Usuario();
@@ -1879,6 +1917,9 @@ public class ContratoDao extends Dao<Contrato> {
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
 		created.setTime(rsContrato.getDate("created"));
 		formulario.setCreated(created);
+		
+		contratoCreated.setTime(rsContrato.getDate("contratoCreated"));
+		contrato.setCreated(contratoCreated);
 
 		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
 		

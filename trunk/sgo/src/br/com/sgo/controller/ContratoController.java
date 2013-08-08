@@ -48,6 +48,7 @@ import br.com.sgo.modelo.Controle;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
+import br.com.sgo.modelo.HisconBeneficio;
 import br.com.sgo.modelo.HistoricoContrato;
 import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Logistica;
@@ -645,28 +646,28 @@ public class ContratoController {
 	}
 	
 	@Post
-	@Path("/contrato/repasse/salva")
-	public void repasse(Contrato contrato) {
+	@Path("/contrato/cliente/historico")
+	public void historico(String doc) {
 
-		this.contrato = this.contratoDao.load(contrato.getContrato_id());
+		ParceiroNegocio parceiroNegocio = this.parceiroNegocioDao.buscaParceiroNegocioByDocumento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), doc);
 
-		this.contrato.setUsuario(contrato.getUsuario());
+		Collection<HisconBeneficio> hisconsBeneficio = new ArrayList<HisconBeneficio>();
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
 
-		if(this.contrato.getCreatedBy().getUsuario_id() != contrato.getUsuario().getUsuario_id())
-			this.contrato.setIsRepasse(true);
-		else
-			this.contrato.setIsRepasse(false);
+		Collection<ParceiroBeneficio> parceiroBeneficios = this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id());
 
-		this.contrato.setOperacao(this.operacaoDao.buscaOperacaoByEmpOrgUsuario(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),contrato.getUsuario().getUsuario_id()));
+		for(ParceiroBeneficio pb : parceiroBeneficios){
 
-		this.contratoDao.beginTransaction();
-		this.contratoDao.atualiza(this.contrato);
-		this.contratoDao.commit();
+			hisconsBeneficio.addAll(this.hisconBeneficioDao.buscaHisconsBeneficioByParceiroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), pb.getParceiroBeneficio_id()));
+			contratos.addAll(this.contratoDao.buscaContratoByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
 
-		this.result.redirectTo(this).status(contrato.getContrato_id());
+		}
+
+		result.include("contratos",contratos);
+		result.include("hisconsBeneficio",hisconsBeneficio);
 
 	}
-	
+
 	@Post
 	@Path("/contrato/inclui/historico")
 	public void incluihistorico(HistoricoContrato historicoContrato) {
