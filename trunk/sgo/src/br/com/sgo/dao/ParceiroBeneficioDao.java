@@ -82,7 +82,7 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 		Convenio convenio = null;
 
 		if (numeroBeneficio != null)
-			sql += " WHERE PARCEIROBENEFICIO.numerobeneficio = ?";
+			sql += " WHERE PARCEIROBENEFICIO.numerobeneficio = ? ";
 
 		this.conn = this.conexao.getConexao();
 

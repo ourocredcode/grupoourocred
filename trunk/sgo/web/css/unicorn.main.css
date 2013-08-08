@@ -71,6 +71,8 @@ a:hover {
 	opacity: 0.9;
 }
 
+#search label { display: inline-block; width: 210px; text-align: right;color: #696969; }
+
 /* Top user navigation */
 #user-nav {
     position: absolute;
