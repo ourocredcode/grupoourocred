@@ -139,56 +139,77 @@
 	}
 	
 	function salvaContato() {
-		
+
 		var parceiroId = $("#parceiroNegocioId").val();
 		var parceiroContatoTipoContatoId = $("#parceiroContatoTipoContatoNovo").val();
 		var parceiroContatoNome = $("#parceiroContatoNomeNovo").val();
-	
-		if (window.confirm("Deseja salvar o contato?"))
-			$.post('<c:url value='/parceironegocio/salvaContato' />',{
-					'parceiroContato.tipoContato.tipoContato_id' : parceiroContatoTipoContatoId ,
-					'parceiroContato.nome' : parceiroContatoNome,
-					'parceiroContato.parceiroNegocio.parceiroNegocio_id ' : parceiroId}
-			, function(resposta) { 
-				if(resposta.indexOf("Erro") != -1){
-					alert(resposta);
-				} else {
-					$('#parceiroContatosDiv').html(resposta);	
-				};
-			} );
+
+		if(parceiroContatoNome == '' || parceiroContatoTipoContatoId == '') {
+
+			alert("Complete com o tipo e o contato.");
+
+		} else {
+			
+			if (window.confirm("Deseja salvar o contato?"))
+				$.post('<c:url value='/parceironegocio/salvaContato' />',{
+						'parceiroContato.tipoContato.tipoContato_id' : parceiroContatoTipoContatoId ,
+						'parceiroContato.nome' : parceiroContatoNome,
+						'parceiroContato.parceiroNegocio.parceiroNegocio_id ' : parceiroId}
+				, function(resposta) { 
+					if(resposta.indexOf("Erro") != -1){
+						alert(resposta);
+					} else {
+						$('#parceiroContatosDiv').html(resposta);	
+					};
+				} );
+			
+		}
+		
 	
 		return false;
 	
 	}
 	
 	function salvaBeneficio() {
-		
+
 		var parceiroId = $("#parceiroNegocioId").val();
 		var convenioId = $("#parceiroBeneficioConvenio").val();
 		var numeroBeneficio = $("#parceiroBeneficioNumeroNovo").val();
 		var senha = $("#parceiroBeneficioSenhaNovo").val();
-	
-		if (window.confirm("Deseja salvar o número do benefício?"))
-			$.post('<c:url value='/parceironegocio/salvaBeneficio' />',{
-					'parceiroBeneficio.numeroBeneficio' : numeroBeneficio,
-					'parceiroBeneficio.senha' : senha,
-					'parceiroBeneficio.convenio.convenio_id' : convenioId,
-					'parceiroBeneficio.parceiroNegocio.parceiroNegocio_id ' : parceiroId}
-			, function(resposta) { 
-				if(resposta.indexOf("Erro") != -1){
-					alert(resposta);
-				} else {
-					$('#parceiroBeneficiosDiv').html(resposta);	
-				};
-			} );
-	
+
+		if(convenioId == '' || numeroBeneficio == '') {
+
+			alert("Complete com o convênio e o benefício.");
+
+		} else {
+
+			if (window.confirm("Deseja salvar o número do benefício?"))
+				$.post('<c:url value='/parceironegocio/salvaBeneficio' />',{
+						'parceiroBeneficio.numeroBeneficio' : numeroBeneficio,
+						'parceiroBeneficio.senha' : senha,
+						'parceiroBeneficio.convenio.convenio_id' : convenioId,
+						'parceiroBeneficio.parceiroNegocio.parceiroNegocio_id ' : parceiroId}
+				, function(resposta) { 
+					if(resposta.indexOf("Erro") != -1){
+						alert(resposta);
+					} else {
+						$('#parceiroBeneficiosDiv').html(resposta);	
+					};
+				} );
+
+		}
+
 		return false;
-	
+
 	}
 	
 	function mostraEndereco() {
 		
 		 $("#ajax_endereco").css("display", "block");
+
+		 $('button#bttLocalidade').text("Salvar").attr({
+				title:"Salvar"
+			});
 	 
 		 var mudar = document.getElementById('bttLocalidade');
 		 mudar.setAttribute('onclick', 'salvaLocalidade()');
@@ -198,6 +219,10 @@
 	function cancelaEndereco() {
 		
 		 $("#ajax_endereco").css("display", "none");
+		 
+		 $('button#bttLocalidade').text("Novo").attr({
+				title:"Novo"
+			});
 	
 		 var mudar = document.getElementById('bttLocalidade');
 		 mudar.setAttribute('onclick', 'mostraEndereco()');
@@ -353,6 +378,12 @@
 						<a href="#" data-dismiss="alert" class="close">×</a>
 					</div>
 			</c:when>
+			<c:when test="${fn:contains(notice,'Info:')}">
+					<div class="alert alert-info">
+						<strong>${notice }</strong>
+						<a href="#" data-dismiss="alert" class="close">×</a>
+					</div>
+			</c:when>
 			<c:otherwise>
 					<div class="alert alert-success">
 						<strong>${notice }</strong>
@@ -364,11 +395,11 @@
 	
 	<c:if test="${parceiroNegocio.parceiroNegocio_id  == null }">
 		<c:set var="url" value="/parceironegocio/salva"></c:set>
-		<c:set var="descButton" value="Salva"></c:set>
+		<c:set var="descButton" value="Salvar"></c:set>
 	</c:if>
 	<c:if test="${parceiroNegocio.parceiroNegocio_id != null }">
 		<c:set var="url" value="/parceironegocio/altera"></c:set>
-		<c:set var="descButton" value="Altera"></c:set>
+		<c:set var="descButton" value="Alterar"></c:set>
 	</c:if>
 
 	<div class="container-fluid">
@@ -651,14 +682,14 @@
 													<c:if test="${not empty parceiroNegocio.parceiroNegocio_id}">
 														<tr>
 															<td>
-																<select id="parceiroContatoTipoContatoNovo" class="input-small">
+																<select id="parceiroContatoTipoContatoNovo" class="input-small" required>
 																	<option value="0" selected="selected">Selecione</option>
 																	<c:forEach var="tipoContato" items="${tiposContato}">
 																		<option value="${tipoContato.tipoContato_id}" >${tipoContato.chave}</option>
 																	</c:forEach>
 																</select>
 															</td>
-															<td><input type="text" id="parceiroContatoNomeNovo" value="${parceiroContato.nome }" class="input-small"/></td>
+															<td><input type="text" id="parceiroContatoNomeNovo" value="${parceiroContato.nome }" class="input-small" required /></td>
 															<td style="text-align: center;">
 																<button type="button" class="btn btn-mini" id="bttParceiroContatoNovo" onClick="return salvaContato();">Novo</button>
 															</td>
@@ -869,7 +900,7 @@
 							</c:if>
 						</div>		
 						<div class="btn-group">
-							<button type="button" class="btn btn-primary" id="bttNovo">Novo</button>
+							<button type="button" class="btn" id="bttNovo">Limpar</button>
 						</div>	
 					</div>
 				</form>		

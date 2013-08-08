@@ -48,6 +48,10 @@ function altera(atributo, id, valor) {
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
 		<a href="#" class="current">Cadastro de Hiscon</a>
 	</div>
+	
+	<div class="alert alert-info">
+		Busque o cliente através do  <strong> número de matrícula </strong> . <a href="#" data-dismiss="alert" class="close">×</a>
+	</div>
 
 	<c:if test="${not empty notice}">
 		<c:choose>
@@ -79,6 +83,9 @@ function altera(atributo, id, valor) {
 	<br>	
 	<div class="container-fluid">
 		<div class="row-fluid">
+			
+			
+			
 			<div class="span12">			
 				<form id="hisconBeneficioForm" name="hisconBeneficioForm" action="<c:url value="/hisconbeneficio/salva"/>" method="POST">
 				

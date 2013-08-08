@@ -167,102 +167,109 @@ public class ParceironegocioController {
 	@Post
 	@Path("/parceironegocio/cadastro")
 	public void cadastro(String doc){
-		
-		if(doc.equals("")){
-			
-			result.include("notice","Erro: Parceiro Negócio não encontrado. ");
-			
-		} else {
-			
-			ParceiroNegocio parceiroNegocio;
-			ParceiroBeneficio parceiroBeneficio;
 
+		ParceiroNegocio parceiroNegocio = null;
+		ParceiroBeneficio parceiroBeneficio = null;
+
+		if(!doc.equals(""))
 			parceiroBeneficio = this.parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(doc);
 
-			if(parceiroBeneficio == null)
+		if( parceiroBeneficio == null ){
+
+			if(!doc.equals(""))
 				parceiroNegocio = this.parceiroNegocioDao.buscaParceiroNegocioByDocumento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), doc);
-			else
-				parceiroNegocio = parceiroBeneficio.getParceiroNegocio();
 
-			if(parceiroNegocio == null) {
+		} else {
 
+			parceiroNegocio = parceiroBeneficio.getParceiroNegocio();
+
+		}
+
+		if( parceiroNegocio == null ) {
+
+			if(!doc.equals(""))
 				parceiroNegocio = this.pnDao.buscaParceiroNegocio(doc);
 
-				if(parceiroNegocio != null){
+			if(parceiroNegocio != null){
 
-					ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
-					ParceiroInfoBanco infoBanco = this.pnDao.buscaParceiroInfoBanco(parceiroNegocio);
+				ParceiroLocalidade parceiroLocalidade = this.pnDao.buscaParceiroLocalidade(parceiroNegocio);
+				ParceiroInfoBanco infoBanco = this.pnDao.buscaParceiroInfoBanco(parceiroNegocio);
 
-					infoBanco.setMeioPagamento(this.meioPagamentoDao.buscaMeioPagamentoByNome(1l, 1l, infoBanco.getMeioPagamento().getNome()));
+				infoBanco.setMeioPagamento(this.meioPagamentoDao.buscaMeioPagamentoByNome(1l, 1l, infoBanco.getMeioPagamento().getNome()));
 
-					Banco b = this.bancoDao.buscaBancoByNome(1l, 1l, infoBanco.getBanco().getNome());
+				Banco b = this.bancoDao.buscaBancoByNome(1l, 1l, infoBanco.getBanco().getNome());
 
-					if(b != null){
-						infoBanco.setBanco(b);
-					} else {
-						b = new Banco();
-						b.setBanco_id(7L);
-						infoBanco.setBanco(b);
-					}
-
-					Localidade l = parceiroLocalidade.getLocalidade();
-
-					if (l.getLocalidade_id() == null){
-
-						restfulie = Restfulie.custom();
-						addressFinder = new BrazilianAddressFinder(restfulie);
-						String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
-
-						l.setPais(this.paisDao.buscaPais("Brasil"));
-		
-						if(!resultado[4].equals(""))
-							l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
-		
-						if(!resultado[3].equals(""))
-							l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
-		
-						if(!resultado[0].equals(""))
-							l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-		
-						if(!resultado[1].equals(""))
-							l.setEndereco(resultado[1]);
-		
-						if(!resultado[2].equals(""))
-							l.setBairro(resultado[2]);
-
-					}
-
-					result.include("parceiroLocalidade",parceiroLocalidade);
-					result.include("localidade",parceiroLocalidade.getLocalidade());
-					result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
-					result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
-					result.include("parceiroInfoBanco",infoBanco);
-
-					TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(1L,1L,"Pessoa Física");
-
-					parceiroNegocio.setTipoParceiro(tipoParceiro);
-					parceiroNegocio.setIsCliente(true);
-
+				if(b != null){
+					infoBanco.setBanco(b);
 				} else {
+					b = new Banco();
+					b.setBanco_id(7L);
+					infoBanco.setBanco(b);
+				}
 
-					result.include("notice","Erro: Parceiro Negócio não encontrado. ");
+				Localidade l = parceiroLocalidade.getLocalidade();
+
+				if (l.getLocalidade_id() == null){
+
+					restfulie = Restfulie.custom();
+					addressFinder = new BrazilianAddressFinder(restfulie);
+					String[] resultado = addressFinder.findAddressByZipCode(l.getCep()).asAddressArray();
+
+					l.setPais(this.paisDao.buscaPais("Brasil"));
+	
+					if(!resultado[4].equals(""))
+						l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+	
+					if(!resultado[3].equals(""))
+						l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+	
+					if(!resultado[0].equals(""))
+						l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+	
+					if(!resultado[1].equals(""))
+						l.setEndereco(resultado[1]);
+	
+					if(!resultado[2].equals(""))
+						l.setBairro(resultado[2]);
 
 				}
 
+				result.include("parceiroLocalidade",parceiroLocalidade);
+				result.include("localidade",parceiroLocalidade.getLocalidade());
+				result.include("parceiroContatos",this.pnDao.buscaParceiroContatos(parceiroNegocio));
+				result.include("parceiroBeneficios",this.pnDao.buscaParceiroBeneficios(parceiroNegocio));
+				result.include("parceiroInfoBanco",infoBanco);
+
+				TipoParceiro tipoParceiro = this.tipoParceiroDao.buscaTipoParceiro(1L,1L,"Pessoa Física");
+
+				parceiroNegocio.setTipoParceiro(tipoParceiro);
+				parceiroNegocio.setIsCliente(true);
+				
+				result.include("notice","Info: Parceiro Negócio encontrado na Base PN. Clique em Salvar. ");
+
 			} else {
 
-				parceiroNegocio = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
-
-				result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id()));
-				result.include("parceiroInfoBanco",this.parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroNegocio.getParceiroNegocio_id()));
-				result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id()));
-				result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
-				result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
-				result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id()));
+				result.include("notice","Erro: Parceiro Negócio não encontrado. ");
 
 			}
+
+		} else {
+
+			parceiroNegocio = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
+
+			result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroInfoBanco",this.parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id()));
 			
+			result.include("notice","Info: Parceiro Negócio encontrado na Base SGO. Possível apenas alteração. ");
+
 		}
+			
+			
+
 
 		
 
@@ -459,11 +466,15 @@ public class ParceironegocioController {
 					parceiroBeneficio.setUpdatedBy(usuario);
 
 					parceiroBeneficio.setIsActive(true);
-	
-					this.parceiroBeneficioDao.beginTransaction();
-					this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
-					this.parceiroBeneficioDao.commit();
-	
+
+					if(this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), parceiroBeneficio.getNumeroBeneficio()) != null) {
+
+						this.parceiroBeneficioDao.beginTransaction();
+						this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
+						this.parceiroBeneficioDao.commit();
+
+					}
+
 				}
 			}
 
@@ -487,7 +498,7 @@ public class ParceironegocioController {
 					localidade.setIsActive(true);
 		
 					try {
-		
+
 						this.localidadeDao.beginTransaction();
 						this.localidadeDao.adiciona(localidade);
 						this.localidadeDao.commit();
