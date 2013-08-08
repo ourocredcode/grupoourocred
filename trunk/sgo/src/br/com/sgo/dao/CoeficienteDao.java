@@ -339,16 +339,24 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 	public Collection<Coeficiente> buscaCoeficientesExcluidos(String bancoNome, String produtoNome, Calendar inicio,Calendar fim) {
 
-		String sql = sqlCoeficientes;
+		String sql = " SELECT COEFICIENTE.empresa_id, EMPRESA.nome AS empresa_nome, COEFICIENTE.organizacao_id " +
+							" , ORGANIZACAO.nome AS organizacao_nome, COEFICIENTE.banco_id, BANCO.nome AS banco_nome, COEFICIENTE.tabela_id " +
+							" , TABELA.nome AS tabela_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.created, COEFICIENTE.updated, COEFICIENTE.isactive " + 
+							" , COEFICIENTE.percentualmeta, COEFICIENTE.valor " + 
+							" FROM ((((( COEFICIENTE (NOLOCK) INNER JOIN BANCO (NOLOCK) ON COEFICIENTE.banco_id = BANCO.banco_id) " +  
+							" INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id) " + 
+							" INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id)  " +
+							" INNER JOIN ORGANIZACAO (NOLOCK) ON COEFICIENTE.organizacao_id = ORGANIZACAO.organizacao_id) " +
+							" INNER JOIN BANCOPRODUTOTABELA(NOLOCK) ON  BANCOPRODUTOTABELA.tabela_id = TABELA.tabela_id AND BANCOPRODUTOTABELA.banco_id = BANCO.banco_id) " +
+							" INNER JOIN PRODUTO (NOLOCK) ON PRODUTO.produto_id = BANCOPRODUTOTABELA.produto_id " +
+							" WHERE " +
+							" COEFICIENTE.isactive = 0 " +
+							" AND COEFICIENTE.created >= ? and COEFICIENTE.created <= ? " +
+							" AND BANCO.banco_id = ? AND PRODUTO.produto_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
 		Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
-
-		sql += " WHERE " +
-				" COEFICIENTE.isactive = 0 " +
-				" AND COEFICIENTE.created >= ? and COEFICIENTE.created <= ? " +
-				" AND BANCO.banco_id = ? AND PRODUTO.produto_id = ? ";
 
 		try {
 
