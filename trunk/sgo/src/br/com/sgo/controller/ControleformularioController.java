@@ -86,7 +86,7 @@ public class ControleformularioController {
 
 		formulario.setContratos(this.contratoDao.buscaContratoByFormulario(formulario_id));
 
-		posvenda = this.controleFormularioDao.buscaControleByContratoTipoControle(formulario_id, tp.getTipoControle_id());
+		posvenda = this.controleFormularioDao.buscaControleByFormularioTipoControle(formulario_id, tp.getTipoControle_id());
 
 		Double countValorParcela = new Double(0.00);
 		Double countValorLiquido = new Double(0.00);
