@@ -212,7 +212,7 @@ public class FormularioController {
 
 		TipoControle tp = this.tipoControleDao.buscaTipoControleByEmpOrgNome(1l,1l,"Pós Venda");
 
-		ControleFormulario posvenda = controleFormularioDao.buscaControleByContratoTipoControle(formulario.getFormulario_id(), tp.getTipoControle_id());
+		ControleFormulario posvenda = controleFormularioDao.buscaControleByFormularioTipoControle(formulario.getFormulario_id(), tp.getTipoControle_id());
 
 		if(posvenda != null) {
 			
@@ -536,6 +536,30 @@ public class FormularioController {
 
 				for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
 
+					if(pl.getNumero() == null || pl.getNumero().equals("")){
+
+						pl = this.parceiroLocalidadeDao.load(pl.getParceiroLocalidade_id());
+
+						pl.setNumero(this.pnDao.buscaNumeroByParceiroNegocio(parceiro));
+
+						this.parceiroLocalidadeDao.beginTransaction();
+						this.parceiroLocalidadeDao.atualiza(pl);
+						this.parceiroLocalidadeDao.commit();
+
+					}
+
+					if(pl.getComplemento() == null || pl.getComplemento().equals("")){
+
+						pl = this.parceiroLocalidadeDao.load(pl.getParceiroLocalidade_id());
+
+						pl.setComplemento(this.pnDao.buscaComplementoByParceiroNegocio(parceiro));
+
+						this.parceiroLocalidadeDao.beginTransaction();
+						this.parceiroLocalidadeDao.atualiza(pl);
+						this.parceiroLocalidadeDao.commit();
+
+					}
+					
 					if(pl.getTipoEndereco().getNome().equals("Assinatura")){
 						parceiroLocalidade = pl;
 					}

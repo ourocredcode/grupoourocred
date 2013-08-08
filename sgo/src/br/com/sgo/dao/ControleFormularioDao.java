@@ -32,13 +32,13 @@ public class ControleFormularioDao extends Dao<ControleFormulario> {
 								 " CONTROLEFORMULARIO.dataatuacao , CONTROLEFORMULARIO.confirmaprazo, CONTROLEFORMULARIO.quantidadecontrato, " +   
 								 " CONTROLEFORMULARIO.valorliquido, CONTROLEFORMULARIO.valorparcela, " + 
 								 " ETAPA.nome as etapa_nome ,ETAPA.etapa_id  , " +
-								 " MOTIVO.nome as workflowpendencia_nome, MOTIVO.etapa_id as etapapendencia_id, MOTIVO.nome as etapapendencia_nome " +
+								 " MOTIVO.etapa_id as etapapendencia_id, MOTIVO.nome as etapapendencia_nome " +
 								 " FROM ((((CONTROLEFORMULARIO (NOLOCK) " +      
 								 " INNER JOIN TIPOCONTROLE (NOLOCK) ON CONTROLEFORMULARIO.tipocontrole_id = TIPOCONTROLE.tipocontrole_id) " +       
 								 " INNER JOIN FORMULARIO (NOLOCK) ON CONTROLEFORMULARIO.formulario_id = FORMULARIO.formulario_id) " +       
 								 " INNER JOIN USUARIO (NOLOCK) ON CONTROLEFORMULARIO.usuario_id = USUARIO.usuario_id) " +  
-								 " INNER JOIN WORKFLOWETAPA AS ETAPA (NOLOCK) ON ETAPA.etapa_id = CONTROLEFORMULARIO.etapa_id) " +
-								 " LEFT JOIN WORKFLOWETAPA AS MOTIVO (NOLOCK) ON MOTIVO.etapa_id = CONTROLEFORMULARIO.etapapendencia_id ";
+								 " INNER JOIN ETAPA AS ETAPA (NOLOCK) ON ETAPA.etapa_id = CONTROLEFORMULARIO.etapa_id) " +
+								 " LEFT JOIN ETAPA AS MOTIVO (NOLOCK) ON MOTIVO.etapa_id = CONTROLEFORMULARIO.etapapendencia_id ";
 
 	public ControleFormularioDao(Session session, ConnJDBC conexao) {
 
@@ -47,7 +47,7 @@ public class ControleFormularioDao extends Dao<ControleFormulario> {
 
 	}
 	
-	public ControleFormulario buscaControleByContratoTipoControle(Long formulario_id, Long tipocontrole_id) {
+	public ControleFormulario buscaControleByFormularioTipoControle(Long formulario_id, Long tipocontrole_id) {
 
 		String sql = sqlControle;
 
@@ -55,7 +55,7 @@ public class ControleFormularioDao extends Dao<ControleFormulario> {
 			sql += " WHERE FORMULARIO.formulario_id = ? ";
 		
 		if (tipocontrole_id != null)
-			sql += " AND TIPOCONTROLE.tipocontrole_id = ?";
+			sql += " AND TIPOCONTROLE.tipocontrole_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 		
