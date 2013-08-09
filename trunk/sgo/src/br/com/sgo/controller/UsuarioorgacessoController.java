@@ -64,8 +64,8 @@ public class UsuarioorgacessoController {
 				usuarioOrgAcesso.setCreated(dataAtual);
 				usuarioOrgAcesso.setUpdated(dataAtual);
 
-				usuarioOrgAcesso.setCreatedBy(usuarioOrgAcesso.getUsuario());
-				usuarioOrgAcesso.setUpdatedBy(usuarioOrgAcesso.getUsuario());
+				usuarioOrgAcesso.setCreatedBy(usuario);
+				usuarioOrgAcesso.setUpdatedBy(usuario);
 				usuarioOrgAcesso.setIsActive(usuarioOrgAcesso.getIsActive() == null ? false: true);
 
 				this.usuarioOrgAcessoDao.insert(usuarioOrgAcesso);
