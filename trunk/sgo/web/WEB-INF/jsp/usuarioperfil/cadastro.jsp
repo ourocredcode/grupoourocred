@@ -194,12 +194,26 @@ jQuery(function($){
 	 
 });
 
-function limpaForm(){
+function altera(linha, empresa, organizacao, usuario, perfil) {
+	var emp = empresa;
+	var org = organizacao;
+	var usu = usuario;
+	var perf = perfil;
 
+	var valor = linha.checked == true ? true : false;
+
+	if (window.confirm("Deseja alterar o dado selecionado?"))
+		$.post('<c:url value='/usuarioperfil/altera' />'
+			,{'empresa_id': emp, 'organizacao_id' : org, 'usuario_id' : usu, 'perfil_id' : perf, 'isActive' : valor}
+		);
+
+	return false;
+}
+
+function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
 		document.usuarioPerfilForm.reset();
 	}
-
 }
 
 
@@ -323,8 +337,14 @@ function limpaForm(){
 									<td>${usuarioPerfil.empresa.nome }</td>
 									<td>${usuarioPerfil.organizacao.nome }</td>
 									<td>${usuarioPerfil.usuario.nome }</td>
-									<td>${usuarioPerfil.perfil.nome }</td>													
-									<td>${usuarioPerfil.isActive }</td>
+									<td>${usuarioPerfil.perfil.nome }</td>
+									<td>
+										<label class="checkbox inline">
+											<input type="checkbox" id="isActiveLine" name="usuarioPerfil.isActive"
+											<c:if test="${usuarioPerfil.isActive == true }"> checked="checked"</c:if> onchange="altera(this, '${usuarioPerfil.empresa.empresa_id }', '${usuarioPerfil.organizacao.organizacao_id }', '${usuarioPerfil.usuario.usuario_id }', '${usuarioPerfil.perfil.perfil_id }');">
+										</label>
+									</td>							
+									
 								</tr>
 							</c:forEach>
 							</tbody>								

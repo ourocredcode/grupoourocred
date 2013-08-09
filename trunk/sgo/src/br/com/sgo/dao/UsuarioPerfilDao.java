@@ -29,7 +29,7 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 	private ResultSet rsEmpresaPerfil;
 	private ResultSet rsOrganizacaoPerfil;
 	
-	private final String sqlPerfil = " SELECT USUARIOPERFIL.empresa_id, USUARIOPERFIL.organizacao_id, USUARIOPERFIL.usuario_id, USUARIOPERFIL.perfil_id FROM USUARIOPERFIL (NOLOCK) ";
+	private final String sqlPerfil = " SELECT USUARIOPERFIL.empresa_id, USUARIOPERFIL.organizacao_id, USUARIOPERFIL.usuario_id, USUARIOPERFIL.perfil_id, USUARIOPERFIL.isactive FROM USUARIOPERFIL (NOLOCK) ";
 	
 	private final String sqlUsuarioPerfis = "SELECT USUARIOPERFIL.usuario_id, USUARIO.nome as usuario_nome, USUARIOPERFIL.perfil_id, PERFIL.nome as perfil_nome "+
 						", USUARIOPERFIL.empresa_id, EMPRESA.nome as empresa_nome, USUARIOPERFIL.organizacao_id, ORGANIZACAO.nome as organizacao_nome, USUARIOPERFIL.isactive "+
@@ -39,8 +39,10 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 						" INNER JOIN PERFIL (NOLOCK) ON USUARIOPERFIL.perfil_id = PERFIL.perfil_id ";
 
 	public UsuarioPerfilDao(Session session, ConnJDBC conexao) {
+
 		super(session, UsuarioPerfil.class);
 		this.conexao = conexao;
+	
 	}
 
 	public UsuarioPerfil buscaUsuarioPerfilByEmpresaOrganizacaoUsuarioPerfil(Long empresa_id, Long organizacao_id, Long usuario_id, Long perfil_id) {
@@ -73,12 +75,25 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 
 			while (rsUsuarioPerfil.next()) {
 
-				usuarioPerfil = new UsuarioPerfil();				
+				usuarioPerfil = new UsuarioPerfil();
+				Empresa empresa = new Empresa();
+				Organizacao organizacao = new Organizacao();
 				Perfil perfil = new Perfil();
-				perfil.setPerfil_id(rsUsuarioPerfil.getLong("perfil_id"));				
+				Usuario usuario = new Usuario();
+				
+				empresa.setEmpresa_id(rsUsuarioPerfil.getLong("empresa_id"));
+				organizacao.setOrganizacao_id(rsUsuarioPerfil.getLong("organizacao_id"));
+				perfil.setPerfil_id(rsUsuarioPerfil.getLong("perfil_id"));
+				usuario.setUsuario_id(rsUsuarioPerfil.getLong("usuario_id"));			
+				usuarioPerfil.setIsActive(rsUsuarioPerfil.getBoolean("isactive"));
+
+				usuarioPerfil.setEmpresa(empresa);
+				usuarioPerfil.setOrganizacao(organizacao);
 				usuarioPerfil.setPerfil(perfil);
+				usuarioPerfil.setUsuario(usuario);
 
 			}
+
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -341,6 +356,45 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			this.conn.setAutoCommit(true);
 
 		}
+		this.conexao.closeConnection(stmt, conn);
+	}
+
+	public void altera(UsuarioPerfil usuarioPerfil) throws SQLException {
+
+		String sql = "UPDATE USUARIOPERFIL SET updated=? , updatedby=?, isactive=? "
+				+ " WHERE USUARIOPERFIL.empresa_id=? AND USUARIOPERFIL.organizacao_id=? AND USUARIOPERFIL.usuario_id=? AND USUARIOPERFIL.perfil_id=? ";
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.conn.setAutoCommit(false);
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setTimestamp(1, new Timestamp(usuarioPerfil.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(2, usuarioPerfil.getUpdatedBy().getUsuario_id());
+			this.stmt.setBoolean(3, usuarioPerfil.getIsActive());
+			this.stmt.setLong(4, usuarioPerfil.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(5, usuarioPerfil.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(6, usuarioPerfil.getUsuario().getUsuario_id());
+			this.stmt.setLong(7, usuarioPerfil.getPerfil().getPerfil_id());
+
+			this.stmt.executeUpdate();
+
+			this.conn.commit();
+
+		} catch (SQLException e) {
+
+			this.conn.rollback();
+			throw e;
+
+		} finally {
+
+			this.conn.setAutoCommit(true);
+
+		}
+
 		this.conexao.closeConnection(stmt, conn);
 	}
 
