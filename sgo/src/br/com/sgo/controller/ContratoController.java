@@ -228,10 +228,9 @@ public class ContratoController {
 			etapas.add(contrato.getEtapa());
 
 		}
-		
-		
+
 		periodos = periodoDao.buscaAllPeriodos();
-		historico.addAll(historicoContratoDao.buscaHistoricoByContrato(id));
+		historico = historicoContratoDao.buscaHistoricoByContrato(id) ;
 
 		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
 		logisticas = logisticaDao.buscaLogisticaByContrato(id);

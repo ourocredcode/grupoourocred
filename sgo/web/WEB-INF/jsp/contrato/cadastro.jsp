@@ -8,9 +8,6 @@ $(document).ready(function() {
 
 	$('select').select2();
 
-	
-	
-	
 	$("#valorContrato").maskMoney({symbol:"",decimal:".",thousands:""});
 	$("#valorParcela").maskMoney({symbol:"",decimal:".",thousands:""});
 	$("#valorDivida").maskMoney({symbol:"",decimal:".",thousands:""});
@@ -233,8 +230,9 @@ function verificaProduto() {
 
 	var valorContrato = document.getElementById("valorContrato");
 	var valorLiquido = document.getElementById("valorLiquido");
-	var parcelasAberto = document.getElementById("parcelasAberto");
+	
 	var bancoComprado = document.getElementById("bancoComprado");
+	var parcelasAberto = document.getElementById("parcelasAberto");
 	var valorDivida = document.getElementById("valorDivida");
 	var valorSeguro = document.getElementById("valorSeguro");
 	
@@ -440,7 +438,7 @@ function habilita(campo){
 }
 
 function validaForm(form) {
-	
+
 	$.each($(".select2-container"), function (i, n) {
         $(n).next().show().fadeTo(0, 0).height("0px").css("left", "auto"); // make the original select visible for validation engine and hidden for us
         $(n).prepend($(n).next());
@@ -451,10 +449,40 @@ function validaForm(form) {
     });
 
 	if ($(form).validate().form() === true) {
+
+		var contratoProduto = document.getElementById("contratoProduto");
+		var contratoBanco = document.getElementById("contratoBanco");
+		var coeficiente = document.getElementById("coeficiente");
+		var contratoProdutoNome = contratoProduto.options[contratoProduto.selectedIndex].text;
+		var bancoComprado = document.getElementById("bancoComprado");
+		var parcelasAberto = document.getElementById("parcelasAberto");
+		var valorDivida = document.getElementById("valorDivida");
+		var valorParcela = document.getElementById("valorParcela");
+		
+		if(contratoProdutoNome == 'RECOMPRA INSS'){
+			if(bancoComprado.value == '' || parcelasAberto == '' || valorDivida == ''){
+				alert(" Banco Comprado / Parcela Aberto / Dívida são campos obrigatórios ");
+				bancoComprado.focus();
+				
+				return false;
+			}
+		}
+
+		if( contratoProduto.value == '' || contratoBanco.value == '' || coeficiente.value == '' || valorParcela == '') {
+
+			alert("Banco / Produto / Coeficiente são obrigatórios");
+
+			return false;
+
+		} 
+
 		$(form).submit();
+
 	} else {
 		return false;
 	}
+
+	
 
 }
 
@@ -574,7 +602,7 @@ function historicoCoeficiente() {
 						</div>
 						<div class="span3">
 							<label for="valorParcela">Valor Parcela</label>
-							<input id="valorParcela" type="text" class="span10"  value="${contrato.valorParcela }" name="contrato.valorParcela" onblur="calculaContrato();" required />	
+							<input id="valorParcela" type="text" class="span10"  value="${contrato.valorParcela }" name="contrato.valorParcela" onblur="calculaContrato();" required="required" />	
 						</div>
 						<div class="span3">
 							<label for="parcelasAberto">Parcelas Aberto</label>

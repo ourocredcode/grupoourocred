@@ -3,6 +3,8 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
+	$('select').select2();
+	
 	$("#dataStatusFinal").mask("99/99/9999");
 	$("#logisticaDataAssinatura").mask("99/99/9999");
 	$("#dataConcluido").mask("99/99/9999");
@@ -17,7 +19,8 @@ $(document).ready(function() {
 		"bJQueryUI": true,
 		"sPaginationType": "full_numbers",
 		"sDom": '<""l>t<"F"fp>',
-		"bFilter": false
+		"bFilter": false,
+		"aaSorting": []
 	});
 
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
@@ -339,7 +342,10 @@ function showObs(value){
 }
 
 function mostra(id){
+
 	$('#divContrato').load('<c:url value="/contrato/cadastro"/>',{'id' : id});
+	
+	return false;
 }
 
 function repasse(id){
@@ -371,16 +377,18 @@ function averbacao(contrato_id){
 
 function desabilita(campo){   
 
+	$("#" + campo.id).select2("disable");
+	
 	campo.disabled = true;
 	campo.required = false;
 	campo.className = 'span10';
 
 }
 
-
-
 function habilita(campo){
 
+	$("#" + campo.id).select2("enable");
+	
 	campo.disabled = false;
 	campo.required = true;
 	campo.className = 'span10';
@@ -659,7 +667,7 @@ function openPopup(url) {
 							<i class="icon-align-justify"></i>									
 						</span>
 						<h5>Dados Contrato</h5>
-						<div class="buttons"><a href="#" class="btn btn-mini" onclick="mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
+						<div class="buttons"><a href="#" class="btn btn-mini" onclick="return mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
 					</div>
 					<div class="widget-content padding">
 
@@ -803,7 +811,7 @@ function openPopup(url) {
 							
 							<div class="span2">
 								<label for="meioPagamento">Meio Pagamento</label>	
-								<select id="meioPagamento" name="contrato.meioPagamento.meioPagamento_id" class="input-medium" onchange="verificaPagamento();" >
+								<select id="meioPagamento" name="contrato.meioPagamento.meioPagamento_id" class="input-medium" onchange="verificaPagamento();">
 									<option value="">Selecione</option>
 									<c:forEach var="meioPagamento" items="${meiosPagamento }">
 										<option value="${meioPagamento.meioPagamento_id }" <c:if test="${meioPagamento.meioPagamento_id == contrato.meioPagamento.meioPagamento_id }">selected="selected" </c:if>>${meioPagamento.nome }</option>
@@ -882,7 +890,7 @@ function openPopup(url) {
 					
 					<div class="form-actions">
 						<div class="span1" style="float: left;">
-							<input value="Salva" type="submit" class="btn btn-primary" >
+							<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
 						</div>
 						<div class="span1" style="float: left;">
 							<input value="Formulário" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'">

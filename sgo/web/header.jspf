@@ -36,7 +36,7 @@
 		<script type="text/javascript" src="<c:url value="/js/bootstrap.js"/>"></script>		
         <script type="text/javascript" src="<c:url value="/js/jquery.peity.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/js/jquery.uniform.js"/>"></script>    
-        <script type="text/javascript" src="<c:url value="/js/jquery.validate.js"/>"></script>    
+        <script type="text/javascript" src="<c:url value="/js/jquery.validate.min.js"/>"></script>    
 		<script type="text/javascript" src="<c:url value="/js/jquery.wizard.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.dataTables.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.maskedinput-1.2.2.min.js"/>"></script>
@@ -55,7 +55,7 @@
 
 		<div id="search">
 			<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="post">
-				<input id="doc" name="doc" type="text" placeholder="Busca cpf" /><button type="submit"><i class="icon-search icon-white"></i></button>
+				<input id="doc" name="doc" type="text" placeholder="Busca cpf" required /><button type="submit"><i class="icon-search icon-white"></i></button>
 				<label for="doc">Busque através do CPF do parceiro .</label>
 			</form>
 		</div>
