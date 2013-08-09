@@ -194,10 +194,6 @@ function verificaStatus() {
 	var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
 	var contratoProduto = $("#contratoProduto").val();
 	var valorQuitacao = document.getElementById("valorQuitacao");
-	var bairro = document.getElementById("bairro");
-	var cidade = document.getElementById("cidade");
-	var endereco = document.getElementById("endereco");
-	var numero = document.getElementById("numero");
 
 	if(status == 'Aprovado') {
 
@@ -221,12 +217,30 @@ function verificaStatus() {
 
 	}
 	
+	if(status == 'Pendente Banco'){
+		$("#dataQuitacao").val('');
+		desabilita(dataQuitacao);
+		habilita(justificativa);
+	}
+	
+	if(status == 'Pendente Administrativo'){
+		habilita(justificativa);
+	}
+
+	if(status == 'Pendente Agendamento'){
+		habilita(justificativa);
+	}
+
+	if(status == 'Pendente Coeficiente'){
+		habilita(justificativa);
+	}
+	
 	if(status != 'Aprovado' && status != 'Recusado' && status != 'Concluído') {
 		desabilita(dataStatusFinal);
 		$("#dataStatusFinal").val("");
 	}
 
-	if(status != 'Recusado')
+	if(status != 'Recusado' && status != 'Pendente Banco' && status != 'Pendente Administrativo' && status != 'Pendente Agendamento' && status != 'Pendente Coeficiente')
 		desabilita(justificativa);
 
 	if(status == 'Enviado DataPrev' || status == 'Quitado'){
@@ -372,11 +386,18 @@ function habilita(campo){
 }
 
 function validaForm(form) {
+	
+	$.each($(".select2-container"), function (i, n) {
+        $(n).next().show().fadeTo(0, 0).height("0px").css("left", "auto"); // make the original select visible for validation engine and hidden for us
+        $(n).prepend($(n).next());
+        $(n).delay(500).queue(function () {
+            $(this).removeClass("validate[required]"); //remove the class name from select2 container(div), so that validation engine dose not validate it
+            $(this).dequeue();
+        });
+    });
 
 	if ($(form).validate().form() === true) {
-		
-		
-		
+
 		var contratoStatus = document.getElementById("contratoStatus");
 		var status = contratoStatus.options[contratoStatus.selectedIndex].text;
 
@@ -414,10 +435,19 @@ function validaForm(form) {
 		}
 
 		if(status == 'Recusado'){
-			if( dataStatusFinal.value == '' ){
+			if( dataStatusFinal.value == '' || justificativa.value == ''){
 				alert(" Data Final obrigatória. ");
 				return false;
 			}
+		}
+		
+		if( status == 'Pendente Banco' && status == 'Pendente Administrativo' && status == 'Pendente Agendamento' && status == 'Pendente Coeficiente'){
+
+			if( justificativa.value == ''){
+				alert(" Justificativa obrigatória. ");
+				return false;
+			}
+
 		}
 
 		if(status == 'Enviado DataPrev' || status == 'Quitado'){
@@ -942,6 +972,10 @@ function openPopup(url) {
 							<select id="justificativa" name="contrato.etapaPendencia.etapa_id" class="input-medium">
 
 								<option value="" selected="selected">Selecione</option>
+								<c:forEach var="justificativa" items="${justificativas }">
+									<option value="${justificativa.etapa_id}" 
+									<c:if test="${justificativa.etapa_id == contrato.etapaPendencia.etapa_id}">selected</c:if>>${justificativa.nome }</option>
+								</c:forEach>
 
 							</select>
 						</div>

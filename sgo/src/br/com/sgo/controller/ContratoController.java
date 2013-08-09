@@ -38,6 +38,7 @@ import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoLogisticaDao;
 import br.com.sgo.dao.TipoProcedimentoDao;
 import br.com.sgo.dao.TipoSaqueDao;
+import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
@@ -61,6 +62,7 @@ import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.TipoProcedimento;
+import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
 
 @Resource
@@ -96,6 +98,7 @@ public class ContratoController {
 	private final MeioPagamentoDao meioPagamentoDao;
 	private final OperacaoDao operacaoDao;
 	private final PnDao pnDao;
+	private final TipoWorkflowDao tipoWorkflowDao;
 
 	private Contrato contrato;
 	private Empresa empresa;
@@ -128,7 +131,7 @@ public class ContratoController {
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
 			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, 
-			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao){		
+			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao,TipoWorkflowDao tipoWorkflowDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -156,6 +159,7 @@ public class ContratoController {
 		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.parceiroInfoBancoDao = parceiroInfoBancoDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
+		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
@@ -273,6 +277,10 @@ public class ContratoController {
 		result.include("formulario",formulario);
 		result.include("contrato",contrato);
 		result.include("etapas",etapas);
+
+		TipoWorkflow tipoWf = tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato Pendência");
+		result.include("justificativas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tipoWf.getTipoWorkflow_id()));
+		
 		result.include("periodos", periodos);
 		result.include("tiposLogistica", tiposLogistica);
 		result.include("logisticas",logisticas);
@@ -424,6 +432,25 @@ public class ContratoController {
 			this.contrato.setEtapa(contrato.getEtapa() == null ? null : contrato.getEtapa());
 		}
 
+		if(contrato.getEtapaPendencia() != null){
+
+			contrato.setEtapaPendencia(this.etapaDao.load(contrato.getEtapaPendencia().getEtapa_id()));
+
+			if(this.contrato.getEtapaPendencia() != null){
+				if(this.contrato.getEtapaPendencia().getEtapa_id() != contrato.getEtapaPendencia().getEtapa_id()){
+					log.add("Justificativa alterada de : " + this.contrato.getEtapaPendencia().getNome() + " para : " + contrato.getEtapaPendencia().getNome() );
+					this.contrato.setEtapaPendencia(contrato.getEtapaPendencia());
+				}
+					
+			}
+
+			if(this.contrato.getEtapaPendencia() == null){
+				log.add("Justificativa alterada para : " + contrato.getEtapaPendencia().getNome() );
+				this.contrato.setEtapaPendencia(contrato.getEtapaPendencia());
+			}
+
+		}
+
 		this.contrato.setSupervisorStatusFinal(this.contrato.getEtapa().getNome().equals("Concluído") ? this.contrato.getUsuario().getSupervisorUsuario() : null);
 
 		this.contrato.setDataDigitacao(this.contrato.getDataDigitacao() == null ? calInicial : this.contrato.getDataDigitacao());
@@ -545,9 +572,13 @@ public class ContratoController {
 			contrato.setOrganizacaoDigitacao(this.organizacaoDao.load(contrato.getOrganizacaoDigitacao().getOrganizacao_id()));
 
 			if(this.contrato.getOrganizacaoDigitacao() != null){
-				if(this.contrato.getOrganizacaoDigitacao().getOrganizacao_id() != contrato.getOrganizacaoDigitacao().getOrganizacao_id())
+				if(this.contrato.getOrganizacaoDigitacao().getOrganizacao_id() != contrato.getOrganizacaoDigitacao().getOrganizacao_id()) {
+
 					log.add("Organização Digitado alterado de : " + this.contrato.getOrganizacaoDigitacao().getNome() + " para : " + contrato.getOrganizacaoDigitacao().getNome() );
 					this.contrato.setOrganizacaoDigitacao(contrato.getOrganizacaoDigitacao());
+
+				}
+					
 			}
 
 			if(this.contrato.getOrganizacaoDigitacao() == null){
