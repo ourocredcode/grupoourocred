@@ -194,6 +194,18 @@ jQuery(function($){
 
 });
 
+function altera(linha, id) {
+
+	var valor = linha.checked == true ? true : false ;
+
+	if (window.confirm("Deseja alterar o usuário selecionado?"))
+		$.post('<c:url value="/usuario/altera" />', {
+			'usuario.usuario_id' : id, 'usuario.isActive' : valor
+		});
+	alert(id);
+	return false;
+}
+
 function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
 		document.usuarioForm.reset();
@@ -343,8 +355,13 @@ function limpaForm(){
 									<td>${user.organizacao.nome }</td>
 									<td>${user.nome }</td>
 									<td>${user.supervisorUsuario.nome }</td>
-									<td>${user.chave }</td>											
-									<td>${user.isActive }</td>
+									<td>${user.chave }</td>
+									<td>
+										<label class="checkbox inline">
+											<input type="checkbox" id="isActiveLine" name="usuario.isActive"
+											<c:if test="${user.isActive == true }"> checked="checked"</c:if> onchange="altera(this,'${user.usuario_id }');">
+										</label>
+									</td>
 								</tr>
 							</c:forEach>
 							</tbody>								
