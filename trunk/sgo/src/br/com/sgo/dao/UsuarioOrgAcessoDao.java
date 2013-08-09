@@ -41,8 +41,7 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 
 	}
 
-	public Collection<UsuarioOrgAcesso> buscaAllUsuarioOrgAcessoByEmpresaOrganizacao(
-			Long empresa_id, Long organizacao_id) {
+	public Collection<UsuarioOrgAcesso> buscaAllUsuarioOrgAcessoByEmpresaOrganizacao(Long empresa_id, Long organizacao_id) {
 
 		String sql = sqlUsuariosOrgAcesso;
 
@@ -74,10 +73,8 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 				empresa.setEmpresa_id(rsUsuarioOrgAcesso.getLong("empresa_id"));
 				empresa.setNome(rsUsuarioOrgAcesso.getString("empresa_nome"));
 
-				organizacao.setOrganizacao_id(rsUsuarioOrgAcesso
-						.getLong("organizacao_id"));
-				organizacao.setNome(rsUsuarioOrgAcesso
-						.getString("organizacao_nome"));
+				organizacao.setOrganizacao_id(rsUsuarioOrgAcesso.getLong("organizacao_id"));
+				organizacao.setNome(rsUsuarioOrgAcesso.getString("organizacao_nome"));
 
 				usuario.setUsuario_id(rsUsuarioOrgAcesso.getLong("usuario_id"));
 				usuario.setNome(rsUsuarioOrgAcesso.getString("usuario_nome"));
@@ -86,8 +83,7 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 				usuarioOrgAcesso.setEmpresa(empresa);
 				usuarioOrgAcesso.setOrganizacao(organizacao);
 				usuarioOrgAcesso.setUsuario(usuario);
-				usuarioOrgAcesso.setIsActive(rsUsuarioOrgAcesso
-						.getBoolean("isactive"));
+				usuarioOrgAcesso.setIsActive(rsUsuarioOrgAcesso.getBoolean("isactive"));
 
 				usuariosOrgAcesso.add(usuarioOrgAcesso);
 
@@ -103,8 +99,7 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 
 	}
 
-	public UsuarioOrgAcesso buscaUsuarioOrgAcessoByEmpresaOrganizacaoUsuarioPerfil(
-			Long empresa_id, Long organizacao_id, Long usuario_id) {
+	public UsuarioOrgAcesso buscaUsuarioOrgAcessoByEmpresaOrganizacaoUsuarioPerfil(Long empresa_id, Long organizacao_id, Long usuario_id) {
 
 		String sql = sqlUsuarioOrgAcesso;
 
@@ -137,8 +132,7 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 				Usuario usuario = new Usuario();
 
 				empresa.setEmpresa_id(rsUsuarioOrgAcesso.getLong("empresa_id"));
-				organizacao.setOrganizacao_id(rsUsuarioOrgAcesso
-						.getLong("organizacao_id"));
+				organizacao.setOrganizacao_id(rsUsuarioOrgAcesso.getLong("organizacao_id"));
 				usuario.setUsuario_id(rsUsuarioOrgAcesso.getLong("usuario_id"));
 
 				usuarioOrgAcesso.setEmpresa(empresa);
@@ -171,16 +165,11 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 
 			this.stmt.setLong(1, usuarioOrgAcesso.getUsuario().getUsuario_id());
 			this.stmt.setLong(2, usuarioOrgAcesso.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(3, usuarioOrgAcesso.getOrganizacao()
-					.getOrganizacao_id());
-			this.stmt.setTimestamp(4, new Timestamp(usuarioOrgAcesso
-					.getCreated().getTimeInMillis()));
-			this.stmt.setTimestamp(5, new Timestamp(usuarioOrgAcesso
-					.getUpdated().getTimeInMillis()));
-			this.stmt.setLong(6, usuarioOrgAcesso.getCreatedBy()
-					.getUsuario_id());
-			this.stmt.setLong(7, usuarioOrgAcesso.getUpdatedBy()
-					.getUsuario_id());
+			this.stmt.setLong(3, usuarioOrgAcesso.getOrganizacao().getOrganizacao_id());
+			this.stmt.setTimestamp(4, new Timestamp(usuarioOrgAcesso.getCreated().getTimeInMillis()));
+			this.stmt.setTimestamp(5, new Timestamp(usuarioOrgAcesso.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(6, usuarioOrgAcesso.getCreatedBy().getUsuario_id());
+			this.stmt.setLong(7, usuarioOrgAcesso.getUpdatedBy().getUsuario_id());
 			this.stmt.setBoolean(8, usuarioOrgAcesso.getIsActive());
 
 			this.stmt.executeUpdate();
@@ -213,14 +202,11 @@ public class UsuarioOrgAcessoDao extends Dao<UsuarioOrgAcesso> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setTimestamp(1, new Timestamp(usuarioOrgAcesso
-					.getUpdated().getTimeInMillis()));
-			this.stmt.setLong(2, usuarioOrgAcesso.getUpdatedBy()
-					.getUsuario_id());
+			this.stmt.setTimestamp(1, new Timestamp(usuarioOrgAcesso.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(2, usuarioOrgAcesso.getUpdatedBy().getUsuario_id());
 			this.stmt.setBoolean(3, usuarioOrgAcesso.getIsActive());
 			this.stmt.setLong(4, usuarioOrgAcesso.getEmpresa().getEmpresa_id());
-			this.stmt.setLong(5, usuarioOrgAcesso.getOrganizacao()
-					.getOrganizacao_id());
+			this.stmt.setLong(5, usuarioOrgAcesso.getOrganizacao().getOrganizacao_id());
 			this.stmt.setLong(6, usuarioOrgAcesso.getUsuario().getUsuario_id());
 
 			this.stmt.executeUpdate();
