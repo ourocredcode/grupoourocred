@@ -12,13 +12,18 @@
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap-responsive.min.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/unicorn.login.css"/>" />
-        <script src="<c:url value="/js/jquery.js"/>"></script>  
+        <script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.validate.min.js"/>"></script>  
+
         <script src="<c:url value="/js/unicorn.login.js"/>"></script> 
+        
 		<script type="text/javascript">
 
 		jQuery(function($){
 
 			$('#loginForm').submit(function() {
+
 				$.ajax({
 					data: $(this).serialize()
 					, type: $(this).attr('method')
@@ -108,14 +113,14 @@
 							<div class="control-group">
 								<label class="control-label" for="login">Login</label>
 								<div class="controls">
-									<input type="text" id="login" name="login" placeholder="Digite seu CPF" required>
+									<input type="text" id="login" name="login" placeholder="Digite seu CPF" required="required">
 								</div>
 							</div>
 	
 							<div class="control-group">
 								<label class="control-label" for="password">Senha</label>
 								<div class="controls">
-									<input type="password" id="password" name="password" placeholder="Senha" required>
+									<input type="password" id="password" name="password" placeholder="Senha" required="required">
 								</div>
 								<div class="control-group">
 									<div class="controls">
