@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.util.Calendar;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -10,7 +12,10 @@ import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.PerfilOrgAcessoDao;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.PerfilOrgAcesso;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class PerfilorgacessoController {
@@ -22,7 +27,14 @@ public class PerfilorgacessoController {
 	private final PerfilDao perfilDao;
 	private final PerfilOrgAcessoDao perfilOrgAcessoDao;
 
-	public PerfilorgacessoController(Result result, UsuarioInfo usuarioInfo, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, PerfilDao perfilDao, PerfilOrgAcessoDao perfilOrgAcessoDao){
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
+
+	private Calendar dataAtual = Calendar.getInstance();
+
+	public PerfilorgacessoController(Result result, UsuarioInfo usuarioInfo, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao, PerfilDao perfilDao
+			, PerfilOrgAcessoDao perfilOrgAcessoDao, Empresa empresa, Organizacao organizacao, Usuario usuario){
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -30,6 +42,9 @@ public class PerfilorgacessoController {
 		this.organizacaoDao = organizacaoDao;
 		this.perfilDao = perfilDao;
 		this.perfilOrgAcessoDao = perfilOrgAcessoDao;
+		this.empresa = usuarioInfo.getEmpresa();
+		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = this.usuarioInfo.getUsuario();
 
 	}
 	
@@ -48,33 +63,46 @@ public class PerfilorgacessoController {
 		String mensagem = "";
 
 		try {
+		if(this.perfilOrgAcessoDao.buscaUsuarioOrgAcessoByEmpresaOrganizacaoUsuarioPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), perfilOrgAcesso.getPerfil().getPerfil_id()) == null){				
 			
-			perfilOrgAcesso.setEmpresa(this.empresaDao.load(perfilOrgAcesso.getEmpresa().getEmpresa_id()));		
-			perfilOrgAcesso.setOrganizacao(this.organizacaoDao.load(perfilOrgAcesso.getOrganizacao().getOrganizacao_id()));			
-			perfilOrgAcesso.setPerfil(this.perfilDao.load(perfilOrgAcesso.getPerfil().getPerfil_id()));
-			perfilOrgAcesso.setIsActive(perfilOrgAcesso.getIsActive() == null ? false : true);
+			perfilOrgAcesso.setCreated(dataAtual);
+			perfilOrgAcesso.setUpdated(dataAtual);
+
+			perfilOrgAcesso.setCreatedBy(usuario);
+			perfilOrgAcesso.setUpdatedBy(usuario);
+			perfilOrgAcesso.setIsActive(perfilOrgAcesso.getIsActive() == null ? false: true);
 
 			this.perfilOrgAcessoDao.insert(perfilOrgAcesso);
 
-			mensagem = "Perfil Janela Acesso adicionado com sucesso";
+			mensagem = "Perfil Acesso adicionado com sucesso";
 
-		} catch(Exception e) {
-			
-			if (e.getMessage().indexOf("IX_PERFILORGACESSO_EMPORGPER") != -1){
-				mensagem = "Erro: Perfil " + perfilOrgAcesso.getPerfil().getNome() + " já cadastrado.";
-			} else {
-				mensagem = "Erro: Organização " + perfilOrgAcesso.getOrganizacao().getNome() + " já cadastrado para a empresa " +
-						"" + perfilOrgAcesso.getEmpresa().getNome() + " e perfil " +
-						"" + perfilOrgAcesso.getPerfil().getNome() + ".";
-			}
+		} else {
 
-		} 
+			mensagem = "Erro: Perfil já cadastrado.";
 
-		this.perfilDao.clear();
-		this.perfilDao.close();
-		result.include("notice",mensagem);
-		result.redirectTo(this).cadastro();
+		}
 
+	} catch (Exception e) {
+
+		mensagem = "Erro: Falha ao adicionar o Perfil.";
+
+	} finally {
+
+		this.perfilOrgAcessoDao.clear();
+		this.perfilOrgAcessoDao.close();
+
+	}
+
+	result.include("notice", mensagem);
+	result.redirectTo(this).cadastro();
+
+	}
+	
+	@Post
+	@Path("/perfilorgacesso/altera")
+	public void altera(Boolean isActive, Long empresa, Long organizacao, Long perfil){
+
+		
 	}
 
 }

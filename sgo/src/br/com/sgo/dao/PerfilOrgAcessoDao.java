@@ -25,6 +25,13 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso> {
 	private Connection conn;
 	private ResultSet rsPerfilOrgAcesso;
 
+	private final String sqlPerfilOrgsAcesso = "SELECT PERFILORGACESSO.empresa_id, EMPRESA.nome as empresa_nome, PERFILORGACESSO.organizacao_id "+
+											", ORGANIZACAO.nome AS organizacao_nome, PERFILORGACESSO.perfil_id, PERFIL.nome AS perfil_nome "+
+											", PERFIL.isactive as perfil_isactive, PERFILORGACESSO.isactive as perforg_isactive"+
+											" FROM ((PERFILORGACESSO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON PERFILORGACESSO.empresa_id = EMPRESA.empresa_id) "+ 
+											" INNER JOIN ORGANIZACAO (NOLOCK) ON PERFILORGACESSO.organizacao_id = ORGANIZACAO.organizacao_id) "+ 
+											" INNER JOIN PERFIL (NOLOCK) ON PERFILORGACESSO.perfil_id = PERFIL.perfil_id ";
+	
 	public PerfilOrgAcessoDao(Session session, ConnJDBC conexao) {
 
 		super(session, PerfilOrgAcesso.class);
@@ -34,12 +41,7 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso> {
 	
 	public Collection<PerfilOrgAcesso> buscaAllPerfilOrgAcessoByEmpOrg(Long empresa_id, Long organizacao_id) {
 
-		String sql = "SELECT PERFIL.perfil_id, PERFIL.nome AS perfil_nome, PERFIL.isactive, "+
-			"PERFIL.empresa_id, EMPRESA.nome AS empresa_nome, PERFIL.organizacao_id, ORGANIZACAO.nome AS organizacao_nome "+
-			", PERFIL.supervisor_usuario_id, USUARIO.nome AS supervisor_usuario_nome "+
-			" FROM (ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
-			" INNER JOIN PERFIL (NOLOCK) ON EMPRESA.empresa_id = PERFIL.empresa_id) ON ORGANIZACAO.organizacao_id = PERFIL.organizacao_id) "+ 
-			" LEFT JOIN USUARIO (NOLOCK) ON PERFIL.supervisor_usuario_id = USUARIO.usuario_id ";
+		String sql = sqlPerfilOrgsAcesso;
 		
 		if (empresa_id != null)
 			sql += " WHERE PERFIL.empresa_id = ? ";		
@@ -78,18 +80,69 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso> {
 		return perfisOrgAcesso;
 
 	}
+	
+	public PerfilOrgAcesso buscaUsuarioOrgAcessoByEmpresaOrganizacaoUsuarioPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
+
+		String sql = sqlPerfilOrgsAcesso;
+
+		this.conn = this.conexao.getConexao();
+
+		if (empresa_id != null)
+			sql += " WHERE PERFILORGACESSO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND PERFILORGACESSO.organizacao_id = ?";
+		if (perfil_id != null)
+			sql += " AND PERFILORGACESSO.usuario_id = ?";
+
+		PerfilOrgAcesso perfilOrgAcesso = null;
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, perfil_id);
+
+			this.rsPerfilOrgAcesso = this.stmt.executeQuery();
+
+			while (rsPerfilOrgAcesso.next()) {
+
+				Empresa empresa = new Empresa();
+				Organizacao organizacao = new Organizacao();
+				perfilOrgAcesso = new PerfilOrgAcesso();
+				Perfil perfil = new Perfil();
+
+				empresa.setEmpresa_id(rsPerfilOrgAcesso.getLong("empresa_id"));
+				organizacao.setOrganizacao_id(rsPerfilOrgAcesso.getLong("organizacao_id"));
+				perfil.setPerfil_id(rsPerfilOrgAcesso.getLong("perfil_id"));
+
+				perfilOrgAcesso.setEmpresa(empresa);
+				perfilOrgAcesso.setOrganizacao(organizacao);
+				perfilOrgAcesso.setPerfil(perfil);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsPerfilOrgAcesso, stmt, conn);
+		return perfilOrgAcesso;
+	}
 
 	public void insert(PerfilOrgAcesso perfilOrgAcesso) throws SQLException {
 
-		String sql = "INSERT INTO PERFILORGACESSO " + "	(perfil_id, "
-				+ "	 empresa_id ," + "	 organizacao_id ," + "	 isactive) "
-				+ "    VALUES (?,?,?,?)";
+		String sql = "INSERT INTO PERFILORGACESSO " + "	(perfil_id, empresa_id, organizacao_id, isactive) VALUES (?,?,?,?)";
 
 		this.conn = this.conexao.getConexao();
 
 		try {
 
 			this.conn.setAutoCommit(false);
+
 			this.stmt = conn.prepareStatement(sql);
 
 			this.stmt.setLong(1, perfilOrgAcesso.getPerfil().getPerfil_id());
@@ -130,11 +183,12 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso> {
 
 		perfil.setPerfil_id(rsPerfilOrgAcesso.getLong("perfil_id"));
 		perfil.setNome(rsPerfilOrgAcesso.getString("perfil_nome"));
+		perfil.setIsActive(rsPerfilOrgAcesso.getBoolean("perfil_isactive"));
 		
 		perfilOrgAcesso.setEmpresa(empresa);
 		perfilOrgAcesso.setOrganizacao(organizacao);
 		perfilOrgAcesso.setPerfil(perfil);
-		perfilOrgAcesso.setIsActive(rsPerfilOrgAcesso.getBoolean("isactive"));
+		perfilOrgAcesso.setIsActive(rsPerfilOrgAcesso.getBoolean("perforg_isactive"));
 
 		perfisOrgAcesso.add(perfilOrgAcesso);
 
