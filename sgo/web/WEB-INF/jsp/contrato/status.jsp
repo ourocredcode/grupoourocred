@@ -51,30 +51,6 @@ $(document).ready(function() {
 	var informacaoSaque = document.getElementById("informacaoSaque");
 	var meioPagamento = document.getElementById("meioPagamento");
 	var valorQuitacao = document.getElementById("valorQuitacao");
-	var bairro = document.getElementById("bairro");
-	var cidade = document.getElementById("cidade");
-	var endereco = document.getElementById("endereco");
-	var numero = document.getElementById("numero");
-
-	if(bairro != undefined) {
-		if( bairro.value == "")
-			desabilita(bairro);
-	}
-	
-	if(cidade != undefined) {
-		if( cidade.value == "")
-			desabilita(cidade);
-	}
-	
-	if(endereco != undefined) {
-		if( endereco.value == "")
-			desabilita(endereco);
-	}
-	
-	if(numero != undefined) {
-		if( numero.value == "")
-			desabilita(numero);
-	}
 
 	if(dataStatusFinal != undefined) {
 		if( dataStatusFinal.value == "")
@@ -397,19 +373,99 @@ function habilita(campo){
 
 function validaForm(form) {
 
-	var consultorTipo = document.getElementById("consultorTipo").value;
-
 	if ($(form).validate().form() === true) {
+		
+		
+		
+		var contratoStatus = document.getElementById("contratoStatus");
+		var status = contratoStatus.options[contratoStatus.selectedIndex].text;
 
-		if(consultorTipo == 'C') {
-			if(confirm("Os telefones de contato e endereço deste cliente estão corretos?") == true){
-		 		$(form).submit();
-		 	} else {
-		 		return false;
-		 	}
-		} else {
-			$(form).submit();
+		var justificativa = document.getElementById("justificativa");
+		var dataAgendado = document.getElementById("dataAgendado");
+		var dataStatusFinal = document.getElementById("dataStatusFinal");
+		var dataConcluido = document.getElementById("dataConcluido");
+		var dataQuitacao = document.getElementById("dataQuitacao");
+		var dataDigitacao = document.getElementById("dataDigitacao");
+	    var meioPagamento = document.getElementById("meioPagamento");
+		var propostaBanco = document.getElementById("propostaBanco");
+		var contratoBanco = document.getElementById("contratoBanco");
+		var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
+		var valorQuitacao = document.getElementById("valorQuitacao");
+		var contratoProduto = document.getElementById("contratoProduto").value;
+
+		if(status == 'Aprovado') {
+
+			if( dataStatusFinal.value == '' || meioPagamento.value == '' ) {
+
+				alert(" Data Final / Meio Pagamento obrigatórios. ");
+				return false;
+				
+			}
+				
 		}
+
+		if(status == 'Concluído') {
+
+			if(dataConcluido.value == ''){
+				alert("Data Conclusão obrigatória. ");
+				return false;
+			}	
+			
+		}
+
+		if(status == 'Recusado'){
+			if( dataStatusFinal.value == '' ){
+				alert(" Data Final obrigatória. ");
+				return false;
+			}
+		}
+
+		if(status == 'Enviado DataPrev' || status == 'Quitado'){
+
+			if(contratoProduto != 'MARGEM LIMPA' && contratoProduto != 'REFINANCIAMENTO' && contratoProduto != 'RETENÇÃO') {
+				
+				if(dataQuitacao.value == ''){
+					alert("Data Quitação obrigatória");
+					return false;
+				}
+				
+			}
+				
+		}
+
+		if(status == 'Agendado') {
+			if(dataAgendado.value == ''){
+				alert("Data Agendamento obrigatória");
+				return false;
+			}
+		} 
+
+		if(status == 'Aguardando Quitação') {
+
+			if(valorQuitacao.value == ''){
+				alert("Valor Quitação obrigatório");
+				return false;
+			}
+		}
+		
+		if(status == 'Quitado') {
+			if(valorQuitacao.value == ''){
+				alert("Valor Quitação obrigatório");
+				return false;
+			}
+		} 
+		
+
+		if(status == 'Digitado'){
+
+			if(contratoBanco.value == '' || propostaBanco.value == '' || organizacaoDigitacao.value == '' || dataDigitacao.value == '') {
+				alert("Valores Contrato / Proposta/ Organizacao / Data Digitação obrigatórias. ");
+				return false;
+			}
+
+		} 
+
+		$(form).submit();
 
 	} else {
 		return false;
@@ -787,8 +843,11 @@ function openPopup(url) {
 						<h5>Status</h5>
 					</div>
 					<div class="widget-content padding">
+
 					<form id="contratoStatusForm" name="contratoStatusForm" action="<c:url value="/contrato/altera/status"/>" method="POST">
+					<input id="contratoProduto" type="hidden" name="contratoStatus.contrato.produto" value="${contrato.produto.nome }" />
 					<input id="contratoId" type="hidden" name="contrato.contrato_id" value="${contrato.contrato_id }" />	
+
 						<div class="row-fluid"> 
 	
 							<div class="span2">
