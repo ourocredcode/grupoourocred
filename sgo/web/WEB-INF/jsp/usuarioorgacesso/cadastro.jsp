@@ -1,6 +1,8 @@
 <%@ include file="/header.jspf"%>
 
 <script type="text/javascript">
+
+
 jQuery(function($){
 
 	$('#usuario-li-a').click(function() {
@@ -148,22 +150,35 @@ jQuery(function($){
 		limpaForm();
 	});
 	
-	$("#usuarioOrgAcessoIsActive").change(function(e){
-		if(document.usuarioOrgAcessoForm.usuarioOrgAcessoIsActive.checked==true){
-			document.usuarioOrgAcessoForm.usuarioOrgAcessoIsActive.value=true;
+	$("#isActive").change(function(e){
+		if(document.usuarioOrgAcessoForm.isActive.checked==true){
+			document.usuarioOrgAcessoForm.isActive.value=true;
 		}else{
-			document.usuarioOrgAcessoForm.usuarioOrgAcessoIsActive.value=false;
+			document.usuarioOrgAcessoForm.isActive.value=false;
 		}
 	});
-
+	
 });
 
-function limpaForm(){
+function altera(linha, empresa, organizacao, usuario) {
+	var emp = empresa;
+	var org = organizacao;
+	var usu = usuario;
 
+	var valor = linha.checked == true ? true : false;
+
+	if (window.confirm("Deseja alterar o dado selecionado?"))
+		$.post('<c:url value='/usuarioorgacesso/altera' />'
+			,{'empresa_id': emp, 'organizacao_id' : org, 'usuario_id' : usu, 'isActive' : valor}
+		);
+
+	return false;
+}
+
+function limpaForm(){
 	if(!(navigator.userAgent.indexOf("Firefox") != -1)){
 		document.usuarioOrgAcessoForm.reset();
 	}
-
 }
 
 </script>
@@ -220,21 +235,21 @@ function limpaForm(){
 							<div class="span2">
 								<label for="usuarioOrgAcessoEmpresa">Empresa</label>
       							<input class="input-medium" id="usuarioOrgAcessoEmpresa" name="usuarioOrgAcesso.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }">
-      							<input class="span1" id="usuarioOrgAcessoEmpresaId" name="usuarioOrgAcesso.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+      							<input class="span1" id="empresaId" name="usuarioOrgAcesso.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
     						</div>						
 							<div class="span2">
 								<label for="usuarioOrgAcessoOrganizacao">Organização</label>
 	      						<input class="input-medium" id="usuarioOrgAcessoOrganizacao" name="usuarioOrgAcesso.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" >
-	      						<input class="span1" id="usuarioOrgAcessoOrganizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+	      						<input class="span1" id="organizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 							<div class="span2">
 								<label for="usuarioOrgAcessoUsuario">Usuário</label>
 	      						<input class="input-medium" id="usuarioOrgAcessoUsuario" name="usuarioOrgAcesso.usuario.nome" value="${usuarioOrgAcesso.usuario.nome }" type="text" required>
-	      						<input class="span1" id="usuarioOrgAcessoUsuarioId" name="usuarioOrgAcesso.usuario.usuario_id" value="${usuarioOrgAcesso.usuario.usuario_id }" type="hidden">
+	      						<input class="span1" id="usuarioId" name="usuarioOrgAcesso.usuario.usuario_id" value="${usuarioOrgAcesso.usuario.usuario_id }" type="hidden">
 	    					</div>
 							<div class="span1">
-								<label for="usuarioOrgAcessoIsActive">Ativo</label>
-								<input type="checkbox" id="usuarioOrgAcessoIsActive" name="usuarioOrgAcesso.isActive" checked="checked" value="1">							
+								<label for="isActive">Ativo</label>
+								<input type="checkbox" id="isActive" name="usuarioOrgAcesso.isActive" checked="checked" value="1">							
 							</div>							
 						</div>
 						<div class="btn-toolbar">
@@ -262,29 +277,33 @@ function limpaForm(){
 				<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Usuário Organização</h5></div>
 				<div id="resultado" class="widget-content">
 					<c:if test="${not empty usuariosOrgAcesso}">
-						<table class="table table-bordered table-striped table-hover data-table" style="font-size: 12px">
-							<thead>									
+						<table id="myTable" class="table table-bordered table-striped table-hover data-table" style="font-size: 12px">
+							<thead>
 								<tr>
 									<th>Empresa</th>
 									<th>Organização</th>
 									<th>Usuário</th>
 									<th>Login</th>
-									<th>Ativo</th>			
+									<th>Ativo</th>
 								</tr>
-							</thead>								
+							</thead>
 							<tbody>
 							<c:forEach items="${usuariosOrgAcesso }" var="usuarioOrgAcesso">
 								<tr>
-									<td>${usuarioOrgAcesso.empresa.nome }</td>
-									<td>${usuarioOrgAcesso.organizacao.nome }</td>
+									<td>${usuarioOrgAcesso.empresa.nome }</td>									
+									<td>${usuarioOrgAcesso.organizacao.nome } </td>
 									<td>${usuarioOrgAcesso.usuario.nome }</td>
 									<td>${usuarioOrgAcesso.usuario.chave }</td>
-									<td>${usuarioOrgAcesso.isActive }</td>
-								</tr>
+									<td>
+										<label class="checkbox inline">
+											<input type="checkbox" id="isActiveLine" name="usuarioOrgAcesso.isActive"
+											<c:if test="${usuarioOrgAcesso.isActive == true }"> checked="checked"</c:if> onchange="altera(this, '${usuarioOrgAcesso.empresa.empresa_id }', '${usuarioOrgAcesso.organizacao.organizacao_id }', '${usuarioOrgAcesso.usuario.usuario_id }');">
+										</label>
+									</td>							
 							</c:forEach>
 							</tbody>								
 						</table>
-					</c:if>							
+					</c:if>
 				</div>
 			</div>
 		</div>
