@@ -20,18 +20,23 @@ public class UsuarioController {
 	private final Result result;
 	private final UsuarioInfo usuarioInfo;
 	private final UsuarioDao usuarioDao;
+	
+	private Usuario usuario;
+	private Usuario userInfo;
 	private Empresa empresa;
 	private Organizacao organizacao;
 
 	private Calendar dataAtual = Calendar.getInstance();
 
-	public UsuarioController(Result result,UsuarioInfo usuarioInfo, UsuarioDao usuarioDao, Empresa empresa,Organizacao organizacao){
+	public UsuarioController(Result result,UsuarioInfo usuarioInfo, Usuario usuario, Usuario userInfo, UsuarioDao usuarioDao, Empresa empresa,Organizacao organizacao){
 
 		this.result = result;
-		this.usuarioInfo = usuarioInfo;
-		this.usuarioDao = usuarioDao;
-		this.empresa = usuarioInfo.getEmpresa();
-		this.organizacao = usuarioInfo.getOrganizacao();
+		this.usuario = usuario;
+		this.usuarioInfo = usuarioInfo;		
+		this.usuarioDao = usuarioDao;		
+		this.userInfo = this.usuarioInfo.getUsuario();		
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
 
 	}
 
@@ -89,10 +94,31 @@ public class UsuarioController {
 
 		result.include("notice", mensagem);			
 		result.redirectTo(this).cadastro();
+	}
+
+	@Post
+	@Path("/usuario/altera")
+	public void altera(Usuario usuario) {
+
+		String mensagem = "";
+
+		this.usuario = this.usuarioDao.load(usuario.getUsuario_id());
+
+		this.usuario.setUpdated(dataAtual);
+		this.usuario.setUpdatedBy(userInfo);
+		this.usuario.setIsActive(usuario.getIsActive() == null || usuario.getIsActive() == false ? false : true);
+
+		usuarioDao.beginTransaction();		
+		usuarioDao.atualiza(this.usuario);
+		usuarioDao.commit();
+
+		mensagem = " Usuário alterado com sucesso.";
+
+		result.include("notice", mensagem);			
+		result.redirectTo(this).cadastro();
 
 	}
-	
-	
+
 	@Get
 	@Path("/usuario/senha")
 	public void senha(){
