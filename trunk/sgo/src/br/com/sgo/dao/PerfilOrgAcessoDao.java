@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -81,7 +82,7 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso> {
 
 	}
 	
-	public PerfilOrgAcesso buscaUsuarioOrgAcessoByEmpresaOrganizacaoUsuarioPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
+	public PerfilOrgAcesso buscaUsuarioOrgAcessoByEmpOrgPerfil(Long empresa_id, Long organizacao_id, Long perfil_id) {
 
 		String sql = sqlPerfilOrgsAcesso;
 
@@ -92,7 +93,7 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso> {
 		if (organizacao_id != null)
 			sql += " AND PERFILORGACESSO.organizacao_id = ?";
 		if (perfil_id != null)
-			sql += " AND PERFILORGACESSO.usuario_id = ?";
+			sql += " AND PERFILORGACESSO.perfil_id = ?";
 
 		PerfilOrgAcesso perfilOrgAcesso = null;
 
@@ -110,13 +111,14 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso> {
 
 				Empresa empresa = new Empresa();
 				Organizacao organizacao = new Organizacao();
-				perfilOrgAcesso = new PerfilOrgAcesso();
 				Perfil perfil = new Perfil();
+				perfilOrgAcesso = new PerfilOrgAcesso();
 
 				empresa.setEmpresa_id(rsPerfilOrgAcesso.getLong("empresa_id"));
 				organizacao.setOrganizacao_id(rsPerfilOrgAcesso.getLong("organizacao_id"));
 				perfil.setPerfil_id(rsPerfilOrgAcesso.getLong("perfil_id"));
-
+				perfilOrgAcesso.setIsActive(rsPerfilOrgAcesso.getBoolean("perforg_isactive"));
+				
 				perfilOrgAcesso.setEmpresa(empresa);
 				perfilOrgAcesso.setOrganizacao(organizacao);
 				perfilOrgAcesso.setPerfil(perfil);
@@ -168,6 +170,43 @@ public class PerfilOrgAcessoDao extends Dao<PerfilOrgAcesso> {
 
 	}
 	
+	public void altera(PerfilOrgAcesso perfilOrgAcesso) throws SQLException {
+
+		String sql = "UPDATE PERFILORGACESSO SET updated=? , updatedby=?, isactive=? "
+				+ " WHERE PERFILORGACESSO.empresa_id=? AND PERFILORGACESSO.organizacao_id=? AND PERFILORGACESSO.perfil_id=? ";
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.conn.setAutoCommit(false);
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setTimestamp(1, new Timestamp(perfilOrgAcesso.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(2, perfilOrgAcesso.getUpdatedBy().getUsuario_id());
+			this.stmt.setBoolean(3, perfilOrgAcesso.getIsActive());
+			this.stmt.setLong(4, perfilOrgAcesso.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(5, perfilOrgAcesso.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(6, perfilOrgAcesso.getPerfil().getPerfil_id());
+
+			this.stmt.executeUpdate();
+
+			this.conn.commit();
+
+		} catch (SQLException e) {
+
+			this.conn.rollback();
+			throw e;
+
+		} finally {
+
+			this.conn.setAutoCommit(true);
+
+		}
+
+		this.conexao.closeConnection(stmt, conn);
+	}
 	private void getPerfilOrgAcesso(Collection<PerfilOrgAcesso> perfisOrgAcesso) throws SQLException {
 		
 		Empresa empresa = new Empresa();

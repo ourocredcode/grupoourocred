@@ -195,7 +195,7 @@ function altera(linha, empresa, organizacao, perfil) {
 	var valor = linha.checked == true ? true : false;
 
 	if (window.confirm("Deseja alterar o dado selecionado?"))
-		$.post('<c:url value='/perfiloorgacesso/altera' />'
+		$.post('<c:url value='/perfilorgacesso/altera' />'
 			,{'empresa_id': emp, 'organizacao_id' : org, 'perfil_id' : perf, 'isActive' : valor}
 		);
 
