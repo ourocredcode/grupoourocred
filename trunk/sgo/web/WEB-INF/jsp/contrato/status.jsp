@@ -541,6 +541,7 @@ function openPopup(url) {
 		<a href="<c:url value="/menu/inicio/${usuarioInfo.perfil.chave}" />" title="Dashboard" class="tip-bottom"><i class="icon-home"></i> Dashboard</a>
 		<a href="javascript:history.go(-1)">Contratos</a>
 		<a href="#" class="current">Status</a>
+		<a href="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'" class="current">Formulário</a>
 	</div>
 
 	<c:if test="${not empty notice}">
@@ -753,7 +754,21 @@ function openPopup(url) {
 							<i class="icon-align-justify"></i>									
 						</span>
 						<h5>Dados Contrato</h5>
-						<div class="buttons"><a href="#" class="btn btn-mini" onclick="return mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
+						<c:choose>
+							<c:when test="${usuarioInfo.perfil.chave == 'Consultor' && (contrato.etapa.nome == 'Recalcular' || contrato.etapa.nome == 'Contrato Fora Planilha')}">
+								<div class="buttons"><a href="#" class="btn btn-mini" onclick="return mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
+							</c:when>
+							<c:when test="${usuarioInfo.perfil.chave == 'Gestor' && contrato.etapa.nome != 'Concluído'}">
+								<div class="buttons"><a href="#" class="btn btn-mini" onclick="return mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
+							</c:when>
+							<c:when test="${(usuarioInfo.perfil.chave == 'Supervisor' && contrato.etapa.nome != 'Concluído' && contrato.etapa.nome != 'Aprovado' && 
+								 contrato.etapa.nome != 'Recusado' && contrato.etapa.nome != 'Aguardando Quitação'  &&  contrato.etapa.nome != 'Enviado DataPrev' &&  contrato.etapa.nome != 'Digitado')}">
+								<div class="buttons"><a href="#" class="btn btn-mini" onclick="return mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
+							</c:when>
+							<c:when test="${usuarioInfo.perfil.chave == 'Administrativo' && contrato.etapa.nome != 'Concluído'}">
+								<div class="buttons"><a href="#" class="btn btn-mini" onclick="return mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
+							</c:when>
+						</c:choose>
 					</div>
 					<div class="widget-content padding">
 

@@ -640,8 +640,6 @@ public class ContratoDao extends Dao<Contrato> {
 				x++;
 				clause = "";
 			}
-			
-			
 
 		}
 
@@ -650,7 +648,7 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " ) ";
 
 			sql += " AND ( 1=1 ";
-			
+
 			for(String statusFinalAux1 : statusFinal){
 
 				clause = x <= 0 ? "AND" : "OR";
@@ -660,17 +658,15 @@ public class ContratoDao extends Dao<Contrato> {
 					x++;
 					clause = "";
 				}
-				
-				
 
 			}
-			
-			if(x == 0){
+
+			if(x == 0 && cliente.equals("") && documento.equals("")){
 				sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) ";
 			}
 
 			sql += " ) ";
-		
+
 		} else {
 
 			x = 0;
@@ -811,7 +807,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//System.out.println(" CONSULTA POR FILTRO : " +  sql);
+			System.out.println(" CONSULTA POR FILTRO : " +  sql);
 
 			int curr = 1;
 

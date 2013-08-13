@@ -161,8 +161,7 @@ public class ControleformularioController {
 			this.posvenda.setValorLiquido(posvenda.getValorLiquido());
 			this.posvenda.setValorParcela(posvenda.getValorParcela());
 
-			status = this.posvenda.getEtapa().getNome().equals("reprovado") || 
-					this.posvenda.getEtapa().getNome().equals("pendente") ? "Recalcular" : "Em Assinatura";
+			status = this.posvenda.getEtapa().getNome().equals("Reprovado") || this.posvenda.getEtapa().getNome().equals("Pendente") ? "Recalcular" : "Em Assinatura";
 
 			this.controleFormularioDao.beginTransaction();
 			this.controleFormularioDao.atualiza(this.posvenda);
@@ -182,17 +181,13 @@ public class ControleformularioController {
 				posvenda.setEtapaPendencia(null);
 			}
 
-			status = posvenda.getEtapa().getNome().equals("reprovado") || 
-					posvenda.getEtapa().getNome().equals("pendente") ? "Recalcular" : "Em Assinatura";
+			status = posvenda.getEtapa().getNome().equals("Reprovado") || posvenda.getEtapa().getNome().equals("Pendente") ? "Recalcular" : "Em Assinatura";
 
 			posvenda.setEmpresa(empresa);
 			posvenda.setOrganizacao(organizacao);
 			posvenda.setIsActive(true);
 			posvenda.setCreatedBy(usuario);
 			posvenda.setCreated(GregorianCalendar.getInstance());
-			
-			
-			System.out.println("AQUI : " + posvenda.getEtapa().getEtapa_id());
 
 			controleFormularioDao.beginTransaction();
 			controleFormularioDao.adiciona(posvenda);
@@ -204,8 +199,9 @@ public class ControleformularioController {
 
 			c = this.contratoDao.load(c.getContrato_id());
 
-			if(c.getEtapa().getNome().equals("Aguardando Pós Venda") || c.getEtapa().getNome().equals("Aguardando Qualidade"))
-				c.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), status));	
+			if(c.getEtapa().getNome().equals("Aguardando Pós Venda") || c.getEtapa().getNome().equals("Aguardando Qualidade")){
+				c.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), status));
+			}
 
 			contratoDao.beginTransaction();
 			contratoDao.atualiza(c);

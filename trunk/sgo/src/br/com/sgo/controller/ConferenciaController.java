@@ -105,7 +105,7 @@ public class ConferenciaController {
 		this.conferenciaDao.atualiza(conferencias);
 		this.conferenciaDao.commit();
 		
-		result.include("msg","Check lista preenchido com sucesso.").redirectTo(this).msg();
+		result.include("msg","Conferência preenchido com sucesso.").redirectTo(this).msg();
 
 	}
 	
