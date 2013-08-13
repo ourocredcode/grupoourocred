@@ -483,10 +483,11 @@ public class MenuController {
 	@Post
 	@Path("/menu/busca") 
 	public void busca(Long informacaoSaque,String tipoAprovado,String empresa,Long tipoPagamento,String tipoRecusado,String justificativa, Collection<String> status,
-			Collection<Long> convenios,
-			String cliente, String documento,String data, String dataFim,String dataAprovadoInicio, String dataAprovadoFim,String dataConcluidoInicio, String dataConcluidoFim,
-			String dataRecusadoInicio, String dataRecusadoFim,Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados, String motivoPendencia,
-			Long consultor) {
+			Collection<Long> convenios,String cliente, String documento,String data, String dataFim,String dataAprovadoInicio, String dataAprovadoFim,String dataConcluidoInicio, 
+			String dataConcluidoFim, String dataRecusadoInicio, String dataRecusadoFim,Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados, 
+			String motivoPendencia, Long consultor) {
+		
+		System.out.println("BUSCA");
 
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();

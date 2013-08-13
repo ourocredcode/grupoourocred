@@ -423,167 +423,172 @@ public class FormularioController {
 
 			Formulario formulario = new Formulario();
 			Contrato c = (Contrato) it.next();
-
-			cc = pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente() == null ? "0" : pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente();
-
-			formulario.setCreated(formularioData);
-			formulario.setParceiroNegocio(parceiro);
-			formulario.setContratos(separaContrato(c));
 			
-			ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(c.getNumeroBeneficio());
-
-			parceiroBeneficio.setParceiroBeneficio_id(pb.getParceiroBeneficio_id());
-			parceiroBeneficio.setNumeroBeneficio(pb.getNumeroBeneficio());
-			parceiroBeneficio.setParceiroNegocio(pb.getParceiroNegocio());
-
-			parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
-
-			if( ( parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id() ).size() == 0 ) && localidadeInsert ){
-
-				localidadeInsert = false;
-				String cep = this.pnDao.buscaCepByParceiroNegocio(parceiroNegocio);
-
-				Localidade l = this.localidadeDao.buscaLocalidade(cep);
-
-				if (l.getLocalidade_id() == null) {
-					
-					restfulie = Restfulie.custom();
-					addressFinder = new BrazilianAddressFinder(restfulie);
-					String[] resultado = addressFinder.findAddressByZipCode(cep).asAddressArray();
-
-					Empresa emp = new Empresa();
-					Organizacao org = new Organizacao();
-
-					emp.setEmpresa_id(1l);
-					org.setOrganizacao_id(1l);
-
-					l.setEmpresa(emp);
-					l.setOrganizacao(org);
-					l.setIsActive(true);
-					l.setCep(cep);
-					l.setCreated(dataAtual);
-					l.setCreatedBy(usuario);
-					
-					l.setPais(this.paisDao.buscaPais("Brasil"));
-
-					if(!resultado[4].equals(""))
-						l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
-
-					if(!resultado[3].equals(""))
-						l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
-
-					if(!resultado[0].equals(""))
-						l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
-
-					if(!resultado[1].equals(""))
-						l.setEndereco(resultado[1]);
-
-					if(!resultado[2].equals(""))
-						l.setBairro(resultado[2]);
-
-					this.localidadeDao.beginTransaction();
-					this.localidadeDao.adiciona(l);
-					this.localidadeDao.commit();
-					
-				}
-
-				Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
-
-				for(TipoEndereco tipoEndereco : tiposEndereco){
-
-					ParceiroLocalidade pl = new ParceiroLocalidade();
-
-					pl.setEmpresa(empresa);
-					pl.setOrganizacao(organizacao);
-					pl.setParceiroNegocio(parceiroNegocio);
-					pl.setLocalidade(l);
-					pl.setTipoEndereco(tipoEndereco);
-					pl.setNumero(this.pnDao.buscaNumeroByParceiroNegocio(parceiro));
-					pl.setComplemento(this.pnDao.buscaComplementoByParceiroNegocio(parceiro));
-					pl.setPontoReferencia(null);
-
-					pl.setCreated(dataAtual);
-					pl.setUpdated(dataAtual);
-
-					pl.setCreatedBy(usuario);
-					pl.setUpdatedBy(usuario);
-
-					pl.setIsActive(true);
-
-					try{
-
-						this.parceiroLocalidadeDao.beginTransaction();
-						this.parceiroLocalidadeDao.adiciona(pl);
-						this.parceiroLocalidadeDao.commit();
-
-					} catch(Exception e) {
-
-						this.parceiroLocalidadeDao.rollback();
-
-					}
-					
-					if(pl.getTipoEndereco().getNome().equals("Assinatura")){
-
-						parceiroLocalidade = pl;
-
-					}
-		
-				}
+			if(!c.getEtapa().getNome().equals("Recusado")){
 				
+				cc = pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente() == null ? "0" : pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente();
+
+				formulario.setCreated(formularioData);
+				formulario.setParceiroNegocio(parceiro);
+				formulario.setContratos(separaContrato(c));
 				
+				ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(c.getNumeroBeneficio());
 
-			} else {
+				parceiroBeneficio.setParceiroBeneficio_id(pb.getParceiroBeneficio_id());
+				parceiroBeneficio.setNumeroBeneficio(pb.getNumeroBeneficio());
+				parceiroBeneficio.setParceiroNegocio(pb.getParceiroNegocio());
 
-				for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
+				parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
 
-					if(pl.getNumero() == null || pl.getNumero().equals("")){
+				if( ( parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id() ).size() == 0 ) && localidadeInsert ){
 
-						pl = this.parceiroLocalidadeDao.load(pl.getParceiroLocalidade_id());
+					localidadeInsert = false;
+					String cep = this.pnDao.buscaCepByParceiroNegocio(parceiroNegocio);
 
+					Localidade l = this.localidadeDao.buscaLocalidade(cep);
+
+					if (l.getLocalidade_id() == null) {
+						
+						restfulie = Restfulie.custom();
+						addressFinder = new BrazilianAddressFinder(restfulie);
+						String[] resultado = addressFinder.findAddressByZipCode(cep).asAddressArray();
+
+						Empresa emp = new Empresa();
+						Organizacao org = new Organizacao();
+
+						emp.setEmpresa_id(1l);
+						org.setOrganizacao_id(1l);
+
+						l.setEmpresa(emp);
+						l.setOrganizacao(org);
+						l.setIsActive(true);
+						l.setCep(cep);
+						l.setCreated(dataAtual);
+						l.setCreatedBy(usuario);
+						
+						l.setPais(this.paisDao.buscaPais("Brasil"));
+
+						if(!resultado[4].equals(""))
+							l.setRegiao(this.regiaoDao.buscaPorNome(resultado[4]));
+
+						if(!resultado[3].equals(""))
+							l.setCidade(this.cidadeDao.buscaPorNome(resultado[3]));
+
+						if(!resultado[0].equals(""))
+							l.setTipoLocalidade(this.tipoLocalidadeDao.buscaPorNome(resultado[0]));
+
+						if(!resultado[1].equals(""))
+							l.setEndereco(resultado[1]);
+
+						if(!resultado[2].equals(""))
+							l.setBairro(resultado[2]);
+
+						this.localidadeDao.beginTransaction();
+						this.localidadeDao.adiciona(l);
+						this.localidadeDao.commit();
+						
+					}
+
+					Collection<TipoEndereco> tiposEndereco = this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades();
+
+					for(TipoEndereco tipoEndereco : tiposEndereco){
+
+						ParceiroLocalidade pl = new ParceiroLocalidade();
+
+						pl.setEmpresa(empresa);
+						pl.setOrganizacao(organizacao);
+						pl.setParceiroNegocio(parceiroNegocio);
+						pl.setLocalidade(l);
+						pl.setTipoEndereco(tipoEndereco);
 						pl.setNumero(this.pnDao.buscaNumeroByParceiroNegocio(parceiro));
-
-						this.parceiroLocalidadeDao.beginTransaction();
-						this.parceiroLocalidadeDao.atualiza(pl);
-						this.parceiroLocalidadeDao.commit();
-
-					}
-
-					if(pl.getComplemento() == null || pl.getComplemento().equals("")){
-
-						pl = this.parceiroLocalidadeDao.load(pl.getParceiroLocalidade_id());
-
 						pl.setComplemento(this.pnDao.buscaComplementoByParceiroNegocio(parceiro));
+						pl.setPontoReferencia(null);
 
-						this.parceiroLocalidadeDao.beginTransaction();
-						this.parceiroLocalidadeDao.atualiza(pl);
-						this.parceiroLocalidadeDao.commit();
+						pl.setCreated(dataAtual);
+						pl.setUpdated(dataAtual);
 
+						pl.setCreatedBy(usuario);
+						pl.setUpdatedBy(usuario);
+
+						pl.setIsActive(true);
+
+						try{
+
+							this.parceiroLocalidadeDao.beginTransaction();
+							this.parceiroLocalidadeDao.adiciona(pl);
+							this.parceiroLocalidadeDao.commit();
+
+						} catch(Exception e) {
+
+							this.parceiroLocalidadeDao.rollback();
+
+						}
+						
+						if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+
+							parceiroLocalidade = pl;
+
+						}
+			
 					}
 					
-					if(pl.getTipoEndereco().getNome().equals("Assinatura")){
-						parceiroLocalidade = pl;
+					
+
+				} else {
+
+					for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
+
+						if(pl.getNumero() == null || pl.getNumero().equals("")){
+
+							pl = this.parceiroLocalidadeDao.load(pl.getParceiroLocalidade_id());
+
+							pl.setNumero(this.pnDao.buscaNumeroByParceiroNegocio(parceiro));
+
+							this.parceiroLocalidadeDao.beginTransaction();
+							this.parceiroLocalidadeDao.atualiza(pl);
+							this.parceiroLocalidadeDao.commit();
+
+						}
+
+						if(pl.getComplemento() == null || pl.getComplemento().equals("")){
+
+							pl = this.parceiroLocalidadeDao.load(pl.getParceiroLocalidade_id());
+
+							pl.setComplemento(this.pnDao.buscaComplementoByParceiroNegocio(parceiro));
+
+							this.parceiroLocalidadeDao.beginTransaction();
+							this.parceiroLocalidadeDao.atualiza(pl);
+							this.parceiroLocalidadeDao.commit();
+
+						}
+						
+						if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+							parceiroLocalidade = pl;
+						}
+
 					}
 
 				}
 
+				countContratos +=1;
+
+				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("AUMENTO"))
+					countMargemLimpa += 1;
+				if(c.getProduto().equals("RECOMPRA INSS"))
+					countRecompraINSS += 1;
+				if(c.getProduto().equals("RECOMPRA RMC"))
+					countRecompraRMC += 1;
+				if(c.getProduto().equals("REFINANCIAMENTO"))
+					countRefinanciamento += 1;
+				
+				
+				formulario.setParceiroBeneficio(parceiroBeneficio);
+				formulario.setParceiroLocalidade(parceiroLocalidade);
+				formulario.setParceiroInfoBanco(parceiroInfoBanco);
+
+				forms.add(formulario);
+				
 			}
-
-			formulario.setParceiroBeneficio(parceiroBeneficio);
-			formulario.setParceiroLocalidade(parceiroLocalidade);
-			formulario.setParceiroInfoBanco(parceiroInfoBanco);
-
-			forms.add(formulario);
-			
-			countContratos +=1;
-
-			if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("AUMENTO"))
-				countMargemLimpa += 1;
-			if(c.getProduto().equals("RECOMPRA INSS"))
-				countRecompraINSS += 1;
-			if(c.getProduto().equals("RECOMPRA RMC"))
-				countRecompraRMC += 1;
-			if(c.getProduto().equals("REFINANCIAMENTO"))
-				countRefinanciamento += 1;
 
 		}
 		

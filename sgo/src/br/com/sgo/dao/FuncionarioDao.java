@@ -54,7 +54,7 @@ public class FuncionarioDao extends Dao<Funcionario> {
 
 		String sql = sqlFuncionarios;
 
-		sql += " WHERE PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? AND USUARIO.isactive = 1 ORDER BY SUPER.nome, FUNCIONARIO.nome   " ;
+		sql += " WHERE PARCEIRONEGOCIO.empresa_id = ? AND PARCEIRONEGOCIO.organizacao_id = ? AND USUARIO.isactive = 1 AND USUARIOPERFIL.isactive = 1 ORDER BY SUPER.nome, FUNCIONARIO.nome   " ;
 
 		this.conn = this.conexao.getConexao();
 		
