@@ -807,7 +807,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			System.out.println(" CONSULTA POR FILTRO : " +  sql);
+			//System.out.println(" CONSULTA POR FILTRO : " +  sql);
 
 			int curr = 1;
 

@@ -486,8 +486,6 @@ public class MenuController {
 			Collection<Long> convenios,String cliente, String documento,String data, String dataFim,String dataAprovadoInicio, String dataAprovadoFim,String dataConcluidoInicio, 
 			String dataConcluidoFim, String dataRecusadoInicio, String dataRecusadoFim,Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados, 
 			String motivoPendencia, Long consultor) {
-		
-		System.out.println("BUSCA");
 
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();
