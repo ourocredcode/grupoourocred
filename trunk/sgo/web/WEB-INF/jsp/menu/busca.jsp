@@ -11,6 +11,22 @@ $(document).ready(function() {
 
 	$('.data-table').dataTable( {
 		
+		"oLanguage": {    
+			"sProcessing": "Aguarde enquanto os dados são carregados ...",    
+			"sLengthMenu": "Mostrar _MENU_ registros por pagina",    
+			"sZeroRecords": "Nenhum registro correspondente ao criterio encontrado",    
+			"sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",    
+			"sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",    
+			"sInfoFiltered": "",    
+			"sSearch": "Procurar",    
+			"oPaginate": {       
+					"sFirst":    "Primeiro",       
+					"sPrevious": "Anterior ",       
+					"sNext":     " Próximo",      
+					"sLast":     "Último"   
+					} 
+		}, 
+
 		"aoColumns": [ 
 			  			/* 0 - Status */   null,
 			  			/* 1 - Data */  null,
@@ -42,7 +58,7 @@ $(document).ready(function() {
 		"oColVis": {
 			"activate": "mouseover",
 			"buttonText": "Selecione Colunas",
-			"aiExclude": [ 0,1,2,3,4,5,6,7,8,9,12,,13,14,15,16 ],
+			"aiExclude": [ 0,1,2,3,4,5,6,7,8,9,12,,13,14,15,16 ]
 			
 		}
 	} );
