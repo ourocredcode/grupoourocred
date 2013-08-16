@@ -210,10 +210,21 @@
 						</ul>
 				
 					</li>
+
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-file"></i> <span>Relatórios</span></a>
+
+						<ul class="reports">
+							<li><a href="<c:url value="/reports/status"/>" target="_blank">Status</a></li>
+							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
+							<li><a href="<c:url value="/reports/chart-aprovados"/>" target="_blank">Aprovados (Gráfico)</a></li>
+						</ul>
+
+					</li>
 				
 				</c:if>
-				
-				
+
 				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
 				
 					<li class="submenu">
