@@ -303,6 +303,7 @@ public class FormularioController {
 
 		this.formulario.setFormulario_id(null);
 		this.formulario.setParceiroNegocio(null);
+		this.formulario.setParceiroBeneficio(null);
 		this.parceiroBeneficio.setParceiroBeneficio_id(null);
 		this.parceiroBeneficio.setNumeroBeneficio(null);
 		this.parceiroLocalidade.setParceiroLocalidade_id(null);
@@ -317,8 +318,6 @@ public class FormularioController {
 	@Post
 	@Path("/formulario/adicionaContrato")
 	public void adicionaContrato(Contrato contrato) {
-		
-		System.out.println(" adiciona contrato ");
 
 		contrato.setEmpresa(usuarioInfo.getEmpresa());
 		contrato.setOrganizacao(usuarioInfo.getOrganizacao());
