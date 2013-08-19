@@ -66,7 +66,8 @@ public class UsuarioorgacessoController {
 
 				usuarioOrgAcesso.setCreatedBy(usuario);
 				usuarioOrgAcesso.setUpdatedBy(usuario);
-				usuarioOrgAcesso.setIsActive(usuarioOrgAcesso.getIsActive() == null ? false: true);
+
+				usuarioOrgAcesso.setIsActive(true);
 
 				this.usuarioOrgAcessoDao.insert(usuarioOrgAcesso);
 
@@ -78,7 +79,10 @@ public class UsuarioorgacessoController {
 
 			}
 
-		} catch (Exception e) {
+		} catch (SQLException e) {
+
+			System.out.println(e);
+			System.out.println(e.getCause());
 
 			mensagem = "Erro: Falha ao adicionar o Usuário.";
 

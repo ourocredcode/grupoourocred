@@ -194,19 +194,14 @@ public class ReportsController {
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();
 
-		calInicio.set(Calendar.YEAR,Calendar.YEAR);
-		calInicio.set(Calendar.MONTH, Calendar.MONTH);
-		calInicio.set(Calendar.DAY_OF_MONTH,calInicio.getActualMinimum(Calendar.DAY_OF_MONTH));
-		calInicio.set(Calendar.HOUR_OF_DAY, calInicio.getActualMinimum(Calendar.HOUR_OF_DAY));
-		calInicio.set(Calendar.MINUTE, calInicio.getActualMinimum(Calendar.MINUTE));
-		calInicio.set(Calendar.SECOND, calInicio.getActualMinimum(Calendar.SECOND));
-
-		calFim.set(Calendar.YEAR,Calendar.YEAR);
-		calFim.set(Calendar.MONTH, Calendar.MONTH);
-		calFim.set(Calendar.DAY_OF_MONTH,calFim.getActualMaximum(Calendar.DAY_OF_MONTH));
-		calFim.set(Calendar.HOUR_OF_DAY, calFim.getActualMaximum(Calendar.HOUR_OF_DAY));
-		calFim.set(Calendar.MINUTE, calFim.getActualMaximum(Calendar.MINUTE));
-		calFim.set(Calendar.SECOND, calFim.getActualMaximum(Calendar.SECOND));
+		calInicio.set(GregorianCalendar.DAY_OF_MONTH, calInicio.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
+		calInicio.set(GregorianCalendar.HOUR_OF_DAY,calInicio.getActualMinimum(GregorianCalendar.HOUR_OF_DAY));
+		calInicio.set(GregorianCalendar.MINUTE,calInicio.getActualMinimum(GregorianCalendar.MINUTE));
+		calInicio.set(GregorianCalendar.SECOND,calInicio.getActualMinimum(GregorianCalendar.SECOND));
+		calFim.set(GregorianCalendar.DAY_OF_MONTH, calFim.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+		calFim.set(GregorianCalendar.HOUR_OF_DAY, calFim.getActualMaximum(GregorianCalendar.HOUR));
+		calFim.set(GregorianCalendar.MINUTE, calFim.getActualMaximum(GregorianCalendar.MINUTE));
+		calFim.set(GregorianCalendar.SECOND, calFim.getActualMaximum(GregorianCalendar.SECOND));
 
 		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
 		String jasper = caminhoJasper + "chart_aprovados.jasper";

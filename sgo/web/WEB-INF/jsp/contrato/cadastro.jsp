@@ -458,12 +458,79 @@ function validaForm(form) {
 		var parcelasAberto = document.getElementById("parcelasAberto");
 		var valorDivida = document.getElementById("valorDivida");
 		var valorParcela = document.getElementById("valorParcela");
+
+		if(contratoProdutoNome == 'MARGEM LIMPA'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
 		
 		if(contratoProdutoNome == 'RECOMPRA INSS'){
-			if(bancoComprado.value == '' || parcelasAberto == '' || valorDivida == ''){
-				alert(" Banco Comprado / Parcela Aberto / Dívida são campos obrigatórios ");
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
 				bancoComprado.focus();
-				
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'RECOMPRA RMC'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'REFINANCIAMENTO'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
 				return false;
 			}
 		}

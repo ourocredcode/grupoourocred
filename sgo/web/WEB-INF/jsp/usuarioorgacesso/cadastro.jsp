@@ -235,17 +235,17 @@ function limpaForm(){
 							<div class="span2">
 								<label for="usuarioOrgAcessoEmpresa">Empresa</label>
       							<input class="input-medium" id="usuarioOrgAcessoEmpresa" name="usuarioOrgAcesso.empresa.nome" type="text" value="${usuarioInfo.empresa.nome }">
-      							<input class="span1" id="empresaId" name="usuarioOrgAcesso.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
+      							<input class="span1" id="usuarioOrgAcessoEmpresaId" name="usuarioOrgAcesso.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">
     						</div>						
 							<div class="span2">
 								<label for="usuarioOrgAcessoOrganizacao">Organização</label>
 	      						<input class="input-medium" id="usuarioOrgAcessoOrganizacao" name="usuarioOrgAcesso.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" >
-	      						<input class="span1" id="organizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+	      						<input class="span1" id="usuarioOrgAcessoOrganizacaoId" name="usuarioOrgAcesso.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
 							</div>
 							<div class="span2">
 								<label for="usuarioOrgAcessoUsuario">Usuário</label>
 	      						<input class="input-medium" id="usuarioOrgAcessoUsuario" name="usuarioOrgAcesso.usuario.nome" value="${usuarioOrgAcesso.usuario.nome }" type="text" required>
-	      						<input class="span1" id="usuarioId" name="usuarioOrgAcesso.usuario.usuario_id" value="${usuarioOrgAcesso.usuario.usuario_id }" type="hidden">
+	      						<input class="span1" id="usuarioOrgAcessoUsuarioId" name="usuarioOrgAcesso.usuario.usuario_id" value="${usuarioOrgAcesso.usuario.usuario_id }" type="hidden">
 	    					</div>
 							<div class="span1">
 								<label for="isActive">Ativo</label>
