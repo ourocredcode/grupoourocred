@@ -197,7 +197,7 @@
 								<select id="busca_Supervisor" name="busca_Supervisor" class="input-medium">
 									<option value="">Todos</option>
 									<c:forEach items="${supervisores}" var="supervisor">
-										<option value="${supervisor.usuario_id}">${supervisor.nome }</option>
+										<option value="${supervisor.usuario_id}">${supervisor.apelido }</option>
 									</c:forEach>
 								</select>	
 							</c:if>
@@ -207,7 +207,7 @@
 								<select id="busca_Consultor" name="busca_Consultor" class="input-medium">
 									<option value="">Selecione um Consultor</option>
 									<c:forEach var="consultor" items="${consultores }">
-										<option value="${consultor.usuario_id }">${consultor.nome }</option>
+										<option value="${consultor.usuario_id }">${consultor.apelido }</option>
 									</c:forEach>
 								</select>
 							</c:if>

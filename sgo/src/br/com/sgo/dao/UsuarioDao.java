@@ -399,7 +399,7 @@ public class UsuarioDao extends Dao<Usuario> {
 	
 	public Collection<Usuario> buscaUsuariosBySupervisor(Long empresa_id, Long organizacao_id, Long supervisor_id) {
 
-		String sql = "SELECT USUARIO.usuario_id, USUARIO.nome, PARCEIRONEGOCIO.cpf, PARCEIRONEGOCIO.parceironegocio_id FROM ((USUARIO (NOLOCK) "
+		String sql = "SELECT USUARIO.usuario_id, USUARIO.nome, USUARIO.apelido, PARCEIRONEGOCIO.cpf, PARCEIRONEGOCIO.parceironegocio_id FROM ((USUARIO (NOLOCK) "
 				+ "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON USUARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) "
 				+ "INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id) "
 				+ "INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id	"
@@ -426,6 +426,7 @@ public class UsuarioDao extends Dao<Usuario> {
 
 				usuario.setUsuario_id(rsUsuarios.getLong("usuario_id"));
 				usuario.setNome(rsUsuarios.getString("nome"));
+				usuario.setApelido(rsUsuarios.getString("apelido"));
 				
 				parceiroNegocio.setParceiroNegocio_id(rsUsuarios.getLong("parceironegocio_id"));
 				parceiroNegocio.setCpf(rsUsuarios.getString("cpf"));
@@ -449,7 +450,7 @@ public class UsuarioDao extends Dao<Usuario> {
 	public Collection<Usuario> buscaUsuariosByPerfilDepartamento(Long empresa_id, Long organizacao_id, String perfil, String departamento) {
 
 		String sql = " SELECT " +
-						" USUARIO.usuario_id, USUARIO.nome, DEPARTAMENTO.nome, USUARIO.parceironegocio_id FROM  USUARIO (NOLOCK) " +   
+						" USUARIO.usuario_id, USUARIO.nome, USUARIO.apelido, DEPARTAMENTO.nome, USUARIO.parceironegocio_id FROM  USUARIO (NOLOCK) " +   
 						" INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id   " + 
 						" INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id " +	  
 						" INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id   " +
@@ -482,6 +483,7 @@ public class UsuarioDao extends Dao<Usuario> {
 
 				usuario.setUsuario_id(rsUsuarios.getLong("usuario_id"));
 				usuario.setNome(rsUsuarios.getString("nome"));
+				usuario.setApelido(rsUsuarios.getString("apelido"));
 
 				usuarios.add(usuario);
 
