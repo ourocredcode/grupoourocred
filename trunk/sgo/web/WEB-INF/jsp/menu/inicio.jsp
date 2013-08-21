@@ -81,14 +81,10 @@
 		
 		
 	});
-	
-	
 
 	</script>
 
 	<script type="text/javascript" src="<c:url value="/js/unicorn.dashboard.js"/>"></script>
-	
-	
 
 	<div id="content-header">
 		<h1>DashBoard - ${usuarioInfo.usuario.nome } </h1>
