@@ -574,10 +574,10 @@
 								<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor'}">
 									<div class="span6">								
 										<label for="busca_Supervisor">Supervisor</label>
-										<select id="busca_Supervisor" name="busca_Supervisor" class="input-xlarge">
+										<select id="busca_Supervisor" name="busca_Supervisor" class="input-medium">
 											<option value="">Todos</option>
 											<c:forEach items="${supervisores}" var="supervisor">
-												<option value="${supervisor.usuario_id}">${supervisor.nome}</option>
+												<option value="${supervisor.usuario_id}">${supervisor.apelido}</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -590,12 +590,12 @@
 								<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Supervisor'}">
 									<div class="span6">
 										<label for="busca_Consultor">Consultor</label>
-										<select id="busca_Consultor" name="busca_Consultor" class="input-xlarge">
+										<select id="busca_Consultor" name="busca_Consultor" class="input-medium">
 
 											<option value="">Selecione um Supervisor</option>
 											<c:if test="${usuarioInfo.perfil.chave == 'Supervisor'}">
 												<c:forEach items="${consultores }" var="consultor">
-													<option value="${consultor.usuario_id}">${consultor.nome}</option>
+													<option value="${consultor.usuario_id}">${consultor.apelido}</option>
 												</c:forEach>
 											</c:if>
 										</select>

@@ -7,7 +7,7 @@
 <c:if test="${consultores != null}">
 	<option value="">Selecione um Consultor</option>
 	<c:forEach var="consultor" items="${consultores}">
-		<option value="${consultor.usuario_id}">${consultor.nome}</option>
+		<option value="${consultor.usuario_id}">${consultor.apelido}</option>
 	</c:forEach>
 </c:if>
 
