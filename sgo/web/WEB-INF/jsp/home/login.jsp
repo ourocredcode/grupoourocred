@@ -4,14 +4,20 @@
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <title>SGO - SISTEMA GRUPO OURO CRED</title>
 		<meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <!--[if lt IE 9]>
+        	<script type="text/javascript" src="<c:url value="/js/html5shiv.js"/>"></script>
+        <![endif]-->
+
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap-responsive.min.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/unicorn.login.css"/>" />
+
         <script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery-ui.custom.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.validate.min.js"/>"></script>  
@@ -20,7 +26,7 @@
         
 		<script type="text/javascript">
 
-		jQuery(function($){
+		$(document).ready(function(){
 
 			$('#loginForm').submit(function() {
 
@@ -92,6 +98,11 @@
 		}); 
 		
 		</script>
+		
+		<!--[if lt IE 9]>  
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>  
+		<![endif]--> 
+
     </head>
     <body>
         <div id="logo">
