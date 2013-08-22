@@ -1,10 +1,11 @@
 <%@ include file="/header.jspf" %> 
 
 <script type="text/javascript">
+
 $(document).ready(function() {
 
-	$('select').select2();
-	
+	// ARRUMAR LOGISTICA $('select').select2();
+
 	$("#dataStatusFinal").mask("99/99/9999");
 	$("#logisticaDataAssinatura").mask("99/99/9999");
 	$("#dataConcluido").mask("99/99/9999");
@@ -1153,7 +1154,7 @@ function openPopup(url) {
 								</div>
 							</div>
 
-							<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div id="myModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 							  <div class="modal-header">
 							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 							    <h3 id="myModalLabel">Cadastro Logística</h3>
@@ -1173,7 +1174,7 @@ function openPopup(url) {
 										<div class="control-group">
 											<label class="control-label">Tipo Logística :</label>
 											<div class="controls">
-												<select id="logisticaTipoLogisticaId" name="logistica.tipoLogistica.tipoLogistica_id">
+												<select id="logisticaTipoLogisticaId" name="logistica.tipoLogistica.tipoLogistica_id" class="selectTipoLogistica">
 													<c:forEach var="tipoLogistica" items="${tiposLogistica }">
 														<option value="${tipoLogistica.tipoLogistica_id }">${tipoLogistica.nome }</option>
 													</c:forEach>
@@ -1183,7 +1184,7 @@ function openPopup(url) {
 										<div class="control-group">
 											<label class="control-label">Período : </label>
 											<div class="controls">
-												<select id="logisticaPeriodoId" name="logistica.periodo.periodo_id">
+												<select id="logisticaPeriodoId" name="logistica.periodo.periodo_id" class="selectPeriodoLogistica">
 													<c:forEach var="periodo" items="${periodos }">
 														<option value="${periodo.periodo_id }">${periodo.nome }</option>
 													</c:forEach>

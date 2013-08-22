@@ -109,7 +109,7 @@ Version: 3.2 Timestamp: Mon Sep 10 10:38:04 PDT 2012
 	-moz-box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
 	-o-box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
 	box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
-	z-index: 9999;
+	z-index: 9998;
 	width:100%;
 	margin-top:-1px;
 	-webkit-border-radius: 0 0 4px 4px;
@@ -165,7 +165,7 @@ Version: 3.2 Timestamp: Mon Sep 10 10:38:04 PDT 2012
 .select2-search {
   display: inline-block;
   white-space: nowrap;
-  z-index: 9999;
+  z-index: 9998;
   min-height: 26px;
   width: 100%;
   margin: 0;
