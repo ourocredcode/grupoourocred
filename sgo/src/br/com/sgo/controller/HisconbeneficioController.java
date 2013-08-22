@@ -159,7 +159,7 @@ public class HisconbeneficioController {
 
 					} else {
 
-						mensagem = "Erro: Hiscon em aberto solicitado por " + hb.getUsuario().getNome() + " em " + formater.format(hb.getCreated().getTime());
+						mensagem = "Erro: Hiscon já esta com solicitação em andamento. ";
 						result.include("notice", mensagem);
 						
 						this.hisconBeneficio.setHisconBeneficio_id(null);
