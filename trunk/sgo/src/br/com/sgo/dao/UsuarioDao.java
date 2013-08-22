@@ -289,7 +289,7 @@ public class UsuarioDao extends Dao<Usuario> {
 
 	public Usuario buscaUsuario(Long empresa_id, Long organizacao_id, String cpf) {
 
-		String sql = "SELECT USUARIO.usuario_id, USUARIO.nome FROM ((USUARIO (NOLOCK) "
+		String sql = "SELECT USUARIO.usuario_id, USUARIO.nome, USUARIO.apelido FROM ((USUARIO (NOLOCK) "
 				+ "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON USUARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) "
 				+ "INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id) "
 				+ "INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id	"
@@ -315,6 +315,8 @@ public class UsuarioDao extends Dao<Usuario> {
 				usuario = new Usuario();
 
 				usuario.setUsuario_id(rsUsuarios.getLong("usuario_id"));
+				usuario.setNome(rsUsuarios.getString("nome"));
+				usuario.setApelido(rsUsuarios.getString("apelido"));
 
 			}
 		} catch (SQLException e) {

@@ -376,7 +376,14 @@ public class MenuController {
 		result.include("bancosComprado",this.bancoDao.buscaBancoCompradoByEmpOrg(1l, 1l));
 		result.include("atuantes",this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
-		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+
+		Collection<Usuario> supervisores = this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial");
+
+		//TODO : ALTERAR USUÁRIO SUPERVISOR RETENÇÃO
+		supervisores.add(this.usuarioDao.buscaUsuario(2l, 2l, "38316716801"));
+
+		result.include("supervisores",supervisores);
+
 		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
 		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
 		result.include("convenios",this.convenioDao.buscaConvenioToFillComboByEmpOrg(1l, 1l));

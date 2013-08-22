@@ -93,13 +93,13 @@ function altera(atributo, id, valor) {
 						<div class="span3">
 							<label for="hisconBeneficioEmpresa">Empresa</label>
 							<input class="input-medium" id="hisconBeneficioEmpresaId" name="hisconBeneficio.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden" readonly="readonly"/>
-							<input class="input-xlarge" id="hisconBeneficioEmpresa" name="hisconBeneficio.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" />
+							<input class="input-xlarge" id="hisconBeneficioEmpresa" name="hisconBeneficio.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" readonly="readonly"/>
 						</div>
 		
 						<div class="span3">
 							<label for="hisconBeneficioOrganizacao">Organização</label>
 							<input  class="input-medium" id="hisconBeneficioOrganizacaoId" name="hisconBeneficio.organizacao.organizacao_id"  value="${usuarioInfo.organizacao.organizacao_id }" type="hidden" readonly="readonly"/>
-							<input  class="input-xlarge" id="hisconBeneficioOrganizacao" name="hisconBeneficio.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" />							
+							<input  class="input-xlarge" id="hisconBeneficioOrganizacao" name="hisconBeneficio.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" readonly="readonly" />							
 						</div>
 					</div>
 
