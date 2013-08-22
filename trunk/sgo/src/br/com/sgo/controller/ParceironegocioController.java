@@ -467,7 +467,7 @@ public class ParceironegocioController {
 
 					parceiroBeneficio.setIsActive(true);
 
-					if(this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), parceiroBeneficio.getNumeroBeneficio()) != null) {
+					if(this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), parceiroBeneficio.getNumeroBeneficio()) == null) {
 
 						this.parceiroBeneficioDao.beginTransaction();
 						this.parceiroBeneficioDao.adiciona(parceiroBeneficio);

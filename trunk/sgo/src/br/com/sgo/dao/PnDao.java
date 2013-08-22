@@ -57,7 +57,7 @@ public class PnDao {
 		String sql = sqlPN;
 
 		if (!cpf.equals(""))
-			sql += " WHERE str_nrdocumento= ?  ";
+			sql += " WHERE str_nrdocumento= ?  AND doc.id_tp_doc = 2 ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -114,7 +114,7 @@ public class PnDao {
 		String sql = sqlPN;
 
 		if (parceiroNegocio != null)
-			sql += " WHERE str_nrdocumento= ?  ";
+			sql += " WHERE str_nrdocumento= ? AND doc.id_tp_doc = 2 ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -171,7 +171,7 @@ public class PnDao {
 		String sql = sqlPN;
 
 		if (parceiroNegocio != null)
-			sql += " WHERE str_nrdocumento= ?  ";
+			sql += " WHERE str_nrdocumento= ?  AND doc.id_tp_doc = 2 ";
 
 		this.conn = this.conexao.getConexao();
 		
@@ -206,7 +206,7 @@ public class PnDao {
 		String sql = sqlPN;
 
 		if (parceiroNegocio != null)
-			sql += " WHERE str_nrdocumento= ?  ";
+			sql += " WHERE str_nrdocumento= ? AND doc.id_tp_doc = 2  ";
 
 		this.conn = this.conexao.getConexao();
 		
@@ -241,7 +241,7 @@ public class PnDao {
 		String sql = sqlPN;
 
 		if (parceiroNegocio != null)
-			sql += " WHERE str_nrdocumento= ?  ";
+			sql += " WHERE str_nrdocumento= ?  AND doc.id_tp_doc = 2 ";
 
 		this.conn = this.conexao.getConexao();
 		
@@ -276,7 +276,7 @@ public class PnDao {
 		String sql = sqlPN;
 
 		if (parceiroNegocio != null)
-			sql += " WHERE str_nrdocumento= ?  ";
+			sql += " WHERE str_nrdocumento= ? AND doc.id_tp_doc = 2  ";
 
 		this.conn = this.conexao.getConexao();
 

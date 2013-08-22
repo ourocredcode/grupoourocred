@@ -90,11 +90,67 @@
 			});
 
 	});
-	
+
 	function limpaForm(){
 		if(!(navigator.userAgent.indexOf("Firefox") != -1)){
 			document.usuarioForm.reset();
 		}	
+	}
+	
+	function novoHiscon(numeroBeneficio){
+
+		var form = document.createElement("form");
+
+		form.setAttribute("method", "post");
+        form.setAttribute("action", "/sgo/hisconbeneficio/cadastro");
+
+        var hiddenFieldEmpresa = document.createElement("input");
+
+        hiddenFieldEmpresa.setAttribute("name", "empresa_id");
+        hiddenFieldEmpresa.setAttribute("value",2 );
+        hiddenFieldEmpresa.setAttribute("type", "hidden");
+
+        var hiddenFieldOrganizacao = document.createElement("input");
+
+        hiddenFieldOrganizacao.setAttribute("name", "organizacao_id");
+        hiddenFieldOrganizacao.setAttribute("value",2 );
+        hiddenFieldOrganizacao.setAttribute("type", "hidden");
+
+        var hiddenFieldBeneficio = document.createElement("input");
+
+        hiddenFieldBeneficio.setAttribute("name", "numeroBeneficio");
+        hiddenFieldBeneficio.setAttribute("value",numeroBeneficio );
+        hiddenFieldBeneficio.setAttribute("type", "hidden");
+
+        form.appendChild(hiddenFieldEmpresa);
+        form.appendChild(hiddenFieldOrganizacao);
+        form.appendChild(hiddenFieldBeneficio);
+
+        document.body.appendChild(form);
+
+        form.submit();
+
+	}
+	
+	function novoContrato(numeroBeneficio){
+
+		var form = document.createElement("form");
+
+		form.setAttribute("method", "post");
+        form.setAttribute("action", "/sgo/formulario/cliente");
+        
+        var hiddenFieldBeneficio = document.createElement("input");
+
+        hiddenFieldBeneficio.setAttribute("name", "numeroBeneficio");
+        hiddenFieldBeneficio.setAttribute("value",numeroBeneficio );
+        hiddenFieldBeneficio.setAttribute("type", "hidden");
+
+        form.appendChild(hiddenFieldBeneficio);
+
+        document.body.appendChild(form);
+
+        form.submit();
+
 	}
 	
 	function salvaLocalidade() {
@@ -704,7 +760,7 @@
 							</c:if>
 	
 							<c:if test="${not empty parceiroBeneficios}">
-								<div class="navbar" style="width: 500px;float: left;">
+								<div class="navbar" style="width: 650px;float: left;">
 									
 								<div class="navbar-inner" >
 								
@@ -718,7 +774,8 @@
 															<th>Convênio</th>
 															<th>Matrícula</th>
 															<th>Senha</th>
-															<th>Excluir</th>
+															<th>Hiscon</th>
+															<th>Contrato</th>
 														</tr>
 													</thead>
 													<tbody>	
@@ -732,9 +789,20 @@
 																</select>
 																</td>
 																<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficio(this,'numeroBeneficio','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
-																<td><input type="text" id="parceiroBeneficioSenhaLista" name="parceiroBeneficios[${status.index}].senha" value="${parceiroBeneficio.senha }" class="input-small" onChange="return alteraBeneficio(this,'senha','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
+																<td><input type="text" id="parceiroBeneficioSenhaLista" name="parceiroBeneficios[${status.index}].senha" value="${parceiroBeneficio.senha }" class="input-small" onChange="return alteraBeneficio(this,'senha','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>															
 																<td style="text-align: center;">
-																	<button type="button" class="btn btn-danger btn-mini" onClick="return excluiBeneficio(this,'${parceiroBeneficio.parceiroBeneficio_id}');">Excluir</button>
+																	
+																	<div class="buttons">
+																		<a href="#" class="btn btn-mini" onclick="novoHiscon(${parceiroBeneficio.numeroBeneficio});"><i class="icon-search"></i> Hiscon </a>
+																	</div>
+																	
+																</td>
+																<td style="text-align: center;">
+																
+																	<div class="buttons">
+																		<a href="#" class="btn btn-mini" onclick="novoContrato(${parceiroBeneficio.numeroBeneficio});"><i class="icon-file"></i> Contrato </a>
+																	</div>
+
 																</td>
 															</tr>
 														</c:forEach>
