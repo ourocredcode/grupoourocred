@@ -774,8 +774,10 @@
 															<th>Convênio</th>
 															<th>Matrícula</th>
 															<th>Senha</th>
-															<th>Hiscon</th>
-															<th>Contrato</th>
+															<c:if test="${parceiroNegocio.parceiroNegocio_id  != null }">
+																<th>Hiscon</th>
+																<th>Contrato</th>
+															</c:if>
 														</tr>
 													</thead>
 													<tbody>	
@@ -790,20 +792,22 @@
 																</td>
 																<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficio(this,'numeroBeneficio','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
 																<td><input type="text" id="parceiroBeneficioSenhaLista" name="parceiroBeneficios[${status.index}].senha" value="${parceiroBeneficio.senha }" class="input-small" onChange="return alteraBeneficio(this,'senha','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>															
-																<td style="text-align: center;">
+																<c:if test="${parceiroNegocio.parceiroNegocio_id  != null }">
+																	<td style="text-align: center;">
+																		
+																		<div class="buttons">
+																			<a href="#" class="btn btn-mini" onclick="novoHiscon(${parceiroBeneficio.numeroBeneficio});"><i class="icon-search"></i> Hiscon </a>
+																		</div>
+																		
+																	</td>
+																	<td style="text-align: center;">
 																	
-																	<div class="buttons">
-																		<a href="#" class="btn btn-mini" onclick="novoHiscon(${parceiroBeneficio.numeroBeneficio});"><i class="icon-search"></i> Hiscon </a>
-																	</div>
-																	
-																</td>
-																<td style="text-align: center;">
-																
-																	<div class="buttons">
-																		<a href="#" class="btn btn-mini" onclick="novoContrato(${parceiroBeneficio.numeroBeneficio});"><i class="icon-file"></i> Contrato </a>
-																	</div>
-
-																</td>
+																		<div class="buttons">
+																			<a href="#" class="btn btn-mini" onclick="novoContrato(${parceiroBeneficio.numeroBeneficio});"><i class="icon-file"></i> Contrato </a>
+																		</div>
+	
+																	</td>
+																</c:if>
 															</tr>
 														</c:forEach>
 														<c:if test="${not empty parceiroNegocio.parceiroNegocio_id}">
