@@ -299,16 +299,6 @@
 				
 					<li class="submenu">
 	
-						<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
-	
-						<ul class="cadastro">
-							<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
-						</ul>
-	
-					</li>
-				
-					<li class="submenu">
-	
 						<a href="#"><i class="icon icon-pencil"></i> <span>Solicitação</span></a>
 	
 						<ul class="consultor">

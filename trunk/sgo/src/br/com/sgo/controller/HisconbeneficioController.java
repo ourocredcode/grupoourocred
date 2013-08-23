@@ -261,8 +261,14 @@ public class HisconbeneficioController {
 
 		}
 
-		if (hisconBeneficio.getEtapaPosicao() != null)
-			this.hisconBeneficio.setEtapaPosicao(hisconBeneficio.getEtapaPosicao() == null ? null : hisconBeneficio.getEtapaPosicao());
+		if(hisconBeneficio.getEtapaPosicao() != null){
+
+			hisconBeneficio.setEtapaPosicao(this.etapaDao.buscaEtapaById(hisconBeneficio.getEtapaPosicao().getEtapa_id()));
+
+			this.hisconBeneficio.setEtapaPosicao(hisconBeneficio.getEtapaPosicao());
+
+		}
+			
 
 		if(hisconBeneficio.getUsuario() != null)
 			this.hisconBeneficio.setUsuario(hisconBeneficio.getUsuario());
@@ -276,7 +282,7 @@ public class HisconbeneficioController {
 		
 		if(hisconBeneficio.getIsEnviado()){
 
-			Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(
+			Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNomeExato(
 					usuarioInfo.getEmpresa().getEmpresa_id(), 
 					usuarioInfo.getOrganizacao().getOrganizacao_id(), 
 					"Enviado");
