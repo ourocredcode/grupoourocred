@@ -58,7 +58,7 @@ $(document).ready(function() {
 		"oColVis": {
 			"activate": "mouseover",
 			"buttonText": "Selecione Colunas",
-			"aiExclude": [ 0,1,2,3,4,5,6,7,8,9,12,,13,14,15,16 ]
+			"aiExclude": [ 0,1,2,3,4,5,6,7,8,12,,13,14,15,16 ]
 			
 		}
 	} );
