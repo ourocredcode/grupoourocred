@@ -306,17 +306,25 @@ public class ContratoController {
 
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
 		
-		if(contrato.getCoeficiente().getCoeficiente_id() != null)
-			contrato.setCoeficiente(coeficienteDao.load(contrato.getCoeficiente().getCoeficiente_id()));
-		
-		if(contrato.getBanco().getBanco_id() != null)
-			contrato.setBanco(bancoDao.load(contrato.getBanco().getBanco_id()));
-		
-		if(contrato.getProduto().getProduto_id() != null)
-			contrato.setProduto(produtoDao.load(contrato.getProduto().getProduto_id()));
-		
-		if(contrato.getRecompraBanco().getBanco_id() != null)
-			contrato.setRecompraBanco(bancoDao.load(contrato.getRecompraBanco().getBanco_id()));
+		if(contrato.getCoeficiente().getCoeficiente_id() != null){
+			this.contrato.setCoeficiente(coeficienteDao.load(contrato.getCoeficiente().getCoeficiente_id()));
+			log.add("Coeficiente alterado de : " + contrato.getCoeficiente().getValor() + " para: " + this.contrato.getCoeficiente().getValor());
+		}
+
+		if(contrato.getBanco().getBanco_id() != null) {
+			this.contrato.setBanco(bancoDao.load(contrato.getBanco().getBanco_id()));
+			log.add("Banco alterado para : " + this.contrato.getBanco().getNome());
+		}
+
+		if(contrato.getProduto().getProduto_id() != null) {
+			this.contrato.setProduto(produtoDao.load(contrato.getProduto().getProduto_id()));
+			log.add("Produto alterado para : " + this.contrato.getProduto().getNome());
+		}
+
+		if(contrato.getRecompraBanco().getBanco_id() != null){
+			this.contrato.setRecompraBanco(bancoDao.load(contrato.getRecompraBanco().getBanco_id()));
+			log.add("Banco recompra alterado para : " + this.contrato.getRecompraBanco().getNome());
+		}
 
 		if(this.contrato.getBanco().getBanco_id() != contrato.getBanco().getBanco_id()){
 			log.add("Banco alterado de : " + this.contrato.getBanco().getNome() + " para: " + contrato.getBanco().getNome());

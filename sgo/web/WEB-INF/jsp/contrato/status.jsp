@@ -470,14 +470,6 @@ function validaForm(form) {
 				return false;
 			}
 		} 
-
-		if(status == 'Aguardando Quitação') {
-
-			if(valorQuitacao.value == ''){
-				alert("Valor Quitação obrigatório");
-				return false;
-			}
-		}
 		
 		if(status == 'Quitado') {
 			if(valorQuitacao.value == ''){
