@@ -10,6 +10,7 @@ function mostra(div){
 	document.getElementById("bradesco").style.display = "none";
 	document.getElementById("daycoval").style.display = "none";
 	document.getElementById("panamericano").style.display = "none";
+	document.getElementById("safra").style.display = "none";
 
 	if(document.getElementById(div).style.display == "none") {
 		document.getElementById(div).style.display = "inline";
@@ -48,6 +49,7 @@ function mostra(div){
 			 	<li><a href="#" onclick="mostra('bradesco');">BRADESCO</a></li>
 			 	<li><a href="#" onclick="mostra('daycoval');">DAYCOVAL</a></li>
 			 	<li><a href="#" onclick="mostra('panamericano');">PANAMERICANO</a></li>
+			 	<li><a href="#" onclick="mostra('safra');">SAFRA</a></li>
 			</ul>
 			</div>
 			
@@ -93,6 +95,15 @@ function mostra(div){
 			<h2 style="color: #b5b5b5;">PANAMERICANO</h2><br/> 
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_panamericano.pdf"/>" style="width: 70%;height: 600px"></iframe>
+			
+			</div>
+			
+			<div id="safra" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">PANAMERICANO</h2><br/> 
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_safra.pdf"/>" style="width: 70%;height: 600px"></iframe>
 			
 			</div>
 		</div>

@@ -10,6 +10,7 @@ function mostra(div){
 	document.getElementById("marco2013").style.display = "none";
 	document.getElementById("abril2013").style.display = "none";
 	document.getElementById("maio2013").style.display = "none";
+	document.getElementById("junho2013").style.display = "none";
 
 	if(document.getElementById(div).style.display == "none") {
 		document.getElementById(div).style.display = "inline";
@@ -46,6 +47,7 @@ function mostra(div){
 		 	<li><a href="#" onclick="mostra('marco2013');">Março 2013</a></li>
 		 	<li><a href="#" onclick="mostra('abril2013');">Abril 2013</a></li>
 		 	<li><a href="#" onclick="mostra('maio2013');">Maio 2013</a></li>
+		 	<li><a href="#" onclick="mostra('junho2013');">Junho 2013</a></li>
 		</ul>
 		</div>
 		
@@ -91,6 +93,15 @@ function mostra(div){
 		<h3 style="color: #b5b5b5;">Maio 2013</h3><br/>
 		
 			<iframe src="<c:url value="/visualizaScript/resultado_maio2013.pdf"/>" style="width: 80%;height: 750px"></iframe>
+		
+		</div>
+		
+		<div id="junho2013" style="display: none;font-size: 16px;">
+		
+		<br/>
+		<h3 style="color: #b5b5b5;">Junho 2013</h3><br/>
+		
+			<iframe src="<c:url value="/visualizaScript/resultado_junho2013.pdf"/>" style="width: 80%;height: 750px"></iframe>
 		
 		</div>
 		
