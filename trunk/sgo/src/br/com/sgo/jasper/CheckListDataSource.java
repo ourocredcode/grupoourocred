@@ -49,7 +49,7 @@ public class CheckListDataSource implements JRDataSource {
 				}else if("dataAssinatura".equals(campo.getName())){
 					valor = new Timestamp(c.getLogistica().getDataAssinatura().getTime().getTime());
 				}else if("clienteEndereco".equals(campo.getName())){
-					valor = formulario.getParceiroLocalidade().getLocalidade().getEndereco();
+					valor = formulario.getParceiroLocalidade().getLocalidade().getTipoLocalidade().getNome() + " " + formulario.getParceiroLocalidade().getLocalidade().getEndereco();
 				}else if("clienteNumero".equals(campo.getName())){
 					valor = formulario.getParceiroLocalidade().getNumero();
 				}else if("clienteCep".equals(campo.getName())){

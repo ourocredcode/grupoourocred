@@ -878,7 +878,7 @@
 															</select>
 															</td>
 															<td style="text-align: center;">
-																<button type="button" class="btn btn-danger btn-mini" onClick="return exclui(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
+																<button type="button" class="btn btn-danger btn-mini" onClick="return excluiDESATIVADO(this,'${parceiroLocalidade.parceiroLocalidade_id}');">Excluir</button>
 															</td>
 														</tr>
 													</c:forEach>

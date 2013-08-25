@@ -153,17 +153,7 @@
 				</c:if>
 				
 				<c:if test="${usuarioInfo.perfil.chave == 'Gestor' }">
-				
-					<li class="submenu">
-	
-						<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
-	
-						<ul class="cadastro">
-							<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
-						</ul>
-	
-					</li>
-					
+
 					<li class="submenu">
 						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
 						<ul class="cadastro">
@@ -235,21 +225,11 @@
 				</c:if>
 
 				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
-				
-					<li class="submenu">
-	
-						<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
-	
-						<ul class="cadastro">
-							<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
-						</ul>
-	
-					</li>
 
 					<li class="submenu">
-	
+
 						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
-					
+
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>

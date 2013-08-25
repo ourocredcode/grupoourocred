@@ -309,6 +309,8 @@ public class ControleController {
 			this.boleto = controleDao.load(boleto.getControle_id());
 
 			this.boleto.setDataAtuacao(GregorianCalendar.getInstance());
+			this.boleto.setUpdated(GregorianCalendar.getInstance());
+			this.boleto.setUpdatedBy(usuario);
 
 			this.boleto.setDataProximaAtuacao(this.boleto.getDataProximaAtuacao() == null ? calInicial : this.boleto.getDataProximaAtuacao());
 			boleto.setDataProximaAtuacao(boleto.getDataProximaAtuacao() == null ? calInicial : boleto.getDataProximaAtuacao());
