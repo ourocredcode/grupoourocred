@@ -8,6 +8,7 @@ function mostra(div){
 	document.getElementById("bradesco").style.display = "none";
 	document.getElementById("bv").style.display = "none";
 	document.getElementById("panamericano").style.display = "none";
+	document.getElementById("safra").style.display = "none";
 
 	if(document.getElementById(div).style.display == "none") {
 		document.getElementById(div).style.display = "inline";
@@ -43,6 +44,7 @@ function mostra(div){
 				<li><a href="#" onclick="mostra('bradesco');">Bradesco</a></li>
 			 	<li><a href="#" onclick="mostra('bv');">BV</a></li>
 			 	<li><a href="#" onclick="mostra('panamericano');">Panamericano</a></li>
+			 	<li><a href="#" onclick="mostra('safra');">Safra</a></li>
 			</ul>
 			</div>
 			
@@ -71,6 +73,15 @@ function mostra(div){
 			<h2 style="color: #b5b5b5;">PANAMERICANO</h2><br/>
 			
 				<iframe src="<c:url value="/visualizaScript/coeficientes_Panamericano.pdf"/>" style="width: 70%;height: 800px"></iframe>
+			
+			</div>
+			
+			<div id="safra" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">SAFRA</h2><br/>
+			
+				<iframe src="<c:url value="/visualizaScript/coeficientes_Safra.pdf"/>" style="width: 70%;height: 800px"></iframe>
 			
 			</div>
 		</div>
