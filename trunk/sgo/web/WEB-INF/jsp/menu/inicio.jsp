@@ -87,7 +87,7 @@
 	<script type="text/javascript" src="<c:url value="/js/unicorn.dashboard.js"/>"></script>
 
 	<div id="content-header">
-		<h1>DashBoard - ${usuarioInfo.usuario.nome } </h1>
+		<h1>DashBoard - ${usuarioInfo.usuario.nome }</h1>
 		
 		<div class="btn-group">
 			<a class="btn btn-large tip-bottom" title="Arquivos"><i class="icon-file"></i></a>

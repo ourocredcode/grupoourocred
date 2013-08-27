@@ -259,7 +259,7 @@
 		var justificativa = $("#busca_Justificativa").val();
 		var tipoPagamento = $("#busca_TipoPagamento").val();
 		var tipoAprovado = $("#busca_TipoAprovado").val();
-		var empresa = $("#busca_Empresa").val();
+		var empresas = $("#busca_Empresa").val();
 		var informacaoSaque = $("#busca_InformacaoSaque").val();
 		var cliente = $("#busca_Cliente").val();
 		var documento = $("#busca_Documento").val();
@@ -299,8 +299,7 @@
 			tipoPagamento = "";
 		if(tipoAprovado == undefined)
 			tipoAprovado = "";
-		if(empresa == undefined)
-			empresa = "";
+
 		if(motivoPendencia == undefined)
 			motivoPendencia = "";
 		if(supervisor == undefined)
@@ -319,6 +318,11 @@
 		if(convenios == null){
 			convenios = new Array();
 			convenios[0] = "";
+		}
+		
+		if(empresas == null){
+			empresas = new Array();
+			empresas[0] = "";
 		}
 		 
 		if(status == null){
@@ -344,7 +348,7 @@
 		if(data != '' || dataFim != '' || dataAprovadoInicio != '' || dataAprovadoFim != '' || dataConcluidoInicio != '' || dataConcluidoFim != '' 
 			  || dataRecusadoInicio != '' || dataRecusadoFim != ''|| cliente != '' || documento != '' ){
 
-			 $("#resultado").load('<c:url value="/menu/busca" />',{'informacaoSaque': informacaoSaque,'tipoAprovado': tipoAprovado,'empresa':empresa,
+			 $("#resultado").load('<c:url value="/menu/busca" />',{'informacaoSaque': informacaoSaque,'tipoAprovado': tipoAprovado,'empresas':empresas,
 				 	'tipoPagamento': tipoPagamento ,'tipoRecusado': tipoRecusado,'justificativa': justificativa,'status': status, 'convenios': convenios,
 					'cliente' : cliente , 'documento' : documento, 'data' : data, 'dataFim' : dataFim,
 					'dataAprovadoInicio' : dataAprovadoInicio, 'dataAprovadoFim' : dataAprovadoFim, 'dataConcluidoInicio' : dataConcluidoInicio, 'dataConcluidoFim' : dataConcluidoFim, 
@@ -370,7 +374,7 @@
 			var bancos = $("#busca_Banco").val();
 			var produtos = $("#busca_Produto").val();
 			var bancosComprados = $("#busca_BancoComprado").val();
-			var empresa = $("#busca_Empresa").val();
+			var empresas = $("#busca_Empresa").val();
 			var data = $("#busca_Data").val();
 			var dataFim = $("#busca_DataFim").val();
 			var previsaoInicio = $("#busca_DataPrevisaoInicio").val();
@@ -395,8 +399,6 @@
 				consultor = "";
 			if(supervisor == undefined)
 				supervisor = "";
-			if(empresa == undefined)
-				empresa = "";
 
 			if(consultor == ""){
 				if(supervisor == "Todos"){
@@ -409,6 +411,11 @@
 			if(convenios == null){
 				convenios = new Array();
 				convenios[0] = "";
+			}
+			
+			if(empresas == null){
+				empresas = new Array();
+				empresas[0] = "";
 			}
 
 			if(status == null){
@@ -440,7 +447,7 @@
 										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'quitacaoInicio': quitacaoInicio,'quitacaoFim': quitacaoFim,
 										'assinaturaInicio': assinaturaInicio,'assinaturaFim': assinaturaFim,'bancos': bancos, 
 										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'convenios': convenios,
-										'consultor': consultor,'cliente': cliente,'documento': documento,'empresa':empresa,
+										'consultor': consultor,'cliente': cliente,'documento': documento,'empresas':empresas,
 										'procedimento': procedimento,'proximoProcedimento': proximoProcedimento,
 										'atuante':atuante,});
 
@@ -524,11 +531,11 @@
 
 						<label for="busca_Empresa">Empresa</label>
 						<select id="busca_Empresa" name="busca_Empresa" class="input-medium" MULTIPLE>
-							<option value="Todos">Todos</option>
-							<option value="ATGGOLD">ATGGOLD</option>
-							<option value="GOCX">GOCX</option>
-							<option value="GRGOLD">GRGOLD</option>
-							<option value="OUROCRED">OUROCRED</option>
+							<option value="">Todos</option>
+							<option value="5">ATGGOLD</option>
+							<option value="3">GOCX</option>
+							<option value="4">GRGOLD</option>
+							<option value="2">OUROCRED</option>
 						</select>
 
 						<label for="busca_Banco">Banco</label>
@@ -625,7 +632,7 @@
 							<div class="control-group">
 								<label class="control-label">Tipo Controle</label>
 								<select id="busca_TipoControle" name="busca_Tipo" class="input-small" >
-									<option value=""></option>
+									<option value="">Tipo</option>
 									<option value="1">Averbação</option>
 									<option value="2">Boleto</option>
 								</select>

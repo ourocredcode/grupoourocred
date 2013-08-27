@@ -161,15 +161,19 @@ function validaForm(form) {
 					<textarea  style="width: 100%;" id="observacao" name="observacao" class="input-medium" rows="5" cols="120" maxlength="255"></textarea>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label">Método : </label>
-				<select id="boletoAgenteAgenteId" name="boleto.agente.agente_id" value="${boleto.agente.agente_id }"  class="input-medium">
-					<option value="">Escolha...</option>
-					<c:forEach var="agente" items="${agentes }">
-						<option value="${agente.agente_id }" <c:if test="${boleto.agente.agente_id == agente.agente_id }">selected="selected"</c:if>>${agente.nome }</option>
-					</c:forEach>
-				</select>
-			</div>
+			
+			<c:if test="${usuarioInfo.perfil.chave != 'Supervisor' }">
+				<div class="control-group">
+					<label class="control-label">Método : </label>
+					<select id="boletoAgenteAgenteId" name="boleto.agente.agente_id" value="${boleto.agente.agente_id }"  class="input-medium">
+						<option value="">Escolha...</option>
+						<c:forEach var="agente" items="${agentes }">
+							<option value="${agente.agente_id }" <c:if test="${boleto.agente.agente_id == agente.agente_id }">selected="selected"</c:if>>${agente.nome }</option>
+						</c:forEach>
+					</select>
+				</div>
+			</c:if>
+				
 			<div class="form-actions">
 				<input type="button" value="Salvar" class="btn btn-primary" onclick="javascript:validaForm('#boletoForm');">
 				<button type="button" value="Fecha" class="btn btn-primary" onclick="window.location.reload(true);">Fecha</button>

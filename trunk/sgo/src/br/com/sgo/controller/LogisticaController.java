@@ -173,6 +173,7 @@ public class LogisticaController {
 		Formulario form = this.formularioDao.load(id);
 
 		Collection<Contrato> contratos = this.contratoDao.buscaContratoToCheckList(form.getFormulario_id());
+
 		form.setContratos(contratos);
 
 		parceiroNegocio = parceiroNegocioDao.buscaParceiroNegocioById(form.getParceiroNegocio().getParceiroNegocio_id());
@@ -185,7 +186,6 @@ public class LogisticaController {
 
 		}
 
-		form.setParceiroLocalidade(parceiroLocalidade);
 		form.setParceiroLocalidade(parceiroLocalidade);
 
 		forms.add(form);

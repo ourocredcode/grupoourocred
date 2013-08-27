@@ -1267,7 +1267,9 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Boleto</h5>
-						<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						<c:if test="${usuarioInfo.perfil.chave != 'Consultor'}">
+							<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						</c:if>
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
@@ -1339,7 +1341,9 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Averbacao</h5>
-						<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						<c:if test="${usuarioInfo.perfil.chave != 'Consultor'}">
+							<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return averbacao('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						</c:if>
 					</div>	
 					<div class="widget-content padding">
 						<div class="row-fluid">
