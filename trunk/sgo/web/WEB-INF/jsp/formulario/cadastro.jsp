@@ -1,5 +1,13 @@
 <%@ include file="/header.jspf"%>
 
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$('#salvaForm').submit(function() {
+			$("input[type='submit']", this).attr("disabled", true);
+		});	
+	});
+	</script>
+
 	<div id="content-header">
 		<h1>Formulário</h1>
 		<div class="btn-group">

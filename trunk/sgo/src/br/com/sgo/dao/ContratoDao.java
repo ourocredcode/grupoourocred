@@ -1000,8 +1000,7 @@ public class ContratoDao extends Dao<Contrato> {
 			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,
 			Calendar quitacaoInicio,Calendar quitacaoFim,Calendar assinaturaInicio,Calendar assinaturaFim,
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Collection<Long> convenios, 
-			Collection<Usuario> consultores,String cliente,
-			String documento,Collection<Long> empresas, Long procedimento, Long proximoProcedimento, Long atuante) {
+			Collection<Usuario> consultores,String cliente, String documento,Collection<Long> empresas, Long procedimento, Long proximoProcedimento, Long atuante) {
 
 		String sql = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 				" FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
@@ -1025,35 +1024,34 @@ public class ContratoDao extends Dao<Contrato> {
 				" CONTROLE.dataprevisao,CONTROLE.datavencimento," +
 				" CONTROLE.dataprimeiraatuacao, CONTROLE.dataproximaatuacao "+
 				" FROM " +
-				" (((((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
-				" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
-				" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) "+
-				" LEFT JOIN CONVENIO (NOLOCK) ON CONTRATO.convenio_id = CONVENIO.convenio_id) "+
-				" LEFT JOIN MODALIDADE (NOLOCK) ON CONTRATO.modalidade_id = MODALIDADE.modalidade_id) "+
-				" INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) "+
-				" INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) "+
-				" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id) "+
-				" INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) "+
-				" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) "+
-				" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) "+
-				" INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id) "+
-				" LEFT JOIN LOGISTICA (NOLOCK) ON CONTRATO.contrato_id = LOGISTICA.contrato_id) "+
-				" LEFT JOIN NATUREZAPROFISSIONAL (NOLOCK) ON CONTRATO.naturezaprofissional_id = NATUREZAPROFISSIONAL.naturezaprofissional_id) "+
-				" LEFT JOIN TIPOSAQUE (NOLOCK) ON CONTRATO.tiposaque_id = TIPOSAQUE.tiposaque_id) "+
-				" LEFT JOIN BANCO (NOLOCK) AS BANCO_1 ON CONTRATO.recompra_banco_id = BANCO_1.banco_id) "+
-				" LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id) "+
-				" LEFT JOIN WORKFLOW (NOLOCK) AS WORKFLOW_1 ON CONTRATO.workflowpendencia_id = WORKFLOW_1.workflow_id) "+
-				" LEFT JOIN ETAPA (NOLOCK) AS ETAPA_1 ON CONTRATO.etapapendencia_id = ETAPA_1.etapa_id)" +
-				" LEFT JOIN CONTROLE (NOLOCK) AS CONTROLE ON CONTRATO.contrato_id = CONTROLE.contrato_id)  "+
+				"  CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id "+
+				" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id "+
+				" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id "+
+				" LEFT JOIN CONVENIO (NOLOCK) ON CONTRATO.convenio_id = CONVENIO.convenio_id "+
+				" LEFT JOIN MODALIDADE (NOLOCK) ON CONTRATO.modalidade_id = MODALIDADE.modalidade_id "+
+				" INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id "+
+				" INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id "+
+				" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id "+
+				" INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id "+
+				" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id "+
+				" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id "+
+				" INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id "+
+				" LEFT JOIN LOGISTICA (NOLOCK) ON CONTRATO.contrato_id = ( SELECT max(LOGISTICA.logistica_id) FROM LOGISTICA WHERE LOGISTICA.contrato_id = CONTRATO.contrato_id ) "+
+				" LEFT JOIN NATUREZAPROFISSIONAL (NOLOCK) ON CONTRATO.naturezaprofissional_id = NATUREZAPROFISSIONAL.naturezaprofissional_id "+
+				" LEFT JOIN TIPOSAQUE (NOLOCK) ON CONTRATO.tiposaque_id = TIPOSAQUE.tiposaque_id "+
+				" LEFT JOIN BANCO (NOLOCK) AS BANCO_1 ON CONTRATO.recompra_banco_id = BANCO_1.banco_id "+
+				" LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id "+
+				" LEFT JOIN WORKFLOW (NOLOCK) AS WORKFLOW_1 ON CONTRATO.workflowpendencia_id = WORKFLOW_1.workflow_id "+
+				" LEFT JOIN ETAPA (NOLOCK) AS ETAPA_1 ON CONTRATO.etapapendencia_id = ETAPA_1.etapa_id " +
 				" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id " ;
 
 		String clause = "";
 		int x = 0;
-
-		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
 		
 		if(tipoControle != null)
-			sql += " AND CONTROLE.tipocontrole_id = ?";
+			sql += " LEFT JOIN CONTROLE (NOLOCK) AS CONTROLE ON CONTRATO.contrato_id = CONTROLE.contrato_id AND CONTROLE.tipocontrole_id = ?  ";
+
+		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
 
 		if(!cliente.equals(""))
 			sql += " AND PARCEIRONEGOCIO.nome like ? ";
@@ -1215,9 +1213,14 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//System.out.println(sql);
+			System.out.println(sql);
 
 			int curr = 1;
+			
+			if(tipoControle != null){
+				this.stmt.setLong(curr, tipoControle);
+				curr++;
+			}
 
 			if(empresa_id != null){
 				this.stmt.setLong(curr, empresa_id);
@@ -1226,11 +1229,6 @@ public class ContratoDao extends Dao<Contrato> {
 			
 			if(organizacao_id != null){
 				this.stmt.setLong(curr, organizacao_id);
-				curr++;
-			}
-
-			if(tipoControle != null){
-				this.stmt.setLong(curr, tipoControle);
 				curr++;
 			}
 
@@ -1569,7 +1567,7 @@ public class ContratoDao extends Dao<Contrato> {
 		return contratos;
 
 	}
-	
+
 	public HashMap<String,Object[]> buscaContratosToCountEtapas(Long empresa_id , Long organizacao_id, Long usuario_id) {
 
 		String sql = " SELECT " +

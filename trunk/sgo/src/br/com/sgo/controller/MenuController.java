@@ -787,11 +787,33 @@ public class MenuController {
 
 		}
 
+		if(tipoControle == null){
+
+			Boolean buscaEnviadoDataPrev = false;
+			Boolean buscaAguardandoBoleto = false;
+
+			for(String s : status){
+
+				if(s.equals("Enviado DataPrev"))
+					buscaEnviadoDataPrev = true;
+
+				if(s.equals("Aguardando Boleto") || s.equals("Aguardando Apoio Comercial"))
+					buscaAguardandoBoleto = true;
+
+			}
+
+			if(buscaEnviadoDataPrev)
+				tipoControle = 1l;
+
+			if(buscaAguardandoBoleto)
+				tipoControle = 2l;
+
+		}
+
 		contratos.clear();
 
 		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoControle,
-				calInicio, calFim, calPrevisaoInicio, 
-				calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
+				calInicio, calFim, calPrevisaoInicio,calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
 				calProximaAtuacaoInicio,calProximaAtuacaoFim,calQuitacaoInicio,calQuitacaoFim,calAssinaturaInicio,calAssinaturaFim,bancos,produtos,bancosComprados,
 				status,convenios,consultoresAux,cliente,documento,empresas,procedimento,proximoProcedimento, atuante));
 
