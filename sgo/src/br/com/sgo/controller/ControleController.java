@@ -445,7 +445,8 @@ public class ControleController {
 
 			}
 
-			this.boleto.setAgente(boleto.getAgente().getAgente_id() == null ? null : boleto.getAgente());
+			if(boleto.getAgente() != null)
+				this.boleto.setAgente(boleto.getAgente().getAgente_id() == null ? null : boleto.getAgente());
 
 			controleDao.beginTransaction();
 			controleDao.atualiza(this.boleto);

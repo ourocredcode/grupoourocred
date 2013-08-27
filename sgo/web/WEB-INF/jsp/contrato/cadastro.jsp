@@ -61,9 +61,12 @@ $(document).ready(function() {
 		var auxCoeficiente = document.getElementById("auxCoeficiente");	
 		var arrayCoeficiente = auxCoeficiente.value.split(',');
 		var tabela_id = arrayCoeficiente[3];
+		
+		var banco_id = document.getElementById("contratoBanco").value;
+		var produto_id = document.getElementById("contratoProduto").value;
 
 		if(tabela_id != undefined){
-			$("#div-prazo").load('<c:url value="/contrato/prazo" />',{'tabela_id': tabela_id});	
+			$("#div-prazo").load('<c:url value="/contrato/prazo" />',{'banco_id':banco_id,'produto_id':produto_id,'tabela_id':tabela_id});	
 		}
 
 	});
@@ -139,7 +142,7 @@ function calculaContrato() {
 
 			switch(contratoBancoNome) {
 
-				case 'BRADESCO':
+				case 'Bradesco':
 					var metaValue = valorLiquido.value * arrayCoeficiente[1];
 					valorMeta.value = metaValue.toFixed(2);
 
@@ -157,19 +160,19 @@ function calculaContrato() {
 
 					break;	
 
-				case 'CRUZEIRO DO SUL':
+				case 'Cruzeiro do Sul':
 					var metaValue = valorLiquido.value;
 					valorMeta.value = metaValue;
 
 					break;
 				
-				case 'PANAMERICANO':
+				case 'Panamericano':
 					var metaValue = valorLiquido.value;
 					valorMeta.value = metaValue;
 
 					break;
 
-				case 'BONSUCESSO':
+				case 'Bonsucesso':
 
 					if(contratoProduto.value == 'REFINANCIAMENTO'){
 
@@ -185,7 +188,7 @@ function calculaContrato() {
 
 					break;
 
-				case 'CIFRA':
+				case 'Cifra':
 					var metaValue = valorLiquido.value / 2;
 					valorMeta.value = metaValue.toFixed(2);
 
@@ -203,14 +206,14 @@ function calculaContrato() {
 
 					break;
 					
-				case 'DAYCOVAL':
+				case 'Daycoval':
 
 					var metaValue = valorLiquido.value / 2;
 					valorMeta.value = metaValue.toFixed(2);
 
 					break;
 				
-				case 'C.E.F':
+				case 'Caixa Econômica Federal':
 
 					var metaValue = valorLiquido.value * arrayCoeficiente[1];
 					valorMeta.value = metaValue.toFixed(2);
@@ -219,6 +222,7 @@ function calculaContrato() {
 
 				default:
 					alert("Escolha um Banco.");
+					
 			}
 			 
 		}

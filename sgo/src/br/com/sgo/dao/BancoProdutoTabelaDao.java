@@ -85,7 +85,7 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 
 	}
 	
-	public Integer buscaPrazoByEmpOrgTabela(Long empresa_id, Long organizacao_id, Long tabela_id ) {
+	public Integer buscaPrazoByEmpOrgBancoProdutoTabela(Long empresa_id, Long organizacao_id, Long banco_id, Long produto_id, Long tabela_id ) {
 
 		String sql = " SELECT BANCOPRODUTOTABELA.prazo FROM BANCOPRODUTOTABELA ";
 
@@ -93,6 +93,10 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 			sql += " WHERE BANCOPRODUTOTABELA.empresa_id = ? ";
 		if (organizacao_id != null)
 			sql += " AND BANCOPRODUTOTABELA.organizacao_id = ? ";
+		if (banco_id != null)
+			sql += " AND BANCOPRODUTOTABELA.banco_id = ? ";
+		if (produto_id != null)
+			sql += " AND BANCOPRODUTOTABELA.produto_id = ? ";
 		if (tabela_id != null)
 			sql += " AND BANCOPRODUTOTABELA.tabela_id = ? ";
 
@@ -106,7 +110,16 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 
 			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
-			this.stmt.setLong(3, tabela_id);
+			this.stmt.setLong(3, banco_id);
+			this.stmt.setLong(4, produto_id);
+			this.stmt.setLong(5, tabela_id);
+			
+			//System.out.println(sql);
+			//System.out.println(empresa_id);
+			//System.out.println(organizacao_id);
+			//System.out.println(banco_id);
+			//System.out.println(produto_id);
+			//System.out.println(tabela_id);
 
 			this.rsBancoProdutoTabela= this.stmt.executeQuery();
 

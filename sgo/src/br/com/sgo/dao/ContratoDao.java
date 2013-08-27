@@ -386,7 +386,7 @@ public class ContratoDao extends Dao<Contrato> {
 					 " LEFT JOIN PERIODO (NOLOCK) ON LOGISTICA.periodo_id = PERIODO.periodo_id  ";
 		
 		if(formulario_id != null)
-			sql += " WHERE FORMULARIO.formulario_id = ? ";
+			sql += " WHERE FORMULARIO.formulario_id = ? AND ETAPA.nome like 'Em Assinatura' ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -608,7 +608,8 @@ public class ContratoDao extends Dao<Contrato> {
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
 			Calendar calStatusFinalInicio,Calendar calStatusFinalFim,Calendar calConclusaoInicio,Calendar calConclusaoFim,
 			String cliente, String documento, Collection<Long> convenios,Collection<String> status,Collection<String> statusFinal,
-			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores,Long tipoPagamento, Long informacaoSaque) {
+			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores,
+			Long tipoPagamento, Long informacaoSaque,Collection<Long> empresas) {
 
 		String sql = sqlContratos;
 		String clause = "";
@@ -701,6 +702,24 @@ public class ContratoDao extends Dao<Contrato> {
 
 			if(convenioAux != null) {
 				sql += clause + " ( CONTRATO.convenio_id = ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		
+		
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(Long empresaAux : empresas){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(empresaAux != null) {
+				sql += clause + " ( CONTRATO.organizacaodigitacao_id = ? ) ";
 				x++;
 				clause = "";
 			}
@@ -876,6 +895,15 @@ public class ContratoDao extends Dao<Contrato> {
 
 			}
 			
+			for(Long empresaAux2 : empresas){
+
+				if(empresaAux2 != null ) {
+					this.stmt.setLong(curr, empresaAux2);
+					curr++;
+				}
+
+			}
+			
 			for(String produtosAux2 : produtos){
 
 				if(!produtosAux2.equals("")) {
@@ -973,7 +1001,7 @@ public class ContratoDao extends Dao<Contrato> {
 			Calendar quitacaoInicio,Calendar quitacaoFim,Calendar assinaturaInicio,Calendar assinaturaFim,
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Collection<Long> convenios, 
 			Collection<Usuario> consultores,String cliente,
-			String documento,Collection<String> empresas, Long procedimento, Long proximoProcedimento, Long atuante) {
+			String documento,Collection<Long> empresas, Long procedimento, Long proximoProcedimento, Long atuante) {
 
 		String sql = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 				" FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
@@ -1058,6 +1086,24 @@ public class ContratoDao extends Dao<Contrato> {
 
 			if(convenioAux1 != null) {
 				sql += clause + " ( CONTRATO.convenio_id = ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		
+		
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(Long empresasAux1 : empresas){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(empresasAux1 != null) {
+				sql += clause + " ( CONTRATO.organizacaodigitacao_id = ? ) ";
 				x++;
 				clause = "";
 			}
@@ -1213,6 +1259,16 @@ public class ContratoDao extends Dao<Contrato> {
 
 				if(conveniosAux2 != null) {
 					this.stmt.setLong(curr, conveniosAux2);
+					curr++;
+				}
+
+			}
+			
+			
+			for(Long empresasAux2 : empresas){
+
+				if(empresasAux2 != null) {
+					this.stmt.setLong(curr, empresasAux2);
 					curr++;
 				}
 

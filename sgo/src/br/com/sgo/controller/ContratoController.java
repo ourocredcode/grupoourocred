@@ -436,7 +436,7 @@ public class ContratoController {
 		contrato.setEtapa(this.etapaDao.buscaEtapaById(contrato.getEtapa().getEtapa_id()));
 
 		if(!(this.contrato.getEtapa().getEtapa_id() == contrato.getEtapa().getEtapa_id())){
-			log.add("Status alterado de : " + this.contrato.getEtapa().getNome() + " para : " + contrato.getEtapa().getNome());
+			log.add("Status alterado para : " + contrato.getEtapa().getNome());
 			this.contrato.setEtapa(contrato.getEtapa() == null ? null : contrato.getEtapa());
 		}
 
@@ -446,7 +446,7 @@ public class ContratoController {
 
 			if(this.contrato.getEtapaPendencia() != null){
 				if(this.contrato.getEtapaPendencia().getEtapa_id() != contrato.getEtapaPendencia().getEtapa_id()){
-					log.add("Justificativa alterada de : " + this.contrato.getEtapaPendencia().getNome() + " para : " + contrato.getEtapaPendencia().getNome() );
+					log.add("Justificativa alterada para : " + contrato.getEtapaPendencia().getNome() );
 					this.contrato.setEtapaPendencia(contrato.getEtapaPendencia());
 				}
 					
@@ -747,9 +747,10 @@ public class ContratoController {
 
 	@Post
  	@Path("/contrato/prazo")
-	public void prazo(Long tabela_id) {
+	public void prazo(Long banco_id,Long produto_id,Long tabela_id) {
 
-		contrato.setPrazo(bancoProdutoTabelaDao.buscaPrazoByEmpOrgTabela(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tabela_id));
+		contrato.setPrazo(bancoProdutoTabelaDao.buscaPrazoByEmpOrgBancoProdutoTabela(
+					empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),banco_id,produto_id, tabela_id));
 
 		result.include("contrato",contrato);
 
