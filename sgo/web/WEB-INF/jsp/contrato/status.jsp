@@ -751,7 +751,7 @@ function openPopup(url) {
 							<c:when test="${usuarioInfo.perfil.chave == 'Consultor' && (contrato.etapa.nome == 'Recalcular' || contrato.etapa.nome == 'Contrato Fora Planilha')}">
 								<div class="buttons"><a href="#" class="btn btn-mini" onclick="return mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
 							</c:when>
-							<c:when test="${usuarioInfo.perfil.chave == 'Gestor' && contrato.etapa.nome != 'Concluído'}">
+							<c:when test="${usuarioInfo.perfil.chave == 'Gestor'}">
 								<div class="buttons"><a href="#" class="btn btn-mini" onclick="return mostra('${contrato.contrato_id}');"><i class="icon-refresh"></i> Altera Contrato</a></div>
 							</c:when>
 							<c:when test="${(usuarioInfo.perfil.chave == 'Supervisor' && contrato.etapa.nome != 'Concluído' && contrato.etapa.nome != 'Aprovado' && 

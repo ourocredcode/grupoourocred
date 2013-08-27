@@ -85,7 +85,6 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 		if (organizacao_id != null)
 			sql += " AND WORKFLOWETAPAPERFILACESSO.organizacao_id = ?";
 		if (workflowetapa_id != null)
-
 			sql += " AND WORKFLOWETAPAPERFILACESSO.workflowetapa_id = ?";
 
 		this.conn = this.conexao.getConexao();

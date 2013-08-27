@@ -85,7 +85,7 @@ function validaForm(form) {
 				<label class="control-label">Última Atuação :
 
 				<c:if test="${not empty boleto.controle_id }">
-					${boleto.createdBy.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
+					${boleto.updatedBy.nome } em <fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${boleto.dataAtuacao.time }" />
 				</c:if>
 				<c:if test="${empty boleto.controle_id }">
 					Ainda não realizado
@@ -162,17 +162,17 @@ function validaForm(form) {
 				</div>
 			</div>
 			
-			<c:if test="${usuarioInfo.perfil.chave != 'Supervisor' }">
-				<div class="control-group">
-					<label class="control-label">Método : </label>
-					<select id="boletoAgenteAgenteId" name="boleto.agente.agente_id" value="${boleto.agente.agente_id }"  class="input-medium">
-						<option value="">Escolha...</option>
-						<c:forEach var="agente" items="${agentes }">
-							<option value="${agente.agente_id }" <c:if test="${boleto.agente.agente_id == agente.agente_id }">selected="selected"</c:if>>${agente.nome }</option>
-						</c:forEach>
-					</select>
-				</div>
-			</c:if>
+			
+			<div class="control-group">
+				<label class="control-label">Método : </label>
+				<select id="boletoAgenteAgenteId" name="boleto.agente.agente_id" value="${boleto.agente.agente_id }"  class="input-medium">
+					<option value="">Escolha...</option>
+					<c:forEach var="agente" items="${agentes }">
+						<option value="${agente.agente_id }" <c:if test="${boleto.agente.agente_id == agente.agente_id }">selected="selected"</c:if>>${agente.nome }</option>
+					</c:forEach>
+				</select>
+			</div>
+			
 				
 			<div class="form-actions">
 				<input type="button" value="Salvar" class="btn btn-primary" onclick="javascript:validaForm('#boletoForm');">

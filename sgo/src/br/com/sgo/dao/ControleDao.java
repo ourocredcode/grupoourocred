@@ -29,17 +29,18 @@ public class ControleDao extends Dao<Controle> {
 	private ResultSet rsControle;
 	
 	private String sqlControle = "  SELECT CONTROLE.controle_id, CONTROLE.tipocontrole_id, TIPOCONTROLE.nome as tipocontrole_nome,  " +
-						" 				CONTROLE.contrato_id, CONTROLE.createdby , USUARIO.nome as usuario_nome, CONTROLE.dataatuacao,  " +
+						" 				CONTROLE.contrato_id, CONTROLE.createdBy, CONTROLE.updatedBy , USUARIO.nome as usuario_nome,  " +
+						"				CONTROLE.dataatuacao,  " +
 						" 				CONTROLE.datachegada, CONTROLE.dataprevisao, CONTROLE.datavencimento, CONTROLE.dataprimeiraatuacao, " +  
 						" 				CONTROLE.dataproximaatuacao, E1.etapa_id as procedimento_id , E1.nome as procedimento_nome , E2.etapa_id as proximoprocedimento_id , E2.nome as proximoprocedimento_nome,  " + 
-						" 				U1.usuario_id, U1.nome, U2.usuario_id as proximoatuante_id , U2.nome as proximoatuante_nome, AGENTE.agente_id, AGENTE.nome as agente_nome" +
+						" 				U1.nome as ultimoatuante_nome, U2.usuario_id as proximoatuante_id , U2.nome as proximoatuante_nome, AGENTE.agente_id, AGENTE.nome as agente_nome" +
 						"			 FROM (((((((( CONTROLE (NOLOCK) " + 
 						" 					INNER JOIN TIPOCONTROLE (NOLOCK) ON CONTROLE.tipocontrole_id = TIPOCONTROLE.tipocontrole_id) " +  
 						" 					INNER JOIN CONTRATO (NOLOCK) ON CONTROLE.contrato_id = CONTRATO.contrato_id ) " +  
 						" 					INNER JOIN USUARIO (NOLOCK) ON CONTROLE.createdby = USUARIO.usuario_id ) " +
 						" 			LEFT JOIN ETAPA AS E1 (NOLOCK) ON CONTROLE.etapa_id = E1.etapa_id ) " +
 						" 			LEFT JOIN ETAPA AS E2 (NOLOCK) ON CONTROLE.etapaproximo_id = E2.etapa_id ) " +
-						" 			LEFT JOIN USUARIO AS U1 (NOLOCK) ON CONTROLE.createdby = U1.usuario_id ) " +
+						" 			LEFT JOIN USUARIO AS U1 (NOLOCK) ON CONTROLE.updatedBy = U1.usuario_id ) " +
 						" 			LEFT JOIN USUARIO AS U2 (NOLOCK) ON CONTROLE.proximoatuante_id = U2.usuario_id )" +
 						"			LEFT JOIN AGENTE (NOLOCK) ON CONTROLE.agente_id = AGENTE.agente_id ) ";
 
@@ -81,12 +82,16 @@ public class ControleDao extends Dao<Controle> {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.FFF");
 				Etapa etapa = new Etapa();
 				Etapa etapaProximo = new Etapa();
+				Usuario ultimoAtuante = new Usuario();
 				Usuario proximoAtuante = new Usuario();
 				Agente agente = new Agente();
 
 				usuario.setUsuario_id(rsControle.getLong("createdby"));
 				usuario.setNome(rsControle.getString("usuario_nome"));
-				
+
+				ultimoAtuante.setUsuario_id(rsControle.getLong("updatedBy"));
+				ultimoAtuante.setNome(rsControle.getString("ultimoatuante_nome"));
+
 				proximoAtuante.setUsuario_id(rsControle.getLong("proximoatuante_id"));
 				proximoAtuante.setNome(rsControle.getString("proximoatuante_nome"));
 				
@@ -106,6 +111,7 @@ public class ControleDao extends Dao<Controle> {
 				controle.setEtapa(etapa);
 				controle.setEtapaProximo(etapaProximo);
 				controle.setAgente(agente);
+				controle.setUpdatedBy(ultimoAtuante);
 
 				try {
 					

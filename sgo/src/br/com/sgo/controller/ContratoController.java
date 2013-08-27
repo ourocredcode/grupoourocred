@@ -187,11 +187,15 @@ public class ContratoController {
 
 		contrato = contratoDao.load(id);
 
+		coeficientes = coeficienteDao.buscaCoeficientesByBancoProduto(contrato.getBanco().getBanco_id(), contrato.getProduto().getProduto_id());
+		
 		Coeficiente coeficienteContrato = new Coeficiente();
 		coeficienteContrato.setValor(contrato.getCoeficiente().getValor());
+		coeficienteContrato.setCoeficiente_id(contrato.getCoeficiente().getCoeficiente_id());
+		coeficienteContrato.setTabela(contrato.getCoeficiente().getTabela());
+		coeficienteContrato.setPercentualMeta(contrato.getCoeficiente().getPercentualMeta());
 
-		coeficientes = coeficienteDao.buscaCoeficientesByBancoProduto(contrato.getBanco().getBanco_id(), contrato.getProduto().getProduto_id());
-
+		/*
 		for(Coeficiente c : coeficientes){
 			if(c.getValor().compareTo(coeficienteContrato.getValor()) == 0) {
 				coeficienteContrato.setCoeficiente_id(c.getCoeficiente_id());
@@ -199,6 +203,7 @@ public class ContratoController {
 				coeficienteContrato.setPercentualMeta(c.getPercentualMeta());
 			}
 		}
+		*/
 
 		coeficientes.add(coeficienteContrato);
 
@@ -307,8 +312,11 @@ public class ContratoController {
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
 		
 		if(contrato.getCoeficiente().getCoeficiente_id() != null){
-			this.contrato.setCoeficiente(coeficienteDao.load(contrato.getCoeficiente().getCoeficiente_id()));
-			log.add("Coeficiente alterado de : " + contrato.getCoeficiente().getValor() + " para: " + this.contrato.getCoeficiente().getValor());
+
+			Coeficiente coefAux = coeficienteDao.load(contrato.getCoeficiente().getCoeficiente_id());
+			log.add("Coeficiente alterado de : " + this.contrato.getCoeficiente().getValor() + " para: " + coefAux.getValor());
+			this.contrato.setCoeficiente(coefAux);
+
 		}
 
 		if(contrato.getBanco().getBanco_id() != null) {

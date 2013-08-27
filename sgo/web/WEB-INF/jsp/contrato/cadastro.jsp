@@ -643,7 +643,7 @@ function historicoCoeficiente() {
 								<c:if test="${not empty contrato.contrato_id}">
 									<c:forEach items="${coeficientes}" var="coeficiente">
 										<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id},${coeficiente.tabela.tabela_id}" 
-										<c:if test="${contrato.coeficiente.coeficiente_id eq coeficiente.coeficiente_id}">selected="selected"</c:if>>${coeficiente.valor} - ${coeficiente.tabela.nome}</option>
+											<c:if test="${contrato.coeficiente.coeficiente_id eq coeficiente.coeficiente_id}">selected="selected"</c:if>>${coeficiente.valor} - ${coeficiente.tabela.nome} </option>
 									</c:forEach>
 								</c:if>
 							</select>
@@ -704,7 +704,7 @@ function historicoCoeficiente() {
 						</div>
 						<div class="span3">
 							<label for="valorMeta">Valor Meta</label>
-							<input id="valorMeta" type="text" class="span10" value="${contrato.valorMeta }" name="contrato.valorMeta" disabled="disabled" />	
+							<input id="valorMeta" type="text" class="span10" value="${contrato.valorMeta }" name="contrato.valorMeta" <c:if test="${usuarioInfo.perfil.chave != 'Gestor' }">disabled="disabled"</c:if> />	
 						</div>
 					</div>
 					<div class="row-fluid">
