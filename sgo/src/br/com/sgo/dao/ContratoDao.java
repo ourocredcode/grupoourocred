@@ -1213,7 +1213,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//System.out.println(sql);
+			System.out.println(sql);
 
 			int curr = 1;
 			
