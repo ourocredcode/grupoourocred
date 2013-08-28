@@ -45,7 +45,7 @@ public class FuncionarioController {
 
 		if(usuarioInfo.getPerfil().getNome().equals("Consultor") || usuarioInfo.getPerfil().getNome().equals("Supervisor")) {
 
-			result.include("supervisores", this.funcionarioDao.buscaFuncionariosByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+			result.include("supervisores", this.funcionarioDao.buscaSupervisorFuncionarioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 			result.include("funcionarios", this.funcionarioDao.buscaFuncionariosBySupervisor(empresa.getEmpresa_id(),  organizacao.getOrganizacao_id(), supervisor_id));
 
 		} else {
@@ -84,10 +84,11 @@ public class FuncionarioController {
 			this.usuarioDao.atualiza(usuario);
 			this.usuarioDao.commit();
 
-		} else if (funcionario.getSupervisor() != null) {
+		} else if (funcionario.getSupervisorFuncionario() != null) {
 
-			this.funcionario.setSupervisor(funcionario.getSupervisor());
-			this.usuario.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.funcionario.getSupervisor().getParceiroNegocio_id()));
+			this.funcionario.setSupervisorFuncionario(funcionario.getSupervisorFuncionario());
+			Funcionario f = funcionarioDao.buscaFuncionarioByEmpOrgFuncionario(this.funcionario.getSupervisorFuncionario().getFuncionario_id());
+			this.usuario.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), f.getParceiroNegocio().getParceiroNegocio_id()));
 			
 			this.funcionarioDao.beginTransaction();
 			this.funcionarioDao.atualiza(this.funcionario);

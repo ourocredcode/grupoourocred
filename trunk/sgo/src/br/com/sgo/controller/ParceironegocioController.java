@@ -152,7 +152,7 @@ public class ParceironegocioController {
 
 		result.include("departamentos", this.departamentoDao.buscaAllDepartamento(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("funcoes", this.funcaoDao.buscaAllFuncao(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
-		result.include("supervisores", this.parceiroNegocioDao.buscaParceiroNegocioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+		result.include("supervisores", this.funcionarioDao.buscaSupervisorFuncionarioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
@@ -267,15 +267,10 @@ public class ParceironegocioController {
 			result.include("notice","Info: Parceiro Negócio encontrado na Base SGO. Possível apenas alteração. ");
 
 		}
-			
-			
-
-
-		
 
 		result.include("departamentos", this.departamentoDao.buscaAllDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("funcoes", this.funcaoDao.buscaAllFuncao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		result.include("supervisores", this.parceiroNegocioDao.buscaParceiroNegocioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+		result.include("supervisores", this.funcionarioDao.buscaSupervisorFuncionarioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
 		result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
 		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
@@ -345,37 +340,41 @@ public class ParceironegocioController {
 				this.parceiroNegocioDao.rollback();
 	
 				if (e.getCause().toString().indexOf("PK_PARCEIRONEGOCIO") != -1){
-					mensagem = "Erro: Parceiro Negócio " + parceiroNegocio.getNome() + " já existente.";
-				} else {
-					mensagem = "Erro ao adicionar Parceiro Negócio:";
-				}
-	
-			}
-	
-			if(parceiroNegocio.getIsFuncionario()){
-	
-				Funcionario f = new Funcionario();
-	
-				if(funcionario.getSupervisor().getParceiroNegocio_id() != null)
-					f.setSupervisor(this.parceiroNegocioDao.buscaParceiroNegocioById(funcionario.getSupervisor().getParceiroNegocio_id()));
-	
-				f.setEmpresa(parceiroNegocio.getEmpresa());
-				f.setOrganizacao(parceiroNegocio.getOrganizacao());
-				f.setDepartamento(funcionario.getDepartamento());
-				f.setParceiroNegocio(parceiroNegocio);
-				f.setFuncao(funcionario.getFuncao());
-				f.setNome(parceiroNegocio.getNome());
-				f.setChave(parceiroNegocio.getNome());
-				f.setDescricao(parceiroNegocio.getNome());
-				f.setApelido(funcionario.getApelido());
-				f.setOperacao(funcionario.getOperacao().getOperacao_id() == null ? null : funcionario.getOperacao());
 
-				f.setCreated(dataAtual);
-				f.setUpdated(dataAtual);
-				f.setCreatedBy(usuario);
-				f.setUpdatedBy(usuario);
-				
-				f.setIsActive(parceiroNegocio.getIsActive());
+					mensagem = "Erro: Parceiro Negócio " + parceiroNegocio.getNome() + " já existente.";
+
+				} else {
+
+					mensagem = "Erro ao adicionar Parceiro Negócio:";
+
+				}
+
+			}
+
+			if(parceiroNegocio.getIsFuncionario()){
+
+				Funcionario f = new Funcionario();
+
+					if(funcionario.getSupervisorFuncionario().getFuncionario_id() != null)
+						f.setSupervisorFuncionario(funcionario.getSupervisorFuncionario());
+
+					f.setEmpresa(parceiroNegocio.getEmpresa());
+					f.setOrganizacao(parceiroNegocio.getOrganizacao());
+					f.setDepartamento(funcionario.getDepartamento());
+					f.setParceiroNegocio(parceiroNegocio);
+					f.setFuncao(funcionario.getFuncao());
+					f.setNome(parceiroNegocio.getNome());
+					f.setChave(parceiroNegocio.getNome());
+					f.setDescricao(parceiroNegocio.getNome());
+					f.setApelido(funcionario.getApelido());
+					f.setOperacao(funcionario.getOperacao().getOperacao_id() == null ? null : funcionario.getOperacao());
+	
+					f.setCreated(dataAtual);
+					f.setUpdated(dataAtual);
+					f.setCreatedBy(usuario);
+					f.setUpdatedBy(usuario);
+					
+					f.setIsActive(parceiroNegocio.getIsActive());
 				
 				try {
 	
@@ -396,22 +395,29 @@ public class ParceironegocioController {
 				}
 	
 				Usuario u = new Usuario();
+				Funcionario func = funcionarioDao.buscaFuncionarioByEmpOrgFuncionario(funcionario.getSupervisorFuncionario().getFuncionario_id());
 				
-				if(funcionario.getSupervisor().getParceiroNegocio_id() != null)
-					u.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),funcionario.getSupervisor().getParceiroNegocio_id()));
+				System.out.println("passou Supervisor " + funcionario.getSupervisorFuncionario().getFuncionario_id());
+				System.out.println("passou parceiro " + func.getParceiroNegocio().getParceiroNegocio_id());
+				
+				//if(funcionario.getSupervisor().getParceiroNegocio_id() != null)
+				//if(func != null)
+				if(funcionario.getSupervisorFuncionario().getFuncionario_id() != null)
+					//u.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(), funcionario.getSupervisor().getParceiroNegocio_id()));
+					u.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(), func.getParceiroNegocio().getParceiroNegocio_id()));
 	
-				u.setChave(parceiroNegocio.getCpf());
-				u.setEmpresa(parceiroNegocio.getEmpresa());
-				u.setOrganizacao(parceiroNegocio.getOrganizacao());
-				u.setParceiroNegocio(parceiroNegocio);
-				u.setSenha("123456");
-				u.setNome(parceiroNegocio.getNome());
-				u.setCreated(dataAtual);
-				u.setUpdated(dataAtual);
-				u.setCreatedBy(usuario);
-				u.setUpdatedBy(usuario);
-				u.setApelido(funcionario.getApelido());
-				u.setIsActive(true);
+					u.setChave(parceiroNegocio.getCpf());
+					u.setEmpresa(parceiroNegocio.getEmpresa());
+					u.setOrganizacao(parceiroNegocio.getOrganizacao());
+					u.setParceiroNegocio(parceiroNegocio);
+					u.setSenha("ouro123");
+					u.setNome(parceiroNegocio.getNome());
+					u.setCreated(dataAtual);
+					u.setUpdated(dataAtual);
+					u.setCreatedBy(usuario);
+					u.setUpdatedBy(usuario);
+					u.setApelido(funcionario.getApelido());
+					u.setIsActive(true);
 
 				if(u.getUsuario_id() == null) {
 					this.usuarioDao.beginTransaction();
@@ -604,7 +610,7 @@ public class ParceironegocioController {
 	
 	@Post
 	@Path("/parceironegocio/altera")
-	public void altera(ParceiroNegocio parceiroNegocio,Funcionario funcionario){
+	public void altera(ParceiroNegocio parceiroNegocio, Funcionario funcionario){
 
 		String mensagem = "Alterado Com sucesso";
 
@@ -626,37 +632,43 @@ public class ParceironegocioController {
 			this.parceiroNegocioDao.beginTransaction();
 			this.parceiroNegocioDao.atualiza(this.parceiroNegocio);
 			this.parceiroNegocioDao.commit();
-			
-			
+
 			if(this.parceiroNegocio.getIsFuncionario()){
-				
+
 				this.funcionario = this.funcionarioDao.load(funcionario.getFuncionario_id());
-				
+
 				this.funcionario.setDepartamento(funcionario.getDepartamento());
-				this.funcionario.setOperacao(funcionario.getOperacao());
+				if (this.funcionario.getOperacao().getOperacao_id() != null){
+					this.funcionario.setOperacao(funcionario.getOperacao());
+				}
+
 				this.funcionario.setFuncao(funcionario.getFuncao());
-				this.funcionario.setSupervisor(funcionario.getSupervisor());
+				this.funcionario.setSupervisorFuncionario(funcionario.getSupervisorFuncionario());
 				this.funcionario.setApelido(funcionario.getApelido());
 
 				this.funcionario.setUpdated(GregorianCalendar.getInstance());
 				this.funcionario.setUpdatedBy(usuario);
-				
+
 				this.funcionarioDao.beginTransaction();
 				this.funcionarioDao.atualiza(this.funcionario);
 				this.funcionarioDao.commit();
-				
+
 				Usuario usuario = this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.parceiroNegocio.getParceiroNegocio_id());
 
-				usuario.setApelido(this.funcionario.getApelido());
-				usuario.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.funcionario.getSupervisor().getParceiroNegocio_id()));
+				System.out.println("no " + parceiroNegocio.getParceiroNegocio_id());
+				System.out.println("yes " + this.parceiroNegocio.getParceiroNegocio_id());
 				
+				usuario.setApelido(this.funcionario.getApelido());
+				Funcionario f = funcionarioDao.buscaFuncionarioByEmpOrgFuncionario(this.funcionario.getSupervisorFuncionario().getFuncionario_id());
+				//usuario.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.funcionario.getSupervisorFuncionario().getFuncionario_id()));
+				usuario.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), f.getParceiroNegocio().getParceiroNegocio_id()));
 				usuario.setUpdated(GregorianCalendar.getInstance());
 				usuario.setUpdatedBy(usuario);
 
 				this.usuarioDao.beginTransaction();
 				this.usuarioDao.atualiza(usuario);
 				this.usuarioDao.commit();
-				
+
 			}
 
 			mensagem = " Parceiro Negócio : " + parceiroNegocio.getNome() + " atualizado com sucesso ";
@@ -889,8 +901,7 @@ public class ParceironegocioController {
 			pl.setTipoEndereco(this.tipoEnderecoDao.load(parceiroLocalidade.getTipoEndereco().getTipoEndereco_id()));
 
 		if(this.parceiroLocalidadeDao.buscaParceiroLocalidadeNum(parceiroNegocio.getEmpresa().getEmpresa_id(),parceiroNegocio.getOrganizacao().getOrganizacao_id(), 
-				parceiroNegocio.getParceiroNegocio_id(),pl.getLocalidade().getLocalidade_id(), pl.getTipoEndereco().getTipoEndereco_id(),
-				pl.getNumero()) == null){
+				parceiroNegocio.getParceiroNegocio_id(),pl.getLocalidade().getLocalidade_id(), pl.getTipoEndereco().getTipoEndereco_id(), pl.getNumero()) == null){
 
 			this.parceiroLocalidadeDao.beginTransaction();
 			this.parceiroLocalidadeDao.atualiza(pl);
