@@ -14,7 +14,7 @@ function altera(linha, atributo, funcionario_id, valor) {
 	if(atributo == 'supervisor'){
 		if (window.confirm("Deseja realmente alterar o consultor selecionado?"))
 			$.post('<c:url value='/funcionario/altera' />'
-			, { 'funcionario.supervisor.parceiroNegocio_id' : valor , 'funcionario.funcionario_id' : funcionario_id}
+			, { 'funcionario.supervisorFuncionario.funcionario_id' : valor , 'funcionario.funcionario_id' : funcionario_id}
 			, function(resposta) { excluiLinha(linha, resposta); });
 	}
 	
@@ -89,16 +89,16 @@ function excluiLinha(linha, resposta) {
 								${funcionario.parceiroNegocio.cpf }
 							</td>
 							<td>
-								${funcionario.parceiroNegocio.nome }
+								${funcionario.nome }
 							</td>
 							<td>
 								<input type="text" name="funcionario.apelido" value="${funcionario.apelido }" class="input-xlarge" onChange="return altera(this,'apelido','${funcionario.funcionario_id }', this.value);" />
 							</td>
 							<td>
-								<select name="funcionario.supervisor.parceironegocio_id" onChange="return altera(this,'supervisor','${funcionario.funcionario_id }', this.value);" >
+								<select name="funcionario.supervisorFuncionario.funcionario_id" onChange="return altera(this,'supervisor','${funcionario.funcionario_id }', this.value);" >
 									<c:forEach items="${supervisores }" var="supervisor">
-										<option value="${supervisor.parceiroNegocio.parceiroNegocio_id }" 
-											<c:if test="${funcionario.supervisor.parceiroNegocio_id == supervisor.parceiroNegocio.parceiroNegocio_id }">selected="selected"</c:if>>${supervisor.parceiroNegocio.nome }</option>
+										<option value="${supervisor.funcionario_id }" 
+											<c:if test="${funcionario.supervisorFuncionario.funcionario_id eq supervisor.funcionario_id }">selected="selected"</c:if>>${supervisor.nome }</option>
 									</c:forEach>
 								</select>
 							</td>
