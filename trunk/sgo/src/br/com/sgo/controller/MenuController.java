@@ -792,6 +792,8 @@ public class MenuController {
 			Boolean buscaEnviadoDataPrev = false;
 			Boolean buscaAguardandoBoleto = false;
 
+			tipoControle = 2l;
+
 			for(String s : status){
 
 				if(s.equals("Enviado DataPrev"))

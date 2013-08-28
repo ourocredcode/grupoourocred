@@ -160,6 +160,8 @@
 
 		$('.data-table').dataTable( {
 			
+			"aLengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Todos"]],
+			
 			"oLanguage": {    
 				"sProcessing": "Aguarde enquanto os dados são carregados ...",    
 				"sLengthMenu": "Mostrar _MENU_ registros por pagina",    
@@ -438,25 +440,37 @@
 				bancosComprados[0] = "";
 			}
 
+			
+
 			if(data != '' || dataFim != '' || previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
 					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' || quitacaoInicio != '' || quitacaoFim != '' || assinaturaInicio != '' || assinaturaFim != '' || procedimento != ''){
+				
+				if( (previsaoInicio != '' || previsaoFim != '' || chegadaInicio != '' || chegadaFim != '' || vencimentoInicio != '' || vencimentoFim != '' 
+					|| proximaAtuacaoInicio != '' || proximaAtuacaoFim != '' ) && tipoControle == ''){
 
-				$("#resultado").load('<c:url value="/menu/busca/controle" />',{'tipoControle': tipoControle,'data' : data, 'dataFim' : dataFim,
-										'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
-										'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
-										'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'quitacaoInicio': quitacaoInicio,'quitacaoFim': quitacaoFim,
-										'assinaturaInicio': assinaturaInicio,'assinaturaFim': assinaturaFim,'bancos': bancos, 
-										'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'convenios': convenios,
-										'consultor': consultor,'cliente': cliente,'documento': documento,'empresas':empresas,
-										'procedimento': procedimento,'proximoProcedimento': proximoProcedimento,
-										'atuante':atuante,});
+					alert("Escolha um tipo de controle.");
+					tipoControle.focus();
+
+				} else {
+					
+					$("#resultado").load('<c:url value="/menu/busca/controle" />',{'tipoControle': tipoControle,'data' : data, 'dataFim' : dataFim,
+						'previsaoInicio': previsaoInicio,'previsaoFim': previsaoFim,
+						'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
+						'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'quitacaoInicio': quitacaoInicio,'quitacaoFim': quitacaoFim,
+						'assinaturaInicio': assinaturaInicio,'assinaturaFim': assinaturaFim,'bancos': bancos, 
+						'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'convenios': convenios,
+						'consultor': consultor,'cliente': cliente,'documento': documento,'empresas':empresas,
+						'procedimento': procedimento,'proximoProcedimento': proximoProcedimento,
+						'atuante':atuante,});
+					
+				}
 
 			} else {
 
 				alert("Escolha uma data para a busca.");
 
 			}
-		
+
 	 }
 	 
 	 
