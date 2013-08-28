@@ -630,11 +630,11 @@
 								
 								<div class="span2">
 									<label for="funcionarioSupervisorId">Supervisor</label>
-									<select  id="funcionarioSupervisorId" name="funcionario.supervisor.parceiroNegocio_id" class="input-medium">
+									<select  id="funcionarioSupervisorId" name="funcionario.supervisorFuncionario.funcionario_id" class="input-medium">
 										<option value="">Selecione o supervisor</option>
 										<c:forEach var="supervisor" items="${supervisores }">
-											<option value="${supervisor.parceiroNegocio_id }" <c:if test="${funcionario.supervisor.parceiroNegocio_id eq supervisor.parceiroNegocio_id }"> selected="selected"</c:if>> ${supervisor.nome }</option>
-										</c:forEach>
+											 <option value="${supervisor.funcionario_id }" <c:if test="${funcionario.supervisorFuncionario.funcionario_id eq supervisor.funcionario_id }"> selected="selected"</c:if>> ${supervisor.nome }</option>
+										</c:forEach>										
 									</select>
 								</div>
 								
