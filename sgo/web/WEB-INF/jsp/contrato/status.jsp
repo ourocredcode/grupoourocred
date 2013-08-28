@@ -578,7 +578,15 @@ function openPopup(url) {
 								</div>
 								<div class="span3">
 									<label for="contratoUsuarioNome">Consultor</label>
-									<input id="contratoUsuarioNome"  name="contrato.usuario.nome" value="${contrato.usuario.nome }" type="text" class="input-xlarge" />
+									<input id="contratoUsuarioNome"  name="contrato.usuario.nome" value="${contrato.usuario.nome }" type="text" class="input-large" />
+								</div>
+								<div class="span2">
+									<label for="contratoUsuarioApelido">Codinome</label>
+									<input id="contratoUsuarioApelido"  name="contrato.usuario.apelido" value="${contrato.usuario.apelido }" type="text" class="input-medium" />
+								</div>
+								<div class="span2">
+									<label for="contratoUsuarioChave">CPF</label>
+									<input id="contratoUsuarioChave"  name="contrato.usuario.chave" value="${contrato.usuario.chave }" type="text" class="input-medium" />
 								</div>
 								<div class="span2">
 									<c:if test="${contrato.isRepasse }">

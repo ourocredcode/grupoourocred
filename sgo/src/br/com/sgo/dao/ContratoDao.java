@@ -47,7 +47,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" CONTRATO.produto_id, CONTRATO.tabela_id, "+
 			" CONTRATO.banco_id, CONTRATO.recompra_banco_id, "+
 			" CONTRATO.usuario_id, "+
-			" USUARIO.nome as usuario_nome, USUARIO.apelido as usuario_apelido, "+
+			" USUARIO.nome as usuario_nome, USUARIO.apelido as usuario_apelido,  USUARIO.chave as usuario_chave , "+
 			" USUARIO_SUPERVISOR.usuario_id as usuario_super_id, "+
 			" USUARIO_SUPERVISOR.nome as usuario_super, USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
 			" CONTRATO.prazo, "+
@@ -1036,7 +1036,7 @@ public class ContratoDao extends Dao<Contrato> {
 				" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id "+
 				" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id "+
 				" INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id "+
-				" LEFT JOIN LOGISTICA (NOLOCK) ON CONTRATO.contrato_id = ( SELECT max(LOGISTICA.logistica_id) FROM LOGISTICA WHERE LOGISTICA.contrato_id = CONTRATO.contrato_id ) "+
+				" LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.logistica_id = ( SELECT max(LOGISTICA.logistica_id) FROM LOGISTICA WHERE LOGISTICA.contrato_id = CONTRATO.contrato_id ) "+
 				" LEFT JOIN NATUREZAPROFISSIONAL (NOLOCK) ON CONTRATO.naturezaprofissional_id = NATUREZAPROFISSIONAL.naturezaprofissional_id "+
 				" LEFT JOIN TIPOSAQUE (NOLOCK) ON CONTRATO.tiposaque_id = TIPOSAQUE.tiposaque_id "+
 				" LEFT JOIN BANCO (NOLOCK) AS BANCO_1 ON CONTRATO.recompra_banco_id = BANCO_1.banco_id "+
@@ -1213,21 +1213,30 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			System.out.println(sql);
+			//System.out.println(sql);
 
 			int curr = 1;
 			
 			if(tipoControle != null){
+				
+				//System.out.println("tipoControle " + tipoControle);
+				
 				this.stmt.setLong(curr, tipoControle);
 				curr++;
 			}
 
 			if(empresa_id != null){
+				
+				//System.out.println("empresa_id : " + empresa_id);
+
 				this.stmt.setLong(curr, empresa_id);
 				curr++;
 			}
 			
 			if(organizacao_id != null){
+				
+				//System.out.println("organizacao_id : " + organizacao_id);
+				
 				this.stmt.setLong(curr, organizacao_id);
 				curr++;
 			}
@@ -1245,6 +1254,8 @@ public class ContratoDao extends Dao<Contrato> {
 			}
 
 			for(String statusAux2 : status){
+				
+				//System.out.println(" status : " + statusAux2);
 
 				if(!statusAux2.equals("")) {
 					this.stmt.setString(curr, '%' + statusAux2 + '%');
@@ -1381,6 +1392,8 @@ public class ContratoDao extends Dao<Contrato> {
 			} 
 			
 			if(procedimento != null) {
+				
+				//System.out.println("procedimento " + procedimento );
 
 				this.stmt.setLong(curr, procedimento);
 				curr++;
@@ -1388,6 +1401,8 @@ public class ContratoDao extends Dao<Contrato> {
 			}
 			
 			if(proximoProcedimento != null) {
+				
+				//System.out.println("proximoProcedimento " + proximoProcedimento );
 
 				this.stmt.setLong(curr, proximoProcedimento);
 				curr++;
@@ -1396,6 +1411,8 @@ public class ContratoDao extends Dao<Contrato> {
 			}
 			
 			if(atuante != null) {
+				
+				//System.out.println(" atuante " + atuante );
 				
 				this.stmt.setLong(curr, atuante);
 				curr++;
@@ -1861,6 +1878,7 @@ public class ContratoDao extends Dao<Contrato> {
 		usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
 		usuario.setNome(rsContrato.getString("usuario_nome"));
 		usuario.setApelido(rsContrato.getString("usuario_apelido"));
+		usuario.setChave(rsContrato.getString("usuario_chave"));
 		supervisor.setUsuario_id(rsContrato.getLong("usuario_super_id"));
 
 		supervisor.setNome(rsContrato.getString("usuario_super"));

@@ -263,6 +263,8 @@ public class ControleController {
 			averbacao.setProximoAtuante(averbacao.getProximoAtuante().getUsuario_id() == null ? null : averbacao.getProximoAtuante());
 			averbacao.setPerfil(usuarioInfo.getPerfil());
 			averbacao.setWorkflow(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Controle Averbação"));
+			averbacao.setDataProximaAtuacao(averbacao.getDataProximaAtuacao() == null ? null : averbacao.getDataProximaAtuacao());
+			averbacao.setDataPrevisao(averbacao.getDataPrevisao() == null ? null : averbacao.getDataPrevisao());
 
 			controleDao.beginTransaction();
 			controleDao.adiciona(averbacao);
@@ -479,7 +481,6 @@ public class ControleController {
 			boleto.setDataPrimeiraAtuacao(GregorianCalendar.getInstance());
 			boleto.setDataAtuacao(GregorianCalendar.getInstance());
 			boleto.setContrato(contratoDao.load(boleto.getContrato().getContrato_id()));
-			boleto.setProximoAtuante(usuarioInfo.getUsuario());
 			boleto.setEmpresa(empresa);
 			boleto.setOrganizacao(organizacao);
 			boleto.setCreated(GregorianCalendar.getInstance());
@@ -492,6 +493,10 @@ public class ControleController {
 			boleto.setProximoAtuante(boleto.getProximoAtuante().getUsuario_id() == null ? null : boleto.getProximoAtuante());
 			boleto.setPerfil(usuarioInfo.getPerfil());
 			boleto.setWorkflow(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Controle Boleto"));
+			boleto.setDataProximaAtuacao(boleto.getDataProximaAtuacao() == null ? null : boleto.getDataProximaAtuacao());
+			boleto.setDataPrevisao(boleto.getDataPrevisao() == null ? null : boleto.getDataPrevisao());
+			boleto.setDataChegada(boleto.getDataChegada() == null ? null : boleto.getDataChegada());
+			boleto.setDataVencimento(boleto.getDataVencimento() == null ? null : boleto.getDataVencimento());
 
 			controleDao.beginTransaction();
 			controleDao.adiciona(boleto);
