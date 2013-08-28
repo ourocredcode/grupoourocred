@@ -39,10 +39,6 @@ public class Funcionario implements Serializable {
 	private Departamento departamento;
 
 	@ManyToOne
-	@JoinColumn(name = "supervisor_funcionario_id", updatable = true, nullable = false)
-	private ParceiroNegocio supervisor;
-
-	@ManyToOne
 	@JoinColumn(name = "parceironegocio_id", updatable = true, nullable = false)
 	private ParceiroNegocio parceiroNegocio;
 	
@@ -54,6 +50,10 @@ public class Funcionario implements Serializable {
 	@JoinColumn(name = "funcao_id", updatable = true, nullable = false)
 	private Funcao funcao;
 
+	@ManyToOne
+	@JoinColumn(name = "supervisorfuncionario_id", updatable = true, nullable = true)
+	private Funcionario supervisorFuncionario;
+	
 	@ManyToOne
 	@JoinColumn(name = "createdby", updatable = true, nullable = true)
 	private Usuario createdBy;
@@ -147,14 +147,6 @@ public class Funcionario implements Serializable {
 		this.parceiroNegocio = parceiroNegocio;
 	}
 
-	public ParceiroNegocio getSupervisor() {
-		return supervisor;
-	}
-
-	public void setSupervisor(ParceiroNegocio supervisor) {
-		this.supervisor = supervisor;
-	}
-
 	public Usuario getCreatedBy() {
 		return createdBy;
 	}
@@ -217,5 +209,13 @@ public class Funcionario implements Serializable {
 
 	public void setOperacao(Operacao operacao) {
 		this.operacao = operacao;
+	}
+
+	public Funcionario getSupervisorFuncionario() {
+		return supervisorFuncionario;
+	}
+
+	public void setSupervisorFuncionario(Funcionario supervisorFuncionario) {
+		this.supervisorFuncionario = supervisorFuncionario;
 	}
 }
