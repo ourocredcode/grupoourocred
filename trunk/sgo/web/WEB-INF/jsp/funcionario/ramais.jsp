@@ -38,10 +38,10 @@
 					<c:forEach items="${funcionarios }" var="funcionario">
 						<tr>
 							<td>
-								${funcionario.supervisor.nome}
+								${funcionario.supervisorFuncionario.nome}
 							</td>
 							<td>
-								${funcionario.parceiroNegocio.nome }
+								${funcionario.nome }
 							</td>
 							<td>
 								${funcionario.apelido }
