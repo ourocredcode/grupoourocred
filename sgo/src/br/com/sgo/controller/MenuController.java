@@ -353,6 +353,9 @@ public class MenuController {
 
 		if(tipo.equals("datascontrole")){
 
+			if(usuarioInfo.getPerfil().getNome().equals("Supervisor"))
+				result.include("consultores",this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.usuario.getUsuario_id()));
+
 			result.include("tipobusca","datascontrole");
 			result.include("function","buscaDatasControle();");
 			result.include("buscaDatasControle","block");
