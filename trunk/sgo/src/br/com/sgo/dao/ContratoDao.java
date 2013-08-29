@@ -91,7 +91,7 @@ public class ContratoDao extends Dao<Contrato> {
 		String sql = sqlContratos;
 
 		if(usuario_id != null)
-			sql += " WHERE ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+			sql += " WHERE ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) AND ( ETAPA.NOME not in ('Recusado') ) ";
 
 		if(calInicio != null)
 			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? )";
@@ -157,7 +157,7 @@ public class ContratoDao extends Dao<Contrato> {
 		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
 
 		if(calInicio != null)
-			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? )";
+			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? ) AND ( ETAPA.NOME not in ('Recusado') ) ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -826,7 +826,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			//System.out.println(" CONSULTA POR FILTRO : " +  sql);
+			//System.out.println(sql);
 
 			int curr = 1;
 

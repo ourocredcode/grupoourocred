@@ -39,7 +39,7 @@ $(document).ready(function() {
 			  			/* 6 - Banco */    null,
 			  			/* 7 - Produto */    null,
 			  			/* 8 - Banco Comprado */    null,
-			  			/* 9 - Parcela */     { "bVisible":    false },
+			  			/* 9 - Parcela */     null,
 			  			/* 10 - Coeficiente */     { "bVisible":    false },
 			  			/* 11 - Prazo */     { "bVisible":    false },
 			  			/* 12 - Vl Contrato */    null,
@@ -60,7 +60,7 @@ $(document).ready(function() {
 		"oColVis": {
 			"activate": "mouseover",
 			"buttonText": "Selecione Colunas",
-			"aiExclude": [ 0,1,2,3,4,5,6,7,8,12,,13,14,15,16 ]
+			"aiExclude": [ 0,1,2,3,4,5,6,7,12,,13,14,15,16 ]
 			
 		}
 	} );

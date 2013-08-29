@@ -40,6 +40,7 @@ import br.com.sgo.dao.TipoProcedimentoDao;
 import br.com.sgo.dao.TipoSaqueDao;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
+import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
@@ -97,6 +98,7 @@ public class ContratoController {
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
 	private final MeioPagamentoDao meioPagamentoDao;
 	private final OperacaoDao operacaoDao;
+	private final WorkflowDao workflowDao;
 	private final PnDao pnDao;
 	private final TipoWorkflowDao tipoWorkflowDao;
 
@@ -131,7 +133,7 @@ public class ContratoController {
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
 			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, 
-			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao,TipoWorkflowDao tipoWorkflowDao){		
+			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao,TipoWorkflowDao tipoWorkflowDao,WorkflowDao workflowDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -175,6 +177,7 @@ public class ContratoController {
 		this.pnDao = pnDao;
 		this.tipoSaqueDao = tipoSaqueDao;
 		this.operacaoDao = operacaoDao;
+		this.workflowDao = workflowDao;
 
 	}
 
@@ -310,38 +313,64 @@ public class ContratoController {
 		List<String> log = new ArrayList<String>();
 
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
-		
+
 		if(contrato.getCoeficiente().getCoeficiente_id() != null){
 
 			Coeficiente coefAux = coeficienteDao.load(contrato.getCoeficiente().getCoeficiente_id());
-			log.add("Coeficiente alterado de : " + this.contrato.getCoeficiente().getValor() + " para: " + coefAux.getValor());
-			this.contrato.setCoeficiente(coefAux);
+			
+			if(this.contrato.getCoeficiente().getCoeficiente_id() != contrato.getCoeficiente().getCoeficiente_id()) {
+
+				log.add("Coeficiente alterado de : " + this.contrato.getCoeficiente().getValor() + " para: " + coefAux.getValor());
+				this.contrato.setCoeficiente(coefAux);
+
+			}
 
 		}
 
 		if(contrato.getBanco().getBanco_id() != null) {
-			this.contrato.setBanco(bancoDao.load(contrato.getBanco().getBanco_id()));
-			log.add("Banco alterado para : " + this.contrato.getBanco().getNome());
+
+			if(this.contrato.getBanco().getBanco_id() != contrato.getBanco().getBanco_id()) {
+
+				this.contrato.setBanco(bancoDao.load(contrato.getBanco().getBanco_id()));
+				log.add("Banco alterado para : " + this.contrato.getBanco().getNome());
+
+			}
+
 		}
 
 		if(contrato.getProduto().getProduto_id() != null) {
-			this.contrato.setProduto(produtoDao.load(contrato.getProduto().getProduto_id()));
-			log.add("Produto alterado para : " + this.contrato.getProduto().getNome());
+
+			if(this.contrato.getProduto().getProduto_id() != contrato.getProduto().getProduto_id() ) {
+
+				this.contrato.setProduto(produtoDao.load(contrato.getProduto().getProduto_id()));
+				log.add("Produto alterado para : " + this.contrato.getProduto().getNome());
+
+			}
+
 		}
 
-		if(contrato.getRecompraBanco().getBanco_id() != null){
-			this.contrato.setRecompraBanco(bancoDao.load(contrato.getRecompraBanco().getBanco_id()));
-			log.add("Banco recompra alterado para : " + this.contrato.getRecompraBanco().getNome());
-		}
+		if(contrato.getRecompraBanco().getBanco_id() == null){
 
-		if(this.contrato.getBanco().getBanco_id() != contrato.getBanco().getBanco_id()){
-			log.add("Banco alterado de : " + this.contrato.getBanco().getNome() + " para: " + contrato.getBanco().getNome());
-			this.contrato.setBanco(contrato.getBanco() == null ? null : contrato.getBanco());
-		}
+			if(this.contrato.getRecompraBanco().getBanco_id() != null){
 
-		if(this.contrato.getProduto().getProduto_id() != contrato.getProduto().getProduto_id()) {
-			log.add("Produto alterado: " + this.contrato.getProduto().getNome() + " para: " + contrato.getProduto().getNome());
-			this.contrato.setProduto(contrato.getProduto() == null ? null : contrato.getProduto());
+				log.add(" Banco recompra excluído. ");
+				this.contrato.setRecompraBanco(null);
+
+			} else {
+
+				this.contrato.setRecompraBanco(null);
+
+			}
+
+		} else {
+
+			if(this.contrato.getRecompraBanco() == null || this.contrato.getRecompraBanco().getBanco_id() != contrato.getRecompraBanco().getBanco_id()) {
+
+				this.contrato.setRecompraBanco(bancoDao.load(contrato.getRecompraBanco().getBanco_id()));
+				log.add("Banco recompra alterado para : " + this.contrato.getRecompraBanco().getNome());
+
+			}
+
 		}
 
 		if(this.contrato.getQtdParcelasAberto() != contrato.getQtdParcelasAberto()){
@@ -353,11 +382,6 @@ public class ContratoController {
 			log.add("Prazo alterado de : " + this.contrato.getPrazo() + " para : " + contrato.getPrazo());
 			this.contrato.setPrazo(contrato.getPrazo() == null ? null : contrato.getPrazo());
 		}		
-
-		if(this.contrato.getCoeficiente().getCoeficiente_id() != contrato.getCoeficiente().getCoeficiente_id()){
-			log.add("Coeficiente alterado de : " + this.contrato.getCoeficiente().getValor() + " para : " + contrato.getCoeficiente().getValor());
-			this.contrato.setCoeficiente(contrato.getCoeficiente() == null ? null : contrato.getCoeficiente());
-		}
 
 		if(this.contrato.getValorContrato().compareTo(contrato.getValorContrato()) != 0){
 			log.add("Valor contrato alterado de : " + this.contrato.getValorContrato() + " para : " + contrato.getValorContrato());
@@ -402,9 +426,12 @@ public class ContratoController {
 
 		if(this.contrato.getProduto().getNome().equals("MARGEM LIMPA") || this.contrato.getProduto().getNome().equals("RECOMPRA INSS")  || this.contrato.getProduto().getNome().equals("RECOMPRA RMC") )
 			this.contrato.setValorContratoLiquido(this.contrato.getValorContrato());
-		
+
 		if(this.contrato.getProduto().getNome().equals("REFINANCIAMENTO") || this.contrato.getProduto().getNome().equals("RETENÇÃO"))
 			this.contrato.setValorContratoLiquido(this.contrato.getValorLiquido());
+
+		this.contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
+				contrato.getBanco().getBanco_id(), contrato.getProduto().getProduto_id() ,this.contrato.getConvenio().getConvenio_id()));
 
 		this.contratoDao.beginTransaction();
 		this.contratoDao.atualiza(this.contrato);
