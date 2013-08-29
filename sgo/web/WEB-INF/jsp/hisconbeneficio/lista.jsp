@@ -7,6 +7,8 @@
 			<th>Imagem</th>
 			<th>Data solicitação</th>
 			<th>Data solicitação Adm</th>
+			<th>Data Envio Adm</th>
+			<th>Supervisor</th>
 			<th>Consultor</th>
 			<th>Cliente</th>
 			<th>Cpf</th>
@@ -27,20 +29,34 @@
 					</c:if>
 				</td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
-				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>			
-				<td>${hiscon.usuario.nome }</td>									
+				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>	
+				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataEnvio.time}" /></td>	
+				<td>${hiscon.usuario.supervisorUsuario.apelido }</td>						
+				<c:if test="${usuarioInfo.perfil.chave != 'Supervisor'}">
+					<td>${hiscon.usuario.apelido }</td>
+				</c:if>
+				<c:if test="${usuarioInfo.perfil.chave == 'Supervisor'}">
+					<td>
+						<select id="hisconBeneficioConsultor" name="hisconBeneficioConsultor" class="input-small" onchange="return altera('usuario.usuario_id','${hiscon.hisconBeneficio_id}', this.value);">
+							<option value="">Selecione um Consultor</option>
+							<c:forEach var="consultor" items="${consultores }">
+								<option value="${consultor.usuario_id }" <c:if test="${consultor.usuario_id == hiscon.usuario.usuario_id}">selected</c:if>>${consultor.apelido }</option>
+							</c:forEach>
+						</select>
+					</td>
+				</c:if>									
 				<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
 				<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 				<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>				
 				<td>
-					<select id="hisconBeneficioStatus" class="input-medium" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+					<select id="hisconBeneficioStatus" class="input-small" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
 						<c:forEach var="etapa" items="${hiscon.etapas }">
 							<option value="${etapa.etapa_id }" <c:if test="${etapa.etapa_id == hiscon.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
 						</c:forEach>
 					</select>
 				</td>
 				<td>
-					<select id="hisconBeneficioPosicoes" class="input-medium" onchange="return altera('etapaPosicao.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+					<select id="hisconBeneficioPosicoes" class="input-small" onchange="return altera('etapaPosicao.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
 						<c:forEach var="etapaPosicao" items="${hiscon.posicoes }">
 							<option value="${etapaPosicao.etapa_id }" <c:if test="${etapaPosicao.etapa_id == hiscon.etapaPosicao.etapa_id}">selected</c:if>>${etapaPosicao.nome }</option>
 						</c:forEach>

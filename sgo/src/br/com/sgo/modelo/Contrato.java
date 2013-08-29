@@ -458,7 +458,7 @@ public class Contrato implements Serializable {
 	}
 
 	public Double getDesconto() {
-		return desconto;
+		return desconto == null ? 0.0 : desconto;
 	}
 
 	public void setDesconto(Double desconto) {
@@ -466,7 +466,7 @@ public class Contrato implements Serializable {
 	}
 
 	public Double getValorContrato() {
-		return valorContrato;
+		return valorContrato == null ? 0.0 : valorContrato;
 	}
 
 	public void setValorContrato(Double valorContrato) {
@@ -474,7 +474,7 @@ public class Contrato implements Serializable {
 	}
 
 	public Double getValorDivida() {
-		return valorDivida;
+		return valorDivida == null ? 0.0 : valorDivida;
 	}
 
 	public void setValorDivida(Double valorDivida) {
@@ -482,7 +482,7 @@ public class Contrato implements Serializable {
 	}
 
 	public Double getValorLiquido() {
-		return valorLiquido;
+		return valorLiquido == null ? 0.0 : valorLiquido;
 	}
 
 	public void setValorLiquido(Double valorLiquido) {
@@ -490,7 +490,7 @@ public class Contrato implements Serializable {
 	}
 
 	public Double getValorParcela() {
-		return valorParcela;
+		return valorParcela == null ? 0.0 : valorParcela;
 	}
 
 	public void setValorParcela(Double valorParcela) {
@@ -498,7 +498,7 @@ public class Contrato implements Serializable {
 	}
 
 	public Double getValorMeta() {
-		return valorMeta;
+		return valorMeta == null ? 0.0 : valorMeta;
 	}
 
 	public void setValorMeta(Double valorMeta) {
@@ -634,7 +634,7 @@ public class Contrato implements Serializable {
 	}
 
 	public Double getValorContratoLiquido() {
-		return valorContratoLiquido;
+		return valorContratoLiquido == null ? 0.0 : valorContratoLiquido;
 	}
 
 	public void setValorContratoLiquido(Double valorContratoLiquido) {

@@ -401,12 +401,13 @@ public class UsuarioDao extends Dao<Usuario> {
 	
 	public Collection<Usuario> buscaUsuariosBySupervisor(Long empresa_id, Long organizacao_id, Long supervisor_id) {
 
-		String sql = "SELECT USUARIO.usuario_id, USUARIO.nome, USUARIO.apelido, PARCEIRONEGOCIO.cpf, PARCEIRONEGOCIO.parceironegocio_id FROM ((USUARIO (NOLOCK) "
-				+ "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON USUARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) "
-				+ "INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id) "
-				+ "INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id	"
-				+ "WHERE USUARIO.isactive = 1 AND PARCEIRONEGOCIO.isactive = 1 AND PARCEIRONEGOCIO.isfuncionario = 1"
-				+ "AND USUARIO.empresa_id = ? AND USUARIO.organizacao_id = ? AND USUARIO.supervisor_usuario_id = ? ";
+		String sql = " SELECT USUARIO.usuario_id, USUARIO.nome, USUARIO.apelido, PARCEIRONEGOCIO.cpf, PARCEIRONEGOCIO.parceironegocio_id " +
+				"	FROM ((USUARIO (NOLOCK) "
+				+ " 		INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON USUARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) "
+				+ "			INNER JOIN EMPRESA (NOLOCK) ON USUARIO.empresa_id = EMPRESA.empresa_id) "
+				+ "			INNER JOIN ORGANIZACAO (NOLOCK) ON USUARIO.organizacao_id = ORGANIZACAO.organizacao_id	"
+				+ "	WHERE USUARIO.isactive = 1 AND PARCEIRONEGOCIO.isactive = 1 AND PARCEIRONEGOCIO.isfuncionario = 1"
+				+ "			AND USUARIO.empresa_id = ? AND USUARIO.organizacao_id = ? AND USUARIO.supervisor_usuario_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 

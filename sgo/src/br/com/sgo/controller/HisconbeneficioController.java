@@ -294,6 +294,8 @@ public class HisconbeneficioController {
 		}
 
 		this.hisconBeneficio.setIsActive(true);
+		this.hisconBeneficio.setUpdated(GregorianCalendar.getInstance());
+		this.hisconBeneficio.setUpdatedBy(usuario);
 
 		hisconBeneficioDao.beginTransaction();
 		hisconBeneficioDao.atualiza(this.hisconBeneficio);
@@ -418,11 +420,13 @@ public class HisconbeneficioController {
 
 		}
 
-		if(usuarioInfo.getPerfil().equals("Supervisor")){
+		if(usuarioInfo.getPerfil().getChave().equals("Supervisor")){
 
 			consultores = this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), usuarioInfo.getUsuario().getUsuario_id());
 			consultores.add(usuarioInfo.getUsuario());
+
 			result.include("consultores",consultores);
+
 		}
 
 		result.include("hisconsBeneficio",hiscons);
