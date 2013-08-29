@@ -351,7 +351,7 @@ public class ContratoController {
 
 		if(contrato.getRecompraBanco().getBanco_id() == null){
 
-			if(this.contrato.getRecompraBanco().getBanco_id() != null){
+			if(this.contrato.getRecompraBanco() != null){
 
 				log.add(" Banco recompra excluído. ");
 				this.contrato.setRecompraBanco(null);

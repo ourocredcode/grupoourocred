@@ -310,6 +310,7 @@
 					
 						<ul class="consultor">
 							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
 						</ul>
 				
 					</li>

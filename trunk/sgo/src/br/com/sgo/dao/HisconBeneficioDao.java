@@ -54,7 +54,8 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 	private String sqlHisconsExibe = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, EMPRESA.nome as empresa_nome   " + 
 			", HISCONBENEFICIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, HISCONBENEFICIO.parceirobeneficio_id , PARCEIROBENEFICIO.numerobeneficio " +     
-			", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,PERFIL.perfil_id, PERFIL.nome as perfil_nome " +    
+			", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,USUARIO.apelido as usuario_apelido, SUPER.apelido as supervisor_apelido, " +
+			"  PERFIL.perfil_id, PERFIL.nome as perfil_nome " +    
 			", HISCONBENEFICIO.workflow_id, PARCEIRONEGOCIO.parceironegocio_id, PARCEIRONEGOCIO.cpf " +    
 			", PARCEIRONEGOCIO.nome as parceironegocio_nome, ETAPA.etapa_id, ETAPA.nome AS etapa_nome, HISCONBENEFICIO.created, HISCONBENEFICIO.updated " +     
 			", HISCONBENEFICIO.dataadm, HISCONBENEFICIO.dataenvio, HISCONBENEFICIO.caminhoarquivo " +    
@@ -728,6 +729,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
 		ParceiroNegocio parceiro = new ParceiroNegocio();
 		Usuario usuario = new Usuario();
+		Usuario supervisor = new Usuario();
 		Etapa etapa = new Etapa();	
 		Etapa etapaPosicao = new Etapa();
 
@@ -757,6 +759,10 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		
 		usuario.setUsuario_id(rsHisconBeneficio.getLong("usuario_id"));
 		usuario.setNome(rsHisconBeneficio.getString("usuario_nome"));
+		usuario.setApelido(rsHisconBeneficio.getString("usuario_apelido"));
+		supervisor.setApelido(rsHisconBeneficio.getString("supervisor_apelido"));
+		
+		usuario.setSupervisorUsuario(supervisor);
 
 		hisconBeneficio.setHisconBeneficio_id(rsHisconBeneficio.getLong("hisconbeneficio_id"));
 		hisconBeneficio.setEmpresa(empresa);
