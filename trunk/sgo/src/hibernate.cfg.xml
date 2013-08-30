@@ -53,8 +53,11 @@
 		<mapping class="br.com.sgo.modelo.Controle" />
 		<mapping class="br.com.sgo.modelo.ControleFormulario" />
 		<mapping class="br.com.sgo.modelo.TipoControle" />		
-		<mapping class="br.com.sgo.modelo.Conferencia" />		
+		<mapping class="br.com.sgo.modelo.Conferencia" />
+		<mapping class="br.com.sgo.modelo.ModeloProcedimento" />
+		<mapping class="br.com.sgo.modelo.ProcedimentoBanco" />		
 		<mapping class="br.com.sgo.modelo.ProcedimentoConferencia" />
+		<mapping class="br.com.sgo.modelo.ProcedimentoDetalhe" />
 		<mapping class="br.com.sgo.modelo.TipoProcedimento" />
 		
 		<mapping class="br.com.sgo.modelo.Operacao" />

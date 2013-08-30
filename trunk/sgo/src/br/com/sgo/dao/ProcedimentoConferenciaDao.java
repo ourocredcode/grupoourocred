@@ -25,7 +25,12 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 	private Connection conn;
 	private ResultSet rsProcedimentoConferencia;
 
-	private final String sqlProcedimentoConferencia = " SELECT PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id, " +
+
+	private final String sqlProcedimentoConferencia = "SELECT PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id, PROCEDIMENTOCONFERENCIA.empresa_id " +
+							", PROCEDIMENTOCONFERENCIA.organizacao_id, PROCEDIMENTOCONFERENCIA.tipoprocedimento_id, PROCEDIMENTOCONFERENCIA.isactive " +
+							", PROCEDIMENTOCONFERENCIA.nome FROM PROCEDIMENTOCONFERENCIA ";
+
+	private final String sqlProcedimentosConferencia = " SELECT PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id, " +
 							" PROCEDIMENTOCONFERENCIA.nome AS procedimentoconferencia_nome, PROCEDIMENTOCONFERENCIA.chave AS procedimentoconferencia_chave, "+
 							" PROCEDIMENTOCONFERENCIA.empresa_id, EMPRESA.nome AS empresa_nome, "+
 							" PROCEDIMENTOCONFERENCIA.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, "+
@@ -43,7 +48,7 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 
 	public Collection<ProcedimentoConferencia> buscaAllProcedimentoConferencia(Long empresa_id, Long organizacao_id) {
 
-		String sql = sqlProcedimentoConferencia;
+		String sql = sqlProcedimentosConferencia;
 
 		if (empresa_id != null)
 			sql += " WHERE PROCEDIMENTOCONFERENCIA.empresa_id = ?";
@@ -79,9 +84,53 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 
 	}
 	
-	public Collection<ProcedimentoConferencia> buscaProcedimentoConferenciaByEmpOrgTipoProcedimento(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id) {
+	public Collection<ProcedimentoConferencia> buscaProcedimentoConferenciaToFillCombo(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id) {
 
 		String sql = sqlProcedimentoConferencia;
+
+		if (empresa_id != null)
+			sql += " WHERE PROCEDIMENTOCONFERENCIA.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND PROCEDIMENTOCONFERENCIA.organizacao_id = ?";
+		if (tipoProcedimento_id != null)
+			sql += " AND PROCEDIMENTOCONFERENCIA.tipoprocedimento_id = ?";
+		
+		this.conn = this.conexao.getConexao();
+
+		Collection<ProcedimentoConferencia> procedimentosConferencia = new ArrayList<ProcedimentoConferencia>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, tipoProcedimento_id);
+
+			this.rsProcedimentoConferencia = this.stmt.executeQuery();
+
+			while (rsProcedimentoConferencia.next()) {
+				
+				ProcedimentoConferencia procedimento = new ProcedimentoConferencia();				
+				procedimento.setProcedimentoConferencia_id(rsProcedimentoConferencia.getLong("procedimentoconferencia_id"));
+				procedimento.setNome(rsProcedimentoConferencia.getString("nome"));
+				procedimentosConferencia.add(procedimento);
+
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsProcedimentoConferencia, stmt, conn);
+		return procedimentosConferencia;
+
+	}
+
+	public Collection<ProcedimentoConferencia> buscaProcedimentoConferenciaByEmpOrgTipoProcedimento(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id) {
+
+		String sql = sqlProcedimentosConferencia;
 
 		if (empresa_id != null)
 			sql += " WHERE PROCEDIMENTOCONFERENCIA.empresa_id = ? ";
@@ -124,7 +173,7 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 	
 	public Collection<ProcedimentoConferencia> buscaProcedimentoConferenciaTipoProcedimentoNome(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id, String nome) {
 
-		String sql = sqlProcedimentoConferencia;
+		String sql = sqlProcedimentosConferencia;
 
 		if (empresa_id != null)
 			sql += " WHERE PROCEDIMENTOCONFERENCIA.empresa_id = ?";
@@ -168,7 +217,7 @@ public class ProcedimentoConferenciaDao extends Dao<ProcedimentoConferencia> {
 
 	public ProcedimentoConferencia buscaProcedimentoConferenciaByEmOrTipoProcedimentoContrato(Long empresa_id, Long organizacao_id, Long tipoProcedimento_id, String nome) {
 
-		String sql = sqlProcedimentoConferencia;
+		String sql = sqlProcedimentosConferencia;
 
 		if (empresa_id != null)
 			sql += " WHERE PROCEDIMENTOCONFERENCIA.empresa_id = ?";

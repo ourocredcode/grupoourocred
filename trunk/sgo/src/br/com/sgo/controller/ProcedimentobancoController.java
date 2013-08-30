@@ -1,5 +1,7 @@
 package br.com.sgo.controller;
 
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Collection;
 
 import br.com.caelum.vraptor.Get;
@@ -16,9 +18,12 @@ import br.com.sgo.dao.ProcedimentoDetalheDao;
 import br.com.sgo.dao.TipoProcedimentoDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
+import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.ModeloProcedimento;
+import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ProcedimentoBanco;
 import br.com.sgo.modelo.ProcedimentoDetalhe;
+import br.com.sgo.modelo.Usuario;
 
 @Resource
 public class ProcedimentobancoController {
@@ -32,8 +37,15 @@ public class ProcedimentobancoController {
 	private final ModeloProcedimentoDao modeloProcedimentoDao;
 	private final ProcedimentoDetalheDao procedimentoDetalheDao;
 
+	private Empresa empresa;
+	private Organizacao organizacao;
+	private Usuario usuario;
+
+	private Calendar dataAtual = Calendar.getInstance();
+
 	public ProcedimentobancoController(Result result, ProcedimentoBancoDao procedimentoBancoDao,ProcedimentoConferenciaDao procedimentoConferenciaDao, UsuarioInfo usuarioInfo,
-			TipoProcedimentoDao tipoProcedimentoDao, BancoDao bancoDao, ModeloProcedimentoDao modeloProcedimentoDao, ProcedimentoDetalheDao procedimentoDetalheDao){
+			TipoProcedimentoDao tipoProcedimentoDao, BancoDao bancoDao, ModeloProcedimentoDao modeloProcedimentoDao, ProcedimentoDetalheDao procedimentoDetalheDao,
+			Empresa empresa, Organizacao organizacao, Usuario usuario){
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -43,14 +55,19 @@ public class ProcedimentobancoController {
 		this.bancoDao = bancoDao;
 		this.modeloProcedimentoDao = modeloProcedimentoDao;
 		this.procedimentoDetalheDao = procedimentoDetalheDao;
+		this.usuario = this.usuarioInfo.getUsuario();
+		this.empresa = this.usuarioInfo.getEmpresa();
+		this.organizacao = this.usuarioInfo.getOrganizacao();
 
-	}	
-
+	}
+	
 	@Get
-	@Path("/procedimentobanco")
+	@Path("/procedimentobanco/cadastro")
 	public void cadastro(){
-		result.include("procedimentosConferencia", this.procedimentoConferenciaDao.buscaProcedimentoConferenciaByEmpOrgTipoProcedimento(usuarioInfo.getEmpresa().getEmpresa_id(), 
-					usuarioInfo.getOrganizacao().getOrganizacao_id(),this.tipoProcedimentoDao.buscaTipoProcedimentoByNome("Banco").getTipoProcedimento_id()));
+
+		result.include("procedimentosConferencia", this.procedimentoConferenciaDao.buscaProcedimentoConferenciaToFillCombo(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.tipoProcedimentoDao.buscaTipoProcedimentoByNome("Banco").getTipoProcedimento_id()));
+		result.include("bancos", this.bancoDao.buscaAllBancos());
+
 	}
 	
 	@Get
@@ -96,32 +113,42 @@ public class ProcedimentobancoController {
 
 		try {
 
-			if (this.procedimentoBancoDao.buscaProcedimentoBancoByEmpOrgProcedimentoBanco(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()
+			if (this.procedimentoBancoDao.buscaProcedimentoBancoByEmpOrgProcedimentoBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()
 					, procedimentoBanco.getProcedimento().getProcedimentoConferencia_id(), procedimentoBanco.getBanco().getBanco_id()) == null) {	
 
-				procedimentoBanco.setIsActive(procedimentoBanco.getIsActive() == null ? false : true);
+				procedimentoBanco.setCreated(dataAtual);
+				procedimentoBanco.setUpdated(dataAtual);
 
-				this.procedimentoBancoDao.beginTransaction();
-				this.procedimentoBancoDao.adiciona(procedimentoBanco);
-				this.procedimentoBancoDao.commit();
+				procedimentoBanco.setCreatedBy(usuario);
+				procedimentoBanco.setUpdatedBy(usuario);
 
-				mensagem = "Procedimento Banco " + procedimentoBanco.getNome() + " adicionado com sucesso";
+				procedimentoBanco.setIsActive(true);
+
+				this.procedimentoBancoDao.insert(procedimentoBanco);
+
+				mensagem = "Procedimento adicionado com sucesso.";
+
 			} else {
-				mensagem = "Erro: Procedimento Banco " + procedimentoBanco.getNome() + " já cadastrado.";
-			} 
 
-		} catch(Exception e) {
+				mensagem = "Erro: Procedimento já cadastrado.";
 
-			mensagem = "Erro: Falha ao adicionar o Procedimento Banco.";
+			}
 
-		} finally{
+		} catch (SQLException e) {
+
+			System.out.println(e);
+			System.out.println(e.getCause());
+
+			mensagem = "Erro: Falha ao adicionar o Procedimento.";
+
+		} finally {
 
 			this.procedimentoBancoDao.clear();
 			this.procedimentoBancoDao.close();
 
 		}
 
-		result.include("notice", mensagem);			
+		result.include("notice", mensagem);
 		result.redirectTo(this).cadastro();
 
 	}
