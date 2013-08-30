@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -26,7 +27,7 @@ public class ProcedimentoBancoDao extends Dao<ProcedimentoBanco> {
 	private Connection conn;
 	private ResultSet rsProcedimentoBanco;
 
-	private final String sqlProcedimentoBanco = "SELECT PROCEDIMENTOBANCO.empresa_id, EMPRESA.nome as empresa_nome, PROCEDIMENTOBANCO.organizacao_id, ORGANIZACAO.nome as organizacao_nome "+
+	private final String sqlProcedimentosBanco = "SELECT PROCEDIMENTOBANCO.empresa_id, EMPRESA.nome as empresa_nome, PROCEDIMENTOBANCO.organizacao_id, ORGANIZACAO.nome as organizacao_nome "+
 									", PROCEDIMENTOBANCO.procedimento_id, PROCEDIMENTOCONFERENCIA.nome as procedimentoconferencia_nome, PROCEDIMENTOBANCO.banco_id, BANCO.nome as banco_nome "+
 									" FROM ((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
 									" INNER JOIN PROCEDIMENTOBANCO (NOLOCK) ON EMPRESA.empresa_id = PROCEDIMENTOBANCO.empresa_id) ON ORGANIZACAO.organizacao_id = PROCEDIMENTOBANCO.organizacao_id) "+ 
@@ -40,7 +41,7 @@ public class ProcedimentoBancoDao extends Dao<ProcedimentoBanco> {
 
 	public Collection<ProcedimentoBanco> buscaAllProcedimentoBanco(Long empresa_id, Long organizacao_id) {
 
-		String sql = sqlProcedimentoBanco;
+		String sql = sqlProcedimentosBanco;
 
 		if (empresa_id != null)
 			sql += " WHERE PROCEDIMENTOBANCO.empresa_id = ?";
@@ -78,7 +79,7 @@ public class ProcedimentoBancoDao extends Dao<ProcedimentoBanco> {
 
 	public Collection<ProcedimentoBanco> buscaProcedimentosBanco(Long procedimento_id, Long banco_id) {
 
-		String sql = sqlProcedimentoBanco;
+		String sql = sqlProcedimentosBanco;
 		
 		if (procedimento_id != null)
 			sql += " WHERE PROCEDIMENTOBANCO.procedimento_id = ?";
@@ -117,7 +118,7 @@ public class ProcedimentoBancoDao extends Dao<ProcedimentoBanco> {
 
 	public ProcedimentoBanco buscaProcedimentoBancoByEmpOrgProcedimentoBanco(Long empresa_id, Long organizacao_id, Long procedimento_id, Long banco_id) {
 
-		String sql = sqlProcedimentoBanco;
+		String sql = sqlProcedimentosBanco;
 
 		if (empresa_id != null)
 			sql += " WHERE PROCEDIMENTOBANCO.empresa_id = ?";
@@ -126,7 +127,7 @@ public class ProcedimentoBancoDao extends Dao<ProcedimentoBanco> {
 		if (procedimento_id != null)
 			sql += " AND PROCEDIMENTOBANCO.procedimento_id = ?";
 		if (banco_id != null)
-			sql += " AND (PROCEDIMENTOBANCO.banco_id = ?)";
+			sql += " AND PROCEDIMENTOBANCO.banco_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -167,7 +168,7 @@ public class ProcedimentoBancoDao extends Dao<ProcedimentoBanco> {
 
 	public ProcedimentoBanco buscaProcedimentoBancoByEmpOrgProcedimento(Long empresa_id, Long organizacao_id, Long procedimento_id) {
 
-		String sql = sqlProcedimentoBanco;
+		String sql = sqlProcedimentosBanco;
 
 		if (empresa_id != null)
 			sql += " WHERE PROCEDIMENTOBANCO.empresa_id = ?";
@@ -210,6 +211,84 @@ public class ProcedimentoBancoDao extends Dao<ProcedimentoBanco> {
 
 		this.conexao.closeConnection(rsProcedimentoBanco, stmt, conn);
 		return procedimentoBanco;
+	}
+
+	public void insert(ProcedimentoBanco procedimentoBanco) throws SQLException {
+
+		String sql = "INSERT INTO ProcedimentoBanco (procedimento_id, banco_id, empresa_id, organizacao_id, created, updated, createdby, updatedby, isactive) VALUES (?,?,?,?,?,?,?,?,?)";
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.conn.setAutoCommit(false);
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, procedimentoBanco.getProcedimento().getProcedimentoConferencia_id());
+			this.stmt.setLong(2, procedimentoBanco.getBanco().getBanco_id());
+			this.stmt.setLong(3, procedimentoBanco.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(4, procedimentoBanco.getOrganizacao().getOrganizacao_id());
+			this.stmt.setTimestamp(5, new Timestamp(procedimentoBanco.getCreated().getTimeInMillis()));
+			this.stmt.setTimestamp(6, new Timestamp(procedimentoBanco.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(7, procedimentoBanco.getCreatedBy().getUsuario_id());
+			this.stmt.setLong(8, procedimentoBanco.getUpdatedBy().getUsuario_id());
+			this.stmt.setBoolean(9, procedimentoBanco.getIsActive());
+
+			this.stmt.executeUpdate();
+
+			this.conn.commit();
+
+		} catch (SQLException e) {
+
+			this.conn.rollback();
+			throw e;
+
+		} finally {
+
+			this.conn.setAutoCommit(true);
+
+		}
+		this.conexao.closeConnection(stmt, conn);
+	}
+
+	public void altera(ProcedimentoBanco procedimentoBanco) throws SQLException {
+
+		String sql = "UPDATE ProcedimentoBanco SET updated=? , updatedby=?, isactive=? "
+				+ " WHERE ProcedimentoBanco.empresa_id=? AND ProcedimentoBanco.organizacao_id=? AND ProcedimentoBanco.procedimento_id=? AND ProcedimentoBanco.banco_id=? ";
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.conn.setAutoCommit(false);
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setTimestamp(1, new Timestamp(procedimentoBanco.getUpdated().getTimeInMillis()));
+			this.stmt.setLong(2, procedimentoBanco.getUpdatedBy().getUsuario_id());
+			this.stmt.setBoolean(3, procedimentoBanco.getIsActive());
+			this.stmt.setLong(4, procedimentoBanco.getEmpresa().getEmpresa_id());
+			this.stmt.setLong(5, procedimentoBanco.getOrganizacao().getOrganizacao_id());
+			this.stmt.setLong(6, procedimentoBanco.getProcedimento().getProcedimentoConferencia_id());
+			this.stmt.setLong(7, procedimentoBanco.getBanco().getBanco_id());
+
+			this.stmt.executeUpdate();
+
+			this.conn.commit();
+
+		} catch (SQLException e) {
+
+			this.conn.rollback();
+			throw e;
+
+		} finally {
+
+			this.conn.setAutoCommit(true);
+
+		}
+
+		this.conexao.closeConnection(stmt, conn);
 	}
 
 	private void getProcedimentoBanco(Collection<ProcedimentoBanco> procedimentosBanco)	throws SQLException {

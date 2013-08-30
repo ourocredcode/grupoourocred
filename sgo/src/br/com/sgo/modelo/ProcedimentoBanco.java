@@ -22,11 +22,11 @@ public class ProcedimentoBanco {
 	private Organizacao organizacao;
 
 	@ManyToOne
-	@JoinColumn(name = "procedimentoconferencia_id", updatable = true, nullable = true)
+	@JoinColumn(name = "procedimentoconferencia_id", updatable = true, nullable = false)
 	private ProcedimentoConferencia procedimento;
 
 	@ManyToOne
-	@JoinColumn(name = "banco_id", updatable = true, nullable = true)
+	@JoinColumn(name = "banco_id", updatable = true, nullable = false)
 	private Banco banco;
 
 	@ManyToOne

@@ -135,7 +135,7 @@ public class TipoControleDao extends Dao<TipoControle> {
 
 			this.stmt = conn.prepareStatement(sql);
 			
-			this.stmt.setLong(1, organizacao_id);
+			this.stmt.setLong(1, empresa_id);
 			this.stmt.setLong(2, organizacao_id);
 			this.stmt.setString(3, nome);
 			

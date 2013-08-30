@@ -28,15 +28,20 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 	private Connection conn;
 	private ResultSet rsProcedimentoDetalhe;
 
-	private final String sqlProcedimentoDetalhe = "SELECT PROCEDIMENTODETALHE.procedimentobancodetalhe_id, PROCEDIMENTODETALHE.empresa_id, EMPRESA.nome as empresa_nome "+
-							", PROCEDIMENTODETALHE.organizacao_id, ORGANIZACAO.nome as organizacao_nome "+
-							", PROCEDIMENTODETALHE.procedimentobanco_id, PROCEDIMENTOBANCO.nome as procedimentobanco_nome "+
-							", PROCEDIMENTODETALHE.banco_id, BANCO.nome as banco_nome, PROCEDIMENTODETALHE.acao, PROCEDIMENTODETALHE.procedimento, PROCEDIMENTODETALHE.isactive "+
-							" FROM (((PROCEDIMENTOBANCO (NOLOCK) INNER JOIN (ORGANIZACAO (NOLOCK) INNER JOIN (MODELOPROCEDIMENTO (NOLOCK) "+
-							" INNER JOIN PROCEDIMENTODETALHE (NOLOCK) ON MODELOPROCEDIMENTO.modeloprocedimento_id = PROCEDIMENTODETALHE.modeloprocedimento_id) ON ORGANIZACAO.organizacao_id = PROCEDIMENTODETALHE.organizacao_id) ON PROCEDIMENTOBANCO.procedimentobanco_id = PROCEDIMENTODETALHE.procedimentobanco_id) "+ 
-							" INNER JOIN TIPOPROCEDIMENTO (NOLOCK) ON PROCEDIMENTOBANCO.tipoprocedimento_id = TIPOPROCEDIMENTO.tipoprocedimento_id) "+
-							" INNER JOIN EMPRESA (NOLOCK) ON PROCEDIMENTODETALHE.empresa_id = EMPRESA.empresa_id) "+
-							" INNER JOIN BANCO (NOLOCK) ON PROCEDIMENTODETALHE.banco_id = BANCO.banco_id ";
+	private final String sqlProcedimentoDetalhe = 	"SELECT PROCEDIMENTODETALHE.empresa_id, EMPRESA.nome AS empresa_nome, PROCEDIMENTODETALHE.organizacao_id "+
+													", ORGANIZACAO.nome AS organizacao_nome, PROCEDIMENTODETALHE.procedimento_id "+
+													", PROCEDIMENTOCONFERENCIA.nome AS procedimentoconferencia_nome, PROCEDIMENTOCONFERENCIA.tipoprocedimento_id "+
+													", TIPOPROCEDIMENTO.nome AS tipoprocedimento_nome, PROCEDIMENTODETALHE.banco_id, BANCO.nome AS banco_nome "+
+													", PROCEDIMENTODETALHE.modeloprocedimento_id, MODELOPROCEDIMENTO.nome AS modeloprocedimento_nome "+
+													", PROCEDIMENTODETALHE.agente_id, AGENTE.nome AS agente_nome, PROCEDIMENTODETALHE.procedimentodetalhe_id "+
+													", PROCEDIMENTODETALHE.isactive, PROCEDIMENTODETALHE.detalheprocedimento, PROCEDIMENTODETALHE.acao "+
+													" FROM (((((PROCEDIMENTODETALHE (NOLOCK) INNER JOIN EMPRESA (NOLOCK) ON PROCEDIMENTODETALHE.empresa_id = EMPRESA.empresa_id) "+ 
+													"	INNER JOIN ORGANIZACAO (NOLOCK) ON PROCEDIMENTODETALHE.organizacao_id = ORGANIZACAO.organizacao_id) "+ 
+													"	INNER JOIN BANCO (NOLOCK) ON PROCEDIMENTODETALHE.banco_id = BANCO.banco_id) "+
+													"	INNER JOIN AGENTE (NOLOCK) ON PROCEDIMENTODETALHE.agente_id = AGENTE.agente_id) "+
+													"	INNER JOIN MODELOPROCEDIMENTO (NOLOCK) ON PROCEDIMENTODETALHE.modeloprocedimento_id = MODELOPROCEDIMENTO.modeloprocedimento_id) "+
+													"	INNER JOIN (PROCEDIMENTOCONFERENCIA (NOLOCK) INNER JOIN TIPOPROCEDIMENTO (NOLOCK) ON PROCEDIMENTOCONFERENCIA.tipoprocedimento_id = TIPOPROCEDIMENTO.tipoprocedimento_id) "+ 
+													"		ON PROCEDIMENTODETALHE.procedimento_id = PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id ";
 
 	public ProcedimentoDetalheDao(Session session, ConnJDBC conexao) {
 		super(session, ProcedimentoDetalhe.class);
@@ -54,7 +59,7 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 
 		this.conn = this.conexao.getConexao();
 
-		Collection<ProcedimentoDetalhe> ProcedimentosDetalhe = new ArrayList<ProcedimentoDetalhe>();
+		Collection<ProcedimentoDetalhe> procedimentosDetalhe = new ArrayList<ProcedimentoDetalhe>();
 
 		try {
 
@@ -67,7 +72,7 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 
 			while (rsProcedimentoDetalhe.next()) {
 
-				getProcedimentoDetalhe(ProcedimentosDetalhe);
+				getProcedimentoDetalhe(procedimentosDetalhe);
 
 			}
 		} catch (SQLException e) {
@@ -77,7 +82,7 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 		}
 
 		this.conexao.closeConnection(rsProcedimentoDetalhe, stmt, conn);
-		return ProcedimentosDetalhe;
+		return procedimentosDetalhe;
 
 	}
 	
@@ -86,7 +91,7 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 		String sql = sqlProcedimentoDetalhe;
 
 		if (procedimentoBanco_id != null)
-			sql += " WHERE PROCEDIMENTODETALHE.procedimentoBanco_id = ?";
+			sql += " WHERE PROCEDIMENTODETALHE.procedimento_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -168,7 +173,7 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 		if (organizacao_id != null)
 			sql += " AND PROCEDIMENTODETALHE.organizacao_id = ?";		
 		if (procedimento_id != null)
-			sql += " AND PROCEDIMENTODETALHE.procedimentobanco_id = ?";
+			sql += " AND PROCEDIMENTODETALHE.procedimento_id = ?";
 		if (banco_id != null)
 			sql += " AND PROCEDIMENTODETALHE.banco_id = ?";
 		if (modeloProcedimento_id != null)
@@ -176,7 +181,7 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 		if (agente_id != null)
 			sql += " AND PROCEDIMENTODETALHE.agente_id = ?";
 		if (acao != null)
-			sql += " AND (PROCEDIMENTODETALHE.acao = ?)";
+			sql += " AND PROCEDIMENTODETALHE.acao = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -199,7 +204,7 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 			while (rsProcedimentoDetalhe.next()) {
 
 				procedimentoDetalhe = new ProcedimentoDetalhe();
-				procedimentoDetalhe.setProcedimentoDetalhe_id(rsProcedimentoDetalhe.getLong("procedimentobanco_id"));
+				procedimentoDetalhe.setProcedimentoDetalhe_id(rsProcedimentoDetalhe.getLong("procedimento_id"));
 				procedimentoDetalhe.setAcao(rsProcedimentoDetalhe.getInt("acao"));
 
 			}
@@ -313,7 +318,7 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 		organizacao.setOrganizacao_id(rsProcedimentoDetalhe.getLong("organizacao_id"));
 		organizacao.setNome(rsProcedimentoDetalhe.getString("organizacao_nome"));
 
-		procedimento.setProcedimentoConferencia_id(rsProcedimentoDetalhe.getLong("procedimentoconferencia_id"));
+		procedimento.setProcedimentoConferencia_id(rsProcedimentoDetalhe.getLong("procedimento_id"));
 		procedimento.setNome(rsProcedimentoDetalhe.getString("procedimentoconferencia_nome"));
 
 		banco.setBanco_id(rsProcedimentoDetalhe.getLong("banco_id"));
@@ -332,7 +337,6 @@ public class ProcedimentoDetalheDao extends Dao<ProcedimentoDetalhe> {
 		procedimentoDetalhe.setModeloProcedimento(modeloProcedimento);
 		procedimentoDetalhe.setAgente(agente);
 		
-		procedimentoDetalhe.setAcao(rsProcedimentoDetalhe.getInt("acao"));		
 		procedimentoDetalhe.setProcedimentoDetalhe_id(rsProcedimentoDetalhe.getLong("procedimentodetalhe_id"));
 		procedimentoDetalhe.setDetalheProcedimento(rsProcedimentoDetalhe.getString("detalheprocedimento"));
 		procedimentoDetalhe.setAcao(rsProcedimentoDetalhe.getInt("acao"));		
