@@ -145,7 +145,7 @@
 						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
 						<ul class="consultor">
-							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
 						</ul>
 				
 					</li>
@@ -190,7 +190,7 @@
 						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
 						<ul class="consultor">
-							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
 							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
 						</ul>
 				
@@ -254,7 +254,7 @@
 						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
 						<ul class="consultor">
-							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
 							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
 						</ul>
 				
@@ -309,7 +309,7 @@
 						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
 					
 						<ul class="consultor">
-							<li><a href="<c:url value="/procedimentobanco"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
 							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
 						</ul>
 				
