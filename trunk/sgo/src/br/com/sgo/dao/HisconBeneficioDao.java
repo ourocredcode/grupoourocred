@@ -298,6 +298,58 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 
 		return hisconsbeneficio;
 	}
+	
+	public Collection<HisconBeneficio> buscaHisconsBeneficioByParceiroBeneficioToStatusContrato(Long empresa_id, Long organizacao_id, Long parceirobeneficio_id) {
+
+		String sql = sqlHisconsExibe;
+
+		if (empresa_id != null)
+			sql += " WHERE HISCONBENEFICIO.empresa_id = ? ";
+		if (organizacao_id != null)
+			sql += " AND HISCONBENEFICIO.organizacao_id = ? ";
+		if (parceirobeneficio_id != null)
+			sql += " AND HISCONBENEFICIO.parceirobeneficio_id = ?  AND HISCONBENEFICIO.isenviado = 1 ORDER BY HISCONBENEFICIO.created DESC ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<HisconBeneficio> hisconsbeneficio = new ArrayList<HisconBeneficio>();
+
+		try {
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, parceirobeneficio_id);
+
+			this.rsHisconBeneficio = this.stmt.executeQuery();
+
+			while (rsHisconBeneficio.next()) {
+
+				getHisconsBeneficio(hisconsbeneficio);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rsHisconBeneficio != null || stmt != null || conn != null) {
+
+					this.conexao.closeConnection(rsHisconBeneficio, stmt, conn);
+
+				}
+
+			} catch (Exception e) {
+
+				e.printStackTrace();
+
+			}
+		}
+
+		return hisconsbeneficio;
+	}
 
 	public HisconBeneficio buscaHisconBeneficioById(Long hisconBeneficio_id) {
 

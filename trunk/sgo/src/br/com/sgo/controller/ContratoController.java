@@ -300,7 +300,7 @@ public class ContratoController {
 		result.include("historicoControleBoleto",historicoControleBoleto);
 		result.include("historicoControleAverbacao",historicoControleAverbacao);
 		result.include("organizacoes", this.organizacaoDao.buscaOrganizacoesByEmpresa(empresa.getEmpresa_id()));
-		result.include("hisconsBeneficio", this.hisconBeneficioDao.buscaHisconsBeneficioByParceiroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),parceiroBeneficio.getParceiroBeneficio_id()));
+		result.include("hisconsBeneficio", this.hisconBeneficioDao.buscaHisconsBeneficioByParceiroBeneficioToStatusContrato(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),parceiroBeneficio.getParceiroBeneficio_id()));
 		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1L, 1L));
 		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
 
