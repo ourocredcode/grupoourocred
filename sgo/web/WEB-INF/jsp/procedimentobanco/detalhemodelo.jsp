@@ -11,7 +11,7 @@
 	
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="<c:url value="/procedimentobanco" />" class="current">Procedimentos Bancos</a>
+		<a href="<c:url value="/procedimentobanco/cadastro" />" class="current">Procedimentos Bancos</a>
 		<a href="#" class="current">Detalhes Modelo</a>
 	</div>
 	

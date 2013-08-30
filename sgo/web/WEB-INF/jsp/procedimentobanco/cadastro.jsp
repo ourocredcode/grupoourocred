@@ -6,107 +6,6 @@ jQuery(function($){
 	$('#procedimentobanco-li-a').click(function() {
 		window.location.href = '<c:url value="/procedimentobanco/cadastro" />';
 	});
-		
-	$('#procedimentoBancoEmpresa').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/empresa/busca.json' />",
-	          dataType: "json",
-	          data : {n: request.term},
-	          success : function(data) {  
-
-	       		  if (!data || data.length == 0) {
-	       	            $('#procedimentoBancoEmpresa').val('');
-						$('#procedimentoBancoEmpresaId').val('');
-	       	        }
-
-	        	  response($.map(data, function(empresa) {  
-	        		  return {
-	                      label: empresa.nome,
-	                      value: empresa.empresa_id
-	                  };
-	              }));  
-	           }
-	        });
-	     } ,
-	     focus: function( event, ui ) {
-	    	 $('#procedimentoBancoEmpresa').val(ui.item.label);
-	         return false;
-	     } ,
-	     select: function( event, ui ) {
-	    	 $('#procedimentoBancoEmpresa').val(ui.item.label);
-	         $('#procedimentoBancoEmpresaId').val(ui.item.value);
-	         return false;
-	     }
-	});
-
-	$('#procedimentoBancoOrganizacao').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/organizacao/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#procedimentoBancoEmpresaId').val() == '' ? '0' :  $('#procedimentoBancoEmpresaId').val(), org_nome : $('#procedimentoBancoOrganizacao').val()},
-	          success : function(data) {  
-
-	        	  if (!data || data.length == 0) {
-	     	            $('#procedimentoBancoOrganizacao').val('');
-	     	           $('#procedimentoBancoOrganizacaoId').val('');
-	     	        }
-
-	        	  response($.map(data, function(organizacao) {  
-	        		  return {
-	        			  label: organizacao.nome,
-	        			  value: organizacao.organizacao_id
-	                  };
-	              }));  
-	           }
-	        });
-	     },
-	     focus: function( event, ui ) {
-	      	 $('#procedimentoBancoOrganizacao').val(ui.item.label);
-	           return false;
-	       } ,
-	     select: function( event, ui ) {
-	         $('#procedimentoBancoOrganizacao').val(ui.item.label);
-	         $('#procedimentoBancoOrganizacaoId').val(ui.item.value);
-	         return false;
-	     }
-	});
-
-	$('#procedimentoBancoProcedimentoConferencia').autocomplete({
-		source: function( request, response ) {
-	        $.ajax({
-	          url: "<c:url value='/procedimento/busca.json' />",
-	          dataType: "json",
-	          data : {empresa_id: $('#procedimentoBancoEmpresaId').val() == '' ? '0' :  $('#procedimentoBancoEmpresaId').val(), 
-	        		  organizacao_id: $('#procedimentoBancoOrganizacaoId').val() == '' ? '0' :  $('#procedimentoBancoOrganizacaoId').val(),
-	        		  nome : $('#procedimentoBancoProcedimentoConferencia').val()},
-	          success : function(data) {  
-
-	        	  if (!data || data.length == 0) {
-	     	            $('#procedimentoBancoProcedimentoConferencia').val('');
-	     	           $('#procedimentoBancoProcedimentoConferenciaId').val('');
-	     	        }
-
-	        	  response($.map(data, function(procedimentoConferencia) {  
-	        		  return {
-	        			  label: procedimentoConferencia.nome,
-	        			  value: procedimentoConferencia.procedimentoconferencia_id
-	                  };
-	              }));  
-	           }
-	        });
-	     },
-	     focus: function( event, ui ) {
-	      	 $('#procedimentoBancoProcedimentoConferencia').val(ui.item.label);
-	           return false;
-	       } ,
-	     select: function( event, ui ) {
-	         $('#procedimentoBancoProcedimentoConferencia').val(ui.item.label);
-	         $('#procedimentoBancoProcedimentoConferenciaId').val(ui.item.value);
-	         return false;
-	     }
-	});
 
 	$('#btnSair').click(function() {
 		window.location.href = '<c:url value="/procedimentobanco/cadastro" />';
@@ -116,11 +15,35 @@ jQuery(function($){
 		limpaForm();
 	});
 
-	$("#procedimentoBancoIsActive").change(function(e){
-		if(document.procedimentoBancoForm.procedimentoBancoIsActive.checked==true){
-			document.procedimentoBancoForm.procedimentoBancoIsActive.value=true;
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>'
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+
+	$('select').select2();
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+
+	$("#isActive").change(function(e){
+		if(document.procedimentoBancoForm.isActive.checked==true){
+			document.procedimentoBancoForm.isActive.value=true;
 		}else{
-			document.procedimentoBancoForm.procedimentoBancoIsActive.value=false;
+			document.procedimentoBancoForm.isActive.value=false;
 		}
 	});
 
@@ -143,7 +66,7 @@ function limpaForm(){
 </div>
 
 <div id="breadcrumb">
-	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+	<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
 	<a href="#" class="current">Procedimentos Bancos</a>
 </div>
 
@@ -166,13 +89,81 @@ function limpaForm(){
 
 <div class="container-fluid">
 	<div class="row-fluid">
+		<div class="span12">
+
+			<ul id="myTab" class="nav nav-tabs">
+				<li class="active" id="procedimentobanco-li"><a href="#procedimentobanco-div" data-toggle="tab" id="procedimentobanco-li-a">Procedimentos Bancos</a></li>
+			</ul>
+
+			<div id="myTabContent" class="tab-content">
+
+				<div class="tab-pane fade" id="modeloprocedimento-div"></div>
+				<div class="tab-pane fade active in" id="procedimentobanco-div">				
+						
+					<form id="procedimentoBancoForm" name="procedimentoBancoForm" action="<c:url value="/procedimentobanco/salva"/>" method="POST">
+						
+						<c:if test="${usuarioInfo.perfil.chave == 'Administrador' }">
+							<div class="row-fluid">
+								<div class="span3">								
+									<label for="empresa">Empresa</label>							
+		      						<input class="input-xlarge" id="empresa" name="procedimentoBanco.empresa.nome" value="${usuarioInfo.empresa.nome }" type="text" required readonly="readonly">
+		      						<input class="span1" id="empresaId" name="procedimentoBanco.empresa.empresa_id" value="${usuarioInfo.empresa.empresa_id }" type="hidden">	    					
+								</div>
+								<div class="span3">
+									<label for="organizacao">Organização</label>
+		      						<input class="input-xlarge" id="organizacao" name="procedimentoBanco.organizacao.nome" value="${usuarioInfo.organizacao.nome }" type="text" required >
+		      						<input class="span1" id="organizacaoId" name="procedimentoBanco.organizacao.organizacao_id" value="${usuarioInfo.organizacao.organizacao_id }" type="hidden">
+								</div>
+								<div class="span2">
+									<label for="procedimentoId">Procedimento</label>
+									<select id="procedimentoId" name="procedimentoBanco.procedimento.procedimentoConferencia_id" class="input-medium">
+										<c:forEach var="procedimento" items="${procedimentosConferencia }">
+										 	<option value="${procedimento.procedimentoConferencia_id }" selected="selected">${procedimento.nome }</option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="span2">
+									<label for="bancoId">Banco</label>
+									<select id="bancoId" name="procedimentoBanco.banco.banco_id" class="input-medium">
+										<c:forEach var="banco" items="${bancos }">
+										 	<option value="${banco.banco_id }" selected="selected">${banco.nome }</option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="span1">
+									<label  for="isActive">Ativo</label>
+									<input type="checkbox" id="isActive" name="procedimentoBanco.isActive" checked="checked" value="1">
+								</div>
+							</div>
+							<div class="btn-toolbar">
+								<div class="btn-group">
+									<button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
+								</div>	
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary" id="btnNovo" >Novo</button>
+								</div>
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary" id="btnSair" >Sair</button>
+								</div>
+							</div>
+						</c:if>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
 		<div class="span12">				
 			<div class="accordion" id="collapse-group">
 				<div class="accordion-group widget-box">
 					<div class="accordion-heading">
 						<div class="widget-title">							
 							<a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
-								<span class="icon"><i class="icon-magnet"></i></span><h5>Procedimentos Bancos </h5>								
+								<span class="icon"><i class="icon-magnet"></i></span><h5>Procedimentos bancos</h5>								
 							</a>
 						</div>
 					</div>
