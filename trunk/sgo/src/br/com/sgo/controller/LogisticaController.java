@@ -26,6 +26,7 @@ import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.FormularioDao;
 import br.com.sgo.dao.HistoricoContratoDao;
 import br.com.sgo.dao.LogisticaDao;
+import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
 import br.com.sgo.dao.ProdutoDao;
@@ -38,6 +39,7 @@ import br.com.sgo.modelo.Formulario;
 import br.com.sgo.modelo.HistoricoContrato;
 import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Usuario;
@@ -53,6 +55,7 @@ public class LogisticaController {
 	private final EtapaDao etapaDao;
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
+	private final ParceiroContatoDao parceiroContatoDao;
 	private final HistoricoContratoDao historicoContratoDao;
 	
 	private Empresa empresa;
@@ -66,7 +69,7 @@ public class LogisticaController {
 
 	public LogisticaController(Result result,BancoDao bancoDao,ProdutoDao produtoDao,ContratoDao contratoDao,FormularioDao formularioDao,UsuarioInfo usuarioInfo,
 			LogisticaDao logisticaDao,HttpServletResponse response, ParceiroNegocioDao parceiroNegocioDao,ParceiroLocalidadeDao parceiroLocalidadeDao,EtapaDao etapaDao,
-			Empresa empresa, Organizacao organizacao, Usuario usuario,HistoricoContratoDao historicoContratoDao){		
+			Empresa empresa, Organizacao organizacao, Usuario usuario,HistoricoContratoDao historicoContratoDao,ParceiroContatoDao parceiroContatoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -78,6 +81,7 @@ public class LogisticaController {
 		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
 		this.historicoContratoDao = historicoContratoDao;
+		this.parceiroContatoDao = parceiroContatoDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
@@ -172,6 +176,7 @@ public class LogisticaController {
 		List<Formulario> forms = new ArrayList<Formulario>();
 		Formulario form = this.formularioDao.load(id);
 
+		List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();
 		Collection<Contrato> contratos = this.contratoDao.buscaContratoToCheckList(form.getFormulario_id());
 
 		form.setContratos(contratos);
@@ -185,8 +190,15 @@ public class LogisticaController {
 			}
 
 		}
+		
+		for(ParceiroContato pc : parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id())) {
+
+			contatos.add(pc);
+
+		}
 
 		form.setParceiroLocalidade(parceiroLocalidade);
+		form.setParceiroContatos(contatos);
 
 		forms.add(form);
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -82,7 +83,7 @@ public class Formulario implements Serializable {
 	private ParceiroBeneficio parceiroBeneficio;
 
 	@Transient
-	private Collection<ParceiroContato> parceiroContatos = new ArrayList<ParceiroContato>();
+	private List<ParceiroContato> parceiroContatos = new ArrayList<ParceiroContato>();
 	
 	@Transient
 	private ControleFormulario posvenda;
@@ -163,14 +164,6 @@ public class Formulario implements Serializable {
 		this.parceiroInfoBanco = parceiroInfoBanco;
 	}
 
-	public Collection<ParceiroContato> getParceiroContatos() {
-		return parceiroContatos;
-	}
-
-	public void setParceiroContatos(Collection<ParceiroContato> parceiroContatos) {
-		this.parceiroContatos = parceiroContatos;
-	}
-
 	public ParceiroBeneficio getParceiroBeneficio() {
 		return parceiroBeneficio;
 	}
@@ -233,5 +226,13 @@ public class Formulario implements Serializable {
 
 	public void setPosvenda(ControleFormulario posvenda) {
 		this.posvenda = posvenda;
+	}
+
+	public List<ParceiroContato> getParceiroContatos() {
+		return parceiroContatos;
+	}
+
+	public void setParceiroContatos(List<ParceiroContato> parceiroContatos) {
+		this.parceiroContatos = parceiroContatos;
 	}
 }
