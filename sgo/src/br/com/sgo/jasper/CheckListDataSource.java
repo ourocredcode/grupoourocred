@@ -43,9 +43,9 @@ public class CheckListDataSource implements JRDataSource {
 				}else if("clienteCpf".equals(campo.getName())){
 					valor = formulario.getParceiroNegocio().getCpf();
 				}else if("clienteTelRes".equals(campo.getName())){
-					valor = "";
+					valor = formulario.getParceiroContatos().get(0).getNome();
 				}else if("clienteTelCel".equals(campo.getName())){
-					valor = "";
+					valor = formulario.getParceiroContatos().size() > 1 ? formulario.getParceiroContatos().get(1).getNome() : "";
 				}else if("dataAssinatura".equals(campo.getName())){
 					valor = new Timestamp(c.getLogistica().getDataAssinatura().getTime().getTime());
 				}else if("clienteEndereco".equals(campo.getName())){

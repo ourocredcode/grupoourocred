@@ -28,6 +28,7 @@ import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.OperacaoDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
+import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
@@ -56,6 +57,7 @@ import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
+import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroInfoBanco;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
@@ -96,6 +98,7 @@ public class ContratoController {
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
+	private final ParceiroContatoDao parceiroContatoDao;
 	private final MeioPagamentoDao meioPagamentoDao;
 	private final OperacaoDao operacaoDao;
 	private final WorkflowDao workflowDao;
@@ -132,7 +135,7 @@ public class ContratoController {
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
-			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, 
+			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, ParceiroContatoDao parceiroContatoDao,
 			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao,TipoWorkflowDao tipoWorkflowDao,WorkflowDao workflowDao){		
 
 		this.result = result;
@@ -161,6 +164,7 @@ public class ContratoController {
 		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.parceiroInfoBancoDao = parceiroInfoBancoDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
+		this.parceiroContatoDao = parceiroContatoDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
@@ -276,11 +280,20 @@ public class ContratoController {
 			}
 
 		}
+		
+		List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();
+		
+		for(ParceiroContato pc : parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id())) {
+
+			contatos.add(pc);
+
+		}
 
 		formulario.setParceiroNegocio(parceiroNegocio);
 		formulario.setParceiroBeneficio(parceiroBeneficio);
 		formulario.setParceiroLocalidade(parceiroLocalidade);
 		formulario.setParceiroInfoBanco(parceiroInfoBanco);
+		formulario.setParceiroContatos(contatos);
 
 		result.include("formulario",formulario);
 		result.include("contrato",contrato);

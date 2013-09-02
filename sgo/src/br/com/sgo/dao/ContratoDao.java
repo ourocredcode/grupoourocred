@@ -382,11 +382,11 @@ public class ContratoDao extends Dao<Contrato> {
 					 " LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id) " + 
 					 " INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +  
 					 " INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio) " +
-					 " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.contrato_id = CONTRATO.contrato_id) " +
+					 " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.logistica_id = ( SELECT max(LOGISTICA.logistica_id) FROM LOGISTICA (NOLOCK) WHERE LOGISTICA.contrato_id = CONTRATO.contrato_id ) ) " +
 					 " LEFT JOIN PERIODO (NOLOCK) ON LOGISTICA.periodo_id = PERIODO.periodo_id  ";
 		
 		if(formulario_id != null)
-			sql += " WHERE FORMULARIO.formulario_id = ? AND ETAPA.nome like 'Em Assinatura' ";
+			sql += " WHERE FORMULARIO.formulario_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
