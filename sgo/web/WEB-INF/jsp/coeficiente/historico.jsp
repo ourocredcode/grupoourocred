@@ -1,5 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	$('select').select2();
+	
+});
+
+</script>
+
+
 <div class="row-fluid">
 	<div class="span12">
 		Banco: ${bancoNome }
@@ -15,7 +27,7 @@
 
 	<div class="span6">
 		<label for="ano">Ano:</label>
-		<select id="ano" class="span12">
+		<select id="ano" class="input-small">
 			<option value="0">Ano</option>
 			<c:forEach items="${anos}" var="ano">
 				<option value="${ano}">${ano}</option>
@@ -24,7 +36,7 @@
 	</div>
 	<div class="span6">
 		<label for="mes">Mês:</label>
-		<select id="mes" class="span12">
+		<select id="mes" class="input-small">
 			<option value="0">Mês</option>
 			<c:forEach items="${meses}" var="mes">
 				<option value="${mes}">

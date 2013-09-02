@@ -451,9 +451,9 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 		if(rsCoeficiente.getDate("updated") != null) {
 			updated.setTime(rsCoeficiente.getDate("updated"));
-			coeficiente.setCreated(updated);
+			coeficiente.setUpdated(updated);
 		}
-		
+
 		coeficiente.setEmpresa(empresa);
 		coeficiente.setOrganizacao(organizacao);
 		coeficiente.setTabela(tabela);

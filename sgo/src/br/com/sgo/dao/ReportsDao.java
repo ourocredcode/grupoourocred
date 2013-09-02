@@ -64,7 +64,7 @@ public class ReportsDao extends Dao<Contrato> {
 	
 	}
 	
-	public ResultSet aprovadosResultSet(Empresa empresa, Organizacao organizacao, Calendar calInicio, Calendar calFim) {
+	public ResultSet aprovadosResultSet(Empresa empresa, Organizacao organizacao, Calendar calInicio, Calendar calFim, Integer concluidoCheck) {
 
 		String sql = " SELECT  " +
 						 " SUPER.apelido as supervisor, " +
@@ -78,9 +78,14 @@ public class ReportsDao extends Dao<Contrato> {
 					 " INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
 					 " WHERE CONTRATO.empresa_id = ? " +
 					 " AND CONTRATO.organizacao_id = ? " +
-					 " AND ( ETAPA.NOME in ('Aprovado','Concluído') ) " +
-					 " AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) " +
-					 " GROUP BY SUPER.apelido ORDER BY metaCount DESC  "; 
+					 " AND ( ETAPA.NOME in ('Aprovado','Concluído') ) ";
+
+					 if(concluidoCheck == null)
+						 sql += " AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) ";
+					 else
+						 sql += " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? ) ";
+
+					 sql += " GROUP BY SUPER.apelido ORDER BY metaCount DESC  "; 
 
 		this.conn = this.conexao.getConexao();
 	
