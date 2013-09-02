@@ -608,7 +608,7 @@ public class ContratoDao extends Dao<Contrato> {
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
 			Calendar calStatusFinalInicio,Calendar calStatusFinalFim,Calendar calConclusaoInicio,Calendar calConclusaoFim,
 			String cliente, String documento, Collection<Long> convenios,Collection<String> status,Collection<String> statusFinal,
-			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores,
+			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores,Boolean isSupervisorApoio,
 			Long tipoPagamento, Long informacaoSaque,Collection<Long> empresas) {
 
 		String sql = sqlContratos;
@@ -783,7 +783,12 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(u != null) {
-				sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+
+				if(isSupervisorApoio)
+					sql += clause + " ( USUARIO.usuario_id = ? ) ";
+				else
+					sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+
 				x++;
 				clause = "";
 			}
@@ -934,10 +939,21 @@ public class ContratoDao extends Dao<Contrato> {
 			for(Usuario u : consultores){
 
 				if(u != null) {
-					this.stmt.setLong(curr,u.getUsuario_id());
-					curr++;
-					this.stmt.setLong(curr,u.getUsuario_id());
-					curr++;
+
+					if(isSupervisorApoio) {
+
+						this.stmt.setLong(curr,u.getUsuario_id());
+						curr++;
+
+					} else {
+
+						this.stmt.setLong(curr,u.getUsuario_id());
+						curr++;
+						this.stmt.setLong(curr,u.getUsuario_id());
+						curr++;
+
+					}
+
 				}
 
 			}
@@ -1000,7 +1016,8 @@ public class ContratoDao extends Dao<Contrato> {
 			Calendar chegadaFim,Calendar vencimentoInicio, Calendar vencimentoFim, Calendar proximaAtuacaoInicio,Calendar proximaAtuacaoFim,
 			Calendar quitacaoInicio,Calendar quitacaoFim,Calendar assinaturaInicio,Calendar assinaturaFim,
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Collection<Long> convenios, 
-			Collection<Usuario> consultores,String cliente, String documento,Collection<Long> empresas, Long procedimento, Long proximoProcedimento, Long atuante) {
+			Collection<Usuario> consultores,Boolean isSupervisorApoio, String cliente, String documento,Collection<Long> empresas, Long procedimento, Long proximoProcedimento, 
+			Long atuante) {
 
 		String sql = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 				" FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
@@ -1166,7 +1183,12 @@ public class ContratoDao extends Dao<Contrato> {
 			clause = x <= 0 ? "AND" : "OR";
 
 			if(u != null) {
-				sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+				
+				if(isSupervisorApoio)
+					sql += clause + " ( USUARIO.usuario_id = ? ) ";
+				else
+					sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+
 				x++;
 				clause = "";
 			}
@@ -1313,10 +1335,21 @@ public class ContratoDao extends Dao<Contrato> {
 			for(Usuario u : consultores){
 
 				if(u != null) {
-					this.stmt.setLong(curr,u.getUsuario_id());
-					curr++;
-					this.stmt.setLong(curr,u.getUsuario_id());
-					curr++;
+					
+					if(isSupervisorApoio) {
+					
+						this.stmt.setLong(curr,u.getUsuario_id());
+						curr++;
+						
+					} else {
+						
+						this.stmt.setLong(curr,u.getUsuario_id());
+						curr++;
+						this.stmt.setLong(curr,u.getUsuario_id());
+						curr++;
+
+					}
+
 				}
 
 			}

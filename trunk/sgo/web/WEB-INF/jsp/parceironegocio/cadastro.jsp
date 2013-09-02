@@ -472,15 +472,15 @@
 							<div class="controls controls-row">
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsFuncionario" name="parceiroNegocio.isFuncionario" value="1"
 									<c:if test="${parceiroNegocio.isFuncionario }">checked="checked"</c:if>
-									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' || usuarioInfo.perfil.chave == 'Administrativo'}">disabled="disabled"</c:if>
-									<c:if test="${usuarioInfo.perfil.chave == 'Supervisor' ||  usuarioInfo.perfil.chave == 'Gestor'}">checked="checked"</c:if>>Funcionário
+									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' || usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Supervisor'}">disabled="disabled"</c:if>
+									<c:if test="${usuarioInfo.perfil.chave == 'Gestor'}">checked="checked"</c:if>>Funcionário
 								</label>
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsCliente" name="parceiroNegocio.isCliente" value="1"
-									<c:if test="${parceiroNegocio.isCliente || usuarioInfo.perfil.chave == 'Consultor' || usuarioInfo.perfil.chave == 'Administrativo' }">checked="checked"</c:if>> Cliente
+									<c:if test="${parceiroNegocio.isCliente || usuarioInfo.perfil.chave == 'Consultor' || usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Supervisor' }">checked="checked"</c:if>> Cliente
 								</label>
 								<label class="checkbox inline"><input type="checkbox" id="parceiroNegocioIsFornecedor" name="parceiroNegocio.isFornecedor" value="1"
 									<c:if test="${parceiroNegocio.isFornecedor }">checked="checked"</c:if>
-									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' || usuarioInfo.perfil.chave == 'Administrativo' }">disabled="disabled"</c:if>> Fornecedor
+									<c:if test="${usuarioInfo.perfil.chave == 'Consultor' || usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Supervisor' }">disabled="disabled"</c:if>> Fornecedor
 								</label>
 							</div>
 						</div>

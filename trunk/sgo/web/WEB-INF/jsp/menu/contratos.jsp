@@ -309,13 +309,15 @@
 		if(consultor == undefined)
 			consultor = "";
 
+		var isSupervisorApoio = consultor == supervisor ? true : false;
+
 		if(consultor == ""){
-			if(supervisor == "Todos"){
+			if(supervisor == ""){
 				consultor = "";
 			} else {
 				consultor = supervisor;
 			}
-		}
+		}		
 		
 		if(convenios == null){
 			convenios = new Array();
@@ -355,7 +357,7 @@
 					'cliente' : cliente , 'documento' : documento, 'data' : data, 'dataFim' : dataFim,
 					'dataAprovadoInicio' : dataAprovadoInicio, 'dataAprovadoFim' : dataAprovadoFim, 'dataConcluidoInicio' : dataConcluidoInicio, 'dataConcluidoFim' : dataConcluidoFim, 
 					'dataRecusadoInicio' : dataRecusadoInicio, 'dataRecusadoFim' : dataRecusadoFim, 'bancos' : bancos, 'produtos' : produtos, 'bancosComprados' : bancosComprados , 
-					'motivoPendencia' : motivoPendencia, 'consultor' : consultor});
+					'motivoPendencia' : motivoPendencia,'isSupervisorApoio' : isSupervisorApoio ,'consultor' : consultor });
 		 
 		} else {
 
@@ -401,6 +403,8 @@
 				consultor = "";
 			if(supervisor == undefined)
 				supervisor = "";
+			
+			var isSupervisorApoio = consultor == supervisor ? true : false;
 
 			if(consultor == ""){
 				if(supervisor == "Todos"){
@@ -458,7 +462,7 @@
 						'chegadaInicio': chegadaInicio,'chegadaFim': chegadaFim,'vencimentoInicio': vencimentoInicio,'vencimentoFim': vencimentoFim, 
 						'proximaAtuacaoInicio': proximaAtuacaoInicio,'proximaAtuacaoFim': proximaAtuacaoFim,'quitacaoInicio': quitacaoInicio,'quitacaoFim': quitacaoFim,
 						'assinaturaInicio': assinaturaInicio,'assinaturaFim': assinaturaFim,'bancos': bancos, 
-						'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'convenios': convenios,
+						'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'convenios': convenios,'isSupervisorApoio': isSupervisorApoio, 
 						'consultor': consultor,'cliente': cliente,'documento': documento,'empresas':empresas,
 						'procedimento': procedimento,'proximoProcedimento': proximoProcedimento,
 						'atuante':atuante,});
@@ -590,8 +594,8 @@
 						</div>
 						
 						
-							<div class="row-fluid">
-								
+						<div class="row-fluid">
+
 								<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor'}">
 									<div class="span6">								
 										<label for="busca_Supervisor">Supervisor</label>
@@ -602,6 +606,10 @@
 											</c:forEach>
 										</select>
 									</div>
+								</c:if>
+								
+								<c:if test="${usuarioInfo.perfil.chave == 'Supervisor'}">
+									<input id="busca_Supervisor" name="busca_Supervisor" type="hidden" value="${usuarioInfo.usuario.usuario_id }"/>
 								</c:if>
 
 							</div>

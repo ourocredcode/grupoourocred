@@ -127,7 +127,7 @@ public class ReportsController {
 	
 	@Post
  	@Path("/reports/aprovados")
-	public void aprovados(Empresa empresa,Organizacao organizacao,Integer ano,Integer mes) {
+	public void aprovados(Empresa empresa,Organizacao organizacao,Integer ano,Integer mes,Integer concluidoCheck) {
 
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();
@@ -153,6 +153,10 @@ public class ReportsController {
 		parametros.put("caminhoJasperSolicitacao", jasper);
 		parametros.put("nomeMes",obterNomeMes(mes)+"/"+ano);
 
+		String nomeReport = concluidoCheck == null ? "Aprovados" : "Concluídos";
+
+		parametros.put("nomeReport",nomeReport);
+
 		JasperPrint impressao = null;
 
 		try{
@@ -164,7 +168,7 @@ public class ReportsController {
 
 			ServletOutputStream responseOutputStream = response.getOutputStream();
 
-			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.aprovadosResultSet(empresa, organizacao, calInicio, calFim));
+			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.aprovadosResultSet(empresa, organizacao, calInicio, calFim, concluidoCheck));
 
 			impressao = JasperFillManager.fillReport(jasper, parametros , jrRS);
 
@@ -189,7 +193,7 @@ public class ReportsController {
 	
 	@Get
  	@Path("/reports/chart-aprovados")
-	public void chart_aprovados() {
+	public void chart_aprovados(Empresa empresa,Organizacao organizacao,Integer ano,Integer mes,Integer concluidoCheck) {
 
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();
@@ -220,7 +224,7 @@ public class ReportsController {
 
 			ServletOutputStream responseOutputStream = response.getOutputStream();
 
-			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.aprovadosResultSet(empresa,organizacao,calInicio,calFim));
+			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.aprovadosResultSet(empresa,organizacao,calInicio,calFim,concluidoCheck));
 
 			impressao = JasperFillManager.fillReport(jasper, parametros , jrRS);
 

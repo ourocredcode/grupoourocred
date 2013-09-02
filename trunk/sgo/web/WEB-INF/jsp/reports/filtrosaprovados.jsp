@@ -97,6 +97,11 @@
 												</select>
 											</div>
 											
+											<div class="span1">
+												<label for="concluidoCheckBox">Apenas Concluídos</label>
+												<input id="concluidoCheckBox" name="concluidoCheck" checked="checked" value="1" type="checkbox">
+											</div>
+											
 										</div>
 
 								</div>
