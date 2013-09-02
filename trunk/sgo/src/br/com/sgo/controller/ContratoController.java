@@ -57,7 +57,6 @@ import br.com.sgo.modelo.HistoricoControle;
 import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
-import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroInfoBanco;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
@@ -280,20 +279,11 @@ public class ContratoController {
 			}
 
 		}
-		
-		List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();
-		
-		for(ParceiroContato pc : parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id())) {
-
-			contatos.add(pc);
-
-		}
 
 		formulario.setParceiroNegocio(parceiroNegocio);
 		formulario.setParceiroBeneficio(parceiroBeneficio);
 		formulario.setParceiroLocalidade(parceiroLocalidade);
 		formulario.setParceiroInfoBanco(parceiroInfoBanco);
-		formulario.setParceiroContatos(contatos);
 
 		result.include("formulario",formulario);
 		result.include("contrato",contrato);
