@@ -94,9 +94,13 @@ public class ControleController {
 
 		TipoWorkflow t = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l,1l, "Controle Contrato");
 
+		Collection<Usuario> atuantes = new ArrayList<Usuario>();		
+		atuantes.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));
+		atuantes.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Apoio Comercial"));
+
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), t.getTipoWorkflow_id()));
 		result.include("agentes",this.agenteDao.buscaAgenteToControleBancoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		result.include("atuantes",this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));
+		result.include("atuantes",atuantes);
 
 	}
 	
