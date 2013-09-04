@@ -138,8 +138,7 @@ public class HisconbeneficioController {
 	public void cadastro(Long empresa_id, Long organizacao_id, String numeroBeneficio) {
 
 		String mensagem = "";
-		SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		
+
 		ParceiroBeneficio pb = this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa_id, organizacao_id, numeroBeneficio);
 
 			if (pb != null){
@@ -148,7 +147,13 @@ public class HisconbeneficioController {
 
 				if (hb != null){
 
-					if (hb.getIsEnviado()){
+					/*
+					System.out.println(" hb.getHisconBeneficio_id() " + hb.getHisconBeneficio_id());
+					System.out.println(" hb.getIsEnviado() " + hb.getIsEnviado());
+					System.out.println(" hb.getEtapa().getNome().equals('Desconsiderado') " + hb.getEtapa().getNome().equals("Desconsiderado"));
+					*/
+
+					if (hb.getIsEnviado() || hb.getEtapa().getNome().equals("Desconsiderado")){
 
 						this.hisconBeneficio.setEmpresa(pb.getEmpresa());
 						this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());

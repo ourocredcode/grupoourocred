@@ -378,7 +378,12 @@ public class MenuController {
 
 		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("bancosComprado",this.bancoDao.buscaBancoCompradoByEmpOrg(1l, 1l));
-		result.include("atuantes",this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));		 
+		
+		Collection<Usuario> atuantes = new ArrayList<Usuario>();		
+		atuantes.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Administrativo", "Apoio Comercial"));
+		atuantes.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Apoio Comercial"));
+
+		result.include("atuantes",atuantes);		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
 		Collection<Usuario> supervisores = this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial");
