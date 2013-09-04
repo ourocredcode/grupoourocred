@@ -1972,6 +1972,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
 		contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
 		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
+		contrato.setDesconto(rsContrato.getDouble("desconto"));
 		contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
 		contrato.setValorMeta(rsContrato.getDouble("valormeta"));
 		contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
