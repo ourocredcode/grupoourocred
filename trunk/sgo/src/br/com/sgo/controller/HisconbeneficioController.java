@@ -262,7 +262,7 @@ public class HisconbeneficioController {
 				this.hisconBeneficio.setDataAdm(hisconBeneficio.getEtapa().getNome().equals("Aguardando Adm") ? GregorianCalendar.getInstance() : null);
 
 			this.hisconBeneficio.setEtapa(hisconBeneficio.getEtapa());
-			this.hisconBeneficio.setIsEnviado(hisconBeneficio.getEtapa().getNome().equals("Enviado") || hisconBeneficio.getEtapa().getNome().equals("Desconsiderado") ? true : false);
+			this.hisconBeneficio.setIsEnviado(hisconBeneficio.getEtapa().getNome().equals("Enviado") ? true : false);
 
 		}
 
@@ -283,17 +283,13 @@ public class HisconbeneficioController {
 
 		if(hisconBeneficio.getCaminhoArquivo() != null)
 			this.hisconBeneficio.setCaminhoArquivo(hisconBeneficio.getCaminhoArquivo());
-		
-		
+
 		if(hisconBeneficio.getIsEnviado()){
 
-			Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNomeExato(
-					usuarioInfo.getEmpresa().getEmpresa_id(), 
-					usuarioInfo.getOrganizacao().getOrganizacao_id(), 
-					"Enviado");
+			Etapa etapaEnviado = this.etapaDao.buscaEtapaByEmpresaOrganizacaoNomeExato(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id(), "Enviado");
 
 			this.hisconBeneficio.setEtapa(etapaEnviado);
-
+			this.hisconBeneficio.setDataEnvio(GregorianCalendar.getInstance());
 			this.hisconBeneficio.setIsEnviado(true);
 
 		}
