@@ -5,6 +5,7 @@
 
 function mostra(div){
 
+	document.getElementById("bgn").style.display = "none";
 	document.getElementById("bmg").style.display = "none";
 	document.getElementById("bonsucesso").style.display = "none";
 	document.getElementById("bradesco").style.display = "none";
@@ -44,6 +45,7 @@ function mostra(div){
 			<div id="menuScripts" style="float:left;min-height: 640px;font-size: 13px;margin-top: 20px;margin-right: 20px;">
 
 			<ul>
+				<li><a href="#" onclick="mostra('bgn');">BGN</a></li>
 				<li><a href="#" onclick="mostra('bmg');">BMG</a></li>
 			 	<li><a href="#" onclick="mostra('bonsucesso');">BONSUCESSO</a></li>
 			 	<li><a href="#" onclick="mostra('bradesco');">BRADESCO</a></li>
@@ -51,6 +53,15 @@ function mostra(div){
 			 	<li><a href="#" onclick="mostra('panamericano');">PANAMERICANO</a></li>
 			 	<li><a href="#" onclick="mostra('safra');">SAFRA</a></li>
 			</ul>
+			</div>
+			
+			<div id="bgn" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">BMG</h2><br/>
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_bgn.pdf"/>" style="width: 70%;height: 800px"></iframe>
+			
 			</div>
 			
 			<div id="bmg" style="display: none;font-size: 16px;">

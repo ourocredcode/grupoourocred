@@ -49,14 +49,14 @@
 				<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 				<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>				
 				<td>
-					<select id="hisconBeneficioStatus" class="input-small" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+					<select id="hisconBeneficioStatus" class="input-large" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
 						<c:forEach var="etapa" items="${hiscon.etapas }">
 							<option value="${etapa.etapa_id }" <c:if test="${etapa.etapa_id == hiscon.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
 						</c:forEach>
 					</select>
 				</td>
 				<td>
-					<select id="hisconBeneficioPosicoes" class="input-small" onchange="return altera('etapaPosicao.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+					<select id="hisconBeneficioPosicoes" class="input-medium" onchange="return altera('etapaPosicao.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
 						<c:forEach var="etapaPosicao" items="${hiscon.posicoes }">
 							<option value="${etapaPosicao.etapa_id }" <c:if test="${etapaPosicao.etapa_id == hiscon.etapaPosicao.etapa_id}">selected</c:if>>${etapaPosicao.nome }</option>
 						</c:forEach>
@@ -64,7 +64,7 @@
 				</td>
 				<c:if test="${usuarioInfo.perfil.chave != 'Consultor' }">
 					<td style="text-align: center;">
-						<a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'><h3><small>${hiscon.countHiscons }</small></h3></a>
+						<a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'><h5><small>${hiscon.countHiscons }</small></h5></a>
 					</td>
 				</c:if>
 			</tr>
