@@ -186,6 +186,7 @@ public class MenuController {
 			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, null, mes1, mes2));
 
 			result.include("mapEtapasFinal",contratosStatusFinal);
+			result.include("mapEquipesCount",this.contratoDao.buscaContratosToCountEquipes(empresa_id, organizacao_id, dia1, dia2));
 
 		}
 

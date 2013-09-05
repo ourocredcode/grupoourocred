@@ -1691,6 +1691,98 @@ public class ContratoDao extends Dao<Contrato> {
 		return map;
 
 	}
+
+	public HashMap<String,Object[]> buscaContratosToCountEquipes(Long empresa_id , Long organizacao_id, Calendar dia1,Calendar dia2) {
+
+		String sql = " SELECT " +
+						 " USUARIO_SUPERVISOR.usuario_id, " +
+						 " USUARIO_SUPERVISOR.apelido, " +
+						 " COUNT(CONTRATO.contrato_id) as qtdContrato," +
+						 " SUM(CONTRATO.valormeta) as metaCount, " +  
+						 " SUM(CONTRATO.valorcontrato) as contratoCount, " + 
+				 		 " SUM(CONTRATO.valorContratoLiquido) as contratoLiquidoCount, " +  
+				 		 " SUM(CONTRATO.valorLiquido) as liquidoCount " + 
+				 " FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +  
+				 " INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +  
+				 " INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id WHERE ";
+
+		if(empresa_id != null)
+			sql += " CONTRATO.empresa_id = ? AND ";
+
+		if(organizacao_id != null)
+			sql += "  CONTRATO.organizacao_id = ? AND ";
+
+		if(dia1 != null)
+			sql += "  ( CONTRATO.created BETWEEN ? AND ? ) AND ";
+
+		sql +=  "  ( ETAPA.nome not like 'Recusado' ) GROUP BY USUARIO_SUPERVISOR.usuario_id, USUARIO_SUPERVISOR.apelido ORDER BY metaCount DESC ";
+
+		this.conn = this.conexao.getConexao();
+
+		HashMap<String,Object[]> map = new HashMap<String,Object[]>();
+
+		try {
+
+			int curr = 1;
+
+			this.stmt = conn.prepareStatement(sql);
+
+
+			if(empresa_id != null){
+				this.stmt.setLong(curr, empresa_id);
+				curr++;
+			}
+
+			if(organizacao_id != null){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+			
+			if(dia1 != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(dia1).getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(dia2).getTimeInMillis()));
+				curr++;
+
+			} 
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+
+				String supervisor_apelido  = rsContrato.getString("apelido");
+				Long supervisor_id = rsContrato.getLong("usuario_id");
+
+				Integer qtdContrato = rsContrato.getInt("qtdContrato");
+				Double contratoCount = rsContrato.getDouble("contratoCount");
+				Double contratoLiquidoCount = rsContrato.getDouble("contratoLiquidoCount");
+				Double liquidoCount = rsContrato.getDouble("liquidoCount");
+				Double metaCount = rsContrato.getDouble("metaCount");
+
+				Object[] values = new Object[6];
+
+				values[0] = supervisor_id;
+				values[1] = qtdContrato;
+				values[2] = contratoCount;
+				values[3] = contratoLiquidoCount;
+				values[4] = liquidoCount;
+				values[5] = metaCount;
+
+				map.put(supervisor_apelido,values);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+
+		return map;
+
+	}
 	
 	public HashMap<String,Object[]> buscaContratosToCountEtapasStatusFinal(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
 
