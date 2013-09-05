@@ -323,6 +323,49 @@
 					</div>
 				</div>
 			</div>
+			
+			<c:if test="${usuarioInfo.perfil.chave == 'Gestor'}">
+				<div class="span6">
+	
+					<div class="widget-box">
+						<div class="widget-title">
+							<span class="icon">
+								<i class="icon-signal"></i>
+							</span>
+							<h5>Performance Equipes</h5>
+						</div>
+						<div class="widget-content">
+	
+								<h5>Valores de contratos por equipes em <fmt:formatDate value="${calInicio.time}" pattern="dd/MM/yyyy" /></h5>
+								<table class="table data-table">
+								<thead>
+								  <tr>
+									<th>Supervisor</th>
+									<th>Qtd.</th>
+									<th>Valor Contrato</th>
+									<th>Valor C. Liquido</th>
+									<th>Valor Liquido
+									<th>Meta</th>
+								  </tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${mapEquipesCount }" var="map">
+										<tr class="success">
+											<td>${map.key }</td>
+											<td>${map.value[1] }</td>
+											<td>${map.value[2] }</td>
+											<td>${map.value[3] }</td>
+											<td>${map.value[4] }</td>
+											<td>R$ ${map.value[5] }</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							  </table>
+	
+						</div>
+					</div>
+				</div>
+			</c:if>
 
 	</div>
 </div>

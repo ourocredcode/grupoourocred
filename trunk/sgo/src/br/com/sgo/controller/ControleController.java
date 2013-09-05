@@ -139,7 +139,7 @@ public class ControleController {
 			this.averbacao = controleDao.load(averbacao.getControle_id());
 			this.averbacao.setDataAtuacao(GregorianCalendar.getInstance());
 			this.averbacao.setContrato(contratoDao.load(averbacao.getContrato().getContrato_id()));
-			this.averbacao.setProximoAtuante(usuarioInfo.getUsuario());
+			this.averbacao.setUpdatedBy(usuarioInfo.getUsuario());
 
 			this.averbacao.setDataProximaAtuacao(this.averbacao.getDataProximaAtuacao() == null ? calInicial : this.averbacao.getDataProximaAtuacao());
 			averbacao.setDataProximaAtuacao(averbacao.getDataProximaAtuacao() == null ? calInicial : averbacao.getDataProximaAtuacao());
@@ -255,7 +255,6 @@ public class ControleController {
 			averbacao.setDataPrimeiraAtuacao(GregorianCalendar.getInstance());
 			averbacao.setDataAtuacao(GregorianCalendar.getInstance());
 			averbacao.setContrato(contratoDao.load(averbacao.getContrato().getContrato_id()));
-			averbacao.setProximoAtuante(usuarioInfo.getUsuario());
 			averbacao.setEmpresa(empresa);
 			averbacao.setOrganizacao(organizacao);
 			averbacao.setCreated(GregorianCalendar.getInstance());
