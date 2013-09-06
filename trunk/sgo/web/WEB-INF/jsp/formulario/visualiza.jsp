@@ -320,7 +320,7 @@ function mostra(formulario_id){
 									</td>
 									<td class="label_txt" style="text-align: center">
 										<c:if test="${not empty contrato.observacao}">
-											<a href="#" onclick="return showObs('${contrato.observacao}');" style="border: 0"><img src="../img/lupa.gif" border="0"/></a>
+											<a href="#" onclick="return showObs('${contrato.observacao}');" style="border: 0"><img src="<c:url  value="/img/lupa.gif" />" border="0"/></a>
 										</c:if>
 									</td>
 									<td>

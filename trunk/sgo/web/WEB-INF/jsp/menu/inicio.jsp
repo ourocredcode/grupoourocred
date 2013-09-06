@@ -356,7 +356,7 @@
 											<td>${map.value[2] }</td>
 											<td>${map.value[3] }</td>
 											<td>${map.value[4] }</td>
-											<td>R$ ${map.value[5] }</td>
+											<td>R$ <fmt:formatNumber type="NUMBER" value="${map.value[5]}" minFractionDigits="2" /></td>
 										</tr>
 									</c:forEach>
 								</tbody>

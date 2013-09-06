@@ -1627,9 +1627,9 @@ public class ContratoDao extends Dao<Contrato> {
 				"		 SUM(CONTRATO.valormeta) as metaCount, " +
 				"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
 				" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
-				" FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
-				" INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
-				" INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id ";
+				" FROM ((CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
+				" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
+				" INNER JOIN USUARIO AS USUARIO_SUPERVISOR (NOLOCK) ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id ";
 
 			sql += " WHERE CONTRATO.empresa_id = ? ";
 
@@ -1702,9 +1702,9 @@ public class ContratoDao extends Dao<Contrato> {
 						 " SUM(CONTRATO.valorcontrato) as contratoCount, " + 
 				 		 " SUM(CONTRATO.valorContratoLiquido) as contratoLiquidoCount, " +  
 				 		 " SUM(CONTRATO.valorLiquido) as liquidoCount " + 
-				 " FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +  
-				 " INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +  
-				 " INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id WHERE ";
+				 " FROM ((CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) " +  
+				 " INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) " +  
+				 " INNER JOIN USUARIO AS USUARIO_SUPERVISOR (NOLOCK) ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id WHERE ";
 
 		if(empresa_id != null)
 			sql += " CONTRATO.empresa_id = ? AND ";
@@ -2070,6 +2070,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 		contrato.setPrazo(rsContrato.getInt("prazo"));
+		contrato.setObservacao(rsContrato.getString("observacao"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
 
 		contratos.add(contrato);

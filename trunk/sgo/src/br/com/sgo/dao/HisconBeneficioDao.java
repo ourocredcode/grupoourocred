@@ -308,7 +308,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		if (organizacao_id != null)
 			sql += " AND HISCONBENEFICIO.organizacao_id = ? ";
 		if (parceirobeneficio_id != null)
-			sql += " AND HISCONBENEFICIO.parceirobeneficio_id = ?  AND HISCONBENEFICIO.isenviado = 1 ORDER BY HISCONBENEFICIO.created DESC ";
+			sql += " AND HISCONBENEFICIO.parceirobeneficio_id = ? ORDER BY HISCONBENEFICIO.created DESC ";
 
 		this.conn = this.conexao.getConexao();
 
