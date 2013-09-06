@@ -409,7 +409,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		if(c1 != null)
 			sql += " AND (HISCONBENEFICIO.created BETWEEN ? AND ? )";
 		
-		sql += " ORDER BY HISCONBENEFICIO.etapa_id , HISCONBENEFICIO.created DESC ";
+		sql += " ORDER BY HISCONBENEFICIO.created DESC ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -526,6 +526,8 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 		
 		if(calendarInicio != null)
 			sql += " AND (HISCONBENEFICIO.created BETWEEN ? AND ? )";
+
+		sql += " ORDER BY HISCONBENEFICIO.created ";
 
 		this.conn = this.conexao.getConexao();
 

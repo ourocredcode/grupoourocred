@@ -524,6 +524,35 @@ public class ContratoController {
 				this.contrato.setDataDigitacao(null);
 		}
 		
+
+
+		
+		this.contrato.setDataAgendado(this.contrato.getDataAgendado() == null ? calInicial : this.contrato.getDataAgendado());
+		contrato.setDataAgendado(contrato.getDataAgendado() == null ? calInicial : contrato.getDataAgendado());
+
+		if(!(this.contrato.getDataAgendado().compareTo(contrato.getDataAgendado() == null ? calInicial : contrato.getDataAgendado()) == 0)) {
+			if (this.contrato.getDataAgendado().compareTo(calInicial) == 0){
+
+				log.add("Data de agendamento alterado para : " + dateFormat.format(contrato.getDataAgendado().getTime()));
+				this.contrato.setDataAgendado(contrato.getDataAgendado());
+
+			} else if (contrato.getDataAgendado().compareTo(calInicial) != 0) {
+
+				log.add("Data de agendamento alterado de : " + dateFormat.format(this.contrato.getDataAgendado().getTime()) + " para: " + dateFormat.format(contrato.getDataAgendado().getTime()));
+				this.contrato.setDataAgendado(contrato.getDataAgendado());
+
+			} else if (contrato.getDataAgendado().compareTo(calInicial) == 0) {
+				log.add("Data de agendamento alterado de : " + dateFormat.format(this.contrato.getDataAgendado().getTime()) + " para: em branco.");
+				this.contrato.setDataAgendado(null);
+			}
+		}
+		
+		if(this.contrato.getDataAgendado() != null) {
+			if(this.contrato.getDataAgendado().compareTo(calInicial) == 0)
+				this.contrato.setDataAgendado(null);
+		}
+
+		
 		this.contrato.setDataQuitacao(this.contrato.getDataQuitacao() == null ? calInicial : this.contrato.getDataQuitacao());
 		contrato.setDataQuitacao(contrato.getDataQuitacao() == null ? calInicial : contrato.getDataQuitacao());
 
