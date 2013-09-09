@@ -217,6 +217,7 @@
 						<ul class="reports">
 							<li><a href="<c:url value="/reports/status"/>" target="_blank">Status</a></li>
 							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
+							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
 							<li><a href="<c:url value="/reports/chart-aprovados"/>" target="_blank">Aprovados (Gráfico)</a></li>
 						</ul>
 

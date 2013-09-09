@@ -16,6 +16,7 @@ import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Usuario;
 
 @Component
 public class ReportsDao extends Dao<Contrato> {
@@ -115,6 +116,61 @@ public class ReportsDao extends Dao<Contrato> {
 
 			}
 	
+			this.rsReports = this.stmt.executeQuery();
+	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return rsReports;
+	
+	}
+	
+	public ResultSet producaoAtivaResultSet(Empresa empresa, Organizacao organizacao, Usuario usuario) {
+
+		String sql = " SELECT " + 
+						 " USUARIO.apelido as usuario, " +
+						 " SUM(CONTRATO.valormeta) as metaCount, " +
+						 " SUM(CONTRATO.valorcontrato) as contratoCount, " +
+						 " SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
+					 " FROM ((( CONTRATO " +
+					 " INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
+					 " INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
+					 " INNER JOIN USUARIO SUPER ON SUPER.usuario_id = USUARIO.supervisor_usuario_id) " +
+					 " WHERE CONTRATO.empresa_id = ? " +
+					 " AND CONTRATO.organizacao_id = ? ";
+
+		if(usuario != null)			 
+					 sql +=" AND ( USUARIO.supervisor_usuario_id = ? OR SUPER.usuario_id = ?) ";
+					 
+		sql += " AND USUARIO.isactive = 1 " +
+					 " GROUP BY USUARIO.apelido ORDER BY metaCount DESC ";
+
+		this.conn = this.conexao.getConexao();
+	
+		try {
+	
+			this.stmt = conn.prepareStatement(sql);
+			
+			int curr = 1;
+
+			if(empresa != null){
+				this.stmt.setLong(curr, empresa.getEmpresa_id());
+				curr++;
+			}
+
+			if(organizacao != null){
+				this.stmt.setLong(curr, organizacao.getOrganizacao_id());
+				curr++;
+			}
+			
+			if(usuario != null){
+				this.stmt.setLong(curr, usuario.getUsuario_id());
+				curr++;
+				this.stmt.setLong(curr, usuario.getUsuario_id());
+				curr++;
+			}
+
 			this.rsReports = this.stmt.executeQuery();
 	
 		} catch (SQLException e) {

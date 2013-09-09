@@ -751,6 +751,29 @@ public class ContratoController {
 	}
 	
 	@Post
+	@Path("/contrato/repasse/salva")
+	public void repasse(Contrato contrato) {
+
+		this.contrato = this.contratoDao.load(contrato.getContrato_id());
+
+		this.contrato.setUsuario(contrato.getUsuario());
+
+		if(this.contrato.getCreatedBy().getUsuario_id() != contrato.getUsuario().getUsuario_id())
+			this.contrato.setIsRepasse(true);
+		else
+			this.contrato.setIsRepasse(false);
+
+		this.contrato.setOperacao(this.operacaoDao.buscaOperacaoByEmpOrgUsuario(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),contrato.getUsuario().getUsuario_id()));
+
+		this.contratoDao.beginTransaction();
+		this.contratoDao.atualiza(this.contrato);
+		this.contratoDao.commit();
+
+		this.result.redirectTo(this).status(contrato.getContrato_id());
+
+	}
+	
+	@Post
 	@Path("/contrato/cliente/historico")
 	public void historico(String doc) {
 

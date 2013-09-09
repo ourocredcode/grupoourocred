@@ -50,7 +50,7 @@ public class UsuarioDao extends Dao<Usuario> {
 	
 	public Usuario buscaUsuarioById(Long usuario_id ) {
 
-		String sql = " SELECT USUARIO.usuario_id, USUARIO.nome, USUARIO.chave FROM USUARIO (NOLOCK) WHERE USUARIO.usuario_id = ? ";
+		String sql = " SELECT USUARIO.usuario_id, USUARIO.nome, USUARIO.chave, USUARIO.apelido FROM USUARIO (NOLOCK) WHERE USUARIO.usuario_id = ? ";
  
 
 		Usuario usuario = null;
@@ -71,6 +71,7 @@ public class UsuarioDao extends Dao<Usuario> {
 
 				usuario.setUsuario_id(rsUsuarios.getLong("usuario_id"));
 				usuario.setNome(rsUsuarios.getString("nome"));
+				usuario.setApelido(rsUsuarios.getString("apelido"));
 
 			}
 
