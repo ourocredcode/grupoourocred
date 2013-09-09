@@ -646,23 +646,9 @@ public class ContratoDao extends Dao<Contrato> {
 
 		if ( x == 0 ){
 
-			sql += " ) ";
-
 			sql += " AND ( 1=1 ";
 
-			for(String statusFinalAux1 : statusFinal){
-
-				clause = x <= 0 ? "AND" : "OR";
-
-				if(!statusFinalAux1.equals("")){
-					sql += clause + " ( ETAPA.nome like ? ) ";
-					x++;
-					clause = "";
-				}
-
-			}
-
-			if(x == 0 && cliente.equals("") && documento.equals("")){
+			if(x == 0 && cliente.equals("") && documento.equals("") && calStatusFinalInicio == null && calConclusaoInicio == null){
 				sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) ";
 			}
 
@@ -670,29 +656,13 @@ public class ContratoDao extends Dao<Contrato> {
 
 		} else {
 
-			x = 0;
-			comboSearch = true;
-
-			for(String statusFinalAux1 : statusFinal){
-
-				clause = " OR ";
-
-				if(!statusFinalAux1.equals("")){
-					sql += clause + " ( ETAPA.nome like ? ) ";
-					x++;
-					clause = "";
-				}
-
-			}
-			
-			if(x == 0){
-				sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) ";
-			}
-
-			sql += " ) ";
+			if(calStatusFinalInicio != null || calConclusaoInicio != null)
+				comboSearch = true;
 
 		}
 		
+		sql += " ) ";
+
 		x = 0;
 		sql += " AND ( 1=1 ";
 
@@ -775,6 +745,7 @@ public class ContratoDao extends Dao<Contrato> {
 		}
 		
 		sql += " ) ";
+		
 		x = 0;
 		sql += " AND ( 1=1 ";
 
@@ -804,23 +775,151 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		if(calStatusFinalInicio != null) {
 
-			if(comboSearch)
-				sql += " OR (CONTRATO.datastatusfinal BETWEEN ? AND ? )";
-			else
-				sql += " AND (CONTRATO.datastatusfinal BETWEEN ? AND ? )";
+			if(comboSearch){
+
+				sql += " ) OR ( ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) ";
+
+				x=0;
+				
+				sql += " AND ( 1=1 ";
+
+				for(String statusFinalAux1 : statusFinal){
+
+					clause = x <= 0 ? " AND " : "OR";
+
+					if(!statusFinalAux1.equals("")){
+						sql += clause + " ( ETAPA.nome like ? ) ";
+						x++;
+						clause = "";
+					}
+
+				}
+				
+				sql += " ) ";
+				
+				x = 0;
+				sql += " AND ( 1=1 ";
+
+				for(Usuario u : consultores){
+
+					clause = x <= 0 ? "AND" : "OR";
+
+					if(u != null) {
+
+						if(isSupervisorApoio)
+							sql += clause + " ( USUARIO.usuario_id = ? ) ";
+						else
+							sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+
+						x++;
+						clause = "";
+					}
+
+				}
+				
+				sql += " ) ";
+				
+				
+
+			} else {
+
+				sql += " AND (  CONTRATO.datastatusfinal BETWEEN ? AND ? )";
+				
+				x=0;
+
+				sql += " AND ( 1=1 ";
+
+				for(String statusFinalAux1 : statusFinal){
+
+					clause = x <= 0 ? " AND " : "OR";
+
+					if(!statusFinalAux1.equals("")){
+						sql += clause + " ( ETAPA.nome like ? ) ";
+						x++;
+						clause = "";
+					}
+
+				}
+				
+				sql += " ) ";
+
+			}
+				
 
 		}
-			
-		
+
 		if(calConclusaoInicio != null) {
 
-			if(comboSearch)
-				sql += " OR (CONTRATO.dataconclusao BETWEEN ? AND ? )";
-			else
-				sql += " AND (CONTRATO.dataconclusao BETWEEN ? AND ? )";
+			if(comboSearch) {
+
+				sql += " ) OR ( (CONTRATO.dataconclusao BETWEEN ? AND ? )";
+				
+				x=0;
+				
+				sql += " AND ( 1=1 ";
+
+				for(String statusFinalAux1 : statusFinal){
+
+					clause = x <= 0 ? " AND " : "OR";
+
+					if(!statusFinalAux1.equals("")){
+						sql += clause + " ( ETAPA.nome like ? ) ";
+						x++;
+						clause = "";
+					}
+
+				}
+				
+				sql += " ) ";
+				
+				x = 0;
+				sql += " AND ( 1=1 ";
+
+				for(Usuario u : consultores){
+
+					clause = x <= 0 ? "AND" : "OR";
+
+					if(u != null) {
+
+						if(isSupervisorApoio)
+							sql += clause + " ( USUARIO.usuario_id = ? ) ";
+						else
+							sql += clause + " ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+
+						x++;
+						clause = "";
+					}
+
+				}
+				
+				sql += " ) ";
+
+			} else {
+
+				sql += " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? )";
+				
+				x=0;
+				
+				sql += " AND ( 1=1 ";
+
+				for(String statusFinalAux1 : statusFinal){
+
+					clause = x <= 0 ? " AND " : "OR";
+
+					if(!statusFinalAux1.equals("")){
+						sql += clause + " ( ETAPA.nome like ? ) ";
+						x++;
+						clause = "";
+					}
+
+				}
+
+				sql += " ) ";
+
+			}
 
 		}
-		
+
 		sql += " ) ";
 
 		this.conn = this.conexao.getConexao();
@@ -882,15 +981,6 @@ public class ContratoDao extends Dao<Contrato> {
 
 			}
 
-			for(String statusFinalAux2 : statusFinal){
-
-				if(!statusFinalAux2.equals("")) {
-					this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
-					curr++;
-				}
-
-			}
-			
 			for(Long convenioAux2 : convenios){
 
 				if(convenioAux2 != null ) {
@@ -992,6 +1082,41 @@ public class ContratoDao extends Dao<Contrato> {
 				
 				//System.out.println(CustomDateUtil.getCalendarFim(calConclusaoFim).getTime());
 
+			}
+
+			for(String statusFinalAux2 : statusFinal){
+
+				if(!statusFinalAux2.equals("")) {
+					this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
+					curr++;
+				}
+
+			}
+			
+			if(comboSearch) {
+				
+				for(Usuario u : consultores){
+
+					if(u != null) {
+
+						if(isSupervisorApoio) {
+
+							this.stmt.setLong(curr,u.getUsuario_id());
+							curr++;
+
+						} else {
+
+							this.stmt.setLong(curr,u.getUsuario_id());
+							curr++;
+							this.stmt.setLong(curr,u.getUsuario_id());
+							curr++;
+
+						}
+
+					}
+
+				}
+				
 			}
 
 			this.rsContrato = this.stmt.executeQuery();
