@@ -796,14 +796,14 @@
 																	<td style="text-align: center;">
 																		
 																		<div class="buttons">
-																			<a href="#" class="btn btn-mini" onclick="novoHiscon(${parceiroBeneficio.numeroBeneficio});"><i class="icon-search"></i> Hiscon </a>
+																			<a href="#" class="btn btn-mini" onclick="novoHiscon('${parceiroBeneficio.numeroBeneficio}');"><i class="icon-search"></i> Hiscon </a>
 																		</div>
 																		
 																	</td>
 																	<td style="text-align: center;">
 																	
 																		<div class="buttons">
-																			<a href="#" class="btn btn-mini" onclick="novoContrato(${parceiroBeneficio.numeroBeneficio});"><i class="icon-file"></i> Contrato </a>
+																			<a href="#" class="btn btn-mini" onclick="novoContrato('${parceiroBeneficio.numeroBeneficio}');"><i class="icon-file"></i> Contrato </a>
 																		</div>
 	
 																	</td>
