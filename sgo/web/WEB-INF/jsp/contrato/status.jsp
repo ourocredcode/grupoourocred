@@ -1372,7 +1372,7 @@ function openPopup(url) {
 												<label class="control-label">Próxima Atuação : <fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataProximaAtuacao.time }" /></label>
 											</div>
 											<div class="control-group">
-												<label class="control-label">Previsão de Chegada : <fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataPrevisao.time }" /></label>
+												<label class="control-label">Previsão de Liberação : <fmt:formatDate pattern="dd/MM/yyyy" value="${averbacao.dataPrevisao.time }" /></label>
 											</div>
 
 										</c:if>

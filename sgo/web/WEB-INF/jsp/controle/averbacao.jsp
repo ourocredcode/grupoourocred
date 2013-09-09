@@ -105,7 +105,7 @@ function buscaByCalendar(){
 				<div class="span4">
 					<label class="control-label">Próximo Atuante : </label>
 					<div class="controls">
-						<select id="averbacaoProximoAtuante" name="averbacao.proximoAtuante.usuario_id" value="${averbacao.proximoAtuante.usuario_id }"  class="input-medium">
+						<select id="averbacaoProximoAtuante" name="averbacao.proximoAtuante.usuario_id" value="${averbacao.proximoAtuante.usuario_id }"  class="input-medium" required>
 							<option value="">Escolha...</option>
 							<c:forEach var="atuante" items="${atuantes }">
 								<option value="${atuante.usuario_id }" <c:if test="${averbacao.proximoAtuante.usuario_id == atuante.usuario_id }">selected="selected"</c:if>>${atuante.nome }</option>
