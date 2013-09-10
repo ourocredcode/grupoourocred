@@ -134,7 +134,7 @@ function validaForm(form) {
 					<div class="span4">
 						<label class="control-label">Próximo Atuante : </label>
 						<div class="controls">
-							<select id="boletoProximoAtuante" name="boleto.proximoAtuante.usuario_id" value="${boleto.proximoAtuante.usuario_id }"  class="input-medium" required>
+							<select id="boletoProximoAtuante" name="boleto.proximoAtuante.usuario_id" value="${boleto.proximoAtuante.usuario_id }"  class="input-medium">
 								<option value="">Escolha...</option>
 								<c:forEach var="atuante" items="${atuantes }">
 									<option value="${atuante.usuario_id }" <c:if test="${boleto.proximoAtuante.usuario_id == atuante.usuario_id }">selected="selected"</c:if>>${atuante.nome }</option>
