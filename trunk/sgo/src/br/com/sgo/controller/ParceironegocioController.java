@@ -396,10 +396,7 @@ public class ParceironegocioController {
 	
 				Usuario u = new Usuario();
 				Funcionario func = funcionarioDao.buscaFuncionarioByEmpOrgFuncionario(funcionario.getSupervisorFuncionario().getFuncionario_id());
-				
-				System.out.println("passou Supervisor " + funcionario.getSupervisorFuncionario().getFuncionario_id());
-				System.out.println("passou parceiro " + func.getParceiroNegocio().getParceiroNegocio_id());
-				
+
 				//if(funcionario.getSupervisor().getParceiroNegocio_id() != null)
 				//if(func != null)
 				if(funcionario.getSupervisorFuncionario().getFuncionario_id() != null)

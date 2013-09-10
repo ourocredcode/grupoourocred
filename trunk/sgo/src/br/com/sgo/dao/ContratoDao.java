@@ -607,7 +607,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 	public Collection<Contrato> buscaContratoByFiltros(Long empresa_id, Long organizacao_id, Calendar calInicio,Calendar calFim, 
 			Calendar calStatusFinalInicio,Calendar calStatusFinalFim,Calendar calConclusaoInicio,Calendar calConclusaoFim,
-			String cliente, String documento, Collection<Long> convenios,Collection<String> status,Collection<String> statusFinal,
+			String cliente, String documento, Collection<Long> convenios,Collection<String> status,Collection<String> statusFinal,Collection<String> justificativas,
 			Collection<String> produtos,Collection<String> bancos,Collection<String> bancosComprados,Collection<Usuario> consultores,Boolean isSupervisorApoio,
 			Long tipoPagamento, Long informacaoSaque,Collection<Long> empresas) {
 
@@ -744,6 +744,23 @@ public class ContratoDao extends Dao<Contrato> {
 
 		}
 		
+		sql += " ) ";
+		
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(String justificativaAux1 : justificativas){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(!justificativaAux1.equals("")) {
+				sql += clause + " ( ETAPA_1.nome like ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
 		sql += " ) ";
 		
 		x = 0;
@@ -1026,6 +1043,15 @@ public class ContratoDao extends Dao<Contrato> {
 
 			}
 			
+			for(String justificativaAux2 : justificativas){
+
+				if(!justificativaAux2.equals("")) {
+					this.stmt.setString(curr,justificativaAux2);
+					curr++;
+				}
+
+			}
+
 			for(Usuario u : consultores){
 
 				if(u != null) {
@@ -1067,6 +1093,15 @@ public class ContratoDao extends Dao<Contrato> {
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calStatusFinalFim).getTimeInMillis()));
 				curr++;
+				
+				for(String statusFinalAux2 : statusFinal){
+
+					if(!statusFinalAux2.equals("")) {
+						this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
+						curr++;
+					}
+
+				}
 
 			}
 			
@@ -1081,17 +1116,19 @@ public class ContratoDao extends Dao<Contrato> {
 				curr++;
 				
 				//System.out.println(CustomDateUtil.getCalendarFim(calConclusaoFim).getTime());
+				
+				for(String statusFinalAux2 : statusFinal){
 
-			}
+					if(!statusFinalAux2.equals("")) {
+						this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
+						curr++;
+					}
 
-			for(String statusFinalAux2 : statusFinal){
-
-				if(!statusFinalAux2.equals("")) {
-					this.stmt.setString(curr, '%' + statusFinalAux2 + '%');
-					curr++;
 				}
 
 			}
+
+			
 			
 			if(comboSearch) {
 				
