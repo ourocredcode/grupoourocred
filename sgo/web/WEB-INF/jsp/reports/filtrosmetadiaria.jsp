@@ -5,7 +5,7 @@
 </script>
 
 <div id="content-header">
-	<h1>Relatório Aprovados</h1>
+	<h1>Relatório Meta Diária</h1>
 	<div class="btn-group">
 		<a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
 		<a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
