@@ -17,10 +17,15 @@ public class ConexaoPN {
 		Properties properties = new Properties();
 
 		try {
+
 			FileInputStream fis = new FileInputStream("////localhost//sistemas//_repositorio//properties//connpn.properties");
+
 			properties.load(fis);
+			
 		} catch (IOException e) {
+
 			e.printStackTrace();
+
 		}
 
 		String driver = properties.getProperty("jdbc.driver");  
@@ -36,13 +41,19 @@ public class ConexaoPN {
 	    }
 
 	    catch (ClassNotFoundException ex)	{   
+
 	    	System.err.print(ex.getMessage()); 
+	    	
 	    	return null;
+
 	    }
 
 	    catch (SQLException e)	{   
+
 	    	System.err.print(e.getMessage());   
+
 	    	return null;
+
 	    }
 	}
 

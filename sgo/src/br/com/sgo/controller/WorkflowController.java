@@ -47,7 +47,7 @@ public class WorkflowController {
 	@Path("/workflow/cadastro")
 	public void cadastro() {
 
-		result.include("workflows", this.workflowDao.buscaTodosWorkflow());
+		result.include("workflows", this.workflowDao.buscaTodosWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("tiposWorkflow", this.tipoWorkflowDao.buscaTodosTipoWorkflow());
 
 	}

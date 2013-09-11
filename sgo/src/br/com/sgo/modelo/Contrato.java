@@ -538,7 +538,7 @@ public class Contrato implements Serializable {
 	}
 
 	public Double getValorQuitacao() {
-		return valorQuitacao;
+		return valorQuitacao == null ? 0.0 : valorQuitacao;
 	}
 
 	public void setValorQuitacao(Double valorQuitacao) {

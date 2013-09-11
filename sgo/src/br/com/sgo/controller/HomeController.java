@@ -98,6 +98,10 @@ public class HomeController {
 		currentUsuario.setEmpresa(empresaDao.load(usuarioPerfil.getEmpresa().getEmpresa_id()));
 		currentUsuario.setOrganizacao(organizacaoDao.load(usuarioPerfil.getOrganizacao().getOrganizacao_id()));
 
+		//TODO: Verificar erro LazyInitiationException ao retirar as duas linhas abaixo (Felipe 11/09/2013)
+		currentUsuario.getEmpresa().getNome();
+		currentUsuario.getOrganizacao().getNome();
+
 		validator.checking(new Validations() {{
 			that(currentUsuario, is(notNullValue()), "login", "invalid_login_or_password");
 		}});

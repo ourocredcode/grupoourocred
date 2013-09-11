@@ -40,9 +40,14 @@ public class WorkflowDao extends Dao<Workflow> {
 		this.conexao = conexao;
 	}
 
-	public Collection<Workflow> buscaTodosWorkflow() {
+	public Collection<Workflow> buscaTodosWorkflow(Long empresa_id, Long organizacao_id) {
 		
 		String sql = sqlWorkflows;
+		
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOW.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOW.organizacao_id = ?";
 		
 		this.conn = this.conexao.getConexao();
 		
@@ -51,6 +56,9 @@ public class WorkflowDao extends Dao<Workflow> {
 		try {
 			
 			this.stmt = conn.prepareStatement(sql);
+			
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
 			
 			this.rsWorkflow = this.stmt.executeQuery();
 			
