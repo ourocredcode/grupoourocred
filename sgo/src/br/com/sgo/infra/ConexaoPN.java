@@ -8,20 +8,34 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.sgo.modelo.Organizacao;
 
 @Component
 public class ConexaoPN {
 
-	public Connection getConexao() {
+	public Connection getConexao(Organizacao organizacao) {
 
 		Properties properties = new Properties();
+		FileInputStream fis;
 
 		try {
 
-			FileInputStream fis = new FileInputStream("////localhost//sistemas//_repositorio//properties//connpn.properties");
+			if(organizacao.getNome().equals("OUROCRED MATRIZ")){
+
+				fis = new FileInputStream("////localhost//sistemas//_repositorio//properties//connpn.properties");
+
+			} else if(organizacao.getNome().equals("OUROCRED RIBEIRAO")) {
+
+				fis = new FileInputStream("////localhost//sistemas//_repositorio//properties//connpnribpr.properties");
+
+			} else {
+
+				fis = new FileInputStream("////localhost//sistemas//_repositorio//properties//connpn.properties");
+
+			} 
 
 			properties.load(fis);
-			
+
 		} catch (IOException e) {
 
 			e.printStackTrace();

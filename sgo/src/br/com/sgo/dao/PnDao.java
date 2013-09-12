@@ -16,6 +16,7 @@ import java.util.TreeMap;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.sgo.infra.ConexaoPN;
+import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Detalhamento;
@@ -32,6 +33,7 @@ import br.com.sgo.modelo.TipoEndereco;
 @Component
 public class PnDao {
 
+	private final UsuarioInfo usuarioInfo;
 	private ConexaoPN conexao;
 	private PreparedStatement stmt;
 	private Connection conn;
@@ -48,8 +50,9 @@ public class PnDao {
 			+ "				LEFT JOIN public.bairros bairro ON bairro.dne = endereco.id_bairro "
 			+ "				LEFT JOIN public.cidade cidade ON cidade.id_cidade = endereco.id_cidade ";
 
-	public PnDao(ConexaoPN conexao) {
+	public PnDao(ConexaoPN conexao,UsuarioInfo usuarioInfo) {
 		this.conexao = conexao;
+		this.usuarioInfo = usuarioInfo;
 	}
 
 	public ParceiroNegocio buscaParceiroNegocio(String cpf) {
@@ -59,7 +62,7 @@ public class PnDao {
 		if (!cpf.equals(""))
 			sql += " WHERE str_nrdocumento= ?  AND doc.id_tp_doc = 2 ";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 
 		ParceiroNegocio parceiroNegocio = new ParceiroNegocio();
 
@@ -116,7 +119,7 @@ public class PnDao {
 		if (parceiroNegocio != null)
 			sql += " WHERE str_nrdocumento= ? AND doc.id_tp_doc = 2 ";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 
 		Localidade localidade = new Localidade();
 		ParceiroLocalidade parceiroLocalidade = new ParceiroLocalidade();
@@ -173,7 +176,7 @@ public class PnDao {
 		if (parceiroNegocio != null)
 			sql += " WHERE str_nrdocumento= ?  AND doc.id_tp_doc = 2 ";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 		
 		String cep = "";
 
@@ -208,7 +211,7 @@ public class PnDao {
 		if (parceiroNegocio != null)
 			sql += " WHERE str_nrdocumento= ? AND doc.id_tp_doc = 2  ";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 		
 		String numero = "";
 
@@ -243,7 +246,7 @@ public class PnDao {
 		if (parceiroNegocio != null)
 			sql += " WHERE str_nrdocumento= ?  AND doc.id_tp_doc = 2 ";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 		
 		String complemento = "";
 
@@ -278,7 +281,7 @@ public class PnDao {
 		if (parceiroNegocio != null)
 			sql += " WHERE str_nrdocumento= ? AND doc.id_tp_doc = 2  ";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 
 		ParceiroInfoBanco parceiroInfoBanco = new ParceiroInfoBanco();
 		Banco banco = new Banco();
@@ -335,7 +338,7 @@ public class PnDao {
 
 		String sql = " SELECT str_ddd,str_fone FROM tb_ent_fone AS contato WHERE contato.str_ativo = 'A' AND contato.id_ent = ? ";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 
 		Collection<ParceiroContato> parceiroContatos = new ArrayList<ParceiroContato>();
 		TipoContato tipoContato = new TipoContato();
@@ -381,7 +384,7 @@ public class PnDao {
 						" LEFT JOIN public.tb_tp_ent tipoent on tipoent.id_tp_ent = tipo.id_tp_ent " +
 						" WHERE doc.id_ent= ? and doc.id_tp_doc = 3 ";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 
 		Collection<ParceiroBeneficio> parceiroBeneficios = new ArrayList<ParceiroBeneficio>();
 
@@ -439,7 +442,7 @@ public class PnDao {
 				+ "d.nr_matricula = ? and " + "d.str_status = 'A' and "
 				+ "v.id_extrato = d.id_extrato";
 
-		this.conn = this.conexao.getConexao();
+		this.conn = this.conexao.getConexao(usuarioInfo.getOrganizacao());
 
 		try {
 
