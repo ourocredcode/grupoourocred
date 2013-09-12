@@ -1,5 +1,6 @@
 package br.com.sgo.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -152,7 +153,14 @@ public class ParceironegocioController {
 
 		result.include("departamentos", this.departamentoDao.buscaAllDepartamento(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("funcoes", this.funcaoDao.buscaAllFuncao(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
-		result.include("supervisores", this.funcionarioDao.buscaSupervisorFuncionarioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+
+		Collection<Funcionario> supervisores = new ArrayList<Funcionario>();
+
+		supervisores.addAll(this.funcionarioDao.buscaSupervisorFuncionarioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+		supervisores.addAll(this.funcionarioDao.buscaSupervisorFuncionarioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor"));
+
+		result.include("supervisores",supervisores);
+
 		result.include("sexos", this.sexoDao.buscaSexos());
 		result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
 		result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
