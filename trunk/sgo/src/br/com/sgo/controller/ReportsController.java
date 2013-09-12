@@ -1,6 +1,7 @@
 package br.com.sgo.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -90,10 +91,12 @@ public class ReportsController {
 	@Path("/reports/filtros/producaoativa")
 	public void filtrosproducaoativa(){
 		
-		Collection<Usuario> supervisores = this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial");
+		Collection<Usuario> supervisores = new ArrayList<Usuario>();
 
-		//TODO : ALTERAR USUÁRIO SUPERVISOR RETENÇÃO
-		supervisores.add(this.usuarioDao.buscaUsuario(2l, 2l, "38316716801"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Retenção"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Retenção"));
 
 		result.include("supervisores",supervisores);
 
@@ -123,10 +126,12 @@ public class ReportsController {
 	@Path("/reports/filtros/metadiaria")
 	public void filtrosmetadiaria(){
 
-		Collection<Usuario> supervisores = this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial");
+		Collection<Usuario> supervisores = new ArrayList<Usuario>();
 
-		//TODO : ALTERAR USUÁRIO SUPERVISOR RETENÇÃO
-		supervisores.add(this.usuarioDao.buscaUsuario(2l, 2l, "38316716801"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Retenção"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Retenção"));
 
 		result.include("supervisores",supervisores);
 
