@@ -39,11 +39,7 @@
 	</c:if>
 
 	<div class="container-fluid">
-		
-		<div class="alert alert-info">
-			Busque o cliente através do  <strong> número de matrícula </strong> . <a href="#" data-dismiss="alert" class="close">×</a>
-		</div>
-		
+
 		<div class="row-fluid">	
 			<form id="buscaParceiroForm" action="<c:url value="/formulario/cliente" />" method="post">
 				<div class="input-append">
