@@ -69,7 +69,7 @@
 			});
 
 		   $('#bttNovo').click(function() {
-				window.location.href = '<c:url value="/parceironegocio/cadastro" />';
+				window.location.href = '<c:url value="/parceironegocio/limpar" />';
 			});
 		   
 		   
@@ -785,13 +785,13 @@
 														<c:forEach items="${parceiroBeneficios}" var="parceiroBeneficio" varStatus="status">
 															<tr>
 																<td>
-																<select type="text" id="parceiroConvenioNome" name="parceiroBeneficios[${status.index}].convenio.convenio_id"  class="input-small" onChange="return alteraBeneficio(this,'convenio.convenio_id','${parceiroBeneficio.parceiroBeneficio_id }', this.value);">
+																<select type="text" id="parceiroConvenioNome" name="parceiroBeneficios[${status.index}].convenio.convenio_id"  class="input-small" onChange="return alteraBeneficioDESATIVADO(this,'convenio.convenio_id','${parceiroBeneficio.parceiroBeneficio_id }', this.value);">
 																	<c:forEach items="${convenios }" var="convenio">
 																		<option value="${convenio.convenio_id }" <c:if test="${parceiroBeneficio.convenio.convenio_id eq convenio.convenio_id}">selected="selected"</c:if>>${convenio.nome }</option>
 																	</c:forEach>
 																</select>
 																</td>
-																<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficio(this,'numeroBeneficio','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>
+																<td><input type="text" id="parceiroBeneficioNumeroLista" name="parceiroBeneficios[${status.index}].numeroBeneficio" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" onChange="return alteraBeneficioDESATIVADO(this,'numeroBeneficio','${parceiroBeneficio.parceiroBeneficio_id}', this.value);" readonly="readonly"/></td>
 																<td><input type="text" id="parceiroBeneficioSenhaLista" name="parceiroBeneficios[${status.index}].senha" value="${parceiroBeneficio.senha }" class="input-small" onChange="return alteraBeneficio(this,'senha','${parceiroBeneficio.parceiroBeneficio_id}', this.value);"/></td>															
 																<c:if test="${parceiroNegocio.parceiroNegocio_id  != null }">
 																	<td style="text-align: center;">
@@ -978,12 +978,15 @@
 								<button type="submit" class="btn btn-primary">${descButton }</button>
 							</c:if>
 						</div>		
-						<div class="btn-group">
-							<button type="button" class="btn" id="bttNovo">Limpar</button>
-						</div>	
 					</div>
 				</form>		
-							
+
+				<div class="btn-group">
+					<form action="<c:url value="/parceironegocio/limpar"/>" method="POST" >
+						<input type="submit" value="Limpar" class="btn"/>
+					</form>
+				</div>	
+
 				</div>
 			</div>	
 		</div>

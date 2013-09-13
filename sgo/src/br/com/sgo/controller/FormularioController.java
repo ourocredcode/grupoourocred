@@ -289,7 +289,8 @@ public class FormularioController {
 			
 		} else {
 
-			result.redirectTo(ParceironegocioController.class).cadastro();
+			result.include("notice","Erro: Cliente não encontrado. Busque pelo CPF no campo acima. ");
+			result.redirectTo(this).cadastro();
 
 		}
 
@@ -309,6 +310,7 @@ public class FormularioController {
 		this.parceiroLocalidade.setParceiroLocalidade_id(null);
 		this.parceiroLocalidade.setLocalidade(null);
 		this.formulario.setContratos(new ArrayList<Contrato>());
+		this.formulario.setParceiroInfoBanco(null);
 
 		result.redirectTo(this).cadastro();
 		result.nothing();

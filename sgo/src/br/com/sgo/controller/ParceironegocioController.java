@@ -42,6 +42,7 @@ import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
+import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Funcionario;
@@ -151,6 +152,34 @@ public class ParceironegocioController {
 	@Path("/parceironegocio/cadastro")
 	public void cadastro(){
 
+		if(this.parceiroNegocio.getParceiroNegocio_id() != null) {
+			
+			parceiroNegocio = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
+
+			result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroInfoBanco",this.parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
+			result.include("parceiroNegocio",parceiroNegocio);
+			result.include("departamentos", this.departamentoDao.buscaAllDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+			result.include("funcoes", this.funcaoDao.buscaAllFuncao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+			result.include("supervisores", this.funcionarioDao.buscaSupervisorFuncionarioByPerfil(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor"));
+			result.include("tiposEndereco",this.tipoEnderecoDao.buscaTiposEnderecoToLocalidades());
+			result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
+			result.include("tiposParceiro", this.tipoParceiroDao.buscaTiposParceiro());
+			result.include("sexos", this.sexoDao.buscaSexos());
+			result.include("estadosCivis", this.estadoCivilDao.buscaEstadosCivis());
+			result.include("bancos",this.bancoDao.buscaAllBancos());
+			result.include("convenios",this.convenioDao.buscaConvenioToFillComboByEmpOrg(1l, 1l));
+			result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
+			result.include("operacoes",this.operacaoDao.buscaOperacoes(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+			result.include("categoriasParceiro",this.categoriaParceiroDao.buscaAllCategoriaParceiroByEmpOrg(1l, 1l));
+			result.include("classificacoesParceiro",this.classificacaoParceiroDao.buscaAllClassificacaoParceiroByEmpOrg(1l, 1l));
+			result.include("gruposParceiro",this.grupoParceiroDao.buscaAllGrupoParceiroByEmpOrg(1l, 1l));
+			
+		}
+
 		result.include("departamentos", this.departamentoDao.buscaAllDepartamento(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 		result.include("funcoes", this.funcaoDao.buscaAllFuncao(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
@@ -253,11 +282,11 @@ public class ParceironegocioController {
 				parceiroNegocio.setTipoParceiro(tipoParceiro);
 				parceiroNegocio.setIsCliente(true);
 				
-				result.include("notice","Info: Parceiro Negócio encontrado na Base PN. Clique em Salvar. ");
+				result.include("notice","Info: Cliente encontrado na Base PN. Clique em Salvar. ");
 
 			} else {
 
-				result.include("notice","Erro: Parceiro Negócio não encontrado. ");
+				result.include("notice","Erro: Cliente não encontrado. Busque pelo CPF no campo acima. ");
 
 			}
 
@@ -272,7 +301,7 @@ public class ParceironegocioController {
 			result.include("funcionario",this.funcionarioDao.buscaFuncionarioPorParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id()));
 			
-			result.include("notice","Info: Parceiro Negócio encontrado na Base SGO. Possível apenas alteração. ");
+			result.include("notice","Info: Cliente encontrado na Base SGO. Possível apenas alteração. ");
 
 		}
 
@@ -342,7 +371,10 @@ public class ParceironegocioController {
 				this.parceiroNegocioDao.beginTransaction();
 				this.parceiroNegocioDao.adiciona(parceiroNegocio);
 				this.parceiroNegocioDao.commit();
-	
+
+				this.parceiroNegocio.setParceiroNegocio_id(parceiroNegocio.getParceiroNegocio_id());
+				this.parceiroNegocio.setCpf(parceiroNegocio.getCpf());
+
 			} catch(Exception e) {
 	
 				this.parceiroNegocioDao.rollback();
@@ -643,6 +675,7 @@ public class ParceironegocioController {
 				this.funcionario = this.funcionarioDao.load(funcionario.getFuncionario_id());
 
 				this.funcionario.setDepartamento(funcionario.getDepartamento());
+
 				if (this.funcionario.getOperacao().getOperacao_id() != null){
 					this.funcionario.setOperacao(funcionario.getOperacao());
 				}
@@ -660,9 +693,6 @@ public class ParceironegocioController {
 
 				Usuario usuario = this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.parceiroNegocio.getParceiroNegocio_id());
 
-				System.out.println("no " + parceiroNegocio.getParceiroNegocio_id());
-				System.out.println("yes " + this.parceiroNegocio.getParceiroNegocio_id());
-				
 				usuario.setApelido(this.funcionario.getApelido());
 				Funcionario f = funcionarioDao.buscaFuncionarioByEmpOrgFuncionario(this.funcionario.getSupervisorFuncionario().getFuncionario_id());
 				//usuario.setSupervisorUsuario(this.usuarioDao.buscaUsuarioByParceiroNegocio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), this.funcionario.getSupervisorFuncionario().getFuncionario_id()));
@@ -973,6 +1003,17 @@ public class ParceironegocioController {
 
 	@Get
 	public void msg(){
+
+	}
+	
+	@Post
+	@Path("/parceironegocio/limpar")
+	public void limpar() {
+
+		this.parceiroNegocio.setParceiroNegocio_id(null);
+		this.parceiroNegocio.setCpf(null);
+
+		result.redirectTo(this).cadastro();
 
 	}
 
