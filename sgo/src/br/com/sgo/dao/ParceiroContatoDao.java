@@ -42,7 +42,7 @@ public class ParceiroContatoDao extends Dao<ParceiroContato> {
 		String sql = sqlParceiroContato;
 
 		if (parceiroNegocio_id != null)
-			sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ? ";
+			sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ? AND PARCEIROCONTATO.isactive = 1  ";
 
 		this.conn = this.conexao.getConexao();
 		Collection<ParceiroContato> parceiroContatos = new ArrayList<ParceiroContato>();

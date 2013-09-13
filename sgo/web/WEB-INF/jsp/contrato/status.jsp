@@ -16,13 +16,43 @@ $(document).ready(function() {
 	$("#telefoneCel").mask("(99) 9999-9999?9");
 	$("#valorQuitacao").maskMoney({symbol:"",decimal:".",thousands:""});
 	
+	jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+	    "date-euro-pre": function ( a ) {
+	        if ($.trim(a) != '') {
+	            var frDatea = $.trim(a).split(' ');
+	            var frTimea = frDatea[1].split(':');
+	            var frDatea2 = frDatea[0].split('/');
+	            var x = (frDatea2[2] + frDatea2[1] + frDatea2[0] + frTimea[0] + frTimea[1] + frTimea[2]) * 1;
+	        } else {
+	            var x = 10000000000000; // = l'an 1000 ...
+	        }
+	         
+	        return x;
+	    },
+	 
+	    "date-euro-asc": function ( a, b ) {
+	        return a - b;
+	    },
+	 
+	    "date-euro-desc": function ( a, b ) {
+	        return b - a;
+	    }
+	} );
+	
 	$('.data-table').dataTable({
 		"bJQueryUI": true,
 		"sPaginationType": "full_numbers",
 		"sDom": '<""l>t<"F"fp>',
 		"bFilter": false,
-		"aaSorting": []
+		"aaSorting": [],
+		"aoColumns": [
+            { "sType": "date-euro" },
+            null,
+            null
+        ]
 	});
+	
+	
 
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 
@@ -1071,7 +1101,7 @@ function openPopup(url) {
 								<c:forEach var="historico" items="${historico }">
 									<tr>
 										<td>
-											<fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${historico.created.time }" />
+											<fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss"  type="time" value="${historico.created.time }" />
 										</td>
 										<td>
 											${historico.createdBy.nome }
@@ -1087,14 +1117,24 @@ function openPopup(url) {
 							<thead>	
 								<tr>
 									<th scope="col">
-										
+										Data
+									</th>
+									<th scope="col">
+										Usuario
+									</th>
+									<th scope="col">
+										Observacao
 									</th>
 								</tr>
 							</thead>
 							<tbody>		
 								<tr>
 									<td>
-										Nenhuma alteração realizada
+									</td>
+									<td>
+									</td>
+									<td>
+										<i> Nenhuma alteração realizada </i>
 									</td>
 								</tr>
 							</tbody>	
@@ -1330,7 +1370,7 @@ function openPopup(url) {
 										<tbody>	
 											<c:forEach items="${historicoControleBoleto}" var="historico">
 												<tr>
-													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${historico.created.time }" /></td>
+													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss"  type="time" value="${historico.created.time }" /></td>
 													
 													<td>${historico.createdBy.nome }</td>
 													<td>${historico.observacao }</td>
@@ -1397,7 +1437,7 @@ function openPopup(url) {
 										<tbody>	
 											<c:forEach items="${historicoControleAverbacao}" var="historico">
 												<tr>
-													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm"  type="time" value="${historico.created.time }" /></td>
+													<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss"  type="time" value="${historico.created.time }" /></td>
 													<td>${historico.createdBy.nome }</td>
 													<td>${historico.observacao }</td>
 												</tr>
@@ -1413,6 +1453,5 @@ function openPopup(url) {
 			</div>
 		</div>
 	</div>
-		
 
 <%@ include file="/footer.jspf" %>
