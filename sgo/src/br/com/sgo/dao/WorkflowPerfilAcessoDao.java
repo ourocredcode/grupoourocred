@@ -41,9 +41,14 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 		this.conexao = conexao;
 	}
 
-	public Collection<WorkflowPerfilAcesso> buscaTodosWorkflowPerfilAcesso() {
+	public Collection<WorkflowPerfilAcesso> buscaTodosWorkflowPerfilAcesso(Long empresa_id, Long organizacao_id) {
 
 		String sql = sqlWorkflowPerfilAcesso;
+		
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOWPERFILACESSO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOWPERFILACESSO.organizacao_id = ?";
 
 		this.conn = this.conexao.getConexao();
 
@@ -52,6 +57,8 @@ public class WorkflowPerfilAcessoDao extends Dao<WorkflowPerfilAcesso> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
 
 			this.rsWorkflowPerfilAcesso = this.stmt.executeQuery();
 

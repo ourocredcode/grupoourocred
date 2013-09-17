@@ -53,8 +53,8 @@ public class WorkflowperfilacessoController {
 
 		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("perfis",this.perfilDao.buscaAllPerfis(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		result.include("workflowPerfisAcesso", this.workflowPerfilAcessoDao.buscaTodosWorkflowPerfilAcesso());
-		
+		result.include("workflowPerfisAcesso", this.workflowPerfilAcessoDao.buscaTodosWorkflowPerfilAcesso(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+
 	}
 
 	@Post

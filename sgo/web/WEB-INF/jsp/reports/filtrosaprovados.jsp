@@ -37,7 +37,7 @@
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span12">
-		<form id="filtroAprovadosForm" name="filtroAprovadosForm" action="<c:url value="/reports/aprovados"/>" method="POST">
+		<form id="filtroAprovadosForm" name="filtroAprovadosForm" action="<c:url value="/reports/aprovados"/>" method="POST" target="_blank">
 			
 			<div class="widget-box">
 
