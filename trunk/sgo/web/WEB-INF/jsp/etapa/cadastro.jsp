@@ -253,6 +253,8 @@ function limpaForm(){
 							style="font-size: 12px">
 							<thead>
 								<tr>
+									<th>Empresa</th>
+									<th>Organizacao</th>
 									<th>Etapa</th>
 									<th>Ordem Etapa</th>
 									<th>Padrão</th>
@@ -262,6 +264,8 @@ function limpaForm(){
 							<tbody>
 								<c:forEach items="${etapas }" var="etapa">
 									<tr>
+										<td>${etapa.empresa.nome }</td>
+										<td>${etapa.organizacao.nome }</td>
 										<td>${etapa.nome }</td>
 										<td>${etapa.ordemEtapa }</td>
 										<td>${etapa.isPadrao }</td>

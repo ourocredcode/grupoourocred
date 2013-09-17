@@ -101,9 +101,10 @@ public class WorkflowetapaperfilacessoController {
 	@Path("/workflowetapaperfilacesso/cadastro")
 	public void cadastro() {
 
-		result.include("workflowEtapasPerfilAcesso", this.workflowEtapaPerfilAcessoDao.buscaTodosWorkflowEtapaPerfilAcesso());
+		result.include("workflowEtapasPerfilAcesso", this.workflowEtapaPerfilAcessoDao.buscaTodosWorkflowEtapaPerfilAcesso(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("workflows", this.workflowDao.buscaWorkflowsToWorkflowEtapaPerfilByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("perfis", this.perfilDao.buscaPerfisToWorkflowEtapaPerfil());
+
 	}
 
 	@Post

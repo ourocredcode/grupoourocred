@@ -382,6 +382,8 @@ function buscaEtapasTransicao(){
 							style="font-size: 12px">
 							<thead>
 								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
 									<th>Worklflow</th>
 									<th>Etapa</th>
 									<th>Etapa Próxima</th>
@@ -395,6 +397,8 @@ function buscaEtapasTransicao(){
 								<c:forEach items="${workflowTransicoes }"
 									var="workflowTransicao">
 									<tr>
+										<td>${workflowTransicao.empresa.nome }</td>
+										<td>${workflowTransicao.organizacao.nome }</td>
 										<td>${workflowTransicao.workflow.nome }</td>
 										<td>${workflowTransicao.etapa.nome }</td>
 										<td>${workflowTransicao.etapaProximo.nome }</td>

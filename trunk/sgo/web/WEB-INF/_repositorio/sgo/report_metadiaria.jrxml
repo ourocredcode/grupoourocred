@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vendasdiarias" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="135"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -15,6 +15,7 @@
 	  USUARIO.apelido as usuario,
 	  SUM(CONTRATO.valormeta) as metaCount,
 	  SUM(CONTRATO.valorcontrato) as contratoCount,
+	  SUM(CONTRATO.valorliquido) as liquidoCount,
 	  SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount
   FROM ((( CONTRATO
   INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id)
@@ -34,16 +35,20 @@ ORDER BY   Convert(varchar(10), CONTRATO.created , 103),SUPER.apelido,USUARIO.ap
 	<field name="usuario" class="java.lang.String"/>
 	<field name="metaCount" class="java.lang.Double"/>
 	<field name="contratoCount" class="java.lang.Double"/>
+	<field name="liquidoCount" class="java.lang.Double"/>
 	<field name="contLiquidoCount" class="java.lang.Double"/>
 	<variable name="sumMeta" class="java.lang.Double" resetType="Group" resetGroup="data" calculation="Sum">
 		<variableExpression><![CDATA[$F{metaCount}]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
-	<variable name="sumContrato" class="java.lang.Double" calculation="Sum">
+	<variable name="sumContrato" class="java.lang.Double" resetType="Group" resetGroup="data" calculation="Sum">
 		<variableExpression><![CDATA[$F{contratoCount}]]></variableExpression>
 	</variable>
-	<variable name="sumContLiquido" class="java.lang.Double" calculation="Sum">
+	<variable name="sumContLiquido" class="java.lang.Double" resetType="Group" resetGroup="data" calculation="Sum">
 		<variableExpression><![CDATA[$F{contLiquidoCount}]]></variableExpression>
+	</variable>
+	<variable name="sumLiquido" class="java.lang.Double" resetType="Group" resetGroup="data" calculation="Sum">
+		<variableExpression><![CDATA[$F{liquidoCount}]]></variableExpression>
 	</variable>
 	<group name="data">
 		<groupExpression><![CDATA[$F{data}]]></groupExpression>
@@ -64,28 +69,28 @@ ORDER BY   Convert(varchar(10), CONTRATO.created , 103),SUPER.apelido,USUARIO.ap
 		<groupFooter>
 			<band height="20">
 				<textField pattern="¤ #,##0.00">
-					<reportElement x="277" y="5" width="145" height="15"/>
+					<reportElement x="621" y="5" width="99" height="15"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 					</box>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font fontName="Arial" size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{sumMeta}]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00">
-					<reportElement x="433" y="4" width="145" height="15"/>
+					<reportElement x="200" y="4" width="137" height="15"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 					</box>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font fontName="Arial" size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{sumContrato}]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-					<reportElement x="575" y="4" width="145" height="15"/>
-					<textElement>
+					<reportElement x="475" y="4" width="145" height="15"/>
+					<textElement textAlignment="Center">
 						<font fontName="Arial" size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{sumContLiquido}]]></textFieldExpression>
@@ -93,6 +98,16 @@ ORDER BY   Convert(varchar(10), CONTRATO.created , 103),SUPER.apelido,USUARIO.ap
 				<line>
 					<reportElement x="0" y="3" width="709" height="1"/>
 				</line>
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="338" y="4" width="137" height="15"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumLiquido}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -123,6 +138,7 @@ ORDER BY   Convert(varchar(10), CONTRATO.created , 103),SUPER.apelido,USUARIO.ap
 		<band height="70" splitType="Stretch">
 			<textField>
 				<reportElement mode="Opaque" x="0" y="0" width="802" height="70" forecolor="#FFFFFF" backcolor="#333333"/>
+				<box topPadding="5" leftPadding="5"/>
 				<textElement>
 					<font size="34"/>
 				</textElement>
@@ -142,24 +158,29 @@ ORDER BY   Convert(varchar(10), CONTRATO.created , 103),SUPER.apelido,USUARIO.ap
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Column header" x="0" y="19" width="277" height="15"/>
+				<reportElement style="Column header" x="0" y="19" width="197" height="15"/>
 				<textElement/>
 				<text><![CDATA[Consultor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="277" y="19" width="145" height="15"/>
-				<textElement/>
+				<reportElement style="Column header" x="621" y="19" width="99" height="15"/>
+				<textElement textAlignment="Center"/>
 				<text><![CDATA[Meta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="430" y="20" width="145" height="15"/>
-				<textElement/>
+				<reportElement style="Column header" x="197" y="19" width="140" height="15"/>
+				<textElement textAlignment="Center"/>
 				<text><![CDATA[Contrato]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="575" y="19" width="145" height="15"/>
-				<textElement/>
+				<reportElement style="Column header" x="475" y="19" width="145" height="15"/>
+				<textElement textAlignment="Center"/>
 				<text><![CDATA[Contrato Liquido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="338" y="20" width="137" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Valor Líquido]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -172,24 +193,29 @@ ORDER BY   Convert(varchar(10), CONTRATO.created , 103),SUPER.apelido,USUARIO.ap
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement style="Detail" x="0" y="0" width="277" height="15"/>
+				<reportElement style="Detail" x="0" y="0" width="197" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{usuario}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement style="Detail" x="277" y="0" width="145" height="15"/>
-				<textElement/>
+				<reportElement style="Detail" x="621" y="0" width="99" height="15"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{metaCount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement style="Detail" x="430" y="0" width="145" height="15"/>
-				<textElement/>
+				<reportElement style="Detail" x="197" y="0" width="140" height="15"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{contratoCount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement style="Detail" x="575" y="0" width="145" height="15"/>
-				<textElement/>
+				<reportElement style="Detail" x="475" y="0" width="145" height="15"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{contLiquidoCount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement style="Detail" x="338" y="0" width="137" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{liquidoCount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

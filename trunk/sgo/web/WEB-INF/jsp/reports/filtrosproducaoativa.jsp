@@ -2,6 +2,29 @@
 
 <script type="text/javascript">
 
+function validaForm(form) {
+
+	$.each($(".select2-container"), function (i, n) {
+        $(n).next().show().fadeTo(0, 0).height("0px").css("left", "auto"); 
+        $(n).prepend($(n).next());
+        $(n).delay(500).queue(function () {
+            $(this).removeClass("validate[required]");
+            $(this).dequeue();
+        });
+    });
+
+	if ($(form).validate().form() == true) {
+
+		$(form).submit();
+
+	} else {
+	
+		return false;
+
+	}
+
+}	
+
 </script>
 
 <div id="content-header">
@@ -37,14 +60,14 @@
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span12">
-		<form id="filtroAprovadosForm" name="filtroAprovadosForm" action="<c:url value="/reports/producaoativa"/>" method="POST">
+		<form id="filtroAprovadosForm" name="filtroAprovadosForm" action="<c:url value="/reports/producaoativa"/>" method="POST" target="_blank" >
 			
 			<div class="widget-box">
 
 					<div class="widget-title">
 						<span class="icon"><i class="icon-signal"></i>
 						</span><h5>Filtros</h5>
-						<div class="buttons"><button type="submit" class="btn btn-mini" ><i class="icon-file icon-black"></i> Gerar Relatório </button></div>
+						<div class="buttons"><button type="button" class="btn btn-mini" onclick="javascript:validaForm('#filtroAprovadosForm');" ><i class="icon-file icon-black"></i> Gerar Relatório </button></div>
 					</div>
 
 					<div class="widget-content">
@@ -67,7 +90,7 @@
 
 											<div class="span3">								
 												<label for="usuario">Supervisor</label>
-												<select id="usuarioId" name="usuario.usuario_id" class="input-medium">
+												<select id="usuarioId" name="usuario.usuario_id" class="input-medium" required>
 													<option value="">Todos</option>
 													<c:forEach items="${supervisores}" var="supervisor">
 														<option value="${supervisor.usuario_id}">${supervisor.apelido}</option>

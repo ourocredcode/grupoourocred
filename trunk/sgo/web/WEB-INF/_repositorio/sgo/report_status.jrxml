@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_aprovados" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
@@ -10,6 +10,7 @@ ETAPA.etapa_id ,
 COUNT(ETAPA.nome) as etapaCount,
 SUM(CONTRATO.valormeta) as metaCount,
 SUM(CONTRATO.valorcontrato) as contratoCount,
+SUM(CONTRATO.valorliquido) as liquidoCount,
 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount
 FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id)
 INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id)
@@ -23,6 +24,7 @@ AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.no
 	<field name="etapaCount" class="java.lang.Integer"/>
 	<field name="metaCount" class="java.lang.Double"/>
 	<field name="contratoCount" class="java.lang.Double"/>
+	<field name="liquidoCount" class="java.lang.Double"/>
 	<field name="contLiquidoCount" class="java.lang.Double"/>
 	<background>
 		<band/>
@@ -54,46 +56,79 @@ AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.no
 	<columnHeader>
 		<band height="22">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="2" width="162" height="19" forecolor="#006699" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="0" y="2" width="150" height="19" forecolor="#006699" backcolor="#E6E6E6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="162" y="2" width="141" height="19" forecolor="#006699" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="254" y="2" width="130" height="19" forecolor="#006699" backcolor="#E6E6E6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Vl Meta]]></text>
+				<text><![CDATA[C. Liquido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="300" y="2" width="141" height="19" forecolor="#006699" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="501" y="2" width="54" height="19" forecolor="#006699" backcolor="#E6E6E6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Qtd Contratos]]></text>
+				<text><![CDATA[Qtd]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="149" y="2" width="107" height="19" forecolor="#006699" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vl Liquido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="383" y="2" width="118" height="19" forecolor="#006699" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vl Meta]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="22">
 			<textField>
-				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="0" y="1" width="162" height="20" backcolor="#CCCCCC"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="0" y="1" width="150" height="20" backcolor="#CCCCCC"/>
+				<box leftPadding="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font isStrikeThrough="false"/>
+					<font size="8" isStrikeThrough="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{etapa_nome}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[     $F{etapa_nome}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="162" y="1" width="141" height="20" backcolor="#CCCCCC"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{metaCount}]]></textFieldExpression>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="254" y="1" width="131" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contLiquidoCount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
-				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="303" y="1" width="139" height="20" backcolor="#CCCCCC"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="501" y="1" width="54" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{etapaCount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="149" y="1" width="107" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{liquidoCount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="384" y="1" width="118" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{metaCount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -104,17 +139,23 @@ AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.no
 		<band height="18">
 			<textField>
 				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
 				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6"/>
-				<textElement/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="0" y="4" width="187" height="13"/>
-				<textElement/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>

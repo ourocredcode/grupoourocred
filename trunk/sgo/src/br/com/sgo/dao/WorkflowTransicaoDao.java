@@ -47,18 +47,26 @@ public class WorkflowTransicaoDao extends Dao<WorkflowTransicao> {
 		this.conexao = conexao;
 	}
 
-	public Collection<WorkflowTransicao> buscaTodosWorkflowTransicao() {
+	public Collection<WorkflowTransicao> buscaTodosWorkflowTransicao(Long empresa_id, Long organizacao_id) {
 
 		String sql = sqlWorkflowTransicoes;
+		
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOWTRANSICAO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOWTRANSICAO.organizacao_id = ?";
 
 		this.conn = this.conexao.getConexao();
 		
 		Collection<WorkflowTransicao> workflowTransicoes = new ArrayList<WorkflowTransicao>();
 
 		try {
-			
+
 			this.stmt = conn.prepareStatement(sql);
-			
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
 			this.rsWorkflowTransicao = this.stmt.executeQuery();
 			
 			while (rsWorkflowTransicao.next()) {

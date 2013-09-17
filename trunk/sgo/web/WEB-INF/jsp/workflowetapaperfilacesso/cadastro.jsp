@@ -421,6 +421,8 @@ function buscaEtapas(){
 							style="font-size: 12px">
 							<thead>
 								<tr>
+									<th>Empresa</th>
+									<th>Organização</th>
 									<th>Worklflow</th>
 									<th>Worklflow Etapa</th>
 									<th>Perfil</th>
@@ -431,6 +433,8 @@ function buscaEtapas(){
 							<tbody>
 								<c:forEach items="${workflowEtapasPerfilAcesso }" var="workflowEtapaPerfilAcesso">
 									<tr>
+										<td>${workflowEtapaPerfilAcesso.empresa.nome }</td>
+										<td>${workflowEtapaPerfilAcesso.organizacao.nome }</td>
 										<td>${workflowEtapaPerfilAcesso.workflow.nome }</td>
 										<td>${workflowEtapaPerfilAcesso.etapa.nome }</td>
 										<td>${workflowEtapaPerfilAcesso.perfil.nome }</td>

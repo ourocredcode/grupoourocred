@@ -41,6 +41,7 @@ public class ReportsDao extends Dao<Contrato> {
 							 " COUNT(ETAPA.nome) as etapaCount, " +
 							 " SUM(CONTRATO.valormeta) as metaCount, " +
 							 " SUM(CONTRATO.valorcontrato) as contratoCount, " +
+							 " SUM(CONTRATO.valorliquido) as liquidoCount, " +
 					 		 " SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 					 " FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
 					 " INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
@@ -71,6 +72,7 @@ public class ReportsDao extends Dao<Contrato> {
 						 " SUPER.apelido as supervisor, " +
 						 " SUM(CONTRATO.valormeta) as metaCount, " +  
 						 " SUM(CONTRATO.valorcontrato) as contratoCount, " + 
+						 " SUM(CONTRATO.valorliquido) as liquidoCount, " +
 						 " SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +  
 					 " FROM ((( CONTRATO " + 
 					 " INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +  
@@ -132,6 +134,7 @@ public class ReportsDao extends Dao<Contrato> {
 						 " USUARIO.apelido as usuario, " +
 						 " SUM(CONTRATO.valormeta) as metaCount, " +
 						 " SUM(CONTRATO.valorcontrato) as contratoCount, " +
+						 " SUM(CONTRATO.valorliquido) as liquidoCount, " +
 						 " SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 					 " FROM ((( CONTRATO " +
 					 " INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
@@ -190,6 +193,7 @@ public class ReportsDao extends Dao<Contrato> {
 						  " USUARIO.apelido as usuario, " +
 						  " SUM(CONTRATO.valormeta) as metaCount, " +
 						  " SUM(CONTRATO.valorcontrato) as contratoCount, " +
+						  " SUM(CONTRATO.valorliquido) as liquidoCount, " +
 						  " SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 					  " FROM ((( CONTRATO " +
 					  " INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +

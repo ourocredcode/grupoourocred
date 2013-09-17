@@ -58,7 +58,7 @@ public class WorkflowtransicaoController {
 	public void cadastro() {
 
 		result.include("workflows", this.workflowDao.buscaWorkflowsByEmpresaOrganizacao(usuarioInfo.getEmpresa().getEmpresa_id(), usuarioInfo.getOrganizacao().getOrganizacao_id()));
-		result.include("workflowTransicoes", this.workflowTransicaoDao.buscaTodosWorkflowTransicao());
+		result.include("workflowTransicoes", this.workflowTransicaoDao.buscaTodosWorkflowTransicao(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
 	}
 

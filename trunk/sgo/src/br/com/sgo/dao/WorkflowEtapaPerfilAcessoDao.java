@@ -46,9 +46,13 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 
 	}
 
-	public Collection<WorkflowEtapaPerfilAcesso> buscaTodosWorkflowEtapaPerfilAcesso() {
+	public Collection<WorkflowEtapaPerfilAcesso> buscaTodosWorkflowEtapaPerfilAcesso(Long empresa_id, Long organizacao_id) {
 
 		String sql = sqlWorkflowEtapaPerfilAcesso;
+		if (empresa_id != null)
+			sql += " WHERE WORKFLOWETAPAPERFILACESSO.empresa_id = ?";
+		if (organizacao_id != null)
+			sql += " AND WORKFLOWETAPAPERFILACESSO.organizacao_id = ?";
 		
 		sql += " ORDER BY WORKFLOW.nome, ETAPA.nome, PERFIL.nome ";
 
@@ -59,6 +63,9 @@ public class WorkflowEtapaPerfilAcessoDao extends Dao<WorkflowEtapaPerfilAcesso>
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
 
 			this.rsWorkflowEtapaPerfilAcesso = this.stmt.executeQuery();
 
