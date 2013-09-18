@@ -181,6 +181,7 @@ public class LogisticaController {
 
 		form.setContratos(contratos);
 
+		parceiroLocalidade = new ParceiroLocalidade();
 		parceiroNegocio = parceiroNegocioDao.buscaParceiroNegocioById(form.getParceiroNegocio().getParceiroNegocio_id());
 
 		for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
@@ -197,38 +198,59 @@ public class LogisticaController {
 
 		}
 
-		form.setParceiroLocalidade(parceiroLocalidade);
-		form.setParceiroContatos(contatos);
+		if(parceiroLocalidade.getParceiroLocalidade_id() != null) {
+			
+			if(contatos.size() > 0){
+				
+				form.setParceiroLocalidade(parceiroLocalidade);
+				form.setParceiroContatos(contatos);
 
-		forms.add(form);
+				forms.add(form);
 
-		try{
+				try{
 
-			response.setHeader("Cache-Control", "no-store");
-			response.setHeader("Pragma", "no-cache");
-			response.setDateHeader("Expires", 0);
-			response.setContentType("application/pdf");
+					response.setHeader("Cache-Control", "no-store");
+					response.setHeader("Pragma", "no-cache");
+					response.setDateHeader("Expires", 0);
+					response.setContentType("application/pdf");
 
-			ServletOutputStream responseOutputStream = response.getOutputStream();
+					ServletOutputStream responseOutputStream = response.getOutputStream();
 
-			CheckListDataSource checklistDataSource;
-			checklistDataSource = new CheckListDataSource(forms);
+					CheckListDataSource checklistDataSource;
+					checklistDataSource = new CheckListDataSource(forms);
 
-			impressao = JasperFillManager.fillReport(jasper, parametros , checklistDataSource);
+					impressao = JasperFillManager.fillReport(jasper, parametros , checklistDataSource);
 
-			JasperExportManager.exportReportToPdfStream(impressao, responseOutputStream);
+					JasperExportManager.exportReportToPdfStream(impressao, responseOutputStream);
 
-			responseOutputStream.flush();
-			responseOutputStream.close();
+					responseOutputStream.flush();
+					responseOutputStream.close();
 
-		}catch(IOException e){
-			System.out.println("Erro:" + e);
-		}catch(JRException e){
-			e.printStackTrace();
-			System.out.println("Erro:" + e.getMessage());
+				}catch(IOException e){
+					System.out.println("Erro:" + e);
+				}catch(JRException e){
+					e.printStackTrace();
+					System.out.println("Erro:" + e.getMessage());
+				}
+
+				result.nothing();
+
+			} else {
+
+				result.include("msg","ERRO : Cliente sem telefone cadastrado.").redirectTo(this).msg();
+
+			}
+
+		} else {
+
+			result.include("msg","ERRO : Cliente sem endereço cadastrado. ").redirectTo(this).msg();
+
 		}
 
-		result.nothing();
+	}
+
+	@Get
+	public void msg(){
 
 	}
 

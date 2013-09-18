@@ -1,11 +1,17 @@
 <%@ include file="/header.jspf"%>
 
 	<script type="text/javascript">
-	$(document).ready(function() {
-		$('#salvaForm').submit(function() {
-			$("input[type='submit']", this).attr("disabled", true);
-		});	
-	});
+
+	function validaFormulario(form) {
+
+		if (confirm("Deseja encerrar o cadastro de contratos?")){
+			$("#btnSalvaForm").attr("disabled", true);
+			$(form).submit();
+		} else {
+			return false;
+		}
+	}
+
 	</script>
 
 	<div id="content-header">
@@ -171,7 +177,7 @@
 					<div class="span3">
 						<div class="btn-group">
 							<form id="salvaForm" action="<c:url value="/formulario/salva"/>" method="POST">
-								<button type="submit" class="btn btn-primary" id="btnNovo" onclick="return confirm('Deseja encerrar o cadastro de contratos?');" >Salvar</button>
+								<button type="button" class="btn btn-primary" id="btnSalvaForm" onclick="return validaFormulario(this.form);" >Salvar</button>
 							</form>
 						</div>
 						<div class="btn-group">

@@ -178,7 +178,7 @@ public class ReportsController {
 
 			ServletOutputStream responseOutputStream = response.getOutputStream();
 
-			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.statusResultSet());
+			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.statusResultSet(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
 			impressao = JasperFillManager.fillReport(jasper, parametros , jrRS);
 
