@@ -37,6 +37,8 @@ function mostra(div){
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span12">
+		
+		<c:if test="${usuarioInfo.perfil.chave == 'Gestor' && usuarioInfo.organizacao.nome == 'OUROCRED MATRIZ' }">	
 
 			<div id="menuScripts" style="float:left;min-height: 640px;font-size: 13px;margin-top: 20px;margin-right: 20px;">
 
@@ -84,6 +86,9 @@ function mostra(div){
 				<iframe src="<c:url value="/visualizaScript/coeficientes_Safra.pdf"/>" style="width: 70%;height: 800px"></iframe>
 			
 			</div>
+
+		</c:if>
+	
 		</div>
 	</div>
 </div>			

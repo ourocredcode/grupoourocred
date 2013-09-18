@@ -33,7 +33,7 @@ public class ReportsDao extends Dao<Contrato> {
 
 	}
 
-	public ResultSet statusResultSet() {
+	public ResultSet statusResultSet(Long empresa_id, Long organizacao_id) {
 
 		String sql = "SELECT " +
 							 " ETAPA.nome as etapa_nome, " +
@@ -46,8 +46,8 @@ public class ReportsDao extends Dao<Contrato> {
 					 " FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
 					 " INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +
 					 " INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
-					 " WHERE CONTRATO.empresa_id = 2 " +
-					 " AND CONTRATO.organizacao_id = 2 " +
+					 " WHERE CONTRATO.empresa_id = ? " +
+					 " AND CONTRATO.organizacao_id = ? " +
 					 " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) GROUP BY ETAPA.nome, ETAPA.etapa_id ORDER BY metaCount DESC ";
 
 		this.conn = this.conexao.getConexao();
@@ -55,7 +55,19 @@ public class ReportsDao extends Dao<Contrato> {
 		try {
 	
 			this.stmt = conn.prepareStatement(sql);
-	
+			
+			int curr = 1;
+
+			if(empresa_id != null){
+				this.stmt.setLong(curr, empresa_id);
+				curr++;
+			}
+
+			if(organizacao_id != null){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+
 			this.rsReports = this.stmt.executeQuery();
 	
 		} catch (SQLException e) {

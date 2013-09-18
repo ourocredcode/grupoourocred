@@ -58,7 +58,7 @@ function mostra(div){
 			<div id="bgn" style="display: none;font-size: 16px;">
 			
 			<br/>
-			<h2 style="color: #b5b5b5;">BMG</h2><br/>
+			<h2 style="color: #b5b5b5;">BGN</h2><br/>
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_bgn.pdf"/>" style="width: 70%;height: 800px"></iframe>
 			
@@ -112,7 +112,7 @@ function mostra(div){
 			<div id="safra" style="display: none;font-size: 16px;">
 			
 			<br/>
-			<h2 style="color: #b5b5b5;">PANAMERICANO</h2><br/> 
+			<h2 style="color: #b5b5b5;">SAFRA</h2><br/> 
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_safra.pdf"/>" style="width: 70%;height: 600px"></iframe>
 			

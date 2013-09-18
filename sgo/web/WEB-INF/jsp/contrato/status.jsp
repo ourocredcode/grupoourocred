@@ -1190,7 +1190,7 @@ function openPopup(url) {
 								<div class="span1">
 									<c:if test="${not empty logisticas && not empty formulario.parceiroLocalidade }">
 
-										<form action="<c:url value="/logistica/checklist/${formulario.formulario_id}"/>">
+										<form action="<c:url value="/logistica/checklist/${formulario.formulario_id}"/>" target="_blank">
 											<input type="submit" value="CheckList" class="btn"/>
 										</form>
 

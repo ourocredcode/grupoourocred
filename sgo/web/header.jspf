@@ -93,7 +93,7 @@
 				<li class="active"><a href="<c:url value="/menu/inicio/${usuarioInfo.perfil.chave }"/>"><i class="icon icon-home"></i> <span>Dashboard</span></a></li>
 
 				
-				<c:if test="${usuarioInfo.perfil.chave == 'Administrador' }">
+				<c:if test="${ usuarioInfo.perfil.chave == 'Administrador' && usuarioInfo.organizacao.nome == 'OUROCRED MATRIZ' }">
 				
 					<li class="submenu">
 	
@@ -152,7 +152,66 @@
 				
 				</c:if>
 				
-				<c:if test="${usuarioInfo.perfil.chave == 'Gestor' }">
+				<c:if test="${ usuarioInfo.perfil.chave == 'Administrador' && usuarioInfo.organizacao.nome == 'OUROCRED RIBEIRAO' }">
+				
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-th-list"></i> <span>Cadastros</span></a>
+	
+						<ul class="cadastro">
+							<li><a href="<c:url value="/parceironegocio/cadastro"/>">Parceiro Negócios</a></li>
+							<li><a href="<c:url value="/funcao/cadastro"/>">Função</a></li>
+							<li><a href="<c:url value="/departamento/cadastro"/>">Departamento</a></li>
+							<li><a href="<c:url value="/perfil/cadastro"/>">Perfil</a></li>
+							<li><a href="<c:url value="/usuario/cadastro"/>">Usuário</a></li>
+						</ul>
+	
+					</li>
+					
+					<li class="submenu">
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
+						<ul class="cadastro">
+							<li><a href="<c:url value="/banco/cadastro"/>">Banco</a></li>
+							<li><a href="<c:url value="/produto/cadastro"/>">Produto</a></li>
+							<li><a href="<c:url value="/tabela/cadastro"/>">Tabela</a></li>
+							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+						</ul>
+					</li>
+					
+					
+					<li class="submenu">
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrador</span></a>
+						<ul class="cadastro">
+							<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
+						</ul>
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
+						</ul>
+				
+					</li>
+				
+				</c:if>
+				
+				<c:if test="${usuarioInfo.perfil.chave == 'Gestor' && usuarioInfo.organizacao.nome == 'OUROCRED MATRIZ' }">
 
 					<li class="submenu">
 						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
@@ -227,8 +286,81 @@
 					</li>
 				
 				</c:if>
+				
+				<c:if test="${usuarioInfo.perfil.chave == 'Gestor' && usuarioInfo.organizacao.nome == 'OUROCRED RIBEIRAO' }">
 
-				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
+					<li class="submenu">
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
+						<ul class="cadastro">
+							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+						</ul>
+					</li>
+					
+					<li class="submenu">
+
+						<a href="#"><i class="icon icon-pencil"></i> <span>Solicitação</span></a>
+
+						<ul class="consultor">
+							<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
+						</ul>
+
+					</li>
+
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
+							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Tabelas</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
+							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
+						</ul>
+				
+					</li>
+
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-file"></i> <span>Relatórios</span></a>
+
+						<ul class="reports">
+							<li><a href="<c:url value="/reports/status"/>" target="_blank">Status</a></li>
+							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
+							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
+							<li><a href="<c:url value="/reports/filtros/metadiaria"/>" >Meta Diária</a></li>
+							<!-- 
+							<li><a href="<c:url value="/reports/chart-aprovados"/>" target="_blank">Aprovados (Gráfico)</a></li>
+							 -->
+						</ul>
+
+					</li>
+				
+				</c:if>
+
+				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' && usuarioInfo.organizacao.nome == 'OUROCRED MATRIZ' }">
 
 					<li class="submenu">
 
@@ -279,7 +411,114 @@
 				
 				</c:if>
 				
-				<c:if test="${usuarioInfo.perfil.chave == 'Supervisor' || usuarioInfo.perfil.chave == 'Consultor' }">
+				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' && usuarioInfo.organizacao.nome == 'OUROCRED RIBEIRAO' }">
+
+					<li class="submenu">
+
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
+
+						<ul class="consultor">
+							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+
+						<a href="#"><i class="icon icon-pencil"></i> <span>Solicitação</span></a>
+
+						<ul class="consultor">
+							<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
+						</ul>
+
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Tabelas</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
+							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
+							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
+						</ul>
+				
+					</li>
+				
+				</c:if>
+				
+				<c:if test="${(usuarioInfo.perfil.chave == 'Supervisor' || usuarioInfo.perfil.chave == 'Consultor') && usuarioInfo.organizacao.nome == 'OUROCRED MATRIZ' }">
+				
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-pencil"></i> <span>Solicitação</span></a>
+	
+						<ul class="consultor">
+							<c:if test="${usuarioInfo.perfil.chave == 'Consultor' }">
+								<li><a href="<c:url value="/formulario/cadastro"/>">Contrato</a></li>
+							</c:if>
+							<li><a href="<c:url value="/hisconbeneficio/cadastro"/>">Hiscon</a></li>
+						</ul>
+	
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
+							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
+							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
+							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
+						</ul>
+				
+					</li>
+					
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Scripts</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
+							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
+						</ul>
+				
+					</li>
+
+					<li class="submenu">
+	
+						<a href="#"><i class="icon icon-check"></i> <span>Tabelas</span></a>
+					
+						<ul class="consultor">
+							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
+							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
+							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
+						</ul>
+				
+					</li>
+				
+				
+				</c:if>
+				
+				<c:if test="${(usuarioInfo.perfil.chave == 'Supervisor' || usuarioInfo.perfil.chave == 'Consultor') && usuarioInfo.organizacao.nome == 'OUROCRED RIBEIRAO' }">
 				
 					<li class="submenu">
 	
