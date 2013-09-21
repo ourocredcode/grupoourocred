@@ -176,7 +176,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 	}
 
-	public Collection<Coeficiente> buscaCoeficientesByBanco(Long bancoId) {
+	public Collection<Coeficiente> buscaCoeficientesByBanco(Long empresa_id, Long organizacao_id, Long bancoId) {
 
 		String sql = sqlCoeficientes;
 
@@ -187,6 +187,8 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		sql += " WHERE " +
 				" BANCO.isactive = 1 " +
 				" AND TABELA.isactive = 1 " +
+				" AND TABELA.empresa_id = ? " +
+				" AND TABELA.organizacao_id = ? " +
 				" AND BANCO.banco_id = ? " +
 				" AND COEFICIENTE.isactive = 1 " +
 				" ORDER BY BANCO.nome, TABELA.nome ";
@@ -196,7 +198,9 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setLong(1,bancoId);
+			this.stmt.setLong(1,empresa_id);
+			this.stmt.setLong(2,organizacao_id);
+			this.stmt.setLong(3,bancoId);
 
 			this.rsCoeficiente = this.stmt.executeQuery();
 			while (rsCoeficiente.next()) {

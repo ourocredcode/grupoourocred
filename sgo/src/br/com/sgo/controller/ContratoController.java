@@ -821,7 +821,6 @@ public class ContratoController {
 	public void consultores(Long supervisor_id) {
 
 		consultores = this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), supervisor_id);
-
 		result.include("consultores",consultores);
 
 	}
@@ -839,9 +838,7 @@ public class ContratoController {
  	@Path("/contrato/prazo")
 	public void prazo(Long banco_id,Long produto_id,Long tabela_id) {
 
-		contrato.setPrazo(bancoProdutoTabelaDao.buscaPrazoByEmpOrgBancoProdutoTabela(
-					empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),banco_id,produto_id, tabela_id));
-
+		contrato.setPrazo(bancoProdutoTabelaDao.buscaPrazoByEmpOrgBancoProdutoTabela(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),banco_id,produto_id, tabela_id));
 		result.include("contrato",contrato);
 
 	}
