@@ -157,14 +157,14 @@ public class TabelaDao extends Dao<Tabela> {
 
 	}
 	
-	public Collection<Tabela> buscaTabelasByBanco(Long banco_id) {
+	public Collection<Tabela> buscaTabelasByBanco(Long empresa_id, Long organizacao_id, Long banco_id) {
 
-		String sql = " SELECT BANCOPRODUTOTABELA.tabela_id, TABELA.nome as tabela_nome " +
+		String sql = " SELECT DISTINCT BANCOPRODUTOTABELA.tabela_id, TABELA.nome as tabela_nome " +
 				"				FROM ((BANCOPRODUTOTABELA (NOLOCK) " +
 				"		INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTOTABELA.produto_id = PRODUTO.produto_id) " +
 				"		INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id) " +
 				"		INNER JOIN TABELA (NOLOCK) ON BANCOPRODUTOTABELA.tabela_id = TABELA.tabela_id " +
-				"			 WHERE BANCO.banco_id = ? ";
+				"			 WHERE BANCOPRODUTOTABELA.empresa_id = ? AND BANCOPRODUTOTABELA.organizacao_id = ? AND BANCO.banco_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -173,7 +173,10 @@ public class TabelaDao extends Dao<Tabela> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setLong(1, banco_id);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, banco_id);
 
 			this.rsTabelas = this.stmt.executeQuery();
 
