@@ -77,12 +77,12 @@ public class PerfilDao extends Dao<Perfil> {
 
 	}
 
-	public Collection<Perfil> buscaAllPerfisByNome(String nome) {
+	public Collection<Perfil> buscaAllPerfisByNome(Long empresa_id, Long organizacao_id , String nome) {
 
 		String sql = sqlPerfis;
-		
+
 		if (nome != null)
-			sql += " WHERE PERFIL.nome like ? ORDER BY PERFIL.nome ";
+			sql += " WHERE PERFIL.empresa_id = ? AND PERFIL.organizacao_id = ? AND PERFIL.nome like ? ORDER BY PERFIL.nome ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -92,7 +92,9 @@ public class PerfilDao extends Dao<Perfil> {
 
 			this.stmt = conn.prepareStatement(sql);
 
-			this.stmt.setString(1, "%" + nome + "%");
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, "%" + nome + "%");
 
 			this.rsPerfil = this.stmt.executeQuery();
 

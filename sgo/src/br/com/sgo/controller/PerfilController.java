@@ -124,9 +124,9 @@ public class PerfilController {
 
 	@Get 
 	@Path("/perfil/busca.json")
-	public void perfil(String nome){
+	public void perfil(Long empresa_id, Long organizacao_id, String nome){
 
-		result.use(Results.json()).withoutRoot().from(perfilDao.buscaAllPerfisByNome(nome)).serialize();
+		result.use(Results.json()).withoutRoot().from(perfilDao.buscaAllPerfisByNome(empresa_id, organizacao_id, nome)).serialize();
 
 	}
 
