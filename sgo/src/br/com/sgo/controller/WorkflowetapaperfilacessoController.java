@@ -103,7 +103,7 @@ public class WorkflowetapaperfilacessoController {
 
 		result.include("workflowEtapasPerfilAcesso", this.workflowEtapaPerfilAcessoDao.buscaTodosWorkflowEtapaPerfilAcesso(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 		result.include("workflows", this.workflowDao.buscaWorkflowsToWorkflowEtapaPerfilByEmpresaOrganizacao(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
-		result.include("perfis", this.perfilDao.buscaPerfisToWorkflowEtapaPerfil());
+		result.include("perfis", this.perfilDao.buscaPerfisToWorkflowEtapaPerfil(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
 	}
 

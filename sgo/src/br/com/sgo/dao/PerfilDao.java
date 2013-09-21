@@ -202,13 +202,15 @@ public class PerfilDao extends Dao<Perfil> {
 		return perfil;
 	}
 
-	public Collection<Perfil> buscaPerfisToWorkflowEtapaPerfil() {
+	public Collection<Perfil> buscaPerfisToWorkflowEtapaPerfil(Long empresa_id, Long organizacao_id) {
 
 		String sql = "SELECT DISTINCT(WORKFLOWPERFILACESSO.perfil_id), PERFIL.nome AS perfil_nome "+
 					" FROM ((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) INNER JOIN WORKFLOWPERFILACESSO (NOLOCK) "+
 					" ON EMPRESA.empresa_id = WORKFLOWPERFILACESSO.empresa_id) ON ORGANIZACAO.organizacao_id = WORKFLOWPERFILACESSO.organizacao_id) "+ 
 					" INNER JOIN PERFIL (NOLOCK) ON WORKFLOWPERFILACESSO.perfil_id = PERFIL.perfil_id) "+
 					" INNER JOIN WORKFLOW (NOLOCK) ON WORKFLOWPERFILACESSO.workflow_id = WORKFLOW.workflow_id ";
+
+		sql += " WHERE WORKFLOWPERFILACESSO.empresa_id =  ? AND WORKFLOWPERFILACESSO.organizacao_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -217,6 +219,8 @@ public class PerfilDao extends Dao<Perfil> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
 
 			this.rsPerfil = this.stmt.executeQuery();
 
