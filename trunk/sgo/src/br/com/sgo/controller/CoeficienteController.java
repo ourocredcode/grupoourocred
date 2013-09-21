@@ -223,7 +223,7 @@ public class CoeficienteController {
 	@Path("/coeficiente/listaporbancos")
 	public void listaporbancos(Long bancoId) {
 
-		coeficientes = coeficienteDao.buscaCoeficientesByBanco(bancoId);
+		coeficientes = coeficienteDao.buscaCoeficientesByBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),bancoId);
 		result.include("coeficientes",coeficientes).redirectTo(this).lista();
 
 	}
