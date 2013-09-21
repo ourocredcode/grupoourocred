@@ -102,12 +102,12 @@ public class TabelaController {
 		result.redirectTo(this).cadastro();
 
 	}
-	
+
 	@Post
 	@Path("/tabela/tabelas")
-	public void tabelas(Long bancoId) {
+	public void tabelas(Long empresa_id, Long organizacao_id, Long bancoId) {
 
-		tabelas = tabelaDao.buscaTabelasByBanco(bancoId);
+		tabelas = tabelaDao.buscaTabelasByBanco(empresa_id, organizacao_id, bancoId);
 		result.include("tabelas",tabelas);
 
 	}

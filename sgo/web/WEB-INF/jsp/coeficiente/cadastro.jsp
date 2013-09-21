@@ -37,12 +37,14 @@ jQuery(function($){
 	$("#banco").change(function() {   
 
 		var bancoId = $("#banco").val();
+		var empresa_id = $("#coeficienteEmpresaId").val();
+		var organizacao_id = $("#coeficienteOrganizacaoId").val();
 
 		$("#lista").load('<c:url value="/coeficiente/listaporbancos" />',   
 	        {'bancoId': bancoId}, function() {  
 
         	$("#tabela").load('<c:url value="/tabela/tabelas" />',   
-				{'bancoId': bancoId});
+				{'empresa_id': empresa_id,'organizacao_id' : organizacao_id,  'bancoId': bancoId});
 	     });
 
 	});
