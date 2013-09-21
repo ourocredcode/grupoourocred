@@ -515,7 +515,7 @@ function mostra(formulario_id){
 						</div>
 					</c:if>
 
-					<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
+					<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor' }">
 						<div class="span1" style="float: left;">	
 							<input value="Pós Venda" type="button" class="btn" onclick="mostra('${formulario.formulario_id}');">
 						</div>
