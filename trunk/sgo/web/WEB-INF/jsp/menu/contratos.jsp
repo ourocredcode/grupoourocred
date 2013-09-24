@@ -211,7 +211,15 @@
 				"buttonText": "Selecione Colunas",
 				"aiExclude": [ 0,1,2,3,4,5,6,7,12,,13,14,15,16 ],
 				
-			}
+			},
+			"aoColumnDefs": [{
+	            "aTargets": [ 9,12,13,14,15,16 ],
+	            "bUseRendered": false,
+	            "fnRender": function ( o ) {
+	            	return o.oSettings.fnFormatNumber( parseFloat( o.aData[ o.iDataColumn ] ).toFixed(2) ).replace(',.','*').replace('.','!').replace(',','?').replace('?','.').replace('!',',').replace('*',',');
+	            }
+	        }
+	     ]
 		} );
 
 		$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
@@ -1053,15 +1061,8 @@
 												<td >
 													${contrato.valorContrato }
 												</td>
-												<td class="${alert}">
-													<c:choose>
-														<c:when test="${contrato.produto.nome eq 'MARGEM LIMPA' || contrato.produto.nome eq 'RECOMPRA RMC' || contrato.produto.nome eq 'RECOMPRA INSS'}">
-															<fmt:formatNumber type="NUMBER" value="${contrato.valorContrato }" minFractionDigits="2" />
-														</c:when>
-														<c:when test="${contrato.produto.nome eq 'RETENÇÃO' || contrato.produto.nome eq 'REFINANCIAMENTO'}">
-															<fmt:formatNumber type="NUMBER" value="${contrato.valorLiquido }" minFractionDigits="2" />
-														</c:when>
-													</c:choose>
+												<td >
+													${contrato.valorContratoLiquido }
 												</td>
 												<td >
 													${contrato.valorDivida }

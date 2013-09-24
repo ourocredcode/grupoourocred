@@ -51,7 +51,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" USUARIO_SUPERVISOR.usuario_id as usuario_super_id, "+
 			" USUARIO_SUPERVISOR.nome as usuario_super, USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
 			" CONTRATO.prazo, "+
-			" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, "+
+			" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.valorContratoLiquido, "+
 			" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
 			" CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
 			" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, "+
@@ -2231,6 +2231,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorMeta(rsContrato.getDouble("valormeta"));
 		contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
+		contrato.setValorContratoLiquido(rsContrato.getDouble("valorContratoLiquido"));
 		contrato.setPrazo(rsContrato.getInt("prazo"));
 		contrato.setObservacao(rsContrato.getString("observacao"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
@@ -2320,6 +2321,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
 		contrato.setValorMeta(rsContrato.getDouble("valormeta"));
 		contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
+		contrato.setValorContratoLiquido(rsContrato.getDouble("valorContratoLiquido"));
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 		contrato.setPrazo(rsContrato.getInt("prazo"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
