@@ -13,8 +13,6 @@ $(document).ready(function() {
 		
 		"aLengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Todos"]],
 
-		"bStateSave": true,
-
 		"oLanguage": {    
 			"sProcessing": "Aguarde enquanto os dados são carregados ...",    
 			"sLengthMenu": "Mostrar _MENU_ registros por pagina",    
