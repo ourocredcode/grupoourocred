@@ -13,9 +13,9 @@ $(document).ready(function() {
 	$("#valorDivida").maskMoney({symbol:"",decimal:".",thousands:""});
 	$("#valorSeguro").maskMoney({symbol:"",decimal:".",thousands:""});
 	$("#valorLiquido").maskMoney({symbol:"",decimal:".",thousands:""});
+	$("#valorMeta").maskMoney({symbol:"",decimal:".",thousands:""});
 
 	var contratoProduto = $("#contratoProduto").val();
-
 	if (contratoProduto != '')
 		$(verificaProduto());
 	
@@ -74,6 +74,7 @@ $(document).ready(function() {
 
 function calculaContrato() {
 
+	var organizacao = document.getElementById("organizacao").value;
 	var valorParcela = document.getElementById("valorParcela");
 	var valorContrato = document.getElementById("valorContrato");
 	var valorLiquido = document.getElementById("valorLiquido");
@@ -132,100 +133,122 @@ function calculaContrato() {
 			valorLiquido.value = '';
 
 		}
+		
+		if(organizacao == 'OUROCRED RIBEIRAO') {
 
-		if(contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' && contratoProdutoNome != 'REFIN C.E.F'){
+			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' ){
 
-			var metaValue = valorContrato.value * arrayCoeficiente[1];
-			valorMeta.value = metaValue.toFixed(2); 
+				var metaValue = valorContrato.value * arrayCoeficiente[1];
+				valorMeta.value = metaValue.toFixed(2);
 
-		} else {
+			} else {
 
-			switch(contratoBancoNome) {
+				var metaValue = valorLiquido.value * arrayCoeficiente[1];
+				valorMeta.value = metaValue.toFixed(2);
 
-				case 'Bradesco':
-					var metaValue = valorLiquido.value * arrayCoeficiente[1];
-					valorMeta.value = metaValue.toFixed(2);
+			}
 
-				break;
+		}
+
+		if(organizacao == 'OUROCRED MATRIZ') {
 			
-				case 'BMG':
-					var metaValue = valorLiquido.value;
-					valorMeta.value = metaValue;
+			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' && contratoProdutoNome != 'REFIN C.E.F' ){
 
-					break;
+				var metaValue = valorContrato.value * arrayCoeficiente[1];
+				valorMeta.value = metaValue.toFixed(2);
 
-				case 'BGN':
-					var metaValue = valorLiquido.value;
-					valorMeta.value = metaValue;
+			} else {
 
-					break;	
+				switch(contratoBancoNome) {
 
-				case 'Cruzeiro do Sul':
-					var metaValue = valorLiquido.value;
-					valorMeta.value = metaValue;
+					case 'Bradesco':
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
 
 					break;
 				
-				case 'Panamericano':
-					var metaValue = valorLiquido.value;
-					valorMeta.value = metaValue;
+					case 'BMG':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
 
-					break;
+						break;
 
-				case 'Bonsucesso':
+					case 'BGN':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
 
-					if(contratoProduto.value == 'REFINANCIAMENTO'){
+						break;	
+
+					case 'Cruzeiro do Sul':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;
+					
+					case 'Panamericano':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;
+
+					case 'Bonsucesso':
+
+						if(contratoProduto.value == 'REFINANCIAMENTO'){
+
+							var metaValue = valorLiquido.value * arrayCoeficiente[1];
+							valorMeta.value = metaValue.toFixed(2);
+
+						} else {
+
+							var metaValue = valorLiquido.value / 2;
+							valorMeta.value = metaValue;
+
+						}
+
+						break;
+
+					case 'Cifra':
+						var metaValue = valorLiquido.value / 2;
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+
+					case 'BV':
+
+						if(parcelasAberto.value <= 17) {
+							var metaValue = valorLiquido.value / 2;
+							valorMeta.value =  metaValue.toFixed(2);
+						} else {
+							var metaValue = valorLiquido.value;
+							valorMeta.value =  metaValue;
+						}
+
+						break;
+						
+					case 'Daycoval':
+
+						var metaValue = valorLiquido.value / 2;
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+					
+					case 'Caixa Econômica Federal':
 
 						var metaValue = valorLiquido.value * arrayCoeficiente[1];
 						valorMeta.value = metaValue.toFixed(2);
 
-					} else {
+						break;	
 
-						var metaValue = valorLiquido.value / 2;
-						valorMeta.value = metaValue;
-
-					}
-
-					break;
-
-				case 'Cifra':
-					var metaValue = valorLiquido.value / 2;
-					valorMeta.value = metaValue.toFixed(2);
-
-					break;
-
-				case 'BV':
-
-					if(parcelasAberto.value <= 17) {
-						var metaValue = valorLiquido.value / 2;
-						valorMeta.value =  metaValue.toFixed(2);
-					} else {
-						var metaValue = valorLiquido.value;
-						valorMeta.value =  metaValue;
-					}
-
-					break;
-					
-				case 'Daycoval':
-
-					var metaValue = valorLiquido.value / 2;
-					valorMeta.value = metaValue.toFixed(2);
-
-					break;
-				
-				case 'Caixa Econômica Federal':
-
-					var metaValue = valorLiquido.value * arrayCoeficiente[1];
-					valorMeta.value = metaValue.toFixed(2);
-
-					break;	
-
-				default:
-					alert("Escolha um Banco.");
-					
+					default:
+						alert("Escolha um Banco.");
+						
+				}
+				 
 			}
-			 
+			
+			
 		}
+		
 	}
 
 }
@@ -607,6 +630,7 @@ function historicoCoeficiente() {
 
 				<form id="contratoForm" name="contratoForm" action="<c:url value="${url }"  />" method="POST">
 				<input type="hidden" id="contratoId" name="contrato.contrato_id" value="${contrato.contrato_id }" />
+				<input type="hidden" id="organizacao" name="organizacao" value="${usuarioInfo.organizacao.nome }" />
 
 					<div class="row-fluid">
 				
