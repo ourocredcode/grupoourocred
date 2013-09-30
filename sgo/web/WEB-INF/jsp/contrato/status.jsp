@@ -1026,11 +1026,32 @@ function openPopup(url) {
 							</select>
 						</div>
 					</div>
-					
+
 					<div class="form-actions">
-						<div class="span1" style="float: left;">
-							<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
-						</div>
+
+							<c:choose>
+								<c:when test="${ usuarioInfo.perfil.chave == 'Consultor' && (contrato.etapa.nome == 'Aguardando Status' || contrato.etapa.nome == 'Recalcular' || contrato.etapa.nome == 'Contrato Fora Planilha') }">
+									<div class="span1" style="float: left;">
+										<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
+									</div>	
+								</c:when>
+								<c:when test="${usuarioInfo.perfil.chave == 'Supervisor' && contrato.etapa.nome != 'Concluído'}">
+									<div class="span1" style="float: left;">
+										<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
+									</div>	
+								</c:when>
+								<c:when test="${usuarioInfo.perfil.chave == 'Administrativo' && contrato.etapa.nome != 'Concluído'}">
+									<div class="span1" style="float: left;">
+										<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
+									</div>	
+								</c:when>
+								<c:when test="${usuarioInfo.perfil.chave == 'Gestor'}">
+									<div class="span1" style="float: left;">
+										<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
+									</div>	
+								</c:when>
+							</c:choose>
+
 						<div class="span1" style="float: left;">
 							<input value="Formulário" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/visualiza/${formulario.formulario_id}'">
 						</div>
