@@ -10,6 +10,10 @@
 				<!-- 
 				<th>Excluir</th>
 				 -->
+				 <c:if test="${parceiroNegocio.parceiroNegocio_id  != null }">
+					<th>Hiscon</th>
+					<th>Contrato</th>
+				</c:if>
 			</tr>
 		</thead>
 		<tbody>	
@@ -22,6 +26,22 @@
 						<button type="button" class="btn btn-danger btn-mini" onClick="return excluiBeneficio(this,'${parceiroBeneficio.parceiroBeneficio_id}');">Excluir</button>
 					</td>
 					 -->
+					 <c:if test="${parceiroNegocio.parceiroNegocio_id  != null }">
+						<td style="text-align: center;">
+							
+							<div class="buttons">
+								<a href="#" class="btn btn-mini" onclick="novoHiscon('${parceiroBeneficio.numeroBeneficio}');"><i class="icon-search"></i> Hiscon </a>
+							</div>
+							
+						</td>
+						<td style="text-align: center;">
+						
+							<div class="buttons">
+								<a href="#" class="btn btn-mini" onclick="novoContrato('${parceiroBeneficio.numeroBeneficio}');"><i class="icon-file"></i> Contrato </a>
+							</div>
+
+						</td>
+					</c:if>
 				</tr>
 			</c:forEach>
 			

@@ -700,6 +700,47 @@
 							</c:if>
 						</div>
 						<div class="row-fluid">
+							<c:if test="${ empty parceiroContatos && not empty parceiroNegocio.parceiroNegocio_id && parceiroNegocio.isCliente == true}">	
+								<div class="navbar" style="width: 350px;float: left;">
+									
+									<div class="navbar-inner" >
+								
+										<div class="container">
+										
+											<div class="control-group">
+											</div>
+											
+											<div id="parceiroContatosDiv">	
+													
+												<table class="table table-striped table-bordered" id="lista">
+												<thead>
+													<tr>
+														<th>TipoContato</th>
+														<th>Contato</th>
+														<th>Excluir</th>
+													</tr>
+													<tr>
+														<td>
+															<select id="parceiroContatoTipoContatoNovo" class="input-small" required>
+																<c:forEach var="tipoContato" items="${tiposContato}">
+																	<option value="${tipoContato.tipoContato_id}" >${tipoContato.chave}</option>
+																</c:forEach>
+															</select>
+														</td>
+														<td><input type="text" id="parceiroContatoNomeNovo" value="${parceiroContato.nome }" class="input-small contactMask" required /></td>
+														<td style="text-align: center;">
+															<button type="button" class="btn btn-mini" id="bttParceiroContatoNovo" onClick="return salvaContato();">Novo</button>
+														</td>
+													</tr>
+												</thead>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>				
+
+							</c:if>
+						
 							<c:if test="${not empty parceiroContatos}">	
 								<div class="navbar" style="width: 350px;float: left;">
 									
@@ -758,6 +799,52 @@
 										</div>
 									</div>
 								</div>
+							</c:if>
+	
+							<c:if test="${empty parceiroBeneficios && not empty parceiroNegocio.parceiroNegocio_id && parceiroNegocio.isCliente == true}">
+								
+								<div class="navbar" style="width: 650px;float: left;">
+									
+								<div class="navbar-inner" >
+								
+									<div class="container">
+										<div class="control-group"></div>
+												
+											<div id="parceiroBeneficiosDiv">	
+												<table class="table table-striped table-bordered" id="lista">
+													<thead>
+														<tr>
+															<th>Convênio</th>
+															<th>Matrícula</th>
+															<th>Senha</th>
+															<c:if test="${parceiroNegocio.parceiroNegocio_id  != null }">
+																<th>Hiscon</th>
+																<th>Contrato</th>
+															</c:if>
+														</tr>
+														<c:if test="${not empty parceiroNegocio.parceiroNegocio_id}">
+															<tr>
+																<td>
+																	<select id="parceiroBeneficioConvenio" name="parceiroBeneficioConvenio" >
+																		<c:forEach var="convenio" items="${convenios }">
+																			<option value="${convenio.convenio_id }">${convenio.nome }</option>
+																		</c:forEach>
+																	</select>
+																</td>
+																<td><input type="text" id="parceiroBeneficioNumeroNovo" value="${parceiroBeneficio.numeroBeneficio }" class="input-small" /></td>
+																<td><input type="text" id="parceiroBeneficioSenhaNovo" value="${parceiroBeneficio.senha }" class="input-small" /></td>
+																<td style="text-align: center;">
+																	<button type="button" class="btn btn-mini" id="bttParceiroBeneficioNovo" onClick="return salvaBeneficio();">Novo</button>
+																</td>
+															</tr>
+														</c:if>
+													</thead>
+												</table>
+											</div>
+									</div>
+								</div>
+								</div>					
+
 							</c:if>
 	
 							<c:if test="${not empty parceiroBeneficios}">
