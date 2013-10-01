@@ -244,7 +244,7 @@
 									<c:choose>
 										<c:when test="${map.key == 'Aguardando Status' }">
 												<tr class="info">
-													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -253,7 +253,7 @@
 										</c:when>
 										<c:when test="${map.key == 'Pendente Administrativo' }">
 												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -262,7 +262,7 @@
 										</c:when>
 										<c:when test="${map.key == 'Pendente Agendamento' }">
 												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -271,7 +271,7 @@
 										</c:when>
 										<c:when test="${map.key == 'Pendente Banco' }">
 												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -280,7 +280,7 @@
 										</c:when>
 										<c:when test="${map.key == 'Pendente Coeficiente' }">
 												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -289,7 +289,7 @@
 										</c:when>
 										<c:when test="${map.key == 'Pendente Conferência' }">
 												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -298,7 +298,7 @@
 										</c:when>
 										<c:when test="${map.key == 'Recalcular' }">
 												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -307,7 +307,7 @@
 										</c:when>
 										<c:otherwise>
 												<tr class="info">
-													<td><a href="<c:url value="/menu/contratos/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -351,7 +351,7 @@
 								<tbody>
 									<c:forEach items="${mapEquipesCount }" var="map">
 										<tr class="success">
-											<td>${map.key }</td>
+											<td><a href="<c:url value="/menu/contratos/busca/supervisores/${map.value[0]}" />">${map.key }</a></td>
 											<td>${map.value[1] }</td>
 											<td>${map.value[2] }</td>
 											<td>${map.value[3] }</td>

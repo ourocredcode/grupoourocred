@@ -408,13 +408,8 @@ public class MenuController {
 	}
 
 	@Get
-	public void buscaproposta() {
-
-	}
-
-	@Get
-	@Path("/menu/contratos/etapas/{etapa_id}") 
-	public void contratos(Long etapa_id) {
+	@Path("/menu/contratos/busca/{tipo}/{id}") 
+	public void contratos(String tipo,Long id) {
 
 		usuarioDao.refresh(usuarioInfo.getUsuario());
 		perfilDao.refresh(usuarioInfo.getPerfil());
@@ -436,60 +431,78 @@ public class MenuController {
 		Calendar calAprovadoFim = null;
 		Calendar calConcluidoInicio = null;
 		Calendar calConcluidoFim = null;
-		Calendar c1 = new GregorianCalendar();
-		Calendar c2 = new GregorianCalendar();
 
-		if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
-			consultores.add(usuario);
+		Calendar dia1 = new GregorianCalendar();
+		Calendar dia2 = new GregorianCalendar();
 
-		//TipoControle tipoControle = new TipoControle();
-		Etapa e = this.etapaDao.buscaEtapaById(etapa_id);
-		status.add(e.getNome());
-		c1 = null;
-		c2 = null;
-		
-		if(e.getNome().equals("Enviado DataPrev")){
+		dia1.set(GregorianCalendar.HOUR_OF_DAY,dia1.getActualMinimum(GregorianCalendar.HOUR_OF_DAY));
+		dia1.set(GregorianCalendar.MINUTE,dia1.getActualMinimum(GregorianCalendar.MINUTE));
+		dia1.set(GregorianCalendar.SECOND,dia1.getActualMinimum(GregorianCalendar.SECOND));
+		dia2.set(GregorianCalendar.HOUR_OF_DAY, dia2.getActualMaximum(GregorianCalendar.HOUR));
+		dia2.set(GregorianCalendar.MINUTE, dia2.getActualMaximum(GregorianCalendar.MINUTE));
+		dia2.set(GregorianCalendar.SECOND, dia2.getActualMaximum(GregorianCalendar.SECOND));
 
-			//tipoControle.setTipoControle_id(1l);
-			//contratos.addAll(this.contratoDao.buscaDatasControle(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tipoControle.getTipoControle_id(), c1, c2, null, null, null, null, null, null, null, null, null, null, null, null, bancos, produtos, bancosComprados, status, convenios, consultores, cliente, documento, null, null, null, null));
+		if(tipo.equals("etapas")){
 			
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
-			
-			result.include("tipobusca","datascontrole");
-			result.include("function","buscaDatasControle();");
-			result.include("buscaDatasControle","block");
-			result.include("buscaAprovado","none");
+			if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
+				consultores.add(usuario);
 
-		} else if(e.getNome().equals("Aguardando Apoio Comercial") || e.getNome().equals("Aguardando Boleto")){
+			Etapa e = this.etapaDao.buscaEtapaById(id);
+			status.add(e.getNome());
+
+			dia1 = null;
+			dia2 = null;
+
+			if(e.getNome().equals("Enviado DataPrev")){
+
+				contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,dia1,dia2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
+
+				result.include("tipobusca","datascontrole");
+				result.include("function","buscaDatasControle();");
+				result.include("buscaDatasControle","block");
+				result.include("buscaAprovado","none");
+
+			} else if(e.getNome().equals("Aguardando Apoio Comercial") || e.getNome().equals("Aguardando Boleto")){
+
+				contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,dia1,dia2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
+
+				result.include("tipobusca","datascontrole");
+				result.include("function","buscaDatasControle();");
+				result.include("buscaDatasControle","block");
+				result.include("buscaAprovado","none");
+
+			} else {
+
+				contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,dia1,dia2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
+
+				result.include("function","buscaContratos();");
+				result.include("buscaDatasControle","none");
+				result.include("buscaAprovado","block");
+
+			}
+
+		}
 		
-			//tipoControle.setTipoControle_id(2l);
-			//contratos.addAll(this.contratoDao.buscaDatasControle(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), tipoControle.getTipoControle_id(), c1, c2, null, null, null, null, null, null, null, null, null, null, null, null, bancos, produtos, bancosComprados, status, convenios, consultores, cliente, documento, null, null, null, null));
-			
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
-			
-			result.include("tipobusca","datascontrole");
-			result.include("function","buscaDatasControle();");
-			result.include("buscaDatasControle","block");
-			result.include("buscaAprovado","none");
-		
-		} else {
-		
-			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,c1,c2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
-		
+		if(tipo.equals("supervisores")){
+
+			if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
+				consultores.add(usuario);
+			else
+				consultores.add(this.usuarioDao.load(id));
+
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,dia1,dia2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
+
 			result.include("function","buscaContratos();");
 			result.include("buscaDatasControle","none");
 			result.include("buscaAprovado","block");
-			
-		}
 
-		
+		}
 
 		TipoWorkflow tw;
 
 		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
-		
-		
+
 		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Controle Contrato");
 		result.include("procedimentos",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
 
@@ -851,6 +864,11 @@ public class MenuController {
 		contratos.addAll(this.contratoDao.buscaContratosByProposta(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),propostaBanco, contratoBanco, u));
 
 		contador();
+	}
+	
+	@Get
+	public void buscaproposta() {
+
 	}
 
 	@Get
