@@ -143,23 +143,16 @@ public class HisconbeneficioController {
 
 			if (pb != null){
 
-				HisconBeneficio hb = this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficio(pb.getEmpresa().getEmpresa_id(),pb.getOrganizacao().getOrganizacao_id(),pb.getParceiroBeneficio_id());
+				//HisconBeneficio hb = this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficio(pb.getEmpresa().getEmpresa_id(),pb.getOrganizacao().getOrganizacao_id(),pb.getParceiroBeneficio_id());
 
-				if (hb != null){
-
-					/*
-					System.out.println(" hb.getHisconBeneficio_id() " + hb.getHisconBeneficio_id());
-					System.out.println(" hb.getIsEnviado() " + hb.getIsEnviado());
-					System.out.println(" hb.getEtapa().getNome().equals('Desconsiderado') " + hb.getEtapa().getNome().equals("Desconsiderado"));
-					*/
-
-					if (hb.getIsEnviado() || hb.getEtapa().getNome().equals("Desconsiderado")){
+					if (this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficioToCheckStatusHiscon
+						(pb.getEmpresa().getEmpresa_id(), pb.getOrganizacao().getOrganizacao_id(), pb.getParceiroBeneficio_id()) == null){
 
 						this.hisconBeneficio.setEmpresa(pb.getEmpresa());
 						this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
 						this.hisconBeneficio.setParceiroBeneficio(pb);
 						this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
-	
+
 						result.include("hisconBeneficio", hisconBeneficio);
 
 					} else {
@@ -172,18 +165,7 @@ public class HisconbeneficioController {
 						this.hisconBeneficio.setCreated(null);
 						this.hisconBeneficio = new HisconBeneficio();
 
-					}
-
-				}else {
-
-					this.hisconBeneficio.setEmpresa(pb.getEmpresa());
-					this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
-					this.hisconBeneficio.setParceiroBeneficio(pb);
-					this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
-
-					result.include("hisconBeneficio", hisconBeneficio);
-
-				}
+					} 
 
 			} else {
 
