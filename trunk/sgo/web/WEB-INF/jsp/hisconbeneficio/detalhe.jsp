@@ -30,6 +30,7 @@
 						<th>Data solicitação Adm</th>
 						<th>Consultor</th>
 						<th>Cliente</th>
+						<th>Nascimento</th>
 						<th>Cpf</th>
 						<th>Número Benefício</th>
 						<th>Status Atual</th>
@@ -48,6 +49,7 @@
 							<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>			
 							<td>${hiscon.usuario.nome }</td>									
 							<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
+							<td><fmt:formatDate pattern="dd/MM/yyyy" type="date" value="${hiscon.parceiroBeneficio.parceiroNegocio.dataNascimento.time }" /></td>
 							<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 							<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>				
 							<td>${hiscon.etapa.nome }</td>			

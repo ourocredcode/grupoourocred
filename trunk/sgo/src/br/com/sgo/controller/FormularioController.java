@@ -63,6 +63,7 @@ import br.com.sgo.modelo.Modalidade;
 import br.com.sgo.modelo.NaturezaProfissional;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroBeneficio;
+import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroInfoBanco;
 import br.com.sgo.modelo.ParceiroLocalidade;
 import br.com.sgo.modelo.ParceiroNegocio;
@@ -581,8 +582,17 @@ public class FormularioController {
 					countRecompraRMC += 1;
 				if(c.getProduto().equals("REFINANCIAMENTO"))
 					countRefinanciamento += 1;
-				
-				
+
+				List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();
+
+				for(ParceiroContato pc : parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id())) {
+					contatos.add(pc);
+				}
+
+				if(contatos.size() > 0){
+					formulario.setParceiroContatos(contatos);
+				}
+
 				formulario.setParceiroBeneficio(parceiroBeneficio);
 				formulario.setParceiroLocalidade(parceiroLocalidade);
 				formulario.setParceiroInfoBanco(parceiroInfoBanco);

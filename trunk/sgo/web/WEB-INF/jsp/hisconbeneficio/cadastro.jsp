@@ -166,6 +166,7 @@ function altera(atributo, id, valor) {
 							<th>Supervisor</th>
 							<th>Consultor</th>
 							<th>Cliente</th>
+							<th>Nascimento</th>
 							<th>Cpf</th>
 							<th>Número Benefício</th>
 							<th>Status Atual</th>
@@ -187,6 +188,7 @@ function altera(atributo, id, valor) {
 								<td>${hiscon.usuario.supervisorUsuario.apelido }</td>
 								<td>${hiscon.usuario.apelido }</td>									
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
+								<td><fmt:formatDate pattern="dd/MM/yyyy" type="date" value="${hiscon.parceiroBeneficio.parceiroNegocio.dataNascimento.time }" /></td>
 								<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 								<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
 								<td>
