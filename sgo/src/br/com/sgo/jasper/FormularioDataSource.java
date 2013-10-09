@@ -59,9 +59,9 @@ public class FormularioDataSource implements JRDataSource {
 				}else if("clienteCep".equals(campo.getName())){
 					valor = formulario.getParceiroLocalidade().getLocalidade().getCep();
 				}else if("clienteTelRes".equals(campo.getName())){
-					valor = "";
+					valor = formulario.getParceiroContatos().get(0).getNome();;
 				}else if("clienteTelCel".equals(campo.getName())){
-					valor = "";
+					valor = formulario.getParceiroContatos().size() > 1 ? formulario.getParceiroContatos().get(1).getNome() : "";
 				}else if("clienteBanco".equals(campo.getName())){
 					valor = "";
 				}else if("clienteAgencia".equals(campo.getName())){
