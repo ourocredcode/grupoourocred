@@ -91,7 +91,7 @@ public class ContratoDao extends Dao<Contrato> {
 		String sql = sqlContratos;
 
 		if(usuario_id != null)
-			sql += " WHERE ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) AND ( ETAPA.NOME not in ('Recusado') ) ";
+			sql += " WHERE ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) AND ( ETAPA.NOME not in ('Recusado','Contrato Fora Planilha') ) ";
 
 		if(calInicio != null)
 			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? )";
@@ -157,7 +157,7 @@ public class ContratoDao extends Dao<Contrato> {
 		sql += " WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? ";
 
 		if(calInicio != null)
-			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? ) AND ( ETAPA.NOME not in ('Recusado') ) ";
+			sql += " AND ( FORMULARIO.created BETWEEN ? AND ? ) AND ( ETAPA.NOME not in ('Recusado','Contrato Fora Planilha') ) ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -649,7 +649,7 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " AND ( 1=1 ";
 
 			if(x == 0 && cliente.equals("") && documento.equals("") && calStatusFinalInicio == null && calConclusaoInicio == null){
-				sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído') ) ";
+				sql += " AND ( ETAPA.NOME not in ('Aprovado','Recusado','Concluído','Contrato Fora Planilha') ) ";
 			}
 
 			sql += " ) ";
@@ -1877,7 +1877,7 @@ public class ContratoDao extends Dao<Contrato> {
 		if(dia1 != null)
 			sql += "  ( CONTRATO.created BETWEEN ? AND ? ) AND ";
 
-		sql +=  "  ( ETAPA.nome not like 'Recusado' ) GROUP BY USUARIO_SUPERVISOR.usuario_id, USUARIO_SUPERVISOR.apelido ORDER BY metaCount DESC ";
+		sql +=  "  ( ETAPA.nome not in ('Recusado','Contrato Fora Planilha') ) GROUP BY USUARIO_SUPERVISOR.usuario_id, USUARIO_SUPERVISOR.apelido ORDER BY metaCount DESC ";
 
 		this.conn = this.conexao.getConexao();
 
