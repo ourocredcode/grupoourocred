@@ -8,7 +8,7 @@
 	<option value="">Selecione o perfil</option>
 
 	<c:forEach var="perfil" items="${perfis}">
-	<option value="${perfil.perfil_id}">${perfil.nome}</option>
+	<option value="${perfil.perfil_id}">${perfil.nome} - ${perfil.organizacao.nome }</option>
 	</c:forEach>
 
 </c:if>
