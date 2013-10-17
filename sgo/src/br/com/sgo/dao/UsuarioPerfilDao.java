@@ -169,7 +169,8 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 	
 	public Collection<Perfil> buscaUsuarioPerfilAcesso(Usuario u) {
 
-		String sql = "SELECT PERFIL.perfil_id ,PERFIL.nome  FROM (ORGANIZACAO (NOLOCK) "
+		String sql = "SELECT PERFIL.perfil_id ,PERFIL.nome as perfil_nome , ORGANIZACAO.organizacao_id, ORGANIZACAO.nome as organizacao_nome  " +
+				"	FROM (ORGANIZACAO (NOLOCK) "
 				+ "INNER JOIN (USUARIO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "
 				+ "INNER JOIN USUARIOPERFIL (NOLOCK)  "
 				+ "ON EMPRESA.empresa_id = USUARIOPERFIL.empresa_id) "
@@ -193,9 +194,20 @@ public class UsuarioPerfilDao extends Dao<UsuarioPerfil> {
 			while (rsUsuarioPerfil.next()) {
 
 				Perfil p = new Perfil();
+				Organizacao o = new Organizacao();
+
+				o.setOrganizacao_id(rsUsuarioPerfil.getLong("organizacao_id"));
+
+				String sigla[] = rsUsuarioPerfil.getString("organizacao_nome").split(" ");
+
+				if(sigla.length > 1)
+					o.setNome(sigla[1]);
+				else
+					o.setNome(rsUsuarioPerfil.getString("organizacao_nome"));
 
 				p.setPerfil_id(rsUsuarioPerfil.getLong("perfil_id"));
-				p.setNome(rsUsuarioPerfil.getString("nome"));
+				p.setNome(rsUsuarioPerfil.getString("perfil_nome"));
+				p.setOrganizacao(o);
 
 				perfis.add(p);
 
