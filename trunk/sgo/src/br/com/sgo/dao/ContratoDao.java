@@ -57,7 +57,8 @@ public class ContratoDao extends Dao<Contrato> {
 			" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, "+
 			" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
-			" ETAPA.etapa_id, ETAPA.nome as etapa_nome, ETAPACONTROLE.etapa_id as etapacontrole_id, ETAPACONTROLE.nome as etapacontrole_nome  "+
+			" ETAPA.etapa_id, ETAPA.nome as etapa_nome, ETAPA_1.etapa_id as etapaPendencia_id , ETAPA_1.nome as etapaPendencia_nome, " +
+			" ETAPACONTROLE.etapa_id as etapacontrole_id, ETAPACONTROLE.nome as etapacontrole_nome  "+
 			" FROM " +
 			" (((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
 			" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
@@ -2148,6 +2149,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Produto produto = new Produto();
 		Workflow workflow = new Workflow();
 		Etapa etapa = new Etapa();
+		Etapa etapaPendencia = new Etapa();
 		Etapa etapacontrole = new Etapa();
 		Empresa empresa = new Empresa();
 		Organizacao organizacao = new Organizacao();
@@ -2203,6 +2205,9 @@ public class ContratoDao extends Dao<Contrato> {
 
 		etapa.setEtapa_id(rsContrato.getLong("etapa_id"));
 		etapa.setNome(rsContrato.getString("etapa_nome"));
+		
+		etapaPendencia.setEtapa_id(rsContrato.getLong("etapaPendencia_id"));
+		etapaPendencia.setNome(rsContrato.getString("etapaPendencia_nome"));
 
 		etapacontrole.setEtapa_id(rsContrato.getLong("etapacontrole_id"));
 		etapacontrole.setNome(rsContrato.getString("etapacontrole_nome"));
@@ -2221,6 +2226,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setBanco(b1);
 		contrato.setRecompraBanco(b2);
 		contrato.setEtapa(etapa);
+		contrato.setEtapaPendencia(etapaPendencia);
 		contrato.setWorkflow(workflow);
 		contrato.setIsActive(rsContrato.getBoolean("isactive"));
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
@@ -2252,6 +2258,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Produto produto = new Produto();
 		Workflow workflow = new Workflow();
 		Etapa etapa = new Etapa();
+		Etapa etapaPendencia = new Etapa();
 		Empresa empresa = new Empresa();
 		Organizacao organizacao = new Organizacao();
 
@@ -2302,6 +2309,9 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		etapa.setEtapa_id(rsContrato.getLong("etapa_id"));
 		etapa.setNome(rsContrato.getString("etapa_nome"));
+		
+		etapaPendencia.setEtapa_id(rsContrato.getLong("etapaPendencia_id"));
+		etapaPendencia.setNome(rsContrato.getString("etapaPendencia_nome"));
 
 		formulario.setParceiroNegocio(parceiro);
 		contrato.setEmpresa(empresa);
@@ -2313,6 +2323,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setBanco(b1);
 		contrato.setRecompraBanco(b2);
 		contrato.setEtapa(etapa);
+		contrato.setEtapaPendencia(etapaPendencia);
 		contrato.setWorkflow(workflow);
 		contrato.setIsActive(rsContrato.getBoolean("isactive"));
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));

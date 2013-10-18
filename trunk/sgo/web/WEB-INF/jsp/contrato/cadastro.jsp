@@ -317,6 +317,21 @@ function verificaProduto() {
 
 			break;
 
+		case 'RECOMPRA GOVRJ':
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
+
 		case 'RECOMPRA RMC':
 			habilita(bancoComprado);
 			desabilita(parcelasAberto);
@@ -497,6 +512,26 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'RECOMPRA INSS'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'RECOMPRA GOVRJ'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
 				bancoComprado.focus();

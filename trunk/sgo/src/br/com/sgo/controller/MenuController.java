@@ -953,12 +953,15 @@ public class MenuController {
 			totalValorLiquido += cs.getValorLiquido();
 			countContratos += 1;
 			
-			if(cs.getProduto().getNome().equals("MARGEM LIMPA") || cs.getProduto().getNome().equals("RECOMPRA INSS")  || cs.getProduto().getNome().equals("RECOMPRA RMC") )
+			if(cs.getProduto().getNome().equals("MARGEM LIMPA") 
+					|| cs.getProduto().getNome().equals("RECOMPRA INSS")  
+					|| cs.getProduto().getNome().equals("RECOMPRA GOVRJ") 
+					|| cs.getProduto().getNome().equals("RECOMPRA RMC") )
 				totalContratoLiquido += cs.getValorContrato();
-			
+
 			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") || cs.getProduto().getNome().equals("RETENÇÃO"))
 				totalContratoLiquido += cs.getValorLiquido();
-			
+
 		}
 
 		result.include("contratos",contratos);
@@ -996,7 +999,10 @@ public class MenuController {
 			totalValorLiquido += cs.getValorLiquido();
 			totalValorMeta += cs.getValorMeta();
 
-			if(cs.getProduto().getNome().equals("MARGEM LIMPA") || cs.getProduto().getNome().equals("RECOMPRA INSS")  || cs.getProduto().getNome().equals("RECOMPRA RMC") )
+			if(cs.getProduto().getNome().equals("MARGEM LIMPA") 
+					|| cs.getProduto().getNome().equals("RECOMPRA INSS")  
+					|| cs.getProduto().getNome().equals("RECOMPRA GOVRJ")
+					|| cs.getProduto().getNome().equals("RECOMPRA RMC") )
 				totalContratoLiquido += cs.getValorContrato();
 			
 			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") || cs.getProduto().getNome().equals("RETENÇÃO"))
