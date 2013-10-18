@@ -206,7 +206,8 @@
 				  			/* 20 - Data Próx Atuação */     { "bVisible":    false },
 				  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
 				  			/* 22 - Data Quitação */     { "bVisible":    false },
-				  			/* 23 - Pós Venda */     { "bVisible":    false }
+				  			/* 23 - Pós Venda */     { "bVisible":    false },
+				  			/* 24 - Motivo Recusa */     { "bVisible":    false }
 				  		] ,
 			
 			"sDom": 'C<"clear">lfrtip',
@@ -1015,6 +1016,9 @@
 											<th >
 												Pós Venda
 											</th>
+											<th >
+												Motivo
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
@@ -1097,6 +1101,9 @@
 												</td>
 												<td >
 													${contrato.formulario.posvenda.etapa.nome }
+												</td>
+												<td >
+													${contrato.etapaPendencia.nome }
 												</td>
 											</tr>
 										</c:forEach>

@@ -427,7 +427,10 @@ public class ContratoController {
 			}
 		}
 
-		if(this.contrato.getProduto().getNome().equals("MARGEM LIMPA") || this.contrato.getProduto().getNome().equals("RECOMPRA INSS")  || this.contrato.getProduto().getNome().equals("RECOMPRA RMC") )
+		if(this.contrato.getProduto().getNome().equals("MARGEM LIMPA") 
+				|| this.contrato.getProduto().getNome().equals("RECOMPRA INSS")  
+				|| this.contrato.getProduto().getNome().equals("RECOMPRA GOVRJ") 
+				|| this.contrato.getProduto().getNome().equals("RECOMPRA RMC") )
 			this.contrato.setValorContratoLiquido(this.contrato.getValorContrato());
 
 		if(this.contrato.getProduto().getNome().equals("REFINANCIAMENTO") || this.contrato.getProduto().getNome().equals("RETENÇÃO"))

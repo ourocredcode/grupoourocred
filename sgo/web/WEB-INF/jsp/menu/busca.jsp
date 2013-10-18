@@ -57,7 +57,8 @@ $(document).ready(function() {
 			  			/* 20 - Data Próx Atuação */     { "bVisible":    false },
 			  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
 			  			/* 22 - Data Quitação */     { "bVisible":    false },
-			  			/* 23 - Pós Venda */     { "bVisible":    false }
+			  			/* 23 - Pós Venda */     { "bVisible":    false },
+			  			/* 24 - Motivo Recusa */     { "bVisible":    false }
 			  		] ,
 		
 		"sDom": 'C<"clear">lfrtip',
@@ -229,6 +230,9 @@ $(document).ready(function() {
 											<th >
 												Pós Venda
 											</th>
+											<th >
+												Motivo
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
@@ -311,6 +315,9 @@ $(document).ready(function() {
 												</td>
 												<td >
 													${contrato.formulario.posvenda.etapa.nome }
+												</td>
+												<td >
+													${contrato.etapaPendencia.nome }
 												</td>
 
 											</tr>

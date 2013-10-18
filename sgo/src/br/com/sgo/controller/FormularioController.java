@@ -378,7 +378,10 @@ public class FormularioController {
 			c.setFormulario(this.formulario);
 			c.setRecompraBanco(c.getRecompraBanco().getBanco_id() == null ? null : c.getRecompraBanco());
 			
-			if(c.getProduto().getNome().equals("MARGEM LIMPA") ||c.getProduto().getNome().equals("RECOMPRA INSS")  || c.getProduto().getNome().equals("RECOMPRA RMC") )
+			if(c.getProduto().getNome().equals("MARGEM LIMPA") 
+					|| c.getProduto().getNome().equals("RECOMPRA INSS")
+					|| c.getProduto().getNome().equals("RECOMPRA GOVRJ")  
+					|| c.getProduto().getNome().equals("RECOMPRA RMC") )
 				c.setValorContratoLiquido(c.getValorContrato());
 			
 			if(c.getProduto().getNome().equals("REFINANCIAMENTO") || c.getProduto().getNome().equals("RETENÇÃO"))
@@ -576,7 +579,7 @@ public class FormularioController {
 
 				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("AUMENTO"))
 					countMargemLimpa += 1;
-				if(c.getProduto().equals("RECOMPRA INSS"))
+				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("RECOMPRA GOVRJ"))
 					countRecompraINSS += 1;
 				if(c.getProduto().equals("RECOMPRA RMC"))
 					countRecompraRMC += 1;
