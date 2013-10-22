@@ -207,10 +207,21 @@
 				  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
 				  			/* 22 - Data Quitação */     { "bVisible":    false },
 				  			/* 23 - Pós Venda */     { "bVisible":    false },
-				  			/* 24 - Motivo Recusa */     { "bVisible":    false }
+				  			/* 24 - Motivo Recusa */     { "bVisible":    false },
+				  			/* 25 - Data Status Final */     { "bVisible":    false }
 				  		] ,
-			
-			"sDom": 'C<"clear">lfrtip',
+
+	  		"sDom": ' T C <"clear">lfrtip',
+
+			"oTableTools": {
+				"aButtons": [
+					{
+						"sExtends": "xls",
+						"sButtonText": "Excel"
+					}
+				]
+			},
+
 			"oColVis": {
 				"activate": "mouseover",
 				"buttonText": "Selecione Colunas",
@@ -1019,6 +1030,9 @@
 											<th >
 												Motivo
 											</th>
+											<th >
+												Dt Status Final
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
@@ -1104,6 +1118,9 @@
 												</td>
 												<td >
 													${contrato.etapaPendencia.nome }
+												</td>
+												<td >
+													<fmt:formatDate value="${contrato.dataStatusFinal.time}" pattern="dd/MM/yy" />
 												</td>
 											</tr>
 										</c:forEach>

@@ -42,7 +42,11 @@ public class ContratoDao extends Dao<Contrato> {
 	private ResultSet rsContrato;
 
 	private static final String sqlContratos = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
-			" FORMULARIO.created,CONTRATO.created as contratoCreated ,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
+			" FORMULARIO.created," +
+			" CONTRATO.created as contratoCreated, " +
+			" CONTRATO.datastatusfinal , CONTRATO.dataquitacao, " +
+			" FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , " +
+			" CONTRATO.contrato_id,CONTRATO.formulario_id, "+
 			" CONTRATO.coeficiente_id, CONTRATO.workflow_id, "+
 			" CONTRATO.produto_id, CONTRATO.tabela_id, "+
 			" CONTRATO.banco_id, CONTRATO.recompra_banco_id, "+
@@ -2139,6 +2143,8 @@ public class ContratoDao extends Dao<Contrato> {
 	private void getContratos(Collection<Contrato> contratos) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
+		Calendar dataStatusFinal = new GregorianCalendar();
+		Calendar dataQuitacao = new GregorianCalendar();
 		Calendar contratoCreated = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
@@ -2181,6 +2187,17 @@ public class ContratoDao extends Dao<Contrato> {
 		formulario.setCreated(created);
 		contratoCreated.setTime(rsContrato.getDate("contratoCreated"));
 		contrato.setCreated(contratoCreated);
+
+		if(rsContrato.getDate("datastatusfinal") != null) {
+			dataStatusFinal.setTime(rsContrato.getDate("datastatusfinal"));
+			contrato.setDataStatusFinal(dataStatusFinal);
+		}
+		
+		if(rsContrato.getDate("dataquitacao") != null) {
+			dataQuitacao.setTime(rsContrato.getDate("dataquitacao"));
+			contrato.setDataQuitacao(dataQuitacao);
+		}
+		
 
 		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
 
@@ -2249,6 +2266,8 @@ public class ContratoDao extends Dao<Contrato> {
 	private void getContrato(Contrato contrato) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
+		Calendar dataStatusFinal = new GregorianCalendar();
+		Calendar dataQuitacao = new GregorianCalendar();
 		Calendar contratoCreated = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
@@ -2282,16 +2301,26 @@ public class ContratoDao extends Dao<Contrato> {
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
 		created.setTime(rsContrato.getDate("created"));
 		formulario.setCreated(created);
-		
+
 		contratoCreated.setTime(rsContrato.getDate("contratoCreated"));
 		contrato.setCreated(contratoCreated);
 
-		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
+		if(rsContrato.getDate("datastatusfinal") != null) {
+			dataStatusFinal.setTime(rsContrato.getDate("datastatusfinal"));
+			contrato.setDataStatusFinal(dataStatusFinal);
+		}
 		
+		if(rsContrato.getDate("dataquitacao") != null) {
+			dataQuitacao.setTime(rsContrato.getDate("dataquitacao"));
+			contrato.setDataQuitacao(dataQuitacao);
+		}
+
+		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
+
 		parceiro.setParceiroNegocio_id(rsContrato.getLong("parceironegocio_id"));
 		parceiro.setNome(rsContrato.getString("parceiro_nome"));
 		parceiro.setCpf(rsContrato.getString("parceiro_cpf"));
-		
+
 		coeficiente.setCoeficiente_id(rsContrato.getLong("coeficiente_id"));
 		coeficiente.setValor(rsContrato.getDouble("valor"));
 		

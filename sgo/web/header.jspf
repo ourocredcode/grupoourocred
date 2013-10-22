@@ -26,6 +26,7 @@
 		<link rel="stylesheet" href="<c:url value="/css/bootstrap-responsive.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/datepicker.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/select2.css"/>" />
+        <link rel="stylesheet" href="<c:url value="/css/TableTools.css"/>" />
 
 		<link rel="stylesheet" href="<c:url value="/css/uniform.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/css/fullcalendar.css"/>" />		
@@ -51,6 +52,8 @@
 		<script type="text/javascript" src="<c:url value="/js/unicorn.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/funcs.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/ColVis.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/TableTools.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/ZeroClipboard.js"/>"></script>
 		
 		<!--[if lt IE 9]>  
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>  
@@ -337,9 +340,6 @@
 							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
 							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
 							<li><a href="<c:url value="/reports/filtros/metadiaria"/>" >Meta Diária</a></li>
-							<!-- 
-							<li><a href="<c:url value="/reports/chart-aprovados"/>" target="_blank">Aprovados (Gráfico)</a></li>
-							 -->
 						</ul>
 
 					</li>
