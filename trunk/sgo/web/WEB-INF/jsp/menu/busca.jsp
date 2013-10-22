@@ -9,6 +9,8 @@
 
 $(document).ready(function() {
 
+	TableTools.DEFAULTS.aButtons = [ "print", "xls" ];
+
 	$('.data-table').dataTable( {
 		
 		"aLengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Todos"]],
@@ -58,10 +60,21 @@ $(document).ready(function() {
 			  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
 			  			/* 22 - Data Quitação */     { "bVisible":    false },
 			  			/* 23 - Pós Venda */     { "bVisible":    false },
-			  			/* 24 - Motivo Recusa */     { "bVisible":    false }
+			  			/* 24 - Motivo Recusa */     { "bVisible":    false },
+			  			/* 25 - Data Status Final */     { "bVisible":    false }
 			  		] ,
-		
-		"sDom": 'C<"clear">lfrtip',
+
+		"sDom": ' T C <"clear">lfrtip',
+
+		"oTableTools": {
+			"aButtons": [
+				{
+					"sExtends": "xls",
+					"sButtonText": "Excel"
+				}
+			]
+		},
+
 		"oColVis": {
 			"activate": "mouseover",
 			"buttonText": "Selecione Colunas",
@@ -233,6 +246,9 @@ $(document).ready(function() {
 											<th >
 												Motivo
 											</th>
+											<th >
+												Dt Status Final
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
@@ -318,6 +334,9 @@ $(document).ready(function() {
 												</td>
 												<td >
 													${contrato.etapaPendencia.nome }
+												</td>
+												<td >
+													<fmt:formatDate value="${contrato.dataStatusFinal.time}" pattern="dd/MM/yy" />
 												</td>
 
 											</tr>

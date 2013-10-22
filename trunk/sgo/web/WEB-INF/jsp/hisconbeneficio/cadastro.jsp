@@ -2,6 +2,49 @@
 
 <script type="text/javascript">
 jQuery(function($){
+	
+	$('.data-table').dataTable( {
+		
+		"aLengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Todos"]],
+
+		"iDisplayLength" : -1,
+
+		"iCookieDuration": 60 * 5,
+
+		"bStateSave": true,
+
+		"oLanguage": {    
+			"sProcessing": "Aguarde enquanto os dados são carregados ...",    
+			"sLengthMenu": "Mostrar _MENU_ registros por pagina",    
+			"sZeroRecords": "Nenhum registro correspondente ao criterio encontrado",    
+			"sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",    
+			"sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",    
+			"sInfoFiltered": "",    
+			"sSearch": "Procurar",    
+			"oPaginate": {       
+					"sFirst":    "Primeiro",       
+					"sPrevious": "Anterior ",       
+					"sNext":     " Próximo",      
+					"sLast":     "Último"   
+					} 
+		},
+
+		"sDom": ' T C <"clear">lfrtip',
+
+		"oTableTools": {
+			"aButtons": [
+				{
+					"sExtends": "xls",
+					"sButtonText": "Excel"
+				}
+			]
+		},
+		
+		"oColVis": {
+			"activate": "mouseover",
+			"buttonText": "Selecione Colunas"
+		}
+	} );
 
 	$('#hisconbeneficio-li-a').click(function() {
 		window.location.href = '<c:url value="/hisconbeneficio/cadastro" />';
@@ -156,58 +199,71 @@ function altera(atributo, id, valor) {
 					</form>	
 				</c:if>
 
-				<br><br>
-				<table class="table table-bordered" id="lista">
-					<thead>
-						<tr>
-							<th>Imagem</th>
-							<th>Data solicitação</th>
-							<th>Data solicitação Adm</th>
-							<th>Supervisor</th>
-							<th>Consultor</th>
-							<th>Cliente</th>
-							<th>Nascimento</th>
-							<th>Cpf</th>
-							<th>Número Benefício</th>
-							<th>Status Atual</th>
-							<c:if test="${usuarioInfo.perfil.chave != 'Consultor'}">
-								<th>Quantidade</th>
-							</c:if>
-						</tr>
-					</thead>
-					<tbody>	
-						<c:forEach items="${hiscons}" var="hiscon">
-							<tr <c:if test="${hiscon.countHiscons >= 3 }"> class="error"</c:if>>
-								<td>
-									<c:if test="${hiscon.isEnviado}">
-										<a href="<c:url value="/visualizaHiscon/${hiscon.hisconBeneficio_id}"/>"><img src="../img/pdf.gif" border="0"/></a>
-									</c:if>
-								</td>
-								<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
-								<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>
-								<td>${hiscon.usuario.supervisorUsuario.apelido }</td>
-								<td>${hiscon.usuario.apelido }</td>									
-								<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
-								<td><fmt:formatDate pattern="dd/MM/yyyy" type="date" value="${hiscon.parceiroBeneficio.parceiroNegocio.dataNascimento.time }" /></td>
-								<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
-								<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
-								<td>
-									<select id="hisconBeneficioStatus" class="input-medium" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
-										<c:forEach var="etapa" items="${hiscon.etapas }">
-											<option value="${etapa.etapa_id }" <c:if test="${etapa.etapa_id == hiscon.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
-										</c:forEach>
-									</select>
-								</td>
-								<c:if test="${usuarioInfo.perfil.chave != 'Consultor' }">
-									<td style="text-align: center;">
-										<a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'><h3><small>${hiscon.countHiscons }</small></h3></a>
-									</td>
-								</c:if>
-							</tr>
-
-						</c:forEach>
-					</tbody>
-				</table>
+				
+			<div class="container-fluid">
+			<div class="row-fluid" style="margin-top: 1px;">
+				<div class="span12" style="margin-top: 1px;">
+	
+					<div class="widget-box">
+						<div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Contratos</h5></div>
+						<div class="widget-content">
+							<table class="table table-bordered table-hover data-table" id="lista">
+								<thead>
+									<tr>
+										<th>Imagem</th>
+										<th>Data solicitação</th>
+										<th>Data solicitação Adm</th>
+										<th>Supervisor</th>
+										<th>Consultor</th>
+										<th>Cliente</th>
+										<th>Nascimento</th>
+										<th>Cpf</th>
+										<th>Número Benefício</th>
+										<th>Status Atual</th>
+										<c:if test="${usuarioInfo.perfil.chave != 'Consultor'}">
+											<th>Quantidade</th>
+										</c:if>
+									</tr>
+								</thead>
+								<tbody>	
+									<c:forEach items="${hiscons}" var="hiscon">
+										<tr <c:if test="${hiscon.countHiscons >= 3 }"> class="error"</c:if>>
+											<td>
+												<c:if test="${hiscon.isEnviado}">
+													<a href="<c:url value="/visualizaHiscon/${hiscon.hisconBeneficio_id}"/>"><img src="../img/pdf.gif" border="0"/></a>
+												</c:if>
+											</td>
+											<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
+											<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>
+											<td>${hiscon.usuario.supervisorUsuario.apelido }</td>
+											<td>${hiscon.usuario.apelido }</td>									
+											<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
+											<td><fmt:formatDate pattern="dd/MM/yyyy" type="date" value="${hiscon.parceiroBeneficio.parceiroNegocio.dataNascimento.time }" /></td>
+											<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
+											<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
+											<td>
+												<select id="hisconBeneficioStatus" class="input-medium" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+													<c:forEach var="etapa" items="${hiscon.etapas }">
+														<option value="${etapa.etapa_id }" <c:if test="${etapa.etapa_id == hiscon.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
+													</c:forEach>
+												</select>
+											</td>
+											<c:if test="${usuarioInfo.perfil.chave != 'Consultor' }">
+												<td style="text-align: center;">
+													<a href='<c:url value="/hisconbeneficio/detalhe/${hiscon.parceiroBeneficio.parceiroBeneficio_id}"/>'><h3><small>${hiscon.countHiscons }</small></h3></a>
+												</td>
+											</c:if>
+										</tr>
+			
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+							
 
 			</div>						
 		</div>
