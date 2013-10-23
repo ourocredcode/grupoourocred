@@ -149,6 +149,105 @@ function calculaContrato() {
 			}
 
 		}
+		
+		if(organizacao == 'OUROCRED RJ') {
+			
+			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' ){
+
+				var metaValue = valorContrato.value * arrayCoeficiente[1];
+				valorMeta.value = metaValue.toFixed(2);
+
+			} else {
+
+				switch(contratoBancoNome) {
+
+					case 'Bradesco':
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+					break;
+				
+					case 'BMG':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;
+
+					case 'BGN':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;	
+
+					case 'Cruzeiro do Sul':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;
+					
+					case 'Panamericano':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;
+
+					case 'Bonsucesso':
+
+						if(contratoProduto.value == 'REFINANCIAMENTO'){
+
+							var metaValue = valorLiquido.value * arrayCoeficiente[1];
+							valorMeta.value = metaValue.toFixed(2);
+
+						} else {
+
+							var metaValue = valorLiquido.value / 2;
+							valorMeta.value = metaValue;
+
+						}
+
+						break;
+
+					case 'Cifra':
+						var metaValue = valorLiquido.value / 2;
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+
+					case 'BV':
+
+						if(parcelasAberto.value <= 17) {
+							var metaValue = valorLiquido.value / 2;
+							valorMeta.value =  metaValue.toFixed(2);
+						} else {
+							var metaValue = valorLiquido.value;
+							valorMeta.value =  metaValue;
+						}
+
+						break;
+						
+					case 'Daycoval':
+
+						var metaValue = valorLiquido.value / 2;
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+					
+					case 'Caixa Econômica Federal':
+
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;	
+
+					default:
+						alert("Escolha um Banco.");
+						
+				}
+				 
+			}
+			
+			
+		}
 
 		if(organizacao == 'OUROCRED MATRIZ') {
 			
