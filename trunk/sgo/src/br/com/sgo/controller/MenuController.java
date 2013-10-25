@@ -959,7 +959,9 @@ public class MenuController {
 					|| cs.getProduto().getNome().equals("RECOMPRA RMC") )
 				totalContratoLiquido += cs.getValorContrato();
 
-			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") || cs.getProduto().getNome().equals("RETENÇÃO"))
+			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") 
+					|| cs.getProduto().getNome().equals("RETENÇÃO") 
+					|| cs.getProduto().getNome().equals("RETENÇÃO PMSP"))
 				totalContratoLiquido += cs.getValorLiquido();
 
 		}
@@ -1005,7 +1007,9 @@ public class MenuController {
 					|| cs.getProduto().getNome().equals("RECOMPRA RMC") )
 				totalContratoLiquido += cs.getValorContrato();
 			
-			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") || cs.getProduto().getNome().equals("RETENÇÃO"))
+			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") 
+					|| cs.getProduto().getNome().equals("RETENÇÃO")
+					|| cs.getProduto().getNome().equals("RETENÇÃO PMSP"))
 				totalContratoLiquido += cs.getValorLiquido();
 				
 

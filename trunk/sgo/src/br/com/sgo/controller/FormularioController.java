@@ -384,7 +384,7 @@ public class FormularioController {
 					|| c.getProduto().getNome().equals("RECOMPRA RMC") )
 				c.setValorContratoLiquido(c.getValorContrato());
 			
-			if(c.getProduto().getNome().equals("REFINANCIAMENTO") || c.getProduto().getNome().equals("RETENÇÃO"))
+			if(c.getProduto().getNome().equals("REFINANCIAMENTO") || c.getProduto().getNome().equals("RETENÇÃO") || c.getProduto().getNome().equals("RETENÇÃO PMSP"))
 				c.setValorContratoLiquido(c.getValorLiquido());
 
 			this.contratoDao.beginTransaction();
@@ -430,8 +430,9 @@ public class FormularioController {
 			Contrato c = (Contrato) it.next();
 			
 			if(!c.getEtapa().getNome().equals("Recusado")){
-				
-				cc = pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente() == null ? "0" : pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente();
+
+				if(c.getConvenio().getNome().equals("INSS"))
+					cc = pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente() == null ? "0" : pnDao.buscaDetalhamento(c.getNumeroBeneficio()).getContacorrente();
 
 				formulario.setCreated(formularioData);
 				formulario.setParceiroNegocio(parceiro);

@@ -1043,6 +1043,7 @@
 															  contrato.etapa.nome eq 'Pendente Banco' ||
 															  contrato.etapa.nome eq 'Pendente Coeficiente' ||
 															  contrato.etapa.nome eq 'Pendente Conferência' ||
+															  contrato.etapa.nome eq 'Pendente Apoio Comercial' ||
 															  contrato.etapa.nome eq 'Recalcular' }">class="error"</c:if>>
 												<td >
 													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>

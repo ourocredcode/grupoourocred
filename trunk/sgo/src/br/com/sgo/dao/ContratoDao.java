@@ -22,6 +22,7 @@ import br.com.sgo.modelo.Coeficiente;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Controle;
 import br.com.sgo.modelo.ControleFormulario;
+import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Formulario;
@@ -62,14 +63,15 @@ public class ContratoDao extends Dao<Contrato> {
 			" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
 			" ETAPA.etapa_id, ETAPA.nome as etapa_nome, ETAPA_1.etapa_id as etapaPendencia_id , ETAPA_1.nome as etapaPendencia_nome, " +
-			" ETAPACONTROLE.etapa_id as etapacontrole_id, ETAPACONTROLE.nome as etapacontrole_nome  "+
+			" ETAPACONTROLE.etapa_id as etapacontrole_id, ETAPACONTROLE.nome as etapacontrole_nome, CONVENIO.convenio_id, CONVENIO.nome as convenio_nome  "+
 			" FROM " +
-			" (((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
+			" ((((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) "+
 			" INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id) "+
 			" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) "+
 			" INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id) "+
 			" INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id) "+
-			" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)" +
+			" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id) " +
+			" LEFT JOIN CONVENIO (NOLOCK) ON CONTRATO.convenio_id = CONVENIO.convenio_id)" +
 			" LEFT JOIN CONTROLEFORMULARIO (NOLOCK) ON CONTROLEFORMULARIO.formulario_id = FORMULARIO.formulario_id)" +
 			" LEFT JOIN ETAPA AS ETAPACONTROLE (NOLOCK) ON CONTROLEFORMULARIO.etapa_id = ETAPACONTROLE.etapa_id) "+
 			" INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) "+
@@ -2158,6 +2160,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Etapa etapaPendencia = new Etapa();
 		Etapa etapacontrole = new Etapa();
 		Empresa empresa = new Empresa();
+		Convenio convenio = new Convenio();
 		Organizacao organizacao = new Organizacao();
 		ControleFormulario posvenda = new ControleFormulario();
 
@@ -2169,6 +2172,9 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		organizacao.setOrganizacao_id(rsContrato.getLong("organizacao_id"));
 		organizacao.setNome(rsContrato.getString("organizacao_nome"));
+
+		convenio.setConvenio_id(rsContrato.getLong("convenio_id"));
+		convenio.setNome(rsContrato.getString("convenio_nome"));
 
 		usuario.setUsuario_id(rsContrato.getLong("usuario_id"));
 		usuario.setNome(rsContrato.getString("usuario_nome"));
@@ -2238,6 +2244,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setCoeficiente(coeficiente);
 		contrato.setEmpresa(empresa);
 		contrato.setOrganizacao(organizacao);
+		contrato.setConvenio(convenio);
 		contrato.setProduto(produto);
 		contrato.setUsuario(usuario);
 		contrato.setBanco(b1);
