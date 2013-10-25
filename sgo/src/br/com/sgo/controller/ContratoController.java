@@ -433,7 +433,9 @@ public class ContratoController {
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA RMC") )
 			this.contrato.setValorContratoLiquido(this.contrato.getValorContrato());
 
-		if(this.contrato.getProduto().getNome().equals("REFINANCIAMENTO") || this.contrato.getProduto().getNome().equals("RETENÇÃO"))
+		if(this.contrato.getProduto().getNome().equals("REFINANCIAMENTO") 
+				|| this.contrato.getProduto().getNome().equals("RETENÇÃO") 
+				|| this.contrato.getProduto().getNome().equals("RETENÇÃO PMSP"))
 			this.contrato.setValorContratoLiquido(this.contrato.getValorLiquido());
 
 		this.contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 

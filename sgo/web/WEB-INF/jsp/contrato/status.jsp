@@ -276,7 +276,7 @@ function verificaStatus() {
 
 	if(status == 'Enviado DataPrev' || status == 'Quitado'){
 
-		if(contratoProduto == 'MARGEM LIMPA' || contratoProduto == 'REFINANCIAMENTO' || contratoProduto == 'RETENÇÃO')
+		if(contratoProduto == 'MARGEM LIMPA' || contratoProduto == 'REFINANCIAMENTO' || contratoProduto == 'RETENÇÃO' || contratoProduto == 'RETENÇÃO PMSP')
 			desabilita(dataQuitacao);
 		else
 			habilita(dataQuitacao);
@@ -483,7 +483,7 @@ function validaForm(form) {
 
 		if(status == 'Enviado DataPrev' || status == 'Quitado'){
 
-			if(contratoProduto != 'MARGEM LIMPA' && contratoProduto != 'REFINANCIAMENTO' && contratoProduto != 'RETENÇÃO') {
+			if(contratoProduto != 'MARGEM LIMPA' && contratoProduto != 'REFINANCIAMENTO' && contratoProduto != 'RETENÇÃO' && contratoProduto != 'RETENÇÃO PMSP') {
 				
 				if(dataQuitacao.value == ''){
 					alert("Data Quitação obrigatória");

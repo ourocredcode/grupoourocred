@@ -136,7 +136,7 @@ function calculaContrato() {
 		
 		if(organizacao == 'OUROCRED RIBEIRAO') {
 
-			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETEN플O' ){
+			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETEN플O' && contratoProdutoNome != 'RETEN플O PMSP' ){
 
 				var metaValue = valorContrato.value * arrayCoeficiente[1];
 				valorMeta.value = metaValue.toFixed(2);
@@ -251,7 +251,7 @@ function calculaContrato() {
 
 		if(organizacao == 'OUROCRED MATRIZ') {
 			
-			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETEN플O' && contratoProdutoNome != 'REFIN C.E.F' ){
+			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETEN플O' && contratoProdutoNome != 'RETEN플O PMSP' ){
 
 				var metaValue = valorContrato.value * arrayCoeficiente[1];
 				valorMeta.value = metaValue.toFixed(2);
@@ -500,6 +500,24 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;	
+			
+		case 'RETEN플O PMSP':
+
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
+
+			desabilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;
 			
 		case 'MARGEM C.E.F':
 
