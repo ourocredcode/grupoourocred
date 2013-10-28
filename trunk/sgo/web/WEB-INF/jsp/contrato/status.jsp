@@ -266,12 +266,20 @@ function verificaStatus() {
 		habilita(justificativa);
 	}
 	
+	if(status == 'Pendente Apoio Comercial'){
+		habilita(justificativa);
+	}
+	
+	if(status == 'Pendente Comercial'){
+		habilita(justificativa);
+	}
+	
 	if(status != 'Aprovado' && status != 'Recusado' && status != 'Concluído') {
 		desabilita(dataStatusFinal);
 		$("#dataStatusFinal").val("");
 	}
 
-	if(status != 'Recusado' && status != 'Pendente Banco' && status != 'Pendente Administrativo' && status != 'Pendente Agendamento' && status != 'Pendente Coeficiente')
+	if(status != 'Recusado' && status != 'Pendente Banco' && status != 'Pendente Administrativo' && status != 'Pendente Agendamento' && status != 'Pendente Coeficiente' && status != 'Pendente Apoio Comercial' && status != 'Pendente Comercial')
 		desabilita(justificativa);
 
 	if(status == 'Enviado DataPrev' || status == 'Quitado'){
@@ -472,7 +480,7 @@ function validaForm(form) {
 			}
 		}
 		
-		if( status == 'Pendente Banco' && status == 'Pendente Administrativo' && status == 'Pendente Agendamento' && status == 'Pendente Coeficiente'){
+		if( status == 'Pendente Banco' && status == 'Pendente Administrativo' && status == 'Pendente Agendamento' && status == 'Pendente Coeficiente' && status == 'Pendente Apoio Comercial' && status == 'Pendente Comercial'){
 
 			if( justificativa.value == ''){
 				alert(" Justificativa obrigatória. ");
