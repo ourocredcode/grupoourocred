@@ -77,6 +77,14 @@ function altera(atributo, id, valor) {
 	eval(temp);
 
 }
+
+function showcontatos(id){
+	
+	$("#myModal").load('<c:url value="/hisconbeneficio/parceironegocio/contatos" />', {'parceironegocio_id': id});
+	$('#myModal').modal('show');
+
+}
+
 </script>
 
 	<div id="content-header">
@@ -237,7 +245,7 @@ function altera(atributo, id, valor) {
 											<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>
 											<td>${hiscon.usuario.supervisorUsuario.apelido }</td>
 											<td>${hiscon.usuario.apelido }</td>									
-											<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
+											<td><a data-toggle="modal" onclick="showcontatos(${hiscon.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id});">${hiscon.parceiroBeneficio.parceiroNegocio.nome }</a></td>
 											<td><fmt:formatDate pattern="dd/MM/yyyy" type="date" value="${hiscon.parceiroBeneficio.parceiroNegocio.dataNascimento.time }" /></td>
 											<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 											<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>
@@ -263,10 +271,14 @@ function altera(atributo, id, valor) {
 				</div>
 			</div>
 			</div>
+			
+			
 							
 
 			</div>						
 		</div>
 	</div>
+	
+	<div id="myModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div> 
 
 <%@ include file="/footer.jspf"%>

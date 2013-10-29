@@ -305,6 +305,15 @@
 													<td>${map.value[4] }</td>
 												</tr>
 										</c:when>
+										<c:when test="${map.key == 'Pendente Comercial' }">
+												<tr class="error">
+													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
+													<td>${map.value[1] }</td>
+													<td>${map.value[2] }</td>
+													<td>${map.value[3] }</td>
+													<td>${map.value[4] }</td>
+												</tr>
+										</c:when>
 										<c:when test="${map.key == 'Recalcular' }">
 												<tr class="error">
 													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
