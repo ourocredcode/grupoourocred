@@ -27,6 +27,9 @@ import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.HisconBeneficioDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
+import br.com.sgo.dao.ParceiroContatoDao;
+import br.com.sgo.dao.ParceiroNegocioDao;
+import br.com.sgo.dao.TipoContatoDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.infra.CustomFileUtil;
@@ -49,6 +52,9 @@ public class HisconbeneficioController {
 	private final WorkflowDao workflowDao;
 	private final EtapaDao etapaDao;
 	private final UsuarioDao usuarioDao;
+	private final TipoContatoDao tipoContatoDao;
+	private final ParceiroContatoDao parceiroContatoDao;
+	private final ParceiroNegocioDao parceiroNegocioDao;
 
 	private HisconBeneficio hisconBeneficio;
 	private Calendar dataAtual = Calendar.getInstance();
@@ -61,7 +67,8 @@ public class HisconbeneficioController {
 	private Usuario usuario;
 
 	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, Usuario usuario,
-			UsuarioDao usuarioDao ,HisconBeneficioDao hisconBeneficioDao, 
+			UsuarioDao usuarioDao ,HisconBeneficioDao hisconBeneficioDao, TipoContatoDao tipoContatoDao, ParceiroContatoDao parceiroContatoDao,
+			ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroBeneficioDao parceiroBeneficioDao, WorkflowDao workflowDao, EtapaDao etapaDao,HisconBeneficio hisconBeneficio,HttpServletResponse response) {
 
 		this.result = result;
@@ -72,6 +79,9 @@ public class HisconbeneficioController {
 		this.workflowDao = workflowDao;
 		this.etapaDao = etapaDao;
 		this.hisconBeneficio = hisconBeneficio;
+		this.tipoContatoDao = tipoContatoDao;
+		this.parceiroContatoDao = parceiroContatoDao;
+		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.response = response;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
@@ -560,6 +570,16 @@ public class HisconbeneficioController {
 		hiscons = this.hisconBeneficioDao.buscaHisconsBeneficioByParceiroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), parceirobeneficio_id);
 
 		result.include("hiscons",hiscons);
+
+	}
+	
+	@Post
+	@Path("/hisconbeneficio/parceironegocio/contatos")
+	public void contatos(Long parceironegocio_id) {
+
+		result.include("parceiroNegocio",this.parceiroNegocioDao.load(parceironegocio_id));
+		result.include("tiposContato",this.tipoContatoDao.buscaTiposContatos());
+		result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceironegocio_id));
 
 	}
 

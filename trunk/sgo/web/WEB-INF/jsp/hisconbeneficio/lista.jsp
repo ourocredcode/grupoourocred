@@ -46,12 +46,12 @@
 						</select>
 					</td>
 				</c:if>									
-				<td>${hiscon.parceiroBeneficio.parceiroNegocio.nome }</td>
+				<td><a data-toggle="modal" onclick="showcontatos(${hiscon.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id});">${hiscon.parceiroBeneficio.parceiroNegocio.nome }</a></td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy" type="date" value="${hiscon.parceiroBeneficio.parceiroNegocio.dataNascimento.time }" /></td>
 				<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
 				<td>${hiscon.parceiroBeneficio.numeroBeneficio }</td>				
 				<td>
-					<select id="hisconBeneficioStatus" class="input-large" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
+					<select id="hisconBeneficioStatus" class="input-medium" onchange="return altera('etapa.etapa_id','${hiscon.hisconBeneficio_id}', this.value);" >
 						<c:forEach var="etapa" items="${hiscon.etapas }">
 							<option value="${etapa.etapa_id }" <c:if test="${etapa.etapa_id == hiscon.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
 						</c:forEach>
@@ -73,3 +73,14 @@
 		</c:forEach>
 	</tbody>
 </table>
+
+<div id="myModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div> 
+
+<script type="text/javascript">
+	function showcontatos(id){
+
+		$("#myModal").load('<c:url value="/hisconbeneficio/parceironegocio/contatos" />', {'parceironegocio_id': id});
+		$('#myModal').modal('show');
+
+	}
+</script>
