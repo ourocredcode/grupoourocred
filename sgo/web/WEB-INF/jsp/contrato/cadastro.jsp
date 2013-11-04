@@ -193,7 +193,7 @@ function calculaContrato() {
 
 					case 'Bonsucesso':
 
-						if(contratoProduto.value == 'REFINANCIAMENTO'){
+						if(contratoProdutoNome == 'REFINANCIAMENTO'){
 
 							var metaValue = valorLiquido.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
@@ -201,7 +201,7 @@ function calculaContrato() {
 						} else {
 
 							var metaValue = valorLiquido.value / 2;
-							valorMeta.value = metaValue;
+							valorMeta.value = metaValue.toFixed(2);
 
 						}
 
@@ -251,6 +251,8 @@ function calculaContrato() {
 
 		if(organizacao == 'OUROCRED MATRIZ') {
 			
+			
+			
 			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' && contratoProdutoNome != 'RETENÇÃO PMSP' ){
 
 				var metaValue = valorContrato.value * arrayCoeficiente[1];
@@ -292,7 +294,7 @@ function calculaContrato() {
 
 					case 'Bonsucesso':
 
-						if(contratoProduto.value == 'REFINANCIAMENTO'){
+						if(contratoProdutoNome == 'REFINANCIAMENTO'){
 
 							var metaValue = valorLiquido.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
@@ -300,7 +302,7 @@ function calculaContrato() {
 						} else {
 
 							var metaValue = valorLiquido.value / 2;
-							valorMeta.value = metaValue;
+							valorMeta.value = metaValue.toFixed(2);
 
 						}
 
