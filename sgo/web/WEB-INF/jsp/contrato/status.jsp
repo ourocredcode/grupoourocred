@@ -1038,7 +1038,7 @@ function openPopup(url) {
 					<div class="form-actions">
 
 							<c:choose>
-								<c:when test="${ usuarioInfo.perfil.chave == 'Consultor' && (contrato.etapa.nome == 'Aguardando Status' || contrato.etapa.nome == 'Recalcular' || contrato.etapa.nome == 'Contrato Fora Planilha') }">
+								<c:when test="${ usuarioInfo.perfil.chave == 'Consultor' && (contrato.etapa.nome == 'Aguardando Status' || contrato.etapa.nome == 'Recalcular' || contrato.etapa.nome == 'Contrato Fora Planilha' || contrato.etapa.nome == 'Pendente Apoio Comercial') }">
 									<div class="span1" style="float: left;">
 										<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
 									</div>	
