@@ -954,14 +954,20 @@ public class MenuController {
 			countContratos += 1;
 			
 			if(cs.getProduto().getNome().equals("MARGEM LIMPA") 
+					|| cs.getProduto().getNome().equals("MARGEM LIMPA PMSP")
+					|| cs.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
 					|| cs.getProduto().getNome().equals("RECOMPRA INSS")  
+					|| cs.getProduto().getNome().equals("RECOMPRA PMSP")
 					|| cs.getProduto().getNome().equals("RECOMPRA GOVRJ") 
 					|| cs.getProduto().getNome().equals("RECOMPRA RMC") )
 				totalContratoLiquido += cs.getValorContrato();
 
-			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") 
+			if(cs.getProduto().getNome().equals("REFINANCIAMENTO")
+					|| cs.getProduto().getNome().equals("REFINANCIAMENTO PMSP")
+					|| cs.getProduto().getNome().equals("REFINANCIAMENTO GOVRJ")
 					|| cs.getProduto().getNome().equals("RETENÇÃO") 
-					|| cs.getProduto().getNome().equals("RETENÇÃO PMSP"))
+					|| cs.getProduto().getNome().equals("RETENÇÃO PMSP")
+					|| cs.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 				totalContratoLiquido += cs.getValorLiquido();
 
 		}
@@ -1002,14 +1008,20 @@ public class MenuController {
 			totalValorMeta += cs.getValorMeta();
 
 			if(cs.getProduto().getNome().equals("MARGEM LIMPA") 
-					|| cs.getProduto().getNome().equals("RECOMPRA INSS")  
+					|| cs.getProduto().getNome().equals("MARGEM LIMPA PMSP")
+					|| cs.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
+					|| cs.getProduto().getNome().equals("RECOMPRA INSS") 
+					|| cs.getProduto().getNome().equals("RECOMPRA PMSP")
 					|| cs.getProduto().getNome().equals("RECOMPRA GOVRJ")
 					|| cs.getProduto().getNome().equals("RECOMPRA RMC") )
 				totalContratoLiquido += cs.getValorContrato();
 			
 			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") 
+					|| cs.getProduto().getNome().equals("REFINANCIAMENTO PMSP")
+					|| cs.getProduto().getNome().equals("REFINANCIAMENTO GOVRJ")
 					|| cs.getProduto().getNome().equals("RETENÇÃO")
-					|| cs.getProduto().getNome().equals("RETENÇÃO PMSP"))
+					|| cs.getProduto().getNome().equals("RETENÇÃO PMSP")
+					|| cs.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 				totalContratoLiquido += cs.getValorLiquido();
 				
 
