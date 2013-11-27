@@ -136,7 +136,12 @@ function calculaContrato() {
 		
 		if(organizacao == 'OUROCRED RIBEIRAO') {
 
-			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' && contratoProdutoNome != 'RETENÇÃO PMSP' ){
+			if( contratoProdutoNome != 'REFINANCIAMENTO' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
+					&& contratoProdutoNome != 'RETENÇÃO' 
+					&& contratoProdutoNome != 'RETENÇÃO PMSP'
+					&& contratoProdutoNome != 'RETENÇÃO GOVRJ'){
 
 				var metaValue = valorContrato.value * arrayCoeficiente[1];
 				valorMeta.value = metaValue.toFixed(2);
@@ -152,7 +157,12 @@ function calculaContrato() {
 		
 		if(organizacao == 'OUROCRED RJ') {
 			
-			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' ){
+			if( contratoProdutoNome != 'REFINANCIAMENTO'
+					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP'
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ'
+					&& contratoProdutoNome != 'RETENÇÃO'
+					&& contratoProdutoNome != 'RETENÇÃO PMSP'
+					&& contratoProdutoNome != 'RETENÇÃO GOVRJ'){
 
 				var metaValue = valorContrato.value * arrayCoeficiente[1];
 				valorMeta.value = metaValue.toFixed(2);
@@ -193,7 +203,7 @@ function calculaContrato() {
 
 					case 'Bonsucesso':
 
-						if(contratoProdutoNome == 'REFINANCIAMENTO'){
+						if(contratoProdutoNome == 'REFINANCIAMENTO' || contratoProdutoNome == 'REFINANCIAMENTO PMSP' || contratoProdutoNome == 'REFINANCIAMENTO GOVRJ'){
 
 							var metaValue = valorLiquido.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
@@ -250,10 +260,13 @@ function calculaContrato() {
 		}
 
 		if(organizacao == 'OUROCRED MATRIZ') {
-			
-			
-			
-			if( contratoProdutoNome != 'REFINANCIAMENTO' && contratoProdutoNome != 'RETENÇÃO' && contratoProdutoNome != 'RETENÇÃO PMSP' ){
+
+			if( contratoProdutoNome != 'REFINANCIAMENTO' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
+					&& contratoProdutoNome != 'RETENÇÃO' 
+					&& contratoProdutoNome != 'RETENÇÃO PMSP' 
+					&& contratoProdutoNome != 'RETENÇÃO GOVRJ' ){
 
 				var metaValue = valorContrato.value * arrayCoeficiente[1];
 				valorMeta.value = metaValue.toFixed(2);
@@ -294,7 +307,7 @@ function calculaContrato() {
 
 					case 'Bonsucesso':
 
-						if(contratoProdutoNome == 'REFINANCIAMENTO'){
+						if(contratoProdutoNome == 'REFINANCIAMENTO' || contratoProdutoNome == 'REFINANCIAMENTO PMSP' || contratoProdutoNome == 'REFINANCIAMENTO GOVRJ'){
 
 							var metaValue = valorLiquido.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
@@ -387,6 +400,37 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;
+			
+		case 'MARGEM LIMPA PMSP':
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;
+			
+		case 'MARGEM LIMPA GOVRJ':
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
+	
 
 		case 'AUMENTO':
 			desabilita(bancoComprado);
@@ -432,6 +476,21 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;	
+			
+		case 'RECOMPRA PMSP':
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;		
 
 		case 'RECOMPRA RMC':
 			habilita(bancoComprado);
@@ -467,6 +526,46 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;
+			
+		case 'REFINANCIAMENTO PMSP':
+
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
+
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
+			
+		case 'REFINANCIAMENTO GOVRJ':
+
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
+
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
 			
 		case 'REFIN C.E.F':
 
@@ -520,6 +619,24 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;
+			
+		case 'RETENÇÃO GOVRJ':
+
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
+
+			desabilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
 			
 		case 'MARGEM C.E.F':
 
@@ -630,6 +747,26 @@ function validaForm(form) {
 
 		}
 		
+		if(contratoProdutoNome == 'MARGEM LIMPA PMSP'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
+		if(contratoProdutoNome == 'MARGEM LIMPA GOVRJ'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
 		if(contratoProdutoNome == 'RECOMPRA INSS'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
@@ -670,6 +807,26 @@ function validaForm(form) {
 			}
 		}
 		
+		if(contratoProdutoNome == 'RECOMPRA PMSP'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
 		if(contratoProdutoNome == 'RECOMPRA RMC'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
@@ -691,6 +848,58 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'REFINANCIAMENTO'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'REFINANCIAMENTO PMSP'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'REFINANCIAMENTO GOVRJ'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
 				bancoComprado.focus();

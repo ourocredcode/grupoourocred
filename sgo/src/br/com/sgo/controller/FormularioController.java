@@ -379,12 +379,20 @@ public class FormularioController {
 			c.setRecompraBanco(c.getRecompraBanco().getBanco_id() == null ? null : c.getRecompraBanco());
 			
 			if(c.getProduto().getNome().equals("MARGEM LIMPA") 
+					|| c.getProduto().getNome().equals("MARGEM LIMPA PMSP")
+					|| c.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
 					|| c.getProduto().getNome().equals("RECOMPRA INSS")
+					|| c.getProduto().getNome().equals("RECOMPRA PMSP")
 					|| c.getProduto().getNome().equals("RECOMPRA GOVRJ")  
 					|| c.getProduto().getNome().equals("RECOMPRA RMC") )
 				c.setValorContratoLiquido(c.getValorContrato());
 			
-			if(c.getProduto().getNome().equals("REFINANCIAMENTO") || c.getProduto().getNome().equals("RETENÇÃO") || c.getProduto().getNome().equals("RETENÇÃO PMSP"))
+			if(c.getProduto().getNome().equals("REFINANCIAMENTO")
+					|| c.getProduto().getNome().equals("REFINANCIAMENTO PMSP")
+					|| c.getProduto().getNome().equals("REFINANCIAMENTO GOVRJ")
+					|| c.getProduto().getNome().equals("RETENÇÃO") 
+					|| c.getProduto().getNome().equals("RETENÇÃO PMSP")
+					|| c.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 				c.setValorContratoLiquido(c.getValorLiquido());
 
 			this.contratoDao.beginTransaction();
@@ -578,13 +586,13 @@ public class FormularioController {
 
 				countContratos +=1;
 
-				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("AUMENTO"))
+				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("AUMENTO") )
 					countMargemLimpa += 1;
-				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("RECOMPRA GOVRJ"))
+				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ"))
 					countRecompraINSS += 1;
 				if(c.getProduto().equals("RECOMPRA RMC"))
 					countRecompraRMC += 1;
-				if(c.getProduto().equals("REFINANCIAMENTO"))
+				if(c.getProduto().equals("REFINANCIAMENTO") || c.getProduto().equals("REFINANCIAMENTO PMSP") || c.getProduto().equals("REFINANCIAMENTO GOVRJ"))
 					countRefinanciamento += 1;
 
 				List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();

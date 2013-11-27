@@ -428,14 +428,20 @@ public class ContratoController {
 		}
 
 		if(this.contrato.getProduto().getNome().equals("MARGEM LIMPA") 
+				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA PMSP")
+				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA INSS")  
+				|| this.contrato.getProduto().getNome().equals("RECOMPRA PMSP") 
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA GOVRJ") 
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA RMC") )
 			this.contrato.setValorContratoLiquido(this.contrato.getValorContrato());
 
 		if(this.contrato.getProduto().getNome().equals("REFINANCIAMENTO") 
+				|| this.contrato.getProduto().getNome().equals("REFINANCIAMENTO PMSP")
+				|| this.contrato.getProduto().getNome().equals("REFINANCIAMENTO GOVRJ")
 				|| this.contrato.getProduto().getNome().equals("RETENÇÃO") 
-				|| this.contrato.getProduto().getNome().equals("RETENÇÃO PMSP"))
+				|| this.contrato.getProduto().getNome().equals("RETENÇÃO PMSP")
+				|| this.contrato.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 			this.contrato.setValorContratoLiquido(this.contrato.getValorLiquido());
 
 		this.contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
