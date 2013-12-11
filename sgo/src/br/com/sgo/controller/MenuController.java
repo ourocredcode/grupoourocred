@@ -153,7 +153,7 @@ public class MenuController {
 		Calendar calConcluidoInicio = null;
 		Calendar calConcluidoFim = null;
 
-		if(perfil.equals("Supervisor") || perfil.equals("Consultor")){
+		if(perfil.equals("Consultor")){
 
 			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),dia1,dia2));
 
@@ -163,6 +163,20 @@ public class MenuController {
 			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id(), mes1, mes2));
 
 			result.include("mapEtapasFinal",contratosStatusFinal);
+
+		}
+		
+		if(perfil.equals("Supervisor")){
+
+			contratos.addAll(this.contratoDao.buscaContratoByUsuario(usuarioInfo.getUsuario().getUsuario_id(),dia1,dia2));
+
+			result.include("mapEtapas", this.contratoDao.buscaContratosToCountEtapas(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id()));
+
+			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasStatusFinal(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id(), mes1, mes2));
+			contratosStatusFinal.putAll(this.contratoDao.buscaContratosToCountEtapasConcluído(empresa_id, organizacao_id, usuarioInfo.getUsuario().getUsuario_id(), mes1, mes2));
+
+			result.include("mapEtapasFinal",contratosStatusFinal);
+			result.include("mapConsultoresCount",this.contratoDao.buscaContratosToCountConsultores(empresa_id, organizacao_id,usuarioInfo.getUsuario().getUsuario_id(), dia1, dia2));
 
 		}
 
@@ -489,6 +503,18 @@ public class MenuController {
 				consultores.add(usuario);
 			else
 				consultores.add(this.usuarioDao.load(id));
+
+			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,dia1,dia2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
+
+			result.include("function","buscaContratos();");
+			result.include("buscaDatasControle","none");
+			result.include("buscaAprovado","block");
+
+		}
+		
+		if(tipo.equals("consultores")){
+
+			consultores.add(this.usuarioDao.load(id));
 
 			contratos.addAll(this.contratoDao.buscaContratoByFiltros(empresa_id,organizacao_id,dia1,dia2,calAprovadoInicio,calAprovadoFim,calConcluidoInicio,calConcluidoFim, cliente, documento, convenios,status,statusFinal,justificativas, produtos, bancos, bancosComprados, consultores,false,null,null,empresas));
 

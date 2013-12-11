@@ -1953,6 +1953,107 @@ public class ContratoDao extends Dao<Contrato> {
 
 	}
 	
+	public HashMap<String,Object[]> buscaContratosToCountConsultores(Long empresa_id , Long organizacao_id, Long supervisor_id, Calendar dia1,Calendar dia2) {
+
+		String sql = " SELECT  " +
+						  " USUARIO.usuario_id,  " +
+						  " USUARIO.apelido, " +  
+						  " COUNT(CONTRATO.contrato_id) as qtdContrato, " + 
+						  " SUM(CONTRATO.valormeta) as metaCount, " +    
+						  " SUM(CONTRATO.valorcontrato) as contratoCount, " +   
+						  " SUM(CONTRATO.valorContratoLiquido) as contratoLiquidoCount, " +    
+						  " SUM(CONTRATO.valorLiquido) as liquidoCount " +   
+					" FROM ((CONTRATO (NOLOCK)  " + 
+					" INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) " +    
+					" INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id) " +    
+					" INNER JOIN USUARIO AS USUARIO_SUPERVISOR (NOLOCK) ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id WHERE  ";
+
+		if(empresa_id != null)
+			sql += " CONTRATO.empresa_id = ? AND ";
+
+		if(organizacao_id != null)
+			sql += "  CONTRATO.organizacao_id = ? AND ";
+		
+		if(supervisor_id != null)
+			sql += "  USUARIO.supervisor_usuario_id = ? AND ";
+
+		if(dia1 != null)
+			sql += " ( CONTRATO.created BETWEEN ? AND ? ) AND ";
+
+		sql +=  " ( ETAPA.nome not in ('Recusado','Contrato Fora Planilha') ) GROUP BY USUARIO.usuario_id, USUARIO.apelido ORDER BY metaCount DESC ";
+
+		this.conn = this.conexao.getConexao();
+
+		HashMap<String,Object[]> map = new HashMap<String,Object[]>();
+
+		try {
+
+			int curr = 1;
+
+			this.stmt = conn.prepareStatement(sql);
+
+
+			if(empresa_id != null){
+				this.stmt.setLong(curr, empresa_id);
+				curr++;
+			}
+
+			if(organizacao_id != null){
+				this.stmt.setLong(curr, organizacao_id);
+				curr++;
+			}
+			
+			if(supervisor_id != null){
+				this.stmt.setLong(curr, supervisor_id);
+				curr++;
+			}
+			
+			if(dia1 != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(dia1).getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(dia2).getTimeInMillis()));
+				curr++;
+
+			} 
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+
+				String usuario_apelido  = rsContrato.getString("apelido");
+				Long usuario_id = rsContrato.getLong("usuario_id");
+
+				Integer qtdContrato = rsContrato.getInt("qtdContrato");
+				Double contratoCount = rsContrato.getDouble("contratoCount");
+				Double contratoLiquidoCount = rsContrato.getDouble("contratoLiquidoCount");
+				Double liquidoCount = rsContrato.getDouble("liquidoCount");
+				Double metaCount = rsContrato.getDouble("metaCount");
+
+				Object[] values = new Object[6];
+
+				values[0] = usuario_id;
+				values[1] = qtdContrato;
+				values[2] = contratoCount;
+				values[3] = contratoLiquidoCount;
+				values[4] = liquidoCount;
+				values[5] = metaCount;
+
+				map.put(usuario_apelido,values);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+
+		return map;
+
+	}
+	
 	public HashMap<String,Object[]> buscaContratosToCountEtapasStatusFinal(Long empresa_id , Long organizacao_id, Long usuario_id, Calendar calInicio, Calendar calFim) {
 
 		String sql = " SELECT " +
