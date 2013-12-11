@@ -342,6 +342,49 @@
 				</div>
 			</div>
 			
+			<c:if test="${usuarioInfo.perfil.chave == 'Supervisor'}">
+				<div class="span6">
+	
+					<div class="widget-box">
+						<div class="widget-title">
+							<span class="icon">
+								<i class="icon-signal"></i>
+							</span>
+							<h5>Performance Consultores</h5>
+						</div>
+						<div class="widget-content">
+	
+								<h5>Valores de contratos por consultores em <fmt:formatDate value="${calInicio.time}" pattern="dd/MM/yyyy" /></h5>
+								<table class="table data-table">
+								<thead>
+								  <tr>
+									<th>Consultor</th>
+									<th>Qtd.</th>
+									<th>Valor Contrato</th>
+									<th>Valor C. Liquido</th>
+									<th>Valor Liquido
+									<th>Meta</th>
+								  </tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${mapConsultoresCount }" var="map">
+										<tr class="success">
+											<td><a href="<c:url value="/menu/contratos/busca/consultores/${map.value[0]}" />">${map.key }</a></td>
+											<td>${map.value[1] }</td>
+											<td>${map.value[2] }</td>
+											<td>${map.value[3] }</td>
+											<td>${map.value[4] }</td>
+											<td>R$ <fmt:formatNumber type="NUMBER" value="${map.value[5]}" minFractionDigits="2" /></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							  </table>
+	
+						</div>
+					</div>
+				</div>
+			</c:if>	
+			
 			<c:if test="${usuarioInfo.perfil.chave == 'Gestor'}">
 				<div class="span6">
 	
