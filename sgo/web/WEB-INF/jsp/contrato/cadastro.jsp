@@ -22,11 +22,12 @@ $(document).ready(function() {
 	$("#contratoBanco").change(function() {
 
 		var banco_id = $("#contratoBanco").val();
+		var convenio_id = $("#convenioId").val();
 
 		$("#contratoProduto").select2('val','');
 		$("#auxCoeficiente").select2('val','');
 
-		$("#contratoProduto").load('<c:url value="/contrato/produtos" />',{'banco_id': banco_id});
+		$("#contratoProduto").load('<c:url value="/contrato/produtos" />',{'banco_id': banco_id, 'convenio_id' : convenio_id});
 
 	});
 
@@ -978,10 +979,12 @@ function historicoCoeficiente() {
 <c:if test="${contrato.contrato_id  == null }">
 	<c:set var="url" value="/formulario/adicionaContrato"></c:set>
 	<c:set var="titulo" value="Novo Contrato"></c:set>
+	<c:set var="convenioId" value="${formulario.parceiroBeneficio.convenio.convenio_id }"></c:set>
 </c:if>
 <c:if test="${contrato.contrato_id != null }">
 	<c:set var="url" value="/contrato/altera"></c:set>
 	<c:set var="titulo" value="Altera Contrato"></c:set>
+	<c:set var="convenioId" value="${contrato.convenio.convenio_id }"></c:set>
 </c:if>
 
 <div id="contrato">
@@ -994,6 +997,7 @@ function historicoCoeficiente() {
 				<form id="contratoForm" name="contratoForm" action="<c:url value="${url }"  />" method="POST">
 				<input type="hidden" id="contratoId" name="contrato.contrato_id" value="${contrato.contrato_id }" />
 				<input type="hidden" id="organizacao" name="organizacao" value="${usuarioInfo.organizacao.nome }" />
+				<input type="hidden" id="convenioId" name="convenio.convenio_id" value="${convenioId }" />
 
 					<div class="row-fluid">
 				
