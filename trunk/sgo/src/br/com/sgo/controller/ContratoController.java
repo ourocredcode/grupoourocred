@@ -743,9 +743,9 @@ public class ContratoController {
 
 	@Post
 	@Path("/contrato/produtos")
-	public void produtos(Long empresa_id, Long organizacao_id, Long banco_id) {
+	public void produtos(Long empresa_id, Long organizacao_id, Long banco_id, Long convenio_id) {
 
-		result.include("produtos",this.produtoDao.buscaProdutoBancoByEmpOrgBanco(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), banco_id));
+		result.include("produtos",this.produtoDao.buscaProdutoBancoByEmpOrgBancoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), banco_id, convenio_id));
 
 	}
 	
