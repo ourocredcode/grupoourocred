@@ -23,7 +23,7 @@
 			"bJQueryUI": true,
 			"sPaginationType": "full_numbers",
 			"sDom": '<""l>t<"F"fp>',
-			"bFilter": false
+			"bFilter": true
 		});
 
 		$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
