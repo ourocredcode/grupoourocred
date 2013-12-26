@@ -40,7 +40,17 @@ function mostra(div){
 			
 			<div id="descricaoStatus" style="display: inline;font-size: 16px;">
 			
-				<iframe src="<c:url value="/visualizaScript/descricaoStatus.pdf"/>" style="width: 95%;height: 780px"></iframe>
+				<c:if test="${ usuarioInfo.organizacao.nome == 'OUROCRED MATRIZ' }">
+				
+					<iframe src="<c:url value="/visualizaScript/descricaoStatus.pdf"/>" style="width: 95%;height: 780px"></iframe>
+				
+				</c:if>
+				
+				<c:if test="${ usuarioInfo.organizacao.nome == 'OUROCRED RIBEIRAO' }">
+				
+					<iframe src="<c:url value="/visualizaScript/descricaoStatusRIBPRETO.pdf"/>" style="width: 95%;height: 780px"></iframe>
+				
+				</c:if>
 			
 			</div>
 		</div>

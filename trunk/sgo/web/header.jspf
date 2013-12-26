@@ -749,6 +749,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/procedimentobanco/cadastro"/>">Procedimentos Bancos</a></li>
 							<li><a href="<c:url value="/script/1"/>">Scripts Vendas</a></li>
+							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
 					</li>

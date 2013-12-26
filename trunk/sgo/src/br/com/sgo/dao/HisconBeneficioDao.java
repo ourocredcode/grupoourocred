@@ -66,7 +66,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			"INNER JOIN ORGANIZACAO (NOLOCK) ON HISCONBENEFICIO.organizacao_id = ORGANIZACAO.organizacao_id) " +       
 			"INNER JOIN USUARIO (NOLOCK) ON HISCONBENEFICIO.usuario_id = USUARIO.usuario_id)" +
 			"INNER JOIN USUARIO as SUPER (NOLOCK) ON USUARIO.supervisor_usuario_id = SUPER.usuario_id)  " +   
-			"INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON (PERFIL.perfil_id = USUARIOPERFIL.perfil_id) AND (PERFIL.perfil_id = HISCONBENEFICIO.perfil_id)) " +     
+			"INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id AND USUARIOPERFIL.isactive = 1 ) ON PERFIL.perfil_id = HISCONBENEFICIO.perfil_id ) " +     
 			"INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON HISCONBENEFICIO.parceirobeneficio_id = PARCEIROBENEFICIO.parceirobeneficio_id) " +    
 			"INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +    
 			"INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id) " +
