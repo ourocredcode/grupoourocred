@@ -80,7 +80,11 @@ public class ReportsDao extends Dao<Contrato> {
 	
 	public ResultSet aprovadosResultSet(Empresa empresa, Organizacao organizacao, Calendar calInicio, Calendar calFim, Integer concluidoCheck) {
 
-		String sql = " SELECT  " +
+		String sql = " SELECT supervisor,  " +
+					  " SUM(metaCount) as metaCount  ,    " + 
+					  " SUM(contratoCount) as contratoCount,   " + 
+					  " SUM(liquidoCount) as liquidoCount,   " +
+					  " SUM(contLiquidoCount) as contLiquidoCount  from ( SELECT  " +
 						 " SUPER.apelido as supervisor, " +
 						 " SUM(CONTRATO.valormeta) as metaCount, " +  
 						 " SUM(CONTRATO.valorcontrato) as contratoCount, " + 
@@ -93,14 +97,30 @@ public class ReportsDao extends Dao<Contrato> {
 					 " INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
 					 " WHERE CONTRATO.empresa_id = ? " +
 					 " AND CONTRATO.organizacao_id = ? " +
-					 " AND ( ETAPA.NOME in ('Aprovado','Concluído') ) ";
+					 " AND ( ETAPA.NOME in ('Concluído') ) ";
 
-					 if(concluidoCheck == null)
-						 sql += " AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) ";
-					 else
-						 sql += " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? ) ";
+		 if(concluidoCheck != null)
+			 sql += " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? ) GROUP BY SUPER.apelido ";
+		 else
+			 sql += " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? ) GROUP BY SUPER.apelido " +
+			 		" UNION " +
+					  " SELECT   " +
+						  " SUPER.apelido as supervisor, " +  
+						  " SUM(CONTRATO.valormeta) as metaCount, " +    
+						  " SUM(CONTRATO.valorcontrato) as contratoCount, " +   
+						  " SUM(CONTRATO.valorliquido) as liquidoCount, " +  
+						  " SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +    
+					  " FROM ((( CONTRATO " +   
+					  " INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +    
+					  " INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +   
+					  " INNER JOIN USUARIO SUPER ON SUPER.usuario_id = USUARIO.supervisor_usuario_id) " +   
+					  " INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +  
+					  " WHERE CONTRATO.empresa_id = ? " +  
+					  " AND CONTRATO.organizacao_id = ? " +  
+					  " AND ( ETAPA.NOME in ('Aprovado') ) " +
+					  " AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) GROUP BY SUPER.apelido ";
 
-					 sql += " GROUP BY SUPER.apelido ORDER BY metaCount DESC  "; 
+		 sql += " ) AS G1 GROUP BY supervisor ORDER BY SUM(metaCount) DESC  "; 
 
 		this.conn = this.conexao.getConexao();
 	
@@ -127,6 +147,30 @@ public class ReportsDao extends Dao<Contrato> {
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
 				curr++;
+
+			}
+			
+			if(concluidoCheck == null) {
+				
+				if(empresa != null){
+					this.stmt.setLong(curr, empresa.getEmpresa_id());
+					curr++;
+				}
+				
+				if(organizacao != null){
+					this.stmt.setLong(curr, organizacao.getOrganizacao_id());
+					curr++;
+				}
+				
+				if(calInicio != null){
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+					curr++;
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+					curr++;
+
+				}
 
 			}
 	
