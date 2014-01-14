@@ -52,7 +52,7 @@ public class HisconBeneficioDao extends Dao<HisconBeneficio> {
 			 " INNER JOIN USUARIOPERFIL (NOLOCK) ON USUARIO.usuario_id = USUARIOPERFIL.usuario_id) ON PERFIL.perfil_id = USUARIOPERFIL.perfil_id) " +
 			 " INNER JOIN ETAPA (NOLOCK) ON (HISCONBENEFICIO.etapa_id = ETAPA.etapa_id)";
 
-	private String sqlHisconsExibe = " SELECT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, EMPRESA.nome as empresa_nome   " + 
+	private String sqlHisconsExibe = " SELECT DISTINCT HISCONBENEFICIO.hisconbeneficio_id, HISCONBENEFICIO.empresa_id, EMPRESA.nome as empresa_nome   " + 
 			", HISCONBENEFICIO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, HISCONBENEFICIO.parceirobeneficio_id , PARCEIROBENEFICIO.numerobeneficio " +     
 			", HISCONBENEFICIO.usuario_id, USUARIO.nome as usuario_nome,USUARIO.apelido as usuario_apelido, SUPER.apelido as supervisor_apelido, " +
 			"  PERFIL.perfil_id, PERFIL.nome as perfil_nome " +    

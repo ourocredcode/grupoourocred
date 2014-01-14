@@ -131,6 +131,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				" INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id AND COEFICIENTE.banco_id = BANCO.banco_id) "+
 				" INNER JOIN PRODUTO (NOLOCK) ON BANCOPRODUTOTABELA.produto_id = PRODUTO.produto_id "+
 				" WHERE " +
+				"   BANCOPRODUTOTABELA.isactive = 1 AND " +
 				"	COEFICIENTE.isactive = 1 AND " +
 				"	BANCO.isactive = 1 AND " +
 				"	PRODUTO.isactive = 1 AND " +
