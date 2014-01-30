@@ -269,8 +269,17 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'RETENÇÃO PMSP' 
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ' ){
 
-				var metaValue = valorContrato.value * arrayCoeficiente[1];
-				valorMeta.value = metaValue.toFixed(2);
+				switch(contratoBancoNome) {
+
+					case 'Panamericano':
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+						break;
+					default:
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+				}	
 
 			} else {
 

@@ -384,7 +384,8 @@ public class FormularioController {
 					|| c.getProduto().getNome().equals("RECOMPRA INSS")
 					|| c.getProduto().getNome().equals("RECOMPRA PMSP")
 					|| c.getProduto().getNome().equals("RECOMPRA GOVRJ")  
-					|| c.getProduto().getNome().equals("RECOMPRA RMC") )
+					|| c.getProduto().getNome().equals("RECOMPRA RMC") 
+					|| c.getProduto().getNome().equals("AUMENTO") )
 				c.setValorContratoLiquido(c.getValorContrato());
 			
 			if(c.getProduto().getNome().equals("REFINANCIAMENTO")

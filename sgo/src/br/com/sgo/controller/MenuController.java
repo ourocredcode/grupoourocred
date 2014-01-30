@@ -985,7 +985,8 @@ public class MenuController {
 					|| cs.getProduto().getNome().equals("RECOMPRA INSS")  
 					|| cs.getProduto().getNome().equals("RECOMPRA PMSP")
 					|| cs.getProduto().getNome().equals("RECOMPRA GOVRJ") 
-					|| cs.getProduto().getNome().equals("RECOMPRA RMC") )
+					|| cs.getProduto().getNome().equals("RECOMPRA RMC")
+					|| cs.getProduto().getNome().equals("AUMENTO"))
 				totalContratoLiquido += cs.getValorContrato();
 
 			if(cs.getProduto().getNome().equals("REFINANCIAMENTO")
@@ -1039,7 +1040,8 @@ public class MenuController {
 					|| cs.getProduto().getNome().equals("RECOMPRA INSS") 
 					|| cs.getProduto().getNome().equals("RECOMPRA PMSP")
 					|| cs.getProduto().getNome().equals("RECOMPRA GOVRJ")
-					|| cs.getProduto().getNome().equals("RECOMPRA RMC") )
+					|| cs.getProduto().getNome().equals("RECOMPRA RMC")
+					|| cs.getProduto().getNome().equals("AUMENTO"))
 				totalContratoLiquido += cs.getValorContrato();
 			
 			if(cs.getProduto().getNome().equals("REFINANCIAMENTO") 

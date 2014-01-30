@@ -403,7 +403,12 @@ public class PnDao {
 				ParceiroBeneficio parceiroBeneficio = new ParceiroBeneficio();
 				Convenio convenio = new Convenio();
 				convenio.setNome(rsParceiroNegocio.getString("tipo"));
-				convenio.setConvenio_id(rsParceiroNegocio.getString("tipo").equals("PM_SP") ? 2L : rsParceiroNegocio.getString("tipo").equals("GOV_RJ") ? 3L : 1L);
+
+				if(rsParceiroNegocio.getString("tipo") == null){
+					convenio.setConvenio_id(1L);
+				} else {
+					convenio.setConvenio_id(rsParceiroNegocio.getString("tipo").equals("PM_SP") ? 2L : rsParceiroNegocio.getString("tipo").equals("GOV_RJ") ? 3L : 1L);
+				}
 
 				parceiroBeneficio.setNumeroBeneficio(rsParceiroNegocio.getString("beneficio"));
 				parceiroBeneficio.setConvenio(convenio);
