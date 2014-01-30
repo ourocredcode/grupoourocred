@@ -433,7 +433,8 @@ public class ContratoController {
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA INSS")  
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA PMSP") 
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA GOVRJ") 
-				|| this.contrato.getProduto().getNome().equals("RECOMPRA RMC") )
+				|| this.contrato.getProduto().getNome().equals("RECOMPRA RMC")
+				|| this.contrato.getProduto().getNome().equals("AUMENTO"))
 			this.contrato.setValorContratoLiquido(this.contrato.getValorContrato());
 
 		if(this.contrato.getProduto().getNome().equals("REFINANCIAMENTO") 
