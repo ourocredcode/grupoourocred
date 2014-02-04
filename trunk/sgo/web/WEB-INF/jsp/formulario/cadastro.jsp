@@ -46,6 +46,7 @@
 
 	<div class="container-fluid">
 
+		<!-- 
 		<div class="row-fluid">	
 			<form id="buscaParceiroForm" action="<c:url value="/formulario/cliente" />" method="post">
 				<div class="input-append">
@@ -53,6 +54,11 @@
 					<button type="submit" class="btn btn-mini" style="height: 26px;">Busca</button>
 				</div>
 			</form>
+		</div>
+		 -->
+		 
+		 <div class="alert alert-info">
+			Para novo formulário pesquise CPF do cliente no campo acima, e selecione a opção Contrato ao lado do benefício.<a href="#" data-dismiss="alert" class="close">×</a>
 		</div>
 
 		<div class="row-fluid">		

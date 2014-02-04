@@ -216,7 +216,7 @@ public class ContratoController {
 		contrato = contratoDao.load(id);
 
 		Banco banco = bancoDao.buscaBancoById(contrato.getBanco().getBanco_id());
-		Collection<Produto> produtos = produtoDao.buscaProdutosByBanco(banco.getBanco_id());
+		Collection<Produto> produtos = produtoDao.buscaProdutoBancoByEmpOrgBancoConvenio(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),banco.getBanco_id(),contrato.getConvenio().getConvenio_id());
 
 		result.include("recompraBancos",recompraBancos);
 		result.include("contrato",contrato);
