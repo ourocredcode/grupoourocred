@@ -318,22 +318,27 @@
 	}
 	
 	function altera(linha, atributo,parceiroLocalidade_id,valor) {
-	
+
 		if(atributo == 'numero'){
 			var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
 					 'parceiroLocalidade.numero' : valor };
 		}
-		
+
 		if(atributo == 'complemento'){
 			var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
 					 'parceiroLocalidade.complemento ' : valor };
 		}
-	
+
 		if(atributo == 'tipoEndereco'){
 			var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
 					 'parceiroLocalidade.tipoEndereco.tipoEndereco_id' : valor} ;
 		}
-	
+
+		if(atributo == 'isActive'){
+			var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
+					 'parceiroLocalidade.isActive' : valor };
+		}
+
 		if (window.confirm("Deseja realmente alterar o atributo do Parceiro Localidade?"))
 			$.post('<c:url value='/parceironegocio/alteraParceiroLocalidade' />'
 			, attr , function(resposta) { 
@@ -344,12 +349,12 @@
 					} else {
 						alert(resposta);	
 					};
-					
+
 			});
-	
+
 		return false;
 	}
-	
+
 	function alteraContato(linha, atributo,parceiroContato_id,valor) {
 	
 		if(atributo == 'nome'){
@@ -936,6 +941,7 @@
 											<table class="table table-striped table-bordered" id="lista">
 												<thead>
 													<tr>
+														<th>Ativo</th>
 														<th>Cep</th>
 														<th>Bairro</th>
 														<th>Cidade</th>
@@ -952,6 +958,9 @@
 												<tbody>	
 													<c:forEach items="${parceiroLocalidades}" var="parceiroLocalidade">
 														<tr>
+															<td>
+																<input type="checkbox" id="parceiroLocalidadeIsActive" name="parceiroNegocio.isActive" value="${parceiroNegocio.isActive }" <c:if test="${parceiroLocalidade.isActive}">checked="checked"</c:if> onChange="return altera(this,'isActive','${parceiroLocalidade.parceiroLocalidade_id}', this.checked);">
+															</td>
 															<td>${parceiroLocalidade.localidade.cep }</td>
 															<td>${parceiroLocalidade.localidade.bairro }</td>
 															<td>${parceiroLocalidade.localidade.cidade.nome }</td>

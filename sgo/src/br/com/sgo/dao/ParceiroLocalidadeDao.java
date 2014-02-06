@@ -32,7 +32,7 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 	private String sqlParceiroLocalidades = " SELECT PARCEIROLOCALIDADE.parceirolocalidade_id, PARCEIROLOCALIDADE.parceironegocio_id , LOCALIDADE.localidade_id, " + 
 			" TIPOLOCALIDADE.tipolocalidade_id, TIPOLOCALIDADE.nome as tipolocalidade_nome,LOCALIDADE.endereco, LOCALIDADE.bairro, LOCALIDADE.cep, PARCEIROLOCALIDADE.numero , PARCEIROLOCALIDADE.complemento,PARCEIROLOCALIDADE.pontoreferencia, " + 
 			" LOCALIDADE.cidade_id, CIDADE.nome as cidade_nome, LOCALIDADE.regiao_id, REGIAO.nome as regiao_nome , " + 
-			" LOCALIDADE.pais_id, PAIS.nome as pais_nome, PARCEIROLOCALIDADE.tipoendereco_id, TIPOENDERECO.tipoendereco_id , " + 
+			" LOCALIDADE.pais_id, PAIS.nome as pais_nome, PARCEIROLOCALIDADE.tipoendereco_id, PARCEIROLOCALIDADE.isactive as active_parceirolocalidade, TIPOENDERECO.tipoendereco_id , " + 
 			" TIPOENDERECO.nome as tipoendereco_nome FROM " + 
 			" ((((LOCALIDADE " +
 			" INNER JOIN PAIS ON LOCALIDADE.pais_id = PAIS.pais_id) " +
@@ -49,13 +49,12 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 		this.conexao = conexao;
 	}
 
-	public Collection<ParceiroLocalidade> buscaParceiroLocalidades(
-			Long parceironegocio_id) {
+	public Collection<ParceiroLocalidade> buscaParceiroLocalidades( Long parceironegocio_id ) {
 
 		String sql = sqlParceiroLocalidades;
 
 		if (parceironegocio_id != null)
-			sql += " WHERE PARCEIROLOCALIDADE.parceironegocio_id = ? AND PARCEIROLOCALIDADE.isactive = 1 ";
+			sql += " WHERE PARCEIROLOCALIDADE.parceironegocio_id = ? ";
 
 		this.conn = this.conexao.getConexao();
 
@@ -96,6 +95,7 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 				parceiroLocalidade.setNumero(rsParceiroLocalidade.getString("numero"));
 				parceiroLocalidade.setComplemento(rsParceiroLocalidade.getString("complemento"));
 				parceiroLocalidade.setPontoReferencia(rsParceiroLocalidade.getString("pontoreferencia"));
+				parceiroLocalidade.setIsActive(rsParceiroLocalidade.getBoolean("active_parceirolocalidade"));
 
 				parceiroLocalidade.setLocalidade(localidade);
 				parceiroLocalidade.setTipoEndereco(tipoEndereco);
@@ -165,7 +165,7 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 
 	public ParceiroLocalidade buscaParceiroLocalidadeNum(Long empresa_id,
 			Long organizacao_id, Long parceironegocio_id, Long localidade_id,
-			Long tipoendereco_id, String numero) {
+			Long tipoendereco_id, String numero, Boolean isActive) {
 
 		String sql = sqlParceiroLocalidade;
 
@@ -181,6 +181,8 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 			sql += " AND PARCEIROLOCALIDADE.tipoendereco_id = ? ";
 		if (!numero.equals(""))
 			sql += " AND PARCEIROLOCALIDADE.numero = ? ";
+		if (isActive != null)
+			sql += " AND PARCEIROLOCALIDADE.isactive = ? ";
 
 		this.conn = this.conexao.getConexao();
 		ParceiroLocalidade parceiroLocalidade = null;
@@ -195,15 +197,14 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 			this.stmt.setLong(4, localidade_id);
 			this.stmt.setLong(5, tipoendereco_id);
 			this.stmt.setString(6, numero);
+			this.stmt.setBoolean(7, isActive);
 
 			this.rsParceiroLocalidade = this.stmt.executeQuery();
 
 			while (rsParceiroLocalidade.next()) {
 
 				parceiroLocalidade = new ParceiroLocalidade();
-				parceiroLocalidade
-						.setParceiroLocalidade_id(rsParceiroLocalidade
-								.getLong("parceirolocalidade_id"));
+				parceiroLocalidade.setParceiroLocalidade_id(rsParceiroLocalidade.getLong("parceirolocalidade_id"));
 
 			}
 
