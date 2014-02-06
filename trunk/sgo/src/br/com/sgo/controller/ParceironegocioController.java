@@ -816,7 +816,7 @@ public class ParceironegocioController {
 			pl.setIsActive(true);
 
 			if(this.parceiroLocalidadeDao.buscaParceiroLocalidadeNum(parceiroNegocio.getEmpresa().getEmpresa_id(),parceiroNegocio.getOrganizacao().getOrganizacao_id(), 
-					parceiroNegocio.getParceiroNegocio_id(),localidade.getLocalidade_id(), tipoEndereco.getTipoEndereco_id(),pl.getNumero()) == null){
+					parceiroNegocio.getParceiroNegocio_id(),localidade.getLocalidade_id(), tipoEndereco.getTipoEndereco_id(),pl.getNumero(), pl.getIsActive()) == null){
 
 				try{
 
@@ -929,13 +929,18 @@ public class ParceironegocioController {
 
 		if(parceiroLocalidade.getNumero() != null)
 			pl.setNumero(parceiroLocalidade.getNumero());
+		
+		if(parceiroLocalidade.getIsActive() != null)
+			pl.setIsActive(parceiroLocalidade.getIsActive());
+		
 		if(parceiroLocalidade.getComplemento() != null)
 			pl.setComplemento(parceiroLocalidade.getComplemento());
+		
 		if(parceiroLocalidade.getTipoEndereco() != null)
 			pl.setTipoEndereco(this.tipoEnderecoDao.load(parceiroLocalidade.getTipoEndereco().getTipoEndereco_id()));
 
 		if(this.parceiroLocalidadeDao.buscaParceiroLocalidadeNum(parceiroNegocio.getEmpresa().getEmpresa_id(),parceiroNegocio.getOrganizacao().getOrganizacao_id(), 
-				parceiroNegocio.getParceiroNegocio_id(),pl.getLocalidade().getLocalidade_id(), pl.getTipoEndereco().getTipoEndereco_id(), pl.getNumero()) == null){
+				parceiroNegocio.getParceiroNegocio_id(),pl.getLocalidade().getLocalidade_id(), pl.getTipoEndereco().getTipoEndereco_id(), pl.getNumero(), pl.getIsActive()) == null){
 
 			this.parceiroLocalidadeDao.beginTransaction();
 			this.parceiroLocalidadeDao.atualiza(pl);
