@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
@@ -2244,8 +2247,10 @@ public class ContratoDao extends Dao<Contrato> {
 	}
 
 	private void getContratos(Collection<Contrato> contratos) throws SQLException {
-		
+
 		Calendar created = new GregorianCalendar();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
 		Calendar dataStatusFinal = new GregorianCalendar();
 		Calendar dataQuitacao = new GregorianCalendar();
 		Calendar contratoCreated = new GregorianCalendar();
@@ -2290,10 +2295,32 @@ public class ContratoDao extends Dao<Contrato> {
 
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
 
-		created.setTime(rsContrato.getDate("created"));
-		formulario.setCreated(created);
-		contratoCreated.setTime(rsContrato.getDate("contratoCreated"));
-		contrato.setCreated(contratoCreated);
+		Date formularioCreatedFormated;
+		Date contratoCreatedFormated;
+
+		try {
+
+			formularioCreatedFormated = format.parse(rsContrato.getTimestamp("created").toString());
+			created.setTime(formularioCreatedFormated);
+			formulario.setCreated(created);
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+
+		}
+
+		try {
+
+			contratoCreatedFormated = format.parse(rsContrato.getTimestamp("contratoCreated").toString());
+			contratoCreated.setTime(contratoCreatedFormated);
+			contrato.setCreated(contratoCreated);
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+
+		}
 
 		if(rsContrato.getDate("datastatusfinal") != null) {
 			dataStatusFinal.setTime(rsContrato.getDate("datastatusfinal"));
@@ -2374,6 +2401,8 @@ public class ContratoDao extends Dao<Contrato> {
 	private void getContrato(Contrato contrato) throws SQLException {
 		
 		Calendar created = new GregorianCalendar();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
 		Calendar dataStatusFinal = new GregorianCalendar();
 		Calendar dataQuitacao = new GregorianCalendar();
 		Calendar contratoCreated = new GregorianCalendar();
@@ -2407,11 +2436,33 @@ public class ContratoDao extends Dao<Contrato> {
 		usuario.setSupervisorUsuario(supervisor);
 
 		formulario.setFormulario_id(rsContrato.getLong("formulario_id"));
-		created.setTime(rsContrato.getDate("created"));
-		formulario.setCreated(created);
+		
+		Date formularioCreatedFormated;
+		Date contratoCreatedFormated;
 
-		contratoCreated.setTime(rsContrato.getDate("contratoCreated"));
-		contrato.setCreated(contratoCreated);
+		try {
+
+			formularioCreatedFormated = format.parse(rsContrato.getTimestamp("created").toString());
+			created.setTime(formularioCreatedFormated);
+			formulario.setCreated(created);
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+
+		}
+
+		try {
+
+			contratoCreatedFormated = format.parse(rsContrato.getTimestamp("contratoCreated").toString());
+			contratoCreated.setTime(contratoCreatedFormated);
+			contrato.setCreated(contratoCreated);
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+
+		}
 
 		if(rsContrato.getDate("datastatusfinal") != null) {
 			dataStatusFinal.setTime(rsContrato.getDate("datastatusfinal"));
