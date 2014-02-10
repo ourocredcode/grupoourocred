@@ -1050,7 +1050,7 @@
 													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
 												</td>
 												<td >
-													<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yy" />
+													<fmt:formatDate value="${contrato.formulario.created.time}" pattern="dd/MM/yy HH:mm" />
 												</td>
 												<td >
 													${contrato.usuario.supervisorUsuario.apelido }
