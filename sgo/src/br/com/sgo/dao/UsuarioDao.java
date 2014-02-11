@@ -462,8 +462,8 @@ public class UsuarioDao extends Dao<Usuario> {
 						" INNER JOIN FUNCIONARIO (NOLOCK) ON FUNCIONARIO.parceironegocio_id  = USUARIO.parceironegocio_id " +
 						" INNER JOIN DEPARTAMENTO (NOLOCK) ON DEPARTAMENTO.departamento_id = FUNCIONARIO.departamento_id " +
 					" WHERE   " +
-					" USUARIO.empresa_id = ? " +
-					" AND USUARIO.organizacao_id = ? " +  
+					" USUARIOPERFIL.empresa_id = ? " +
+					" AND USUARIOPERFIL.organizacao_id = ? " +  
 					" AND PERFIL.nome like ? " +
 					" AND DEPARTAMENTO.nome like ? AND USUARIO.isactive = 1 AND FUNCIONARIO.isactive = 1 ";
 
