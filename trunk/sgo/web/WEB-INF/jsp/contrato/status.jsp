@@ -1348,7 +1348,10 @@ function openPopup(url) {
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
 						<i class="icon-signal"></i></span><h5>Controle Boleto</h5>
-						<c:if test="${usuarioInfo.perfil.chave != 'Consultor'}">
+						<c:if test="${ ( usuarioInfo.perfil.chave == 'Consultor' ) && contrato.etapa.nome != 'Aguardando Apoio Comercial' }">
+							<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
+						</c:if>
+						<c:if test="${ usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Supervisor' }">
 							<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
 						</c:if>
 					</div>	
