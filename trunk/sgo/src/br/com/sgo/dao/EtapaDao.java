@@ -488,7 +488,7 @@ public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(Lon
 				"			INNER JOIN WORKFLOWTRANSICAO (NOLOCK) " +
 				"					ON ETAPA.etapa_id = WORKFLOWTRANSICAO.etapaproximo_id) " +
 				"					ON ( CONTRATO.etapa_id = WORKFLOWTRANSICAO.etapa_id " +
-				"					 AND CONTRATO.workflow_id = WORKFLOWTRANSICAO.workflow_id ) " +
+				"					 AND CONTRATO.workflow_id = WORKFLOWTRANSICAO.workflow_id AND WORKFLOWTRANSICAO.isactive = 1 ) " +
 				"			INNER JOIN PERFIL (NOLOCK) ON WORKFLOWTRANSICAO.perfil_id = PERFIL.perfil_id) " +
 				"		WHERE CONTRATO.contrato_id = ? AND PERFIL.perfil_id = ? ";
 
@@ -499,6 +499,8 @@ public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(Lon
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
+			
+			//System.out.println(sql);
 
 			this.stmt.setLong(1, contrato_id);
 			this.stmt.setLong(2, perfil_id);
