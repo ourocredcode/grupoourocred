@@ -804,7 +804,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			if(comboSearch){
 
-				sql += " ) OR ( ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) ";
+				sql += " ) OR ( CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) ";
 
 				x=0;
 				
@@ -850,7 +850,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			} else {
 
-				sql += " AND (  CONTRATO.datastatusfinal BETWEEN ? AND ? )";
+				sql += " AND (   CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? AND CONTRATO.datastatusfinal BETWEEN ? AND ? )";
 				
 				x=0;
 
@@ -879,7 +879,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			if(comboSearch) {
 
-				sql += " ) OR ( (CONTRATO.dataconclusao BETWEEN ? AND ? )";
+				sql += " ) OR ( CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? AND (CONTRATO.dataconclusao BETWEEN ? AND ? )";
 				
 				x=0;
 				
@@ -923,7 +923,7 @@ public class ContratoDao extends Dao<Contrato> {
 
 			} else {
 
-				sql += " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? )";
+				sql += " AND (  CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? AND CONTRATO.dataconclusao BETWEEN ? AND ? )";
 				
 				x=0;
 				
@@ -1097,6 +1097,18 @@ public class ContratoDao extends Dao<Contrato> {
 			} 
 			
 			if(calStatusFinalInicio != null){
+				
+				if(empresa_id != null){
+
+					this.stmt.setLong(curr, empresa_id);
+					curr++;
+				}
+				
+				if(organizacao_id != null){
+
+					this.stmt.setLong(curr, organizacao_id);
+					curr++;
+				}
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calStatusFinalInicio).getTimeInMillis()));
 				curr++;
@@ -1116,6 +1128,18 @@ public class ContratoDao extends Dao<Contrato> {
 			}
 			
 			if(calConclusaoInicio != null){
+				
+				if(empresa_id != null){
+
+					this.stmt.setLong(curr, empresa_id);
+					curr++;
+				}
+				
+				if(organizacao_id != null){
+
+					this.stmt.setLong(curr, organizacao_id);
+					curr++;
+				}
 
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calConclusaoInicio).getTimeInMillis()));
 				curr++;
