@@ -208,7 +208,8 @@
 				  			/* 22 - Data Quitação */     { "bVisible":    false },
 				  			/* 23 - Pós Venda */     { "bVisible":    false },
 				  			/* 24 - Motivo Recusa */     { "bVisible":    false },
-				  			/* 25 - Data Status Final */     { "bVisible":    false }
+				  			/* 25 - Data Status Final */     { "bVisible":    false },
+				  			/* 26 - Repasse */     { "bVisible":    false }
 				  		] ,
 
 	  		"sDom": ' T C <"clear">lfrtip',
@@ -1033,6 +1034,9 @@
 											<th >
 												Dt Status Final
 											</th>
+											<th >
+												Repasse
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
@@ -1123,6 +1127,10 @@
 												</td>
 												<td >
 													<fmt:formatDate value="${contrato.dataStatusFinal.time}" pattern="dd/MM/yy" />
+												</td>
+												<td >
+													<c:if test="${contrato.isRepasse }">SIM</c:if>
+													<c:if test="${!contrato.isRepasse }">NÃO</c:if>
 												</td>
 											</tr>
 										</c:forEach>
