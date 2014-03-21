@@ -4,11 +4,14 @@
 <table class="table table-bordered">
 	<thead>
 		<tr>
-			<th>Imagem</th>
+			<th>Pdf</th>
 			<th>Data solicitação</th>
 			<th>Data solicitação Adm</th>
 			<th>Data Envio Adm</th>
 			<th>Supervisor</th>
+			<c:if test="${usuarioInfo.perfil.chave == 'Gestor'}">
+				<th>Troca Consultor (Apenas Gestor)</th>	
+			</c:if>
 			<th>Consultor</th>
 			<th>Cliente</th>
 			<th>Nascimento</th>
@@ -32,7 +35,28 @@
 				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.created.time}" /></td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataAdm.time}" /></td>	
 				<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" type="date" value="${hiscon.dataEnvio.time}" /></td>	
-				<td>${hiscon.usuario.supervisorUsuario.apelido }</td>						
+				
+				<c:if test="${usuarioInfo.perfil.chave != 'Gestor'}">
+					<td>${hiscon.usuario.supervisorUsuario.apelido }</td>
+				</c:if>
+				<c:if test="${usuarioInfo.perfil.chave == 'Gestor'}">
+					<td>
+						<select id="busca_Supervisor_lista" name="busca_Supervisor_lista" class="input-small" onchange="showConsultores(this.value);">
+							<c:forEach items="${supervisoresLista}" var="supervisorLista">
+								<option value="${supervisorLista.usuario_id}" <c:if test="${supervisorLista.usuario_id == hiscon.usuario.supervisorUsuario.usuario_id}">selected</c:if> >${supervisorLista.apelido }</option>
+							</c:forEach>
+						</select>	
+					</td>
+					<td>
+						<select id="busca_ConsultorLista" name="busca_ConsultorLista" class="input-small" onchange="return altera('usuario.usuario_id','${hiscon.hisconBeneficio_id}', this.value);">
+							<option value="">Selecione um Consultor</option>
+							<c:forEach var="consultor" items="${consultores }">
+								<option value="${consultor.usuario_id }">${consultor.apelido }</option>
+							</c:forEach>
+						</select>
+					</td>					
+				</c:if>						
+
 				<c:if test="${usuarioInfo.perfil.chave != 'Supervisor'}">
 					<td>${hiscon.usuario.apelido }</td>
 				</c:if>
@@ -45,7 +69,8 @@
 							</c:forEach>
 						</select>
 					</td>
-				</c:if>									
+				</c:if>	
+													
 				<td><a data-toggle="modal" onclick="showcontatos(${hiscon.parceiroBeneficio.parceiroNegocio.parceiroNegocio_id});">${hiscon.parceiroBeneficio.parceiroNegocio.nome }</a></td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy" type="date" value="${hiscon.parceiroBeneficio.parceiroNegocio.dataNascimento.time }" /></td>
 				<td>${hiscon.parceiroBeneficio.parceiroNegocio.cpf }</td>
@@ -76,11 +101,18 @@
 
 <div id="myModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div> 
 
+
 <script type="text/javascript">
 	function showcontatos(id){
 
 		$("#myModal").load('<c:url value="/hisconbeneficio/parceironegocio/contatos" />', {'parceironegocio_id': id});
 		$('#myModal').modal('show');
+
+	}
+	
+	function showConsultores(id){
+
+		$("#busca_ConsultorLista").load('<c:url value="/hisconbeneficio/consultores" />', {'supervisor_id': id});
 
 	}
 </script>

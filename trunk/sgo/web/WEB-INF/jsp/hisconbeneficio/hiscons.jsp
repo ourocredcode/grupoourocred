@@ -42,7 +42,7 @@
 				$('#busca_Consultor option').remove();
 
 		});
-		
+
 		$('#loading').ajaxStart(function() {
 			 $(this).show();
 			 $('#resultado').hide();
