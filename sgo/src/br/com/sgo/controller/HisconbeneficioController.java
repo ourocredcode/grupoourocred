@@ -422,6 +422,14 @@ public class HisconbeneficioController {
 
 		}
 
+		Collection<Usuario> supervisores = new ArrayList<Usuario>();
+
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Administrativo"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Apoio Comercial"));
+
+		result.include("supervisoresLista", supervisores);
+
 		result.include("hisconsBeneficio",hiscons);
 
 	}
