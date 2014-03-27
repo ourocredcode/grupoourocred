@@ -113,9 +113,10 @@
         hiddenFieldEmpresa.setAttribute("type", "hidden");
 
         var hiddenFieldOrganizacao = document.createElement("input");
+        var parceiroNegocioOrganizacaoId = document.getElementById("parceiroNegocioOrganizacaoId").value;
 
         hiddenFieldOrganizacao.setAttribute("name", "organizacao_id");
-        hiddenFieldOrganizacao.setAttribute("value",2 );
+        hiddenFieldOrganizacao.setAttribute("value",parceiroNegocioOrganizacaoId );
         hiddenFieldOrganizacao.setAttribute("type", "hidden");
 
         var hiddenFieldBeneficio = document.createElement("input");
