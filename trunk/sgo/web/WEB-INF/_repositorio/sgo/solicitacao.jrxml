@@ -24,6 +24,9 @@
 	<parameter name="detalhamentoCC" class="java.lang.String">
 		<defaultValueExpression><![CDATA[$P{detalhamentoCC}]]></defaultValueExpression>
 	</parameter>
+	<parameter name="tituloFormulario" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{tituloFormulario}]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select
 formulario.dt_data as formularioData,
@@ -116,13 +119,6 @@ and formulario.id = $P{formulario.id}]]>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Produto:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="164" y="7" width="199" height="17"/>
-				<textElement>
-					<font size="10" isBold="true" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[OUROCRED ASSESSORIA FINANCEIRA]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="3" y="78" width="529" height="20"/>
@@ -895,6 +891,13 @@ and formulario.id = $P{formulario.id}]]>
 				<reportElement x="108" y="47" width="129" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{consultorCpf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="0" width="283" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tituloFormulario}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

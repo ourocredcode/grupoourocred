@@ -267,7 +267,7 @@ public class ContratoController {
 		if(averbacao != null)
 			historicoControleAverbacao = this.historicoControleDao.buscaHistoricoByContratoControle(contrato.getContrato_id(), averbacao.getControle_id());
 		
-		parceiroBeneficio = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(contrato.getNumeroBeneficio());
+		parceiroBeneficio = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),contrato.getNumeroBeneficio());
 		
 		parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
 		parceiroInfoBanco = parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());

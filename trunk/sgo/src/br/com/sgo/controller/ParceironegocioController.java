@@ -208,7 +208,7 @@ public class ParceironegocioController {
 		ParceiroBeneficio parceiroBeneficio = null;
 
 		if(!doc.equals(""))
-			parceiroBeneficio = this.parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(doc);
+			parceiroBeneficio = this.parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),doc);
 
 		if( parceiroBeneficio == null ){
 
