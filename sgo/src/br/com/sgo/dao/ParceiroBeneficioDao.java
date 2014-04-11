@@ -73,7 +73,7 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 	}
 	
-	public ParceiroBeneficio buscaParceiroBeneficioByNumeroBeneficio(String numeroBeneficio) {
+	public ParceiroBeneficio buscaParceiroBeneficioByNumeroBeneficio(Long empresa_id, Long organizacao_id,String numeroBeneficio) {
 
 		String sql = sqlParceiroBeneficio;
 
@@ -81,15 +81,22 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 		ParceiroNegocio parceiroNegocio = null;
 		Convenio convenio = null;
 
+		if (empresa_id != null)
+			sql += " WHERE PARCEIROBENEFICIO.empresa_id = ? ";		
+		if (organizacao_id != null)
+			sql += " AND PARCEIROBENEFICIO.organizacao_id = ? ";
 		if (numeroBeneficio != null)
-			sql += " WHERE PARCEIROBENEFICIO.numerobeneficio = ? ";
+			sql += " AND PARCEIROBENEFICIO.numerobeneficio = ? ";
 
 		this.conn = this.conexao.getConexao();
 
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setString(1,numeroBeneficio);
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setString(3, numeroBeneficio);
+			
 			this.rsParceiroBeneficio = this.stmt.executeQuery();
 
 			while (rsParceiroBeneficio.next()) {
@@ -210,9 +217,9 @@ public class ParceiroBeneficioDao extends Dao<ParceiroBeneficio> {
 
 		String sql = sqlParceiroBeneficioToHiscon;
 
-		if (numeroBeneficio != null)
+		if (empresa_id != null)
 			sql += " WHERE PARCEIROBENEFICIO.empresa_id = ? ";		
-		if (numeroBeneficio != null)
+		if (organizacao_id != null)
 			sql += " AND PARCEIROBENEFICIO.organizacao_id = ? ";
 		if (numeroBeneficio != null)
 			sql += " AND PARCEIROBENEFICIO.numerobeneficio = ? ";

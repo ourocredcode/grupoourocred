@@ -260,7 +260,7 @@ public class FormularioController {
 	@Path("/formulario/cliente")
 	public void cliente(String numeroBeneficio){
 
-		ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(numeroBeneficio);
+		ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),numeroBeneficio);
 		
 		if(pb != null) {
 			
@@ -447,7 +447,7 @@ public class FormularioController {
 				formulario.setParceiroNegocio(parceiro);
 				formulario.setContratos(separaContrato(c));
 				
-				ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(c.getNumeroBeneficio());
+				ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),c.getNumeroBeneficio());
 
 				parceiroBeneficio.setParceiroBeneficio_id(pb.getParceiroBeneficio_id());
 				parceiroBeneficio.setNumeroBeneficio(pb.getNumeroBeneficio());
@@ -622,6 +622,11 @@ public class FormularioController {
 		parametros.put("countRecompraRMC", countRecompraRMC);
 		parametros.put("countRefinanciamento", countRefinanciamento);
 		parametros.put("detalhamentoCC", cc);
+
+		String tituloFormulario = f.getOrganizacao().getDescricao() + " - GRUPO OURO CRED";
+
+		parametros.put("tituloFormulario", tituloFormulario);
+
 		
 		try{
 
