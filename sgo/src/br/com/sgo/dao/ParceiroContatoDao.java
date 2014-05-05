@@ -14,6 +14,7 @@ import br.com.sgo.infra.ConnJDBC;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.TipoContato;
+import br.com.sgo.modelo.Usuario;
 
 @Component
 public class ParceiroContatoDao extends Dao<ParceiroContato> {
@@ -27,10 +28,11 @@ public class ParceiroContatoDao extends Dao<ParceiroContato> {
 			+ " PARCEIROCONTATO.parceironegocio_id, PARCEIROCONTATO.tipocontato_id, PARCEIROCONTATO.nome	FROM PARCEIROCONTATO (NOLOCK)";
 
 	private String sqlParceiroContato = "SELECT PARCEIROCONTATO.parceirocontato_id, PARCEIROCONTATO.nome as parceirocontato_nome, PARCEIROCONTATO.empresa_id, PARCEIROCONTATO.organizacao_id, "
-			+ "PARCEIROCONTATO.parceironegocio_id, PARCEIROCONTATO.tipocontato_id, TIPOCONTATO.nome as tipocontato_nome	FROM (((PARCEIROCONTATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) "
+			+ "PARCEIROCONTATO.parceironegocio_id, PARCEIROCONTATO.tipocontato_id, TIPOCONTATO.nome as tipocontato_nome, PARCEIROCONTATO.isactive , USER_UPDATED.nome as userupdated_nome	FROM (((PARCEIROCONTATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) "
 			+ "ON PARCEIROCONTATO.empresa_id = EMPRESA.empresa_id) INNER JOIN ORGANIZACAO (NOLOCK) ON PARCEIROCONTATO.organizacao_id = ORGANIZACAO.organizacao_id) "
 			+ "INNER JOIN TIPOCONTATO (NOLOCK) ON PARCEIROCONTATO.tipocontato_id = TIPOCONTATO.tipocontato_id) "
-			+ "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROCONTATO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id";
+			+ "INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIROCONTATO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id "
+			+ "LEFT JOIN USUARIO (NOLOCK) AS USER_UPDATED ON PARCEIROCONTATO.updatedby = USER_UPDATED.usuario_id  ";
 
 	public ParceiroContatoDao(Session session, ConnJDBC conexao) {
 		super(session, ParceiroContato.class);
@@ -42,7 +44,7 @@ public class ParceiroContatoDao extends Dao<ParceiroContato> {
 		String sql = sqlParceiroContato;
 
 		if (parceiroNegocio_id != null)
-			sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ? AND PARCEIROCONTATO.isactive = 1  ";
+			sql += " WHERE PARCEIRONEGOCIO.parceironegocio_id = ?  ";
 
 		this.conn = this.conexao.getConexao();
 		Collection<ParceiroContato> parceiroContatos = new ArrayList<ParceiroContato>();
@@ -59,10 +61,15 @@ public class ParceiroContatoDao extends Dao<ParceiroContato> {
 				parceiroContato.setParceiroContato_id(rsParceiroContato.getLong("parceirocontato_id"));
 				parceiroContato.setNome(rsParceiroContato.getString("parceirocontato_nome"));
 
+				Usuario userupdated = new Usuario();
+				userupdated.setNome(rsParceiroContato.getString("userupdated_nome"));
+				parceiroContato.setUpdatedBy(userupdated);
+
 				TipoContato tipoContato = new TipoContato();
 				tipoContato.setTipoContato_id(rsParceiroContato.getLong("tipocontato_id"));
 				tipoContato.setNome(rsParceiroContato.getString("tipocontato_nome"));
 				parceiroContato.setTipoContato(tipoContato);
+				parceiroContato.setIsActive( rsParceiroContato.getBoolean("isactive"));
 
 				parceiroContatos.add(parceiroContato);
 

@@ -731,6 +731,8 @@ public class ParceironegocioController {
 
 		ParceiroLocalidade pl = this.parceiroLocalidadeDao.load(parceiroLocalidade.getParceiroLocalidade_id());
 
+		pl.setUpdated(GregorianCalendar.getInstance());
+		pl.setUpdatedBy(usuario);
 		pl.setIsActive(false);
 
 		this.parceiroLocalidadeDao.beginTransaction();
@@ -747,6 +749,8 @@ public class ParceironegocioController {
 
 		ParceiroContato pc = this.parceiroContatoDao.load(parceiroContato.getParceiroContato_id());
 
+		pc.setUpdated(GregorianCalendar.getInstance());
+		pc.setUpdatedBy(usuario);
 		pc.setIsActive(false);
 
 		this.parceiroContatoDao.beginTransaction();
@@ -853,6 +857,8 @@ public class ParceironegocioController {
 		parceiroContato.setIsActive(true);
 		parceiroContato.setEmpresa(empresa);
 		parceiroContato.setOrganizacao(organizacao);
+		parceiroContato.setUpdated(GregorianCalendar.getInstance());
+		parceiroContato.setUpdatedBy(usuario);
 
 		String mensagem = "";
 
@@ -1004,12 +1010,44 @@ public class ParceironegocioController {
 		this.parceiroBeneficioDao.commit();
 
 	}
+	
+	@Post
+	@Path("/parceironegocio/alteraDataNascimento")
+	public void alteraDataNascimento(ParceiroNegocio parceiroNegocio){
+
+		ParceiroNegocio pn = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
+
+		pn.setDataNascimento(parceiroNegocio.getDataNascimento());
+
+		this.parceiroNegocioDao.beginTransaction();
+		this.parceiroNegocioDao.atualiza(pn);
+		this.parceiroNegocioDao.commit();
+		
+		result.include("msg","Parceiro Negócio atualizado com sucesso.").redirectTo(this).msg();
+
+	}
+
+	@Post
+	@Path("/parceironegocio/alteraNome")
+	public void alteraNome(ParceiroNegocio parceiroNegocio){
+
+		ParceiroNegocio pn = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
+
+		pn.setNome(parceiroNegocio.getNome());
+
+		this.parceiroNegocioDao.beginTransaction();
+		this.parceiroNegocioDao.atualiza(pn);
+		this.parceiroNegocioDao.commit();
+
+		result.include("msg","Parceiro Negócio atualizado com sucesso.").redirectTo(this).msg();
+
+	}
 
 	@Get
 	public void msg(){
 
 	}
-	
+
 	@Post
 	@Path("/parceironegocio/limpar")
 	public void limpar() {

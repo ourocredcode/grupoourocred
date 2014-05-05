@@ -209,7 +209,8 @@
 				  			/* 23 - Pós Venda */     { "bVisible":    false },
 				  			/* 24 - Motivo Recusa */     { "bVisible":    false },
 				  			/* 25 - Data Status Final */     { "bVisible":    false },
-				  			/* 26 - Repasse */     { "bVisible":    false }
+				  			/* 26 - Repasse */     { "bVisible":    false },
+				  			/* 27 - Contrato ID */     { "bVisible":    false }
 				  		] ,
 
 	  		"sDom": ' T C <"clear">lfrtip',
@@ -1037,6 +1038,9 @@
 											<th >
 												Repasse
 											</th>
+											<th >
+												Contrato ID
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
@@ -1131,6 +1135,9 @@
 												<td >
 													<c:if test="${contrato.isRepasse }">SIM</c:if>
 													<c:if test="${!contrato.isRepasse }">NÃO</c:if>
+												</td>
+												<td >
+													${contrato.contrato_id }
 												</td>
 											</tr>
 										</c:forEach>
