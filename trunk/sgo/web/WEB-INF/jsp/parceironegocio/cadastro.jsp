@@ -1,7 +1,15 @@
 <%@ include file="/header.jspf"%>
 
-	 <link rel="stylesheet" href="<c:url value="/css/select2.css"/>" />
-	 <script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
+	<link rel="stylesheet" href="<c:url value="/css/select2.css"/>" />
+	<script type="text/javascript" src="<c:url value="/js/select2.js"/>"></script>
+	 
+	<style type="text/css">
+
+	.hide{
+		visibility: hidden
+	}
+
+	</style>
 
 	<script type="text/javascript">
 	jQuery(function($){
@@ -71,8 +79,77 @@
 		   $('#bttNovo').click(function() {
 				window.location.href = '<c:url value="/parceironegocio/limpar" />';
 			});
+
+		   $('#parceiroNegocioNome').change(function () {
+
+			   var nome = $("#parceiroNegocioNome").val();
+			   var parceiroId = $("#parceiroNegocioId").val();
+
+			   var tam = nome.length;
+			   
+			   if (tam > 0 && parceiroId != '') {
+			   
+				   var attr = {'parceiroNegocio.parceiroNegocio_id' :  $("#parceiroNegocioId").val() ,
+							 'parceiroNegocio.nome' : nome };
+
+				   if (window.confirm("Deseja realmente alterar o Nome ?"))
+						$.post('<c:url value='/parceironegocio/alteraNome' />'
+						, attr , function(resposta) { 
+				
+								if(resposta.indexOf("Erro") != -1){
+									alert(resposta);
+									window.location.reload();
+								} else {
+									alert(resposta);	
+								};
+
+						});
+
+					return false;
+
+			   } else {
+
+				   return false;
+
+			   }
+
+		   });
 		   
-		   
+		   $('#parceiroNegocioDataNascimento').change(function () {
+
+			   var dtNascimento = $("#parceiroNegocioDataNascimento").val();
+			   var parceiroId = $("#parceiroNegocioId").val();
+
+			   var tam = dtNascimento.length;
+			   
+			   if (tam == 10 && parceiroId != '') {
+			   
+				   var attr = {'parceiroNegocio.parceiroNegocio_id' :  $("#parceiroNegocioId").val() ,
+							 'parceiroNegocio.dataNascimento' : dtNascimento };
+
+				   if (window.confirm("Deseja realmente alterar a Data de Nascimento ?"))
+						$.post('<c:url value='/parceironegocio/alteraDataNascimento' />'
+						, attr , function(resposta) { 
+				
+								if(resposta.indexOf("Erro") != -1){
+									alert(resposta);
+									window.location.reload();
+								} else {
+									alert(resposta);	
+								};
+
+						});
+
+					return false;
+
+			   } else {
+
+				   return false;
+
+			   }
+
+		   });
+
 		   $('#parceiroNegocioCpf').change(function () {
 
 			   if((!$('#parceiroNegocioCpf').validateCPF()) && ($('#parceiroNegocioCpf').val() != '')){
@@ -768,20 +845,22 @@
 												</thead>
 												<tbody>
 													<c:forEach items="${parceiroContatos}" var="parceiroContato" varStatus="status">
-														<tr>
-															<td>
-																<select id="parceiroContatoTipoContatoLista"  name="parceiroContatos[${status.index}].tipoContato.tipoContato_id" onChange="return alteraContato(this,'tipoContato','${parceiroContato.parceiroContato_id}', this.value);" class="input-small">
-																	<option value="0" selected="selected">Selecione</option>
-																	<c:forEach var="tipoContato" items="${tiposContato}">
-																		<option value="${tipoContato.tipoContato_id}" <c:if test="${parceiroContato.tipoContato.tipoContato_id eq tipoContato.tipoContato_id}">SELECTED</c:if>>${tipoContato.chave}</option>
-																	</c:forEach>
-																</select>
-															</td>
-															<td><input type="text" id="parceiroContatoNomeLista" name="parceiroContatos[${status.index}].nome" value="${parceiroContato.nome }" class="input-small" onChange="return alteraContato(this,'nome','${parceiroContato.parceiroContato_id}', this.value);"/></td>
-															<td style="text-align: center;">
-																<button type="button" class="btn btn-danger btn-mini" onClick="return excluiContato(this,'${parceiroContato.parceiroContato_id}');">Excluir</button>
-															</td>
-														</tr>
+														<c:if test="${parceiroContato.isActive || empty parceiroContato.isActive }">
+															<tr>
+																<td >
+																	<select id="parceiroContatoTipoContatoLista"  name="parceiroContatos[${status.index}].tipoContato.tipoContato_id" onChange="return alteraContato(this,'tipoContato','${parceiroContato.parceiroContato_id}', this.value);" class="input-small">
+																		<option value="0" selected="selected">Selecione</option>
+																		<c:forEach var="tipoContato" items="${tiposContato}">
+																			<option value="${tipoContato.tipoContato_id}" <c:if test="${parceiroContato.tipoContato.tipoContato_id eq tipoContato.tipoContato_id}">SELECTED</c:if>>${tipoContato.chave}</option>
+																		</c:forEach>
+																	</select>
+																</td>
+																<td><input type="text" id="parceiroContatoNomeLista" name="parceiroContatos[${status.index}].nome" value="${parceiroContato.nome }" class="input-small" onChange="return alteraContato(this,'nome','${parceiroContato.parceiroContato_id}', this.value);"/></td>
+																<td style="text-align: center;">
+																	<button type="button" class="btn btn-danger btn-mini" onClick="return excluiContato(this,'${parceiroContato.parceiroContato_id}');">Excluir</button>
+																</td>
+															</tr>
+														</c:if>
 													</c:forEach>
 													<c:if test="${not empty parceiroNegocio.parceiroNegocio_id}">
 														<tr>
@@ -1082,10 +1161,21 @@
 						<input type="submit" value="Limpar" class="btn"/>
 					</form>
 				</div>	
-
 				</div>
 			</div>	
 		</div>
-		
+
+<!-- INICIO AUDITORIA CONTATOS EXCLUIDOS -->
+<table>
+	<c:forEach items="${parceiroContatos}" var="parceiroContato" varStatus="status">
+		<c:if test="${not parceiroContato.isActive }">
+			<tr class="hide">
+				<td><input value="${parceiroContato.nome }" /></td>
+				<td><input value="${parceiroContato.updatedBy.nome }" /></td>
+			</tr>
+		</c:if>
+	</c:forEach>
+</table>
+<!-- FIM AUDITORIA CONTATOS EXCLUIDOS -->
 
 <%@ include file="/footer.jspf"%>

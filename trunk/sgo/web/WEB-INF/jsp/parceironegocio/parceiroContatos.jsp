@@ -12,20 +12,22 @@
 		<tbody>
 			<c:if test="${not empty parceiroContatos}">	
 				<c:forEach items="${parceiroContatos}" var="parceiroContato">
-					<tr>
-						<td>
-							<select id="parceiroContatoTipoContatoLista" onChange="return altera(this,'tipoContato','${parceiroContato.parceiroContato_id}', this.value);" class="input-small">
-								<option value="0" selected="selected">Selecione</option>
-								<c:forEach var="tipoContato" items="${tiposContato}">
-									<option value="${tipoContato.tipoContato_id}" <c:if test="${parceiroContato.tipoContato.tipoContato_id eq tipoContato.tipoContato_id}">SELECTED</c:if>>${tipoContato.chave}</option>
-								</c:forEach>
-							</select>
-						</td>
-						<td><input type="text" id="parceiroContatoNomeLista" value="${parceiroContato.nome }" class="input-small" onChange="return altera(this,'nome','${parceiroContato.parceiroContato_id}', this.value);"/></td>
-						<td style="text-align: center;">
-							<button type="button" class="btn btn-danger btn-mini" onClick="return exclui(this,'${parceiroContato.parceiroContato_id}');">Excluir</button>
-						</td>
-					</tr>
+					<c:if test="${parceiroContato.isActive }">
+						<tr>
+							<td>
+								<select id="parceiroContatoTipoContatoLista" onChange="return altera(this,'tipoContato','${parceiroContato.parceiroContato_id}', this.value);" class="input-small">
+									<option value="0" selected="selected">Selecione</option>
+									<c:forEach var="tipoContato" items="${tiposContato}">
+										<option value="${tipoContato.tipoContato_id}" <c:if test="${parceiroContato.tipoContato.tipoContato_id eq tipoContato.tipoContato_id}">SELECTED</c:if>>${tipoContato.chave}</option>
+									</c:forEach>
+								</select>
+							</td>
+							<td><input type="text" id="parceiroContatoNomeLista" value="${parceiroContato.nome }" class="input-small" onChange="return altera(this,'nome','${parceiroContato.parceiroContato_id}', this.value);"/></td>
+							<td style="text-align: center;">
+								<button type="button" class="btn btn-danger btn-mini" onClick="return exclui(this,'${parceiroContato.parceiroContato_id}');">Excluir</button>
+							</td>
+						</tr>
+					</c:if>
 				</c:forEach>
 			</c:if>
 			
