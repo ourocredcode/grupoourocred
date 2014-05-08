@@ -41,7 +41,7 @@ public class Logistica implements Serializable {
 	private Contrato contrato;
 
 	@ManyToOne
-	@JoinColumn(name = "parceironegociorepresentante_id", updatable = true, nullable = false)
+	@JoinColumn(name = "parceironegociorepresentante_id", updatable = true, nullable = true)
 	private ParceiroNegocio parceiroNegocioRepresentante;
 
 	@ManyToOne
