@@ -272,11 +272,6 @@ function calculaContrato() {
 
 				switch(contratoBancoNome) {
 
-					case 'Panamericano':
-						var metaValue = valorLiquido.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-						break;
-
 					case 'BMG':
 						var metaValue = valorLiquido.value * arrayCoeficiente[1];
 						valorMeta.value = metaValue.toFixed(2);
