@@ -543,9 +543,12 @@ public class ContratoDao extends Dao<Contrato> {
 		return contrato;
 	}
 
-	public Collection<Contrato> buscaContratosByProposta(Long empresa_id, Long organizacao_id, String proposta, String contrato, Usuario usuario) {
+	public Collection<Contrato> buscaContratosByProposta(Long empresa_id, Long organizacao_id, String proposta, String contrato, Usuario usuario, 
+			Calendar calDigitacaoInicio, Calendar calDigitacaoFim, Collection<Long> empresas , Collection<Long> bancos) {
 
 		String sql = sqlContratos;
+		String clause = "";
+		int x = 0;
 
 		if(empresa_id != null)
 			sql += " WHERE EMPRESA.empresa_id = ? ";
@@ -557,6 +560,42 @@ public class ContratoDao extends Dao<Contrato> {
 			sql += " AND CONTRATO.contratobanco like ? ";
 		if(usuario != null)
 			sql += " AND ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+		if(calDigitacaoInicio != null)
+			sql += " AND ( CONTRATO.datadigitacao BETWEEN ? AND ? )";
+		
+		sql += " AND ( 1=1 ";
+
+		for(Long empresaAux : empresas){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(empresaAux != null) {
+				sql += clause + " ( CONTRATO.organizacaodigitacao_id = ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		
+		x = 0;
+		sql += " AND ( 1=1 ";
+
+		for(Long bancosAux1 : bancos){
+
+			clause = x <= 0 ? "AND" : "OR";
+
+			if(bancosAux1 != null){
+				sql += clause + " ( CONTRATO.banco_id = ? ) ";
+				x++;
+				clause = "";
+			}
+
+		}
+
+		sql += " ) ";
+		
 
 		this.conn = this.conexao.getConexao();
 
@@ -595,6 +634,34 @@ public class ContratoDao extends Dao<Contrato> {
 				curr++;
 				this.stmt.setLong(curr,usuario.getUsuario_id());
 				curr++;
+			}
+			
+			if(calDigitacaoInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calDigitacaoInicio).getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calDigitacaoFim).getTimeInMillis()));
+				curr++;
+
+			} 
+			
+			for(Long empresaAux2 : empresas){
+
+				if(empresaAux2 != null ) {
+					this.stmt.setLong(curr, empresaAux2);
+					curr++;
+				}
+
+			}
+			
+			for(Long bancosAux2 : bancos){
+
+				if(bancosAux2 != null) {
+					this.stmt.setLong(curr, bancosAux2);
+					curr++;
+				}
+
 			}
 
 			this.rsContrato = this.stmt.executeQuery();
@@ -1213,7 +1280,7 @@ public class ContratoDao extends Dao<Contrato> {
 			Calendar quitacaoInicio,Calendar quitacaoFim,Calendar assinaturaInicio,Calendar assinaturaFim,
 			Collection<String> bancos, Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Collection<Long> convenios, 
 			Collection<Usuario> consultores,Boolean isSupervisorApoio, String cliente, String documento,Collection<Long> empresas, Long procedimento, Long proximoProcedimento, 
-			Long atuante) {
+			Long atuante, Long tipoLogistica, Long periodo) {
 
 		String sql = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 				" FORMULARIO.created,FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , CONTRATO.contrato_id,CONTRATO.formulario_id, "+
@@ -1413,6 +1480,12 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		if(assinaturaInicio != null)
 			sql += " AND (LOGISTICA.dataassinatura BETWEEN ? AND ? )";
+		
+		if(tipoLogistica != null)
+			sql += "  AND ( LOGISTICA.tipologistica_id = ? ) ";
+		
+		if(periodo != null)
+			sql += "  AND ( LOGISTICA.periodo_id = ? ) ";
 		
 		if(procedimento != null)
 			sql += " AND ( CONTROLE.etapa_id = ? ) ";
@@ -1619,6 +1692,27 @@ public class ContratoDao extends Dao<Contrato> {
 				curr++;
 
 			} 
+			
+			
+			if(tipoLogistica != null) {
+				
+				//System.out.println(" tipoLogistica " + tipoLogistica );
+				
+				this.stmt.setLong(curr, tipoLogistica);
+				curr++;
+
+				
+			}
+			
+			if(periodo != null) {
+				
+				//System.out.println(" periodo " + periodo );
+				
+				this.stmt.setLong(curr, periodo);
+				curr++;
+
+				
+			}
 			
 			if(procedimento != null) {
 				

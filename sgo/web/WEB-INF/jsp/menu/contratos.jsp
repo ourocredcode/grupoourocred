@@ -422,6 +422,8 @@
 			var procedimento = $("#busca_Procedimento").val();
 			var proximoProcedimento = $("#busca_ProximoProcedimento").val();
 			var atuante = $("#busca_Atuante").val();
+			var tipoLogistica = $("#busca_TipoLogistica").val();
+			var periodo = $("#busca_Periodo").val();
 
 			var tipoControle = $("#busca_TipoControle").val();
 			
@@ -491,7 +493,7 @@
 						'produtos': produtos,'bancosComprados': bancosComprados,'status': status,'convenios': convenios,'isSupervisorApoio': isSupervisorApoio, 
 						'consultor': consultor,'cliente': cliente,'documento': documento,'empresas':empresas,
 						'procedimento': procedimento,'proximoProcedimento': proximoProcedimento,
-						'atuante':atuante,});
+						'atuante':atuante,'tipoLogistica':tipoLogistica,'periodo':periodo});
 					
 				}
 
@@ -709,7 +711,7 @@
 								</select>
 							</div>
 							<div class="control-group">
-								<label class="control-label">Próximo Procedimento</label>
+								<label class="control-label">Próx.Procedimento</label>
 								<select  id="busca_ProximoProcedimento" name="busca_ProximoProcedimento" class="input-medium">
 									<option value=""></option>
 									<c:forEach items="${procedimentos }" var="procedimento">
@@ -783,6 +785,24 @@
 								<div class="controls">
 									<input id="busca_DataAssinaturaFim" name="busca_DataAssinaturaFim" type="text" class="input-small"/>
 								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Tipo Logística</label>
+								<select  id="busca_TipoLogistica" name="busca_TipoLogistica" class="input-small">
+									<option value=""></option>
+									<c:forEach items="${tiposLogistica }" var="tipoLogistica">
+										<option value="${tipoLogistica.tipoLogistica_id }">${tipoLogistica.nome }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Período</label>
+								<select  id="busca_Periodo" name="busca_Periodo" class="input-small">
+									<option value=""></option>
+									<c:forEach items="${periodos }" var="periodo">
+										<option value="${periodo.periodo_id }">${periodo.nome }</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>

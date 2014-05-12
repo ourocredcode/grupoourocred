@@ -28,8 +28,10 @@ import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
+import br.com.sgo.dao.PeriodoDao;
 import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.TipoControleDao;
+import br.com.sgo.dao.TipoLogisticaDao;
 import br.com.sgo.dao.TipoSaqueDao;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
@@ -40,6 +42,8 @@ import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
+import br.com.sgo.modelo.Periodo;
+import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
 
@@ -56,6 +60,8 @@ public class MenuController {
 	private final PerfilDao perfilDao;
 	private final EtapaDao etapaDao;
 	private final TipoWorkflowDao tipoWorkflowDao;
+	private final PeriodoDao periodoDao;
+	private final TipoLogisticaDao tipoLogisticaDao;
 	private final ProdutoDao produtoDao;
 	private final BancoDao bancoDao;
 	private final TipoControleDao tipoControleDao;
@@ -67,13 +73,15 @@ public class MenuController {
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
 	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 	private Collection<Usuario> consultoresAux = new ArrayList<Usuario>();
+	private Collection<Periodo> periodos;
+	private Collection<TipoLogistica> tiposLogistica;
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,CoeficienteDao coeficienteDao,
 			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,TipoSaqueDao tipoSaqueDao,
-			ConvenioDao convenioDao,
+			ConvenioDao convenioDao,PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,
 			MeioPagamentoDao meioPagamentoDao,TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
@@ -89,6 +97,8 @@ public class MenuController {
 		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.produtoDao = produtoDao;
 		this.tipoSaqueDao = tipoSaqueDao;
+		this.periodoDao = periodoDao;
+		this.tipoLogisticaDao = tipoLogisticaDao;
 		this.meioPagamentoDao = meioPagamentoDao;
 		this.coeficienteDao = coeficienteDao;
 		this.bancoDao = bancoDao;
@@ -416,6 +426,13 @@ public class MenuController {
 		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
 		result.include("convenios",this.convenioDao.buscaConvenioToFillComboByEmpOrg(1l, 1l));
 		result.include("contratos",contratos);
+		
+		periodos = periodoDao.buscaAllPeriodos();
+		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
+		
+		result.include("periodos", periodos);
+		result.include("tiposLogistica", tiposLogistica);
+		
 
 		contador();
 
@@ -539,6 +556,12 @@ public class MenuController {
 		result.include("supervisores", this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
 		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
 		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1l, 1l));
+		
+		periodos = periodoDao.buscaAllPeriodos();
+		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
+		
+		result.include("periodos", periodos);
+		result.include("tiposLogistica", tiposLogistica);
 
 		result.include("contratos",contratos);
 
@@ -701,7 +724,7 @@ public class MenuController {
 							Collection<String> bancos, 
 							Collection<String> produtos, Collection<String> bancosComprados,Collection<String> status,Collection<Long> convenios,
 							Boolean isSupervisorApoio, Long consultor,String cliente, String documento,
-							Collection<Long> empresas,Long procedimento , Long proximoProcedimento, Long atuante) {
+							Collection<Long> empresas,Long procedimento , Long proximoProcedimento, Long atuante, Long tipoLogistica, Long periodo) {
 
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();
@@ -870,7 +893,7 @@ public class MenuController {
 		contratos.addAll(this.contratoDao.buscaDatasControle(this.empresa.getEmpresa_id(),this.organizacao.getOrganizacao_id(),tipoControle,
 				calInicio, calFim, calPrevisaoInicio,calPrevisaoFim,calChegadaInicio,calChegadaFim,calVencimentoInicio,calVencimentoFim,
 				calProximaAtuacaoInicio,calProximaAtuacaoFim,calQuitacaoInicio,calQuitacaoFim,calAssinaturaInicio,calAssinaturaFim,bancos,produtos,bancosComprados,
-				status,convenios,consultoresAux,isSupervisorApoio,cliente,documento,empresas,procedimento,proximoProcedimento, atuante));
+				status,convenios,consultoresAux,isSupervisorApoio,cliente,documento,empresas,procedimento,proximoProcedimento, atuante, tipoLogistica, periodo));
 
 		contador();
 
@@ -878,22 +901,53 @@ public class MenuController {
 	
 	@Post
 	@Path("/menu/contrato/propostaContrato")
-	public void busca(String propostaBanco, String contratoBanco) {
+	public void busca(String propostaBanco, String contratoBanco,String digitacaoInicio,String digitacaoFim, Collection<Long> empresas , Collection<Long> bancos) {
 
 		contratos.clear();
+		
+		Calendar calDigitacaoInicio = new GregorianCalendar();
+		Calendar calDigitacaoFim = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		
+		try {
+			
+			if(digitacaoFim.equals(""))
+				digitacaoFim = digitacaoInicio;
+
+			if(digitacaoInicio.equals("")) {
+
+				calDigitacaoInicio = null;
+				calDigitacaoFim = null;
+
+			} else {
+
+				calDigitacaoInicio.setTime(sdf.parse(digitacaoInicio));
+				calDigitacaoFim.setTime(sdf.parse(digitacaoFim));
+
+				calDigitacaoInicio.set(Calendar.HOUR_OF_DAY,calDigitacaoInicio.getActualMinimum(Calendar.HOUR_OF_DAY));
+				calDigitacaoFim.set(Calendar.HOUR_OF_DAY,calDigitacaoFim.getActualMaximum(Calendar.HOUR_OF_DAY));
+
+			}
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		Usuario u = null;
 
 		if(usuarioInfo.getPerfil().getNome().equals("Supervisor") || usuarioInfo.getPerfil().getNome().equals("Consultor"))
 			u = usuarioInfo.getUsuario();
 
-		contratos.addAll(this.contratoDao.buscaContratosByProposta(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),propostaBanco, contratoBanco, u));
+		contratos.addAll(this.contratoDao.buscaContratosByProposta(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),propostaBanco, contratoBanco, u,
+				calDigitacaoInicio,calDigitacaoFim,empresas,bancos));
 
 		contador();
 	}
 	
 	@Get
 	public void buscaproposta() {
+		
+		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 
 	}
 
