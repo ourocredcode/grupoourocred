@@ -399,6 +399,8 @@
 							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
 							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
 							<li><a href="<c:url value="/reports/filtros/metadiaria"/>" >Meta Diária</a></li>
+							<li><a href="<c:url value="/reports/filtros/rankingproducao"/>" >Ranking Produção</a></li>
+							<li><a href="<c:url value="/reports/filtros/aproveitamentohiscons"/>" >Aproveitamento Hiscons</a></li>
 						</ul>
 
 					</li>
@@ -469,9 +471,8 @@
 							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
 							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
 							<li><a href="<c:url value="/reports/filtros/metadiaria"/>" >Meta Diária</a></li>
-							<!-- 
-							<li><a href="<c:url value="/reports/chart-aprovados"/>" target="_blank">Aprovados (Gráfico)</a></li>
-							 -->
+							<li><a href="<c:url value="/reports/filtros/rankingproducao"/>" >Ranking Produção</a></li>
+							<li><a href="<c:url value="/reports/filtros/aproveitamentohiscons"/>" >Aproveitamento Hiscons</a></li>
 						</ul>
 
 					</li>
@@ -545,9 +546,8 @@
 							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
 							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
 							<li><a href="<c:url value="/reports/filtros/metadiaria"/>" >Meta Diária</a></li>
-							<!-- 
-							<li><a href="<c:url value="/reports/chart-aprovados"/>" target="_blank">Aprovados (Gráfico)</a></li>
-							 -->
+							<li><a href="<c:url value="/reports/filtros/rankingproducao"/>" >Ranking Produção</a></li>
+							<li><a href="<c:url value="/reports/filtros/aproveitamentohiscons"/>" >Aproveitamento Hiscons</a></li>
 						</ul>
 
 					</li>
@@ -621,9 +621,8 @@
 							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
 							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
 							<li><a href="<c:url value="/reports/filtros/metadiaria"/>" >Meta Diária</a></li>
-							<!-- 
-							<li><a href="<c:url value="/reports/chart-aprovados"/>" target="_blank">Aprovados (Gráfico)</a></li>
-							 -->
+							<li><a href="<c:url value="/reports/filtros/rankingproducao"/>" >Ranking Produção</a></li>
+							<li><a href="<c:url value="/reports/filtros/aproveitamentohiscons"/>" >Aproveitamento Hiscons</a></li>
 						</ul>
 
 					</li>

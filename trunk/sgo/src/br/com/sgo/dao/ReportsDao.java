@@ -313,5 +313,222 @@ public class ReportsDao extends Dao<Contrato> {
 		return rsReports;
 	
 	}
+	
+	public ResultSet rankingProducaoResultSet(Empresa empresa, Organizacao organizacao, Calendar calInicio, Calendar calFim, Usuario usuario , Integer concluidoCheck) {
+
+		String sql = " SELECT  " +
+					 " usuario_nome, " +  
+					 " usuario_id, " +
+					 " COUNT(usuarioCount) as usuarioCount, " +  
+					 " SUM(metaCount) as metaCount, " +  
+					 " SUM(contratoCount) as contratoCount, " +  
+					 " SUM(liquidoCount) as liquidoCount, " +  
+					 " SUM(contLiquidoCount) as contLiquidoCount FROM ( " +
+				" SELECT " +  
+					 " USUARIO.apelido as usuario_nome, " +  
+					 " USUARIO.usuario_id , " +  
+					 " COUNT(USUARIO.apelido) as usuarioCount, " +  
+					 " SUM(CONTRATO.valormeta) as metaCount, " +  
+					 " SUM(CONTRATO.valorcontrato) as contratoCount, " +  
+					 " SUM(CONTRATO.valorliquido) as liquidoCount, " +  
+					 " SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +  
+					 " FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +  
+					 " INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +  
+					 " INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +  
+					 " WHERE CONTRATO.empresa_id = ? " +  
+					 " AND CONTRATO.organizacao_id = ? ";  
+
+		 if(concluidoCheck != null){
+
+			 sql += " AND ( ETAPA.NOME in ('Concluído') ) " +
+			        " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? ) ";
+
+		 			if(usuario.getUsuario_id() != null){
+		 				sql += " AND ( USUARIO.supervisor_usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+		 			}
+
+		 sql += "  GROUP BY USUARIO.apelido, USUARIO.usuario_id ) AS G1 GROUP BY usuario_nome,usuario_id ORDER BY metaCount DESC ";
+
+		 } else {
+
+			 sql += " AND ( ETAPA.NOME in ('Concluído') ) "
+			 	 + " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? ) ";
+
+			 sql += "  GROUP BY  USUARIO.apelido, USUARIO.usuario_id ";
+			 
+			 sql += " UNION " +
+						" SELECT  " +
+						 " USUARIO.apelido as usuario_nome, " +  
+						 " USUARIO.usuario_id , " +  
+						 " COUNT(USUARIO.apelido) as usuarioCount, " +   
+						 " SUM(CONTRATO.valormeta) as metaCount,  " +
+						 " SUM(CONTRATO.valorcontrato) as contratoCount, " +  
+						 " SUM(CONTRATO.valorliquido) as liquidoCount, " +  
+						 " SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +  
+						 " FROM ((CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +  
+						 " INNER JOIN USUARIO ON CONTRATO.usuario_id = USUARIO.usuario_id) " +  
+						 " INNER JOIN USUARIO AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +  
+						 " WHERE CONTRATO.empresa_id = ? " + 
+						 " AND CONTRATO.organizacao_id = ? " +  
+						 " AND ( ETAPA.NOME in ('Aprovado') ) " +
+						 " AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) ";
+
+			 if(usuario.getUsuario_id() != null){
+				sql += " AND ( USUARIO.supervisor_usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+			 }
+			
+			
+			sql += "GROUP BY  USUARIO.apelido, USUARIO.usuario_id " +
+					" ) AS G1 GROUP BY usuario_nome,usuario_id ORDER BY metaCount DESC  ";
+
+		 }
+
+		 //System.out.println(sql);
+
+		this.conn = this.conexao.getConexao();
+	
+		try {
+	
+			this.stmt = conn.prepareStatement(sql);
+			
+			int curr = 1;
+
+			if(empresa != null){
+				this.stmt.setLong(curr, empresa.getEmpresa_id());
+				curr++;
+			}
+
+			if(organizacao != null){
+				this.stmt.setLong(curr, organizacao.getOrganizacao_id());
+				curr++;
+			}
+			
+	
+			
+			if(concluidoCheck == null) {
+				
+				if(calInicio != null){
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+					curr++;
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+					curr++;
+
+				}
+				
+				if(empresa != null){
+					this.stmt.setLong(curr, empresa.getEmpresa_id());
+					curr++;
+				}
+				
+				if(organizacao != null){
+					this.stmt.setLong(curr, organizacao.getOrganizacao_id());
+					curr++;
+				}
+				
+				if(calInicio != null){
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+					curr++;
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+					curr++;
+
+				}
+				
+				if(usuario.getUsuario_id() != null){
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+				}
+
+			} else {
+				
+				if(calInicio != null){
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+					curr++;
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+					curr++;
+
+				}
+				
+				if(usuario.getUsuario_id() != null){
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+				}
+				
+			}
+
+			this.rsReports = this.stmt.executeQuery();
+	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return rsReports;
+	
+	}
+	
+	public ResultSet rankingAproveitamentoHisconResultSet(Empresa empresa, Organizacao organizacao, Calendar calInicio,Calendar calFim, Usuario usuario) {
+
+		String sql = " SELECT ETAPA.nome as posicao, COUNT(ETAPA.nome) as quantidade FROM  " +
+					 "   HISCONBENEFICIO (NOLOCK) LEFT JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id = HISCONBENEFICIO.etapaposicao_id "
+					 + " INNER JOIN USUARIO (NOLOCK) ON USUARIO.usuario_id = HISCONBENEFICIO.usuario_id "
+					 + " LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
+					 " WHERE "; 
+
+		if(calInicio != null)
+			sql += 	 "  HISCONBENEFICIO.created BETWEEN ? AND ? ";
+
+		if(usuario.getUsuario_id() != null)
+			sql += "  AND ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? )  ";
+
+		sql += " GROUP BY " +   
+				"	ETAPA.nome  " +
+				" ORDER BY " +
+				" quantidade DESC ";   
+
+		//System.out.println(sql);
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			
+			int curr = 1;
+			
+			if(calInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+				curr++;
+
+			}
+			
+			if(usuario.getUsuario_id() != null){
+				this.stmt.setLong(curr, usuario.getUsuario_id());
+				curr++;
+				this.stmt.setLong(curr, usuario.getUsuario_id());
+				curr++;
+			}
+
+			this.rsReports = this.stmt.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return rsReports;
+
+	}
 
 }

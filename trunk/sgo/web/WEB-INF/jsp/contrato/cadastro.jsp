@@ -300,8 +300,8 @@ function calculaContrato() {
 						break;
 				
 					case 'BMG':
-						var metaValue = valorLiquido.value * 0.3;
-						valorMeta.value = metaValue.toFixed(2);
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
 
 						break;
 
