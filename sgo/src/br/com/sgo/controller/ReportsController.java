@@ -1,6 +1,8 @@
 package br.com.sgo.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -40,6 +42,7 @@ public class ReportsController {
 	private HttpServletResponse response;
 	private Empresa empresa;
 	private Organizacao organizacao;
+	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 
 	public ReportsController(Empresa empresa, Organizacao organizacao,UsuarioInfo usuarioInfo,Result result,HttpServletResponse response,ReportsDao reportsDao,
 			UsuarioDao usuarioDao){		
@@ -154,6 +157,56 @@ public class ReportsController {
 
 		result.include("meses",meses);
 		result.include("mesAtual",mesAtual.get(Calendar.MONTH));
+
+	}
+	
+	@Get
+	@Path("/reports/filtros/rankingproducao")
+	public void filtrosrankingproducao(){
+
+		Collection<Usuario> supervisores = new ArrayList<Usuario>();
+
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Retenção"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Retenção"));
+
+		result.include("supervisores",supervisores);
+
+		Calendar mesAtual = Calendar.getInstance();
+
+		Collection<Integer> meses = new HashSet<Integer>();
+
+		meses.add(0);
+		meses.add(1);
+		meses.add(2);
+		meses.add(3);
+		meses.add(4);
+		meses.add(5);
+		meses.add(6);
+		meses.add(7);
+		meses.add(8);
+		meses.add(9);
+		meses.add(10);
+		meses.add(11);
+
+		result.include("meses",meses);
+		result.include("mesAtual",mesAtual.get(Calendar.MONTH));
+
+	}
+	
+	@Get
+	@Path("/reports/filtros/aproveitamentohiscons")
+	public void filtrosaproveitamentohiscons(){
+
+		Collection<Usuario> supervisores = new ArrayList<Usuario>();
+
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Retenção"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Retenção"));
+
+		result.include("supervisores",supervisores);
 
 	}
 
@@ -381,6 +434,175 @@ public class ReportsController {
 		result.nothing();
 	}
 	
+	@Post
+ 	@Path("/reports/rankingproducao")
+	public void rankingproducao(Empresa empresa,Organizacao organizacao,Integer ano,Integer mes,Usuario usuario,Integer concluidoCheck) {
+
+		
+		Calendar calInicio = new GregorianCalendar();
+		Calendar calFim = new GregorianCalendar();
+
+		calInicio.set(Calendar.YEAR,ano);
+		calInicio.set(Calendar.MONTH, mes);
+		calInicio.set(Calendar.DAY_OF_MONTH,calInicio.getActualMinimum(Calendar.DAY_OF_MONTH));
+		calInicio.set(Calendar.HOUR_OF_DAY, calInicio.getActualMinimum(Calendar.HOUR_OF_DAY));
+		calInicio.set(Calendar.MINUTE, calInicio.getActualMinimum(Calendar.MINUTE));
+		calInicio.set(Calendar.SECOND, calInicio.getActualMinimum(Calendar.SECOND));
+
+		calFim.set(Calendar.YEAR,ano);
+		calFim.set(Calendar.MONTH, mes);
+		calFim.set(Calendar.DAY_OF_MONTH,calFim.getActualMaximum(Calendar.DAY_OF_MONTH));
+		calFim.set(Calendar.HOUR_OF_DAY, calFim.getActualMaximum(Calendar.HOUR_OF_DAY));
+		calFim.set(Calendar.MINUTE, calFim.getActualMaximum(Calendar.MINUTE));
+		calFim.set(Calendar.SECOND, calFim.getActualMaximum(Calendar.SECOND));
+
+		Usuario u = new Usuario();
+
+		if(usuario.getUsuario_id() != null){
+			 u = this.usuarioDao.buscaUsuarioById(usuario.getUsuario_id());
+		}
+
+		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
+		String jasper = caminhoJasper + "report_rankingproducao.jasper";
+
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("caminhoJasperSolicitacao", jasper);
+
+		String nomeReport =  "Relatório Ranking Produção";
+
+		parametros.put("nomeReport",nomeReport);
+
+		parametros.put("nomeSupervisor", u.getUsuario_id() != null ? u.getApelido() : " Todos " );
+		parametros.put("nomeMes"," - " + obterNomeMes(mes)+"/"+ano);
+
+		JasperPrint impressao = null;
+
+		try{
+
+			response.setHeader("Cache-Control", "no-store");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentType("application/pdf");
+
+			ServletOutputStream responseOutputStream = response.getOutputStream();
+
+			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.rankingProducaoResultSet(empresa, organizacao, calInicio, calFim, usuario, concluidoCheck));
+
+			impressao = JasperFillManager.fillReport(jasper, parametros , jrRS);
+
+			JasperExportManager.exportReportToPdfStream(impressao, responseOutputStream);
+
+			responseOutputStream.flush();
+			responseOutputStream.close();
+
+		} catch(IOException e) {
+
+			System.out.println("Erro:" + e);
+
+		} catch(JRException e) {
+
+			e.printStackTrace();
+			System.out.println("Erro:" + e.getMessage());
+
+		}
+
+		result.nothing();
+	}
+	
+	
+	@Post
+ 	@Path("/reports/aproveitamentohiscons")
+	public void aproveitamentohiscons(Empresa empresa,Organizacao organizacao, String data, String dataFim, Long supervisor_id, Long consultor_id) {
+
+		Calendar calInicio = new GregorianCalendar();
+		Calendar calFim = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		
+		try {
+
+			if(dataFim.equals(""))
+				dataFim = data;
+
+			if(data.equals("")) {
+
+				calInicio = null;
+				calFim = null;
+
+			} else {
+
+				calInicio.setTime(sdf.parse(data));
+				calFim.setTime(sdf.parse(dataFim));
+
+				calInicio.set(Calendar.HOUR_OF_DAY,calInicio.getActualMinimum(Calendar.HOUR_OF_DAY));
+				calFim.set(Calendar.HOUR_OF_DAY,calInicio.getActualMaximum(Calendar.HOUR_OF_DAY));
+
+			}
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+
+		Usuario u = new Usuario();
+
+		if(supervisor_id != null){
+			
+			if(consultor_id != null){
+			 
+				u = this.usuarioDao.buscaUsuarioById(consultor_id);
+
+			} else {
+			
+				u = this.usuarioDao.buscaUsuarioById(supervisor_id);
+				
+			}
+		}
+
+		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
+		String jasper = caminhoJasper + "report_aproveitamentohiscon.jasper";
+
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("caminhoJasperSolicitacao", jasper);
+
+		String nomeReport =  "Relatório Ranking Produção";
+
+		parametros.put("nomeReport",nomeReport);
+
+		parametros.put("nomeSupervisor", u.getUsuario_id() != null ? u.getApelido() : " Todos " );
+
+		JasperPrint impressao = null;
+
+		try{
+
+			response.setHeader("Cache-Control", "no-store");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentType("application/pdf");
+
+			ServletOutputStream responseOutputStream = response.getOutputStream();
+
+			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.rankingAproveitamentoHisconResultSet(empresa, organizacao,  calInicio, calFim, u));
+
+			impressao = JasperFillManager.fillReport(jasper, parametros , jrRS);
+
+			JasperExportManager.exportReportToPdfStream(impressao, responseOutputStream);
+
+			responseOutputStream.flush();
+			responseOutputStream.close();
+
+		} catch(IOException e) {
+
+			System.out.println("Erro:" + e);
+
+		} catch(JRException e) {
+
+			e.printStackTrace();
+			System.out.println("Erro:" + e.getMessage());
+
+		}
+
+		result.nothing();
+	}
+	
 	@Get
  	@Path("/reports/chart-aprovados")
 	public void chart_aprovados(Empresa empresa,Organizacao organizacao,Integer ano,Integer mes,Integer concluidoCheck) {
@@ -435,6 +657,16 @@ public class ReportsController {
 		}
 
 		result.nothing();
+	}
+	
+	@Post
+ 	@Path("/reports/consultores")
+	public void consultores(Long supervisor_id) {
+
+		consultores = this.usuarioDao.buscaUsuariosBySupervisor(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), supervisor_id);
+
+		result.include("consultores",consultores);
+
 	}
 	
 	public String obterNomeMes(int mes){  
