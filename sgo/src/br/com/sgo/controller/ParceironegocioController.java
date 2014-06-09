@@ -931,7 +931,6 @@ public class ParceironegocioController {
 	public void alteraParceiroLocalidade(ParceiroLocalidade parceiroLocalidade){
 
 		ParceiroLocalidade pl = this.parceiroLocalidadeDao.load(parceiroLocalidade.getParceiroLocalidade_id());
-		ParceiroNegocio parceiroNegocio = this.parceiroNegocioDao.load(pl.getParceiroNegocio().getParceiroNegocio_id());
 
 		if(parceiroLocalidade.getNumero() != null)
 			pl.setNumero(parceiroLocalidade.getNumero());
@@ -945,20 +944,11 @@ public class ParceironegocioController {
 		if(parceiroLocalidade.getTipoEndereco() != null)
 			pl.setTipoEndereco(this.tipoEnderecoDao.load(parceiroLocalidade.getTipoEndereco().getTipoEndereco_id()));
 
-		if(this.parceiroLocalidadeDao.buscaParceiroLocalidadeNum(parceiroNegocio.getEmpresa().getEmpresa_id(),parceiroNegocio.getOrganizacao().getOrganizacao_id(), 
-				parceiroNegocio.getParceiroNegocio_id(),pl.getLocalidade().getLocalidade_id(), pl.getTipoEndereco().getTipoEndereco_id(), pl.getNumero(), pl.getIsActive()) == null){
-
-			this.parceiroLocalidadeDao.beginTransaction();
-			this.parceiroLocalidadeDao.atualiza(pl);
-			this.parceiroLocalidadeDao.commit();
-			
-			result.include("msg","Parceiro Localidade atualizado com sucesso.").redirectTo(this).msg();
-
-		} else {
-
-			result.include("msg","Erro : Parceiro Localidade já existente neste endereço.").redirectTo(this).msg();
-
-		}
+		this.parceiroLocalidadeDao.beginTransaction();
+		this.parceiroLocalidadeDao.atualiza(pl);
+		this.parceiroLocalidadeDao.commit();
+		
+		result.include("msg","Parceiro Localidade atualizado com sucesso.").redirectTo(this).msg();
 
 	}
 	

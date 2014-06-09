@@ -511,7 +511,18 @@ function mostra(formulario_id){
 
 					<c:if test="${posvenda.etapa.nome == 'Aprovado' || usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Supervisor' }">
 						<div class="span1" style="float: left;">
-							<input value="Imprimir" type="button" class="btn" onclick="javascript:window.location='/sgo/formulario/impressao/${formulario.formulario_id}'">
+
+							<form action="<c:url value="/formulario/impressao/${formulario.formulario_id}"/>" target="_blank">
+								<input type="submit" value="Formulário" class="btn"/>
+							</form>
+
+						</div>
+						<div class="span1" style="float: left;">
+
+							<form action="<c:url value="/formulario/proposta/${formulario.formulario_id}"/>" target="_blank">
+								<input type="submit" value="Proposta" class="btn"/>
+							</form>
+
 						</div>
 					</c:if>
 

@@ -23,7 +23,7 @@ public class OrganizacaoInfoDao extends Dao<OrganizacaoInfo> {
 	private Connection conn;
 	private ResultSet rsOrganizacaoInfo;
 
-	private final String sqlOrganizacaoInfo = "SELECT ORGANIZACAOINFO.organizacao_id, ORGANIZACAOINFO.nome, ORGANIZACAOINFO.empresa_id FROM ORGANIZACAOINFO (NOLOCK)";
+	private final String sqlOrganizacaoInfo = "SELECT ORGANIZACAOINFO.organizacao_id, ORGANIZACAOINFO.nome, ORGANIZACAOINFO.empresa_id, ORGANIZACAOINFO.descricao, ORGANIZACAOINFO.dddfone1, ORGANIZACAOINFO.telefone1 FROM ORGANIZACAOINFO (NOLOCK)";
 
 	public OrganizacaoInfoDao(Session session, ConnJDBC conexao) {
 
@@ -92,6 +92,9 @@ public class OrganizacaoInfoDao extends Dao<OrganizacaoInfo> {
 				Organizacao organizacao = new Organizacao();
 				organizacao.setOrganizacao_id(rsOrganizacaoInfo.getLong("organizacao_id"));
 				organizacaoInfo.setOrganizacao_id(organizacao_id);
+				organizacaoInfo.setDescricao(rsOrganizacaoInfo.getString("descricao"));
+				organizacaoInfo.setDddFone1(rsOrganizacaoInfo.getString("dddfone1"));
+				organizacaoInfo.setTelefone1(rsOrganizacaoInfo.getString("telefone1"));
 
 			}
 

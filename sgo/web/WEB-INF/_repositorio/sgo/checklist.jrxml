@@ -2,8 +2,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="checklist" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="155"/>
 	<parameter name="formulario.id" class="java.math.BigDecimal"/>
+	<parameter name="tituloFormulario" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{tituloFormulario}]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select
 consultor.nm_nome as consultorNome,
@@ -49,6 +52,8 @@ and formulario.id = $P{formulario.id}]]>
 	<field name="clienteBairro" class="java.lang.String"/>
 	<field name="clienteCidade" class="java.lang.String"/>
 	<field name="periodoAssinatura" class="java.lang.String"/>
+	<field name="pontoReferencia" class="java.lang.String"/>
+	<field name="complemento" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -64,7 +69,7 @@ and formulario.id = $P{formulario.id}]]>
 				<reportElement x="5" y="5" width="539" height="16"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="163" y="8" width="99" height="17"/>
+				<reportElement x="11" y="7" width="59" height="17"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -170,7 +175,7 @@ and formulario.id = $P{formulario.id}]]>
 				<textFieldExpression><![CDATA[$F{clienteTelCel}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="343" y="9" width="115" height="16"/>
+				<reportElement x="397" y="8" width="115" height="16"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -732,6 +737,21 @@ and formulario.id = $P{formulario.id}]]>
 			<line>
 				<reportElement x="445" y="59" width="96" height="1"/>
 			</line>
+			<textField>
+				<reportElement x="70" y="6" width="469" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{tituloFormulario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="283" width="536" height="37"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pontoReferencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="340" width="538" height="39"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{complemento}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>

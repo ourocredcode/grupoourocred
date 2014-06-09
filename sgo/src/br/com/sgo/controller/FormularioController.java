@@ -34,6 +34,7 @@ import br.com.sgo.dao.HistoricoControleFormularioDao;
 import br.com.sgo.dao.LocalidadeDao;
 import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.OperacaoDao;
+import br.com.sgo.dao.OrganizacaoInfoDao;
 import br.com.sgo.dao.PaisDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
 import br.com.sgo.dao.ParceiroContatoDao;
@@ -50,6 +51,7 @@ import br.com.sgo.dao.TipoLocalidadeDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.jasper.FormularioDataSource;
+import br.com.sgo.jasper.PropostaDataSource;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.ControleFormulario;
@@ -62,6 +64,7 @@ import br.com.sgo.modelo.MeioPagamento;
 import br.com.sgo.modelo.Modalidade;
 import br.com.sgo.modelo.NaturezaProfissional;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.OrganizacaoInfo;
 import br.com.sgo.modelo.ParceiroBeneficio;
 import br.com.sgo.modelo.ParceiroContato;
 import br.com.sgo.modelo.ParceiroInfoBanco;
@@ -104,7 +107,8 @@ public class FormularioController {
 	private final TipoLocalidadeDao tipoLocalidadeDao;
 	private final LocalidadeDao localidadeDao;
 	private final TipoEnderecoDao tipoEnderecoDao;
-	
+	private final OrganizacaoInfoDao organizacaoInfoDao;
+
 	private BrazilianAddressFinder addressFinder;
 	private RestClient restfulie;
 	private HttpServletResponse response;
@@ -132,7 +136,7 @@ public class FormularioController {
 			WorkflowDao workflowDao, EtapaDao etapaDao,ControleFormularioDao controleFormularioDao,Empresa empresa,Organizacao organizacao,Usuario usuario,
 			Perfil perfil,HistoricoControleFormularioDao historicoControleFormularioDao,Workflow workflow, MeioPagamentoDao meioPagamentoDao,TabelaDao tabelaDao,
 			ParceiroContatoDao parceiroContatoDao,OperacaoDao operacaoDao,PaisDao paisDao,CidadeDao cidadeDao,RegiaoDao regiaoDao,TipoLocalidadeDao tipoLocalidadeDao,
-			LocalidadeDao localidadeDao,TipoEnderecoDao tipoEnderecoDao){		
+			LocalidadeDao localidadeDao,TipoEnderecoDao tipoEnderecoDao,OrganizacaoInfoDao organizacaoInfoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -164,6 +168,7 @@ public class FormularioController {
 		this.localidadeDao = localidadeDao;
 		this.tipoLocalidadeDao = tipoLocalidadeDao;
 		this.tipoEnderecoDao = tipoEnderecoDao;
+		this.organizacaoInfoDao = organizacaoInfoDao;
 		this.parceiroNegocio = parceiroNegocio;
 		this.parceiroLocalidade = parceiroLocalidade;
 		this.parceiroInfoBanco = parceiroInfoBanco;
@@ -251,8 +256,17 @@ public class FormularioController {
 
 		}
 
+		List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();
+
+		for(ParceiroContato pc : parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id())) {
+
+			if(pc.getIsActive())
+				contatos.add(pc);
+
+		}
+
 		result.include("formulario",formulario);
-		result.include("parceiroContatos", this.parceiroContatoDao.buscaParceiroContatos(formulario.getParceiroNegocio().getParceiroNegocio_id()));
+		result.include("parceiroContatos", contatos);
 
 	}
 	
@@ -657,8 +671,206 @@ public class FormularioController {
 			System.out.println("Erro:" + e.getMessage());
 
 		}
+		
+		forms = null;
+		f = null;
+		contratos = null;
+		parceiro = null;
+		formularioData = null;
+		countContratos = null;
+		countRecompraINSS = null;
+		countMargemLimpa = null;
+		countRecompraRMC = null;
+		countRefinanciamento = null;
+		cc = null;
+		localidadeInsert = null;
+		impressao = null;
+		parceiroNegocio = null;
+		parceiroBeneficio = null;
+		parceiroLocalidade = null;
+		
 
 		result.nothing();
+	}
+	
+	@Get
+ 	@Path("/formulario/proposta/{id}")
+	public void proposta(Long id) {
+
+		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
+		String jasper = caminhoJasper + "proposta.jasper";
+
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("caminhoJasperSolicitacao", jasper);
+
+		JasperPrint impressao = null;
+
+		List<Formulario> forms = new ArrayList<Formulario>();
+		Formulario f = this.formularioDao.load(id);
+
+		Collection<Contrato> contratos = this.contratoDao.buscaContratoByFormulario(f.getFormulario_id());
+
+		ParceiroNegocio parceiro =  f.getParceiroNegocio();
+		Calendar formularioData = f.getCreated();
+		Integer countContratos = new Integer(0);
+		Integer countRecompraINSS = new Integer(0);
+		Integer countMargemLimpa = new Integer(0);
+		Integer countRecompraRMC = new Integer(0);
+		Integer countRefinanciamento = new Integer(0);
+
+		for (Iterator<Contrato> it  = contratos.iterator(); it.hasNext();) {
+
+			Formulario formulario = new Formulario();
+			Contrato c = (Contrato) it.next();
+			
+			if(!c.getEtapa().getNome().equals("Recusado")){
+
+				formulario.setCreated(formularioData);
+				formulario.setParceiroNegocio(parceiro);
+				formulario.setContratos(separaContrato(c));
+				
+				ParceiroBeneficio pb = parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),c.getNumeroBeneficio());
+
+				parceiroBeneficio.setParceiroBeneficio_id(pb.getParceiroBeneficio_id());
+				parceiroBeneficio.setNumeroBeneficio(pb.getNumeroBeneficio());
+				parceiroBeneficio.setParceiroNegocio(pb.getParceiroNegocio());
+
+				parceiroNegocio = parceiroNegocioDao.load(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
+
+				if( ( parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id() ).size() != 0 ) ){
+
+					
+					for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
+
+						if(pl.getNumero() == null || pl.getNumero().equals("")){
+
+							pl = this.parceiroLocalidadeDao.load(pl.getParceiroLocalidade_id());
+
+							pl.setNumero(this.pnDao.buscaNumeroByParceiroNegocio(parceiro));
+
+							this.parceiroLocalidadeDao.beginTransaction();
+							this.parceiroLocalidadeDao.atualiza(pl);
+							this.parceiroLocalidadeDao.commit();
+
+						}
+
+						if(pl.getComplemento() == null || pl.getComplemento().equals("")){
+
+							pl = this.parceiroLocalidadeDao.load(pl.getParceiroLocalidade_id());
+
+							pl.setComplemento(this.pnDao.buscaComplementoByParceiroNegocio(parceiro));
+
+							this.parceiroLocalidadeDao.beginTransaction();
+							this.parceiroLocalidadeDao.atualiza(pl);
+							this.parceiroLocalidadeDao.commit();
+
+						}
+
+						if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+							parceiroLocalidade = pl;
+						}
+
+					}
+
+				}
+
+				countContratos +=1;
+
+				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("AUMENTO") )
+					countMargemLimpa += 1;
+				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ"))
+					countRecompraINSS += 1;
+				if(c.getProduto().equals("RECOMPRA RMC"))
+					countRecompraRMC += 1;
+				if(c.getProduto().equals("REFINANCIAMENTO") || c.getProduto().equals("REFINANCIAMENTO PMSP") || c.getProduto().equals("REFINANCIAMENTO GOVRJ"))
+					countRefinanciamento += 1;
+
+				List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();
+
+				for(ParceiroContato pc : parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id())) {
+
+					if(pc.getIsActive())
+						contatos.add(pc);
+
+				}
+
+				if(contatos.size() > 0){
+					formulario.setParceiroContatos(contatos);
+				}
+
+				formulario.setParceiroBeneficio(parceiroBeneficio);
+				formulario.setParceiroLocalidade(parceiroLocalidade);
+				formulario.setParceiroInfoBanco(parceiroInfoBanco);
+
+				forms.add(formulario);
+				
+			}
+
+		}
+		
+		parametros.put("countContratos", countContratos);
+		parametros.put("countMargemLimpa", countMargemLimpa);
+		parametros.put("countRecompraINSS", countRecompraINSS);
+		parametros.put("countRecompraRMC", countRecompraRMC);
+		parametros.put("countRefinanciamento", countRefinanciamento);
+
+		String tituloFormulario = " PROPOSTA DE CRÉDITO - " + f.getOrganizacao().getDescricao() + " - GRUPO OURO CRED ";
+
+		parametros.put("tituloFormulario", tituloFormulario);
+
+		OrganizacaoInfo info = this.organizacaoInfoDao.buscaOrganizacaoById(f.getOrganizacao().getOrganizacao_id());
+
+		parametros.put("organizacaoEndereco", info.getDescricao());
+		parametros.put("organizacaoContato", info.getDddFone1() + " " + info.getTelefone1());
+
+		try{
+
+			response.setHeader("Cache-Control", "no-store");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentType("application/pdf");
+	
+			ServletOutputStream responseOutputStream = response.getOutputStream();
+	
+			PropostaDataSource propostaDataSource;
+			propostaDataSource = new PropostaDataSource(forms);
+	
+			impressao = JasperFillManager.fillReport(jasper, parametros , propostaDataSource);
+
+			JasperExportManager.exportReportToPdfStream(impressao, responseOutputStream);
+	
+			responseOutputStream.flush();
+			responseOutputStream.close();
+
+		} catch(IOException e) {
+
+			System.out.println("Erro:" + e);
+
+		} catch(JRException e) {
+
+			e.printStackTrace();
+			System.out.println("Erro:" + e.getMessage());
+
+		}
+
+		forms = null;
+		f = null;
+		contratos = null;
+		parceiro = null;
+		formularioData = null;
+		countContratos = null;
+		countRecompraINSS = null;
+		countMargemLimpa = null;
+		countRecompraRMC = null;
+		countRefinanciamento = null;
+
+		impressao = null;
+		parceiroNegocio = null;
+		parceiroBeneficio = null;
+		parceiroLocalidade = null;
+
+		result.nothing();
+
 	}
 	
 	public static Collection<Contrato> separaContrato(Contrato contrato) {
