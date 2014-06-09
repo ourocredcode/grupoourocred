@@ -37,6 +37,8 @@ public class TipoLogisticaDao extends Dao<TipoLogistica> {
 	public Collection<TipoLogistica> buscaAllTipoLogistica() {
 
 		String sql = sqlTipoLogisticas;
+		
+		sql += " ORDER BY TIPOLOGISTICA.tipologistica_id DESC "; 
 
 		this.conn = this.conexao.getConexao();
 

@@ -105,7 +105,7 @@
 			<div class="span12">
 
 				<div class="alert alert-info">
-					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas !<a href="#" data-dismiss="alert" class="close">×</a>
+					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas ! - <b>** <a href="https://secure.avaaz.org/po/petition/PRESIDENTE_DO_SENADO_FEDERAL_E_PRESIDENTE_DA_CAMARA_DOS_DEPUTADOS_SUSPENSAO_E_REVISAO_DA_RESOLUCOES_429213_SOBRE_PORTABI/?launch" target="_blank"> ASSINE A PETIÇÃO DE REVISÃO SOBRE AS REGRAS DE PORTABILIDADE</a> ** </b> <a href="#" data-dismiss="alert" class="close">×</a>
 				</div>
 
 				<div class="widget-box">

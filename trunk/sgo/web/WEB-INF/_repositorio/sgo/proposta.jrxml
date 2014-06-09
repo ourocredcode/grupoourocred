@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="proposta" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="506"/>
+	<parameter name="formulario.id" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countContratos" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countContratos}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countMargemLimpa" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countMargemLimpa}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countRecompraINSS" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countRecompraINSS}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countRecompraRMC" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countRecompraRMC}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="countRefinanciamento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{countRefinanciamento}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="detalhamentoCC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{detalhamentoCC}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tituloFormulario" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{tituloFormulario}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="organizacaoEndereco" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{organizacaoEndereco}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="organizacaoContato" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{organizacaoContato}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	FORMULARIO.created as formularioData,
+	USUARIO.nome as consultorNome,
+	USUARIO.chave as consultorCpf,
+	USUARIO_SUPERVISOR.nome as consultorSupervisor,
+	PARCEIRONEGOCIO.nome as clienteNome,
+	PARCEIRONEGOCIO.parceironegocio_id as clienteId,
+	PRODUTO.nome as contratoProduto,
+	BANCO.nome	 as contratoBanco,
+	PARCEIRONEGOCIO.cpf as clienteCpf,
+	PARCEIRONEGOCIO.datanascimento as clienteNascimento,
+	PARCEIROBENEFICIO.numerobeneficio as clienteBeneficio,
+	BANCO_1.nome as contratoBancoComprado,
+	CONTRATO.qtdparcelasaberto as contratoParcelaAberto,
+	CONTRATO.valorcontrato as contratoValor,
+	CONTRATO.valorparcela as contratoParcela,
+	CONTRATO.prazo as contratoPrazo,
+	CONTRATO.valordivida as contratoDivida,
+	CONTRATO.desconto as contratoDesconto,
+	CONTRATO.valorliquido as contratoLiquido,
+	CONTRATO.observacao as contratoObs,
+    TIPOLOCALIDADE.nome + ' ' + LOCALIDADE.endereco + ' ' + PARCEIROLOCALIDADE.numero + ' CEP :  ' + LOCALIDADE.cep + ' - ' + LOCALIDADE.bairro + ' - ' + CIDADE.nome as clienteEndereco,
+    PARCEIROCONTATO.nome as clienteContato
+ FROM
+ ((((((((((((((((((( CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id)
+ INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id)
+ INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id)
+ INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)
+ INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id)
+ INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)
+ LEFT JOIN CONVENIO (NOLOCK) ON CONTRATO.convenio_id = CONVENIO.convenio_id)
+ LEFT JOIN CONTROLEFORMULARIO (NOLOCK) ON CONTROLEFORMULARIO.formulario_id = FORMULARIO.formulario_id)
+ LEFT JOIN ETAPA AS ETAPACONTROLE (NOLOCK) ON CONTROLEFORMULARIO.etapa_id = ETAPACONTROLE.etapa_id)
+ INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id)
+ INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id)
+ LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id)
+ INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id)
+ LEFT JOIN TIPOSAQUE (NOLOCK) ON CONTRATO.tiposaque_id = TIPOSAQUE.tiposaque_id)
+ LEFT JOIN BANCO (NOLOCK) AS BANCO_1 ON CONTRATO.recompra_banco_id = BANCO_1.banco_id)
+ LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id)
+ LEFT JOIN WORKFLOW (NOLOCK) AS WORKFLOW_1 ON CONTRATO.workflowpendencia_id = WORKFLOW_1.workflow_id)
+ LEFT JOIN ETAPA (NOLOCK) AS ETAPA_1 ON CONTRATO.etapapendencia_id = ETAPA_1.etapa_id)
+ LEFT JOIN PARCEIROCONTATO ON PARCEIROCONTATO.parceirocontato_id = (SELECT max(PC.parceirocontato_id) FROM PARCEIROCONTATO PC WHERE PC.parceironegocio_id = FORMULARIO.parceironegocio_id AND PC.isactive = 1)
+ LEFT JOIN CIDADE ON CIDADE.cidade_id = (SELECT max(C.cidade_id) FROM CIDADE C, LOCALIDADE L, PARCEIROLOCALIDADE PL WHERE PL.localidade_id = L.localidade_id AND L.cidade_id = C.cidade_id AND PL.parceironegocio_id = FORMULARIO.parceironegocio_id AND PL.isactive = 1 and PL.tipoendereco_id = 2)
+ LEFT JOIN PARCEIROLOCALIDADE ON PARCEIROLOCALIDADE.parceirolocalidade_id = (SELECT max(PL.parceirolocalidade_id) FROM PARCEIROLOCALIDADE PL WHERE PL.parceironegocio_id = FORMULARIO.parceironegocio_id AND PL.isactive = 1 and PL.tipoendereco_id = 2)
+ LEFT JOIN LOCALIDADE ON LOCALIDADE.localidade_id = PARCEIROLOCALIDADE.localidade_id
+ LEFT JOIN TIPOLOCALIDADE ON TIPOLOCALIDADE.tipolocalidade_id = LOCALIDADE.tipolocalidade_id
+ INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)
+ INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio
+ WHERE FORMULARIO.formulario_id =  $P{formulario.id}]]>
+	</queryString>
+	<field name="formularioData" class="java.sql.Timestamp"/>
+	<field name="consultorNome" class="java.lang.String"/>
+	<field name="consultorCpf" class="java.lang.String"/>
+	<field name="consultorSupervisor" class="java.lang.String"/>
+	<field name="clienteNome" class="java.lang.String"/>
+	<field name="clienteId" class="java.math.BigDecimal"/>
+	<field name="contratoProduto" class="java.lang.String"/>
+	<field name="contratoBanco" class="java.lang.String"/>
+	<field name="clienteCpf" class="java.lang.String"/>
+	<field name="clienteNascimento" class="java.sql.Timestamp"/>
+	<field name="clienteBeneficio" class="java.lang.String"/>
+	<field name="contratoBancoComprado" class="java.lang.String"/>
+	<field name="contratoParcelaAberto" class="java.lang.Integer"/>
+	<field name="contratoValor" class="java.lang.Double"/>
+	<field name="contratoParcela" class="java.lang.Double"/>
+	<field name="contratoPrazo" class="java.lang.Integer"/>
+	<field name="contratoDivida" class="java.lang.Double"/>
+	<field name="contratoDesconto" class="java.lang.Double"/>
+	<field name="contratoLiquido" class="java.lang.Double"/>
+	<field name="contratoObs" class="java.lang.String"/>
+	<field name="clienteEndereco" class="java.lang.String"/>
+	<field name="clienteContato" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="2" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="3" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="778" splitType="Stretch">
+			<textField>
+				<reportElement x="5" y="16" width="384" height="20"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tituloFormulario}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame" hAlign="Left" vAlign="Middle">
+				<reportElement stretchType="RelativeToBandHeight" x="400" y="2" width="143" height="41"/>
+				<imageExpression><![CDATA["C:\\Sistemas\\tomcat7\\webapps\\sgo\\WEB-INF\\_repositorio\\sgo\\img\\logo1.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="4" y="48" width="543" height="15" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#999999"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="50" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Dados do Cliente]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="1" y="181" width="547" height="15" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#999999"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="182" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Conta Bancária]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="260" width="546" height="15" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#999999"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="7" y="278" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Produto]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="2" y="355" width="270" height="15" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#999999"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="281" y="354" width="268" height="15" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#999999"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="355" width="102" height="15"/>
+				<textElement/>
+				<text><![CDATA[Condições Contratuais]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="355" width="102" height="15"/>
+				<textElement/>
+				<text><![CDATA[Outras Informações]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="35" y="664" width="186" height="16"/>
+				<textElement/>
+				<text><![CDATA[Assinatura do Representante Ourocred]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="4" y="453" width="545" height="15" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#999999"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="454" width="102" height="15"/>
+				<textElement/>
+				<text><![CDATA[Observações]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="690" width="186" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[**Valores sujeitos a Alteração**]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="65" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[CPF :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="79" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Nome :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="93" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Nascimento :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="107" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Sexo :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="121" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Telefones :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="149" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Endereço :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="93" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Nome Pai :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="65" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Código :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="79" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Nome Mãe :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="107" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[RG / Expedição :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="121" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Naturalidade :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="135" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Salário :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="215" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Agência :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="201" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Banco :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="261" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Tipo de Conta :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="229" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Conta : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="228" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Abertura :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="214" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Titular :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="200" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[CPF :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="243" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Observação :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="292" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Funcionário :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="320" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Produto :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="306" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Banco :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="292" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Parceiro :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="306" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Supervisor :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="334" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Desc Produto :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="390" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Saldo Devedor :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="404" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Valor Líquido :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="375" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Valor Contrato :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="418" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Prazo :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="432" width="79" height="14"/>
+				<textElement/>
+				<text><![CDATA[Valor Parcela :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="376" width="106" height="14"/>
+				<textElement/>
+				<text><![CDATA[Forma de Pagamento :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="390" width="106" height="14"/>
+				<textElement/>
+				<text><![CDATA[Forma de Crédito :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="404" width="106" height="14"/>
+				<textElement/>
+				<text><![CDATA[N° Benefício :]]></text>
+			</staticText>
+			<textField pattern="">
+				<reportElement x="85" y="65" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteCpf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="79" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteNome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="85" y="93" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteNascimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="374" y="200" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteCpf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="320" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contratoProduto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="306" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contratoBanco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="375" y="292" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consultorNome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="375" y="306" width="126" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consultorSupervisor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="85" y="376" width="100" height="13"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contratoValor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="85" y="389" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contratoDivida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="85" y="404" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contratoLiquido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="418" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contratoPrazo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="85" y="432" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contratoParcela}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="401" y="404" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteBeneficio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="149" width="197" height="34"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteEndereco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="121" width="197" height="27"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clienteContato}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="364" y="664" width="108" height="16"/>
+				<textElement/>
+				<text><![CDATA[Assinatura do Cliente]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="14" y="705" width="521" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{organizacaoEndereco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="719" width="186" height="13"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{organizacaoContato}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="14" y="663" width="229" height="1"/>
+			</line>
+			<line>
+				<reportElement x="295" y="662" width="229" height="1"/>
+			</line>
+			<line>
+				<reportElement x="14" y="689" width="529" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="423" y="758" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="503" y="758" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="221" y="758" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="6" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="4" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="5" splitType="Stretch"/>
+	</summary>
+</jasperReport>

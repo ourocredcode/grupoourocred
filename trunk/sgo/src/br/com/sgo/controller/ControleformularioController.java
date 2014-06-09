@@ -161,7 +161,7 @@ public class ControleformularioController {
 			this.posvenda.setValorLiquido(posvenda.getValorLiquido());
 			this.posvenda.setValorParcela(posvenda.getValorParcela());
 
-			status = this.posvenda.getEtapa().getNome().equals("Reprovado") || this.posvenda.getEtapa().getNome().equals("Pendente") ? "Recalcular" : "Em Assinatura";
+			status = this.posvenda.getEtapa().getNome().equals("Reprovado") || this.posvenda.getEtapa().getNome().equals("Pendente") ? "Recalcular" : "Aguardando Logística";
 
 			this.controleFormularioDao.beginTransaction();
 			this.controleFormularioDao.atualiza(this.posvenda);
@@ -181,7 +181,7 @@ public class ControleformularioController {
 				posvenda.setEtapaPendencia(null);
 			}
 
-			status = posvenda.getEtapa().getNome().equals("Reprovado") || posvenda.getEtapa().getNome().equals("Pendente") ? "Recalcular" : "Em Assinatura";
+			status = posvenda.getEtapa().getNome().equals("Reprovado") || posvenda.getEtapa().getNome().equals("Pendente") ? "Recalcular" : "Aguardando Logística";
 
 			posvenda.setEmpresa(empresa);
 			posvenda.setOrganizacao(organizacao);

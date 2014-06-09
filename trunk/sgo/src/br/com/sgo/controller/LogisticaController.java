@@ -184,6 +184,10 @@ public class LogisticaController {
 		parceiroLocalidade = new ParceiroLocalidade();
 		parceiroNegocio = parceiroNegocioDao.buscaParceiroNegocioById(form.getParceiroNegocio().getParceiroNegocio_id());
 
+		String tituloFormulario = " - " + form.getOrganizacao().getDescricao() + " - GRUPO OURO CRED";
+
+		parametros.put("tituloFormulario", tituloFormulario);
+
 		for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
 
 			if(pl.getTipoEndereco().getNome().equals("Assinatura") && pl.getIsActive()){
@@ -194,7 +198,8 @@ public class LogisticaController {
 		
 		for(ParceiroContato pc : parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id())) {
 
-			contatos.add(pc);
+			if(pc.getIsActive())
+				contatos.add(pc);
 
 		}
 
@@ -246,6 +251,18 @@ public class LogisticaController {
 			result.include("msg","ERRO : Cliente sem endereço cadastrado. ").redirectTo(this).msg();
 
 		}
+
+		impressao = null;
+		forms = null;
+		form = null;
+		contatos = null;
+		contratos = null;
+		parceiroNegocio = null;
+		parceiroLocalidade = null;
+		
+		System.gc();
+
+		result.nothing();
 
 	}
 

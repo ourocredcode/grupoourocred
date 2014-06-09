@@ -1259,7 +1259,7 @@ function openPopup(url) {
 											<div class="controls">
 												<select id="logisticaPeriodoId" name="logistica.periodo.periodo_id" class="selectPeriodoLogistica">
 													<c:forEach var="periodo" items="${periodos }">
-														<option value="${periodo.periodo_id }">${periodo.nome }</option>
+														<option value="${periodo.periodo_id }" <c:if test="${periodo.nome eq 'Comercial' }">selected="selected"	</c:if> >${periodo.nome }</option>
 													</c:forEach>
 												</select>
 											</div>

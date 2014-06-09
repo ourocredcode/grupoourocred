@@ -60,6 +60,10 @@ public class CheckListDataSource implements JRDataSource {
 					valor = formulario.getParceiroLocalidade().getLocalidade().getCidade().getNome();
 				}else if("periodoAssinatura".equals(campo.getName())){
 					valor = c.getLogistica().getPeriodo().getNome();
+				}else if("pontoReferencia".equals(campo.getName())){
+					valor = formulario.getParceiroLocalidade().getPontoReferencia();
+				}else if("complemento".equals(campo.getName())){
+					valor = formulario.getParceiroLocalidade().getComplemento();
 				}
 
 		}

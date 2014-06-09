@@ -35,14 +35,14 @@ public class ParceiroLocalidadeDao extends Dao<ParceiroLocalidade> {
 			" LOCALIDADE.pais_id, PAIS.nome as pais_nome, PARCEIROLOCALIDADE.tipoendereco_id, PARCEIROLOCALIDADE.isactive as active_parceirolocalidade, TIPOENDERECO.tipoendereco_id , " + 
 			" TIPOENDERECO.nome as tipoendereco_nome FROM " + 
 			" ((((LOCALIDADE " +
-			" INNER JOIN PAIS ON LOCALIDADE.pais_id = PAIS.pais_id) " +
-			" LEFT JOIN REGIAO ON LOCALIDADE.regiao_id = REGIAO.regiao_id) " + 
-			" INNER JOIN CIDADE ON LOCALIDADE.cidade_id = CIDADE.cidade_id) " + 
-			" INNER JOIN ((( ORGANIZACAO INNER JOIN PARCEIRONEGOCIO ON ORGANIZACAO.organizacao_id = PARCEIRONEGOCIO.organizacao_id ) " + 
-			" INNER JOIN EMPRESA ON PARCEIRONEGOCIO.empresa_id = EMPRESA.empresa_id) " + 
-			" INNER JOIN PARCEIROLOCALIDADE ON PARCEIRONEGOCIO.parceironegocio_id = PARCEIROLOCALIDADE.parceironegocio_id) ON LOCALIDADE.localidade_id = PARCEIROLOCALIDADE.localidade_id) " + 
-			" LEFT JOIN TIPOENDERECO ON PARCEIROLOCALIDADE.tipoendereco_id = TIPOENDERECO.tipoendereco_id " +
-			" LEFT JOIN TIPOLOCALIDADE ON TIPOLOCALIDADE.tipolocalidade_id = LOCALIDADE.tipolocalidade_id "; 
+			" INNER JOIN PAIS (NOLOCK) ON LOCALIDADE.pais_id = PAIS.pais_id) " +
+			" LEFT JOIN REGIAO (NOLOCK) ON LOCALIDADE.regiao_id = REGIAO.regiao_id) " + 
+			" INNER JOIN CIDADE (NOLOCK) ON LOCALIDADE.cidade_id = CIDADE.cidade_id) " + 
+			" INNER JOIN ((( ORGANIZACAO (NOLOCK) INNER JOIN PARCEIRONEGOCIO ON ORGANIZACAO.organizacao_id = PARCEIRONEGOCIO.organizacao_id ) " + 
+			" INNER JOIN EMPRESA (NOLOCK) ON PARCEIRONEGOCIO.empresa_id = EMPRESA.empresa_id) " + 
+			" INNER JOIN PARCEIROLOCALIDADE (NOLOCK) ON PARCEIRONEGOCIO.parceironegocio_id = PARCEIROLOCALIDADE.parceironegocio_id) ON LOCALIDADE.localidade_id = PARCEIROLOCALIDADE.localidade_id) " + 
+			" LEFT JOIN TIPOENDERECO (NOLOCK) ON PARCEIROLOCALIDADE.tipoendereco_id = TIPOENDERECO.tipoendereco_id " +
+			" LEFT JOIN TIPOLOCALIDADE (NOLOCK) ON TIPOLOCALIDADE.tipolocalidade_id = LOCALIDADE.tipolocalidade_id "; 
 
 	public ParceiroLocalidadeDao(Session session, ConnJDBC conexao) {
 		super(session, ParceiroLocalidade.class);
