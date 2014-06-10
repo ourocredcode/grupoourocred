@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import br.com.caelum.restfulie.RestClient;
 import br.com.caelum.restfulie.Restfulie;
@@ -42,6 +43,7 @@ import br.com.sgo.dao.TipoParceiroDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
+import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Convenio;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Funcionario;
@@ -152,10 +154,20 @@ public class ParceironegocioController {
 	public void cadastro(){
 
 		if(this.parceiroNegocio.getParceiroNegocio_id() != null) {
-			
+
 			parceiroNegocio = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
 
-			result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id()));
+			List<ParceiroLocalidade> parceiroLocalidades = new ArrayList<ParceiroLocalidade>();
+			Collection<ParceiroLocalidade> pls = this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id());
+
+			for(ParceiroLocalidade pl : pls){
+				if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+					parceiroLocalidades.add(pl);
+				}
+			}
+
+			result.include("parceiroLocalidades",parceiroLocalidades);
+			
 			result.include("parceiroInfoBanco",this.parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
@@ -293,7 +305,16 @@ public class ParceironegocioController {
 
 			parceiroNegocio = this.parceiroNegocioDao.load(parceiroNegocio.getParceiroNegocio_id());
 
-			result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id()));
+			List<ParceiroLocalidade> parceiroLocalidades = new ArrayList<ParceiroLocalidade>();
+			Collection<ParceiroLocalidade> pls = this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id());
+
+			for(ParceiroLocalidade pl : pls){
+				if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+					parceiroLocalidades.add(pl);
+				}
+			}
+
+			result.include("parceiroLocalidades",parceiroLocalidades);
 			result.include("parceiroInfoBanco",this.parceiroInfoBancoDao.buscaParceiroInfoBancoByParceiro(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroContatos",this.parceiroContatoDao.buscaParceiroContatos(parceiroNegocio.getParceiroNegocio_id()));
 			result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
@@ -326,8 +347,17 @@ public class ParceironegocioController {
 	@Get
 	@Path("/parceironegocio/parceiroLocalidades")
 	public void parceiroLocalidades(Long parceironegocio_id){
+		
+		List<ParceiroLocalidade> parceiroLocalidades = new ArrayList<ParceiroLocalidade>();
+		Collection<ParceiroLocalidade> pls = this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceironegocio_id);
 
-		result.include("parceiroLocalidades",this.parceiroLocalidadeDao.buscaParceiroLocalidades(parceironegocio_id));
+		for(ParceiroLocalidade pl : pls){
+			if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+				parceiroLocalidades.add(pl);
+			}
+		}
+
+		result.include("parceiroLocalidades",parceiroLocalidades);
 
 	}
 
@@ -892,37 +922,47 @@ public class ParceironegocioController {
 	@Path("/parceironegocio/salvaBeneficio")
 	public void salvaBeneficio(ParceiroBeneficio parceiroBeneficio){
 
+		parceiroBeneficio.setNumeroBeneficio(parceiroBeneficio.getNumeroBeneficio().trim());
 		parceiroBeneficio.setIsActive(true);
 		parceiroBeneficio.setEmpresa(empresa);
 		parceiroBeneficio.setOrganizacao(organizacao);
 
 		String mensagem = "";
 
-		try {
+		if ( this.parceiroBeneficioDao.buscaParceiroBeneficioByNumeroBeneficio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), parceiroBeneficio.getNumeroBeneficio()) == null){
 
-			this.parceiroBeneficioDao.beginTransaction();
-			this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
-			this.parceiroBeneficioDao.commit();
-		
-		} catch(Exception e) {
-
-			this.parceiroBeneficioDao.rollback();
-
-			if (e.getCause().toString().indexOf("PK_PARCEIROBENEFICIO") != -1){
-
-				mensagem = "Erro: Contato " + parceiroBeneficio.getNumeroBeneficio() + " já existente.";
-
-			} else {
-
-				mensagem = "Erro ao adicionar Matrícula:";
-
+			try {
+	
+				this.parceiroBeneficioDao.beginTransaction();
+				this.parceiroBeneficioDao.adiciona(parceiroBeneficio);
+				this.parceiroBeneficioDao.commit();
+			
+			} catch(Exception e) {
+	
+				this.parceiroBeneficioDao.rollback();
+	
+				if (e.getCause().toString().indexOf("PK_PARCEIROBENEFICIO") != -1){
+	
+					mensagem = "Erro: Benefício " + parceiroBeneficio.getNumeroBeneficio() + " já existente para este cliente.";
+	
+				} else {
+	
+					mensagem = "Erro ao adicionar Matrícula:";
+	
+				}
+	
+				result.include("msg",mensagem).redirectTo(this).msg();
+	
 			}
+	
+			result.redirectTo(this).parceiroBeneficios(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
+		
+		} else {
+
+			mensagem = "Erro: Benefício " + parceiroBeneficio.getNumeroBeneficio() + " já existente para este cliente.";
 
 			result.include("msg",mensagem).redirectTo(this).msg();
-
 		}
-
-		result.redirectTo(this).parceiroBeneficios(parceiroBeneficio.getParceiroNegocio().getParceiroNegocio_id());
 
 	}
 	
@@ -934,13 +974,16 @@ public class ParceironegocioController {
 
 		if(parceiroLocalidade.getNumero() != null)
 			pl.setNumero(parceiroLocalidade.getNumero());
-		
+
 		if(parceiroLocalidade.getIsActive() != null)
 			pl.setIsActive(parceiroLocalidade.getIsActive());
-		
+
 		if(parceiroLocalidade.getComplemento() != null)
 			pl.setComplemento(parceiroLocalidade.getComplemento());
-		
+
+		if(parceiroLocalidade.getPontoReferencia() != null)
+			pl.setPontoReferencia(parceiroLocalidade.getPontoReferencia());
+
 		if(parceiroLocalidade.getTipoEndereco() != null)
 			pl.setTipoEndereco(this.tipoEnderecoDao.load(parceiroLocalidade.getTipoEndereco().getTipoEndereco_id()));
 

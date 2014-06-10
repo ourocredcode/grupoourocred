@@ -407,6 +407,11 @@
 					 'parceiroLocalidade.complemento ' : valor };
 		}
 
+		if(atributo == 'pontoReferencia'){
+			var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
+					 'parceiroLocalidade.pontoReferencia ' : valor };
+		}
+
 		if(atributo == 'tipoEndereco'){
 			var attr = {'parceiroLocalidade.parceiroLocalidade_id' : parceiroLocalidade_id ,
 					 'parceiroLocalidade.tipoEndereco.tipoEndereco_id' : valor} ;
@@ -1007,13 +1012,21 @@
 							</c:if>
 						</div>
 						<c:if test="${not empty parceiroLocalidades}">
-							<div class="navbar" style="clear: both;width: 900px;">
+							<div class="navbar" style="clear: both;width: 1000px;">
 				
 								<div class="navbar-inner"  >
 									<div class="container">
 				
 										<div class="page-header">
 											<h2><small>Endereços</small></h2>
+										</div>
+										
+										<div class="alert alert-block">
+										  <button type="button" class="close" data-dismiss="alert">&times;</button>
+										  <h4>ATENÇÃO!</h4>
+										  </br>
+										  Para alteração de número, complemento e ponto de referência utilize os campos das linhas abaixo . </br> </br>
+										  Caso possua mais de um endereço , deixe a opção ativo marcada na linha correspondente para impressão correta do checklist, não sendo necessário cadastrá-lo novamente.
 										</div>
 				
 										<div id="enderecos" style="margin-top: 15px;">
@@ -1028,6 +1041,7 @@
 														<th>Endereço</th>
 														<th>Número</th>
 														<th>Complemento</th>
+														<th>Ponto Referência</th>
 														<th>Tipo</th>
 														<!-- 
 														<th>Excluir</th>
@@ -1046,7 +1060,8 @@
 															<td>${parceiroLocalidade.localidade.tipoLocalidade.nome }</td>
 															<td>${parceiroLocalidade.localidade.endereco }</td>
 															<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-small" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
-															<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-medium" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+															<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-small" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+															<td><input type="text" id="parceiroLocalidadePontoReferenciaLista" value="${parceiroLocalidade.pontoReferencia }" class="input-medium" onChange="return altera(this,'pontoReferencia','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
 															<td>${parceiroLocalidade.tipoEndereco.nome }</td>
 															<!-- 
 															<td>
