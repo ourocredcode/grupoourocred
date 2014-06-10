@@ -396,6 +396,7 @@ public class FormularioController {
 					|| c.getProduto().getNome().equals("MARGEM LIMPA PMSP")
 					|| c.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
 					|| c.getProduto().getNome().equals("RECOMPRA INSS")
+					|| c.getProduto().getNome().equals("PORTABILIDADE/REFIN")
 					|| c.getProduto().getNome().equals("RECOMPRA PMSP")
 					|| c.getProduto().getNome().equals("RECOMPRA GOVRJ")  
 					|| c.getProduto().getNome().equals("RECOMPRA RMC") 
@@ -603,7 +604,7 @@ public class FormularioController {
 
 				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("AUMENTO") )
 					countMargemLimpa += 1;
-				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ"))
+				if(c.getProduto().equals("RECOMPRA INSS") ||   c.getProduto().equals("PORTABILIDADE/REFIN") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ"))
 					countRecompraINSS += 1;
 				if(c.getProduto().equals("RECOMPRA RMC"))
 					countRecompraRMC += 1;
@@ -778,7 +779,7 @@ public class FormularioController {
 
 				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("AUMENTO") )
 					countMargemLimpa += 1;
-				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ"))
+				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("PORTABILIDADE/REFIN") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ"))
 					countRecompraINSS += 1;
 				if(c.getProduto().equals("RECOMPRA RMC"))
 					countRecompraRMC += 1;

@@ -500,6 +500,21 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;
+		
+		case 'PORTABILIDADE/REFIN':
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;
 
 		case 'RECOMPRA GOVRJ':
 			habilita(bancoComprado);
@@ -804,6 +819,26 @@ function validaForm(form) {
 				return false;
 			}
 
+		}
+		
+		if(contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
 		}
 		
 		if(contratoProdutoNome == 'RECOMPRA INSS'){
