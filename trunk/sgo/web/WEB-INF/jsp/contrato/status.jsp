@@ -1189,6 +1189,33 @@ function openPopup(url) {
 						<div class="row-fluid"> 
 
 							<div id="logisticasDiv">
+							
+								<c:if test="${not empty formulario.parceiroLocalidade.complemento && not empty formulario.parceiroLocalidade.pontoReferencia }">
+								
+									<div class="alert alert-success">
+									  <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+									  <h6>Endereço cadastrado corretamente!</h6>
+
+									  <b>Endereço de assinatura : </b> <c:out value="${formulario.parceiroLocalidade.localidade.tipoLocalidade.nome }" /> <c:out value="${formulario.parceiroLocalidade.localidade.endereco }" /> - <c:out value="${formulario.parceiroLocalidade.numero }" /> / CEP : - <c:out value="${formulario.parceiroLocalidade.localidade.cep }" /> <br/>
+									  <b>Complemento : </b> <c:out value="${formulario.parceiroLocalidade.complemento }" /> <br/>
+									  <b>Ponto de Referência : </b>  <c:out value="${formulario.parceiroLocalidade.pontoReferencia }" />
+
+									</div>
+								
+								</c:if>
+
+								<c:if test="${empty formulario.parceiroLocalidade.complemento || empty formulario.parceiroLocalidade.pontoReferencia }">
+								
+									<div class="alert alert-error">
+									  <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+									  <h6>Atenção! Cadastro de endereço incompleto!</h6>
+									  Cliente sem ponto de referência e / ou complemento cadastrado no seu endereço de assinatura. Clique no botão (Dados do Cliente) abaixo para realizar o seu cadastro.
+
+									</div>
+								
+								</c:if>
 
 								<c:if test="${not empty logisticas }">
 									<table class="table table-striped table-bordered" id="lista">
@@ -1213,9 +1240,25 @@ function openPopup(url) {
 							</div>
 
 							<div class="row-fluid"> 
-								<div class="span2">
-									<a href="#myModal" role="button" class="btn" data-toggle="modal">Nova Logística</a>
-								</div>
+								
+								
+								<c:if test="${not empty formulario.parceiroLocalidade.complemento && not empty formulario.parceiroLocalidade.pontoReferencia }">
+									<div class="span2">
+										<a href="#myModal" role="button" class="btn" data-toggle="modal">Nova Logística</a>
+									</div>
+								</c:if>
+								<c:if test="${empty formulario.parceiroLocalidade.complemento || empty formulario.parceiroLocalidade.pontoReferencia }">
+									<div class="span2">
+										<div class="buttons">
+											<form id="buscaParceiroForm" action="<c:url value="/parceironegocio/cadastro" />" method="post">
+												<input id="doc" name="doc" type="hidden" value="${formulario.parceiroNegocio.cpf }" />
+												<button type="submit" class="btn" ><i class="icon-user icon-black"></i> Dados do Cliente</button>
+											</form>
+										</div>
+										
+									</div>
+								</c:if>
+								
 								<div class="span1">
 									<c:if test="${not empty logisticas && not empty formulario.parceiroLocalidade }">
 
@@ -1225,6 +1268,7 @@ function openPopup(url) {
 
 									</c:if>
 								</div>
+								
 							</div>
 
 							<div id="myModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
