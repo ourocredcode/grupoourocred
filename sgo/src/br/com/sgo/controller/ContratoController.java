@@ -274,7 +274,7 @@ public class ContratoController {
 
 		for(ParceiroLocalidade pl : parceiroLocalidadeDao.buscaParceiroLocalidades(parceiroNegocio.getParceiroNegocio_id())){
 
-			if(pl.getTipoEndereco().getNome().equals("Assinatura")){
+			if(pl.getTipoEndereco().getNome().equals("Assinatura") && pl.getIsActive()){
 				parceiroLocalidade = pl;
 			}
 
