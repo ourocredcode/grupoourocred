@@ -1,5 +1,8 @@
 <%@ include file="/header.jspf" %> 
 
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -204,6 +207,10 @@ $(document).ready(function() {
 		else
 			$('#busca_Consultor option').remove();
 
+	});
+	
+	$('#reload').click(function() {
+	    location.reload();
 	});
 	
 });
@@ -1211,7 +1218,10 @@ function openPopup(url) {
 									  <button type="button" class="close" data-dismiss="alert">&times;</button>
 
 									  <h6>Atenção! Cadastro de endereço incompleto!</h6>
-									  Cliente sem ponto de referência e / ou complemento cadastrado no seu endereço de assinatura. Clique no botão (Dados do Cliente) abaixo para realizar o seu cadastro.
+									  Cliente sem ponto de referência e / ou complemento no seu endereço de assinatura. Clique no botão (Dados do Cliente) abaixo para completar o cadastro.
+
+									  <br/><br/>
+									  Após realizar a alteração, clique <a id="reload" href="#">aqui</a> para carregar esta página novamente.
 
 									</div>
 								
