@@ -901,7 +901,8 @@ public class MenuController {
 	
 	@Post
 	@Path("/menu/contrato/propostaContrato")
-	public void busca(String propostaBanco, String contratoBanco,String digitacaoInicio,String digitacaoFim, Collection<Long> empresas , Collection<Long> bancos) {
+	public void busca(String propostaBanco, String contratoBanco,String digitacaoInicio,String digitacaoFim, Collection<Long> empresas , Collection<Long> bancos,
+			Collection<String> status) {
 
 		contratos.clear();
 		
@@ -939,13 +940,18 @@ public class MenuController {
 			u = usuarioInfo.getUsuario();
 
 		contratos.addAll(this.contratoDao.buscaContratosByProposta(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),propostaBanco, contratoBanco, u,
-				calDigitacaoInicio,calDigitacaoFim,empresas,bancos));
+				calDigitacaoInicio,calDigitacaoFim,empresas,bancos,status));
 
 		contador();
 	}
 	
 	@Get
 	public void buscaproposta() {
+
+		TipoWorkflow tw;
+
+		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
 		
 		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
 

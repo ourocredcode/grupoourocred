@@ -34,6 +34,7 @@
 		var digitacaoFim = $("#busca_DataDigitacaoFim").val();
 		var empresas = $("#busca_Empresa").val();
 		var bancos = $("#busca_Banco").val();
+		var status = $("#busca_Status").val();
 
 		if(digitacaoInicio == undefined || digitacaoInicio == '__/__/____')
 			digitacaoInicio = "";
@@ -49,13 +50,18 @@
 			bancos = new Array();
 			bancos[0] = "";
 		}
+		
+		if(status == null){
+			status = new Array();
+			status[0] = "";
+		}
 
 		if(propostaBanco == '' && contratoBanco == '' && digitacaoInicio == '' && digitacaoFim == ''){
 			alert('Pesquise por um dos campos acima.');
 			$("#busca_PropostaBanco").focus();
 		} else {
 			$("#resultado").load('<c:url value="/menu/contrato/propostaContrato" />',{'propostaBanco': propostaBanco,'contratoBanco': contratoBanco, 
-				'digitacaoInicio':digitacaoInicio , 'digitacaoFim':digitacaoFim , 'empresas':empresas ,'bancos' : bancos});	
+				'digitacaoInicio':digitacaoInicio , 'digitacaoFim':digitacaoFim , 'empresas':empresas ,'bancos' : bancos,'status': status});	
 		}
 	
 	}
@@ -90,11 +96,27 @@
 	
 				<div class="widget-content" style="padding: 6px;">
 					<div class="row-fluid">
+					
+						<div class="span2">
+
+							<div class="row-fluid">
+								
+								<label for="busca_Status">Status Contrato</label>
+			  					<select id="busca_Status" name="busca_Status" class="input-medium" MULTIPLE >
+									<option value="">Todos...</option>
+									<c:forEach items="${etapas }" var="etapa">
+										<option value="${etapa.nome }">${etapa.nome }</option>
+									</c:forEach>
+								</select>
+							
+							</div>
+
+						</div>
 
 						<div class="span2">
 							<div class="row-fluid">
 								
-								<label for="busca_Banco">Banco</label>
+								<label for="busca_Banco">Banco Contrato</label>
 								<select id="busca_Banco" name="busca_Banco"  class="input-medium" MULTIPLE>
 									<option value="">Selecione um banco</option>
 									<c:forEach items="${bancos }" var="banco">
@@ -105,7 +127,7 @@
 							</div>
 							<div class="row-fluid">
 							
-								<label for="busca_Empresa">Empresa</label>
+								<label for="busca_Empresa">Empresa Digitação</label>
 								<select id="busca_Empresa" name="busca_Empresa" class="input-medium" MULTIPLE>
 									<option value="">Todos</option>
 									<option value="5">ATGGOLD</option>
@@ -139,12 +161,12 @@
 							<div class="row-fluid">
 							
 								<div class="span5">	
-									<label for="busca_Contrato">Contrato</label>
+									<label for="busca_Contrato">Núm. Contrato</label>
 									<input type="text" id="busca_ContratoBanco" name="busca_ContratoBanco" class="input-small" />
 								</div>
 
 								<div class="span5">	
-									<label for="busca_Proposta">Proposta</label>
+									<label for="busca_Proposta">Núm. Proposta</label>
 									<input type="text" id="busca_PropostaBanco" name="busca_PropostaBanco"  class="input-small" />
 								</div>
 							

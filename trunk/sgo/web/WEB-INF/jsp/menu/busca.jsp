@@ -59,11 +59,12 @@ $(document).ready(function() {
 			  			/* 20 - Data Próx Atuação */     { "bVisible":    false },
 			  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
 			  			/* 22 - Data Quitação */     { "bVisible":    false },
-			  			/* 23 - Pós Venda */     { "bVisible":    false },
-			  			/* 24 - Motivo Recusa */     { "bVisible":    false },
-			  			/* 25 - Data Status Final */     { "bVisible":    false },
-			  			/* 26 - Repasse */     { "bVisible":    false },
-			  			/* 27 - Contrato ID */     { "bVisible":    false }
+			  			/* 23 - Data Digitação */     { "bVisible":    false },
+			  			/* 24 - Pós Venda */     { "bVisible":    false },
+			  			/* 25 - Motivo Recusa */     { "bVisible":    false },
+			  			/* 26 - Data Status Final */     { "bVisible":    false },
+			  			/* 27 - Repasse */     { "bVisible":    false },
+			  			/* 28 - Contrato ID */     { "bVisible":    false }
 			  		] ,
 
 		"sDom": ' T C <"clear">lfrtip',
@@ -243,6 +244,9 @@ $(document).ready(function() {
 												Dt Quitação
 											</th>
 											<th >
+												Dt Digitação
+											</th>
+											<th >
 												Pós Venda
 											</th>
 											<th >
@@ -336,7 +340,10 @@ $(document).ready(function() {
 													<fmt:formatDate value="${contrato.controle.dataAtuacao.time }" pattern="dd/MM" />
 												</td>
 												<td >
-													<fmt:formatDate value="${contrato.dataQuitacao.time }" pattern="dd/MM" />
+													<fmt:formatDate value="${contrato.dataQuitacao.time }" pattern="dd/MM/yy" />
+												</td>
+												<td >
+													<fmt:formatDate value="${contrato.dataDigitacao.time }" pattern="dd/MM/yy" />
 												</td>
 												<td >
 													${contrato.formulario.posvenda.etapa.nome }
