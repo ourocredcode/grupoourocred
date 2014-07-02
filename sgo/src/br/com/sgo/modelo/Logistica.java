@@ -78,6 +78,12 @@ public class Logistica implements Serializable {
 	@Column(name = "dataassinatura")
 	private Calendar dataAssinatura;
 
+	@Column(name = "horaassinaturainicio")
+	private Calendar horaAssinaturaInicio;
+
+	@Column(name = "horaassinaturafim")
+	private Calendar horaAssinaturaFim;
+
 	@Column(name = "isfechado")
 	private Boolean isFechado;
 
@@ -177,6 +183,22 @@ public class Logistica implements Serializable {
 
 	public void setDataAssinatura(Calendar dataAssinatura) {
 		this.dataAssinatura = dataAssinatura;
+	}
+
+	public Calendar getHoraAssinaturaInicio() {
+		return horaAssinaturaInicio;
+	}
+
+	public void setHoraAssinaturaInicio(Calendar horaAssinaturaInicio) {
+		this.horaAssinaturaInicio = horaAssinaturaInicio;
+	}
+
+	public Calendar getHoraAssinaturaFim() {
+		return horaAssinaturaFim;
+	}
+
+	public void setHoraAssinaturaFim(Calendar horaAssinaturaFim) {
+		this.horaAssinaturaFim = horaAssinaturaFim;
 	}
 
 	public String getNome() {
