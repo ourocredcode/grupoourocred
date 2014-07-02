@@ -198,6 +198,20 @@ $(document).ready(function() {
 		dateFormat: 'dd/mm/y'
 	});
 	
+	$('#logisticaDataAssinatura').datepicker({
+		dateFormat: 'dd/mm/y'
+	});	
+
+	$('#horaAssinatura .time').timepicker({
+        'showDuration': true,
+        'minTime': '9:00am',
+        'maxTime': '6:00pm',
+        'timeFormat': 'H:i'
+    });
+
+	$('#horaAssinatura').datepair();
+
+	
 	$("#busca_Supervisor").change(function() {   
 		
 		var supervisor_id = $("#busca_Supervisor").val();
@@ -289,7 +303,7 @@ function verificaStatus() {
 	if(status != 'Recusado' && status != 'Pendente Banco' && status != 'Pendente Administrativo' && status != 'Pendente Agendamento' && status != 'Pendente Coeficiente' && status != 'Pendente Apoio Comercial' && status != 'Pendente Comercial')
 		desabilita(justificativa);
 
-	if(status == 'Enviado DataPrev' || status == 'Quitado'){
+	if(status == 'Enviado DataPrev' || status == 'Quitado' || status == 'Aguardando Integração'){
 
 		if(contratoProduto == 'MARGEM LIMPA' || contratoProduto == 'REFINANCIAMENTO' || contratoProduto == 'RETENÇÃO' || contratoProduto == 'RETENÇÃO PMSP')
 			desabilita(dataQuitacao);
@@ -540,6 +554,57 @@ function validaForm(form) {
 	}
 
 };
+
+
+function verificaPeriodo(value) {
+
+	var logisticaPeriodoId = document.getElementById("logisticaPeriodoId");
+	var logisticaPeriodo = logisticaPeriodoId.options[logisticaPeriodoId.selectedIndex].text;
+	var horaInicio = document.getElementById("logisticaHoraAssinaturaInicio");
+	var horaFim = document.getElementById("logisticaHoraAssinaturaFim");
+	var btt_salvalogistica = document.getElementById("btt_salvalogistica");
+
+	if(logisticaPeriodo == "Restrito"){
+
+		horaInicio.disabled = false;
+		horaInicio.required = true;
+
+		horaFim.disabled = false;
+		horaFim.required = true;
+		
+		btt_salvalogistica.disabled = true;
+
+	} else {
+
+		horaInicio.disabled = true;
+		horaInicio.required = false;
+
+		horaFim.disabled = true;
+		horaFim.required = false;
+		
+		btt_salvalogistica.disabled = false;
+
+		horaInicio.value = "";
+		horaFim.value = "";
+	}
+
+}
+
+function habilitaSalva(value){
+
+	var btt_salvalogistica = document.getElementById("btt_salvalogistica");
+
+	if(value != ""){
+
+		btt_salvalogistica.disabled = false;
+
+	} else {
+
+		btt_salvalogistica.disabled = true;
+
+	}
+
+}
 
 function verificaPagamento() {
 
@@ -1311,11 +1376,20 @@ function openPopup(url) {
 										<div class="control-group">
 											<label class="control-label">Período : </label>
 											<div class="controls">
-												<select id="logisticaPeriodoId" name="logistica.periodo.periodo_id" class="selectPeriodoLogistica">
+												<select id="logisticaPeriodoId" name="logistica.periodo.periodo_id" class="selectPeriodoLogistica" onchange="verificaPeriodo(this.value);">
 													<c:forEach var="periodo" items="${periodos }">
 														<option value="${periodo.periodo_id }" <c:if test="${periodo.nome eq 'Comercial' }">selected="selected"	</c:if> >${periodo.nome }</option>
 													</c:forEach>
 												</select>
+											</div>
+										</div>
+										<div id="horaAssinaturaDiv" class="control-group">
+											<label class="control-label">Hora Inicio : </label>
+											<div class="controls">
+												<p id="horaAssinatura">
+													<input id="logisticaHoraAssinaturaInicio" name="logistica.horaAssinaturaInicio.time"  value="<fmt:formatDate pattern="HH:mm" value="${ logistica.horaAssinaturaInicio.time }"  />"  disabled="disabled" class="input-small time start" onchange="habilitaSalva(this.value);" /> até
+													<input id="logisticaHoraAssinaturaFim" name="logistica.horaAssinaturaFim.time" value="<fmt:formatDate pattern="HH:mm" value="${ logistica.horaAssinaturaInicio.time }"  />"  disabled="disabled" class="input-small time end" />
+												</p>
 											</div>
 										</div>
 									</div>	
@@ -1334,7 +1408,7 @@ function openPopup(url) {
 								  </div>
 								  <div class="modal-footer">
 								    <button class="btn" data-dismiss="modal" aria-hidden="true">Fecha</button>
-								    <button class="btn btn-primary" type="submit">Salva</button>
+								    <button class="btn btn-primary" type="submit" id="btt_salvalogistica">Salva</button>
 								  </div>
 							</form>
 							</div>

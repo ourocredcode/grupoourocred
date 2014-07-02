@@ -380,7 +380,8 @@ public class ContratoDao extends Dao<Contrato> {
 					 " PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, " + 
 					 " CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , " +  
 					 " ETAPA.etapa_id, ETAPA.nome as etapa_nome, " + 
-					 " LOGISTICA.logistica_id, LOGISTICA.dataassinatura, LOGISTICA.periodo_id , PERIODO.nome as periodo_nome " + 
+					 " LOGISTICA.logistica_id, LOGISTICA.dataassinatura, LOGISTICA.horaassinaturainicio , LOGISTICA.horaassinaturafim , " +
+                     " LOGISTICA.periodo_id , PERIODO.nome as periodo_nome " + 
 					 " FROM " +  
 					 " (((((((((( CONTRATO (NOLOCK) " + 
 					 " INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) " + 
@@ -463,6 +464,31 @@ public class ContratoDao extends Dao<Contrato> {
 					Calendar dataAssinatura = new GregorianCalendar();
 					dataAssinatura.setTime(rsContrato.getDate("dataassinatura"));
 					logistica.setDataAssinatura(dataAssinatura);
+
+					if(rsContrato.getTimestamp("horaassinaturainicio") != null){
+
+						Calendar horaAssinaturaInicio = new GregorianCalendar();
+						horaAssinaturaInicio.setTime(rsContrato.getTimestamp("horaassinaturainicio"));
+						logistica.setHoraAssinaturaInicio(horaAssinaturaInicio);
+						
+					} else {
+						
+						logistica.setHoraAssinaturaInicio(dataAssinatura);
+					}
+					
+					if(rsContrato.getTimestamp("horaassinaturafim") != null){
+						
+						Calendar horaAssinaturaFim = new GregorianCalendar();
+						horaAssinaturaFim.setTime(rsContrato.getTimestamp("horaassinaturafim"));
+						logistica.setHoraAssinaturaFim(horaAssinaturaFim);
+						
+					} else {
+						
+						logistica.setHoraAssinaturaFim(dataAssinatura);
+						
+					}
+					
+
 					periodo.setPeriodo_id(rsContrato.getLong("periodo_id"));
 					periodo.setNome(rsContrato.getString("periodo_nome"));
 					logistica.setPeriodo(periodo);
@@ -470,7 +496,6 @@ public class ContratoDao extends Dao<Contrato> {
 					contrato.setLogistica(logistica);
 
 				}
-				
 
 				formulario.setParceiroNegocio(parceiro);
 

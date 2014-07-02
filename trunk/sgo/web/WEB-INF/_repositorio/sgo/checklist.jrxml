@@ -2,42 +2,43 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="checklist" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="155"/>
+	<property name="ireport.y" value="88"/>
 	<parameter name="formulario.id" class="java.math.BigDecimal"/>
 	<parameter name="tituloFormulario" class="java.lang.String">
 		<defaultValueExpression><![CDATA[$P{tituloFormulario}]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select
-consultor.nm_nome as consultorNome,
-consultor.nm_supervisor as consultorSupervisor,
-cliente.nm_nome as clienteNome,
-cliente.nm_cpf as clienteCpf,
-cliente.nm_telefoneRes as clienteTelRes,
-cliente.nm_telefoneCel as clienteTelCel,
-sts.dt_dataAssinatura as dataAssinatura,
-cliente.nm_endereco as clienteEndereco,
-cliente.nm_numero as clienteNumero,
-cliente.nm_cep as clienteCep,
-cliente.nm_bairro as clienteBairro,
-cliente.nm_cidade as clienteCidade,
-sts.nm_periodoAssinatura as periodoAssinatura
-from
-dbo.SOLICITACAO_CONSULTOR consultor,
-dbo.SOLICITACAO_FORMULARIO formulario,
-dbo.SOLICITACAO_FORMULARIO_CONTRATO fc,
-dbo.SOLICITACAO_CONTRATO contrato,
-dbo.SOLICITACAO_CLIENTE cliente,
-dbo.SOLICITACAO_CONTRATO_STATUS sts
-where
-formulario.fk_consultor = consultor.nm_login
-and formulario.fk_cliente = cliente.nm_beneficio
-and fc.fk_contrato = contrato.id
-and fc.fk_formulario = formulario.id
-and contrato.id = sts.fk_contrato
-and sts.dt_dataAssinatura is not null
-and sts.nm_periodoAssinatura is not null
-and formulario.id = $P{formulario.id}]]>
+		<![CDATA[SELECT
+USUARIO.apelido as consultorNome,
+USUARIO_SUPERVISOR.apelido as consultorSupervisor,
+PARCEIRONEGOCIO.nome as clienteNome,
+PARCEIRONEGOCIO.cpf as clienteCpf,
+'' as clienteTelRes,
+'' as clienteTelCel,
+LOGISTICA.dataassinatura as dataAssinatura,
+'' as clienteEndereco,
+'' as clienteNumero,
+'' as clienteCep,
+'' as clienteBairro,
+'' as clienteCidade,
+PERIODO.nome as periodoAssinatura  ,
+'' as pontoReferencia,
+'' as complemento,
+'' as horaAssinatura
+FROM
+(((((((((( CONTRATO (NOLOCK)
+INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id)
+INNER JOIN WORKFLOW (NOLOCK) ON CONTRATO.workflow_id = WORKFLOW.workflow_id)
+INNER JOIN USUARIO (NOLOCK) ON CONTRATO.usuario_id = USUARIO.usuario_id)
+INNER JOIN EMPRESA (NOLOCK) ON CONTRATO.empresa_id = EMPRESA.empresa_id)
+INNER JOIN ORGANIZACAO (NOLOCK) ON CONTRATO.organizacao_id = ORGANIZACAO.organizacao_id)
+INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id)
+LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id)
+INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id)
+INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio)
+LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.logistica_id = ( SELECT max(LOGISTICA.logistica_id) FROM LOGISTICA (NOLOCK) WHERE LOGISTICA.contrato_id = CONTRATO.contrato_id ) )
+LEFT JOIN PERIODO (NOLOCK) ON LOGISTICA.periodo_id = PERIODO.periodo_id
+WHERE FORMULARIO.formulario_id = $P{formulario.id}]]>
 	</queryString>
 	<field name="consultorNome" class="java.lang.String"/>
 	<field name="consultorSupervisor" class="java.lang.String"/>
@@ -54,6 +55,7 @@ and formulario.id = $P{formulario.id}]]>
 	<field name="periodoAssinatura" class="java.lang.String"/>
 	<field name="pontoReferencia" class="java.lang.String"/>
 	<field name="complemento" class="java.lang.String"/>
+	<field name="horaAssinatura" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -362,7 +364,7 @@ and formulario.id = $P{formulario.id}]]>
 				<text><![CDATA[CEP:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="84" y="244" width="171" height="16"/>
+				<reportElement x="84" y="244" width="136" height="16"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="84" y="233" width="57" height="21"/>
@@ -372,24 +374,24 @@ and formulario.id = $P{formulario.id}]]>
 				<text><![CDATA[Bairro:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="273" y="244" width="194" height="16"/>
+				<reportElement x="229" y="244" width="144" height="16"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="273" y="233" width="57" height="21"/>
+				<reportElement x="229" y="233" width="57" height="21"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Cidade:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="475" y="244" width="69" height="16"/>
+				<reportElement x="381" y="244" width="86" height="16"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="475" y="233" width="57" height="21"/>
+				<reportElement x="380" y="233" width="57" height="13"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[Horário:]]></text>
+				<text><![CDATA[Período :]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="5" y="325" width="539" height="54"/>
@@ -700,7 +702,7 @@ and formulario.id = $P{formulario.id}]]>
 				<text><![CDATA[Ponto de Referência:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="477" y="246" width="115" height="20"/>
+				<reportElement x="382" y="246" width="85" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{periodoAssinatura}]]></textFieldExpression>
 			</textField>
@@ -725,12 +727,12 @@ and formulario.id = $P{formulario.id}]]>
 				<textFieldExpression><![CDATA[$F{clienteCep}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="88" y="246" width="174" height="20"/>
+				<reportElement x="88" y="246" width="132" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{clienteBairro}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="275" y="246" width="192" height="20"/>
+				<reportElement x="229" y="246" width="144" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{clienteCidade}]]></textFieldExpression>
 			</textField>
@@ -751,6 +753,21 @@ and formulario.id = $P{formulario.id}]]>
 				<reportElement x="7" y="340" width="538" height="39"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{complemento}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="475" y="243" width="69" height="16"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="475" y="233" width="57" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Horário:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="478" y="247" width="87" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{horaAssinatura}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

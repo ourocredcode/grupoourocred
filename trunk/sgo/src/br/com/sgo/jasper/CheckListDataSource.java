@@ -1,6 +1,7 @@
 package br.com.sgo.jasper;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +28,7 @@ public class CheckListDataSource implements JRDataSource {
 
 		Object valor = null;
 		formulario = (Formulario) valorAtual;
+		SimpleDateFormat horaAssinaturaFormat = new SimpleDateFormat("HH:mm");
 
 		Collection<Contrato> contratos = formulario.getContratos();
 
@@ -64,6 +66,8 @@ public class CheckListDataSource implements JRDataSource {
 					valor = formulario.getParceiroLocalidade().getPontoReferencia();
 				}else if("complemento".equals(campo.getName())){
 					valor = formulario.getParceiroLocalidade().getComplemento();
+				}else if("horaAssinatura".equals(campo.getName())){
+					valor = horaAssinaturaFormat.format(c.getLogistica().getHoraAssinaturaInicio().getTime()) + " - " + horaAssinaturaFormat.format(c.getLogistica().getHoraAssinaturaFim().getTime());
 				}
 
 		}

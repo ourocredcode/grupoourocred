@@ -3,6 +3,7 @@ package br.com.sgo.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -97,7 +98,7 @@ public class LogisticaController {
 	@Post
 	@Path("/logistica/salva")
 	public void salva(Logistica logistica, Long[] contrato_ids) {
-		
+
 		List<String> log = new ArrayList<String>();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -116,6 +117,39 @@ public class LogisticaController {
 			l.setDataAssinatura(logistica.getDataAssinatura());
 			l.setTipoLogistica(logistica.getTipoLogistica());
 			l.setPeriodo(logistica.getPeriodo());
+
+			if(logistica.getHoraAssinaturaInicio() != null){
+
+				Calendar horaInicio = new GregorianCalendar();
+				horaInicio.setTime(l.getDataAssinatura().getTime());
+
+				horaInicio.set(Calendar.HOUR_OF_DAY, logistica.getHoraAssinaturaInicio().get(Calendar.HOUR_OF_DAY));
+				horaInicio.set(Calendar.MINUTE, logistica.getHoraAssinaturaInicio().get(Calendar.MINUTE));
+
+				l.setHoraAssinaturaInicio(horaInicio);
+
+			} else {
+
+				l.setHoraAssinaturaInicio(logistica.getDataAssinatura());
+
+			}
+
+			if(logistica.getHoraAssinaturaFim() != null) {
+
+				Calendar horaFim = new GregorianCalendar();
+				horaFim = l.getDataAssinatura();
+
+				horaFim.set(Calendar.HOUR_OF_DAY, logistica.getHoraAssinaturaFim().get(Calendar.HOUR_OF_DAY));
+				horaFim.set(Calendar.MINUTE, logistica.getHoraAssinaturaFim().get(Calendar.MINUTE));
+
+				l.setHoraAssinaturaFim(horaFim);
+
+			} else {
+				
+				l.setHoraAssinaturaFim(logistica.getDataAssinatura());
+				
+			}
+			
 
 			log.add(" Data de Assinatura alterada para : " + dateFormat.format(l.getDataAssinatura().getTime()));
 
