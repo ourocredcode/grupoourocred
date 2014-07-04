@@ -374,7 +374,7 @@ public Collection<Etapa> buscaEtapasByEmpresaOrganizacaoTipoWorkflowDistinct(Lon
 					 " ,EMPRESA.nome AS empresa_nome, ETAPA.organizacao_id, ORGANIZACAO.nome as organizacao_nome   " +
 					 " , ETAPA.isactive, ETAPA.ispadrao, ETAPA.ordemetapa " +   
 					 "		FROM ((((ETAPA (NOLOCK)   "  +
-					 " INNER JOIN WORKFLOWETAPA (NOLOCK) ON WORKFLOWETAPA.etapa_id = ETAPA.etapa_id) " +  
+					 " INNER JOIN WORKFLOWETAPA (NOLOCK) ON WORKFLOWETAPA.etapa_id = ETAPA.etapa_id AND WORKFLOWETAPA.isactive = 1 ) " +  
 					 " INNER JOIN WORKFLOW (NOLOCK) ON WORKFLOWETAPA.workflow_id = WORKFLOW.workflow_id)   " +
 					 " INNER JOIN TIPOWORKFLOW (NOLOCk) ON WORKFLOW.tipoworkflow_id = TIPOWORKFLOW.tipoworkflow_id) " +  
 					 " INNER JOIN EMPRESA (NOLOCK) ON ETAPA.empresa_id = EMPRESA.empresa_id) " +    

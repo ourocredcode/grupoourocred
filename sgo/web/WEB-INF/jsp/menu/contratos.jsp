@@ -207,11 +207,14 @@
 				  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
 				  			/* 22 - Data Quitação */     { "bVisible":    false },
 				  			/* 23 - Data Digitação */     { "bVisible":    false },
-				  			/* 24 - Pós Venda */     { "bVisible":    false },
-				  			/* 25 - Motivo Recusa */     { "bVisible":    false },
-				  			/* 26 - Data Status Final */     { "bVisible":    false },
-				  			/* 27 - Repasse */     { "bVisible":    false },
-				  			/* 28 - Contrato ID */     { "bVisible":    false }
+				  			/* 24 - Proposta Banco */     { "bVisible":    false },
+				  			/* 25 - Contrato Banco */     { "bVisible":    false },
+				  			/* 26 - Pós Venda */     { "bVisible":    false },
+				  			/* 27 - Motivo Recusa */     { "bVisible":    false },
+				  			/* 28 - Data Status Final */     { "bVisible":    false },
+				  			/* 29 - Repasse */     { "bVisible":    false },
+				  			/* 30 - Tabela */     { "bVisible":    false },
+				  			/* 31 - Contrato ID */     { "bVisible":    false }
 				  		] ,
 
 	  		"sDom": ' T C <"clear">lfrtip',
@@ -904,23 +907,41 @@
 								<label for="busca_Justificativa">Justificativa</label>
 								<select id="busca_Justificativa" name="busca_Justificativa" class="input-medium">
 									<option value="Todos">Todos</option>
+									<option value="Agencia/Conta Inválida">Agencia/Conta Inválida</option>
+									<option value="Aguardando Documentação">Aguardando Documentação</option>
+									<option value="Aguardando Procedimento">Aguardando Procedimento</option>
+									<option value="Benefício Bloqueado">Benefício Bloqueado</option>
+									<option value="Cliente Cancelou Agendamento">Cliente Cancelou Agendamento</option>
 									<option value="Cliente com pendência de documentos">Cliente com pendência de documentos</option>
 									<option value="Cliente desistiu">Cliente desistiu</option>
+									<option value="Cliente Faleceu">Cliente Faleceu</option>
 									<option value="Cliente fechou por outro banco">Cliente fechou por outro banco</option>
-									<option value="Cliente inadimplente">Cliente inadimplente</option>
+									<option value="Cliente Inadimplente">Cliente Inadimplente</option>
 									<option value="Cliente não assinou">Cliente não assinou</option>
 									<option value="Cliente não retirou o boleto">Cliente não retirou o boleto</option>
-									<option value="Cliente refinanciou">Cliente refinanciou</option>
-									<option value="Dívida maior que o previsto">Dívida maior que o previsto</option>
+									<option value="Críticas Diversas do Banco">Críticas Diversas do Banco</option>
+									<option value="Dados Divergentes">Dados Divergentes</option>
+									<option value="Dívida Maior que o Estimado">Dívida Maior que o Estimado</option>
 									<option value="Erro de análise">Erro de análise</option>
 									<option value="Erro de preenchimento">Erro de preenchimento</option>
 									<option value="Família não deixou">Família não deixou</option>
 									<option value="Filho não deixou">Filho não deixou</option>
+									<option value="Fora da Política de Idade">Fora da Política de Idade</option>
 									<option value="Junção de Parcelas">Junção de Parcelas</option>
-									<option value="Operador trocou de equipe">Operador trocou de equipe</option>
+									<option value="Margem Excedida">Margem Excedida</option>
+									<option value="Operação Abaixo do Mínimo Exigido">Operação Abaixo do Mínimo Exigido</option>
+									<option value="Orientação ao Cliente">Orientação ao Cliente</option>
+									<option value="Parcelas Abaixo do Mínimo Exigido">Parcelas Abaixo do Mínimo Exigido</option>
+									<option value="Prioridades">Prioridades</option>
+									<option value="Quantidade de Contratos Excedida">Quantidade de Contratos Excedida</option>
 									<option value="Recusado Banco">Recusado Banco</option>
-									<option value="Recusado Qualidade">Recusado Qualidade</option>
 									<option value="Recusado Pós Venda">Recusado Pós Venda</option>
+									<option value="Recusado Qualidade">Recusado Qualidade</option>
+									<option value="Retorno ao Cliente">Retorno ao Cliente</option>
+									<option value="Risco de Fraude">Risco de Fraude</option>
+									<option value="Sem contato com o cliente">Sem contato com o cliente</option>
+									<option value="Sem Retorno do INSS">Sem Retorno do INSS</option>
+									<option value="Solicitado Supervisor">Solicitado Supervisor</option>
 								</select>
 							</div>
 						</div>
@@ -1051,6 +1072,12 @@
 												Dt Digitação
 											</th>
 											<th >
+												Proposta Banco
+											</th>
+											<th >
+												Contrato Banco
+											</th>
+											<th >
 												Pós Venda
 											</th>
 											<th >
@@ -1061,6 +1088,9 @@
 											</th>
 											<th >
 												Repasse
+											</th>
+											<th >
+												Tabela
 											</th>
 											<th >
 												Contrato ID
@@ -1151,6 +1181,12 @@
 													<fmt:formatDate value="${contrato.dataDigitacao.time }" pattern="dd/MM/yy" />
 												</td>
 												<td >
+													${contrato.propostaBanco }
+												</td>
+												<td >
+													${contrato.contratoBanco }
+												</td>
+												<td >
 													${contrato.formulario.posvenda.etapa.nome }
 												</td>
 												<td >
@@ -1162,6 +1198,9 @@
 												<td >
 													<c:if test="${contrato.isRepasse }">SIM</c:if>
 													<c:if test="${!contrato.isRepasse }">NÃO</c:if>
+												</td>
+												<td >
+													${contrato.coeficiente.tabela.nome }
 												</td>
 												<td >
 													${contrato.contrato_id }

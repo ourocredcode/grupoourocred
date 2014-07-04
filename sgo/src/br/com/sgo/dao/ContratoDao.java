@@ -34,6 +34,7 @@ import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.Produto;
+import br.com.sgo.modelo.Tabela;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.Workflow;
 
@@ -48,7 +49,7 @@ public class ContratoDao extends Dao<Contrato> {
 	private static final String sqlContratos = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 			" FORMULARIO.created," +
 			" CONTRATO.created as contratoCreated, " +
-			" CONTRATO.datastatusfinal , CONTRATO.dataquitacao, CONTRATO.datadigitacao, " +
+			" CONTRATO.datastatusfinal , CONTRATO.dataquitacao, CONTRATO.datadigitacao,CONTRATO.propostabanco, CONTRATO.contratobanco, " +
 			" FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , " +
 			" CONTRATO.contrato_id,CONTRATO.formulario_id, "+
 			" CONTRATO.coeficiente_id, CONTRATO.workflow_id, "+
@@ -62,7 +63,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.valorContratoLiquido, "+
 			" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
 			" CONTRATO.prazo , CONTRATO.isrepasse , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
-			" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, "+
+			" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, TABELA.tabela_id, TABELA.nome as tabela_nome, "+
 			" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
 			" ETAPA.etapa_id, ETAPA.nome as etapa_nome, ETAPA_1.etapa_id as etapaPendencia_id , ETAPA_1.nome as etapaPendencia_nome, " +
@@ -1347,7 +1348,7 @@ public class ContratoDao extends Dao<Contrato> {
 				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, "+
 				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
 				" CONTRATO.prazo, CONTRATO.isrepasse , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
-				" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, "+
+				" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, TABELA.tabela_id, TABELA.nome as tabela_nome, "+
 				" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 				" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
 				" ETAPA.etapa_id, ETAPA.nome as etapa_nome, CONTROLE.controle_id, CONTROLE.tipocontrole_id, CONTROLE.dataatuacao, CONTROLE.datachegada," +
@@ -1810,6 +1811,7 @@ public class ContratoDao extends Dao<Contrato> {
 				Empresa empresa = new Empresa();
 				Organizacao organizacao = new Organizacao();
 				Controle controle = new Controle();
+				Tabela tabela = new Tabela();
 				
 				Banco b1 = new Banco();
 				Banco b2 = new Banco();
@@ -1903,8 +1905,12 @@ public class ContratoDao extends Dao<Contrato> {
 				parceiro.setNome(rsContrato.getString("parceiro_nome"));
 				parceiro.setCpf(rsContrato.getString("parceiro_cpf"));
 				
+				tabela.setTabela_id(rsContrato.getLong("tabela_id"));
+				tabela.setNome(rsContrato.getString("tabela_nome"));
+				
 				coeficiente.setCoeficiente_id(rsContrato.getLong("coeficiente_id"));
 				coeficiente.setValor(rsContrato.getDouble("valor"));
+				coeficiente.setTabela(tabela);
 				
 				produto.setProduto_id(rsContrato.getLong("produto_id"));
 				produto.setNome(rsContrato.getString("produto_nome"));
@@ -2439,6 +2445,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Convenio convenio = new Convenio();
 		Organizacao organizacao = new Organizacao();
 		ControleFormulario posvenda = new ControleFormulario();
+		Tabela tabela = new Tabela();
 
 		Banco b1 = new Banco();
 		Banco b2 = new Banco();
@@ -2514,8 +2521,12 @@ public class ContratoDao extends Dao<Contrato> {
 		parceiro.setNome(rsContrato.getString("parceiro_nome"));
 		parceiro.setCpf(rsContrato.getString("parceiro_cpf"));
 		
+		tabela.setTabela_id(rsContrato.getLong("tabela_id"));
+		tabela.setNome(rsContrato.getString("tabela_nome"));
+
 		coeficiente.setCoeficiente_id(rsContrato.getLong("coeficiente_id"));
 		coeficiente.setValor(rsContrato.getDouble("valor"));
+		coeficiente.setTabela(tabela);
 		
 		produto.setProduto_id(rsContrato.getLong("produto_id"));
 		produto.setNome(rsContrato.getString("produto_nome"));
@@ -2558,6 +2569,8 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setIsActive(rsContrato.getBoolean("isactive"));
 		contrato.setIsRepasse(rsContrato.getBoolean("isrepasse"));
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
+		contrato.setPropostaBanco(rsContrato.getString("propostabanco"));
+		contrato.setContratoBanco(rsContrato.getString("contratobanco"));
 		contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
 		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
 		contrato.setDesconto(rsContrato.getDouble("desconto"));
@@ -2594,6 +2607,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Etapa etapaPendencia = new Etapa();
 		Empresa empresa = new Empresa();
 		Organizacao organizacao = new Organizacao();
+		Tabela tabela = new Tabela();
 
 		Banco b1 = new Banco();
 		Banco b2 = new Banco();
@@ -2661,9 +2675,13 @@ public class ContratoDao extends Dao<Contrato> {
 		parceiro.setParceiroNegocio_id(rsContrato.getLong("parceironegocio_id"));
 		parceiro.setNome(rsContrato.getString("parceiro_nome"));
 		parceiro.setCpf(rsContrato.getString("parceiro_cpf"));
+		
+		tabela.setTabela_id(rsContrato.getLong("tabela_id"));
+		tabela.setNome(rsContrato.getString("tabela_nome"));
 
 		coeficiente.setCoeficiente_id(rsContrato.getLong("coeficiente_id"));
 		coeficiente.setValor(rsContrato.getDouble("valor"));
+		coeficiente.setTabela(tabela);
 		
 		produto.setProduto_id(rsContrato.getLong("produto_id"));
 		produto.setNome(rsContrato.getString("produto_nome"));
@@ -2698,6 +2716,8 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setIsActive(rsContrato.getBoolean("isactive"));
 		contrato.setIsRepasse(rsContrato.getBoolean("isrepasse"));
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
+		contrato.setPropostaBanco(rsContrato.getString("propostabanco"));
+		contrato.setContratoBanco(rsContrato.getString("contratobanco"));
 		contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
 		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
 		contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
