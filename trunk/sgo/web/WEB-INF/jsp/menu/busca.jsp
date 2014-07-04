@@ -60,11 +60,14 @@ $(document).ready(function() {
 			  			/* 21 - Data Últ Atuação */     { "bVisible":    false },
 			  			/* 22 - Data Quitação */     { "bVisible":    false },
 			  			/* 23 - Data Digitação */     { "bVisible":    false },
-			  			/* 24 - Pós Venda */     { "bVisible":    false },
-			  			/* 25 - Motivo Recusa */     { "bVisible":    false },
-			  			/* 26 - Data Status Final */     { "bVisible":    false },
-			  			/* 27 - Repasse */     { "bVisible":    false },
-			  			/* 28 - Contrato ID */     { "bVisible":    false }
+			  			/* 24 - Proposta Banco */     { "bVisible":    false },
+			  			/* 25 - Contrato Banco */     { "bVisible":    false },
+			  			/* 26 - Pós Venda */     { "bVisible":    false },
+			  			/* 27 - Motivo Recusa */     { "bVisible":    false },
+			  			/* 28 - Data Status Final */     { "bVisible":    false },
+			  			/* 29 - Repasse */     { "bVisible":    false },
+			  			/* 30 - Tabela */     { "bVisible":    false },
+			  			/* 31 - Contrato ID */     { "bVisible":    false }
 			  		] ,
 
 		"sDom": ' T C <"clear">lfrtip',
@@ -247,6 +250,12 @@ $(document).ready(function() {
 												Dt Digitação
 											</th>
 											<th >
+												Proposta Banco
+											</th>
+											<th >
+												Contrato Banco
+											</th>
+											<th >
 												Pós Venda
 											</th>
 											<th >
@@ -257,6 +266,9 @@ $(document).ready(function() {
 											</th>
 											<th >
 												Repasse
+											</th>
+											<th >
+												Tabela
 											</th>
 											<th >
 												Contrato ID
@@ -346,6 +358,12 @@ $(document).ready(function() {
 													<fmt:formatDate value="${contrato.dataDigitacao.time }" pattern="dd/MM/yy" />
 												</td>
 												<td >
+													${contrato.propostaBanco }
+												</td>
+												<td >
+													${contrato.contratoBanco }
+												</td>
+												<td >
 													${contrato.formulario.posvenda.etapa.nome }
 												</td>
 												<td >
@@ -357,6 +375,9 @@ $(document).ready(function() {
 												<td >
 													<c:if test="${contrato.isRepasse }">SIM</c:if>
 													<c:if test="${!contrato.isRepasse }">NÃO</c:if>
+												</td>
+												<td >
+													${contrato.coeficiente.tabela.nome }
 												</td>
 												<td >
 													${contrato.contrato_id }
