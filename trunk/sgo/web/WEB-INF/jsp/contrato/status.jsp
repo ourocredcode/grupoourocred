@@ -1115,7 +1115,7 @@ function openPopup(url) {
 										<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
 									</div>	
 								</c:when>
-								<c:when test="${usuarioInfo.perfil.chave == 'Supervisor' && ( contrato.etapa.nome != 'Concluído' &&  contrato.etapa.nome != 'Aprovado')  }">
+								<c:when test="${usuarioInfo.perfil.chave == 'Supervisor' && contrato.etapa.nome != 'Concluído' }">
 									<div class="span1" style="float: left;">
 										<input value="Salva" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoStatusForm');" >
 									</div>	
