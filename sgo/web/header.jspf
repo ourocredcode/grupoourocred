@@ -388,7 +388,7 @@
 							<li><a href="<c:url value="/script/15"/>">Resultados</a></li>
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -535,7 +535,7 @@
 							<li><a href="<c:url value="/script/15"/>">Resultados</a></li>
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -610,7 +610,7 @@
 							<li><a href="<c:url value="/script/15"/>">Resultados</a></li>
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -676,7 +676,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -736,7 +736,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -787,7 +787,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -838,7 +838,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -893,7 +893,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -950,7 +950,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -1006,7 +1006,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
@@ -1062,7 +1062,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/script/10"/>">Tabelas de Desconto</a></li>
 							<li><a href="<c:url value="/script/11"/>">Políticas de Banco</a></li>
-							<li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>
+							<!-- <li><a href="<c:url value="/script/12"/>">Coeficientes</a></li>  -->
 							<li><a href="<c:url value="/script/13"/>">Status PN</a></li>
 						</ul>
 				
