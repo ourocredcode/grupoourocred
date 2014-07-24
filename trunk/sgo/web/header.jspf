@@ -84,6 +84,23 @@
                         <li><a class="sAdd" title="" href="<c:url value="/usuario/senha"/>">Troca Senha</a></li>
                     </ul>
                 </li>
+               
+                <c:if test="${usuarioInfo.perfil.chave == 'Gestor' && perfis != null}">
+                <li class="btn btn-inverse dropdown" id="menu-messages2"><a href="#" data-toggle="dropdown" data-target="#menu-messages2" class="dropdown-toggle"><i class="icon icon-th-list"></i> <span class="text">Organizações</span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+						 <c:forEach var="perfil" items="${perfis}">	
+	                         <li>
+	                        	<form id="usuarioPerfilForm" action="<c:url value="/home/perfil"/>" method="POST">
+	                        		<input id="usuarioPerfil" name="usuarioPerfil.perfil.perfil_id" value="${perfil.perfil_id }" type="hidden"/>
+	                        		<input id="usuarioPerfilEmpresa" name="usuarioPerfil.empresa.empresa_id" value="${perfil.empresa.empresa_id }" type="hidden"/>
+	                        		<input id="usuarioPerfilOrganizacao" name="usuarioPerfil.organizacao.organizacao_id" value="${perfil.organizacao.organizacao_id }" type="hidden"/> 
+									<a href="#" onclick="$(this).closest('form').submit()">${perfil.nome } - ${perfil.organizacao.nome }</a>
+								</form>
+	                        </li>
+						</c:forEach>
+                    </ul>
+                </li>
+                </c:if> 
 
                 <li class="btn btn-inverse"><a title="" href="#"><i class="icon icon-cog"></i> <span class="text">Configurações</span></a></li>
 
