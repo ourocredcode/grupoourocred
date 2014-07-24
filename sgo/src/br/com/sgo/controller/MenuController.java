@@ -35,6 +35,7 @@ import br.com.sgo.dao.TipoLogisticaDao;
 import br.com.sgo.dao.TipoSaqueDao;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
+import br.com.sgo.dao.UsuarioPerfilDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
@@ -42,6 +43,7 @@ import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
+import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Periodo;
 import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.TipoWorkflow;
@@ -58,6 +60,7 @@ public class MenuController {
 	private final ContratoDao contratoDao;
 	private final UsuarioDao usuarioDao;
 	private final PerfilDao perfilDao;
+	private final UsuarioPerfilDao usuarioPerfilDao;
 	private final EtapaDao etapaDao;
 	private final TipoWorkflowDao tipoWorkflowDao;
 	private final PeriodoDao periodoDao;
@@ -81,7 +84,7 @@ public class MenuController {
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,CoeficienteDao coeficienteDao,
 			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,TipoSaqueDao tipoSaqueDao,
-			ConvenioDao convenioDao,PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,
+			ConvenioDao convenioDao,PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,UsuarioPerfilDao usuarioPerfilDao,
 			MeioPagamentoDao meioPagamentoDao,TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
 
 		this.empresaDao = empresaDao;
@@ -104,6 +107,7 @@ public class MenuController {
 		this.bancoDao = bancoDao;
 		this.convenioDao = convenioDao;
 		this.tipoControleDao = tipoControleDao;
+		this.usuarioPerfilDao = usuarioPerfilDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
@@ -215,6 +219,9 @@ public class MenuController {
 
 		}
 
+		Collection<Perfil> perfis = this.usuarioPerfilDao.buscaUsuarioPerfilAcesso(usuario);
+		result.include("perfis",perfis);
+
 		result.include("calInicio", dia1);
 		result.include("calFim", dia2);
 		
@@ -223,13 +230,8 @@ public class MenuController {
 
 		contadorSeparado();
 
-		//long diferenca = System.currentTimeMillis() - dataInicial.getTimeInMillis();  
-		//long diferencaSeg = diferenca /1000;    //DIFERENCA EM SEGUNDOS   
-
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		System.out.println(" Acesso : " + usuarioInfo.getUsuario().getNome() + " em :  " + sdf.format(Calendar.getInstance().getTime()) );
-
-		//System.out.println(" Tempo : " + diferencaSeg + " s ");
 
 	}
 

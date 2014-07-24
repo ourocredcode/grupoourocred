@@ -387,8 +387,11 @@ function verificaStatus() {
 }
 
 function showObs(value){
+
 	alert(value);
+
 	return false;
+
 }
 
 function mostra(id){
@@ -971,7 +974,10 @@ function openPopup(url) {
 											</td>
 											<td class="label_txt" style="text-align: center">
 												<c:if test="${not empty contrato.observacao}">
-													<a href="#" onclick="return showObs('${contrato.observacao}');" style="border: 0"><img src="<c:url  value="/img/lupa.gif" />" border="0"/></a>
+													<a href="#myModalObservacao" role="button" data-toggle="modal"><i class="icon-search"></i></a>
+												</c:if>
+												<c:if test="${empty contrato.observacao}">
+													<a href="#myModalObservacao" role="button" data-toggle="modal"><i class="icon-pencil"></i></a>
 												</c:if>
 											</td>
 										</tr>
@@ -986,6 +992,33 @@ function openPopup(url) {
 				</div>						
 			</div>
 		</div>
+	</div>
+	
+	<div id="myModalObservacao" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 id="myModalLabel">Altera Observação</h3>
+	  </div>
+
+	  <form action="<c:url value='/contrato/observacao/salva'/>"  method="post">
+
+	 	 <input id="contratoId" name="contrato.contrato_id" value="${contrato.contrato_id }" type="hidden" />
+
+		  <div class="modal-body">
+			<div style="float: left;">
+	  			<div class="control-group">
+					<label for="observacao">Observacao</label>
+					<textarea id="observacao" name="contrato.observacao" rows="4" cols="4" maxlength="255" class="span5"><c:out value="${contrato.observacao}"></c:out></textarea>	
+				</div>
+			</div>	
+		  </div>
+		  <div class="modal-footer">
+		    <button class="btn" data-dismiss="modal" aria-hidden="true">Fecha</button>
+		    <c:if test="${usuarioInfo.perfil.chave == 'Consultor' || usuarioInfo.perfil.chave == 'Supervisor'}">
+		    	<button class="btn btn-primary" type="submit" id="btt_salvalogistica">Salva</button>
+		    </c:if>
+		  </div>
+		</form>
 	</div>
 	
 	<div class="container-fluid">

@@ -28,7 +28,6 @@ import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.OperacaoDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
-import br.com.sgo.dao.ParceiroContatoDao;
 import br.com.sgo.dao.ParceiroInfoBancoDao;
 import br.com.sgo.dao.ParceiroLocalidadeDao;
 import br.com.sgo.dao.ParceiroNegocioDao;
@@ -97,7 +96,6 @@ public class ContratoController {
 	private final ParceiroNegocioDao parceiroNegocioDao;
 	private final ParceiroInfoBancoDao parceiroInfoBancoDao;
 	private final ParceiroLocalidadeDao parceiroLocalidadeDao;
-	private final ParceiroContatoDao parceiroContatoDao;
 	private final MeioPagamentoDao meioPagamentoDao;
 	private final OperacaoDao operacaoDao;
 	private final WorkflowDao workflowDao;
@@ -134,7 +132,7 @@ public class ContratoController {
 			HistoricoContratoDao historicoContratoDao, HistoricoControleDao historicoControleDao,Controle boleto,  Controle averbacao, Collection<Conferencia> conferencias ,
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
-			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao, ParceiroContatoDao parceiroContatoDao,
+			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao,
 			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao,TipoWorkflowDao tipoWorkflowDao,WorkflowDao workflowDao){		
 
 		this.result = result;
@@ -163,7 +161,6 @@ public class ContratoController {
 		this.parceiroNegocioDao = parceiroNegocioDao;
 		this.parceiroInfoBancoDao = parceiroInfoBancoDao;
 		this.parceiroLocalidadeDao = parceiroLocalidadeDao;
-		this.parceiroContatoDao = parceiroContatoDao;
 		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
@@ -878,4 +875,50 @@ public class ContratoController {
 		result.include("detalhamento",this.pnDao.buscaDetalhamento(beneficio));
 
 	}
+	
+	
+	@Post
+	@Path("/contrato/observacao/salva")
+	public void salva(Contrato contrato) {
+
+		List<String> log = new ArrayList<String>();
+		this.contrato = this.contratoDao.load(contrato.getContrato_id());
+
+		if(!contrato.getObservacao().equals("")){
+
+			if(this.contrato.getObservacao() != null)
+				log.add(" Observação do Contrato alterada de :" + this.contrato.getObservacao());
+
+			this.contrato.setObservacao(contrato.getObservacao().trim());
+
+			this.contratoDao.beginTransaction();
+			this.contratoDao.atualiza(this.contrato);
+			this.contratoDao.commit();
+
+			log.add(" Observação do Contrato alterada para :" + this.contrato.getObservacao());
+
+			for(String lo : log){
+
+				HistoricoContrato historico = new HistoricoContrato();
+				historico.setEmpresa(empresa);
+				historico.setOrganizacao(organizacao);
+				historico.setIsActive(true);
+				historico.setCreatedBy(usuario);
+				historico.setCreated(GregorianCalendar.getInstance());
+				historico.setObservacao(lo);
+				historico.setContrato(contrato);
+
+				this.historicoContratoDao.beginTransaction();
+				this.historicoContratoDao.adiciona(historico);
+				this.historicoContratoDao.commit();
+
+			}
+
+		}
+
+		result.redirectTo(ContratoController.class).status(contrato.getContrato_id());
+
+	}
+	
+	
 }
