@@ -372,6 +372,77 @@ function calculaContrato() {
 						
 					}
 					
+					case 'Agiplan':
+					
+						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+	
+							if(parcelasAberto.value != ''){
+	
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								
+								if(metaValue == 0){
+									
+									var metaValue = valorContrato.value * arrayCoeficiente[1];
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								} else {
+									
+									var metaValue = valorContrato.value * arrayCoeficiente[1];
+									var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+									var comissaoBruto = metaValue * 0.17;
+	
+									var comissaoLiquido = comissaoBruto - RCO;
+	
+									if(comissaoLiquido <= 0){
+										
+										if(contratoId != ''){
+	
+											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+	
+											valorMeta.value = '0.0';
+	
+											break;
+	
+										} else {
+	
+											alert('Contrato com valor abaixo do mínimo exigido.');
+	
+											valorParcela.value = '';
+											valorParcela.focus();
+											
+											break;
+	
+										}
+										
+									} else {
+									
+										//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+										//valorMeta.value = metaValue.toFixed(2);
+										
+										metaValue = valorContrato.value * arrayCoeficiente[1];
+										valorMeta.value = metaValue.toFixed(2);
+										
+										break;
+										
+									}
+									
+								}
+								
+								
+	
+							}
+							
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+	
+						break;
+						
+					}	
+					
 				case 'Bonsucesso':
 
 					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
@@ -808,14 +879,84 @@ function calculaContrato() {
 
 						}
 						
-					} else {
+				} else {
+					
+					var metaValue = valorContrato.value * arrayCoeficiente[1];
+					valorMeta.value = metaValue.toFixed(2);
+
+					break;
+					
+				}
+					
+					
+				case 'Agiplan':
+					
+					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+
+						if(parcelasAberto.value != ''){
+
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+							
+							if(metaValue == 0){
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+								
+								break;
+								
+							} else {
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var comissaoBruto = metaValue * 0.17;
+
+								var comissaoLiquido = comissaoBruto - RCO;
+
+								if(comissaoLiquido <= 0){
+									
+									if(contratoId != ''){
+
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+
+										valorMeta.value = '0.0';
+
+										break;
+
+									} else {
+
+										alert('Contrato com valor abaixo do mínimo exigido.');
+
+										valorParcela.value = '';
+										valorParcela.focus();
+										
+										break;
+
+									}
+									
+								} else {
+								
+									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									//valorMeta.value = metaValue.toFixed(2);
+									
+									metaValue = valorContrato.value * arrayCoeficiente[1];
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								}
+								
+							}
+
+						}
 						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-	
-						break;
-						
-					}
+				} else {
+					
+					var metaValue = valorContrato.value * arrayCoeficiente[1];
+					valorMeta.value = metaValue.toFixed(2);
+
+					break;
+					
+				}	
 					
 				case 'Bonsucesso':
 
@@ -1044,6 +1185,19 @@ function calculaContrato() {
 						valorMeta.value = metaValue;
 
 						break;
+						
+					case 'Safra':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;	
+					
+					case 'Agiplan':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;	
+						
 
 					case 'BGN':
 						var metaValue = valorLiquido.value;
@@ -1338,6 +1492,77 @@ function calculaContrato() {
 							
 						}
 						
+					case 'Agiplan':
+						
+						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+	
+							if(parcelasAberto.value != ''){
+	
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								
+								if(metaValue == 0){
+									
+									var metaValue = valorContrato.value * arrayCoeficiente[1];
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								} else {
+									
+									var metaValue = valorContrato.value * arrayCoeficiente[1];
+									var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+									var comissaoBruto = metaValue * 0.17;
+	
+									var comissaoLiquido = comissaoBruto - RCO;
+	
+									if(comissaoLiquido <= 0){
+										
+										if(contratoId != ''){
+	
+											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+	
+											valorMeta.value = '0.0';
+	
+											break;
+	
+										} else {
+	
+											alert('Contrato com valor abaixo do mínimo exigido.');
+	
+											valorParcela.value = '';
+											valorParcela.focus();
+											
+											break;
+	
+										}
+										
+									} else {
+									
+										//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+										//valorMeta.value = metaValue.toFixed(2);
+										
+										metaValue = valorContrato.value * arrayCoeficiente[1];
+										valorMeta.value = metaValue.toFixed(2);
+										
+										break;
+										
+									}
+									
+								}
+								
+								
+	
+							}
+							
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+	
+						break;
+						
+					}	
+						
 					case 'Bonsucesso':
 
 						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
@@ -1563,6 +1788,12 @@ function calculaContrato() {
 						valorMeta.value = metaValue;
 
 						break;
+						
+					case 'Agiplan':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;	
 				
 					case 'BMG':
 						var metaValue = valorLiquido.value;
