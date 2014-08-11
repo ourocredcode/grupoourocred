@@ -67,7 +67,8 @@ $(document).ready(function() {
 			  			/* 28 - Data Status Final */     { "bVisible":    false },
 			  			/* 29 - Repasse */     { "bVisible":    false },
 			  			/* 30 - Tabela */     { "bVisible":    false },
-			  			/* 31 - Contrato ID */     { "bVisible":    false }
+			  			/* 31 - QtdParcelasAberto */     { "bVisible":    false },
+			  			/* 32 - Contrato ID */     { "bVisible":    false }
 			  		] ,
 
 		"sDom": ' T C <"clear">lfrtip',
@@ -271,6 +272,9 @@ $(document).ready(function() {
 												Tabela
 											</th>
 											<th >
+												Parc.Aberto
+											</th>
+											<th >
 												Contrato ID
 											</th>
 										</tr>
@@ -378,6 +382,9 @@ $(document).ready(function() {
 												</td>
 												<td >
 													${contrato.coeficiente.tabela.nome }
+												</td>
+												<td >
+													${contrato.qtdParcelasAberto }
 												</td>
 												<td >
 													${contrato.contrato_id }
