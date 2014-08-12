@@ -2624,7 +2624,7 @@ function historicoCoeficiente() {
 								<c:if test="${not empty contrato.contrato_id}">
 									<c:forEach items="${coeficientes}" var="coeficiente">
 										<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id},${coeficiente.tabela.tabela_id}" 
-											<c:if test="${contrato.coeficiente.coeficiente_id eq coeficiente.coeficiente_id}">selected="selected"</c:if>>${coeficiente.valor} - ${coeficiente.tabela.nome} </option>
+											<c:if test="${contrato.coeficiente.coeficiente_id eq coeficiente.coeficiente_id}">selected="selected"</c:if>>${coeficiente.valor} - ${coeficiente.tabela.nome} (<fmt:formatNumber value="${coeficiente.percentualMeta * 100}" maxFractionDigits="0"/>%) </option>
 									</c:forEach>
 								</c:if>
 							</select>
