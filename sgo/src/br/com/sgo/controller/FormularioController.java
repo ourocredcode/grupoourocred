@@ -395,10 +395,12 @@ public class FormularioController {
 			if(c.getProduto().getNome().equals("MARGEM LIMPA") 
 					|| c.getProduto().getNome().equals("MARGEM LIMPA PMSP")
 					|| c.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
+					|| c.getProduto().getNome().equals("MARGEM LIMPA SIAPE")
 					|| c.getProduto().getNome().equals("RECOMPRA INSS")
 					|| c.getProduto().getNome().equals("PORTABILIDADE/REFIN")
 					|| c.getProduto().getNome().equals("RECOMPRA PMSP")
-					|| c.getProduto().getNome().equals("RECOMPRA GOVRJ")  
+					|| c.getProduto().getNome().equals("RECOMPRA GOVRJ") 
+					|| c.getProduto().getNome().equals("RECOMPRA SIAPE")
 					|| c.getProduto().getNome().equals("RECOMPRA RMC") 
 					|| c.getProduto().getNome().equals("AUMENTO") )
 				c.setValorContratoLiquido(c.getValorContrato());
@@ -406,6 +408,7 @@ public class FormularioController {
 			if(c.getProduto().getNome().equals("REFINANCIAMENTO")
 					|| c.getProduto().getNome().equals("REFINANCIAMENTO PMSP")
 					|| c.getProduto().getNome().equals("REFINANCIAMENTO GOVRJ")
+					|| c.getProduto().getNome().equals("REFINANCIAMENTO SIAPE")
 					|| c.getProduto().getNome().equals("RETENÇÃO") 
 					|| c.getProduto().getNome().equals("RETENÇÃO PMSP")
 					|| c.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
@@ -602,13 +605,13 @@ public class FormularioController {
 
 				countContratos +=1;
 
-				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("AUMENTO") )
+				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA SIAPE") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("AUMENTO") )
 					countMargemLimpa += 1;
-				if(c.getProduto().equals("RECOMPRA INSS") ||   c.getProduto().equals("PORTABILIDADE/REFIN") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ"))
+				if(c.getProduto().equals("RECOMPRA INSS") ||   c.getProduto().equals("PORTABILIDADE/REFIN") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ") || c.getProduto().equals("RECOMPRA SIAPE"))
 					countRecompraINSS += 1;
 				if(c.getProduto().equals("RECOMPRA RMC"))
 					countRecompraRMC += 1;
-				if(c.getProduto().equals("REFINANCIAMENTO") || c.getProduto().equals("REFINANCIAMENTO PMSP") || c.getProduto().equals("REFINANCIAMENTO GOVRJ"))
+				if(c.getProduto().equals("REFINANCIAMENTO") || c.getProduto().equals("REFINANCIAMENTO PMSP") || c.getProduto().equals("REFINANCIAMENTO GOVRJ") || c.getProduto().equals("REFINANCIAMENTO SIAPE"))
 					countRefinanciamento += 1;
 
 				List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();
@@ -777,13 +780,13 @@ public class FormularioController {
 
 				countContratos +=1;
 
-				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("AUMENTO") )
+				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA SIAPE") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("AUMENTO") )
 					countMargemLimpa += 1;
-				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("PORTABILIDADE/REFIN") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ"))
+				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("PORTABILIDADE/REFIN") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA GOVRJ") || c.getProduto().equals("RECOMPRA SIAPE"))
 					countRecompraINSS += 1;
 				if(c.getProduto().equals("RECOMPRA RMC"))
 					countRecompraRMC += 1;
-				if(c.getProduto().equals("REFINANCIAMENTO") || c.getProduto().equals("REFINANCIAMENTO PMSP") || c.getProduto().equals("REFINANCIAMENTO GOVRJ"))
+				if(c.getProduto().equals("REFINANCIAMENTO") || c.getProduto().equals("REFINANCIAMENTO PMSP") || c.getProduto().equals("REFINANCIAMENTO GOVRJ") || c.getProduto().equals("REFINANCIAMENTO SIAPE"))
 					countRefinanciamento += 1;
 
 				List<ParceiroContato> contatos = new ArrayList<ParceiroContato>();
