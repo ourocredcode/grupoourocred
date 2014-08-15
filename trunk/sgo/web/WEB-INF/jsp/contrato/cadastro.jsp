@@ -1987,6 +1987,20 @@ function verificaProduto() {
 
 			break;	
 	
+		case 'MARGEM LIMPA SIAPE':
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
 
 		case 'AUMENTO':
 			desabilita(bancoComprado);
@@ -2061,7 +2075,22 @@ function verificaProduto() {
 			if(valorContrato.value != '')
 				calculaContrato();
 
-			break;		
+			break;
+			
+		case 'RECOMPRA SIAPE':
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
 
 		case 'RECOMPRA RMC':
 			habilita(bancoComprado);
@@ -2119,6 +2148,26 @@ function verificaProduto() {
 			break;	
 			
 		case 'REFINANCIAMENTO GOVRJ':
+
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
+
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;
+		
+		case 'REFINANCIAMENTO SIAPE':
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
@@ -2328,6 +2377,16 @@ function validaForm(form) {
 
 		}
 		
+		if(contratoProdutoNome == 'MARGEM LIMPA SIAPE'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
 		if(contratoProdutoNome == 'MARGEM LIMPA GOVRJ'){
 
 			if(valorParcela.value == ''){
@@ -2359,6 +2418,26 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'RECOMPRA INSS'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'RECOMPRA SIAPE'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
 				bancoComprado.focus();
@@ -2515,6 +2594,32 @@ function validaForm(form) {
 				return false;
 			}
 		}
+		
+		if(contratoProdutoNome == 'REFINANCIAMENTO SIAPE'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
 
 		if( contratoProduto.value == '' || contratoBanco.value == '' || coeficiente.value == '' || valorParcela == '') {
 
@@ -2562,6 +2667,28 @@ function historicoCoeficiente() {
 
 	$("#historico").load('<c:url value="/coeficiente/historico" />',{'banco_id': banco_id,'produto_id': produto_id});
 
+}
+
+
+window.onload = function() { 
+  var txts = document.getElementsByTagName('TEXTAREA'); 
+
+  for(var i = 0, l = txts.length; i < l; i++) {
+    if(/^[0-9]+$/.test(txts[i].getAttribute("maxlength"))) { 
+      var func = function() { 
+        var len = parseInt(this.getAttribute("maxlength"), 10); 
+
+        if(this.value.length > len) { 
+          alert('Tamanho do campo excedido : ' + len); 
+          this.value = this.value.substr(0, len); 
+          return false; 
+        } 
+      };
+
+      txts[i].onkeyup = func;
+      txts[i].onblur = func;
+    } 
+  } 
 }
 
 </script>
