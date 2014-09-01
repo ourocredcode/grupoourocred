@@ -920,6 +920,7 @@
 									<option value="Cliente Inadimplente">Cliente Inadimplente</option>
 									<option value="Cliente não assinou">Cliente não assinou</option>
 									<option value="Cliente não retirou o boleto">Cliente não retirou o boleto</option>
+									<option value="Cliente refinanciou">Cliente refinanciou</option>
 									<option value="Críticas Diversas do Banco">Críticas Diversas do Banco</option>
 									<option value="Dados Divergentes">Dados Divergentes</option>
 									<option value="Dívida Maior que o Estimado">Dívida Maior que o Estimado</option>
