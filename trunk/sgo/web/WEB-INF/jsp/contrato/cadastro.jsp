@@ -1823,7 +1823,7 @@ function calculaContrato() {
 
 						if(contratoProdutoNome == 'REFINANCIAMENTO' || contratoProdutoNome == 'REFINANCIAMENTO PMSP' || contratoProdutoNome == 'REFINANCIAMENTO GOVRJ'){
 
-							var metaValue = valorLiquido.value * 0.3;
+							var metaValue = valorLiquido.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
 
 						} else {
