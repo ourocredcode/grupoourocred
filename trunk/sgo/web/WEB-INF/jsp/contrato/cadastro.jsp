@@ -2457,6 +2457,21 @@ function verificaProduto() {
 
 			break;
 			
+		case 'MARGEM LIMPA PMRP':
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
+			
 		case 'MARGEM LIMPA GOVRJ':
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
@@ -2473,6 +2488,21 @@ function verificaProduto() {
 			break;	
 	
 		case 'MARGEM LIMPA SIAPE':
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;
+			
+		case 'DEBITO':
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -2562,6 +2592,21 @@ function verificaProduto() {
 
 			break;
 			
+		case 'RECOMPRA PMRP':
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
+			
 		case 'RECOMPRA SIAPE':
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
@@ -2613,6 +2658,26 @@ function verificaProduto() {
 			break;
 			
 		case 'REFINANCIAMENTO PMSP':
+
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
+
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;
+			
+		case 'REFINANCIAMENTO PMRP':
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
@@ -2862,6 +2927,16 @@ function validaForm(form) {
 
 		}
 		
+		if(contratoProdutoNome == 'MARGEM LIMPA PMRP'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
 		if(contratoProdutoNome == 'MARGEM LIMPA SIAPE'){
 
 			if(valorParcela.value == ''){
@@ -2873,6 +2948,16 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'MARGEM LIMPA GOVRJ'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
+		if(contratoProdutoNome == 'DEBITO'){
 
 			if(valorParcela.value == ''){
 				alert(" Valor Parcela é campo obrigatório.");
@@ -2982,6 +3067,26 @@ function validaForm(form) {
 			}
 		}
 		
+		if(contratoProdutoNome == 'RECOMPRA PMRP'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
 		if(contratoProdutoNome == 'RECOMPRA RMC'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
@@ -3029,6 +3134,32 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'REFINANCIAMENTO PMSP'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'REFINANCIAMENTO PMRP'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
 				bancoComprado.focus();

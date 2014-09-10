@@ -305,7 +305,17 @@ function verificaStatus() {
 
 	if(status == 'Enviado DataPrev' || status == 'Quitado' || status == 'Aguardando Integração'){
 
-		if(contratoProduto == 'MARGEM LIMPA' || contratoProduto == 'REFINANCIAMENTO' || contratoProduto == 'RETENÇÃO' || contratoProduto == 'RETENÇÃO PMSP')
+		if(contratoProduto == 'MARGEM LIMPA' 
+				|| contratoProduto == 'MARGEM LIMPA PMSP' 
+				|| contratoProduto == 'MARGEM LIMPA PMRP' 
+				|| contratoProduto == 'MARGEM LIMPA GOVRJ'
+				|| contratoProduto == 'MARGEM LIMPA SIAPE'
+				|| contratoProduto == 'REFINANCIAMENTO' 
+				|| contratoProduto == 'REFINANCIAMENTO GOVRJ'
+				|| contratoProduto == 'REFINANCIAMENTO PMSP' 
+				|| contratoProduto == 'REFINANCIAMENTO PMRP' 
+				|| contratoProduto == 'REFINANCIAMENTO SIAPE'
+				|| contratoProduto == 'RETENÇÃO' || contratoProduto == 'RETENÇÃO PMSP')
 			desabilita(dataQuitacao);
 		else
 			habilita(dataQuitacao);
@@ -515,7 +525,18 @@ function validaForm(form) {
 
 		if(status == 'Enviado DataPrev' || status == 'Quitado'){
 
-			if(contratoProduto != 'MARGEM LIMPA' && contratoProduto != 'REFINANCIAMENTO' && contratoProduto != 'RETENÇÃO' && contratoProduto != 'RETENÇÃO PMSP') {
+			if(contratoProduto != 'MARGEM LIMPA' 
+					&& contratoProduto != 'MARGEM LIMPA PMSP'
+					&& contratoProduto != 'MARGEM LIMPA PMRP'
+					&& contratoProduto != 'MARGEM LIMPA SIAPE'
+					&& contratoProduto != 'MARGEM LIMPA GOVRJ'
+					&& contratoProduto != 'REFINANCIAMENTO' 
+					&& contratoProduto != 'REFINANCIAMENTO PMSP'
+					&& contratoProduto != 'REFINANCIAMENTO PMRP'
+					&& contratoProduto != 'REFINANCIAMENTO SIAPE'
+					&& contratoProduto != 'REFINANCIAMENTO GOVRJ'
+					&& contratoProduto != 'RETENÇÃO' 
+					&& contratoProduto != 'RETENÇÃO PMSP') {
 				
 				if(dataQuitacao.value == ''){
 					alert("Data Quitação obrigatória");
