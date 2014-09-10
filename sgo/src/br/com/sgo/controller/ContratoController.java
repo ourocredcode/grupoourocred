@@ -426,11 +426,14 @@ public class ContratoController {
 
 		if(this.contrato.getProduto().getNome().equals("MARGEM LIMPA") 
 				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA PMSP")
+				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA PMRP")
 				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA SIAPE")
 				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
+				|| this.contrato.getProduto().getNome().equals("DEBITO")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA INSS")  
 				|| this.contrato.getProduto().getNome().equals("PORTABILIDADE/REFIN")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA PMSP") 
+				|| this.contrato.getProduto().getNome().equals("RECOMPRA PMRP") 
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA GOVRJ")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA SIAPE")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA RMC")
@@ -439,6 +442,7 @@ public class ContratoController {
 
 		if(this.contrato.getProduto().getNome().equals("REFINANCIAMENTO") 
 				|| this.contrato.getProduto().getNome().equals("REFINANCIAMENTO PMSP")
+				|| this.contrato.getProduto().getNome().equals("REFINANCIAMENTO PMRP")
 				|| this.contrato.getProduto().getNome().equals("REFINANCIAMENTO GOVRJ")
 				|| this.contrato.getProduto().getNome().equals("REFINANCIAMENTO SIAPE")
 				|| this.contrato.getProduto().getNome().equals("RETENÇÃO") 
