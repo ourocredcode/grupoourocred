@@ -674,11 +674,17 @@ public class MenuController {
 
 			}
 
+			if(!justificativa.equals("Todos")){
+				justificativas.add(justificativa);
+			}
+			
+			/*
 			if(calRecusadoInicio != null) {
 				if(!justificativa.equals("Todos")){
 					justificativas.add(justificativa);
 				}
 			}
+			*/
 
 		} catch (ParseException e) {
 			e.printStackTrace();

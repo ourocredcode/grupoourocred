@@ -911,6 +911,7 @@
 									<option value="Agencia/Conta Inválida">Agencia/Conta Inválida</option>
 									<option value="Aguardando Documentação">Aguardando Documentação</option>
 									<option value="Aguardando Procedimento">Aguardando Procedimento</option>
+									<option value="Ajuste de Saldo">Ajuste de Saldo</option>
 									<option value="Benefício Bloqueado">Benefício Bloqueado</option>
 									<option value="Cliente Cancelou Agendamento">Cliente Cancelou Agendamento</option>
 									<option value="Cliente com pendência de documentos">Cliente com pendência de documentos</option>
