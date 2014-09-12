@@ -475,6 +475,7 @@
 						<a href="#"><i class="icon icon-file"></i> <span>Relatórios</span></a>
 
 						<ul class="reports">
+							<li><a href="<c:url value="/script/16"/>">Análises BI</a></li>
 							<li><a href="<c:url value="/reports/status"/>" target="_blank">Status</a></li>
 							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
 							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
