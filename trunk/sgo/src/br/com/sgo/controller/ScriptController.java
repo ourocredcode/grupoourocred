@@ -47,6 +47,7 @@ public class ScriptController {
 			case 13 : result.use(Results.page()).forwardTo("/WEB-INF/jsp/script/descricaoStatus.jsp"); break;
 			case 14 : result.use(Results.page()).forwardTo("/WEB-INF/jsp/script/novasideias.jsp"); break;
 			case 15 : result.use(Results.page()).forwardTo("/WEB-INF/jsp/script/resultados.jsp"); break;
+			case 16 : result.use(Results.page()).forwardTo("/WEB-INF/jsp/script/analiseBI.jsp"); break;
 			
 			default: result.nothing();
 		}
