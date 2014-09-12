@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() { 
-	$("#prazo").mask("99");		
+	//$("#prazo").mask("99");		
 });
 </script>
 

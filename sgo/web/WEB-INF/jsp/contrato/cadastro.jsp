@@ -159,6 +159,24 @@ function calculaContrato() {
 
 				switch(contratoBancoNome) {
 				
+				
+				case 'Sorocred':
+
+					if(contratoProdutoNome == 'CARTAO CREDITO'){
+
+						valorMeta.value = '0.0';
+						
+						break;
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}
+				
 				case 'BMG':
 
 					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
@@ -683,6 +701,25 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ'){
 
 				switch(contratoBancoNome) {
+				
+				case 'Sorocred':
+
+					if(contratoProdutoNome == 'CARTAO CREDITO'){
+
+						valorMeta.value = '0.0';
+						
+						break;
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}
+				
+				
 				
 				case 'BMG':
 
@@ -1286,6 +1323,23 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ' ){
 
 				switch(contratoBancoNome) {
+				
+				case 'Sorocred':
+
+					if(contratoProdutoNome == 'CARTAO CREDITO'){
+
+						valorMeta.value = '0.0';
+						
+						break;
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}
 					
 				case 'BMG':
 
@@ -1887,6 +1941,24 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ' ){
 	
 				switch(contratoBancoNome) {
+				
+				
+				case 'Sorocred':
+
+					if(contratoProdutoNome == 'CARTAO CREDITO'){
+
+						valorMeta.value = '0.0';
+						
+						break;
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}
 	
 				case 'BMG':
 	
@@ -2515,6 +2587,21 @@ function verificaProduto() {
 			if(valorContrato.value != '')
 				calculaContrato();
 
+			break;
+			
+		case 'CARTAO CREDITO':
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
 			break;	
 
 		case 'AUMENTO':
@@ -2958,6 +3045,16 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'DEBITO'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
+		if(contratoProdutoNome == 'CARTAO CREDITO'){
 
 			if(valorParcela.value == ''){
 				alert(" Valor Parcela é campo obrigatório.");

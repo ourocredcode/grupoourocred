@@ -430,6 +430,7 @@ public class ContratoController {
 				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA SIAPE")
 				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
 				|| this.contrato.getProduto().getNome().equals("DEBITO")
+				|| this.contrato.getProduto().getNome().equals("CARTAO CREDITO")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA INSS")  
 				|| this.contrato.getProduto().getNome().equals("PORTABILIDADE/REFIN")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA PMSP") 
