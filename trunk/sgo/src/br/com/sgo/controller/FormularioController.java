@@ -398,7 +398,6 @@ public class FormularioController {
 					|| c.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
 					|| c.getProduto().getNome().equals("MARGEM LIMPA SIAPE")
 					|| c.getProduto().getNome().equals("DEBITO")
-					|| c.getProduto().getNome().equals("CARTAO CREDITO")
 					|| c.getProduto().getNome().equals("RECOMPRA INSS")
 					|| c.getProduto().getNome().equals("PORTABILIDADE/REFIN")
 					|| c.getProduto().getNome().equals("RECOMPRA PMSP")
@@ -418,6 +417,9 @@ public class FormularioController {
 					|| c.getProduto().getNome().equals("RETENÇÃO PMSP")
 					|| c.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 				c.setValorContratoLiquido(c.getValorLiquido());
+			
+			if(c.getProduto().getNome().equals("CARTAO CREDITO"))
+				c.setValorContratoLiquido(0.0);
 
 			this.contratoDao.beginTransaction();
 			this.contratoDao.atualiza(c);
