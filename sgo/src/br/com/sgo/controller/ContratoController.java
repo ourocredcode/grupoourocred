@@ -430,7 +430,6 @@ public class ContratoController {
 				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA SIAPE")
 				|| this.contrato.getProduto().getNome().equals("MARGEM LIMPA GOVRJ")
 				|| this.contrato.getProduto().getNome().equals("DEBITO")
-				|| this.contrato.getProduto().getNome().equals("CARTAO CREDITO")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA INSS")  
 				|| this.contrato.getProduto().getNome().equals("PORTABILIDADE/REFIN")
 				|| this.contrato.getProduto().getNome().equals("RECOMPRA PMSP") 
@@ -450,6 +449,9 @@ public class ContratoController {
 				|| this.contrato.getProduto().getNome().equals("RETENÇÃO PMSP")
 				|| this.contrato.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 			this.contrato.setValorContratoLiquido(this.contrato.getValorLiquido());
+
+		if(this.contrato.getProduto().getNome().equals("CARTAO CREDITO"))
+			this.contrato.setValorContratoLiquido(0.0);
 
 		this.contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
 				contrato.getBanco().getBanco_id(), contrato.getProduto().getProduto_id() ,this.contrato.getConvenio().getConvenio_id()));

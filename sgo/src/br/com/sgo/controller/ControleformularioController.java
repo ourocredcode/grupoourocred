@@ -200,6 +200,13 @@ public class ControleformularioController {
 			c = this.contratoDao.load(c.getContrato_id());
 
 			if(c.getEtapa().getNome().equals("Aguardando Pós Venda") || c.getEtapa().getNome().equals("Aguardando Qualidade")){
+
+				//Regra inserida para CARTAO CREDITO Não passar por aguardando Logistica -- Felipe Almeida 15-09-2014
+				if(!status.equals("Recalcular")){
+					status = c.getProduto().getNome().equals("CARTAO CREDITO") && status.equals("Aguardando Logística") ? "Aguardando Digitação" : "Aguardando Logística";
+				}
+				
+				
 				c.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), status));
 			}
 
