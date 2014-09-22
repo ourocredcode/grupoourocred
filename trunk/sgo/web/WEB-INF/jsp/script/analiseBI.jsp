@@ -41,6 +41,12 @@ function mostra(div){
 					<img src="<c:url value="/visualizaScript/analiseBI.png"/>" style="width: 100%;height: 1780px" />
 				
 				</c:if>
+				
+				<c:if test="${ usuarioInfo.organizacao.nome == 'OUROCRED RJ' }">
+
+					<img src="<c:url value="/visualizaScript/analiseBI_RJ.png"/>" style="width: 100%;height: 1780px" />
+				
+				</c:if>
 
 			</div>
 		</div>
