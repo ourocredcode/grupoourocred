@@ -1443,7 +1443,9 @@ window.onload = function() {
 											<div class="controls">
 												<select id="logisticaTipoLogisticaId" name="logistica.tipoLogistica.tipoLogistica_id" class="selectTipoLogistica">
 													<c:forEach var="tipoLogistica" items="${tiposLogistica }">
-														<option value="${tipoLogistica.tipoLogistica_id }">${tipoLogistica.nome }</option>
+														<c:if test="${tipoLogistica.nome != 'Representante' }">
+															<option value="${tipoLogistica.tipoLogistica_id }">${tipoLogistica.nome }</option>
+														</c:if>
 													</c:forEach>
 												</select>
 											</div>

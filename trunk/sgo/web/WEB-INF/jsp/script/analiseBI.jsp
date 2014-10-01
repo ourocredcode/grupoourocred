@@ -38,13 +38,13 @@ function mostra(div){
 			
 				<c:if test="${ usuarioInfo.organizacao.nome == 'OUROCRED MATRIZ' }">
 
-					<img src="<c:url value="/visualizaScript/analiseBI.png"/>" style="width: 100%;height: 1780px" />
+					<img src="<c:url value="/visualizaScript/analiseBI.png"/>" style="width: 100%;height: 1980px" />
 				
 				</c:if>
 				
 				<c:if test="${ usuarioInfo.organizacao.nome == 'OUROCRED RJ' }">
 
-					<img src="<c:url value="/visualizaScript/analiseBI_RJ.png"/>" style="width: 100%;height: 1780px" />
+					<img src="<c:url value="/visualizaScript/analiseBI_RJ.png"/>" style="width: 100%;height: 1980px" />
 				
 				</c:if>
 
