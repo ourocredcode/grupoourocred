@@ -15,7 +15,9 @@ import br.com.sgo.infra.CustomDateUtil;
 import br.com.sgo.infra.Dao;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Produto;
 import br.com.sgo.modelo.Usuario;
 
 @Component
@@ -518,6 +520,83 @@ public class ReportsDao extends Dao<Contrato> {
 				this.stmt.setLong(curr, usuario.getUsuario_id());
 				curr++;
 				this.stmt.setLong(curr, usuario.getUsuario_id());
+				curr++;
+			}
+
+			this.rsReports = this.stmt.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return rsReports;
+
+	}
+	
+	public ResultSet rankingProdutoResultSet(Empresa empresa, Organizacao organizacao, Calendar calInicio,Calendar calFim, Usuario usuario, Produto produto, Etapa etapa) {
+
+		String sql = " SELECT USUARIO.apelido as usuario_nome, " +
+					 "	COUNT(USUARIO.apelido) as quantidade, " +
+					 "	SUM(CONTRATO.valormeta) as metaCount, " +
+					 "	SUM(CONTRATO.valorcontrato) as contratoCount, " +
+					 "	SUM(CONTRATO.valorliquido) as liquidoCount, " +
+					 "	SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount FROM  " +
+					 "   CONTRATO (NOLOCK) LEFT JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id = CONTRATO.etapa_id "
+					 + " INNER JOIN USUARIO (NOLOCK) ON USUARIO.usuario_id = CONTRATO.usuario_id "
+					 + " LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
+					 " WHERE "; 
+
+		if(calInicio != null)
+			sql += 	 "  CONTRATO.created BETWEEN ? AND ? ";
+
+		if(usuario.getUsuario_id() != null)
+			sql += "  AND ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? )  ";
+		
+		if(produto.getProduto_id() != null)
+			sql += "  AND ( CONTRATO.produto_id = ? )  ";
+		
+		if(etapa.getEtapa_id() != null)
+			sql += "  AND ( CONTRATO.etapa_id = ? )  ";
+
+		sql += " GROUP BY " +   
+				"	USUARIO.apelido  " +
+				" ORDER BY " +
+				" quantidade DESC ";   
+
+		//System.out.println(sql);
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			int curr = 1;
+
+			if(calInicio != null){
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+				curr++;
+
+				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+				curr++;
+
+			}
+
+			if(usuario.getUsuario_id() != null){
+				this.stmt.setLong(curr, usuario.getUsuario_id());
+				curr++;
+				this.stmt.setLong(curr, usuario.getUsuario_id());
+				curr++;
+			}
+
+			if(produto.getProduto_id() != null){
+				this.stmt.setLong(curr, produto.getProduto_id());
+				curr++;
+			}
+
+			if(etapa.getEtapa_id() != null){
+				this.stmt.setLong(curr, etapa.getEtapa_id());
 				curr++;
 			}
 

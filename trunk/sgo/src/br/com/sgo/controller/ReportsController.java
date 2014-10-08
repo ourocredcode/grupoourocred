@@ -24,11 +24,17 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.sgo.dao.EtapaDao;
+import br.com.sgo.dao.ProdutoDao;
 import br.com.sgo.dao.ReportsDao;
+import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Empresa;
+import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.Organizacao;
+import br.com.sgo.modelo.Produto;
+import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
 
 @Resource
@@ -38,6 +44,9 @@ public class ReportsController {
 	private final UsuarioInfo usuarioInfo;
 	private final ReportsDao reportsDao;
 	private final UsuarioDao usuarioDao;
+	private final TipoWorkflowDao tipoWorkflowDao;
+	private final EtapaDao etapaDao;
+	private final ProdutoDao produtoDao;
 
 	private HttpServletResponse response;
 	private Empresa empresa;
@@ -45,13 +54,16 @@ public class ReportsController {
 	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 
 	public ReportsController(Empresa empresa, Organizacao organizacao,UsuarioInfo usuarioInfo,Result result,HttpServletResponse response,ReportsDao reportsDao,
-			UsuarioDao usuarioDao){		
+			UsuarioDao usuarioDao,TipoWorkflowDao tipoWorkflowDao,EtapaDao etapaDao,ProdutoDao produtoDao){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
 		this.response = response;
 		this.reportsDao = reportsDao;
 		this.usuarioDao = usuarioDao;
+		this.etapaDao = etapaDao;
+		this.produtoDao = produtoDao;
+		this.tipoWorkflowDao = tipoWorkflowDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 
@@ -207,6 +219,29 @@ public class ReportsController {
 		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Retenção"));
 
 		result.include("supervisores",supervisores);
+
+	}
+	
+	@Get
+	@Path("/reports/filtros/rankingproduto")
+	public void filtrosrankingproduto(){
+
+		Collection<Usuario> supervisores = new ArrayList<Usuario>();
+		
+
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Retenção"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Retenção"));
+
+		result.include("supervisores",supervisores);
+		
+		TipoWorkflow tw;
+
+		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
+		
+		result.include("produtos",this.produtoDao.buscaProdutos(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),"CARTAO CREDITO"));
 
 	}
 
@@ -581,6 +616,115 @@ public class ReportsController {
 			ServletOutputStream responseOutputStream = response.getOutputStream();
 
 			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.rankingAproveitamentoHisconResultSet(empresa, organizacao,  calInicio, calFim, u));
+
+			impressao = JasperFillManager.fillReport(jasper, parametros , jrRS);
+
+			JasperExportManager.exportReportToPdfStream(impressao, responseOutputStream);
+
+			responseOutputStream.flush();
+			responseOutputStream.close();
+
+		} catch(IOException e) {
+
+			System.out.println("Erro:" + e);
+
+		} catch(JRException e) {
+
+			e.printStackTrace();
+			System.out.println("Erro:" + e.getMessage());
+
+		}
+
+		result.nothing();
+	}
+	
+	@Post
+ 	@Path("/reports/rankingproduto")
+	public void rankingproduto(Empresa empresa,Organizacao organizacao, String data, String dataFim, Long supervisor_id, Long consultor_id, Long etapa_id, Long produto_id) {
+
+		Calendar calInicio = new GregorianCalendar();
+		Calendar calFim = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		String filtros = "";
+		
+		try {
+
+			if(dataFim.equals(""))
+				dataFim = data;
+
+			if(data.equals("")) {
+
+				calInicio = null;
+				calFim = null;
+
+			} else {
+
+				calInicio.setTime(sdf.parse(data));
+				calFim.setTime(sdf.parse(dataFim));
+
+				calInicio.set(Calendar.HOUR_OF_DAY,calInicio.getActualMinimum(Calendar.HOUR_OF_DAY));
+				calFim.set(Calendar.HOUR_OF_DAY,calInicio.getActualMaximum(Calendar.HOUR_OF_DAY));
+				
+				filtros += data +  " - " + dataFim;
+
+			}
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+
+		Usuario u = new Usuario();
+		Produto prod = new Produto();
+		Etapa etapa = new Etapa();
+
+		if(supervisor_id != null){
+
+			if(consultor_id != null){
+
+				u = this.usuarioDao.buscaUsuarioById(consultor_id);
+
+			} else {
+
+				u = this.usuarioDao.buscaUsuarioById(supervisor_id);
+
+			}
+			
+			filtros += " \\ Consultor : " + u.getApelido();
+		}
+
+		if(produto_id != null){
+			prod = this.produtoDao.buscaProdutoById(produto_id);
+			
+			filtros += " \\ Produto : " + prod.getNome();
+		}
+
+		if(etapa_id != null){
+			etapa = this.etapaDao.buscaEtapaById(etapa_id);
+			
+			filtros += " \\ Etapa : " + etapa.getNome();
+		}
+
+		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
+		String jasper = caminhoJasper + "report_rankingproduto.jasper";
+
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("caminhoJasperSolicitacao", jasper);
+
+		parametros.put("nomeProduto",prod.getNome());
+		parametros.put("filtros",filtros);
+
+		JasperPrint impressao = null;
+
+		try{
+
+			response.setHeader("Cache-Control", "no-store");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentType("application/pdf");
+
+			ServletOutputStream responseOutputStream = response.getOutputStream();
+
+			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.rankingProdutoResultSet(empresa, organizacao,  calInicio, calFim, u, prod, etapa));
 
 			impressao = JasperFillManager.fillReport(jasper, parametros , jrRS);
 
