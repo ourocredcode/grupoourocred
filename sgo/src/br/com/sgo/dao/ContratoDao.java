@@ -80,7 +80,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" LEFT JOIN ETAPA AS ETAPACONTROLE (NOLOCK) ON CONTROLEFORMULARIO.etapa_id = ETAPACONTROLE.etapa_id) "+
 			" INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id) "+
 			" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id) "+
-			" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id) "+
+			" LEFT JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id) "+
 			" INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id) "+
 			" LEFT JOIN TIPOSAQUE (NOLOCK) ON CONTRATO.tiposaque_id = TIPOSAQUE.tiposaque_id) "+
 			" LEFT JOIN BANCO (NOLOCK) AS BANCO_1 ON CONTRATO.recompra_banco_id = BANCO_1.banco_id) "+
@@ -1365,7 +1365,7 @@ public class ContratoDao extends Dao<Contrato> {
 				" INNER JOIN FORMULARIO (NOLOCK) ON CONTRATO.formulario_id = FORMULARIO.formulario_id "+
 				" INNER JOIN COEFICIENTE (NOLOCK) ON CONTRATO.coeficiente_id = COEFICIENTE.coeficiente_id "+
 				" INNER JOIN PRODUTO (NOLOCK) ON CONTRATO.produto_id = PRODUTO.produto_id "+
-				" LEFT JOIN TABELA (NOLOCK) ON CONTRATO.tabela_id = TABELA.tabela_id "+
+				" LEFT JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id "+
 				" INNER JOIN BANCO (NOLOCK) ON CONTRATO.banco_id = BANCO.banco_id "+
 				" LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.logistica_id = ( SELECT max(LOGISTICA.logistica_id) FROM LOGISTICA WHERE LOGISTICA.contrato_id = CONTRATO.contrato_id ) "+
 				" LEFT JOIN NATUREZAPROFISSIONAL (NOLOCK) ON CONTRATO.naturezaprofissional_id = NATUREZAPROFISSIONAL.naturezaprofissional_id "+
@@ -1374,7 +1374,8 @@ public class ContratoDao extends Dao<Contrato> {
 				" LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id "+
 				" LEFT JOIN WORKFLOW (NOLOCK) AS WORKFLOW_1 ON CONTRATO.workflowpendencia_id = WORKFLOW_1.workflow_id "+
 				" LEFT JOIN ETAPA (NOLOCK) AS ETAPA_1 ON CONTRATO.etapapendencia_id = ETAPA_1.etapa_id " +
-				" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id " ;
+				" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id " +
+				" INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio " ;
 
 		String clause = "";
 		int x = 0;

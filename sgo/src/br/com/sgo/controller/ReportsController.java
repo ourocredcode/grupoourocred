@@ -359,14 +359,18 @@ public class ReportsController {
  	@Path("/reports/producaoativa")
 	public void producaoativa(Empresa empresa,Organizacao organizacao,Usuario usuario ) {
 
-		Usuario u = this.usuarioDao.buscaUsuarioById(usuario.getUsuario_id());
+		Usuario u = null;
+
+		if(usuario.getUsuario_id() != null){
+			u = this.usuarioDao.buscaUsuarioById(usuario.getUsuario_id());
+		}
 
 		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
 		String jasper = caminhoJasper + "report_producaoativa.jasper";
 
 		HashMap<String, Object> parametros = new HashMap<String, Object>();
 		parametros.put("caminhoJasperSolicitacao", jasper);
-		parametros.put("nomeEquipe", u.getApelido());
+		parametros.put("nomeEquipe", u == null ? "Todos" : u.getApelido());
 		parametros.put("nomeReport","Produção Ativa");
 
 		JasperPrint impressao = null;

@@ -90,7 +90,7 @@ function validaForm(form) {
 
 											<div class="span3">								
 												<label for="usuario">Supervisor</label>
-												<select id="usuarioId" name="usuario.usuario_id" class="input-medium" required>
+												<select id="usuarioId" name="usuario.usuario_id" class="input-medium">
 													<option value="">Todos</option>
 													<c:forEach items="${supervisores}" var="supervisor">
 														<option value="${supervisor.usuario_id}">${supervisor.apelido}</option>
