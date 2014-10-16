@@ -52,6 +52,7 @@
 		<script type="text/javascript" src="<c:url value="/js/jquery.timepicker.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/Datepair.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/jquery.datepair.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.dataTables.dateorder.js"/>"></script>
 		
 		<script type="text/javascript" src="<c:url value="/js/unicorn.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/funcs.js"/>"></script>
