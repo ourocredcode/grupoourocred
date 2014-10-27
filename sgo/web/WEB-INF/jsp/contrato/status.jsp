@@ -1393,9 +1393,19 @@ window.onload = function() {
 								
 								
 								<c:if test="${not empty formulario.parceiroLocalidade.complemento && not empty formulario.parceiroLocalidade.pontoReferencia }">
-									<div class="span2">
-										<a href="#myModal" role="button" class="btn" data-toggle="modal">Nova Logística</a>
-									</div>
+									<c:if test="${not empty contratosLogistica }">
+										<div class="span2">
+											<a href="#myModal" role="button" class="btn" data-toggle="modal">Nova Logística</a>
+										</div>
+									</c:if>
+									<c:if test="${empty contratosLogistica }">
+										<div class="alert alert-error">
+										  <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+										  <h6>Opção Logística desativada : Não foram encontrados contratos neste formulário com status Aguardando Status ou Aguardando Logística.</h6>
+
+										</div>
+									</c:if>
 								</c:if>
 								<c:if test="${empty formulario.parceiroLocalidade.complemento || empty formulario.parceiroLocalidade.pontoReferencia }">
 									<div class="span2">
@@ -1475,7 +1485,7 @@ window.onload = function() {
 											<label class="control-label">Incluir Contratos do mesmo Formulário: </label>
 											<div class="controls">
 												<select id="contrato_ids[]" name="contrato_ids[]" multiple="multiple" style="width: 300px">
-													<c:forEach var="contrato" items="${contratos }">
+													<c:forEach var="contrato" items="${contratosLogistica }">
 														<option value="${contrato.contrato_id }" selected="selected">${contrato.produto.nome } - ${contrato.etapa.nome }</option>
 													</c:forEach>
 												</select>

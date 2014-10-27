@@ -24,12 +24,14 @@ import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.ConvenioDao;
 import br.com.sgo.dao.EmpresaDao;
 import br.com.sgo.dao.EtapaDao;
+import br.com.sgo.dao.LogisticaDao;
 import br.com.sgo.dao.MeioPagamentoDao;
 import br.com.sgo.dao.MenuDao;
 import br.com.sgo.dao.OrganizacaoDao;
 import br.com.sgo.dao.PerfilDao;
 import br.com.sgo.dao.PeriodoDao;
 import br.com.sgo.dao.ProdutoDao;
+import br.com.sgo.dao.RegiaoDao;
 import br.com.sgo.dao.TipoControleDao;
 import br.com.sgo.dao.TipoLogisticaDao;
 import br.com.sgo.dao.TipoSaqueDao;
@@ -40,11 +42,13 @@ import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
+import br.com.sgo.modelo.Logistica;
 import br.com.sgo.modelo.Menu;
 import br.com.sgo.modelo.Organizacao;
 import br.com.sgo.modelo.ParceiroNegocio;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Periodo;
+import br.com.sgo.modelo.Regiao;
 import br.com.sgo.modelo.TipoLogistica;
 import br.com.sgo.modelo.TipoWorkflow;
 import br.com.sgo.modelo.Usuario;
@@ -72,20 +76,24 @@ public class MenuController {
 	private final ConvenioDao convenioDao;
 	private final TipoSaqueDao tipoSaqueDao;
 	private final MeioPagamentoDao meioPagamentoDao;
+	private final LogisticaDao logisticaDao;
+	private final RegiaoDao regiaoDao;
 	private final UsuarioInfo usuarioInfo;
 	private Set<Contrato> contratos = new LinkedHashSet<Contrato>();
+	private Set<Logistica> logisticas = new LinkedHashSet<Logistica>();
 	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 	private Collection<Usuario> consultoresAux = new ArrayList<Usuario>();
 	private Collection<Periodo> periodos;
 	private Collection<TipoLogistica> tiposLogistica;
+	private Collection<Regiao> regioes;
 	private Empresa empresa;
 	private Organizacao organizacao;
 	private Usuario usuario;
 
 	public MenuController(Result result,Validator validator, EmpresaDao empresaDao, OrganizacaoDao organizacaoDao,MenuDao menuDao,UsuarioInfo usuarioInfo,CoeficienteDao coeficienteDao,
 			UsuarioDao usuarioDao,ContratoDao contratoDao,PerfilDao perfilDao,EtapaDao etapaDao,TipoWorkflowDao tipoWorkflowDao, ProdutoDao produtoDao,TipoSaqueDao tipoSaqueDao,
-			ConvenioDao convenioDao,PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,UsuarioPerfilDao usuarioPerfilDao,
-			MeioPagamentoDao meioPagamentoDao,TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario){
+			ConvenioDao convenioDao,PeriodoDao periodoDao,TipoLogisticaDao tipoLogisticaDao,UsuarioPerfilDao usuarioPerfilDao,LogisticaDao logisticaDao,
+			MeioPagamentoDao meioPagamentoDao,TipoControleDao tipoControleDao,BancoDao bancoDao,Empresa empresa,Organizacao organizacao,Usuario usuario,RegiaoDao regiaoDao){
 
 		this.empresaDao = empresaDao;
 		this.usuarioDao = usuarioDao;
@@ -108,6 +116,8 @@ public class MenuController {
 		this.convenioDao = convenioDao;
 		this.tipoControleDao = tipoControleDao;
 		this.usuarioPerfilDao = usuarioPerfilDao;
+		this.regiaoDao = regiaoDao;
+		this.logisticaDao = logisticaDao;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
 		this.usuario = usuarioInfo.getUsuario();
@@ -394,6 +404,10 @@ public class MenuController {
 
 		if(tipo.equals("proposta")){
 			result.redirectTo(this).buscaproposta();
+		}
+		
+		if(tipo.equals("logistica")){
+			result.redirectTo(this).buscalogistica();;
 		}
 
 		TipoWorkflow tw;
@@ -953,6 +967,72 @@ public class MenuController {
 		contador();
 	}
 	
+	@Post
+	@Path("/menu/contrato/logistica")
+	public void logisticas(String assinaturaInicio,String assinaturaFim, Collection<Long> bancos, Collection<String> status, Long consultor, Boolean isSupervisorApoio,
+			Long tipoLogistica, Long periodo, Long regiao) {
+		
+		logisticas.clear();
+
+		Calendar calAssinaturaInicio = new GregorianCalendar();
+		Calendar calAssinaturaFim = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		
+		try {
+			
+			if(assinaturaFim.equals(""))
+				assinaturaFim = assinaturaInicio;
+
+			if(assinaturaInicio.equals("")) {
+
+				assinaturaInicio = null;
+				assinaturaFim = null;
+
+			} else {
+
+				calAssinaturaInicio.setTime(sdf.parse(assinaturaInicio));
+				calAssinaturaFim.setTime(sdf.parse(assinaturaFim));
+
+				calAssinaturaInicio.set(Calendar.HOUR_OF_DAY,calAssinaturaInicio.getActualMinimum(Calendar.HOUR_OF_DAY));
+				calAssinaturaFim.set(Calendar.HOUR_OF_DAY,calAssinaturaFim.getActualMaximum(Calendar.HOUR_OF_DAY));
+
+			}
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		Usuario u = null;
+
+		if(usuarioInfo.getPerfil().getChave().equals("Consultor") || usuarioInfo.getPerfil().getChave().equals("Supervisor")){
+
+			u = new Usuario();
+
+			if(consultor != null) {
+				u = this.usuarioDao.load(consultor);
+			} else {
+				u = this.usuarioDao.load(usuario.getUsuario_id());
+			}
+
+			consultoresAux.add(u);
+
+		} else {
+
+			if(consultor != null){
+
+				consultoresAux.add(this.usuarioDao.load(consultor));
+
+			}
+
+		}
+
+		logisticas.addAll(this.logisticaDao.buscaLogisticaByDataAssinatura(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(), consultoresAux,isSupervisorApoio,
+				calAssinaturaInicio,calAssinaturaFim,bancos,status,tipoLogistica,periodo, regiao));
+		
+		result.include("logisticas",logisticas);
+
+	}
+	
 	@Get
 	public void buscaproposta() {
 
@@ -962,6 +1042,40 @@ public class MenuController {
 		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
 		
 		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+
+	}
+	
+	@Get
+	public void buscalogistica() {
+
+		TipoWorkflow tw;
+
+		Collection<Usuario> supervisores = new ArrayList<Usuario>();
+
+		tw = this.tipoWorkflowDao.buscaTipoWorkflowPorEmpresaOrganizacaoNomeExato(1l, 1l, "Contrato");
+		result.include("etapas",this.etapaDao.buscaEtapasByEmpresaOrganizacaoTipoWorkflow(empresa.getEmpresa_id(),organizacao.getOrganizacao_id(),tw.getTipoWorkflow_id()));
+
+		result.include("bancos",this.bancoDao.buscaBancosToBancoProdutoByEmpOrg(empresa.getEmpresa_id(), organizacao.getOrganizacao_id()));
+
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
+		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Comercial"));
+
+		result.include("supervisores",supervisores);
+		
+		periodos = periodoDao.buscaAllPeriodos();
+		tiposLogistica = tipoLogisticaDao.buscaAllTipoLogistica();
+		
+		result.include("periodos", periodos);
+		result.include("tiposLogistica", tiposLogistica);
+		
+		regioes = new ArrayList<Regiao>();
+		
+		regioes.add(this.regiaoDao.buscaPorNome("SP"));
+		regioes.add(this.regiaoDao.buscaPorNome("RJ"));
+		
+		result.include("regioes", regioes);
+		
+		
 
 	}
 

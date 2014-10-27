@@ -119,7 +119,6 @@ public class ContratoController {
 	private Collection<Periodo> periodos;
 	private Collection<TipoLogistica> tiposLogistica;
 	private Collection<Logistica> logisticas;
-	private Collection<Contrato> contratos;
 	private Collection<HistoricoContrato> historico = new ArrayList<HistoricoContrato>();
 	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 	private Collection<HistoricoControle> historicoControleBoleto;
@@ -256,7 +255,7 @@ public class ContratoController {
 		conferencias = this.conferenciaDao.buscaConferenciaByEmOrTipoProcedimentoContrato(contrato.getEmpresa().getEmpresa_id(), contrato.getOrganizacao().getOrganizacao_id(), 
 				tipoProcedimento.getTipoProcedimento_id(), contrato.getContrato_id());
 
-		contratos = contratoDao.buscaContratoByFormulario(formulario.getFormulario_id());
+		Collection<Contrato> contratosLogistica = contratoDao.buscaContratoParaLogisticaByFormulario(formulario.getFormulario_id());
 
 		if(boleto != null)
 			historicoControleBoleto = this.historicoControleDao.buscaHistoricoByContratoControle(contrato.getContrato_id(), boleto.getControle_id());
@@ -292,7 +291,7 @@ public class ContratoController {
 		result.include("periodos", periodos);
 		result.include("tiposLogistica", tiposLogistica);
 		result.include("logisticas",logisticas);
-		result.include("contratos",contratos);
+		result.include("contratosLogistica",contratosLogistica);
 		result.include("historico",historico);
 		result.include("boleto",boleto);
 		result.include("averbacao",averbacao);

@@ -440,6 +440,7 @@
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
 							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
+							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
 						</ul>
@@ -798,6 +799,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
 						</ul>
@@ -858,6 +860,7 @@
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
 							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
+							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
 						</ul>
@@ -909,6 +912,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
 						</ul>
@@ -960,6 +964,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
 						</ul>
@@ -1011,6 +1016,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
 						</ul>
