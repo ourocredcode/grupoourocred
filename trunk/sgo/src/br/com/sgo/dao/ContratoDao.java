@@ -329,6 +329,40 @@ public class ContratoDao extends Dao<Contrato> {
 		return contratos;
 	}
 	
+	public Collection<Contrato> buscaContratoParaLogisticaByFormulario(Long formulario_id) {
+
+		String sql = sqlContratos;
+		
+		if(formulario_id != null)
+			sql += " WHERE FORMULARIO.formulario_id = ? AND ( ETAPA.nome like 'Aguardando Status' OR ETAPA.nome like 'Aguardando Logística' ) ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+			this.stmt.setLong(1, formulario_id);
+
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+
+				getContratos(contratos);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contratos;
+	}
+	
 	public Collection<Contrato> buscaContratoByParceiroNegocio(Long parceiro_id) {
 
 		String sql = sqlContratos;
