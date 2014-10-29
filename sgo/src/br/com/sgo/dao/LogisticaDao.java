@@ -155,6 +155,7 @@ public class LogisticaDao extends Dao<Logistica> {
 		" INNER JOIN TIPOENDERECO (NOLOCK) ON PARCEIROLOCALIDADE.tipoendereco_id = TIPOENDERECO.tipoendereco_id AND TIPOENDERECO.nome like 'Assinatura' " +
 		" INNER JOIN TIPOLOCALIDADE (NOLOCK) ON TIPOLOCALIDADE.tipolocalidade_id = LOCALIDADE.tipolocalidade_id " +
 		" INNER JOIN PERIODO (NOLOCK) ON PERIODO.periodo_id = LOGISTICA.periodo_id " +
+		" INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id  " +
 		" WHERE " +
 		" EMPRESA.empresa_id = ? " +
 		" AND ORGANIZACAO.organizacao_id = ? ";
