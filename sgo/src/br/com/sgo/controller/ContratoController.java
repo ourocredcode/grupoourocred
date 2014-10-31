@@ -774,19 +774,45 @@ public class ContratoController {
 	public void repasse(Contrato contrato) {
 
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
+		List<String> log = new ArrayList<String>();
+		Usuario created = this.usuarioDao.load(this.contrato.getCreatedBy().getUsuario_id());
+		Usuario usuarioAtual = this.usuarioDao.load(this.contrato.getUsuario().getUsuario_id());
+		Usuario usuarioRepasse = this.usuarioDao.load(contrato.getUsuario().getUsuario_id());
 
-		this.contrato.setUsuario(contrato.getUsuario());
+		if(this.contrato.getUsuario().getUsuario_id() != contrato.getUsuario().getUsuario_id()) {
 
-		if(this.contrato.getCreatedBy().getUsuario_id() != contrato.getUsuario().getUsuario_id())
+			this.contrato.setUsuario(contrato.getUsuario());
 			this.contrato.setIsRepasse(true);
-		else
-			this.contrato.setIsRepasse(false);
+			this.contrato.setPercentualRepasse(contrato.getPercentualRepasse());
 
+			log.add("Usuário alterado de : " + usuarioAtual.getApelido() + " para : " + usuarioRepasse.getApelido() + " ( Contrato criado por :  " + created.getApelido() + ")");
+			log.add("Status atual : " + this.contrato.getEtapa().getNome() + " - Regra repasse utilizada : " + contrato.getPercentualRepasse()*100 + " %");
+
+		}
+		
 		this.contrato.setOperacao(this.operacaoDao.buscaOperacaoByEmpOrgUsuario(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),contrato.getUsuario().getUsuario_id()));
 
 		this.contratoDao.beginTransaction();
 		this.contratoDao.atualiza(this.contrato);
 		this.contratoDao.commit();
+		
+		
+		for(String l : log){
+
+			HistoricoContrato historico = new HistoricoContrato();
+			historico.setEmpresa(empresa);
+			historico.setOrganizacao(organizacao);
+			historico.setIsActive(true);
+			historico.setCreatedBy(usuario);
+			historico.setCreated(GregorianCalendar.getInstance());
+			historico.setObservacao(l);
+			historico.setContrato(contrato);
+
+			this.historicoContratoDao.beginTransaction();
+			this.historicoContratoDao.adiciona(historico);
+			this.historicoContratoDao.commit();
+
+		}
 
 		this.result.redirectTo(this).status(contrato.getContrato_id());
 

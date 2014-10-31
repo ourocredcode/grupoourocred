@@ -371,6 +371,7 @@ public class FormularioController {
 		}
 
 		contrato.setIsRepasse(false);
+		contrato.setPercentualRepasse(0.0);
 
 		contrato.setOperacao(this.operacaoDao.buscaOperacaoByEmpOrgUsuario(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),usuarioInfo.getUsuario().getUsuario_id()));
 
