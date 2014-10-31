@@ -183,6 +183,9 @@ public class Contrato implements Serializable {
 	
 	@Column(name = "isrepasse")
 	private Boolean isRepasse;
+	
+	@Column(name="percentualrepasse")
+	private Double percentualRepasse;
 
 	@Column(name = "numerobeneficio")
 	private String numeroBeneficio;
@@ -663,5 +666,13 @@ public class Contrato implements Serializable {
 
 	public void setOperacao(Operacao operacao) {
 		this.operacao = operacao;
+	}
+
+	public Double getPercentualRepasse() {
+		return percentualRepasse == null ? 0.0 : percentualRepasse;
+	}
+
+	public void setPercentualRepasse(Double percentualRepasse) {
+		this.percentualRepasse = percentualRepasse;
 	}
 }

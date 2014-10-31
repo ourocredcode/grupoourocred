@@ -66,9 +66,10 @@ $(document).ready(function() {
 			  			/* 27 - Motivo Recusa */     { "bVisible":    false },
 			  			/* 28 - Data Status Final */     { "bVisible":    false, "sType": "custom_euro_date" },
 			  			/* 29 - Repasse */     { "bVisible":    false },
-			  			/* 30 - Tabela */     { "bVisible":    false },
-			  			/* 31 - QtdParcelasAberto */     { "bVisible":    false },
-			  			/* 32 - Contrato ID */     { "bVisible":    false }
+			  			/* 30 - % Repasse */     { "bVisible":    false },
+			  			/* 31 - Tabela */     { "bVisible":    false },
+			  			/* 32 - QtdParcelasAberto */     { "bVisible":    false },
+			  			/* 33 - Contrato ID */     { "bVisible":    false }
 			  		] ,
 
 		"sDom": ' T C <"clear">lfrtip',
@@ -269,6 +270,9 @@ $(document).ready(function() {
 												Repasse
 											</th>
 											<th >
+												% Repasse
+											</th>
+											<th >
 												Tabela
 											</th>
 											<th >
@@ -379,6 +383,9 @@ $(document).ready(function() {
 												<td >
 													<c:if test="${contrato.isRepasse }">SIM</c:if>
 													<c:if test="${!contrato.isRepasse }">NÃO</c:if>
+												</td>
+												<td >
+													${contrato.percentualRepasse }
 												</td>
 												<td >
 													${contrato.coeficiente.tabela.nome }

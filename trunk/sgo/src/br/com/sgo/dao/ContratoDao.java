@@ -62,7 +62,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" CONTRATO.prazo, "+
 			" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.valorContratoLiquido, "+
 			" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
-			" CONTRATO.prazo , CONTRATO.isrepasse , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
+			" CONTRATO.prazo , CONTRATO.isrepasse , CONTRATO.percentualrepasse , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
 			" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, TABELA.tabela_id, TABELA.nome as tabela_nome, "+
 			" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 			" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
@@ -1381,7 +1381,7 @@ public class ContratoDao extends Dao<Contrato> {
 				" CONTRATO.prazo, CONTRATO.dataquitacao, "+
 				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, "+
 				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
-				" CONTRATO.prazo, CONTRATO.isrepasse , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
+				" CONTRATO.prazo, CONTRATO.isrepasse , CONTRATO.percentualrepasse, CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
 				" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, TABELA.tabela_id, TABELA.nome as tabela_nome, "+
 				" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
 				" CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , "+
@@ -2603,6 +2603,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setWorkflow(workflow);
 		contrato.setIsActive(rsContrato.getBoolean("isactive"));
 		contrato.setIsRepasse(rsContrato.getBoolean("isrepasse"));
+		contrato.setPercentualRepasse(rsContrato.getDouble("percentualrepasse"));
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
 		contrato.setPropostaBanco(rsContrato.getString("propostabanco"));
 		contrato.setContratoBanco(rsContrato.getString("contratobanco"));
@@ -2750,6 +2751,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setWorkflow(workflow);
 		contrato.setIsActive(rsContrato.getBoolean("isactive"));
 		contrato.setIsRepasse(rsContrato.getBoolean("isrepasse"));
+		contrato.setPercentualRepasse(rsContrato.getDouble("percentualrepasse"));
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
 		contrato.setPropostaBanco(rsContrato.getString("propostabanco"));
 		contrato.setContratoBanco(rsContrato.getString("contratobanco"));

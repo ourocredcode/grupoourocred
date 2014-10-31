@@ -46,8 +46,8 @@ function validaFormRepasse(form) {
 					</c:forEach>
 				</select>	
 			</div>
-			<div class="span2">
-				<label for="contratoUsuarioId">Consultor Repasse</label>
+			<div class="span3">
+				<label for="busca_Consultor">Consultor Repasse</label>
 				<select id="busca_Consultor" name="contrato.usuario.usuario_id" class="input-xlarge">
 					<option value="">Selecione um Supervisor</option>
 					<c:if test="${usuarioInfo.perfil.chave == 'Gestor'}">
@@ -55,6 +55,23 @@ function validaFormRepasse(form) {
 							<option value="${consultor.usuario_id}" <c:if test="${consultor.usuario_id == contrato.usuario.usuario_id}">selected="selected"</c:if>>${consultor.nome}</option>
 						</c:forEach>
 					</c:if>
+				</select>
+			</div>
+			
+			<div class="span2">
+				<label for="percentualRepasse">Percentual Repasse</label>
+				<select id="percentualRepasse" name="contrato.percentualRepasse" class="input-small">
+					<option value="1.0">100%</option>
+					<option value="0.9">90%</option>
+					<option value="0.8">80%</option>
+					<option value="0.7">70%</option>
+					<option value="0.6">60%</option>
+					<option value="0.5">50%</option>
+					<option value="0.4">40%</option>
+					<option value="0.3">30%</option>
+					<option value="0.2">20%</option>
+					<option value="0.1">10%</option>
+					<option value="0.0">0%</option>
 				</select>
 			</div>
 		</div>
