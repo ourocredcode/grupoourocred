@@ -202,11 +202,17 @@ public class Contrato implements Serializable {
 	@Column(name="datadigitacao")
 	private Calendar dataDigitacao;
 	
+	@Column(name="datasolicitacaosaldo")
+	private Calendar dataSolicitacaoSaldo;
+	
 	@Column(name="contratobanco",length=100)
 	private String contratoBanco;
 	
 	@Column(name="propostabanco",length=100)
 	private String propostaBanco;
+	
+	@Column(name="numeroportabilidade",length=100)
+	private String numeroPortabilidade;
 
 	@Column(name="dataconclusao")
 	private Calendar dataConcluido;
@@ -674,5 +680,21 @@ public class Contrato implements Serializable {
 
 	public void setPercentualRepasse(Double percentualRepasse) {
 		this.percentualRepasse = percentualRepasse;
+	}
+
+	public Calendar getDataSolicitacaoSaldo() {
+		return dataSolicitacaoSaldo;
+	}
+
+	public void setDataSolicitacaoSaldo(Calendar dataSolicitacaoSaldo) {
+		this.dataSolicitacaoSaldo = dataSolicitacaoSaldo;
+	}
+
+	public String getNumeroPortabilidade() {
+		return numeroPortabilidade == null ? "" : numeroPortabilidade;
+	}
+
+	public void setNumeroPortabilidade(String numeroPortabilidade) {
+		this.numeroPortabilidade = numeroPortabilidade;
 	}
 }

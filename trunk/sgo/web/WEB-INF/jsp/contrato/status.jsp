@@ -13,6 +13,7 @@ $(document).ready(function() {
 	$("#logisticaDataAssinatura").mask("99/99/9999");
 	$("#dataConcluido").mask("99/99/9999");
 	$("#dataDigitacao").mask("99/99/9999");
+	$("#dataSolicitacaoSaldo").mask("99/99/9999");
 	$("#dataQuitacao").mask("99/99/9999");
 	$("#dataAgendado").mask("99/99/9999");
 	$("#telefoneRes").mask("(99) 9999-9999?9");
@@ -76,11 +77,13 @@ $(document).ready(function() {
 	var justificativa = document.getElementById("justificativa");
 	var dataQuitacao = document.getElementById("dataQuitacao");
 	var dataDigitacao = document.getElementById("dataDigitacao");
+	var dataSolicitacaoSaldo = document.getElementById("dataSolicitacaoSaldo");
 	var dataAgendado = document.getElementById("dataAgendado");
 	var dataStatusFinal = document.getElementById("dataStatusFinal");
 	var dataConcluido = document.getElementById("dataConcluido");
 	var propostaBanco = document.getElementById("propostaBanco");
 	var contratoBanco = document.getElementById("contratoBanco");
+	var numeroPortabilidade = document.getElementById("numeroPortabilidade");
 	var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
 	var informacaoSaque = document.getElementById("informacaoSaque");
 	var meioPagamento = document.getElementById("meioPagamento");
@@ -106,6 +109,11 @@ $(document).ready(function() {
 			desabilita(dataDigitacao);
 	}
 	
+	if(dataSolicitacaoSaldo != undefined) {
+		if( dataSolicitacaoSaldo.value == "")
+			desabilita(dataSolicitacaoSaldo);
+	}
+	
 	if(dataAgendado != undefined) {
 		if( dataAgendado.value == "")
 			desabilita(dataAgendado);
@@ -124,6 +132,11 @@ $(document).ready(function() {
 	if(contratoBanco != undefined) {
 		if(contratoBanco.value == "")
 			desabilita(contratoBanco);	
+	}
+	
+	if(numeroPortabilidade != undefined) {
+		if(numeroPortabilidade.value == "")
+			desabilita(numeroPortabilidade);	
 	}
 	
 	if(organizacaoDigitacao != undefined) {
@@ -185,6 +198,11 @@ $(document).ready(function() {
 	$('#dataDigitacao').datepicker({
 		dateFormat: 'dd/mm/y'
 	});
+	
+	$('#dataSolicitacaoSaldo').datepicker({
+		dateFormat: 'dd/mm/y'
+	});
+	
 	$('#dataQuitacao').datepicker({
 		dateFormat: 'dd/mm/y'
 	});
@@ -240,9 +258,11 @@ function verificaStatus() {
 	var dataConcluido = document.getElementById("dataConcluido");
 	var dataQuitacao = document.getElementById("dataQuitacao");
 	var dataDigitacao = document.getElementById("dataDigitacao");
+	var dataSolicitacaoSaldo = document.getElementById("dataSolicitacaoSaldo");
     var meioPagamento = document.getElementById("meioPagamento");
 	var propostaBanco = document.getElementById("propostaBanco");
 	var contratoBanco = document.getElementById("contratoBanco");
+	var numeroPortabilidade = document.getElementById("numeroPortabilidade");
 	var organizacaoDigitacao = document.getElementById("organizacaoDigitacao");
 	var contratoProduto = $("#contratoProduto").val();
 	var valorQuitacao = document.getElementById("valorQuitacao");
@@ -354,9 +374,12 @@ function verificaStatus() {
 
 		habilita(contratoBanco);
 		habilita(propostaBanco);
+		habilitaNotRequired(numeroPortabilidade);
 		habilita(organizacaoDigitacao);
 		habilita(dataDigitacao);
+		habilitaNotRequired(dataSolicitacaoSaldo);
 		$("#dataDigitacao").val(getCurrentDate());
+		$("#dataSolicitacaoSaldo").val(getCurrentDate());
 
 	} else {
 
@@ -364,11 +387,21 @@ function verificaStatus() {
 			desabilita(contratoBanco);
 		if(propostaBanco.value == '')
 			desabilita(propostaBanco);
+		if(numeroPortabilidade.value == '')
+			desabilita(numeroPortabilidade);
 		if(organizacaoDigitacao.value == '')
 			desabilita(organizacaoDigitacao);
-		if(dataDigitacao.value == '')
+		if(dataDigitacao.value == '') 
 			desabilita(dataDigitacao);
+		if(dataSolicitacaoSaldo.value == '') 
+			desabilita(dataSolicitacaoSaldo);
 
+	}
+
+	if(status == 'Digitado' || status == 'Aguardando Saldo Quitação' || status == 'Aguardando Integração'){
+		habilitaNotRequired(numeroPortabilidade);
+		habilitaNotRequired(dataSolicitacaoSaldo);
+		$("#dataSolicitacaoSaldo").val(getCurrentDate());
 	}
 
 	if(status == 'Contrato Fora Planilha'){
@@ -458,6 +491,17 @@ function habilita(campo){
 
 }
 
+
+function habilitaNotRequired(campo){
+
+	$("#" + campo.id).select2("enable");
+	
+	campo.disabled = false;
+	campo.required = false;
+	campo.className = 'span10';
+
+}
+
 function validaForm(form) {
 	
 	$.each($(".select2-container"), function (i, n) {
@@ -480,6 +524,7 @@ function validaForm(form) {
 		var dataConcluido = document.getElementById("dataConcluido");
 		var dataQuitacao = document.getElementById("dataQuitacao");
 		var dataDigitacao = document.getElementById("dataDigitacao");
+		var dataSolicitacaoSaldo = document.getElementById("dataSolicitacaoSaldo");
 	    var meioPagamento = document.getElementById("meioPagamento");
 		var propostaBanco = document.getElementById("propostaBanco");
 		var contratoBanco = document.getElementById("contratoBanco");
@@ -565,7 +610,7 @@ function validaForm(form) {
 		if(status == 'Digitado'){
 
 			if(contratoBanco.value == '' || propostaBanco.value == '' || organizacaoDigitacao.value == '' || dataDigitacao.value == '') {
-				alert("Valores Contrato / Proposta/ Organizacao / Data Digitação obrigatórias. ");
+				alert("Valores Contrato / Proposta/ Organizacao / Data Digitação / Solicitação obrigatórias. ");
 				return false;
 			}
 
@@ -1135,6 +1180,17 @@ window.onload = function() {
 								<label for="propostaBanco">Proposta Banco</label>	
 								<input id="propostaBanco" type="text" name="contrato.propostaBanco" value="${contrato.propostaBanco}" class="input-medium" />
 							</div>
+							
+							<div class="span2">
+								<label for="dataSolicitacaoSaldo">Data Solicitação Saldo</label>
+								<input id="dataSolicitacaoSaldo" type="text" name="contrato.dataSolicitacaoSaldo" value="<fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${contrato.dataSolicitacaoSaldo.time}" />" class="input-medium" />
+							</div>
+							
+							<div class="span2">	
+								<label for="numeroPortabilidade">Número Portabilidade</label>	
+								<input id="numeroPortabilidade" type="text" name="contrato.numeroPortabilidade" value="${contrato.numeroPortabilidade}" class="input-medium" />
+							</div>
+							
 							<div class="span2">	
 								<label for="organizacaoDigitacao">Organização Digitação</label>	
 								<select id="organizacaoDigitacao" name="contrato.organizacaoDigitacao.organizacao_id" class="input-medium" >
