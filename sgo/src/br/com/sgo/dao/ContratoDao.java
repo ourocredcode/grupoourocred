@@ -49,7 +49,7 @@ public class ContratoDao extends Dao<Contrato> {
 	private static final String sqlContratos = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 			" FORMULARIO.created," +
 			" CONTRATO.created as contratoCreated, " +
-			" CONTRATO.datastatusfinal , CONTRATO.dataquitacao, CONTRATO.datadigitacao,CONTRATO.propostabanco, CONTRATO.contratobanco, " +
+			" CONTRATO.datastatusfinal , CONTRATO.dataquitacao, CONTRATO.datadigitacao, CONTRATO.datasolicitacaosaldo, CONTRATO.propostabanco, CONTRATO.contratobanco, CONTRATO.numeroportabilidade, " +
 			" FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , " +
 			" CONTRATO.contrato_id,CONTRATO.formulario_id, "+
 			" CONTRATO.coeficiente_id, CONTRATO.workflow_id, "+
@@ -428,7 +428,7 @@ public class ContratoDao extends Dao<Contrato> {
 					 " LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id) " + 
 					 " INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON FORMULARIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id) " +  
 					 " INNER JOIN PARCEIROBENEFICIO (NOLOCK ) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio) " +
-					 " LEFT JOIN LOGISTICA (NOLOCK) ON LOGISTICA.logistica_id = ( SELECT max(LOGISTICA.logistica_id) FROM LOGISTICA (NOLOCK) WHERE LOGISTICA.contrato_id = CONTRATO.contrato_id ) ) " +
+					 " INNER JOIN LOGISTICA (NOLOCK) ON LOGISTICA.logistica_id = ( SELECT max(LOGISTICA.logistica_id) FROM LOGISTICA (NOLOCK) WHERE LOGISTICA.contrato_id = CONTRATO.contrato_id ) ) " +
 					 " LEFT JOIN PERIODO (NOLOCK) ON LOGISTICA.periodo_id = PERIODO.periodo_id  ";
 		
 		if(formulario_id != null)
@@ -2607,6 +2607,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
 		contrato.setPropostaBanco(rsContrato.getString("propostabanco"));
 		contrato.setContratoBanco(rsContrato.getString("contratobanco"));
+		contrato.setNumeroPortabilidade(rsContrato.getString("numeroportabilidade"));
 		contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
 		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
 		contrato.setDesconto(rsContrato.getDouble("desconto"));
@@ -2755,6 +2756,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
 		contrato.setPropostaBanco(rsContrato.getString("propostabanco"));
 		contrato.setContratoBanco(rsContrato.getString("contratobanco"));
+		contrato.setNumeroPortabilidade(rsContrato.getString("numeroportabilidade"));
 		contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
 		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
 		contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));

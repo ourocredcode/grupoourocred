@@ -517,6 +517,35 @@ public class ContratoController {
 		}
 
 		this.contrato.setSupervisorStatusFinal(this.contrato.getEtapa().getNome().equals("Concluído") ? this.contrato.getUsuario().getSupervisorUsuario() : null);
+		
+		
+		this.contrato.setDataSolicitacaoSaldo(this.contrato.getDataSolicitacaoSaldo() == null ? calInicial : this.contrato.getDataSolicitacaoSaldo());
+		contrato.setDataSolicitacaoSaldo(contrato.getDataSolicitacaoSaldo() == null ? calInicial : contrato.getDataSolicitacaoSaldo());
+
+		if(!(this.contrato.getDataSolicitacaoSaldo().compareTo(contrato.getDataSolicitacaoSaldo() == null ? calInicial : contrato.getDataSolicitacaoSaldo()) == 0)) {
+			if (this.contrato.getDataSolicitacaoSaldo().compareTo(calInicial) == 0){
+
+				log.add("Data de solicitação saldo alterado para : " + dateFormat.format(contrato.getDataSolicitacaoSaldo().getTime()));
+				this.contrato.setDataSolicitacaoSaldo(contrato.getDataSolicitacaoSaldo());
+
+			} else if (contrato.getDataSolicitacaoSaldo().compareTo(calInicial) != 0) {
+
+				log.add("Data de solicitação saldo alterado de : " + dateFormat.format(this.contrato.getDataSolicitacaoSaldo().getTime()) + " para: " + dateFormat.format(contrato.getDataSolicitacaoSaldo().getTime()));
+				this.contrato.setDataSolicitacaoSaldo(contrato.getDataSolicitacaoSaldo());
+
+			} else if (contrato.getDataSolicitacaoSaldo().compareTo(calInicial) == 0) {
+				log.add("Data de solicitação saldo alterado de : " + dateFormat.format(this.contrato.getDataSolicitacaoSaldo().getTime()) + " para: em branco.");
+				this.contrato.setDataSolicitacaoSaldo(null);
+			}
+		}
+		
+		if(this.contrato.getDataSolicitacaoSaldo() != null) {
+			if(this.contrato.getDataSolicitacaoSaldo().compareTo(calInicial) == 0)
+				this.contrato.setDataSolicitacaoSaldo(null);
+		}
+		
+		
+		
 
 		this.contrato.setDataDigitacao(this.contrato.getDataDigitacao() == null ? calInicial : this.contrato.getDataDigitacao());
 		contrato.setDataDigitacao(contrato.getDataDigitacao() == null ? calInicial : contrato.getDataDigitacao());
@@ -659,6 +688,11 @@ public class ContratoController {
 		if(!this.contrato.getContratoBanco().equals(contrato.getContratoBanco())) {
 			log.add("Contrato Banco alterada para : " + contrato.getContratoBanco() );
 			this.contrato.setContratoBanco(contrato.getContratoBanco());
+		}
+		
+		if(!this.contrato.getNumeroPortabilidade().equals(contrato.getNumeroPortabilidade())) {
+			log.add("Número Portabilidade alterado para : " + contrato.getNumeroPortabilidade() );
+			this.contrato.setNumeroPortabilidade(contrato.getNumeroPortabilidade());
 		}
 
 		if(contrato.getOrganizacaoDigitacao() != null){

@@ -117,8 +117,9 @@ public class HisconbeneficioController {
 
 		for (HisconBeneficio h : hisconsAuxiliar){
 
-			h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
-
+			//h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(usuarioInfo.getEmpresa().getEmpresa_id(),usuarioInfo.getOrganizacao().getOrganizacao_id(),h.getParceiroBeneficio().getParceiroBeneficio_id()));
+			h.setCountHiscons(0);
+			
 			h.setEtapas(etapaDao.buscaEtapaByHisconPerfil(
 						usuarioInfo.getEmpresa().getEmpresa_id(),
 						usuarioInfo.getOrganizacao().getOrganizacao_id(),
@@ -391,7 +392,8 @@ public class HisconbeneficioController {
 
 		for(HisconBeneficio h : hisconsAux){
 
-			h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), h.getParceiroBeneficio().getParceiroBeneficio_id()));
+			//h.setCountHiscons(this.hisconBeneficioDao.buscaCountHisconsBeneficios(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), h.getParceiroBeneficio().getParceiroBeneficio_id()));
+			h.setCountHiscons(0);
 
 			h.setEtapas(etapaDao.buscaEtapaByHisconPerfil(
 					usuarioInfo.getEmpresa().getEmpresa_id(),
