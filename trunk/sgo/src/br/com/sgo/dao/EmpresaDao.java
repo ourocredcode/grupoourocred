@@ -131,6 +131,7 @@ public class EmpresaDao extends Dao<Empresa> {
 
 				empresa.setEmpresa_id(rsEmpresas.getLong("empresa_id"));
 				empresa.setNome(rsEmpresas.getString("nome"));
+				empresa.setIsActive(rsEmpresas.getBoolean("isactive"));
 
 			}
 

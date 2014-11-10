@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
+import br.com.sgo.dao.ContratoDao;
 import br.com.sgo.dao.EtapaDao;
 import br.com.sgo.dao.HisconBeneficioDao;
 import br.com.sgo.dao.ParceiroBeneficioDao;
@@ -34,6 +35,7 @@ import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
 import br.com.sgo.infra.CustomFileUtil;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Contrato;
 import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Etapa;
 import br.com.sgo.modelo.HisconBeneficio;
@@ -52,6 +54,7 @@ public class HisconbeneficioController {
 	private final WorkflowDao workflowDao;
 	private final EtapaDao etapaDao;
 	private final UsuarioDao usuarioDao;
+	private final ContratoDao contratoDao;
 	private final TipoContatoDao tipoContatoDao;
 	private final ParceiroContatoDao parceiroContatoDao;
 	private final ParceiroNegocioDao parceiroNegocioDao;
@@ -68,7 +71,7 @@ public class HisconbeneficioController {
 
 	public HisconbeneficioController(Result result, UsuarioInfo usuarioInfo,Empresa empresa, Organizacao organizacao, Usuario usuario,
 			UsuarioDao usuarioDao ,HisconBeneficioDao hisconBeneficioDao, TipoContatoDao tipoContatoDao, ParceiroContatoDao parceiroContatoDao,
-			ParceiroNegocioDao parceiroNegocioDao,
+			ParceiroNegocioDao parceiroNegocioDao,ContratoDao contratoDao,
 			ParceiroBeneficioDao parceiroBeneficioDao, WorkflowDao workflowDao, EtapaDao etapaDao,HisconBeneficio hisconBeneficio,HttpServletResponse response) {
 
 		this.result = result;
@@ -82,6 +85,7 @@ public class HisconbeneficioController {
 		this.tipoContatoDao = tipoContatoDao;
 		this.parceiroContatoDao = parceiroContatoDao;
 		this.parceiroNegocioDao = parceiroNegocioDao;
+		this.contratoDao  = contratoDao;
 		this.response = response;
 		this.empresa = usuarioInfo.getEmpresa();
 		this.organizacao = usuarioInfo.getOrganizacao();
@@ -151,41 +155,77 @@ public class HisconbeneficioController {
 		String mensagem = "";
 
 		ParceiroBeneficio pb = this.parceiroBeneficioDao.buscaParceiroBeneficioPorNumeroBeneficio(empresa_id, organizacao_id, numeroBeneficio);
+		Boolean aguardandoAverbacao = false;
 
-			if (pb != null){
+		//Regra inserida em 06/11/2014 - Evitar solicitação de hiscon com contratos aguardando averbação
+		if(organizacao.getNome().equals("OUROCRED MATRIZ") || organizacao.getNome().equals("OUROCRED RJ") || organizacao.getNome().equals("USECRED")){
 
-				//HisconBeneficio hb = this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficio(pb.getEmpresa().getEmpresa_id(),pb.getOrganizacao().getOrganizacao_id(),pb.getParceiroBeneficio_id());
+			Collection<Contrato> verificaContratos = this.contratoDao.buscaContratosByNumeroBeneficio(empresa_id,organizacao_id,numeroBeneficio);
 
-					if (this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficioToCheckStatusHiscon
-						(pb.getEmpresa().getEmpresa_id(), pb.getOrganizacao().getOrganizacao_id(), pb.getParceiroBeneficio_id()) == null){
+			for(Contrato c : verificaContratos){
 
+				if((usuarioInfo.getPerfil().getNome().equals("Consultor") || usuarioInfo.getPerfil().getNome().equals("Supervisor")) 
+						&&  ( c.getEtapa().getNome().equals("Aguardando Integração") 
+						|| c.getEtapa().getNome().equals("Enviado DataPrev")
+						|| c.getEtapa().getNome().equals("Enviado DataPrev Refin")
+						|| c.getEtapa().getNome().equals("Pendente ADM")
+						|| c.getEtapa().getNome().equals("Pendente Banco")
+						|| c.getEtapa().getNome().equals("Pendente Inadimplência"))){
+					aguardandoAverbacao = true;
+				}
+
+			}
+			
+		}
+
+		if (pb != null){
+
+			//HisconBeneficio hb = this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficio(pb.getEmpresa().getEmpresa_id(),pb.getOrganizacao().getOrganizacao_id(),pb.getParceiroBeneficio_id());
+
+				if (this.hisconBeneficioDao.buscaHisconBeneficioByParceiroBeneficioToCheckStatusHiscon
+					(pb.getEmpresa().getEmpresa_id(), pb.getOrganizacao().getOrganizacao_id(), pb.getParceiroBeneficio_id()) == null){
+
+					if(!aguardandoAverbacao) {
+					
 						this.hisconBeneficio.setEmpresa(pb.getEmpresa());
 						this.hisconBeneficio.setOrganizacao(pb.getOrganizacao());
 						this.hisconBeneficio.setParceiroBeneficio(pb);
 						this.hisconBeneficio.setUsuario(usuarioInfo.getUsuario());
 
 						result.include("hisconBeneficio", hisconBeneficio);
-
+						
 					} else {
 
-						mensagem = "Erro: Hiscon já esta com solicitação em andamento. ";
+						mensagem = "Erro: Cliente esta em período de averbação de contrato. Não é possível fazer nova solicitação de hiscon.";
 						result.include("notice", mensagem);
-						
+
 						this.hisconBeneficio.setHisconBeneficio_id(null);
 						this.hisconBeneficio.setParceiroBeneficio(null);
 						this.hisconBeneficio.setCreated(null);
 						this.hisconBeneficio = new HisconBeneficio();
 
-					} 
+					}
 
-			} else {
+				} else {
 
-				mensagem = "Erro: Beneficio não cadastrado.";
+					mensagem = "Erro: Hiscon já esta com solicitação em andamento.";
+					result.include("notice", mensagem);
 
-			}
+					this.hisconBeneficio.setHisconBeneficio_id(null);
+					this.hisconBeneficio.setParceiroBeneficio(null);
+					this.hisconBeneficio.setCreated(null);
+					this.hisconBeneficio = new HisconBeneficio();
 
-		result.include("notice", mensagem);			
-		result.redirectTo(this).cadastro();
+				} 
+
+		} else {
+
+			mensagem = "Erro: Beneficio não cadastrado.";
+
+		}
+
+	result.include("notice", mensagem);			
+	result.redirectTo(this).cadastro();
 
 	}
 
