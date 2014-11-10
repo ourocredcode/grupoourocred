@@ -86,7 +86,7 @@
                     </ul>
                 </li>
                
-                <c:if test="${usuarioInfo.perfil.chave == 'Gestor' && perfis != null}">
+                <c:if test="${ ( usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Hiscon' ) && perfis != null}">
                 <li class="btn btn-inverse dropdown" id="menu-messages2"><a href="#" data-toggle="dropdown" data-target="#menu-messages2" class="dropdown-toggle"><i class="icon icon-th-list"></i> <span class="text">Organizações</span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
 						 <c:forEach var="perfil" items="${perfis}">	
@@ -704,6 +704,7 @@
 						<a href="#"><i class="icon icon-file"></i> <span>Relatórios</span></a>
 
 						<ul class="reports">
+							<li><a href="<c:url value="/script/16"/>">Análises BI</a></li>
 							<li><a href="<c:url value="/reports/status"/>" target="_blank">Status</a></li>
 							<li><a href="<c:url value="/reports/filtros/aprovados"/>" >Aprovados</a></li>
 							<li><a href="<c:url value="/reports/filtros/producaoativa"/>" >Produção Ativa</a></li>
@@ -800,6 +801,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
 							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
@@ -913,6 +915,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
 							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
@@ -975,6 +978,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
 							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>
@@ -1027,6 +1031,7 @@
 						<ul class="consultor">
 							<li><a href="<c:url value="/menu/contratos/${usuarioInfo.perfil.chave}"/>">Contratos</a></li>
 							<li><a href="<c:url value="/menu/contratos/datascontrole"/>">Boleto / Averbação</a></li>
+							<li><a href="<c:url value="/menu/contratos/proposta"/>">Proposta / Contrato</a></li>
 							<li><a href="<c:url value="/menu/contratos/logistica"/>">Logística</a></li>
 							<li><a href="<c:url value="/hisconbeneficio/hiscons/${usuarioInfo.perfil.chave}"/>">Hiscons</a></li>
 							<li><a href="<c:url value="/coeficiente/coeficientes"/>">Coeficientes</a></li>

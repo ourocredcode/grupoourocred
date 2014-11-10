@@ -1358,6 +1358,64 @@ public class ContratoDao extends Dao<Contrato> {
 		return contratos;
 
 	}
+	
+	public Collection<Contrato> buscaContratosByNumeroBeneficio(Long empresa_id, Long organizacao_id, String numeroBeneficio){
+		
+		String sql = "SELECT DISTINCT (ETAPA.nome) as etapa_nome FROM CONTRATO (NOLOCK) " + 
+					" INNER JOIN EMPRESA (NOLOCK) ON EMPRESA.empresa_id = CONTRATO.empresa_id " +
+					" INNER JOIN ORGANIZACAO (NOLOCK) ON ORGANIZACAO.organizacao_id = CONTRATO.organizacao_id " + 
+					" INNER JOIN FORMULARIO (NOLOCK) ON FORMULARIO.formulario_id = CONTRATO.formulario_id " +
+					" INNER JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id = CONTRATO.etapa_id " +
+					" INNER JOIN PARCEIRONEGOCIO (NOLOCK) ON PARCEIRONEGOCIO.parceironegocio_id = FORMULARIO.parceironegocio_id " +
+					" INNER JOIN PARCEIROBENEFICIO (NOLOCK) ON PARCEIROBENEFICIO.parceironegocio_id = PARCEIRONEGOCIO.parceironegocio_id " + 
+					" AND PARCEIROBENEFICIO.numerobeneficio = CONTRATO.numerobeneficio " +
+						" WHERE CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ?  ";
+
+		if(!numeroBeneficio.equals(""))
+			sql += " AND  PARCEIROBENEFICIO.numerobeneficio like ?  ";
+
+		this.conn = this.conexao.getConexao();
+
+		Collection<Contrato> contratos = new ArrayList<Contrato>();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			//System.out.println(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+
+			if(!numeroBeneficio.equals("")){
+				this.stmt.setString(3,numeroBeneficio);
+			}
+			
+			this.rsContrato = this.stmt.executeQuery();
+
+			while (rsContrato.next()) {
+				
+				Contrato contrato = new Contrato();
+				Etapa etapa = new Etapa();
+				
+				etapa.setNome(rsContrato.getString("etapa_nome"));
+				
+				contrato.setEtapa(etapa);
+
+				contratos.add(contrato);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsContrato, stmt, conn);
+		return contratos;
+
+	}
 
 	public Collection<Contrato> buscaDatasControle(Long empresa_id, Long organizacao_id,Long tipoControle,Calendar calInicio,Calendar calFim,
 			Calendar previsaoInicio,Calendar previsaoFim, Calendar chegadaInicio,

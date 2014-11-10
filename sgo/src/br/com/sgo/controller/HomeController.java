@@ -19,6 +19,7 @@ import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.UsuarioPerfilDao;
 import br.com.sgo.interceptor.Public;
 import br.com.sgo.interceptor.UsuarioInfo;
+import br.com.sgo.modelo.Empresa;
 import br.com.sgo.modelo.Perfil;
 import br.com.sgo.modelo.Usuario;
 import br.com.sgo.modelo.UsuarioPerfil;
@@ -53,12 +54,24 @@ public class HomeController {
 	@Get
 	@Public
 	public void login() {
+		
+		Empresa e = this.empresaDao.buscaEmpresaByNome("GRUPO OUROCRED");
+		
+		//System.out.println("ATIVO 1 ? : " + e.getIsActive());
+		
+		result.include("e",e);
 
 	}
 	
 	@Get
 	@Path("/")
 	public void home() {
+		
+		Empresa e = this.empresaDao.buscaEmpresaByNome("GRUPO OUROCRED");
+		
+		//System.out.println("ATIVO 2 ? : " + e.getIsActive());
+		
+		result.include("e",e);
 
 	}	
 

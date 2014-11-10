@@ -133,12 +133,25 @@
 								<div class="controls">
 									<input type="password" id="password" name="password" placeholder="Senha" required="required">
 								</div>
-								<div class="control-group">
-									<div class="controls">
-										<p></p>
-										<button type="submit" class="btn btn-primary">OK</button>
-									</div>
-								</div>
+								
+								<c:if test="${e.isActive }">
+										<div class="control-group">
+											<div class="controls">
+												<p></p>
+												<button type="submit" class="btn btn-primary">OK</button>
+											</div>
+										</div>
+								</c:if>
+								
+								<c:if test="${ e.isActive == false  }">
+										 <div class="control-group">
+											<div class="controls">
+												<p></p>
+												<button type="button" class="btn btn-danger" disabled="disabled">Favor aguardar. Sistema em manutenção.</button>
+											</div>
+										</div>
+								</c:if>
+								
 							</div>
 						</form>
 	
