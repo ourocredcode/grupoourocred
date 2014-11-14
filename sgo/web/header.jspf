@@ -796,6 +796,16 @@
 
 					<li class="submenu">
 
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
+						
+						<ul class="cadastro">
+							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+						</ul>
+
+					</li>
+
+					<li class="submenu">
+
 						<a href="#"><i class="icon icon-search"></i> <span>Consultas</span></a>
 
 						<ul class="consultor">
@@ -907,6 +917,16 @@
 				</c:if>
 				
 				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' && usuarioInfo.organizacao.nome == 'OUROCRED RJ' }">
+				
+					<li class="submenu">
+
+						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
+						
+						<ul class="cadastro">
+							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+						</ul>
+
+					</li>
 
 					<li class="submenu">
 

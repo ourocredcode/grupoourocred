@@ -1436,8 +1436,9 @@ public class ContratoDao extends Dao<Contrato> {
 				" USUARIO_SUPERVISOR.usuario_id as usuario_super_id, "+
 				" USUARIO_SUPERVISOR.nome as usuario_super," +
 				" USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
-				" CONTRATO.prazo, CONTRATO.dataquitacao, "+
-				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, "+
+				" CONTRATO.prazo,  "+
+				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.datastatusfinal, " + 
+				" CONTRATO.dataquitacao, CONTRATO.datadigitacao, CONTRATO.datasolicitacaosaldo, CONTRATO.propostabanco, CONTRATO.contratobanco, CONTRATO.numeroportabilidade, " +
 				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
 				" CONTRATO.prazo, CONTRATO.isrepasse , CONTRATO.percentualrepasse, CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
 				" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, TABELA.tabela_id, TABELA.nome as tabela_nome, "+
@@ -1892,6 +1893,11 @@ public class ContratoDao extends Dao<Contrato> {
 			while (rsContrato.next()) {
 
 				Calendar created = new GregorianCalendar();
+				Calendar dataStatusFinal = new GregorianCalendar();
+				Calendar dataDigitacao = new GregorianCalendar();
+				Calendar dataQuitacao = new GregorianCalendar();
+				Calendar dataSolicitacaoSaldo = new GregorianCalendar();
+		
 				Formulario formulario = new Formulario();
 				Usuario usuario = new Usuario();
 				Usuario supervisor = new Usuario();
@@ -1981,12 +1987,23 @@ public class ContratoDao extends Dao<Contrato> {
 				}
 				
 				if(rsContrato.getDate("dataquitacao") != null) {
-
-					Calendar dataQuitacao = new GregorianCalendar();
-
 					dataQuitacao.setTime(rsContrato.getDate("dataquitacao"));
 					contrato.setDataQuitacao(dataQuitacao);
+				}
 
+				if(rsContrato.getDate("datastatusfinal") != null) {
+					dataStatusFinal.setTime(rsContrato.getDate("datastatusfinal"));
+					contrato.setDataStatusFinal(dataStatusFinal);
+				}
+
+				if(rsContrato.getDate("datadigitacao") != null) {
+					dataDigitacao.setTime(rsContrato.getDate("datadigitacao"));
+					contrato.setDataDigitacao(dataDigitacao);
+				}
+
+				if(rsContrato.getDate("datasolicitacaosaldo") != null) {
+					dataSolicitacaoSaldo.setTime(rsContrato.getDate("datasolicitacaosaldo"));
+					contrato.setDataSolicitacaoSaldo(dataSolicitacaoSaldo);
 				}
 
 				contrato.setControle(controle);
@@ -2034,6 +2051,9 @@ public class ContratoDao extends Dao<Contrato> {
 				contrato.setIsActive(rsContrato.getBoolean("isactive"));
 				contrato.setIsRepasse(rsContrato.getBoolean("isrepasse"));
 				contrato.setNumeroBeneficio(rsContrato.getString("numerobeneficio"));
+				contrato.setPropostaBanco(rsContrato.getString("propostabanco"));
+				contrato.setContratoBanco(rsContrato.getString("contratobanco"));
+				contrato.setNumeroPortabilidade(rsContrato.getString("numeroportabilidade"));
 				contrato.setValorContrato(rsContrato.getDouble("valorcontrato"));
 				contrato.setValorDivida(rsContrato.getDouble("valordivida"));
 				contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
@@ -2522,6 +2542,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Calendar dataStatusFinal = new GregorianCalendar();
 		Calendar dataQuitacao = new GregorianCalendar();
 		Calendar dataDigitacao = new GregorianCalendar();
+		Calendar dataSolicitacaoSaldo = new GregorianCalendar();
 		Calendar contratoCreated = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
@@ -2607,6 +2628,11 @@ public class ContratoDao extends Dao<Contrato> {
 			contrato.setDataDigitacao(dataDigitacao);
 		}
 		
+		if(rsContrato.getDate("datasolicitacaosaldo") != null) {
+			dataSolicitacaoSaldo.setTime(rsContrato.getDate("datasolicitacaosaldo"));
+			contrato.setDataSolicitacaoSaldo(dataSolicitacaoSaldo);
+		}
+		
 
 		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
 
@@ -2690,6 +2716,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Calendar dataStatusFinal = new GregorianCalendar();
 		Calendar dataQuitacao = new GregorianCalendar();
 		Calendar dataDigitacao = new GregorianCalendar();
+		Calendar dataSolicitacaoSaldo = new GregorianCalendar();
 		Calendar contratoCreated = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
@@ -2764,6 +2791,12 @@ public class ContratoDao extends Dao<Contrato> {
 			dataDigitacao.setTime(rsContrato.getDate("datadigitacao"));
 			contrato.setDataDigitacao(dataQuitacao);
 		}
+		
+		if(rsContrato.getDate("datasolicitacaosaldo") != null) {
+			dataSolicitacaoSaldo.setTime(rsContrato.getDate("datasolicitacaosaldo"));
+			contrato.setDataSolicitacaoSaldo(dataSolicitacaoSaldo);
+		}
+		
 
 		contrato.setContrato_id(rsContrato.getLong("contrato_id"));
 

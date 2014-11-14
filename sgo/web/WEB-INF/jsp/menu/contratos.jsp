@@ -209,14 +209,16 @@
 				  			/* 23 - Data Digitação */     { "bVisible":    false, "sType": "custom_euro_date" },
 				  			/* 24 - Proposta Banco */     { "bVisible":    false },
 				  			/* 25 - Contrato Banco */     { "bVisible":    false },
-				  			/* 26 - Pós Venda */     { "bVisible":    false },
-				  			/* 27 - Motivo Recusa */     { "bVisible":    false },
-				  			/* 28 - Data Status Final */     { "bVisible":    false, "sType": "custom_euro_date" },
-				  			/* 29 - Repasse */     { "bVisible":    false },
-				  			/* 30 - Percentual Repasse */     { "bVisible":    false },
-				  			/* 31 - Tabela */     { "bVisible":    false },
-				  			/* 32 - QtdParcelasAberto */     { "bVisible":    false },
-				  			/* 33 - Contrato ID */     { "bVisible":    false }
+				  			/* 26 - Numero Portabilidade */     { "bVisible":    false },
+				  			/* 27 - Data Solicitacao Saldo */     { "bVisible":    false },
+				  			/* 28 - Pós Venda */     { "bVisible":    false },
+				  			/* 29 - Motivo Recusa */     { "bVisible":    false },
+				  			/* 30 - Data Status Final */     { "bVisible":    false, "sType": "custom_euro_date" },
+				  			/* 31 - Repasse */     { "bVisible":    false },
+				  			/* 32 - Percentual Repasse */     { "bVisible":    false },
+				  			/* 33 - Tabela */     { "bVisible":    false },
+				  			/* 34 - QtdParcelasAberto */     { "bVisible":    false },
+				  			/* 35 - Contrato ID */     { "bVisible":    false }
 				  		] ,
 
 	  		"sDom": ' T C <"clear">lfrtip',
@@ -1082,6 +1084,12 @@
 												Contrato Banco
 											</th>
 											<th >
+												Número Portabilidade
+											</th>
+											<th >
+												Dt Solicitação Saldo
+											</th>
+											<th >
 												Pós Venda
 											</th>
 											<th >
@@ -1195,6 +1203,12 @@
 												</td>
 												<td >
 													${contrato.contratoBanco }
+												</td>
+												<td >
+													${contrato.numeroPortabilidade }
+												</td>
+												<td >
+													<fmt:formatDate value="${contrato.dataSolicitacaoSaldo.time}" pattern="dd/MM/yy" />
 												</td>
 												<td >
 													${contrato.formulario.posvenda.etapa.nome }
