@@ -167,6 +167,7 @@ public class HisconbeneficioController {
 				if((usuarioInfo.getPerfil().getNome().equals("Consultor") || usuarioInfo.getPerfil().getNome().equals("Supervisor")) 
 						&&  ( c.getEtapa().getNome().equals("Aguardando Integração") 
 						|| c.getEtapa().getNome().equals("Enviado DataPrev")
+						|| c.getEtapa().getNome().equals("Quitado")
 						|| c.getEtapa().getNome().equals("Enviado DataPrev Refin")
 						|| c.getEtapa().getNome().equals("Pendente ADM")
 						|| c.getEtapa().getNome().equals("Pendente Banco")
