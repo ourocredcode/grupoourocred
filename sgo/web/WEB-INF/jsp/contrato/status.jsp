@@ -1174,11 +1174,11 @@ window.onload = function() {
 							</div>
 							<div class="span2">	
 								<label for="contratoBanco">Contrato Banco</label>	
-								<input id="contratoBanco" type="text" name="contrato.contratoBanco" value="${contrato.contratoBanco}" class="input-medium" />
+								<input id="contratoBanco" type="text" name="contrato.contratoBanco" value="${contrato.contratoBanco}" class="input-medium" maxlength="50" />
 							</div>
 							<div class="span2">	
 								<label for="propostaBanco">Proposta Banco</label>	
-								<input id="propostaBanco" type="text" name="contrato.propostaBanco" value="${contrato.propostaBanco}" class="input-medium" />
+								<input id="propostaBanco" type="text" name="contrato.propostaBanco" value="${contrato.propostaBanco}" class="input-medium" maxlength="50" />
 							</div>
 							
 							<div class="span2">
@@ -1188,7 +1188,7 @@ window.onload = function() {
 							
 							<div class="span2">	
 								<label for="numeroPortabilidade">Número Portabilidade</label>	
-								<input id="numeroPortabilidade" type="text" name="contrato.numeroPortabilidade" value="${contrato.numeroPortabilidade}" class="input-medium" />
+								<input id="numeroPortabilidade" type="text" name="contrato.numeroPortabilidade" value="${contrato.numeroPortabilidade}" class="input-medium" maxlength="50" />
 							</div>
 							
 							<div class="span2">	

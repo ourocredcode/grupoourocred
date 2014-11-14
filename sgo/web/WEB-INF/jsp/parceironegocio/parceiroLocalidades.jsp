@@ -28,8 +28,8 @@
 						<td>${parceiroLocalidade.localidade.tipoLocalidade.nome }</td>
 						<td>${parceiroLocalidade.localidade.endereco }</td>
 						<td><input type="text" id="parceiroLocalidadeNumeroLista" value="${parceiroLocalidade.numero }" class="input-small" onChange="return altera(this,'numero','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
-						<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }" class="input-small" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
-						<td><input type="text" id="parceiroLocalidadePontoReferenciaLista" value="${parceiroLocalidade.pontoReferencia }" class="input-medium" onChange="return altera(this,'pontoReferencia','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+						<td><input type="text" id="parceiroLocalidadeComplementoLista" value="${parceiroLocalidade.complemento }"  maxlength="50" class="input-small" onChange="return altera(this,'complemento','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
+						<td><input type="text" id="parceiroLocalidadePontoReferenciaLista" value="${parceiroLocalidade.pontoReferencia }" maxlength="50" class="input-medium" onChange="return altera(this,'pontoReferencia','${parceiroLocalidade.parceiroLocalidade_id}', this.value);"/></td>
 						<td>${parceiroLocalidade.tipoEndereco.nome }</td>
 						<!-- 
 						<td>
