@@ -24,8 +24,8 @@ public class ParceiroContatoDao extends Dao<ParceiroContato> {
 	private Connection conn;
 	private ResultSet rsParceiroContato;
 
-	private String sqlParceiroContatoAll = "SELECT PARCEIROCONTATO.parceirocontato_id, PARCEIROCONTATO.empresa_id, PARCEIROCONTATO.organizacao_id,"
-			+ " PARCEIROCONTATO.parceironegocio_id, PARCEIROCONTATO.tipocontato_id, PARCEIROCONTATO.nome	FROM PARCEIROCONTATO (NOLOCK)";
+	private String sqlParceiroContatoAll = " SELECT PARCEIROCONTATO.parceirocontato_id, PARCEIROCONTATO.empresa_id, PARCEIROCONTATO.organizacao_id,"
+			+ " PARCEIROCONTATO.parceironegocio_id, PARCEIROCONTATO.tipocontato_id, PARCEIROCONTATO.nome FROM PARCEIROCONTATO (NOLOCK) ";
 
 	private String sqlParceiroContato = "SELECT PARCEIROCONTATO.parceirocontato_id, PARCEIROCONTATO.nome as parceirocontato_nome, PARCEIROCONTATO.empresa_id, PARCEIROCONTATO.organizacao_id, "
 			+ "PARCEIROCONTATO.parceironegocio_id, PARCEIROCONTATO.tipocontato_id, TIPOCONTATO.nome as tipocontato_nome, PARCEIROCONTATO.isactive , USER_UPDATED.nome as userupdated_nome	FROM (((PARCEIROCONTATO (NOLOCK) INNER JOIN EMPRESA (NOLOCK) "
@@ -86,31 +86,52 @@ public class ParceiroContatoDao extends Dao<ParceiroContato> {
 
 	}
 
-	public ParceiroContato buscaParceiroContatoByTipoContatoNome(Long tipocontato_id,String nome) {
+	public ParceiroContato buscaParceiroContatoByTipoContatoNome(Long empresa_id, Long organizacao_id, Long parceiro_id, Long tipocontato_id,String nome ) {
 
-		String sql = sqlParceiroContatoAll;
-
+		String sql = sqlParceiroContatoAll + " WHERE ";
+		if (empresa_id != null)
+			sql += " PARCEIROCONTATO.empresa_id = ?  ";
+		if (organizacao_id != null)
+			sql += " AND PARCEIROCONTATO.organizacao_id = ?  ";
+		if (parceiro_id != null)
+			sql += " AND PARCEIROCONTATO.parceironegocio_id = ? ";
 		if (tipocontato_id != null)
-			sql += " AND PARCEIROCONTATO.tipocontato_id = ?";
+			sql += " AND PARCEIROCONTATO.tipocontato_id = ?  ";
 		if (nome != null)
 			sql += " AND PARCEIROCONTATO.nome like ? ";
 
 		this.conn = this.conexao.getConexao();
-		ParceiroContato parceiroCont = new ParceiroContato();
+
+		ParceiroContato parceiroCont = null;
+
 		try {
+
+			//System.out.println(sql);
+
 			this.stmt = conn.prepareStatement(sql);
-			this.stmt.setLong(1, tipocontato_id);
-			this.stmt.setString(2, "%" + nome + "%");
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, parceiro_id);
+			this.stmt.setLong(4, tipocontato_id);
+			this.stmt.setString(5, nome);
+
 			this.rsParceiroContato = this.stmt.executeQuery();
+
 			while (rsParceiroContato.next()) {
-				parceiroCont.setParceiroContato_id(rsParceiroContato
-						.getLong("parceirocontato_id"));
+
+				parceiroCont = new ParceiroContato();
+				parceiroCont.setParceiroContato_id(rsParceiroContato.getLong("parceirocontato_id"));
+
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		this.conexao.closeConnection(rsParceiroContato, stmt, conn);
 		return parceiroCont;
+
 	}
 
 	public ParceiroContato buscaParceiroContatoAll() {

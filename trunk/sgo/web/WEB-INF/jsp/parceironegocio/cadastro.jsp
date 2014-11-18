@@ -428,7 +428,6 @@
 	
 					if(resposta.indexOf("Erro") != -1){
 						alert(resposta);
-						window.location.reload();
 					} else {
 						alert(resposta);	
 					};
@@ -456,7 +455,6 @@
 	
 					if(resposta.indexOf("Erro") != -1){
 						alert(resposta);
-						window.location.reload();
 					} else {
 						alert(resposta);	
 					};
@@ -489,7 +487,6 @@
 	
 					if(resposta.indexOf("Erro") != -1){
 						alert(resposta);
-						window.location.reload();
 					} else {
 						alert(resposta);	
 					};

@@ -1006,13 +1006,19 @@ public class ParceironegocioController {
 		if(parceiroContato.getTipoContato() != null)
 			pc.setTipoContato(this.tipoContatoDao.load(parceiroContato.getTipoContato().getTipoContato_id()));
 
-		if(this.parceiroContatoDao.buscaParceiroContatoByTipoContatoNome(pc.getTipoContato().getTipoContato_id(),pc.getNome()) == null) {
+		ParceiroContato checkParceiro = this.parceiroContatoDao.buscaParceiroContatoByTipoContatoNome(
+				pc.getEmpresa().getEmpresa_id(), 
+				pc.getOrganizacao().getOrganizacao_id(), 
+				pc.getParceiroNegocio().getParceiroNegocio_id() ,
+				pc.getTipoContato().getTipoContato_id(),pc.getNome());
+
+		if(checkParceiro == null) {
 
 			this.parceiroContatoDao.beginTransaction();
 			this.parceiroContatoDao.atualiza(pc);
 			this.parceiroContatoDao.commit();
-
-			result.include("msg","Parceiro Contato atualizado com sucesso.").redirectTo(this).msg();
+			
+			result.include("msg","Contato atualizado com sucesso.").redirectTo(this).msg();
 
 		} else {
 
