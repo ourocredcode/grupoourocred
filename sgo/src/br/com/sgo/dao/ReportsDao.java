@@ -385,7 +385,7 @@ public class ReportsDao extends Dao<Contrato> {
 
 		 }
 
-		 //System.out.println(sql);
+	     //System.out.println(sql);
 
 		this.conn = this.conexao.getConexao();
 	
