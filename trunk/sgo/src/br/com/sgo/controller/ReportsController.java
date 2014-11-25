@@ -644,7 +644,7 @@ public class ReportsController {
 	
 	@Post
  	@Path("/reports/rankingproduto")
-	public void rankingproduto(Empresa empresa,Organizacao organizacao, String data, String dataFim, Long supervisor_id, Long consultor_id, Long etapa_id, Long produto_id) {
+	public void rankingproduto(Empresa empresa,Organizacao organizacao, String data, String dataFim, Long supervisor_id, Long consultor_id, Long produto_id, Integer concluidoCheck) {
 
 		Calendar calInicio = new GregorianCalendar();
 		Calendar calFim = new GregorianCalendar();
@@ -679,7 +679,6 @@ public class ReportsController {
 
 		Usuario u = new Usuario();
 		Produto prod = new Produto();
-		Etapa etapa = new Etapa();
 
 		if(supervisor_id != null){
 
@@ -702,12 +701,6 @@ public class ReportsController {
 			filtros += " \\ Produto : " + prod.getNome();
 		}
 
-		if(etapa_id != null){
-			etapa = this.etapaDao.buscaEtapaById(etapa_id);
-			
-			filtros += " \\ Etapa : " + etapa.getNome();
-		}
-
 		String caminhoJasper = "////localhost//sistemas//tomcat7//webapps//sgo//WEB-INF//_repositorio//sgo//";
 		String jasper = caminhoJasper + "report_rankingproduto.jasper";
 
@@ -728,7 +721,7 @@ public class ReportsController {
 
 			ServletOutputStream responseOutputStream = response.getOutputStream();
 
-			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.rankingProdutoResultSet(empresa, organizacao,  calInicio, calFim, u, prod, etapa));
+			JRDataSource jrRS = new JRResultSetDataSource(reportsDao.rankingProdutoResultSet(empresa, organizacao,  calInicio, calFim, u, prod, concluidoCheck));
 
 			impressao = JasperFillManager.fillReport(jasper, parametros , jrRS);
 

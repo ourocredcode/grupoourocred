@@ -533,35 +533,83 @@ public class ReportsDao extends Dao<Contrato> {
 
 	}
 	
-	public ResultSet rankingProdutoResultSet(Empresa empresa, Organizacao organizacao, Calendar calInicio,Calendar calFim, Usuario usuario, Produto produto, Etapa etapa) {
+	public ResultSet rankingProdutoResultSet(Empresa empresa, Organizacao organizacao, Calendar calInicio,Calendar calFim, Usuario usuario, Produto produto, Integer concluidoCheck) {
 
-		String sql = " SELECT USUARIO.apelido as usuario_nome, " +
-					 "	COUNT(USUARIO.apelido) as quantidade, " +
-					 "	SUM(CONTRATO.valormeta) as metaCount, " +
-					 "	SUM(CONTRATO.valorcontrato) as contratoCount, " +
-					 "	SUM(CONTRATO.valorliquido) as liquidoCount, " +
-					 "	SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount FROM  " +
-					 "   CONTRATO (NOLOCK) LEFT JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id = CONTRATO.etapa_id "
-					 + " INNER JOIN USUARIO (NOLOCK) ON USUARIO.usuario_id = CONTRATO.usuario_id "
-					 + " LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +
-					 " WHERE "; 
+		String sql = " SELECT usuario_nome, usuario_id,  " + 
+		" quantidade, " +  
+		" metaCount, " +  
+		" contratoCount,   " +
+		" liquidoCount, " +  
+	    " contLiquidoCount FROM ( " +
+	    " 	SELECT USUARIO.apelido as usuario_nome, USUARIO.usuario_id, " +  
+		" COUNT(USUARIO.apelido) as quantidade, " +  
+		" SUM(CONTRATO.valormeta) as metaCount, " +  
+		" SUM(CONTRATO.valorcontrato) as contratoCount, " +  
+		" SUM(CONTRATO.valorliquido) as liquidoCount, " +  
+		" SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount FROM " +    
+		" CONTRATO (NOLOCK) LEFT JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id = CONTRATO.etapa_id " + 
+		" INNER JOIN USUARIO (NOLOCK) ON USUARIO.usuario_id = CONTRATO.usuario_id " + 
+		" LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id " +  
+	    " WHERE CONTRATO.empresa_id = ? " +  
+        " AND CONTRATO.organizacao_id = ? ";   
 
-		if(calInicio != null)
-			sql += 	 "  CONTRATO.created BETWEEN ? AND ? ";
+		 if(concluidoCheck != null){
 
-		if(usuario.getUsuario_id() != null)
-			sql += "  AND ( USUARIO.usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? )  ";
-		
-		if(produto.getProduto_id() != null)
-			sql += "  AND ( CONTRATO.produto_id = ? )  ";
-		
-		if(etapa.getEtapa_id() != null)
-			sql += "  AND ( CONTRATO.etapa_id = ? )  ";
+			 sql += " AND ( ETAPA.NOME in ('Concluído') ) " +
+			        " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? ) ";
 
-		sql += " GROUP BY " +   
-				"	USUARIO.apelido  " +
-				" ORDER BY " +
-				" quantidade DESC ";   
+		 			if(usuario.getUsuario_id() != null){
+		 				sql += " AND ( USUARIO.supervisor_usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+		 			}
+		 			
+		 			if(produto.getProduto_id() != null){
+		 				sql += " AND ( CONTRATO.produto_id = ? ) ";
+		 			}
+
+            sql += "  GROUP BY USUARIO.apelido, USUARIO.usuario_id ) AS G1 GROUP BY usuario_nome, usuario_id, quantidade , metaCount ,contratoCount, liquidoCount, contLiquidoCount ORDER BY quantidade DESC ";
+	
+		 } else {
+	
+			 sql += " AND ( ETAPA.NOME in ('Concluído') ) "
+			 	 +  " AND ( CONTRATO.dataconclusao BETWEEN ? AND ? ) ";
+			 
+			 if(usuario.getUsuario_id() != null){
+	 				sql += " AND ( USUARIO.supervisor_usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+	 			}
+	 			
+	 			if(produto.getProduto_id() != null){
+	 				sql += " AND ( CONTRATO.produto_id = ? ) ";
+	 			}
+
+			 sql += "  GROUP BY USUARIO.apelido, USUARIO.usuario_id ";
+
+			 sql += " UNION " +
+						" SELECT USUARIO.apelido as usuario_nome, USUARIO.usuario_id,  " +
+						" COUNT(USUARIO.apelido) as quantidade, " +  
+						" SUM(CONTRATO.valormeta) as metaCount, " +  
+						" SUM(CONTRATO.valorcontrato) as contratoCount, " +  
+						" SUM(CONTRATO.valorliquido) as liquidoCount, " +  
+						" SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount FROM " +   
+						" CONTRATO (NOLOCK) LEFT JOIN ETAPA (NOLOCK) ON ETAPA.etapa_id = CONTRATO.etapa_id " + 
+						" INNER JOIN USUARIO (NOLOCK) ON USUARIO.usuario_id = CONTRATO.usuario_id " + 
+						" LEFT JOIN USUARIO (NOLOCK) AS USUARIO_SUPERVISOR ON USUARIO.supervisor_usuario_id = USUARIO_SUPERVISOR.usuario_id   " +   
+						 " WHERE CONTRATO.empresa_id = ? " + 
+						 " AND CONTRATO.organizacao_id = ? " +  
+						 " AND ( ETAPA.NOME in ('Aprovado') ) " +
+						 " AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) ";
+	
+			 if(usuario.getUsuario_id() != null){
+				sql += " AND ( USUARIO.supervisor_usuario_id = ? OR USUARIO_SUPERVISOR.usuario_id = ? ) ";
+			 }
+			 
+			 if(produto.getProduto_id() != null){
+	 				sql += " AND ( CONTRATO.produto_id = ? ) ";
+	 			}
+
+			sql += "GROUP BY  USUARIO.apelido, USUARIO.usuario_id " +
+					" ) AS G1 GROUP BY usuario_nome, usuario_id, quantidade , metaCount ,contratoCount, liquidoCount, contLiquidoCount  ORDER BY quantidade DESC  ";
+
+		 }  
 
 		//System.out.println(sql);
 
@@ -570,34 +618,99 @@ public class ReportsDao extends Dao<Contrato> {
 		try {
 
 			this.stmt = conn.prepareStatement(sql);
-
+			
 			int curr = 1;
 
-			if(calInicio != null){
-
-				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
-				curr++;
-
-				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
-				curr++;
-
-			}
-
-			if(usuario.getUsuario_id() != null){
-				this.stmt.setLong(curr, usuario.getUsuario_id());
-				curr++;
-				this.stmt.setLong(curr, usuario.getUsuario_id());
+			if(empresa != null){
+				this.stmt.setLong(curr, empresa.getEmpresa_id());
 				curr++;
 			}
 
-			if(produto.getProduto_id() != null){
-				this.stmt.setLong(curr, produto.getProduto_id());
+			if(organizacao != null){
+				this.stmt.setLong(curr, organizacao.getOrganizacao_id());
 				curr++;
 			}
+		
+			if(concluidoCheck == null) {
+				
+				if(calInicio != null){
 
-			if(etapa.getEtapa_id() != null){
-				this.stmt.setLong(curr, etapa.getEtapa_id());
-				curr++;
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+					curr++;
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+					curr++;
+
+				}
+				
+				if(usuario.getUsuario_id() != null){
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+				}
+				
+				if(produto.getProduto_id() != null){
+					this.stmt.setLong(curr, produto.getProduto_id());
+					curr++;
+				}
+				
+				if(empresa != null){
+					this.stmt.setLong(curr, empresa.getEmpresa_id());
+					curr++;
+				}
+				
+				if(organizacao != null){
+					this.stmt.setLong(curr, organizacao.getOrganizacao_id());
+					curr++;
+				}
+				
+				if(calInicio != null){
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+					curr++;
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+					curr++;
+
+				}
+				
+				if(usuario.getUsuario_id() != null){
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+				}
+				
+				if(produto.getProduto_id() != null){
+					this.stmt.setLong(curr, produto.getProduto_id());
+					curr++;
+				}
+
+			} else {
+				
+				if(calInicio != null){
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarInicio(calInicio).getTimeInMillis()));
+					curr++;
+
+					this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calFim).getTimeInMillis()));
+					curr++;
+
+				}
+				
+				if(usuario.getUsuario_id() != null){
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+					this.stmt.setLong(curr, usuario.getUsuario_id());
+					curr++;
+				}
+				
+				if(produto.getProduto_id() != null){
+					this.stmt.setLong(curr, produto.getProduto_id());
+					curr++;
+				}
+				
 			}
 
 			this.rsReports = this.stmt.executeQuery();

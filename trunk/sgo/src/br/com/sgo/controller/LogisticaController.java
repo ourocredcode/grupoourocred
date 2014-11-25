@@ -165,6 +165,8 @@ public class LogisticaController {
 				log.add("Status alterado de : " +c.getEtapa().getNome() + " para : " + e.getNome());
 
 				c.setEtapa(e);
+				c.setUpdated(GregorianCalendar.getInstance());
+				c.setUpdatedBy(usuario);
 
 				contratoDao.beginTransaction();
 				contratoDao.atualiza(c);

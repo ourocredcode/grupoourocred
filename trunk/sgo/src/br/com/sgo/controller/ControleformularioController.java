@@ -208,6 +208,8 @@ public class ControleformularioController {
 				
 				
 				c.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), status));
+				c.setUpdated(GregorianCalendar.getInstance());
+				c.setUpdatedBy(usuarioInfo.getUsuario());
 			}
 
 			contratoDao.beginTransaction();

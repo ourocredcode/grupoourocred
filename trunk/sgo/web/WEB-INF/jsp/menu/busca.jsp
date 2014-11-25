@@ -71,7 +71,8 @@ $(document).ready(function() {
 			  			/* 32 - % Repasse */     { "bVisible":    false },
 			  			/* 33 - Tabela */     { "bVisible":    false },
 			  			/* 34 - QtdParcelasAberto */     { "bVisible":    false },
-			  			/* 35 - Contrato ID */     { "bVisible":    false }
+			  			/* 35 - Contrato ID */     { "bVisible":    false },
+			  			/* 36 - Dias Ultima Atualização */     { "bVisible":    false }
 			  		] ,
 
 		"sDom": ' T C <"clear">lfrtip',
@@ -289,6 +290,9 @@ $(document).ready(function() {
 											<th >
 												Contrato ID
 											</th>
+											<th >
+												Qtd Dias
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
@@ -409,6 +413,9 @@ $(document).ready(function() {
 												</td>
 												<td >
 													${contrato.contrato_id }
+												</td>
+												<td >
+													${contrato.qtdDias }
 												</td>
 											</tr>
 										</c:forEach>

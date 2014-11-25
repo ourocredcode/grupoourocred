@@ -226,6 +226,9 @@ public class Contrato implements Serializable {
 	@Transient
 	private Controle controle;
 
+	@Transient
+	private Integer qtdDias;
+
 	public Long getContrato_id() {
 		return contrato_id;
 	}
@@ -696,5 +699,13 @@ public class Contrato implements Serializable {
 
 	public void setNumeroPortabilidade(String numeroPortabilidade) {
 		this.numeroPortabilidade = numeroPortabilidade;
+	}
+
+	public Integer getQtdDias() {
+		return qtdDias;
+	}
+
+	public void setQtdDias(Integer qtdDias) {
+		this.qtdDias = qtdDias;
 	}
 }
