@@ -48,7 +48,8 @@ public class ContratoDao extends Dao<Contrato> {
 
 	private static final String sqlContratos = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 			" FORMULARIO.created," +
-			" CONTRATO.created as contratoCreated, " +
+			" CONTRATO.created as contratoCreated, CONTRATO.updated as contratoUpdated," +
+			" DATEDIFF(DAY,CONTRATO.updated,GETDATE()) as qtdDias, " +
 			" CONTRATO.datastatusfinal , CONTRATO.dataquitacao, CONTRATO.datadigitacao, CONTRATO.datasolicitacaosaldo, CONTRATO.propostabanco, CONTRATO.contratobanco, CONTRATO.numeroportabilidade, " +
 			" FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , " +
 			" CONTRATO.contrato_id,CONTRATO.formulario_id, "+
@@ -1436,8 +1437,9 @@ public class ContratoDao extends Dao<Contrato> {
 				" USUARIO_SUPERVISOR.usuario_id as usuario_super_id, "+
 				" USUARIO_SUPERVISOR.nome as usuario_super," +
 				" USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
-				" CONTRATO.prazo,  "+
-				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.datastatusfinal, " + 
+				" CONTRATO.prazo," +
+				" DATEDIFF(DAY,CONTRATO.updated,GETDATE()) as qtdDias,   "+
+				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.datastatusfinal, CONTRATO.updated as contratoUpdated, " + 
 				" CONTRATO.dataquitacao, CONTRATO.datadigitacao, CONTRATO.datasolicitacaosaldo, CONTRATO.propostabanco, CONTRATO.contratobanco, CONTRATO.numeroportabilidade, " +
 				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
 				" CONTRATO.prazo, CONTRATO.isrepasse , CONTRATO.percentualrepasse, CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
@@ -1897,7 +1899,8 @@ public class ContratoDao extends Dao<Contrato> {
 				Calendar dataDigitacao = new GregorianCalendar();
 				Calendar dataQuitacao = new GregorianCalendar();
 				Calendar dataSolicitacaoSaldo = new GregorianCalendar();
-		
+				Calendar contratoUpdated = new GregorianCalendar();
+
 				Formulario formulario = new Formulario();
 				Usuario usuario = new Usuario();
 				Usuario supervisor = new Usuario();
@@ -2005,6 +2008,11 @@ public class ContratoDao extends Dao<Contrato> {
 					dataSolicitacaoSaldo.setTime(rsContrato.getDate("datasolicitacaosaldo"));
 					contrato.setDataSolicitacaoSaldo(dataSolicitacaoSaldo);
 				}
+				
+				if(rsContrato.getDate("contratoUpdated") != null) {
+					contratoUpdated.setTime(rsContrato.getDate("contratoUpdated"));
+					contrato.setUpdated(contratoUpdated);
+				}
 
 				contrato.setControle(controle);
 
@@ -2062,6 +2070,7 @@ public class ContratoDao extends Dao<Contrato> {
 				contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 				contrato.setPrazo(rsContrato.getInt("prazo"));
 				contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
+				contrato.setQtdDias(rsContrato.getInt("qtdDias"));
 
 				contratos.add(contrato);
 
@@ -2703,6 +2712,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setPrazo(rsContrato.getInt("prazo"));
 		contrato.setObservacao(rsContrato.getString("observacao"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
+		contrato.setQtdDias(rsContrato.getInt("qtdDias"));
 
 		contratos.add(contrato);
 
@@ -2718,6 +2728,7 @@ public class ContratoDao extends Dao<Contrato> {
 		Calendar dataDigitacao = new GregorianCalendar();
 		Calendar dataSolicitacaoSaldo = new GregorianCalendar();
 		Calendar contratoCreated = new GregorianCalendar();
+		Calendar contratoUpdated = new GregorianCalendar();
 		Formulario formulario = new Formulario();
 		Usuario usuario = new Usuario();
 		Usuario supervisor = new Usuario();
@@ -2752,6 +2763,7 @@ public class ContratoDao extends Dao<Contrato> {
 		
 		Date formularioCreatedFormated;
 		Date contratoCreatedFormated;
+		Date contratoUpdatedFormated;
 
 		try {
 
@@ -2770,6 +2782,23 @@ public class ContratoDao extends Dao<Contrato> {
 			contratoCreatedFormated = format.parse(rsContrato.getTimestamp("contratoCreated").toString());
 			contratoCreated.setTime(contratoCreatedFormated);
 			contrato.setCreated(contratoCreated);
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+
+		}
+		
+		try {
+
+			if(rsContrato.getDate("contratoUpdated") != null) {
+			
+				contratoUpdatedFormated = format.parse(rsContrato.getTimestamp("contratoUpdated").toString());
+				contratoUpdated.setTime(contratoUpdatedFormated);
+				contrato.setUpdated(contratoUpdated);
+				
+			}
+			
 
 		} catch (ParseException e) {
 
@@ -2857,6 +2886,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 		contrato.setPrazo(rsContrato.getInt("prazo"));
 		contrato.setQtdParcelasAberto(rsContrato.getInt("qtdparcelasaberto"));
+		contrato.setQtdDias(rsContrato.getInt("qtdDias"));
 
 	}
 

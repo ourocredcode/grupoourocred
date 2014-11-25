@@ -341,6 +341,8 @@ public class FormularioController {
 		contrato.setIsActive(true);
 		contrato.setCreated(GregorianCalendar.getInstance());
 		contrato.setCreatedBy(usuarioInfo.getUsuario());
+		contrato.setUpdated(GregorianCalendar.getInstance());
+		contrato.setUpdatedBy(usuarioInfo.getUsuario());
 		contrato.setUsuario(usuarioInfo.getUsuario());
 		contrato.setSupervisorCreatedBy(usuarioInfo.getUsuario().getSupervisorUsuario());
 		contrato.setBanco(this.bancoDao.buscaBancoById(contrato.getBanco().getBanco_id()));

@@ -114,17 +114,7 @@ $(document).ready(function() {
 													</c:forEach>
 												</select>
 											</div>
-											
-											<div class="span2">								
-												<label for="etapa_id">Status</label>
-												<select id="etapa_id" name="etapa_id" class="input-medium">
-													<option value="">Todos</option>
-													<c:forEach items="${etapas}" var="etapa">
-														<option value="${etapa.etapa_id}">${etapa.nome}</option>
-													</c:forEach>
-												</select>
-											</div>
-											
+
 											<div class="span2">								
 												<label for="supervisor_id">Supervisor</label>
 												<select id="supervisor_id" name="supervisor_id" class="input-medium">
@@ -142,6 +132,11 @@ $(document).ready(function() {
 													<option value="">Selecione um Supervisor</option>
 
 												</select>
+											</div>
+											
+											<div class="span1">
+												<label for="concluidoCheckBox">Apenas Concluídos</label>
+												<input id="concluidoCheckBox" name="concluidoCheck" checked="checked" value="1" type="checkbox">
 											</div>
 
 										</div>
