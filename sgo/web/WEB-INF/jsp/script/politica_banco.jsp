@@ -5,6 +5,7 @@
 
 function mostra(div){
 
+	document.getElementById("banrisul").style.display = "none";
 	document.getElementById("bgn").style.display = "none";
 	document.getElementById("bmg").style.display = "none";
 	document.getElementById("bonsucesso").style.display = "none";
@@ -45,6 +46,7 @@ function mostra(div){
 			<div id="menuScripts" style="float:left;min-height: 640px;font-size: 13px;margin-top: 20px;margin-right: 20px;">
 
 			<ul>
+				<li><a href="#" onclick="mostra('banrisul');">BANRISUL</a></li>
 				<li><a href="#" onclick="mostra('bgn');">BGN</a></li>
 				<li><a href="#" onclick="mostra('bmg');">BMG</a></li>
 			 	<li><a href="#" onclick="mostra('bonsucesso');">BONSUCESSO</a></li>
@@ -55,9 +57,20 @@ function mostra(div){
 			</ul>
 			</div>
 			
+			<div id="banrisul" style="display: none;font-size: 16px;">
+			
+			<br/>
+			
+			<h2 style="color: #b5b5b5;">BANRISUL</h2><br/>
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_banrisul.pdf"/>" style="width: 70%;height: 800px"></iframe>
+			
+			</div>
+			
 			<div id="bgn" style="display: none;font-size: 16px;">
 			
 			<br/>
+			
 			<h2 style="color: #b5b5b5;">BGN</h2><br/>
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_bgn.pdf"/>" style="width: 70%;height: 800px"></iframe>
