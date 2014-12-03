@@ -49,7 +49,7 @@ public class ContratoDao extends Dao<Contrato> {
 	private static final String sqlContratos = " SELECT CONTRATO.empresa_id, EMPRESA.nome as empresa_nome, CONTRATO.organizacao_id, ORGANIZACAO.nome as organizacao_nome, "+
 			" FORMULARIO.created," +
 			" CONTRATO.created as contratoCreated, CONTRATO.updated as contratoUpdated," +
-			" DATEDIFF(DAY,CONTRATO.updated,GETDATE()) as qtdDias, " +
+			" dbo.FnDiasUteis(CONTRATO.updated,GETDATE()) as qtdDias, " +
 			" CONTRATO.datastatusfinal , CONTRATO.dataquitacao, CONTRATO.datadigitacao, CONTRATO.datasolicitacaosaldo, CONTRATO.propostabanco, CONTRATO.contratobanco, CONTRATO.numeroportabilidade, " +
 			" FORMULARIO.formulario_id, FORMULARIO.parceironegocio_id , " +
 			" CONTRATO.contrato_id,CONTRATO.formulario_id, "+
@@ -1438,7 +1438,7 @@ public class ContratoDao extends Dao<Contrato> {
 				" USUARIO_SUPERVISOR.nome as usuario_super," +
 				" USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
 				" CONTRATO.prazo," +
-				" DATEDIFF(DAY,CONTRATO.updated,GETDATE()) as qtdDias,   "+
+				" dbo.FnDiasUteis(CONTRATO.updated,GETDATE()) as qtdDias,   "+
 				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.datastatusfinal, CONTRATO.updated as contratoUpdated, " + 
 				" CONTRATO.dataquitacao, CONTRATO.datadigitacao, CONTRATO.datasolicitacaosaldo, CONTRATO.propostabanco, CONTRATO.contratobanco, CONTRATO.numeroportabilidade, " +
 				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+

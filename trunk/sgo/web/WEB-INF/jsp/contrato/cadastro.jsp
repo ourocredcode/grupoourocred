@@ -176,6 +176,77 @@ function calculaContrato() {
 						break;
 						
 					}
+					
+				case 'Banrisul':
+
+					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+
+						if(parcelasAberto.value != ''){
+
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+							
+							if(metaValue == 0){
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+								
+								break;
+								
+							} else {
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var comissaoBruto = metaValue * 0.17;
+
+								var comissaoLiquido = comissaoBruto - RCO;
+
+								if(comissaoLiquido <= 0){
+									
+									if(contratoId != ''){
+
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+
+										valorMeta.value = '0.0';
+
+										break;
+
+									} else {
+
+										alert('Contrato com valor abaixo do mínimo exigido.');
+
+										valorParcela.value = '';
+										valorParcela.focus();
+										
+										break;
+
+									}
+									
+								} else {
+
+									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									//valorMeta.value = metaValue.toFixed(2);
+									
+									var metaValue = valorContrato.value * arrayCoeficiente[1];
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								}
+								
+							}
+							
+							
+
+						}
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}	
 				
 				case 'BMG':
 
@@ -718,6 +789,73 @@ function calculaContrato() {
 						break;
 						
 					}
+					
+					
+				case 'Banrisul':
+
+					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+
+						if(parcelasAberto.value != ''){
+
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+							
+							if(metaValue == 0){
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+								
+								break;
+								
+							} else {
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var comissaoBruto = metaValue * 0.17;
+
+								var comissaoLiquido = comissaoBruto - RCO;
+
+								if(comissaoLiquido <= 0){
+									
+									if(contratoId != ''){
+
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+
+										valorMeta.value = '0.0';
+
+										break;
+
+									} else {
+
+										alert('Contrato com valor abaixo do mínimo exigido.');
+
+										valorParcela.value = '';
+										valorParcela.focus();
+										
+										break;
+
+									}
+									
+								} else {
+								
+									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								}
+								
+							}
+
+						}
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}	
 				
 				
 				
@@ -775,8 +913,6 @@ function calculaContrato() {
 								}
 								
 							}
-							
-							
 
 						}
 						
@@ -1049,8 +1185,6 @@ function calculaContrato() {
 								}
 								
 							}
-							
-							
 
 						}
 						
@@ -1117,8 +1251,6 @@ function calculaContrato() {
 								}
 								
 							}
-							
-							
 
 						}
 						
@@ -1187,8 +1319,6 @@ function calculaContrato() {
 								}
 								
 							}
-							
-							
 
 						}
 						
@@ -1215,7 +1345,13 @@ function calculaContrato() {
 						var metaValue = valorLiquido.value * arrayCoeficiente[1];
 						valorMeta.value = metaValue.toFixed(2);
 
-					break;
+						break;
+					
+					case 'Banrisul':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;
 				
 					case 'BMG':
 						var metaValue = valorLiquido.value;
@@ -1340,6 +1476,73 @@ function calculaContrato() {
 						break;
 						
 					}
+				
+				case 'Banrisul':
+
+					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+
+						if(parcelasAberto.value != ''){
+
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+							
+							if(metaValue == 0){
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+								
+								break;
+								
+							} else {
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var comissaoBruto = metaValue * 0.17;
+
+								var comissaoLiquido = comissaoBruto - RCO;
+
+								if(comissaoLiquido <= 0){
+									
+									if(contratoId != ''){
+
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+
+										valorMeta.value = '0.0';
+
+										break;
+
+									} else {
+
+										alert('Contrato com valor abaixo do mínimo exigido.');
+
+										valorParcela.value = '';
+										valorParcela.focus();
+										
+										break;
+
+									}
+									
+								} else {
+								
+									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								}
+								
+							}
+
+						}
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}	
+					
 					
 				case 'BMG':
 
@@ -1395,8 +1598,6 @@ function calculaContrato() {
 								}
 								
 							}
-							
-							
 
 						}
 						
@@ -1464,8 +1665,6 @@ function calculaContrato() {
 									}
 									
 								}
-								
-								
 
 							}
 							
@@ -1837,6 +2036,12 @@ function calculaContrato() {
 
 						break;
 						
+					case 'Banrisul':
+						var metaValue = valorLiquido.value;
+						valorMeta.value = metaValue;
+
+						break;	
+						
 					case 'Safra':
 						var metaValue = valorLiquido.value;
 						valorMeta.value = metaValue;
@@ -1959,6 +2164,75 @@ function calculaContrato() {
 						break;
 						
 					}
+				
+				case 'Banrisul':
+					
+					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+	
+						if(parcelasAberto.value != ''){
+	
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+	
+							if(metaValue == 0){
+	
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+	
+								break;
+	
+							} else {
+	
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var comissaoBruto = metaValue * 0.17;
+	
+								var comissaoLiquido = comissaoBruto - RCO;
+	
+								if(comissaoLiquido <= 0){
+	
+									if(contratoId != ''){
+	
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+	
+										valorMeta.value = '0.0';
+	
+										break;
+	
+									} else {
+	
+										alert('Contrato com valor abaixo do mínimo exigido.');
+	
+										valorParcela.value = '';
+										valorParcela.focus();
+	
+										break;
+	
+									}
+	
+								} else {
+	
+									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									valorMeta.value = metaValue.toFixed(2);
+	
+									break;
+	
+								}
+	
+							}
+	
+	
+	
+						}
+	
+					} else {
+	
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+	
+						break;
+	
+					}	
+					
 	
 				case 'BMG':
 	

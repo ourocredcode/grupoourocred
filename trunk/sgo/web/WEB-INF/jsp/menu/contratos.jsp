@@ -1121,15 +1121,119 @@
 									</thead>
 									<tbody>		
 										<c:forEach items="${contratos}" var="contrato">
+											<!-- 
 											<tr <c:if test="${contrato.formulario.posvenda.etapa.nome eq 'Pendente' || 
 															  contrato.etapa.nome eq 'Pendente Administrativo' ||
 															  contrato.etapa.nome eq 'Pendente Agendamento' ||
 															  contrato.etapa.nome eq 'Pendente Banco' ||
 															  contrato.etapa.nome eq 'Pendente Coeficiente' ||
-															  contrato.etapa.nome eq 'Pendente Conferência' ||
 															  contrato.etapa.nome eq 'Pendente Apoio Comercial' ||
 															  contrato.etapa.nome eq 'Pendente Comercial' ||
-															  contrato.etapa.nome eq 'Recalcular' }">class="error"</c:if>>
+															  contrato.etapa.nome eq 'Recalcular' }">class="error"</c:if> >
+															  
+											 -->
+											  <tr
+											 	<c:choose>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Boleto' }">
+															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 10 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias >= 11 && contrato.qtdDias <= 15 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 16 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Correio' }">
+															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 7 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias >= 8 && contrato.qtdDias <= 10 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 11 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Digitação' }">
+															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 2 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 3 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 4 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Integração' }">
+															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 7 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias >= 8 && contrato.qtdDias <= 10 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 11 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Pós Venda' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Qualidade' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Redigitação' }">
+															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 1 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 2 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Remarcação' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias >= 1 }">class="warning"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Saldo Quitação' }">
+															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 7 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 8 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 9 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Status' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 1 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Aguardando Logística' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Digitado' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias >= 1 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Em Análise' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias >= 1 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Em Assinatura' }">
+															<c:if test="${contrato.qtdDias <= 1 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 2 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Em Conferência' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Pendente Administrativo' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Pendente Banco' }">
+															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 3 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias >= 4 && contrato.qtdDias <= 30 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 31 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Pendente Comercial' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Pendente Conferência' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Pendente Pós Venda' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 1 }">class="error"</c:if>
+													</c:when>
+													<c:when test="${contrato.etapa.nome eq 'Recalcular' }">
+															<c:if test="${contrato.qtdDias == 0 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 1 }">class="error"</c:if>
+													</c:when>
+											 	</c:choose> >
 												<td >
 													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
 												</td>
