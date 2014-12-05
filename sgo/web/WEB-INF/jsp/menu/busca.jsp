@@ -405,6 +405,11 @@ $(document).ready(function() {
 														<c:if test="${contrato.qtdDias == 0 }">class="warning"</c:if>
 														<c:if test="${contrato.qtdDias >= 1 }">class="error"</c:if>
 												</c:when>
+												<c:when test="${contrato.etapa.nome eq 'Quitado' }">
+														<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 7 }">class="success"</c:if>
+														<c:if test="${contrato.qtdDias >= 8 && contrato.qtdDias <= 10 }">class="warning"</c:if>
+														<c:if test="${contrato.qtdDias >= 11 }">class="error"</c:if>
+												</c:when>
 												<c:when test="${contrato.etapa.nome eq 'Recalcular' }">
 														<c:if test="${contrato.qtdDias == 0 }">class="warning"</c:if>
 														<c:if test="${contrato.qtdDias >= 1 }">class="error"</c:if>
