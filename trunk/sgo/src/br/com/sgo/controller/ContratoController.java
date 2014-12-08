@@ -492,7 +492,7 @@ public class ContratoController {
 
 		contrato.setEtapa(this.etapaDao.buscaEtapaById(contrato.getEtapa().getEtapa_id()));
 
-		if(!(this.contrato.getEtapa().getEtapa_id() == contrato.getEtapa().getEtapa_id())){
+		if(!(this.contrato.getEtapa().getEtapa_id().equals(contrato.getEtapa().getEtapa_id()))){
 			log.add("Status alterado para : " + contrato.getEtapa().getNome());
 			this.contrato.setEtapa(contrato.getEtapa() == null ? null : contrato.getEtapa());
 			this.contrato.setUpdated(GregorianCalendar.getInstance());
