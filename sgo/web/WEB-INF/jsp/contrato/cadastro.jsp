@@ -103,6 +103,11 @@ function calculaContrato() {
 	
 	var isRco = true;
 	
+	var isProdRco = contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'RECOMPRA GOVRJ' 
+	            || contratoProdutoNome == 'RECOMPRA GOVSP' || contratoProdutoNome == 'PORTABILIDADE/REFIN' ? true : false;
+
+	//alert(isProdRco);
+	
 	if(bancoCompradoNome == 'Cruzeiro do Sul' || bancoCompradoNome == 'Morada' || bancoCompradoNome == 'Rural'){
 		isRco = false ;
 	}
@@ -153,6 +158,7 @@ function calculaContrato() {
 			if( contratoProdutoNome != 'REFINANCIAMENTO' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
 					&& contratoProdutoNome != 'RETENÇÃO' 
 					&& contratoProdutoNome != 'RETENÇÃO PMSP'
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ'){
@@ -179,7 +185,7 @@ function calculaContrato() {
 					
 				case 'Banrisul':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -250,7 +256,7 @@ function calculaContrato() {
 				
 				case 'BMG':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -321,7 +327,7 @@ function calculaContrato() {
 
 				case 'BGN':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -392,7 +398,7 @@ function calculaContrato() {
 
 				case 'Safra':
 					
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -463,7 +469,7 @@ function calculaContrato() {
 					
 					case 'Agiplan':
 					
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 	
 							if(parcelasAberto.value != ''){
 	
@@ -534,7 +540,7 @@ function calculaContrato() {
 					
 				case 'Bonsucesso':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -605,7 +611,7 @@ function calculaContrato() {
 
 				case 'Bradesco':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -678,7 +684,7 @@ function calculaContrato() {
 					
 				case 'Panamericano':
 					
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -767,6 +773,7 @@ function calculaContrato() {
 			if( contratoProdutoNome != 'REFINANCIAMENTO'
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP'
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ'
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
 					&& contratoProdutoNome != 'RETENÇÃO'
 					&& contratoProdutoNome != 'RETENÇÃO PMSP'
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ'){
@@ -793,7 +800,7 @@ function calculaContrato() {
 					
 				case 'Banrisul':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -861,7 +868,7 @@ function calculaContrato() {
 				
 				case 'BMG':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -927,7 +934,7 @@ function calculaContrato() {
 
 				case 'BGN':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -995,7 +1002,7 @@ function calculaContrato() {
 
 				case 'Safra':
 					
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -1064,7 +1071,7 @@ function calculaContrato() {
 					
 				case 'Agiplan':
 					
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -1133,7 +1140,7 @@ function calculaContrato() {
 					
 				case 'Bonsucesso':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -1199,7 +1206,7 @@ function calculaContrato() {
 
 				case 'Bradesco':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -1267,7 +1274,7 @@ function calculaContrato() {
 					
 				case 'Panamericano':
 					
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -1392,7 +1399,7 @@ function calculaContrato() {
 
 					case 'Bonsucesso':
 
-						if(contratoProdutoNome == 'REFINANCIAMENTO' || contratoProdutoNome == 'REFINANCIAMENTO PMSP' || contratoProdutoNome == 'REFINANCIAMENTO GOVRJ'){
+						if(contratoProdutoNome == 'REFINANCIAMENTO' || contratoProdutoNome == 'REFINANCIAMENTO PMSP' || contratoProdutoNome == 'REFINANCIAMENTO GOVRJ' || contratoProdutoNome == 'REFINANCIAMENTO GOVSP'){
 
 							var metaValue = valorLiquido.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
@@ -1454,6 +1461,7 @@ function calculaContrato() {
 			if( contratoProdutoNome != 'REFINANCIAMENTO' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
 					&& contratoProdutoNome != 'RETENÇÃO' 
 					&& contratoProdutoNome != 'RETENÇÃO PMSP' 
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ' ){
@@ -1479,7 +1487,7 @@ function calculaContrato() {
 				
 				case 'Banrisul':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -1546,7 +1554,7 @@ function calculaContrato() {
 					
 				case 'BMG':
 
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 
 						if(parcelasAberto.value != ''){
 
@@ -1613,7 +1621,7 @@ function calculaContrato() {
 
 					case 'BGN':
 
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 
 							if(parcelasAberto.value != ''){
 
@@ -1679,7 +1687,7 @@ function calculaContrato() {
 
 					case 'Safra':
 						
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 
 							if(parcelasAberto.value != ''){
 
@@ -1747,7 +1755,7 @@ function calculaContrato() {
 						
 					case 'Agiplan':
 						
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 	
 							if(parcelasAberto.value != ''){
 	
@@ -1818,7 +1826,7 @@ function calculaContrato() {
 						
 					case 'Bonsucesso':
 
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 
 							if(parcelasAberto.value != ''){
 
@@ -1886,7 +1894,7 @@ function calculaContrato() {
 
 					case 'Bradesco':
 
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 
 							if(parcelasAberto.value != ''){
 
@@ -1954,7 +1962,7 @@ function calculaContrato() {
 
 					case 'Panamericano':
 						
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 
 							if(parcelasAberto.value != ''){
 
@@ -2080,7 +2088,7 @@ function calculaContrato() {
 
 					case 'Bonsucesso':
 
-						if(contratoProdutoNome == 'REFINANCIAMENTO' || contratoProdutoNome == 'REFINANCIAMENTO PMSP' || contratoProdutoNome == 'REFINANCIAMENTO GOVRJ'){
+						if(contratoProdutoNome == 'REFINANCIAMENTO' || contratoProdutoNome == 'REFINANCIAMENTO PMSP' || contratoProdutoNome == 'REFINANCIAMENTO GOVRJ' || contratoProdutoNome == 'REFINANCIAMENTO GOVSP'){
 
 							var metaValue = valorLiquido.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
@@ -2141,6 +2149,7 @@ function calculaContrato() {
 				if( contratoProdutoNome != 'REFINANCIAMENTO' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
 					&& contratoProdutoNome != 'RETENÇÃO' 
 					&& contratoProdutoNome != 'RETENÇÃO PMSP' 
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ' ){
@@ -2167,7 +2176,7 @@ function calculaContrato() {
 				
 				case 'Banrisul':
 					
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 	
 						if(parcelasAberto.value != ''){
 	
@@ -2236,7 +2245,7 @@ function calculaContrato() {
 	
 				case 'BMG':
 	
-					if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+					if(isProdRco){
 	
 						if(parcelasAberto.value != ''){
 	
@@ -2305,7 +2314,7 @@ function calculaContrato() {
 	
 					case 'BGN':
 	
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 	
 							if(parcelasAberto.value != ''){
 	
@@ -2373,7 +2382,7 @@ function calculaContrato() {
 	
 					case 'Safra':
 	
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 	
 							if(parcelasAberto.value != ''){
 	
@@ -2441,7 +2450,7 @@ function calculaContrato() {
 	
 					case 'Agiplan':
 	
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 	
 							if(parcelasAberto.value != ''){
 	
@@ -2512,7 +2521,7 @@ function calculaContrato() {
 	
 					case 'Bonsucesso':
 	
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 	
 							if(parcelasAberto.value != ''){
 	
@@ -2580,7 +2589,7 @@ function calculaContrato() {
 	
 					case 'Bradesco':
 	
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 	
 							if(parcelasAberto.value != ''){
 	
@@ -2648,7 +2657,7 @@ function calculaContrato() {
 	
 					case 'Panamericano':
 	
-						if(contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'PORTABILIDADE/REFIN'){
+						if(isProdRco){
 	
 							if(parcelasAberto.value != ''){
 	
@@ -2733,7 +2742,8 @@ function calculaContrato() {
 
 			if( contratoProdutoNome != 'REFINANCIAMENTO' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
-					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ'
+					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP' 
 					&& contratoProdutoNome != 'RETENÇÃO' 
 					&& contratoProdutoNome != 'RETENÇÃO PMSP'
 					&& contratoProdutoNome != 'RETENÇÃO GOVRJ'){
@@ -2832,6 +2842,21 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;	
+			
+		case 'MARGEM LIMPA GOVSP':
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;		
 	
 		case 'MARGEM LIMPA SIAPE':
 			desabilita(bancoComprado);
@@ -2937,6 +2962,22 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;	
+		
+		case 'RECOMPRA GOVSP':
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
+			
 			
 		case 'RECOMPRA PMSP':
 			habilita(bancoComprado);
@@ -3077,6 +3118,26 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;
+		
+		case 'REFINANCIAMENTO GOVSP':
+
+			$("#bancoComprado").select2().select2('val',contratoBanco.value);
+
+			habilita(bancoComprado);
+			habilita(parcelasAberto);
+			habilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
 		
 		case 'REFINANCIAMENTO SIAPE':
 
@@ -3318,6 +3379,16 @@ function validaForm(form) {
 
 		}
 		
+		if(contratoProdutoNome == 'MARGEM LIMPA GOVSP'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
 		if(contratoProdutoNome == 'DEBITO'){
 
 			if(valorParcela.value == ''){
@@ -3399,6 +3470,26 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'RECOMPRA GOVRJ'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'RECOMPRA GOVSP'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
 				bancoComprado.focus();
@@ -3557,6 +3648,32 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'REFINANCIAMENTO GOVRJ'){
+			if(bancoComprado.value == ''){
+				alert(" Banco Comprado é campo obrigatório.");
+				bancoComprado.focus();
+				return false;
+			}
+			
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+			
+			if(parcelasAberto.value == ''){
+				alert(" Parcela Aberto é campo obrigatório.");
+				parcelasAberto.focus();
+				return false;
+			}
+			
+			if(valorDivida.value == ''){
+				alert(" Dívida é campo obrigatório.");
+				valorDivida.focus();
+				return false;
+			}
+		}
+		
+		if(contratoProdutoNome == 'REFINANCIAMENTO GOVSP'){
 			if(bancoComprado.value == ''){
 				alert(" Banco Comprado é campo obrigatório.");
 				bancoComprado.focus();
