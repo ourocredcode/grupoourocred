@@ -201,7 +201,8 @@ function calculaContrato() {
 							} else {
 								
 								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = 0;
 								var comissaoBruto = metaValue * 0.17;
 
 								var comissaoLiquido = comissaoBruto - RCO;
@@ -816,7 +817,8 @@ function calculaContrato() {
 							} else {
 								
 								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = 0;
 								var comissaoBruto = metaValue * 0.17;
 
 								var comissaoLiquido = comissaoBruto - RCO;
@@ -1503,7 +1505,8 @@ function calculaContrato() {
 							} else {
 								
 								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = 0;
 								var comissaoBruto = metaValue * 0.17;
 
 								var comissaoLiquido = comissaoBruto - RCO;
@@ -2192,7 +2195,8 @@ function calculaContrato() {
 							} else {
 	
 								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = 0;
 								var comissaoBruto = metaValue * 0.17;
 	
 								var comissaoLiquido = comissaoBruto - RCO;
