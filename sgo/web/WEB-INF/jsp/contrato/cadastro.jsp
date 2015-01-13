@@ -159,9 +159,8 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
-					&& contratoProdutoNome != 'RETEN플O' 
-					&& contratoProdutoNome != 'RETEN플O PMSP'
-					&& contratoProdutoNome != 'RETEN플O GOVRJ'){
+					//&& contratoProdutoNome != 'RETEN플O' && contratoProdutoNome != 'RETEN플O PMSP' && contratoProdutoNome != 'RETEN플O GOVRJ'
+					){
 
 				switch(contratoBancoNome) {
 				
@@ -775,9 +774,8 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP'
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ'
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
-					&& contratoProdutoNome != 'RETEN플O'
-					&& contratoProdutoNome != 'RETEN플O PMSP'
-					&& contratoProdutoNome != 'RETEN플O GOVRJ'){
+					//&& contratoProdutoNome != 'RETEN플O' && contratoProdutoNome != 'RETEN플O PMSP' && contratoProdutoNome != 'RETEN플O GOVRJ'
+					){
 
 				switch(contratoBancoNome) {
 				
@@ -1464,9 +1462,8 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
-					&& contratoProdutoNome != 'RETEN플O' 
-					&& contratoProdutoNome != 'RETEN플O PMSP' 
-					&& contratoProdutoNome != 'RETEN플O GOVRJ' ){
+					//&& contratoProdutoNome != 'RETEN플O'  && contratoProdutoNome != 'RETEN플O PMSP' && contratoProdutoNome != 'RETEN플O GOVRJ' 
+					){
 
 				switch(contratoBancoNome) {
 				
@@ -2153,9 +2150,8 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
-					&& contratoProdutoNome != 'RETEN플O' 
-					&& contratoProdutoNome != 'RETEN플O PMSP' 
-					&& contratoProdutoNome != 'RETEN플O GOVRJ' ){
+					//&& contratoProdutoNome != 'RETEN플O'  && contratoProdutoNome != 'RETEN플O PMSP'  && contratoProdutoNome != 'RETEN플O GOVRJ' 
+					){
 	
 				switch(contratoBancoNome) {
 				
@@ -2748,9 +2744,8 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ'
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP' 
-					&& contratoProdutoNome != 'RETEN플O' 
-					&& contratoProdutoNome != 'RETEN플O PMSP'
-					&& contratoProdutoNome != 'RETEN플O GOVRJ'){
+					//&& contratoProdutoNome != 'RETEN플O'  && contratoProdutoNome != 'RETEN플O PMSP' && contratoProdutoNome != 'RETEN플O GOVRJ'
+					){
 
 				var metaValue = valorContrato.value * arrayCoeficiente[1];
 				valorMeta.value = metaValue.toFixed(2);
