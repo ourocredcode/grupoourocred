@@ -1211,6 +1211,10 @@ window.onload = function() {
 									<option value="${etapa.etapa_id}" 
 									<c:if test="${etapa.etapa_id == contrato.etapa.etapa_id}">selected</c:if>>${etapa.nome }</option>
 								</c:forEach>
+								<!-- Solicitado por Eduardo Pileggi em 12/01/2015 - Liberar status Recusado para apenas dois supervisores abaixo (Fernando/Thiago B.) -->
+								<c:if test="${usuarioInfo.usuario.usuario_id == 146 || usuarioInfo.usuario.usuario_id == 363 }">
+									<option value="74">Recusado</option>
+								</c:if>
 							</select>
 						</div>
 					
