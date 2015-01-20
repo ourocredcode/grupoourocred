@@ -407,7 +407,7 @@ public class PnDao {
 				if(rsParceiroNegocio.getString("tipo") == null){
 					convenio.setConvenio_id(1L);
 				} else {
-					convenio.setConvenio_id(rsParceiroNegocio.getString("tipo").equals("PM_SP") ? 2L : rsParceiroNegocio.getString("tipo").equals("GOV_RJ") ? 3L : 1L);
+					convenio.setConvenio_id(rsParceiroNegocio.getString("tipo").equals("SIAPE") ? 4L : rsParceiroNegocio.getString("tipo").equals("PM_SP") ? 2L : rsParceiroNegocio.getString("tipo").equals("GOV_RJ") ? 3L : 1L);
 				}
 
 				parceiroBeneficio.setNumeroBeneficio(rsParceiroNegocio.getString("beneficio"));
