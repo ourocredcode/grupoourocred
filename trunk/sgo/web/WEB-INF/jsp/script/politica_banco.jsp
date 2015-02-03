@@ -7,11 +7,15 @@ function mostra(div){
 
 	document.getElementById("banrisul").style.display = "none";
 	document.getElementById("bgn").style.display = "none";
+	document.getElementById("bgn_siape").style.display = "none";
 	document.getElementById("bmg").style.display = "none";
+	document.getElementById("bmg_siape").style.display = "none";
 	document.getElementById("bonsucesso").style.display = "none";
+	document.getElementById("bonsucesso_siape").style.display = "none";
 	document.getElementById("bradesco").style.display = "none";
 	document.getElementById("daycoval").style.display = "none";
 	document.getElementById("panamericano").style.display = "none";
+	document.getElementById("panamericano_siape").style.display = "none";
 	document.getElementById("safra").style.display = "none";
 
 	if(document.getElementById(div).style.display == "none") {
@@ -48,11 +52,15 @@ function mostra(div){
 			<ul>
 				<li><a href="#" onclick="mostra('banrisul');">BANRISUL</a></li>
 				<li><a href="#" onclick="mostra('bgn');">BGN</a></li>
+				<li><a href="#" onclick="mostra('bgn_siape');">BGN (SIAPE)</a></li>
 				<li><a href="#" onclick="mostra('bmg');">BMG</a></li>
+				<li><a href="#" onclick="mostra('bmg_siape');">BMG (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('bonsucesso');">BONSUCESSO</a></li>
+			 	<li><a href="#" onclick="mostra('bonsucesso_siape');">BONSUCESSO (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('bradesco');">BRADESCO</a></li>
 			 	<li><a href="#" onclick="mostra('daycoval');">DAYCOVAL</a></li>
 			 	<li><a href="#" onclick="mostra('panamericano');">PANAMERICANO</a></li>
+			 	<li><a href="#" onclick="mostra('panamericano_siape');">PANAMERICANO (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('safra');">SAFRA</a></li>
 			</ul>
 			</div>
@@ -77,6 +85,16 @@ function mostra(div){
 			
 			</div>
 			
+			<div id="bgn_siape" style="display: none;font-size: 16px;">
+			
+			<br/>
+			
+			<h2 style="color: #b5b5b5;">BGN (SIAPE)</h2><br/>
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_bgn_siape.pdf"/>" style="width: 70%;height: 800px"></iframe>
+			
+			</div>
+			
 			<div id="bmg" style="display: none;font-size: 16px;">
 			
 			<br/>
@@ -86,12 +104,30 @@ function mostra(div){
 			
 			</div>
 			
+			<div id="bmg_siape" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">BMG (SIAPE)</h2><br/>
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_bmg_siape.pdf"/>" style="width: 70%;height: 800px"></iframe>
+			
+			</div>
+			
 			<div id="bonsucesso" style="display: none;font-size: 16px;">
 			
 			<br/>
 			<h2 style="color: #b5b5b5;">BONSUCESSO</h2><br/>
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_bonsucesso.pdf"/>" style="width: 70%;height: 800px"></iframe>
+			
+			</div>
+			
+			<div id="bonsucesso_siape" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">BONSUCESSO (SIAPE)</h2><br/>
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_bonsucesso_siape.pdf"/>" style="width: 70%;height: 800px"></iframe>
 			
 			</div>
 			
@@ -119,6 +155,15 @@ function mostra(div){
 			<h2 style="color: #b5b5b5;">PANAMERICANO</h2><br/> 
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_panamericano.pdf"/>" style="width: 70%;height: 600px"></iframe>
+			
+			</div>
+			
+			<div id="panamericano_siape" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">PANAMERICANO (SIAPE)</h2><br/> 
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_panamericano_siape.pdf"/>" style="width: 70%;height: 600px"></iframe>
 			
 			</div>
 			
