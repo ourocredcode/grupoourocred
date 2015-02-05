@@ -300,6 +300,7 @@ public class ContratoController {
 		result.include("historicoControleAverbacao",historicoControleAverbacao);
 		result.include("organizacoes", this.organizacaoDao.buscaOrganizacoesByEmpresa(empresa.getEmpresa_id()));
 		result.include("hisconsBeneficio", this.hisconBeneficioDao.buscaHisconsBeneficioByParceiroBeneficioToStatusContrato(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),parceiroBeneficio.getParceiroBeneficio_id()));
+		result.include("parceiroBeneficios",this.parceiroBeneficioDao.buscaParceiroBeneficioByParceiroNegocio(parceiroNegocio.getParceiroNegocio_id()));
 		result.include("meiosPagamento",this.meioPagamentoDao.buscaAllMeioPagamento(1L, 1L));
 		result.include("tiposSaque",this.tipoSaqueDao.buscaAllTipoSaque());
 
@@ -993,6 +994,50 @@ public class ContratoController {
 		result.redirectTo(ContratoController.class).status(contrato.getContrato_id());
 
 	}
-	
-	
+
+	@Post
+	@Path("/contrato/altera/numerobeneficio")
+	public void alteraNumerobeneficio(Long contratoId, String numeroBeneficio) {
+		
+		List<String> log = new ArrayList<String>();
+		this.contrato = this.contratoDao.load(contratoId);
+
+		if(!this.contrato.getNumeroBeneficio().equals(numeroBeneficio)){
+			
+			log.add(" Número Benefício alterado de : " + this.contrato.getNumeroBeneficio() + " para : " + numeroBeneficio );
+
+			this.contrato.setNumeroBeneficio(numeroBeneficio);
+
+			this.contratoDao.beginTransaction();
+			this.contratoDao.atualiza(this.contrato);
+			this.contratoDao.commit();
+
+		}
+
+		for(String lo : log){
+
+			HistoricoContrato historico = new HistoricoContrato();
+			historico.setEmpresa(empresa);
+			historico.setOrganizacao(organizacao);
+			historico.setIsActive(true);
+			historico.setCreatedBy(usuario);
+			historico.setCreated(GregorianCalendar.getInstance());
+			historico.setObservacao(lo);
+			historico.setContrato(this.contrato);
+
+			this.historicoContratoDao.beginTransaction();
+			this.historicoContratoDao.adiciona(historico);
+			this.historicoContratoDao.commit();
+
+		}
+
+		result.include("msg","Número Benefício atualizado com sucesso.").redirectTo(this).msg();
+
+	}
+
+	@Get
+	public void msg(){
+
+	}
+
 }
