@@ -1624,7 +1624,7 @@ window.onload = function() {
 							<i class="icon-align-justify"></i>									
 						</span>
 						<h5>Conferência Contrato </h5>
-						<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' }">
+						<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' || usuarioInfo.perfil.chave == 'Gestor' }">
 							<div class="buttons"><a href="#" class="btn btn-mini" onclick="javascript:return conferencia('${contrato.contrato_id}');"><i class="icon-refresh"></i> Conferencia</a></div>
 						</c:if>
 					</div>
