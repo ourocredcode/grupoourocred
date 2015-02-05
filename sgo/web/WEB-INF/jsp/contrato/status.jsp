@@ -245,6 +245,44 @@ $(document).ready(function() {
 	    location.reload();
 	});
 	
+	
+	$('#parceiroBeneficioNumeroBeneficio').change(function () {
+
+	   var numeroBeneficio = $("#parceiroBeneficioNumeroBeneficio").val();
+	   var contratoId = $("#contratoId").val();
+
+	   var tam = numeroBeneficio.length;
+	   
+	   if (tam == 10 && contratoId != '') {
+	   
+		   var attr = {'contratoId' :  contratoId ,
+					 'numeroBeneficio' : numeroBeneficio };
+
+		   if (window.confirm("Deseja realmente alterar o número Benefício ?"))
+				$.post('<c:url value='/contrato/altera/numerobeneficio' />'
+				, attr , function(resposta) { 
+		
+						if(resposta.indexOf("Erro") != -1){
+							alert(resposta);
+							window.location.reload();
+						} else {
+							alert(resposta);
+							window.location.reload();
+						};
+						
+
+				});
+
+			return false;
+
+	   } else {
+
+		   return false;
+
+	   }
+
+   });
+	
 });
 
 function verificaStatus() {
@@ -845,7 +883,16 @@ window.onload = function() {
 								</div>
 								<div class="span2">
 									<label for="parceiroBeneficioNumeroBeneficio">Beneficio</label>
-									<input type="text" class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio" value="${formulario.parceiroBeneficio.numeroBeneficio }" />
+									<c:if test="${usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Administrativo'}">
+										<select class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio">
+											<c:forEach var="parceiroBeneficio" items="${parceiroBeneficios }">
+												<option value="${parceiroBeneficio.numeroBeneficio }" <c:if test="${parceiroBeneficio.numeroBeneficio eq formulario.parceiroBeneficio.numeroBeneficio }">selected="selected"</c:if>  >${parceiroBeneficio.numeroBeneficio }</option>
+											</c:forEach>
+										</select>
+									</c:if>
+									<c:if test="${usuarioInfo.perfil.chave == 'Supervisor' || usuarioInfo.perfil.chave == 'Consultor'}">
+										<input type="text" class="input-medium" id="parceiroBeneficioNumeroBeneficio" name="parceiroBeneficio.numeroBeneficio" value="${formulario.parceiroBeneficio.numeroBeneficio }" />	
+									</c:if>
 								</div>
 								<div class="span2">
 									<label for="formularioParceiroNegocioDataNascimento">Dt Nascimento</label>
