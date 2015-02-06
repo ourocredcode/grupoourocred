@@ -159,6 +159,7 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
+					&& contratoProdutoNome != 'REFINANCIAMENTO SIAPE'
 					//&& contratoProdutoNome != 'RETEN플O' && contratoProdutoNome != 'RETEN플O PMSP' && contratoProdutoNome != 'RETEN플O GOVRJ'
 					){
 
@@ -776,6 +777,7 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP'
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ'
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
+					&& contratoProdutoNome != 'REFINANCIAMENTO SIAPE'
 					//&& contratoProdutoNome != 'RETEN플O' && contratoProdutoNome != 'RETEN플O PMSP' && contratoProdutoNome != 'RETEN플O GOVRJ'
 					){
 
@@ -1464,6 +1466,7 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
+					&& contratoProdutoNome != 'REFINANCIAMENTO SIAPE'
 					//&& contratoProdutoNome != 'RETEN플O'  && contratoProdutoNome != 'RETEN플O PMSP' && contratoProdutoNome != 'RETEN플O GOVRJ' 
 					){
 
@@ -2152,6 +2155,7 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
+					&& contratoProdutoNome != 'REFINANCIAMENTO SIAPE'
 					//&& contratoProdutoNome != 'RETEN플O'  && contratoProdutoNome != 'RETEN플O PMSP'  && contratoProdutoNome != 'RETEN플O GOVRJ' 
 					){
 	
@@ -2746,6 +2750,7 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ'
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP' 
+					&& contratoProdutoNome != 'REFINANCIAMENTO SIAPE'
 					//&& contratoProdutoNome != 'RETEN플O'  && contratoProdutoNome != 'RETEN플O PMSP' && contratoProdutoNome != 'RETEN플O GOVRJ'
 					){
 
