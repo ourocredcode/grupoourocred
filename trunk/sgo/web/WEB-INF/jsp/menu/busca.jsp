@@ -331,14 +331,14 @@ $(document).ready(function() {
 														<c:if test="${contrato.qtdDias >= 11 }">class="error"</c:if>
 												</c:when>
 												<c:when test="${contrato.etapa.nome eq 'Aguardando Pós Venda' }">
-														<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
-														<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
-														<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+														<c:if test="${contrato.qtdDias == 1 }">class="success"</c:if>
+														<c:if test="${contrato.qtdDias == 2 }">class="warning"</c:if>
+														<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
 												</c:when>
 												<c:when test="${contrato.etapa.nome eq 'Aguardando Qualidade' }">
-														<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
-														<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
-														<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+														<c:if test="${contrato.qtdDias == 1 }">class="success"</c:if>
+														<c:if test="${contrato.qtdDias == 2 }">class="warning"</c:if>
+														<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
 												</c:when>
 												<c:when test="${contrato.etapa.nome eq 'Aguardando Redigitação' }">
 														<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 1 }">class="success"</c:if>
@@ -377,9 +377,9 @@ $(document).ready(function() {
 														<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
 												</c:when>
 												<c:when test="${contrato.etapa.nome eq 'Em Conferência' }">
-														<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
-														<c:if test="${contrato.qtdDias == 1 }">class="warning"</c:if>
-														<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+														<c:if test="${contrato.qtdDias == 1 }">class="success"</c:if>
+														<c:if test="${contrato.qtdDias == 2 }">class="warning"</c:if>
+														<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
 												</c:when>
 												<c:when test="${contrato.etapa.nome eq 'Pendente Administrativo' }">
 														<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
