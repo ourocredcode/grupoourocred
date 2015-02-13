@@ -100,19 +100,28 @@ function calculaContrato() {
 	var arrayCoeficiente = auxCoeficiente.value.split(',');
 	var coeficiente = document.getElementById("coeficiente");
 	coeficiente.value = arrayCoeficiente[2];
-	
+
 	var isRco = true;
-	
+	var isRcoBGN = true;
+
 	var isProdRco = contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'RECOMPRA GOVRJ' 
 	            || contratoProdutoNome == 'RECOMPRA GOVSP' || contratoProdutoNome == 'PORTABILIDADE/REFIN' ? true : false;
 
 	//alert(isProdRco);
-	
+
 	if(bancoCompradoNome == 'Cruzeiro do Sul' || bancoCompradoNome == 'Morada' || bancoCompradoNome == 'Rural'){
 		isRco = false ;
 	}
-	
+
 	//alert(isRco);
+
+	if(bancoCompradoNome == 'Bradesco' || bancoCompradoNome == 'Santander' || bancoCompradoNome == 'Banrisul' 
+			|| bancoCompradoNome == 'Paraná' || bancoCompradoNome == 'HSBC' || bancoCompradoNome == 'Banco do Brasil S/A' 
+			|| bancoCompradoNome == 'Caixa Econômica Federal'){
+		isRcoBGN = false ;
+	}
+	
+	//alert(isRcoBGN);
 
 	if (valorParcela.value == ''){
 
@@ -954,7 +963,7 @@ function calculaContrato() {
 							} else {
 								
 								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = (isRco & isRcoBGN) ? (443 / 60) * parcelasAberto.value : 0;
 								var comissaoBruto = metaValue * 0.17;
 
 								var comissaoLiquido = comissaoBruto - RCO;
@@ -1643,7 +1652,7 @@ function calculaContrato() {
 								} else {
 									
 									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+									var RCO = (isRco & isRcoBGN) ? (443 / 60) * parcelasAberto.value : 0;
 									var comissaoBruto = metaValue * 0.17;
 
 									var comissaoLiquido = comissaoBruto - RCO;
@@ -2338,7 +2347,7 @@ function calculaContrato() {
 								} else {
 	
 									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+									var RCO = (isRco & isRcoBGN ) ? (443 / 60) * parcelasAberto.value : 0;
 									var comissaoBruto = metaValue * 0.17;
 	
 									var comissaoLiquido = comissaoBruto - RCO;
