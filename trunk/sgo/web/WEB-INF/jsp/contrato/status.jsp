@@ -1064,6 +1064,12 @@ window.onload = function() {
 												Coeficiente
 											</th>
 											<th scope="col">
+												Tabela
+											</th>
+											<th scope="col">
+												% Meta
+											</th>
+											<th scope="col">
 												Observação
 											</th>
 										</tr>
@@ -1105,6 +1111,12 @@ window.onload = function() {
 											</td>
 											<td>
 												<fmt:formatNumber type="number" pattern="#.#####" value="${contrato.coeficiente.valor }" />
+											</td>
+											<td>
+												${contrato.coeficiente.tabela.nome }
+											</td>
+											<td>
+												<fmt:formatNumber value="${contrato.coeficiente.percentualMeta * 100 }" maxFractionDigits="0" /> %
 											</td>
 											<td class="label_txt" style="text-align: center">
 												<c:if test="${not empty contrato.observacao}">
