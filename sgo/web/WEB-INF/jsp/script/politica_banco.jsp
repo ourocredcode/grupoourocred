@@ -6,6 +6,7 @@
 function mostra(div){
 
 	document.getElementById("banrisul").style.display = "none";
+	document.getElementById("banrisul_siape").style.display = "none";
 	document.getElementById("bgn").style.display = "none";
 	document.getElementById("bgn_siape").style.display = "none";
 	document.getElementById("bmg").style.display = "none";
@@ -51,6 +52,7 @@ function mostra(div){
 
 			<ul>
 				<li><a href="#" onclick="mostra('banrisul');">BANRISUL</a></li>
+				<li><a href="#" onclick="mostra('banrisul_siape');">BANRISUL (SIAPE)</a></li>
 				<li><a href="#" onclick="mostra('bgn');">BGN</a></li>
 				<li><a href="#" onclick="mostra('bgn_siape');">BGN (SIAPE)</a></li>
 				<li><a href="#" onclick="mostra('bmg');">BMG</a></li>
@@ -72,6 +74,16 @@ function mostra(div){
 			<h2 style="color: #b5b5b5;">BANRISUL</h2><br/>
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_banrisul.pdf"/>" style="width: 70%;height: 800px"></iframe>
+			
+			</div>
+			
+			<div id="banrisul_siape" style="display: none;font-size: 16px;">
+			
+			<br/>
+			
+			<h2 style="color: #b5b5b5;">BANRISUL</h2><br/>
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_banrisul_siape.pdf"/>" style="width: 70%;height: 800px"></iframe>
 			
 			</div>
 			
