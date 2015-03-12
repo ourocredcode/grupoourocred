@@ -1,11 +1,16 @@
 package br.com.sgo.controller;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -41,6 +46,7 @@ import br.com.sgo.dao.TipoSaqueDao;
 import br.com.sgo.dao.TipoWorkflowDao;
 import br.com.sgo.dao.UsuarioDao;
 import br.com.sgo.dao.WorkflowDao;
+import br.com.sgo.infra.CustomFileUtil;
 import br.com.sgo.interceptor.UsuarioInfo;
 import br.com.sgo.modelo.Banco;
 import br.com.sgo.modelo.Coeficiente;
@@ -113,6 +119,7 @@ public class ContratoController {
 	private ParceiroBeneficio parceiroBeneficio;
 	private Controle boleto;
 	private Controle averbacao;
+	private HttpServletResponse response;
 	private Collection<Conferencia> conferencias;
 	private Collection<Coeficiente> coeficientes = new ArrayList<Coeficiente>();
 	private Collection<Etapa> etapas;
@@ -123,6 +130,7 @@ public class ContratoController {
 	private Collection<Usuario> consultores = new ArrayList<Usuario>();
 	private Collection<HistoricoControle> historicoControleBoleto;
 	private Collection<HistoricoControle> historicoControleAverbacao;
+	private LinkedHashMap<String,String> arquivos =  null;
 
 	public ContratoController(Result result,BancoDao bancoDao,OrganizacaoDao organizacaoDao, ProdutoDao produtoDao,CoeficienteDao coeficienteDao,Contrato contrato,
 			Formulario formulario,ContratoDao contratoDao,FormularioDao formularioDao,EtapaDao etapaDao,UsuarioInfo usuarioInfo,
@@ -132,7 +140,7 @@ public class ContratoController {
 			ControleDao controleDao, ParceiroBeneficioDao parceiroBeneficioDao,TipoControleDao tipoControleDao,ParceiroNegocioDao parceiroNegocioDao,
 			ParceiroInfoBancoDao parceiroInfoBancoDao,ParceiroLocalidadeDao parceiroLocalidadeDao,ConferenciaDao conferenciaDao,TipoProcedimentoDao tipoProcedimentoDao
 			,MeioPagamentoDao meioPagamentoDao, BancoProdutoTabelaDao bancoProdutoTabelaDao,UsuarioDao usuarioDao,HisconBeneficioDao hisconBeneficioDao,
-			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao,TipoWorkflowDao tipoWorkflowDao,WorkflowDao workflowDao){		
+			PnDao pnDao,TipoSaqueDao tipoSaqueDao,OperacaoDao operacaoDao,TipoWorkflowDao tipoWorkflowDao,WorkflowDao workflowDao,HttpServletResponse response){		
 
 		this.result = result;
 		this.usuarioInfo = usuarioInfo;
@@ -177,6 +185,7 @@ public class ContratoController {
 		this.tipoSaqueDao = tipoSaqueDao;
 		this.operacaoDao = operacaoDao;
 		this.workflowDao = workflowDao;
+		this.response = response;
 
 	}
 
@@ -275,6 +284,32 @@ public class ContratoController {
 			}
 
 		}
+
+		// PROJETO DIGITALIZAÇÃO : Criado em 09/03/2015 Solicitação Agostinho Ribeiro e Ana Cláudia (ADM)
+		
+		if(this.usuarioInfo.getPerfil().getNome().equals("Administrativo") || this.usuarioInfo.getPerfil().getNome().equals("Gestor")){
+
+			String dir = "\\\\servidor1\\arquivos$\\Administrativo\\Documentos Digitalizados\\2015\\" + parceiroNegocio.getCpf();
+
+			File diretorio = new File(dir);
+	
+	    	if(diretorio.exists()) {
+	    		
+	    		arquivos = new LinkedHashMap<String,String>();
+	
+	    		File fList[] = diretorio.listFiles();
+	
+	            for ( int i = 0; i < fList.length; i++ ){
+	            	arquivos.put(fList[i].getPath(), fList[i].getName());
+	            }
+	
+	            result.include("arquivos",arquivos);
+	
+	    	}
+    	
+		}
+
+		//
 
 		formulario.setParceiroNegocio(parceiroNegocio);
 		formulario.setParceiroBeneficio(parceiroBeneficio);
@@ -1033,6 +1068,71 @@ public class ContratoController {
 
 		result.include("msg","Número Benefício atualizado com sucesso.").redirectTo(this).msg();
 
+	}
+
+	@Get
+	@Path("/digitalizado/{count}/{cpf}")
+	public void digitalizado(Long count, String cpf) {
+
+		if(this.usuarioInfo.getPerfil().getNome().equals("Administrativo") || this.usuarioInfo.getPerfil().getNome().equals("Gestor")){
+
+			String dir = "\\\\servidor1\\arquivos$\\Administrativo\\Documentos Digitalizados\\2015\\" + cpf;
+
+			File diretorio = new File(dir);
+
+	    	if(diretorio.exists()) {
+
+	    		arquivos = new LinkedHashMap<String,String>();
+
+	    		File fList[] = diretorio.listFiles();
+
+	            for ( int i = 0; i < fList.length; i++ ){
+	            	arquivos.put(fList[i].getPath(), fList[i].getName());
+	            }
+
+	    	}
+
+	    	String file = (new ArrayList<String>(arquivos.keySet())).get( count.intValue() );
+
+			File pdf = new File(file);
+
+			try {
+
+	            byte[] arquivo = null;
+
+	            File dirFile = new File(pdf.getPath());
+
+	            try {
+	                arquivo = CustomFileUtil.fileToByte(dirFile);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+
+	            response.reset();
+	            response.setContentType("application/pdf");
+	            response.setDateHeader("Expires", 0);
+	            response.setContentLength(arquivo.length);
+	            response.getOutputStream().write(arquivo, 0, arquivo.length);
+
+	            ServletOutputStream responseOutputStream = response.getOutputStream();
+
+	            responseOutputStream.flush();
+				responseOutputStream.close();
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+			result.nothing();
+
+			
+		} else {
+			
+			result.include("msg","Perfil não liberado para visualização.").redirectTo(this).msg();
+			
+		}
+		
+		
 	}
 
 	@Get

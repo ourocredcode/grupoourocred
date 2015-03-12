@@ -728,8 +728,6 @@ function verificaPagamento() {
 
 }
 
-
-
 function openPopup(url) {
 	 window.open(url, "popup_id", "scrollbars,resizable,width=650,height=750");
  return false;
@@ -927,7 +925,51 @@ window.onload = function() {
 			</div>
 		</div>
 	</div>
+
+	<c:if test="${not empty arquivos }">
 	
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="widget-box">
+						<div class="widget-title">
+							<span class="icon">
+								<i class="icon-align-justify"></i>									
+							</span>
+							<h5>Documentos Digitalizados</h5>
+						</div>
+						<div class="widget-content padding">
+							<table class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>Arquivos</th>
+									</tr>
+								</thead>
+								<tbody>	
+									
+									<c:set var="count" value="0" scope="page" />
+									
+									<c:forEach items="${arquivos }" var="arquivo">
+										<tr>
+											<c:if test="${fn:contains(arquivo.value, '.pdf')}">
+												<td>
+													<a href="<c:url  value="/digitalizado/${count}/${formulario.parceiroNegocio.cpf }"/>" target="_blank">${arquivo.value }</a>
+												</td>
+											</c:if>
+										</tr>
+
+									<c:set var="count" value="${count + 1}" scope="page"/>	
+									
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</div>						
+				</div>
+			</div>
+		</div>
+	
+	</c:if>
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
