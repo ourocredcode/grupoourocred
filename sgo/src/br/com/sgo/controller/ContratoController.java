@@ -287,7 +287,9 @@ public class ContratoController {
 
 		// PROJETO DIGITALIZAÇÃO : Criado em 09/03/2015 Solicitação Agostinho Ribeiro e Ana Cláudia (ADM)
 		
-		if(this.usuarioInfo.getPerfil().getNome().equals("Administrativo") || this.usuarioInfo.getPerfil().getNome().equals("Gestor")){
+		if(this.usuarioInfo.getPerfil().getNome().equals("Administrativo") || 
+				this.usuarioInfo.getPerfil().getNome().equals("Gestor") || 
+				this.usuarioInfo.getPerfil().getNome().equals("Supervisor")){
 
 			String dir = "\\\\servidor1\\arquivos$\\Administrativo\\Documentos Digitalizados\\2015\\" + parceiroNegocio.getCpf();
 
@@ -1074,7 +1076,9 @@ public class ContratoController {
 	@Path("/digitalizado/{count}/{cpf}")
 	public void digitalizado(Long count, String cpf) {
 
-		if(this.usuarioInfo.getPerfil().getNome().equals("Administrativo") || this.usuarioInfo.getPerfil().getNome().equals("Gestor")){
+		if(this.usuarioInfo.getPerfil().getNome().equals("Administrativo") || 
+				this.usuarioInfo.getPerfil().getNome().equals("Gestor") || 
+				this.usuarioInfo.getPerfil().getNome().equals("Supervisor")){
 
 			String dir = "\\\\servidor1\\arquivos$\\Administrativo\\Documentos Digitalizados\\2015\\" + cpf;
 
