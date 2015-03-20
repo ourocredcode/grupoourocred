@@ -100,72 +100,233 @@
 		<a href="#" title="Dashboard" class="current"><i class="icon-home"></i> Dashboard</a>
 	</div>
 
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span12">
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
 
-				<div class="alert alert-info">
-					Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas Vendas !
+			<div class="alert alert-info">
+				Bem Vindo ao <strong>SGO - Sistema Grupo Ourocred </strong>! Boas
+				Vendas !
+			</div>
+
+			<div class="widget-box">
+
+				<div class="widget-title">
+					<span class="icon"><i class="icon-signal"></i> </span>
+					<h5>
+						Vendas -
+						<fmt:formatDate value="${calInicio.time}" pattern="dd/MM/yyyy" />
+					</h5>
+					<div class="buttons">
+						<a href="javascript:window.location.reload()" class="btn btn-mini"><i
+							class="icon-refresh"></i> Atualiza Status</a>
+					</div>
 				</div>
 
-				<div class="widget-box">
+				<div class="widget-content">
 
-					<div class="widget-title">
-						<span class="icon"><i class="icon-signal"></i>
-						</span><h5>Vendas - <fmt:formatDate value="${calInicio.time}" pattern="dd/MM/yyyy" /></h5>
-						<div class="buttons"><a href="javascript:window.location.reload()" class="btn btn-mini"><i class="icon-refresh"></i> Atualiza Status</a></div>
-					</div>
+					<div class="widget-box">
+						<div class="widget-title">
+							<ul class="nav nav-tabs">
+								<li class="active"><a data-toggle="tab" href="#tab1">Total Contratos</a></li>
+								<li><a data-toggle="tab" href="#tab2">Média Contratos</a></li>
+								<li><a data-toggle="tab" href="#tab3">Média Clientes</a></li>
+							</ul>
+						</div>
+						<div class="widget-content tab-content">
 
-					<div class="widget-content">
-						<div class="row-fluid">
-							<div class="span12">
-								<div class="span12 center" style="text-align: center;font-size: 7px;">					
-									<ul class="stat-boxes">
-										
-										<li class="popover-users">
-											
-											<div class="right" style="width: 135px;">
-												<strong><fmt:formatNumber type="NUMBER" value="${totalValorContratos}" minFractionDigits="2" /></strong>
-												T. Contratos 
-											</div>
-										</li>
-										
-										<li class="popover-users">
-											
-											<div class="right" style="width: 135px;">
-												<strong><fmt:formatNumber type="NUMBER" value="${totalContratoLiquido}" minFractionDigits="2" /></strong>
-												T. C. Liquido
-											</div>
-										</li>
-										<li class="popover-users">
-											
-											<div class="right" style="width: 135px;">
-												<strong><fmt:formatNumber type="NUMBER" value="${totalValorLiquido}" minFractionDigits="2" /></strong>
-												Vl Líquido
-											</div>
-										</li>
-										<li class="popover-users">
-											
-											<div class="right" style="width: 135px;">
-												<strong><fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" /></strong>
-												Vl Meta
-											</div>
-										</li>
-									</ul>
+							<div id="tab1" class="tab-pane active">
+
+								<div class="row-fluid">
+									<div class="span12">
+										<div class="span12 center"
+											style="text-align: center; font-size: 7px;">
+											<ul class="stat-boxes">
+
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorContratos}" minFractionDigits="2" /></strong>
+														T. Contratos
+													</div>
+												</li>
+
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalContratoLiquido}" minFractionDigits="2" /></strong>
+														T. C. Liquido
+													</div>
+												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorLiquido}" minFractionDigits="2" /></strong>
+														Vl Líquido
+													</div>
+												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorMeta}" minFractionDigits="2" /></strong> Vl
+														Meta
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
 								</div>
 							</div>
+
+
+							<div id="tab2" class="tab-pane">
+
+
+								<div class="row-fluid">
+									<div class="span12">
+										<div class="span12 center"
+											style="text-align: center; font-size: 7px;">
+											<ul class="stat-boxes">
+
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${countContratos}" /></strong> Qtd. Contratos
+													</div>
+												</li>
+
+												<c:if test="${countContratos <= 0 }">
+													<c:set var="countContratos" value="1"></c:set>
+												</c:if>
+
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorContratos / countContratos}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média T.
+														Contratos
+													</div>
+												</li>
+
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalContratoLiquido / countContratos}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média T.
+														C. Liquido
+													</div>
+												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorLiquido / countContratos}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média Vl
+														Líquido
+													</div>
+												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorMeta / countContratos}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média Vl
+														Meta
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+							
+							<div id="tab3" class="tab-pane">
+
+
+								<div class="row-fluid">
+									<div class="span12">
+										<div class="span12 center"
+											style="text-align: center; font-size: 7px;">
+											<ul class="stat-boxes">
+
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER" value="${countClientesByCpf}" /></strong> Qtd. Clientes
+													</div>
+												</li>
+
+												<c:if test="${countClientesByCpf <= 0 }">
+													<c:set var="countClientesByCpf" value="1"></c:set>
+												</c:if>
+
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorContratos / countClientesByCpf}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média T.
+														Contratos
+													</div>
+												</li>
+
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalContratoLiquido / countClientesByCpf}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média T.
+														C. Liquido
+													</div>
+												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorLiquido / countClientesByCpf}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média Vl
+														Líquido
+													</div>
+												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorMeta / countClientesByCpf}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média Vl
+														Meta
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+						
+						
+						
 						</div>
 					</div>
+
 				</div>
-			
-			
-			
-			
 			</div>
+
 		</div>
 	</div>
+</div>
 
-	<div class="container-fluid">
+<div class="container-fluid">
 		<div class="row-fluid">
 		
 			<div class="span6">

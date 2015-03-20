@@ -150,7 +150,7 @@ $(document).ready(function() {
 		<div class="container-fluid">
 			<div class="row-fluid" style="margin-top: 1px;">
 				<div class="span12" style="margin-top: 1px;">
-					<table class="table table-bordered table-striped table-hover" style="width: 500px;float: right;font-size: 11px;">
+					<table class="table table-bordered table-striped table-hover" style="width: 500px;float: right;font-size: 10px;text-align: center;">
 						<tr>
 							<th >Total Contrato</th>
 							<th >Total C. Líquido</th>
@@ -165,10 +165,30 @@ $(document).ready(function() {
 							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorLiquido}" minFractionDigits="2" /></td>
 							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorMeta}" minFractionDigits="2" /></td>
 						</tr>
+						<tr>
+							<th colspan="5" style="text-align: left"> Média por contrato - Quantidade ( <c:out value="${ countContratos }" /> ) </th>
+						</tr>
+						<tr>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorContratos / countContratos}" minFractionDigits="2" /></td>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalContratoLiquido / countContratos}" minFractionDigits="2" /></td>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorDivida / countContratos}" minFractionDigits="2" /></td>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorLiquido / countContratos}" minFractionDigits="2" /></td>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorMeta / countContratos}" minFractionDigits="2" /></td>
+						</tr>
+						<tr>
+							<th colspan="5" style="text-align: left"> Média por cliente - Quantidade ( <c:out value="${ countClientesByCpf }" /> ) </th>
+						</tr>
+						<tr>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorContratos / countClientesByCpf}" minFractionDigits="2" /></td>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalContratoLiquido / countClientesByCpf}" minFractionDigits="2" /></td>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorDivida / countClientesByCpf}" minFractionDigits="2" /></td>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorLiquido / countClientesByCpf}" minFractionDigits="2" /></td>
+							<td>R$ <fmt:formatNumber type="NUMBER" value="${totalValorMeta / countClientesByCpf}" minFractionDigits="2" /></td>
+						</tr>
 					</table>	
 				</div>
 			</div>
-		</div>		
+		</div>	
 	
 		<div class="container-fluid">
 			<div class="row-fluid" style="margin-top: 1px;">

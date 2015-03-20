@@ -1331,11 +1331,25 @@ function calculaContrato() {
 									}
 									
 								} else {
-								
-									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
+
+									if(valorContrato.value >= 0 && valorContrato.value <= 4999.99){
+
+										valorMeta.value = 0.0;
+										break;
+
+									} else if (valorContrato.value >= 5000 && valorContrato.value <= 8999.99){
+
+										var metaValue = ( valorContrato.value * arrayCoeficiente[1]) / 2;
+										valorMeta.value = metaValue.toFixed(2);
+										break;
+
+									} else if (valorContrato.value >= 9000){
+
+										var metaValue = valorContrato.value * arrayCoeficiente[1];
+										valorMeta.value = metaValue.toFixed(2);
+										break;
+
+									}
 									
 								}
 								
@@ -1347,7 +1361,6 @@ function calculaContrato() {
 						
 						var metaValue = valorContrato.value * arrayCoeficiente[1];
 						valorMeta.value = metaValue.toFixed(2);
-
 						break;
 						
 					}		
@@ -1360,8 +1373,22 @@ function calculaContrato() {
 
 			} else {
 
-				var metaValue = valorLiquido.value * arrayCoeficiente[1];
-				valorMeta.value = metaValue.toFixed(2);
+				switch(contratoBancoNome) {
+				
+				case 'Panamericano':
+
+					var metaValue = valorLiquido.value * arrayCoeficiente[1];
+					valorMeta.value = metaValue.toFixed(2);
+					break;
+
+				default:
+
+					var metaValue = valorLiquido.value * arrayCoeficiente[1];
+					valorMeta.value = metaValue.toFixed(2);
+				
+				break;
+				
+				}
 				 
 			}
 			
@@ -1920,27 +1947,38 @@ function calculaContrato() {
 										}
 										
 									} else {
-									
-										metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-										valorMeta.value = metaValue.toFixed(2);
-										
-										break;
+
+										if(valorContrato.value >= 0 && valorContrato.value <= 4999.99){
+
+											valorMeta.value = 0.0;
+											break;
+
+										} else if (valorContrato.value >= 5000 && valorContrato.value <= 8999.99){
+
+											var metaValue = ( valorContrato.value * arrayCoeficiente[1]) / 2;
+											valorMeta.value = metaValue.toFixed(2);
+											break;
+
+										} else if (valorContrato.value >= 9000){
+
+											var metaValue = valorContrato.value * arrayCoeficiente[1];
+											valorMeta.value = metaValue.toFixed(2);
+											break;
+
+										}
 										
 									}
 									
 								}
-								
-								
 
 							}
 							
 						} else {
-							
+
 							var metaValue = valorContrato.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
-
 							break;
-							
+
 						}		
 
 					default:
@@ -1951,11 +1989,24 @@ function calculaContrato() {
 
 			} else {
 
-				var metaValue = valorLiquido.value * arrayCoeficiente[1];
-				valorMeta.value = metaValue.toFixed(2);
+				switch(contratoBancoNome) {
+				
+					case 'Panamericano':
+
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+						break;
+
+					default:
+
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+					
+					break;
+					
+				}		
 				 
 			}
-			
 			
 		}
 
@@ -2517,11 +2568,25 @@ function calculaContrato() {
 										}
 	
 									} else {
-	
-										metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-										valorMeta.value = metaValue.toFixed(2);
-	
-										break;
+
+										if(valorContrato.value >= 0 && valorContrato.value <= 4999.99){
+
+											valorMeta.value = 0.0;
+											break;
+
+										} else if (valorContrato.value >= 5000 && valorContrato.value <= 8999.99){
+
+											var metaValue = ( valorContrato.value * arrayCoeficiente[1]) / 2;
+											valorMeta.value = metaValue.toFixed(2);
+											break;
+
+										} else if (valorContrato.value >= 9000){
+
+											var metaValue = valorContrato.value * arrayCoeficiente[1];
+											valorMeta.value = metaValue.toFixed(2);
+											break;
+
+										}
 	
 									}
 	
@@ -2535,7 +2600,6 @@ function calculaContrato() {
 	
 							var metaValue = valorContrato.value * arrayCoeficiente[1];
 							valorMeta.value = metaValue.toFixed(2);
-	
 							break;
 	
 						}		
@@ -2548,8 +2612,22 @@ function calculaContrato() {
 	
 			} else {
 			
-				var metaValue = valorLiquido.value * arrayCoeficiente[1];
-				valorMeta.value = metaValue.toFixed(2);
+				switch(contratoBancoNome) {
+				
+					case 'Panamericano':
+	
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+						break;
+	
+					default:
+	
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+					
+					break;
+				
+				}
 	
 			}
 

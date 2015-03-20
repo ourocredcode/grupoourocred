@@ -15,6 +15,7 @@ function mostra(div){
 	document.getElementById("bonsucesso_siape").style.display = "none";
 	document.getElementById("bradesco").style.display = "none";
 	document.getElementById("daycoval").style.display = "none";
+	document.getElementById("daycoval_siape").style.display = "none";
 	document.getElementById("panamericano").style.display = "none";
 	document.getElementById("panamericano_siape").style.display = "none";
 	document.getElementById("safra").style.display = "none";
@@ -61,6 +62,7 @@ function mostra(div){
 			 	<li><a href="#" onclick="mostra('bonsucesso_siape');">BONSUCESSO (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('bradesco');">BRADESCO</a></li>
 			 	<li><a href="#" onclick="mostra('daycoval');">DAYCOVAL</a></li>
+			 	<li><a href="#" onclick="mostra('daycoval_siape');">DAYCOVAL (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('panamericano');">PANAMERICANO</a></li>
 			 	<li><a href="#" onclick="mostra('panamericano_siape');">PANAMERICANO (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('safra');">SAFRA</a></li>
@@ -158,6 +160,15 @@ function mostra(div){
 			<h2 style="color: #b5b5b5;">DAYCOVAL</h2><br/> 
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_daycoval.pdf"/>" style="width: 70%;height: 600px"></iframe>
+			
+			</div>
+			
+			<div id="daycoval_siape" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">DAYCOVAL</h2><br/> 
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_daycoval_siape.pdf"/>" style="width: 70%;height: 600px"></iframe>
 			
 			</div>
 			
