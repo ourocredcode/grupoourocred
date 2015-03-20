@@ -1150,10 +1150,13 @@ public class MenuController {
 		Double totalValorLiquido = 0.0;
 		Integer countContratos = 0;
 		Set<ParceiroNegocio> countClientes = new HashSet<ParceiroNegocio>();
+		Set<String> countClientesByCpf = new HashSet<String>();
 		Double totalContratoLiquido = 0.0;
 
 		for(Contrato cs : contratos){
 			countClientes.add(cs.getFormulario().getParceiroNegocio());
+			countClientesByCpf.add(cs.getFormulario().getParceiroNegocio().getCpf());
+
 			totalValorContratos += cs.getValorContrato();
 			totalValorMeta += cs.getValorMeta();
 			totalValorDivida += cs.getValorDivida();
@@ -1201,6 +1204,7 @@ public class MenuController {
 		result.include("totalValorMeta",totalValorMeta);
 		result.include("countContratos",countContratos);
 		result.include("countClientes",countClientes.size());
+		result.include("countClientesByCpf",countClientesByCpf.size());
 
 	}
 	
@@ -1215,11 +1219,12 @@ public class MenuController {
 		
 		Integer countContratos = 0;
 		Set<ParceiroNegocio> countClientes = new HashSet<ParceiroNegocio>();
-		
+		Set<String> countClientesByCpf = new HashSet<String>();
 
 		for(Contrato cs : contratos){
 
 			countClientes.add(cs.getFormulario().getParceiroNegocio());
+			countClientesByCpf.add(cs.getFormulario().getParceiroNegocio().getCpf());
 			totalValorContratos += cs.getValorContrato();
 			
 			totalValorDivida += cs.getValorDivida();
@@ -1270,6 +1275,7 @@ public class MenuController {
 		result.include("totalValorMeta",totalValorMeta);
 		result.include("countContratos",countContratos);
 		result.include("countClientes",countClientes.size());
+		result.include("countClientesByCpf",countClientesByCpf.size());
 
 	}
 
