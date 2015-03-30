@@ -996,7 +996,7 @@ public class ContratoController {
 		List<String> log = new ArrayList<String>();
 		this.contrato = this.contratoDao.load(contrato.getContrato_id());
 
-		if(!contrato.getObservacao().equals("")){
+		if(!contrato.getObservacao().trim().equals("") & contrato.getObservacao().trim().length() <= 255){
 
 			if(this.contrato.getObservacao() != null)
 				log.add(" Observação do Contrato alterada de :" + this.contrato.getObservacao());

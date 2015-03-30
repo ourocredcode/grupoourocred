@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -32,14 +34,17 @@ public class ConferenciaDao extends Dao<Conferencia> {
 
 	private final String sqlConferencia = " SELECT CONFERENCIA.conferencia_id, CONFERENCIA.empresa_id, EMPRESA.nome AS empresa_nome, "+
 					" CONFERENCIA.organizacao_id, ORGANIZACAO.nome AS organizacao_nome, CONFERENCIA.observacao,CONFERENCIA.isvalido, CONFERENCIA.isactive, "+
-					" CONFERENCIA.contrato_id, CONFERENCIA.procedimentoconferencia_id, CONFERENCIA.created, PROCEDIMENTOCONFERENCIA.nome as procedimentoconferencia_nome" +
-					", CONFERENCIA.tipoprocedimento_id, TIPOPROCEDIMENTO.nome as tipoprocedimento_nome,USUARIO.usuario_id, USUARIO.nome as usuario_nome "+
+					" CONFERENCIA.contrato_id, CONFERENCIA.procedimentoconferencia_id, CONFERENCIA.created, CONFERENCIA.updated, " +
+					" PROCEDIMENTOCONFERENCIA.nome as procedimentoconferencia_nome, " +
+					" CONFERENCIA.tipoprocedimento_id, TIPOPROCEDIMENTO.nome as tipoprocedimento_nome,USUARIO.usuario_id, " +
+				    " USUARIO.nome as usuario_nome, UPDATED.nome as usuario_nome_updated, UPDATED.usuario_id as usuario_id_updated "+
 					" FROM ((((ORGANIZACAO (NOLOCK) INNER JOIN (EMPRESA (NOLOCK) "+
 					" INNER JOIN CONFERENCIA (NOLOCK) ON EMPRESA.empresa_id = CONFERENCIA.empresa_id) ON ORGANIZACAO.organizacao_id = CONFERENCIA.organizacao_id) "+
 					" INNER JOIN PROCEDIMENTOCONFERENCIA (NOLOCK) ON CONFERENCIA.procedimentoconferencia_id = PROCEDIMENTOCONFERENCIA.procedimentoconferencia_id) " +
 					" INNER JOIN TIPOPROCEDIMENTO (NOLOCK) ON CONFERENCIA.tipoprocedimento_id = TIPOPROCEDIMENTO.tipoprocedimento_id) "+
 					" INNER JOIN CONTRATO (NOLOCK) ON CONFERENCIA.contrato_id = CONTRATO.contrato_id)" +
-					" INNER JOIN USUARIO (NOLOCK) ON USUARIO.usuario_id = CONFERENCIA.createdby ";
+					" INNER JOIN USUARIO (NOLOCK) ON USUARIO.usuario_id = CONFERENCIA.createdby " + 
+					" LEFT JOIN USUARIO AS UPDATED (NOLOCK) ON UPDATED.usuario_id = CONFERENCIA.updatedby ";
 
 	public ConferenciaDao(Session session, ConnJDBC conexao) {
 
@@ -136,8 +141,11 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		ProcedimentoConferencia procedimentoConferencia = new ProcedimentoConferencia();
 		TipoProcedimento tipoProcedimento = new TipoProcedimento();
 		Usuario usuario = new Usuario();
+		Usuario updatedBy = new Usuario();
 		Calendar created = new GregorianCalendar();
-		
+		Calendar udpated = new GregorianCalendar();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
 		empresa.setEmpresa_id(rsConferencia.getLong("empresa_id"));
 		empresa.setNome(rsConferencia.getString("empresa_nome"));
 
@@ -146,6 +154,9 @@ public class ConferenciaDao extends Dao<Conferencia> {
 
 		usuario.setUsuario_id(rsConferencia.getLong("usuario_id"));
 		usuario.setNome(rsConferencia.getString("usuario_nome"));
+
+		updatedBy.setUsuario_id(rsConferencia.getLong("usuario_id_updated"));
+		updatedBy.setNome(rsConferencia.getString("usuario_nome_updated"));
 
 		contrato.setContrato_id(rsConferencia.getLong("contrato_id"));
 
@@ -160,8 +171,23 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		conferencia.setIsValido(rsConferencia.getBoolean("isvalido"));
 		conferencia.setIsActive(rsConferencia.getBoolean("isactive"));
 
-		created.setTime(rsConferencia.getDate("created"));
-		conferencia.setCreated(created);
+		try {
+
+			if(rsConferencia.getDate("created") != null) {
+				created.setTime(format.parse(rsConferencia.getTimestamp("created").toString()));
+				conferencia.setCreated(created);
+			}	
+
+			if(rsConferencia.getDate("updated") != null) {
+				udpated.setTime(format.parse(rsConferencia.getTimestamp("updated").toString()));
+				conferencia.setUpdated(udpated);
+			} else {
+				conferencia.setUpdated(GregorianCalendar.getInstance());
+			}
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		conferencia.setEmpresa(empresa);
 		conferencia.setOrganizacao(organizacao);
@@ -169,6 +195,7 @@ public class ConferenciaDao extends Dao<Conferencia> {
 		conferencia.setProcedimentoConferencia(procedimentoConferencia);
 		conferencia.setTipoProcedimento(tipoProcedimento);
 		conferencia.setCreatedBy(usuario);
+		conferencia.setUpdatedBy(updatedBy);
 
 		conferencias.add(conferencia);
 
