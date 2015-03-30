@@ -1196,14 +1196,14 @@ window.onload = function() {
 			<div style="float: left;">
 	  			<div class="control-group">
 					<label for="observacao">Observacao</label>
-					<textarea id="observacao" name="contrato.observacao" rows="4" cols="4" maxlength="255" class="span5"><c:out value="${contrato.observacao}"></c:out></textarea>	
+					<textarea id="observacao" name="contrato.observacao" rows="4" cols="4" maxlength="250" class="span5"><c:out value="${contrato.observacao}"></c:out></textarea>	
 				</div>
 			</div>	
 		  </div>
 		  <div class="modal-footer">
 		    <button class="btn" data-dismiss="modal" aria-hidden="true">Fecha</button>
 		    <c:if test="${usuarioInfo.perfil.chave == 'Consultor' || usuarioInfo.perfil.chave == 'Supervisor'}">
-		    	<button class="btn btn-primary" type="submit" id="btt_salvalogistica">Salva</button>
+		    	<button class="btn btn-primary" type="submit" id="btt_salvaObservacao">Salva</button>
 		    </c:if>
 		  </div>
 		</form>
@@ -1696,10 +1696,18 @@ window.onload = function() {
 											</tr>
 											<c:forEach var="conferencia" items="${conferencias }">
 												<tr>
-													<td style="text-align: center;"><fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${conferencia.created.time }" /></td>	
-													<td style="text-align: center;"><c:out value="${conferencia.createdBy.nome }"></c:out></td>
-													<td style="text-align: center;"><c:out value="${conferencia.procedimentoConferencia.nome }"></c:out></td>
-													<td style="text-align: center;"><c:if test="${conferencia.isValido }"> OK </c:if> ${conferencia.observacao }</td>
+													<c:if test="${conferencia.updatedBy.usuario_id == 0   }">
+														<td style="text-align: center;"><fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${conferencia.created.time }" /></td>
+														<td style="text-align: center;"><c:out value="${conferencia.createdBy.nome }"></c:out></td>
+														<td style="text-align: center;"><c:out value="${conferencia.procedimentoConferencia.nome }"></c:out></td>
+														<td style="text-align: center;"><c:if test="${conferencia.isValido }"> OK </c:if> ${conferencia.observacao }</td>
+													</c:if>
+													<c:if test="${conferencia.updatedBy.usuario_id != 0  }">
+														<td style="text-align: center;"><fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${conferencia.updated.time }" /></td>
+														<td style="text-align: center;"><c:out value="${conferencia.updatedBy.nome }"></c:out></td>
+														<td style="text-align: center;"><c:out value="${conferencia.procedimentoConferencia.nome }"></c:out></td>
+														<td style="text-align: center;"><c:if test="${conferencia.isValido }"> OK </c:if> ${conferencia.observacao }</td>
+													</c:if>
 												</tr>
 											</c:forEach>
 										</thead>

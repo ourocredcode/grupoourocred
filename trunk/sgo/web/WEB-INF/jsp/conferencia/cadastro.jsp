@@ -119,6 +119,8 @@ function validaForm(form) {
 					<input type="hidden" id="conferencia.organizacao.organizacao_id" name="conferencias[${status.index}].organizacao.organizacao_id" value="${conferencia.organizacao.organizacao_id }" />
 					<input type="hidden" id="conferencia.createdBy.usuario_id" name="conferencias[${status.index}].createdBy.usuario_id" value="${conferencia.createdBy.usuario_id }" />
 					<input type="hidden" id="conferencia.created.time" name="conferencias[${status.index}].created.time" value="<fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${conferencia.created.time }" />" />
+					<input type="hidden" id="conferencia.updatedBy.usuario_id" name="conferencias[${status.index}].updatedBy.usuario_id" value="${conferencia.updatedBy.usuario_id }" />
+					<input type="hidden" id="conferencia.updated.time" name="conferencias[${status.index}].updated.time" value="<fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${conferencia.updated.time }" />" />
 					<input type="hidden" id="conferencia.isActive" name="conferencias[${status.index}].isActive" value="1" />
 					<input type="hidden" id="conferencia.conferencia_id" name="conferencias[${status.index}].conferencia_id" value="${conferencia.conferencia_id}" />
 					<tr>

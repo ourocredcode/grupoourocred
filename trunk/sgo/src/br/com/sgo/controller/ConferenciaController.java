@@ -89,8 +89,12 @@ public class ConferenciaController {
 				c.setTipoProcedimento(tipoProcedimento);
 				c.setEmpresa(empresa);
 				c.setOrganizacao(organizacao);
+
 				c.setCreatedBy(usuario);
 				c.setCreated(GregorianCalendar.getInstance());
+				c.setUpdatedBy(usuario);
+				c.setUpdated(GregorianCalendar.getInstance());
+
 				c.setIsValido(true);
 				c.setIsActive(true);
 
@@ -110,10 +114,7 @@ public class ConferenciaController {
 	public void salva(List<Conferencia> conferencias) {
 
 		List<String> log = new ArrayList<String>();
-		
-		this.conferenciaDao.beginTransaction();
-		this.conferenciaDao.atualiza(conferencias);
-		this.conferenciaDao.commit();
+		List<Conferencia> conferenciasUpdated = new ArrayList<Conferencia>();
 
 		boolean valid = true;
 		Long contrato_id = null;
@@ -124,8 +125,16 @@ public class ConferenciaController {
 				valid = c.getIsValido();
 
 			contrato_id = c.getContrato().getContrato_id();
+			c.setUpdated(GregorianCalendar.getInstance());
+			c.setUpdatedBy(usuarioInfo.getUsuario());
+
+			conferenciasUpdated.add(c);
 
 		}
+
+		this.conferenciaDao.beginTransaction();
+		this.conferenciaDao.atualiza(conferenciasUpdated);
+		this.conferenciaDao.commit();
 
 		Contrato c = this.contratoDao.load(contrato_id);
 
