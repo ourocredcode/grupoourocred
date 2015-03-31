@@ -115,7 +115,7 @@ function calculaContrato() {
 
 	//alert(isRco);
 
-	if(bancoCompradoNome == 'Bradesco' || bancoCompradoNome == 'Santander' || bancoCompradoNome == 'Banrisul' 
+	if(bancoCompradoNome == 'Bradesco' || bancoCompradoNome == 'BMC' || bancoCompradoNome == 'Bonsucesso' || bancoCompradoNome == 'Santander' || bancoCompradoNome == 'Banrisul' 
 			|| bancoCompradoNome == 'Paraná' || bancoCompradoNome == 'HSBC' || bancoCompradoNome == 'Banco do Brasil S/A' 
 			|| bancoCompradoNome == 'Caixa Econômica Federal'){
 		isRcoBGN = false ;
@@ -191,6 +191,78 @@ function calculaContrato() {
 						break;
 						
 					}
+					
+				case 'Sabemi':
+
+					if(isProdRco){
+
+						if(parcelasAberto.value != ''){
+
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+							
+							if(metaValue == 0){
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+								
+								break;
+								
+							} else {
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = 0;
+								var comissaoBruto = metaValue * 0.17;
+
+								var comissaoLiquido = comissaoBruto - RCO;
+
+								if(comissaoLiquido <= 0){
+									
+									if(contratoId != ''){
+
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+
+										valorMeta.value = '0.0';
+
+										break;
+
+									} else {
+
+										alert('Contrato com valor abaixo do mínimo exigido.');
+
+										valorParcela.value = '';
+										valorParcela.focus();
+										
+										break;
+
+									}
+									
+								} else {
+
+									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									//valorMeta.value = metaValue.toFixed(2);
+									
+									var metaValue = valorContrato.value * arrayCoeficiente[1];
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								}
+								
+							}
+							
+							
+
+						}
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}		
 					
 				case 'Banrisul':
 
@@ -809,6 +881,73 @@ function calculaContrato() {
 						
 					}
 					
+				case 'Sabemi':
+
+					if(isProdRco){
+
+						if(parcelasAberto.value != ''){
+
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+							
+							if(metaValue == 0){
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+								
+								break;
+								
+							} else {
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = 0;
+								var comissaoBruto = metaValue * 0.17;
+
+								var comissaoLiquido = comissaoBruto - RCO;
+
+								if(comissaoLiquido <= 0){
+									
+									if(contratoId != ''){
+
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+
+										valorMeta.value = '0.0';
+
+										break;
+
+									} else {
+
+										alert('Contrato com valor abaixo do mínimo exigido.');
+
+										valorParcela.value = '';
+										valorParcela.focus();
+										
+										break;
+
+									}
+									
+								} else {
+								
+									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								}
+								
+							}
+
+						}
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}	
+					
 					
 				case 'Banrisul':
 
@@ -1380,8 +1519,16 @@ function calculaContrato() {
 					var metaValue = valorLiquido.value * arrayCoeficiente[1];
 					valorMeta.value = metaValue.toFixed(2);
 					break;
+					
+				
+				case 'Sabemi':
+
+					var metaValue = valorContrato.value * arrayCoeficiente[1];
+					valorMeta.value = metaValue.toFixed(2);
+					break;					
 
 				default:
+					
 
 					var metaValue = valorLiquido.value * arrayCoeficiente[1];
 					valorMeta.value = metaValue.toFixed(2);
@@ -1424,6 +1571,73 @@ function calculaContrato() {
 						break;
 						
 					}
+					
+				case 'Sabemi':
+
+					if(isProdRco){
+
+						if(parcelasAberto.value != ''){
+
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+							
+							if(metaValue == 0){
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+								
+								break;
+								
+							} else {
+								
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = 0;
+								var comissaoBruto = metaValue * 0.17;
+
+								var comissaoLiquido = comissaoBruto - RCO;
+
+								if(comissaoLiquido <= 0){
+									
+									if(contratoId != ''){
+
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+
+										valorMeta.value = '0.0';
+
+										break;
+
+									} else {
+
+										alert('Contrato com valor abaixo do mínimo exigido.');
+
+										valorParcela.value = '';
+										valorParcela.focus();
+										
+										break;
+
+									}
+									
+								} else {
+								
+									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									valorMeta.value = metaValue.toFixed(2);
+									
+									break;
+									
+								}
+								
+							}
+
+						}
+						
+					} else {
+						
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+
+						break;
+						
+					}	
 				
 				case 'Banrisul':
 
@@ -1996,6 +2210,12 @@ function calculaContrato() {
 						var metaValue = valorLiquido.value * arrayCoeficiente[1];
 						valorMeta.value = metaValue.toFixed(2);
 						break;
+						
+					case 'Sabemi':
+
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+						break;	
 
 					default:
 
@@ -2039,6 +2259,75 @@ function calculaContrato() {
 						break;
 						
 					}
+					
+				case 'Sabemi':
+					
+					if(isProdRco){
+	
+						if(parcelasAberto.value != ''){
+	
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+	
+							if(metaValue == 0){
+	
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								valorMeta.value = metaValue.toFixed(2);
+	
+								break;
+	
+							} else {
+	
+								var metaValue = valorContrato.value * arrayCoeficiente[1];
+								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
+								var RCO = 0;
+								var comissaoBruto = metaValue * 0.17;
+	
+								var comissaoLiquido = comissaoBruto - RCO;
+	
+								if(comissaoLiquido <= 0){
+	
+									if(contratoId != ''){
+	
+										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
+	
+										valorMeta.value = '0.0';
+	
+										break;
+	
+									} else {
+	
+										alert('Contrato com valor abaixo do mínimo exigido.');
+	
+										valorParcela.value = '';
+										valorParcela.focus();
+	
+										break;
+	
+									}
+	
+								} else {
+	
+									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
+									valorMeta.value = metaValue.toFixed(2);
+	
+									break;
+	
+								}
+	
+							}
+	
+	
+	
+						}
+	
+					} else {
+	
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+	
+						break;
+	
+					}	
 				
 				case 'Banrisul':
 					
@@ -2619,6 +2908,13 @@ function calculaContrato() {
 						var metaValue = valorLiquido.value * arrayCoeficiente[1];
 						valorMeta.value = metaValue.toFixed(2);
 						break;
+					
+						
+					case 'Sabemi':
+						
+						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						valorMeta.value = metaValue.toFixed(2);
+						break;	
 	
 					default:
 	
