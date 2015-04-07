@@ -492,6 +492,10 @@ public class ContratoController {
 
 		if(this.contrato.getProduto().getNome().equals("CARTAO CREDITO"))
 			this.contrato.setValorContratoLiquido(0.0);
+		
+		if(this.contrato.getBanco().getNome().equals("Sabemi")){
+			this.contrato.setValorContratoLiquido(this.contrato.getValorContrato());
+		}
 
 		this.contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
 				contrato.getBanco().getBanco_id(), contrato.getProduto().getProduto_id() ,this.contrato.getConvenio().getConvenio_id()));
