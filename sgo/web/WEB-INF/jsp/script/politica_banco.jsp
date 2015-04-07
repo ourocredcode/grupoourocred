@@ -18,6 +18,7 @@ function mostra(div){
 	document.getElementById("daycoval_siape").style.display = "none";
 	document.getElementById("panamericano").style.display = "none";
 	document.getElementById("panamericano_siape").style.display = "none";
+	document.getElementById("sabemi_siape").style.display = "none";
 	document.getElementById("safra").style.display = "none";
 
 	if(document.getElementById(div).style.display == "none") {
@@ -65,6 +66,7 @@ function mostra(div){
 			 	<li><a href="#" onclick="mostra('daycoval_siape');">DAYCOVAL (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('panamericano');">PANAMERICANO</a></li>
 			 	<li><a href="#" onclick="mostra('panamericano_siape');">PANAMERICANO (SIAPE)</a></li>
+			 	<li><a href="#" onclick="mostra('sabemi_siape');">SABEMI (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('safra');">SAFRA</a></li>
 			</ul>
 			</div>
@@ -189,6 +191,16 @@ function mostra(div){
 				<iframe src="<c:url value="/visualizaScript/politicas_panamericano_siape.pdf"/>" style="width: 70%;height: 600px"></iframe>
 			
 			</div>
+			
+			<div id="sabemi_siape" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">SABEMI (SIAPE)</h2><br/> 
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_sabemi_siape.pdf"/>" style="width: 70%;height: 600px"></iframe>
+			
+			</div>
+			
 			
 			<div id="safra" style="display: none;font-size: 16px;">
 			

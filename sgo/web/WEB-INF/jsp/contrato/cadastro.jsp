@@ -2912,7 +2912,7 @@ function calculaContrato() {
 						
 					case 'Sabemi':
 						
-						var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						var metaValue = valorContrato.value * arrayCoeficiente[1];
 						valorMeta.value = metaValue.toFixed(2);
 						break;	
 	

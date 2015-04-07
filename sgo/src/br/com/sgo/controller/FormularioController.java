@@ -412,7 +412,7 @@ public class FormularioController {
 					|| c.getProduto().getNome().equals("RECOMPRA RMC") 
 					|| c.getProduto().getNome().equals("AUMENTO") )
 				c.setValorContratoLiquido(c.getValorContrato());
-			
+
 			if(c.getProduto().getNome().equals("REFINANCIAMENTO")
 					|| c.getProduto().getNome().equals("REFINANCIAMENTO PMSP")
 					|| c.getProduto().getNome().equals("REFINANCIAMENTO PMRP")
@@ -423,9 +423,13 @@ public class FormularioController {
 					|| c.getProduto().getNome().equals("RETENÇÃO PMSP")
 					|| c.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 				c.setValorContratoLiquido(c.getValorLiquido());
-			
+
 			if(c.getProduto().getNome().equals("CARTAO CREDITO"))
 				c.setValorContratoLiquido(0.0);
+
+			if(c.getBanco().getNome().equals("Sabemi")){
+				c.setValorContratoLiquido(c.getValorContrato());
+			}
 
 			this.contratoDao.beginTransaction();
 			this.contratoDao.atualiza(c);
