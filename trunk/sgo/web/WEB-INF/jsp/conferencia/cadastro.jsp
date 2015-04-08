@@ -114,6 +114,7 @@ function validaForm(form) {
 				<c:forEach var="conferencia" items="${conferencias }" varStatus="status">
 					<input type="hidden" id="conferencia.tipoProcedimento.tipoProcedimento_id" name="conferencias[${status.index}].tipoProcedimento.tipoProcedimento_id" value="${conferencia.tipoProcedimento.tipoProcedimento_id }" />
 					<input type="hidden" id="conferencia.procedimentoConferencia.procedimentoConferencia_id" name="conferencias[${status.index}].procedimentoConferencia.procedimentoConferencia_id" value="${conferencia.procedimentoConferencia.procedimentoConferencia_id }" />
+					<input type="hidden" id="conferencia.procedimentoConferencia.nome" name="conferencias[${status.index}].procedimentoConferencia.nome" value="${conferencia.procedimentoConferencia.nome }" />
 					<input type="hidden" id="conferencia.contrato.contrato_id" name="conferencias[${status.index}].contrato.contrato_id" value="${conferencia.contrato.contrato_id }" />
 					<input type="hidden" id="conferencia.empresa.empresa_id" name="conferencias[${status.index}].empresa.empresa_id" value="${conferencia.empresa.empresa_id }" />
 					<input type="hidden" id="conferencia.organizacao.organizacao_id" name="conferencias[${status.index}].organizacao.organizacao_id" value="${conferencia.organizacao.organizacao_id }" />

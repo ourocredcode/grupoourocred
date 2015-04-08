@@ -121,8 +121,10 @@ public class ConferenciaController {
 
 		for(Conferencia c : conferencias){
 
-			if(c.getIsValido() != true)
+			if(c.getIsValido() != true){
 				valid = c.getIsValido();
+				log.add(" Pendente Conferência ( " + c.getProcedimentoConferencia().getNome() + " ) : " + c.getObservacao());
+			}
 
 			contrato_id = c.getContrato().getContrato_id();
 			c.setUpdated(GregorianCalendar.getInstance());
@@ -167,6 +169,21 @@ public class ConferenciaController {
 
 			}
 
+		} else {
+			
+			HistoricoContrato historico = new HistoricoContrato();
+			historico.setEmpresa(empresa);
+			historico.setOrganizacao(organizacao);
+			historico.setIsActive(true);
+			historico.setCreatedBy(usuario);
+			historico.setCreated(GregorianCalendar.getInstance());
+			historico.setObservacao("Conferência registrada por " + usuario.getApelido() + " sem pendências. ");
+			historico.setContrato(c);
+
+			this.historicoContratoDao.beginTransaction();
+			this.historicoContratoDao.adiciona(historico);
+			this.historicoContratoDao.commit();
+			
 		}
 
 		result.include("msg","Conferência preenchido com sucesso.").redirectTo(this).msg();
