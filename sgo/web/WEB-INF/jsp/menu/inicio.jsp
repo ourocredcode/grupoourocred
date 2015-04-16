@@ -357,7 +357,14 @@
 										<c:choose>
 											<c:when test="${map.key == 'Aprovado' }">
 													<tr class="success">
-														<td><a href="<c:url value="/menu/contratos/aprovados" />">${map.key }</a></td>
+														
+														<c:if test="${usuarioInfo.perfil.chave != 'Diretor'}">
+															<td><a href="<c:url value="/menu/contratos/aprovados" />">${map.key }</a></td>
+														</c:if>
+														<c:if test="${usuarioInfo.perfil.chave == 'Diretor'}">
+															<td>${map.key }</td>
+														</c:if>
+														
 														<td><fmt:formatNumber value="${map.value[1] }" type="number" maxFractionDigits="0" /></td>
 														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
@@ -366,7 +373,12 @@
 											</c:when>
 											<c:when test="${map.key == 'Concluído' }">
 													<tr class="success">
-														<td><a href="<c:url value="/menu/contratos/concluidos" />">${map.key }</a></td>
+														<c:if test="${usuarioInfo.perfil.chave != 'Diretor'}">
+															<td><a href="<c:url value="/menu/contratos/concluidos" />">${map.key }</a></td>
+														</c:if>
+														<c:if test="${usuarioInfo.perfil.chave == 'Diretor'}">
+															<td>${map.key }</td>
+														</c:if>
 														<td><fmt:formatNumber value="${map.value[1] }" type="number" maxFractionDigits="0" /></td>
 														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
@@ -375,7 +387,12 @@
 											</c:when>
 											<c:when test="${map.key == 'Recusado' }">
 													<tr class="error">
-														<td><a href="<c:url value="/menu/contratos/recusados" />">${map.key }</a></td>
+														<c:if test="${usuarioInfo.perfil.chave != 'Diretor'}">
+															<td><a href="<c:url value="/menu/contratos/recusados" />">${map.key }</a></td>
+														</c:if>
+														<c:if test="${usuarioInfo.perfil.chave == 'Diretor'}">
+															<td>${map.key }</td>
+														</c:if>
 														<td><fmt:formatNumber value="${map.value[1] }" type="number" maxFractionDigits="0" /></td>
 														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
@@ -403,81 +420,25 @@
 								<c:forEach items="#{mapEtapas }" var="map">
 									
 									<c:choose>
-										<c:when test="${map.key == 'Aguardando Status' }">
-												<tr class="info">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
-													<td>${map.value[1] }</td>
-													<td>${map.value[2] }</td>
-													<td>${map.value[3] }</td>
-													<td>${map.value[4] }</td>
-												</tr>
-										</c:when>
-										<c:when test="${map.key == 'Pendente Administrativo' }">
+										<c:when test="${ map.key == 'Pendente Administrativo' 
+											|| map.key == 'Pendente Agendamento' 
+											|| map.key == 'Pendente Banco' 
+											|| map.key == 'Pendente Coeficiente' 
+											|| map.key == 'Pendente Conferência'  
+											|| map.key == 'Pendente Apoio Comercial' 
+											|| map.key == 'Pendente Comercial'   
+											|| map.key == 'Recalcular'  }">
 												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
-													<td>${map.value[1] }</td>
-													<td>${map.value[2] }</td>
-													<td>${map.value[3] }</td>
-													<td>${map.value[4] }</td>
-												</tr>
-										</c:when>
-										<c:when test="${map.key == 'Pendente Agendamento' }">
-												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
-													<td>${map.value[1] }</td>
-													<td>${map.value[2] }</td>
-													<td>${map.value[3] }</td>
-													<td>${map.value[4] }</td>
-												</tr>
-										</c:when>
-										<c:when test="${map.key == 'Pendente Banco' }">
-												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
-													<td>${map.value[1] }</td>
-													<td>${map.value[2] }</td>
-													<td>${map.value[3] }</td>
-													<td>${map.value[4] }</td>
-												</tr>
-										</c:when>
-										<c:when test="${map.key == 'Pendente Coeficiente' }">
-												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
-													<td>${map.value[1] }</td>
-													<td>${map.value[2] }</td>
-													<td>${map.value[3] }</td>
-													<td>${map.value[4] }</td>
-												</tr>
-										</c:when>
-										<c:when test="${map.key == 'Pendente Conferência' }">
-												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
-													<td>${map.value[1] }</td>
-													<td>${map.value[2] }</td>
-													<td>${map.value[3] }</td>
-													<td>${map.value[4] }</td>
-												</tr>
-										</c:when>
-										<c:when test="${map.key == 'Pendente Apoio Comercial' }">
-												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
-													<td>${map.value[1] }</td>
-													<td>${map.value[2] }</td>
-													<td>${map.value[3] }</td>
-													<td>${map.value[4] }</td>
-												</tr>
-										</c:when>
-										<c:when test="${map.key == 'Pendente Comercial' }">
-												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
-													<td>${map.value[1] }</td>
-													<td>${map.value[2] }</td>
-													<td>${map.value[3] }</td>
-													<td>${map.value[4] }</td>
-												</tr>
-										</c:when>
-										<c:when test="${map.key == 'Recalcular' }">
-												<tr class="error">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
+													
+														<c:if test="${usuarioInfo.perfil.chave != 'Diretor'}">
+															<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
+														</c:if>
+														<c:if test="${usuarioInfo.perfil.chave == 'Diretor'}">
+															<td>${map.key }</td>
+														</c:if>
+													
+													
+													
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -486,7 +447,16 @@
 										</c:when>
 										<c:otherwise>
 												<tr class="info">
-													<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
+													
+													
+														<c:if test="${usuarioInfo.perfil.chave != 'Diretor'}">
+															<td><a href="<c:url value="/menu/contratos/busca/etapas/${map.value[0]}" />">${map.key }</a></td>
+														</c:if>
+														<c:if test="${usuarioInfo.perfil.chave == 'Diretor'}">
+															<td>${map.key }</td>
+														</c:if>
+													
+													
 													<td>${map.value[1] }</td>
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
@@ -546,7 +516,7 @@
 				</div>
 			</c:if>	
 			
-			<c:if test="${usuarioInfo.perfil.chave == 'Gestor'}">
+			<c:if test="${usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Diretor' }">
 				<div class="span6">
 	
 					<div class="widget-box">
@@ -573,7 +543,14 @@
 								<tbody>
 									<c:forEach items="${mapEquipesCount }" var="map">
 										<tr class="success">
-											<td><a href="<c:url value="/menu/contratos/busca/supervisores/${map.value[0]}" />">${map.key }</a></td>
+											
+											<c:if test="${usuarioInfo.perfil.chave != 'Diretor'}">
+												<td><a href="<c:url value="/menu/contratos/busca/supervisores/${map.value[0]}" />">${map.key }</a></td>
+											</c:if>
+											<c:if test="${usuarioInfo.perfil.chave == 'Diretor'}">
+												<td>${map.key }</td>
+											</c:if>
+
 											<td>${map.value[1] }</td>
 											<td>${map.value[2] }</td>
 											<td>${map.value[3] }</td>

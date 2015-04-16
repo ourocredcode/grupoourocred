@@ -86,7 +86,7 @@
                     </ul>
                 </li>
                
-                <c:if test="${ ( usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Hiscon' ) && perfis != null}">
+                <c:if test="${ ( usuarioInfo.perfil.chave == 'Gestor' || usuarioInfo.perfil.chave == 'Hiscon' || usuarioInfo.perfil.chave == 'Diretor'  ) && perfis != null}">
                 <li class="btn btn-inverse dropdown" id="menu-messages2"><a href="#" data-toggle="dropdown" data-target="#menu-messages2" class="dropdown-toggle"><i class="icon icon-th-list"></i> <span class="text">Organizações</span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
 						 <c:forEach var="perfil" items="${perfis}">	
