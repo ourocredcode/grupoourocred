@@ -451,7 +451,7 @@ public class MenuController {
 		result.include("atuantes",atuantes);		 
 		result.include("produtos",this.produtoDao.buscaProdutosByEmpOrg(empresa.getEmpresa_id(),organizacao.getOrganizacao_id()));
 
-		Collection<Usuario> supervisores = new ArrayList<Usuario>();
+		Collection<Usuario> supervisores = new HashSet<Usuario>();
 
 		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Supervisor", "Comercial"));
 		supervisores.addAll(this.usuarioDao.buscaUsuariosByPerfilDepartamento(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Gestor", "Comercial"));

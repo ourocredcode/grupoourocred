@@ -1185,9 +1185,9 @@
 															<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
 													</c:when>
 													<c:when test="${contrato.etapa.nome eq 'Aguardando Redigitação' }">
-															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 1 }">class="success"</c:if>
-															<c:if test="${contrato.qtdDias == 2 }">class="warning"</c:if>
-															<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
+															<c:if test="${contrato.qtdDias >= 0 && contrato.qtdDias <= 2 }">class="success"</c:if>
+															<c:if test="${contrato.qtdDias == 3 }">class="warning"</c:if>
+															<c:if test="${contrato.qtdDias >= 4 }">class="error"</c:if>
 													</c:when>
 													<c:when test="${contrato.etapa.nome eq 'Aguardando Remarcação' }">
 															<c:if test="${contrato.qtdDias == 0 }">class="success"</c:if>
