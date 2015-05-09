@@ -1472,25 +1472,35 @@ function calculaContrato() {
 										
 									} else {
 
-										if(valorContrato.value >= 0 && valorContrato.value <= 4999.99){
+										if(isRco){
+											
+											if(valorContrato.value >= 0 && valorContrato.value <= 4999.99){
 
-											valorMeta.value = 0.0;
-											break;
+												valorMeta.value = 0.0;
+												break;
 
-										} else if (valorContrato.value >= 5000 && valorContrato.value <= 8999.99){
+											} else if (valorContrato.value >= 5000 && valorContrato.value <= 8999.99){
 
-											var metaValue = ( valorContrato.value * arrayCoeficiente[1]) / 2;
-											valorMeta.value = metaValue.toFixed(2);
-											break;
+												var metaValue = ( valorContrato.value * arrayCoeficiente[1]) / 2;
+												valorMeta.value = metaValue.toFixed(2);
+												break;
 
-										} else if (valorContrato.value >= 9000){
+											} else if (valorContrato.value >= 9000){
 
+												var metaValue = valorContrato.value * arrayCoeficiente[1];
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+
+											}
+											
+										} else {
+											
 											var metaValue = valorContrato.value * arrayCoeficiente[1];
 											valorMeta.value = metaValue.toFixed(2);
 											break;
-
+											
 										}
-										
+	
 									}
 									
 								}
