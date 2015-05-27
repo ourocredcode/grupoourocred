@@ -72,7 +72,8 @@ $(document).ready(function() {
 			  			/* 33 - Tabela */     { "bVisible":    false },
 			  			/* 34 - QtdParcelasAberto */     { "bVisible":    false },
 			  			/* 35 - Contrato ID */     { "bVisible":    false },
-			  			/* 36 - Dias Ultima Atualização */     { "bVisible":    false }
+			  			/* 36 - Dias Ultima Atualização */     { "bVisible":    false },
+			  			/* 37 - Desconto */     { "bVisible":    false }
 			  		] ,
 
 		"sDom": ' T C <"clear">lfrtip',
@@ -313,6 +314,9 @@ $(document).ready(function() {
 											<th >
 												Qtd Dias
 											</th>
+											<th >
+												Desconto
+											</th>
 										</tr>
 									</thead>
 									<tbody>		
@@ -434,6 +438,15 @@ $(document).ready(function() {
 														<c:if test="${contrato.qtdDias == 0 }">class="warning"</c:if>
 														<c:if test="${contrato.qtdDias >= 1 }">class="error"</c:if>
 												</c:when>
+												<c:when test="${contrato.etapa.nome eq 'Troca de Físico' }">
+														<c:if test="${contrato.qtdDias <= 1 }">class="success"</c:if>
+														<c:if test="${contrato.qtdDias == 2 }">class="warning"</c:if>
+														<c:if test="${contrato.qtdDias >= 3 }">class="error"</c:if>
+												</c:when>
+												<c:when test="${contrato.etapa.nome eq 'Retorno Troca de Físico' }">
+														<c:if test="${contrato.qtdDias == 1 }">class="success"</c:if>
+														<c:if test="${contrato.qtdDias >= 2 }">class="error"</c:if>
+												</c:when>
 											 	</c:choose> >			  
 												<td >
 													<a href="<c:url value="/contrato/status/${contrato.contrato_id}"/>">${contrato.etapa.nome }</a>
@@ -546,6 +559,9 @@ $(document).ready(function() {
 												</td>
 												<td >
 													${contrato.qtdDias }
+												</td>
+												<td >
+													${contrato.desconto }
 												</td>
 											</tr>
 										</c:forEach>
