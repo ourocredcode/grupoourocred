@@ -9,7 +9,7 @@
 	<option value="">Selecione um coeficiente...</option>
 
 	<c:forEach var="coeficiente" items="${coeficientes}">
-	<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id},${coeficiente.tabela.tabela_id}">${coeficiente.valor} - ${coeficiente.tabela.nome} (<fmt:formatNumber value="${coeficiente.percentualMeta * 100}" maxFractionDigits="0"/>%)</option>
+	<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id},${coeficiente.tabela.tabela_id},${coeficiente.tabela.nome}">${coeficiente.valor} - ${coeficiente.tabela.nome} (<fmt:formatNumber value="${coeficiente.percentualMeta * 100}" maxFractionDigits="0"/>%)</option>
 	</c:forEach>
 
 </c:if>

@@ -101,6 +101,8 @@ function calculaContrato() {
 	var coeficiente = document.getElementById("coeficiente");
 	coeficiente.value = arrayCoeficiente[2];
 
+	var tabelaNome = arrayCoeficiente[4];
+
 	var isRco = true;
 	var isRcoBGN = true;
 
@@ -1198,16 +1200,216 @@ function calculaContrato() {
 										
 									} else {
 									
-										metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-										valorMeta.value = metaValue.toFixed(2);
-										
-										break;
+										 if(isRco){
+
+											 if(tabelaNome == 'INSS 72'){
+
+												 if(valorContrato.value <= 2499.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 2500.00 && valorContrato.value <= 2999.99){
+
+													var metaValue = (valorContrato.value * 0.1) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3499.99){
+
+													var metaValue = (valorContrato.value * 0.4) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 3500.00 && valorContrato.value <= 3999.99){
+
+													var metaValue = (valorContrato.value * 0.65) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
+
+													var metaValue = ( valorContrato.value * 0.70 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 5000.00 && valorContrato.value <= 7499.99){
+
+													var metaValue = ( valorContrato.value * 0.75 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 7500.00 ){
+
+													var metaValue = ( valorContrato.value * 0.85 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+												}
+
+											}  else if (tabelaNome == 'FLEX 1.72'){
+
+												if(valorContrato.value <= 1999.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 2000.00 && valorContrato.value <= 2499.99){
+
+													var metaValue = ( valorContrato.value * 0.05 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 2500.00 && valorContrato.value <= 2999.99){
+
+													var metaValue = ( valorContrato.value * 0.07 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3499.99){
+
+													var metaValue = ( valorContrato.value * 0.25 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 3500.00 && valorContrato.value <= 3999.99){
+
+													var metaValue = ( valorContrato.value * 0.45 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
+
+													var metaValue = ( valorContrato.value * 0.50 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 5000.00 ){
+
+													var metaValue = ( valorContrato.value * 0.60 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+												}
+
+											} else if (tabelaNome == 'FLEX 2.72'){
+
+												if(valorContrato.value <= 2499.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 2500.00 && valorContrato.value <= 2999.99){
+
+													var metaValue =  ( valorContrato.value * 0.05 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3999.99){
+
+													var metaValue = ( valorContrato.value * 0.15 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
+
+													var metaValue = ( valorContrato.value * 0.40 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												}  else if (valorContrato.value >= 5000.00 ){
+
+													var metaValue = ( valorContrato.value * 0.45 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+												}
+
+											} else if (tabelaNome == 'FLEX 3.72'){
+
+												if(valorContrato.value <= 2999.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3999.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
+
+													var metaValue = ( valorContrato.value * 0.1 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 5000.00 ){
+
+													var metaValue = ( valorContrato.value * 0.15 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+												}
+
+											} else if (tabelaNome == 'FLEX 4.72'){
+
+												if(valorContrato.value <= 4999.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 5000.00 && valorContrato.value <= 9999.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 10000.00 && valorContrato.value <= 14999.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 15000.00 && valorContrato.value <= 19999.99){
+
+													var metaValue = ( valorContrato.value * 0.10 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+
+												} else if (valorContrato.value >= 20000.00 ){
+
+													var metaValue = ( valorContrato.value * 0.15 ) * (comissaoLiquido/comissaoBruto);
+													valorMeta.value = metaValue.toFixed(2);
+													break;
+												}
+
+											} else if (tabelaNome == 'FLEX 5.72'){
+
+												if (valorContrato.value <= 19999.99){
+
+													valorMeta.value = 0.0;
+													break;
+
+												} else if (valorContrato.value >= 20000.00 ){
+
+													valorMeta.value = 0.0;
+													break;
+
+												}
+
+											} else {
+												
+												var metaValue = valorContrato.value * arrayCoeficiente[1];
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+
+											}
+		
+										} else {
+
+											var metaValue = valorContrato.value * arrayCoeficiente[1];
+											valorMeta.value = metaValue.toFixed(2);
+											break;
+											
+										}
 										
 									}
 									
 								}
-								
-								
 
 							}
 							
@@ -2691,7 +2893,7 @@ window.onload = function() {
 								</c:if>
 								<c:if test="${not empty contrato.contrato_id}">
 									<c:forEach items="${coeficientes}" var="coeficiente">
-										<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id},${coeficiente.tabela.tabela_id}" 
+										<option value="${coeficiente.valor},${coeficiente.percentualMeta},${coeficiente.coeficiente_id},${coeficiente.tabela.tabela_id},${coeficiente.tabela.nome}" 
 											<c:if test="${contrato.coeficiente.coeficiente_id eq coeficiente.coeficiente_id}">selected="selected"</c:if>>${coeficiente.valor} - ${coeficiente.tabela.nome} (<fmt:formatNumber value="${coeficiente.percentualMeta * 100}" maxFractionDigits="0"/>%) </option>
 									</c:forEach>
 								</c:if>
