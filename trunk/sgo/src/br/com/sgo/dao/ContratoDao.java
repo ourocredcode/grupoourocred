@@ -963,6 +963,25 @@ public class ContratoDao extends Dao<Contrato> {
 
 				sql += " ) OR ( CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? AND ( CONTRATO.datastatusfinal BETWEEN ? AND ? ) ";
 
+				
+				x = 0;
+				sql += " AND ( 1=1 ";
+
+				for(Long convenioAux : convenios){
+
+					clause = x <= 0 ? "AND" : "OR";
+
+					if(convenioAux != null) {
+						sql += clause + " ( CONTRATO.convenio_id = ? ) ";
+						x++;
+						clause = "";
+					}
+
+				}
+
+				sql += " ) ";
+				
+				
 				x=0;
 				
 				sql += " AND ( 1=1 ";
@@ -1009,6 +1028,25 @@ public class ContratoDao extends Dao<Contrato> {
 
 				sql += " AND (   CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? AND CONTRATO.datastatusfinal BETWEEN ? AND ? )";
 				
+				
+				x = 0;
+				sql += " AND ( 1=1 ";
+
+				for(Long convenioAux : convenios){
+
+					clause = x <= 0 ? "AND" : "OR";
+
+					if(convenioAux != null) {
+						sql += clause + " ( CONTRATO.convenio_id = ? ) ";
+						x++;
+						clause = "";
+					}
+
+				}
+
+				sql += " ) ";
+				
+				
 				x=0;
 
 				sql += " AND ( 1=1 ";
@@ -1037,6 +1075,24 @@ public class ContratoDao extends Dao<Contrato> {
 			if(comboSearch) {
 
 				sql += " ) OR ( CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? AND (CONTRATO.dataconclusao BETWEEN ? AND ? )";
+				
+				x = 0;
+				sql += " AND ( 1=1 ";
+
+				for(Long convenioAux : convenios){
+
+					clause = x <= 0 ? "AND" : "OR";
+
+					if(convenioAux != null) {
+						sql += clause + " ( CONTRATO.convenio_id = ? ) ";
+						x++;
+						clause = "";
+					}
+
+				}
+
+				sql += " ) ";
+				
 				
 				x=0;
 				
@@ -1081,6 +1137,24 @@ public class ContratoDao extends Dao<Contrato> {
 			} else {
 
 				sql += " AND (  CONTRATO.empresa_id = ? AND CONTRATO.organizacao_id = ? AND CONTRATO.dataconclusao BETWEEN ? AND ? )";
+				
+				x = 0;
+				sql += " AND ( 1=1 ";
+
+				for(Long convenioAux : convenios){
+
+					clause = x <= 0 ? "AND" : "OR";
+
+					if(convenioAux != null) {
+						sql += clause + " ( CONTRATO.convenio_id = ? ) ";
+						x++;
+						clause = "";
+					}
+
+				}
+
+				sql += " ) ";
+				
 				
 				x=0;
 				
@@ -1280,6 +1354,15 @@ public class ContratoDao extends Dao<Contrato> {
 				this.stmt.setTimestamp(curr,new Timestamp(CustomDateUtil.getCalendarFim(calStatusFinalFim).getTimeInMillis()));
 				curr++;
 				
+				for(Long convenioAux2 : convenios){
+
+					if(convenioAux2 != null ) {
+						this.stmt.setLong(curr, convenioAux2);
+						curr++;
+					}
+
+				}
+				
 				for(String statusFinalAux2 : statusFinal){
 
 					if(!statusFinalAux2.equals("")) {
@@ -1314,6 +1397,15 @@ public class ContratoDao extends Dao<Contrato> {
 				curr++;
 				
 				//System.out.println(CustomDateUtil.getCalendarFim(calConclusaoFim).getTime());
+				
+				for(Long convenioAux2 : convenios){
+
+					if(convenioAux2 != null ) {
+						this.stmt.setLong(curr, convenioAux2);
+						curr++;
+					}
+
+				}
 				
 				for(String statusFinalAux2 : statusFinal){
 

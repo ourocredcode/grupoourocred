@@ -1,6 +1,5 @@
 package br.com.sgo.controller;
 
-import java.sql.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
