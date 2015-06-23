@@ -498,7 +498,7 @@ public class ContratoController {
 			this.contrato.setValorContratoLiquido(this.contrato.getValorContrato());
 		}
 
-		this.contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), 
+		this.contrato.setWorkflow(this.workflowDao.buscaWorkflowByEmpresaOrganizacaoBancoProdutoConvenio(this.contrato.getEmpresa().getEmpresa_id(),this.contrato.getOrganizacao().getOrganizacao_id(), 
 				contrato.getBanco().getBanco_id(), contrato.getProduto().getProduto_id() ,this.contrato.getConvenio().getConvenio_id()));
 
 		this.contratoDao.beginTransaction();
