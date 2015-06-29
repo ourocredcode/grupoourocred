@@ -491,7 +491,7 @@ public class ContratoController {
 				|| this.contrato.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 			this.contrato.setValorContratoLiquido(this.contrato.getValorLiquido());
 
-		if(this.contrato.getProduto().getNome().equals("CARTAO CREDITO"))
+		if(this.contrato.getProduto().getNome().equals("CARTAO CREDITO") || this.contrato.getProduto().getNome().equals("SEGURO VIDA"))
 			this.contrato.setValorContratoLiquido(0.0);
 		
 		if(this.contrato.getBanco().getNome().equals("Sabemi")){
