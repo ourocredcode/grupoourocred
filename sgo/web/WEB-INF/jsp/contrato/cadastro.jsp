@@ -1010,12 +1010,284 @@ function calculaContrato() {
 						}
 						
 					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
 
-						break;
-						
+						if(contratoProdutoNome == 'SEGURO VIDA'){
+
+							if(tabelaNome == 'SV3M24'){
+								valorParcela.value = 121.46;
+								calculaValorContratoSimples();
+								break;
+							}
+
+							if(tabelaNome == 'SV3M36'){
+								valorParcela.value = 182.20;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV3M48'){
+								valorParcela.value = 242.93;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							
+							if(tabelaNome == 'SV3M54'){
+								valorParcela.value = 273.29;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							
+							if(tabelaNome == 'SV3M60'){
+								valorParcela.value = 303.65;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV3M66'){
+								valorParcela.value = 334.03;
+								calculaValorContratoSimples();
+								break;
+							}
+
+							if(tabelaNome == 'SV3M72'){
+								valorParcela.value = 364.39;
+								calculaValorContratoSimples();
+								break;
+							}
+
+							if(tabelaNome == 'SV3M78'){
+								valorParcela.value = 394.76;
+								calculaValorContratoSimples();
+								break;
+							}
+
+							if(tabelaNome == 'SV3M84'){
+								valorParcela.value = 425.12;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV3M90'){
+								valorParcela.value = 455.49;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV3M96'){
+								valorParcela.value = 485.86;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M36'){
+								valorParcela.value = 349.19;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M48'){
+								valorParcela.value = 404.88;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M54'){
+								valorParcela.value = 455.48;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M60'){
+								valorParcela.value = 506.10;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M66'){
+								valorParcela.value = 556.71;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M72'){
+								valorParcela.value = 607.33;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M78'){
+								valorParcela.value = 657.94;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M84'){
+								valorParcela.value = 708.54;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M90'){
+								valorParcela.value = 759.16;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV5M96'){
+								valorParcela.value = 809.77;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV6M24'){
+								valorParcela.value = 260.50;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M24'){
+								valorParcela.value = 303.66;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M36'){
+								valorParcela.value = 455.47;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M48'){
+								valorParcela.value = 607.32;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M54'){
+								valorParcela.value = 683.24;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M60'){
+								valorParcela.value = 759.15;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M66'){
+								valorParcela.value = 835.07;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M72'){
+								valorParcela.value = 910.98;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M78'){
+								valorParcela.value = 986.90;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M84'){
+								valorParcela.value = 1062.81;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M90'){
+								valorParcela.value = 1138.73;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV7M96'){
+								valorParcela.value = 1214.64;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M24'){
+								valorParcela.value = 404.87;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M36'){
+								valorParcela.value = 607.31;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M48'){
+								valorParcela.value = 809.76;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M54'){
+								valorParcela.value = 910.99;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M60'){
+								valorParcela.value = 1012.20;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M66'){
+								valorParcela.value = 1113.42;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M72'){
+								valorParcela.value = 1214.65;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M78'){
+								valorParcela.value = 1315.86;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M84'){
+								valorParcela.value = 1417.08;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M90'){
+								valorParcela.value = 1518.30;
+								calculaValorContratoSimples();
+								break;
+							}
+							
+							if(tabelaNome == 'SV10M96'){
+								valorParcela.value = 1619.52;
+								calculaValorContratoSimples();
+								break;
+							}
+
+						} else {
+							
+							var metaValue = valorContrato.value * arrayCoeficiente[1];
+							valorMeta.value = metaValue.toFixed(2);
+
+							break;
+							
+						}
+
 					}	
 					
 					
@@ -1770,7 +2042,8 @@ function verificaProduto() {
 	var parcelasAberto = document.getElementById("parcelasAberto");
 	var valorDivida = document.getElementById("valorDivida");
 	var valorSeguro = document.getElementById("valorSeguro");
-	
+	var valorParcela = document.getElementById("valorParcela");
+	var desconto = document.getElementById("desconto");
 	var contratoProduto = document.getElementById("contratoProduto");
 	var contratoProdutoNome = contratoProduto.options[contratoProduto.selectedIndex].text;
 	
@@ -1781,6 +2054,8 @@ function verificaProduto() {
 	switch (contratoProdutoNome) {
 
 		case 'MARGEM LIMPA':
+			
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1796,6 +2071,8 @@ function verificaProduto() {
 			break;
 			
 		case 'MARGEM LIMPA PMSP':
+			
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1811,6 +2088,8 @@ function verificaProduto() {
 			break;
 			
 		case 'MARGEM LIMPA PMRP':
+			
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1826,6 +2105,8 @@ function verificaProduto() {
 			break;	
 			
 		case 'MARGEM LIMPA GOVRJ':
+			
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1841,6 +2122,8 @@ function verificaProduto() {
 			break;	
 			
 		case 'MARGEM LIMPA GOVSP':
+			
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1856,6 +2139,8 @@ function verificaProduto() {
 			break;		
 	
 		case 'MARGEM LIMPA SIAPE':
+			
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1871,6 +2156,8 @@ function verificaProduto() {
 			break;
 			
 		case 'DEBITO':
+			
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1886,6 +2173,8 @@ function verificaProduto() {
 			break;
 			
 		case 'CARTAO CREDITO':
+			
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1899,8 +2188,31 @@ function verificaProduto() {
 				calculaContrato();
 
 			break;	
+			
+			
+		case 'SEGURO VIDA':
+			
+			desabilita(valorParcela);
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			desconto.value = '';
+			parcelasAberto.value = '';
+			valorDivida.value = '';
+
+			break;	
 
 		case 'AUMENTO':
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
@@ -1916,6 +2228,7 @@ function verificaProduto() {
 			break;
 
 		case 'RECOMPRA INSS':
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -1931,6 +2244,7 @@ function verificaProduto() {
 			break;
 		
 		case 'PORTABILIDADE/REFIN':
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -1946,6 +2260,7 @@ function verificaProduto() {
 			break;
 
 		case 'RECOMPRA GOVRJ':
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -1961,6 +2276,7 @@ function verificaProduto() {
 			break;	
 		
 		case 'RECOMPRA GOVSP':
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -1977,6 +2293,7 @@ function verificaProduto() {
 			
 			
 		case 'RECOMPRA PMSP':
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -1992,6 +2309,7 @@ function verificaProduto() {
 			break;
 			
 		case 'RECOMPRA PMRP':
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2007,6 +2325,7 @@ function verificaProduto() {
 			break;	
 			
 		case 'RECOMPRA SIAPE':
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2022,6 +2341,7 @@ function verificaProduto() {
 			break;	
 
 		case 'RECOMPRA RMC':
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			desabilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2040,6 +2360,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2048,8 +2369,6 @@ function verificaProduto() {
 			desabilita(valorLiquido);
 			desabilita(prazo);
 			observacao.value = "";
-
-			
 
 			if(valorContrato.value != '')
 				calculaContrato();
@@ -2060,6 +2379,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2068,8 +2388,6 @@ function verificaProduto() {
 			desabilita(valorLiquido);
 			desabilita(prazo);
 			observacao.value = "";
-
-			
 
 			if(valorContrato.value != '')
 				calculaContrato();
@@ -2080,6 +2398,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2088,8 +2407,6 @@ function verificaProduto() {
 			desabilita(valorLiquido);
 			desabilita(prazo);
 			observacao.value = "";
-
-			
 
 			if(valorContrato.value != '')
 				calculaContrato();
@@ -2100,6 +2417,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2108,8 +2426,6 @@ function verificaProduto() {
 			desabilita(valorLiquido);
 			desabilita(prazo);
 			observacao.value = "";
-
-			
 
 			if(valorContrato.value != '')
 				calculaContrato();
@@ -2120,6 +2436,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2140,6 +2457,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			habilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2160,6 +2478,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2177,6 +2496,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2195,6 +2515,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2213,6 +2534,7 @@ function verificaProduto() {
 
 			$("#bancoComprado").select2().select2('val',contratoBanco.value);
 
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			habilita(parcelasAberto);
 			habilita(valorDivida);
@@ -2229,6 +2551,7 @@ function verificaProduto() {
 			
 		case 'MARGEM C.E.F':
 
+			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorContrato);
@@ -2397,6 +2720,16 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'CARTAO CREDITO'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
+		if(contratoProdutoNome == 'SEGURO VIDA'){
 
 			if(valorParcela.value == ''){
 				alert(" Valor Parcela é campo obrigatório.");
@@ -2735,6 +3068,24 @@ function validaForm(form) {
 	} else {
 		return false;
 	}
+
+}
+
+function calculaValorContratoSimples(){
+
+	var valorContrato = document.getElementById("valorContrato");
+	var valorLiquido = document.getElementById("valorLiquido");
+	var valorMeta = document.getElementById("valorMeta");
+	var valorParcela = document.getElementById("valorParcela");
+	var auxCoeficiente = document.getElementById("auxCoeficiente");	
+	var arrayCoeficiente = auxCoeficiente.value.split(',');
+
+	var contratoValue = valorParcela.value / arrayCoeficiente[0];
+	valorContrato.value = contratoValue.toFixed(2);
+	valorLiquido.value = contratoValue.toFixed(2);
+	
+	var metaValue = valorContrato.value * arrayCoeficiente[1];
+	valorMeta.value = metaValue.toFixed(2);
 
 }
 
