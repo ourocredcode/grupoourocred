@@ -499,14 +499,14 @@ function calculaContrato() {
 							} else {
 								
 								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
-								var RCO = 0;
+								var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
+								//var RCO = 0;
 								var comissaoBruto = metaValue * 0.17;
 
-								var comissaoLiquido = comissaoBruto - RCO;
+								var comissaoLiquido = comissaoBruto -  ( RCO / 2) ;
 
 								if(comissaoLiquido <= 0){
-									
+
 									if(contratoId != ''){
 
 										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
@@ -528,19 +528,115 @@ function calculaContrato() {
 									
 								} else {
 								
-									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									//valorMeta.value = metaValue.toFixed(2);
-									
-									metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
+									 if(isRco){
+
+										 if(tabelaNome == 'INSS 72 P'){
+
+											 if(valorContrato.value <= 2499.99){
+
+												valorMeta.value = 0.0;
+												break;
+
+											} else if (valorContrato.value >= 2500.00 && valorContrato.value <= 2999.99){
+
+												valorMeta.value = 0.0;
+												break;
+
+											} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3499.99){
+
+												valorMeta.value = 0.0;
+												break;
+
+											} else if (valorContrato.value >= 3500.00 && valorContrato.value <= 3999.99){
+
+												var metaValue = (valorContrato.value * 0.50) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+
+											} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
+
+												var metaValue = ( valorContrato.value * 0.50 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+
+											} else if (valorContrato.value >= 5000.00 && valorContrato.value <= 9999.99){
+
+												var metaValue = ( valorContrato.value * 0.65 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+												
+											} else if (valorContrato.value >= 10000.00 && valorContrato.value <= 14999.99){
+
+												var metaValue = ( valorContrato.value * 0.85 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;	
+
+											} else if (valorContrato.value >= 15000.00 ){
+
+												var metaValue = ( valorContrato.value * 0.85 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+											}
+
+										}  else if (tabelaNome == 'INSSC03'){
+
+											if(valorContrato.value <= 4999.99){
+
+												valorMeta.value = 0.0;
+												break;
+
+											} else if (valorContrato.value >= 5000.00 ){
+
+												var metaValue = ( valorContrato.value * 0.35 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+											}
+
+										} else if (tabelaNome == 'INSSC05'){
+
+											if(valorContrato.value <= 9999.99){
+
+												valorMeta.value = 0.0;
+												break;
+
+											} else if (valorContrato.value >= 10000.00 && valorContrato.value <= 14999.99){
+
+												var metaValue =  ( valorContrato.value * 0.15 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+
+											} else if (valorContrato.value >= 15000.00 && valorContrato.value <= 19999.99){
+
+												var metaValue = ( valorContrato.value * 0.20 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+
+											}  else if (valorContrato.value >= 20000.00 ){
+
+												var metaValue = ( valorContrato.value * 0.20 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+											}
+
+										} else {
+											
+											var metaValue = valorContrato.value * arrayCoeficiente[1];
+											valorMeta.value = metaValue.toFixed(2);
+											break;
+
+										}
+	
+									} else {
+
+										var metaValue = valorContrato.value * arrayCoeficiente[1];
+										valorMeta.value = metaValue.toFixed(2);
+										break;
+										
+									}
 									
 								}
 								
 							}
-							
-							
 
 						}
 						
@@ -548,12 +644,15 @@ function calculaContrato() {
 						
 						var metaValue = valorContrato.value * arrayCoeficiente[1];
 						valorMeta.value = metaValue.toFixed(2);
-	
+
 						break;
 						
-					}
-					
-					case 'Agiplan':
+					}	
+				
+				
+				
+				
+				case 'Agiplan':
 					
 						if(isProdRco){
 	
@@ -1425,6 +1524,7 @@ function calculaContrato() {
 							
 						}
 
+						
 					case 'Safra':
 						
 						if(isProdRco){
