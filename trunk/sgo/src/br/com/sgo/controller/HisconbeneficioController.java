@@ -249,11 +249,14 @@ public class HisconbeneficioController {
 		this.hisconBeneficio.setIsImportado(false);
 		this.hisconBeneficio.setIsPadrao(false);
 
-		this.hisconBeneficio.setWorkflow(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Status Hiscon"));
-		this.hisconBeneficio.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Aguardando Supervisor"));
+		Long empresa_id = this.hisconBeneficio.getParceiroBeneficio().getEmpresa().getEmpresa_id();
+		Long organizacao_id = this.hisconBeneficio.getParceiroBeneficio().getOrganizacao().getOrganizacao_id();
 
-		this.hisconBeneficio.setWorkflowPosicao(this.workflowDao.buscaWorkflowPorNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Posicao Hiscon"));
-		this.hisconBeneficio.setEtapaPosicao(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(), "Aguardando Posição"));
+		this.hisconBeneficio.setWorkflow(this.workflowDao.buscaWorkflowPorNome(empresa_id, organizacao_id, "Status Hiscon"));
+		this.hisconBeneficio.setEtapa(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa_id, organizacao_id, "Aguardando Supervisor"));
+
+		this.hisconBeneficio.setWorkflowPosicao(this.workflowDao.buscaWorkflowPorNome(empresa_id, organizacao_id, "Posicao Hiscon"));
+		this.hisconBeneficio.setEtapaPosicao(this.etapaDao.buscaEtapaByEmpresaOrganizacaoNome(empresa_id, organizacao_id, "Aguardando Posição"));
 
 		try {
 
