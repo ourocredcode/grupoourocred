@@ -158,7 +158,10 @@ public class HisconbeneficioController {
 		Boolean aguardandoAverbacao = false;
 
 		//Regra inserida em 06/11/2014 - Evitar solicitação de hiscon com contratos aguardando averbação
-		if(organizacao.getNome().equals("OUROCRED MATRIZ") || organizacao.getNome().equals("OUROCRED RJ") || organizacao.getNome().equals("USECRED")){
+		if(organizacao.getNome().equals("OUROCRED MATRIZ") 
+				|| organizacao.getNome().equals("OUROCRED RJ") 
+				|| organizacao.getNome().equals("USECRED")
+				|| organizacao.getNome().equals("XV NOVEMBRO")){
 
 			Collection<Contrato> verificaContratos = this.contratoDao.buscaContratosByNumeroBeneficio(empresa_id,organizacao_id,numeroBeneficio);
 
