@@ -954,7 +954,7 @@ function calculaContrato() {
 
 		}
 
-		if(organizacao == 'OUROCRED MATRIZ' || organizacao == 'OUROCRED RJ' || organizacao == 'USECRED') {
+		if(organizacao == 'OUROCRED MATRIZ' || organizacao == 'OUROCRED RJ' || organizacao == 'USECRED' || organizacao == 'XV NOVEMBRO') {
 
 			if( contratoProdutoNome != 'REFINANCIAMENTO' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
