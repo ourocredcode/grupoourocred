@@ -544,7 +544,8 @@ function calculaContrato() {
 
 											} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3499.99){
 
-												valorMeta.value = 0.0;
+												var metaValue = (valorContrato.value * 0.25) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
 												break;
 
 											} else if (valorContrato.value >= 3500.00 && valorContrato.value <= 3999.99){
@@ -587,7 +588,7 @@ function calculaContrato() {
 
 											} else if (valorContrato.value >= 5000.00 ){
 
-												var metaValue = ( valorContrato.value * 0.35 ) * (comissaoLiquido/comissaoBruto);
+												var metaValue = ( valorContrato.value * 0.40 ) * (comissaoLiquido/comissaoBruto);
 												valorMeta.value = metaValue.toFixed(2);
 												break;
 											}
