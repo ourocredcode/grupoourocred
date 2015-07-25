@@ -354,7 +354,7 @@
 				
 				</c:if>
 				
-				<c:if test="${ usuarioInfo.perfil.chave == 'Administrador' && usuarioInfo.organizacao.nome == 'XV NOVEMBRO' }">
+				<c:if test="${ usuarioInfo.perfil.chave == 'Administrador' && usuarioInfo.organizacao.nome == 'OUROCRED LOJA01' }">
 				
 					<li class="submenu">
 	
@@ -718,7 +718,7 @@
 				
 				</c:if>
 				
-				<c:if test="${usuarioInfo.perfil.chave == 'Gestor' && usuarioInfo.organizacao.nome == 'XV NOVEMBRO' }">
+				<c:if test="${usuarioInfo.perfil.chave == 'Gestor' && usuarioInfo.organizacao.nome == 'OUROCRED LOJA01' }">
 
 					<li class="submenu">
 						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
@@ -1044,7 +1044,7 @@
 				
 				</c:if>
 				
-				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' && usuarioInfo.organizacao.nome == 'XV NOVEMBRO' }">
+				<c:if test="${usuarioInfo.perfil.chave == 'Administrativo' && usuarioInfo.organizacao.nome == 'OUROCRED LOJA01' }">
 
 					<li class="submenu">
 
@@ -1322,7 +1322,7 @@
 				
 				</c:if>
 				
-				<c:if test="${(usuarioInfo.perfil.chave == 'Supervisor' || usuarioInfo.perfil.chave == 'Consultor') && usuarioInfo.organizacao.nome == 'XV NOVEMBRO' }">
+				<c:if test="${(usuarioInfo.perfil.chave == 'Supervisor' || usuarioInfo.perfil.chave == 'Consultor') && usuarioInfo.organizacao.nome == 'OUROCRED LOJA01' }">
 				
 					<li class="submenu">
 	

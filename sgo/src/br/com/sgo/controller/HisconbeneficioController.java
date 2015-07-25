@@ -161,7 +161,7 @@ public class HisconbeneficioController {
 		if(organizacao.getNome().equals("OUROCRED MATRIZ") 
 				|| organizacao.getNome().equals("OUROCRED RJ") 
 				|| organizacao.getNome().equals("USECRED")
-				|| organizacao.getNome().equals("XV NOVEMBRO")){
+				|| organizacao.getNome().equals("OUROCRED LOJA01")){
 
 			Collection<Contrato> verificaContratos = this.contratoDao.buscaContratosByNumeroBeneficio(empresa_id,organizacao_id,numeroBeneficio);
 
