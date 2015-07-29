@@ -581,9 +581,21 @@ function calculaContrato() {
 
 										}  else if (tabelaNome == 'INSSC03'){
 
-											if(valorContrato.value <= 4999.99){
+											if(valorContrato.value <= 2999.99){
 
 												valorMeta.value = 0.0;
+												break;
+
+										  	}  else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3999.99){
+
+												var metaValue = (valorContrato.value * 0.15) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
+												break;
+												
+										  	} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99 ){
+
+												var metaValue = ( valorContrato.value * 0.20 ) * (comissaoLiquido/comissaoBruto);
+												valorMeta.value = metaValue.toFixed(2);
 												break;
 
 											} else if (valorContrato.value >= 5000.00 ){
