@@ -424,7 +424,9 @@ public class FormularioController {
 					|| c.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 				c.setValorContratoLiquido(c.getValorLiquido());
 
-			if(c.getProduto().getNome().equals("CARTAO CREDITO") || c.getProduto().getNome().equals("SEGURO VIDA"))
+			if(c.getProduto().getNome().equals("CARTAO CREDITO") 
+					|| c.getProduto().getNome().equals("CARTAO CONSIGNADO")
+					|| c.getProduto().getNome().equals("SEGURO VIDA"))
 				c.setValorContratoLiquido(0.0);
 
 			if(c.getBanco().getNome().equals("Sabemi")){
@@ -622,7 +624,17 @@ public class FormularioController {
 
 				countContratos +=1;
 
-				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA PMRP") || c.getProduto().equals("MARGEM LIMPA SIAPE") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("MARGEM LIMPA GOVSP") || c.getProduto().equals("DEBITO") || c.getProduto().equals("CARTAO CREDITO") || c.getProduto().equals("SEGURO VIDA") || c.getProduto().equals("AUMENTO") )
+				if(c.getProduto().equals("MARGEM LIMPA") 
+							|| c.getProduto().equals("MARGEM LIMPA PMSP") 
+							|| c.getProduto().equals("MARGEM LIMPA PMRP") 
+							|| c.getProduto().equals("MARGEM LIMPA SIAPE") 
+							|| c.getProduto().equals("MARGEM LIMPA GOVRJ") 
+							|| c.getProduto().equals("MARGEM LIMPA GOVSP") 
+							|| c.getProduto().equals("DEBITO") 
+							|| c.getProduto().equals("CARTAO CREDITO") 
+							|| c.getProduto().equals("CARTAO CONSIGNADO")
+							|| c.getProduto().equals("SEGURO VIDA") 
+							|| c.getProduto().equals("AUMENTO") )
 					countMargemLimpa += 1;
 				if(c.getProduto().equals("RECOMPRA INSS") ||   c.getProduto().equals("PORTABILIDADE/REFIN") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA PMRP") || c.getProduto().equals("RECOMPRA GOVRJ") || c.getProduto().equals("RECOMPRA GOVSP") || c.getProduto().equals("RECOMPRA SIAPE"))
 					countRecompraINSS += 1;
@@ -797,7 +809,17 @@ public class FormularioController {
 
 				countContratos +=1;
 
-				if(c.getProduto().equals("MARGEM LIMPA") || c.getProduto().equals("MARGEM LIMPA PMSP") || c.getProduto().equals("MARGEM LIMPA PMRP") || c.getProduto().equals("MARGEM LIMPA SIAPE") || c.getProduto().equals("MARGEM LIMPA GOVRJ") || c.getProduto().equals("MARGEM LIMPA GOVSP") || c.getProduto().equals("DEBITO") || c.getProduto().equals("CARTAO CREDITO") || c.getProduto().equals("SEGURO VIDA") || c.getProduto().equals("AUMENTO") )
+				if(c.getProduto().equals("MARGEM LIMPA") 
+							|| c.getProduto().equals("MARGEM LIMPA PMSP") 
+							|| c.getProduto().equals("MARGEM LIMPA PMRP") 
+							|| c.getProduto().equals("MARGEM LIMPA SIAPE") 
+							|| c.getProduto().equals("MARGEM LIMPA GOVRJ") 
+							|| c.getProduto().equals("MARGEM LIMPA GOVSP") 
+							|| c.getProduto().equals("DEBITO") 
+							|| c.getProduto().equals("CARTAO CREDITO")
+							|| c.getProduto().equals("CARTAO CONSIGNADO") 
+							|| c.getProduto().equals("SEGURO VIDA") 
+							|| c.getProduto().equals("AUMENTO") )
 					countMargemLimpa += 1;
 				if(c.getProduto().equals("RECOMPRA INSS") || c.getProduto().equals("PORTABILIDADE/REFIN") || c.getProduto().equals("RECOMPRA PMSP") || c.getProduto().equals("RECOMPRA PMRP") || c.getProduto().equals("RECOMPRA GOVRJ") || c.getProduto().equals("RECOMPRA GOVSP") || c.getProduto().equals("RECOMPRA SIAPE"))
 					countRecompraINSS += 1;

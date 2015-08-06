@@ -117,7 +117,8 @@ function calculaContrato() {
 
 	//alert(isRco);
 
-	if(bancoCompradoNome == 'Bradesco' || bancoCompradoNome == 'BMC' || bancoCompradoNome == 'Bonsucesso' || bancoCompradoNome == 'Santander' || bancoCompradoNome == 'Banrisul' 
+	if(bancoCompradoNome == 'Bradesco' || bancoCompradoNome == 'BMC' || bancoCompradoNome == 'Bonsucesso' || bancoCompradoNome == 'Santander' 
+			|| bancoCompradoNome == 'Banrisul' 
 			|| bancoCompradoNome == 'Paraná' || bancoCompradoNome == 'HSBC' || bancoCompradoNome == 'Banco do Brasil S/A' 
 			|| bancoCompradoNome == 'Caixa Econômica Federal'){
 		isRcoBGN = false ;
@@ -974,6 +975,7 @@ function calculaContrato() {
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
 					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
 					&& contratoProdutoNome != 'REFINANCIAMENTO SIAPE'
+					&& contratoProdutoNome != 'CARTAO CONSIGNADO'
 					//&& contratoProdutoNome != 'RETENÇÃO'  && contratoProdutoNome != 'RETENÇÃO PMSP' && contratoProdutoNome != 'RETENÇÃO GOVRJ' 
 					){
 
@@ -2116,13 +2118,37 @@ function calculaContrato() {
 			} else {
 
 				switch(contratoBancoNome) {
-				
+
 					case 'Panamericano':
 
-						var metaValue = valorLiquido.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-						break;
+						if(contratoProdutoNome == 'CARTAO CONSIGNADO'){
+
+							valorMeta.value = '15.0';
+							break;
+
+						} else {
+
+							var metaValue = valorLiquido.value * arrayCoeficiente[1];
+							valorMeta.value = metaValue.toFixed(2);
+							break;
+
+						}
 						
+					case 'Bonsucesso':
+
+						if(contratoProdutoNome == 'CARTAO CONSIGNADO'){
+
+							valorMeta.value = '15.0';							
+							break;
+
+						} else {
+
+							var metaValue = valorLiquido.value * arrayCoeficiente[1];
+							valorMeta.value = metaValue.toFixed(2);
+							break;
+
+						}	
+
 					case 'Sabemi':
 
 						var metaValue = valorContrato.value * arrayCoeficiente[1];
@@ -2287,6 +2313,24 @@ function verificaProduto() {
 			
 		case 'CARTAO CREDITO':
 			
+			habilita(valorParcela);
+			desabilita(bancoComprado);
+			desabilita(parcelasAberto);
+			desabilita(valorDivida);
+			desabilita(valorSeguro);
+			desabilita(valorContrato);
+			desabilita(valorLiquido);
+			desabilita(prazo);
+			observacao.value = "";
+
+			if(valorContrato.value != '')
+				calculaContrato();
+
+			break;	
+			
+		
+		case 'CARTAO CONSIGNADO':
+
 			habilita(valorParcela);
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
@@ -2833,6 +2877,16 @@ function validaForm(form) {
 		}
 		
 		if(contratoProdutoNome == 'CARTAO CREDITO'){
+
+			if(valorParcela.value == ''){
+				alert(" Valor Parcela é campo obrigatório.");
+				valorParcela.focus();
+				return false;
+			}
+
+		}
+		
+		if(contratoProdutoNome == 'CARTAO CONSIGNADO'){
 
 			if(valorParcela.value == ''){
 				alert(" Valor Parcela é campo obrigatório.");
