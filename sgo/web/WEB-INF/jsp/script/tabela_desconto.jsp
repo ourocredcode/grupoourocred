@@ -11,6 +11,10 @@ function mostra(div){
 	document.getElementById("bancosmediosBB_CEF").style.display = "none";
 	document.getElementById("bancosmedios").style.display = "none";
 	document.getElementById("bancosruins").style.display = "none";
+	document.getElementById("bancosbons72").style.display = "none";
+	document.getElementById("bancosmedios72").style.display = "none";
+	document.getElementById("bancosruins72").style.display = "none";
+	document.getElementById("bancosbmc72").style.display = "none";
 
 	if(document.getElementById(div).style.display == "none") {
 		document.getElementById(div).style.display = "inline";
@@ -48,6 +52,10 @@ function mostra(div){
 			 	<li><a href="#" onclick="mostra('bancosmediosBB_CEF');">Bancos Médios Banco Brasil / C.E.F.</a></li>
 			 	<li><a href="#" onclick="mostra('bancosmedios');">Bancos Médios</a></li>
 			 	<li><a href="#" onclick="mostra('bancosruins');">Bancos Ruins</a></li>
+			 	<li><a href="#" onclick="mostra('bancosbons72');">Bancos Bons 72</a></li>
+			 	<li><a href="#" onclick="mostra('bancosmedios72');">Bancos Médios 72</a></li>
+			 	<li><a href="#" onclick="mostra('bancosruins72');">Bancos Ruins 72</a></li>
+			 	<li><a href="#" onclick="mostra('bancosbmc72');">Banco BMC 72</a></li>
 			</ul>
 			</div>
 			
@@ -105,6 +113,42 @@ function mostra(div){
 			
 			</div>
 			
+			<div id="bancosbons72" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">Bancos Bons 72 </h2><br/> 
+			
+				<iframe src="<c:url value="/visualizaScript/tabelaDescontos_bancosBons72.pdf"/>" style="width: 65%;height: 800px"></iframe>
+			
+			</div>
+			
+			<div id="bancosmedios72" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">Bancos Médios 72 </h2><br/> 
+			
+				<iframe src="<c:url value="/visualizaScript/tabelaDescontos_bancosMedios72.pdf"/>" style="width: 65%;height: 800px"></iframe>
+			
+			</div>
+			
+			<div id="bancosruins72" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">Bancos Ruins 72 </h2><br/> 
+			
+				<iframe src="<c:url value="/visualizaScript/tabelaDescontos_bancosRuins72.pdf"/>" style="width: 65%;height: 800px"></iframe>
+			
+			</div>
+			
+			<div id="bancosbmc72" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">Banco BMC 72 </h2><br/> 
+			
+				<iframe src="<c:url value="/visualizaScript/tabelaDescontos_BMC72.pdf"/>" style="width: 65%;height: 800px"></iframe>
+			
+			</div>
+
 		</div>
 		
 	</div>

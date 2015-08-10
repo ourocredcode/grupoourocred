@@ -13,6 +13,7 @@ function mostra(div){
 	document.getElementById("bmg_siape").style.display = "none";
 	document.getElementById("bonsucesso").style.display = "none";
 	document.getElementById("bonsucesso_siape").style.display = "none";
+	document.getElementById("bonsucesso_rmc").style.display = "none";
 	document.getElementById("bradesco").style.display = "none";
 	document.getElementById("daycoval").style.display = "none";
 	document.getElementById("daycoval_siape").style.display = "none";
@@ -61,6 +62,7 @@ function mostra(div){
 				<li><a href="#" onclick="mostra('bmg_siape');">BMG (SIAPE)</a></li>
 			 	<li><a href="#" onclick="mostra('bonsucesso');">BONSUCESSO</a></li>
 			 	<li><a href="#" onclick="mostra('bonsucesso_siape');">BONSUCESSO (SIAPE)</a></li>
+			 	<li><a href="#" onclick="mostra('bonsucesso_rmc');">BONSUCESSO (RMC)</a></li>
 			 	<li><a href="#" onclick="mostra('bradesco');">BRADESCO</a></li>
 			 	<li><a href="#" onclick="mostra('daycoval');">DAYCOVAL</a></li>
 			 	<li><a href="#" onclick="mostra('daycoval_siape');">DAYCOVAL (SIAPE)</a></li>
@@ -144,6 +146,15 @@ function mostra(div){
 			<h2 style="color: #b5b5b5;">BONSUCESSO (SIAPE)</h2><br/>
 			
 				<iframe src="<c:url value="/visualizaScript/politicas_bonsucesso_siape.pdf"/>" style="width: 70%;height: 800px"></iframe>
+			
+			</div>
+			
+			<div id="bonsucesso_rmc" style="display: none;font-size: 16px;">
+			
+			<br/>
+			<h2 style="color: #b5b5b5;">BONSUCESSO (RMC)</h2><br/>
+			
+				<iframe src="<c:url value="/visualizaScript/politicas_bonsucesso_rmc.pdf"/>" style="width: 70%;height: 800px"></iframe>
 			
 			</div>
 			
