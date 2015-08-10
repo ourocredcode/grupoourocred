@@ -201,10 +201,9 @@ public class ControleformularioController {
 
 			if(c.getEtapa().getNome().equals("Aguardando Pós Venda") || c.getEtapa().getNome().equals("Aguardando Qualidade")){
 
-				//Regra inserida para CARTAO CREDITO/ CONSIGNADO / SEGURO VIDA Não passar por aguardando Logistica -- Felipe Almeida 15-09-2014
+				//Regra inserida para CARTAO CREDITO/SEGURO VIDA Não passar por aguardando Logistica -- Felipe Almeida 15-09-2014
 				if(!status.equals("Recalcular")){
 					status = ( c.getProduto().getNome().equals("CARTAO CREDITO") 
-							|| c.getProduto().getNome().equals("CARTAO CONSIGNADO")
 							|| c.getProduto().getNome().equals("SEGURO VIDA") ) && status.equals("Aguardando Logística") ? "Aguardando Digitação" : "Aguardando Logística";
 				}
 				
