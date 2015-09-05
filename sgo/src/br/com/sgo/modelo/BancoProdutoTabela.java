@@ -75,6 +75,9 @@ public class BancoProdutoTabela implements Serializable {
 	@Column(name = "isactive")
 	private Boolean isActive;
 
+	@Column(name = "valorRemuneracaoFixo")
+	private Double valorRemuneracaoFixo;
+
 	public Long getBancoProdutoTabela_id() {
 		return bancoProdutoTabela_id;
 	}
@@ -193,6 +196,14 @@ public class BancoProdutoTabela implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Double getValorRemuneracaoFixo() {
+		return valorRemuneracaoFixo;
+	}
+
+	public void setValorRemuneracaoFixo(Double valorRemuneracaoFixo) {
+		this.valorRemuneracaoFixo = valorRemuneracaoFixo;
 	}
 
 }

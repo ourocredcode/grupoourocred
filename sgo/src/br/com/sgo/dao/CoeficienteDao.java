@@ -32,7 +32,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 	private String sqlCoeficientes = "SELECT COEFICIENTE.empresa_id, EMPRESA.nome AS empresa_nome, COEFICIENTE.organizacao_id "+
 									", ORGANIZACAO.nome AS organizacao_nome, COEFICIENTE.banco_id, BANCO.nome AS banco_nome, COEFICIENTE.tabela_id "+
 									", TABELA.nome AS tabela_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.created, COEFICIENTE.updated, COEFICIENTE.isactive "+
-									", COEFICIENTE.percentualmeta, COEFICIENTE.valor "+
+									", COEFICIENTE.percentualmeta, COEFICIENTE.percentualcomissao, COEFICIENTE.valor "+
 									" FROM (((COEFICIENTE (NOLOCK) INNER JOIN BANCO (NOLOCK) ON COEFICIENTE.banco_id = BANCO.banco_id) "+ 
 									" INNER JOIN TABELA (NOLOCK) ON COEFICIENTE.tabela_id = TABELA.tabela_id) "+
 									" INNER JOIN EMPRESA (NOLOCK) ON COEFICIENTE.empresa_id = EMPRESA.empresa_id) "+
@@ -125,7 +125,13 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 
 	public Collection<Coeficiente> buscaCoeficientesByBancoProduto(Long banco_id, Long produto_id) {
 		
-		String sql = " SELECT COEFICIENTE.tabela_id, TABELA.nome AS tabela_nome, COEFICIENTE.coeficiente_id, COEFICIENTE.valor, COEFICIENTE.percentualmeta "+
+		String sql = " SELECT "
+				+ "	COEFICIENTE.tabela_id, "
+				+ "	TABELA.nome AS tabela_nome, "
+				+ "	COEFICIENTE.coeficiente_id, "
+				+ "	COEFICIENTE.valor, "
+				+ "	COEFICIENTE.percentualmeta,"
+				+ "	COEFICIENTE.percentualcomissao "+
 				" FROM (((BANCOPRODUTOTABELA (NOLOCK) INNER JOIN TABELA (NOLOCK) ON BANCOPRODUTOTABELA.tabela_id = TABELA.tabela_id) "+ 
 				" INNER JOIN COEFICIENTE (NOLOCK) ON TABELA.tabela_id = COEFICIENTE.tabela_id) "+ 
 				" INNER JOIN BANCO (NOLOCK) ON BANCOPRODUTOTABELA.banco_id = BANCO.banco_id AND COEFICIENTE.banco_id = BANCO.banco_id) "+
@@ -162,7 +168,8 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 				coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
 				coeficiente.setValor(rsCoeficiente.getDouble("valor"));
 				coeficiente.setPercentualMeta(rsCoeficiente.getDouble("percentualmeta"));
-				
+				coeficiente.setPercentualComissao(rsCoeficiente.getDouble("percentualcomissao"));
+
 				coeficiente.setTabela(tabela);
 
 				coeficientes.add(coeficiente);
@@ -448,6 +455,7 @@ public class CoeficienteDao extends Dao<Coeficiente> {
 		coeficiente.setCoeficiente_id(rsCoeficiente.getLong("coeficiente_id"));
 		coeficiente.setValor(rsCoeficiente.getDouble("valor"));
 		coeficiente.setPercentualMeta(rsCoeficiente.getDouble("percentualmeta"));
+		coeficiente.setPercentualComissao(rsCoeficiente.getDouble("percentualcomissao"));
 
 		if(rsCoeficiente.getDate("created") != null) {
 			created.setTime(rsCoeficiente.getDate("created"));

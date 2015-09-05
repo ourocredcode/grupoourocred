@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -439,6 +440,11 @@ public class ContratoController {
 		if(this.contrato.getValorMeta().compareTo(contrato.getValorMeta()) != 0) {
 			log.add("Valor Meta Alterado de : " + this.contrato.getValorMeta() + " para : " + contrato.getValorMeta());
 			this.contrato.setValorMeta(contrato.getValorMeta() == null ? null : contrato.getValorMeta());
+		}
+
+		if(this.contrato.getValorComissao().compareTo(contrato.getValorComissao()) != 0) {
+			log.add("Valor Comissão Alterado de : " + this.contrato.getValorComissao() + " para : " + contrato.getValorComissao());
+			this.contrato.setValorComissao(contrato.getValorComissao() == null ? null : contrato.getValorComissao());
 		}
 
 		if(!(this.contrato.getValorDivida() == null && contrato.getValorDivida() == null)){
@@ -978,6 +984,31 @@ public class ContratoController {
 	public void prazo(Long banco_id,Long produto_id,Long tabela_id) {
 
 		contrato.setPrazo(bancoProdutoTabelaDao.buscaPrazoByEmpOrgBancoProdutoTabela(empresa.getEmpresa_id(), organizacao.getOrganizacao_id(),banco_id,produto_id, tabela_id));
+		result.include("contrato",contrato);
+
+	}
+
+	@Post
+ 	@Path("/contrato/regras_tabela")
+	public void regras_tabela(Long banco_id,Long bancoComprado_id,Long produto_id,Long tabela_id,Long coeficiente_id,Integer parcelasAberto,Double valorContrato,Double valorLiquido) {
+
+		Map<String,Object> regras = bancoProdutoTabelaDao.buscaCalculoMetaByEmpOrgBancoProdutoTabelaCoeficiente(
+				empresa.getEmpresa_id(), 
+				organizacao.getOrganizacao_id(),
+				banco_id,
+				bancoComprado_id,
+				produto_id, 
+				tabela_id,
+				coeficiente_id,
+				parcelasAberto,
+				valorContrato,
+				valorLiquido);
+
+		contrato.setPrazo((Integer) regras.get("prazo"));
+		contrato.setValorMeta((Double)  regras.get("meta"));
+		contrato.setValorComissao((Double)  regras.get("comissao"));
+
+		result.include("notice", (String) regras.get("status"));	
 		result.include("contrato",contrato);
 
 	}

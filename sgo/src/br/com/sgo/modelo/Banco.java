@@ -71,6 +71,9 @@ public class Banco implements Serializable {
 	@Column(name = "iscomprado")
 	private Boolean isComprado;
 
+	@Column(name = "isCobradoRCO")
+	private Boolean isCobradoRCO;
+
 	public Long getBanco_id() {
 		return banco_id;
 	}
@@ -181,6 +184,14 @@ public class Banco implements Serializable {
 
 	public void setIsComprado(Boolean isComprado) {
 		this.isComprado = isComprado;
+	}
+
+	public Boolean getIsCobradoRCO() {
+		return isCobradoRCO;
+	}
+
+	public void setIsCobradoRCO(Boolean isCobradoRCO) {
+		this.isCobradoRCO = isCobradoRCO;
 	}
 
 }

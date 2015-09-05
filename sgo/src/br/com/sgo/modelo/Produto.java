@@ -82,10 +82,16 @@ public class Produto implements Serializable {
 	
 	@Column(name = "isvendido")
 	private Boolean isVendido;
-	
+
 	@Column(name = "iscomprado")
 	private Boolean isComprado;
+
+	@Column(name = "isCobradoRCO")
+	private Boolean isCobradoRCO;
 	
+	@Column(name = "isCalculadoVLiquido")
+	private Boolean isCalculadoVLiquido;
+
 	@Column(name = "islistamateriais")
 	private Boolean isListaMateriais;
 	
@@ -261,6 +267,22 @@ public class Produto implements Serializable {
 
 	public void setIsProdutoContrato(Boolean isProdutoContrato) {
 		this.isProdutoContrato = isProdutoContrato;
+	}
+
+	public Boolean getIsCobradoRCO() {
+		return isCobradoRCO;
+	}
+
+	public void setIsCobradoRCO(Boolean isCobradoRCO) {
+		this.isCobradoRCO = isCobradoRCO;
+	}
+
+	public Boolean getIsCalculadoVLiquido() {
+		return isCalculadoVLiquido;
+	}
+
+	public void setIsCalculadoVLiquido(Boolean isCalculadoVLiquido) {
+		this.isCalculadoVLiquido = isCalculadoVLiquido;
 	}
 
 }

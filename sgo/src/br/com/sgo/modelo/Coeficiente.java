@@ -70,6 +70,9 @@ public class Coeficiente implements Serializable {
 
 	@Column(name="percentualmeta")
 	private Double percentualMeta;
+	
+	@Column(name="percentualcomissao")
+	private Double percentualComissao;
 
 	@Column(name = "isactive")
 	private Boolean isActive;
@@ -193,4 +196,13 @@ public class Coeficiente implements Serializable {
 	public void setBanco(Banco banco) {
 		this.banco = banco;
 	}
+
+	public Double getPercentualComissao() {
+		return percentualComissao;
+	}
+
+	public void setPercentualComissao(Double percentualComissao) {
+		this.percentualComissao = percentualComissao;
+	}
+
 }

@@ -174,6 +174,9 @@ public class Contrato implements Serializable {
 
 	@Column(name = "valormeta")
 	private Double valorMeta;
+	
+	@Column(name = "valorcomissao")
+	private Double valorComissao;
 
 	@Column(name = "isactive")
 	private Boolean isActive;
@@ -707,5 +710,13 @@ public class Contrato implements Serializable {
 
 	public void setQtdDias(Integer qtdDias) {
 		this.qtdDias = qtdDias;
+	}
+
+	public Double getValorComissao() {
+		return valorComissao == null ? 0.0 : valorComissao;
+	}
+
+	public void setValorComissao(Double valorComissao) {
+		this.valorComissao = valorComissao;
 	}
 }

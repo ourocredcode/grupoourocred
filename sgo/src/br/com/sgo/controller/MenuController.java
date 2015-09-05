@@ -1170,6 +1170,7 @@ public class MenuController {
 
 		Double totalValorContratos = 0.0;
 		Double totalValorMeta = 0.0;
+		Double totalValorComissao = 0.0;
 		Double totalValorDivida = 0.0;
 		Double totalValorSeguro = 0.0;
 		Double totalValorLiquido = 0.0;
@@ -1184,6 +1185,7 @@ public class MenuController {
 
 			totalValorContratos += cs.getValorContrato();
 			totalValorMeta += cs.getValorMeta();
+			totalValorComissao += cs.getValorComissao();
 			totalValorDivida += cs.getValorDivida();
 			totalValorSeguro += cs.getValorSeguro();
 			totalValorLiquido += cs.getValorLiquido();
@@ -1227,6 +1229,7 @@ public class MenuController {
 		result.include("totalValorSeguro",totalValorSeguro);
 		result.include("totalValorLiquido",totalValorLiquido);
 		result.include("totalValorMeta",totalValorMeta);
+		result.include("totalValorComissao",totalValorComissao);
 		result.include("countContratos",countContratos);
 		result.include("countClientes",countClientes.size());
 		result.include("countClientesByCpf",countClientesByCpf.size());
@@ -1237,6 +1240,7 @@ public class MenuController {
 
 		Double totalValorContratos = 0.0;
 		Double totalValorMeta = 0.0;
+		Double totalValorComissao = 0.0;
 		Double totalValorDivida = 0.0;
 		Double totalValorSeguro = 0.0;
 		Double totalValorLiquido = 0.0;
@@ -1256,6 +1260,7 @@ public class MenuController {
 			totalValorSeguro += cs.getValorSeguro();
 			totalValorLiquido += cs.getValorLiquido();
 			totalValorMeta += cs.getValorMeta();
+			totalValorComissao += cs.getValorComissao();
 
 			if(cs.getProduto().getNome().equals("MARGEM LIMPA") 
 					|| cs.getProduto().getNome().equals("MARGEM LIMPA PMSP")
@@ -1285,7 +1290,6 @@ public class MenuController {
 					|| cs.getProduto().getNome().equals("RETENÇÃO PMSP")
 					|| cs.getProduto().getNome().equals("RETENÇÃO GOVRJ"))
 				totalContratoLiquido += cs.getValorLiquido();
-				
 
 			countContratos += 1;
 
@@ -1298,6 +1302,7 @@ public class MenuController {
 		result.include("totalValorSeguro",totalValorSeguro);
 		result.include("totalValorLiquido",totalValorLiquido);
 		result.include("totalValorMeta",totalValorMeta);
+		result.include("totalValorComissao",totalValorComissao);
 		result.include("countContratos",countContratos);
 		result.include("countClientes",countClientes.size());
 		result.include("countClientesByCpf",countClientesByCpf.size());

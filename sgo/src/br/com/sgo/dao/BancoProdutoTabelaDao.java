@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.hibernate.Session;
 
@@ -140,6 +144,8 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 		return prazo;
 
 	}
+	
+	
 	
 	public Collection<BancoProdutoTabela> buscaBancoProdutoTabelasByEmpOrgoBancoProdutoTabela(Long empresa_id, Long organizacao_id, Long banco_id, Long produto_id, Long tabela_id) {
 
@@ -278,6 +284,61 @@ public class BancoProdutoTabelaDao extends Dao<BancoProdutoTabela> {
 		bancoProdutoTabela.setIsActive(rsBancoProdutoTabela.getBoolean("isactive"));
 
 		bancoProdutoTabelas.add(bancoProdutoTabela);
+
+	}
+
+	public Map<String,Object> buscaCalculoMetaByEmpOrgBancoProdutoTabelaCoeficiente(Long empresa_id, Long organizacao_id, 
+			Long banco_id,Long bancoComprado_id, Long produto_id, Long tabela_id, Long coeficiente_id,Integer parcelasAberto, Double valorContrato,Double valorLiquido ) {
+
+		String sql = " { CALL proc_calculo_meta_bancos(?,?,?,?,?,?,?,?,?,?) } ";
+		Map<String,Object> result = new HashMap<String,Object>();
+
+		parcelasAberto = parcelasAberto == null ? 0 : parcelasAberto;
+		bancoComprado_id = bancoComprado_id == null ? 0 : bancoComprado_id;
+
+		this.conn = this.conexao.getConexao();
+
+		try {
+
+			this.stmt = conn.prepareStatement(sql);
+
+			this.stmt.setLong(1, empresa_id);
+			this.stmt.setLong(2, organizacao_id);
+			this.stmt.setLong(3, banco_id);
+			this.stmt.setLong(4, bancoComprado_id);
+			this.stmt.setLong(5, produto_id);
+			this.stmt.setLong(6, tabela_id);
+			this.stmt.setLong(7, coeficiente_id);
+			this.stmt.setLong(8, parcelasAberto);
+			this.stmt.setDouble(9, valorContrato);
+			this.stmt.setDouble(10, valorLiquido);
+
+			/*
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			System.out.println(sdf.format(Calendar.getInstance().getTime()));
+			System.out.println( " proc_calculo_meta_bancos " + empresa_id + " , " + organizacao_id + " , " + banco_id + "," + bancoComprado_id + " , " + produto_id + "," + tabela_id + "," + coeficiente_id + "," + parcelasAberto + "," + valorContrato + "," + valorLiquido);
+			*/
+
+			this.rsBancoProdutoTabela= this.stmt.executeQuery();
+
+			while (rsBancoProdutoTabela.next()) {
+
+				result.put("prazo", rsBancoProdutoTabela.getInt("prazo"));
+				result.put("meta", rsBancoProdutoTabela.getDouble("meta"));
+				result.put("comissao", rsBancoProdutoTabela.getDouble("comissao"));
+				result.put("status", rsBancoProdutoTabela.getString("status"));
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		this.conexao.closeConnection(rsBancoProdutoTabela, stmt, conn);
+
+		return result;
 
 	}
 

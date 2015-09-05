@@ -62,7 +62,7 @@ public class ContratoDao extends Dao<Contrato> {
 			" USUARIO_SUPERVISOR.nome as usuario_super, USUARIO_SUPERVISOR.apelido as usuario_super_apelido, "+
 			" CONTRATO.prazo, "+
 			" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.valorContratoLiquido, "+
-			" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
+			" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.valorcomissao, CONTRATO.observacao, "+
 			" CONTRATO.prazo , CONTRATO.isrepasse , CONTRATO.percentualrepasse , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
 			" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, TABELA.tabela_id, TABELA.nome as tabela_nome, "+
 			" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
@@ -411,7 +411,7 @@ public class ContratoDao extends Dao<Contrato> {
 					 " USUARIO_SUPERVISOR.nome as usuario_super, USUARIO_SUPERVISOR.apelido as usuario_super_apelido, " + 
 					 " CONTRATO.prazo, " +  
 					 " CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, " + 
-					 " CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, " + 
+					 " CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.valorcomissao, CONTRATO.observacao, " + 
 					 " CONTRATO.prazo , CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, " + 
 					 " PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, " + 
 					 " CONTRATO.etapa_id, WORKFLOW.workflow_id,WORKFLOW.nome as workflow_nome , " +  
@@ -550,6 +550,7 @@ public class ContratoDao extends Dao<Contrato> {
 				contrato.setValorDivida(rsContrato.getDouble("valordivida"));
 				contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
 				contrato.setValorMeta(rsContrato.getDouble("valormeta"));
+				contrato.setValorComissao(rsContrato.getDouble("valorcomissao"));
 				contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
 				contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 				contrato.setPrazo(rsContrato.getInt("prazo"));
@@ -1544,7 +1545,7 @@ public class ContratoDao extends Dao<Contrato> {
 				" dbo.FnDiasUteis(CONTRATO.updated,GETDATE()) as qtdDias,   "+
 				" CONTRATO.qtdparcelasaberto, CONTRATO.valorseguro, CONTRATO.desconto, CONTRATO.valorcontrato, CONTRATO.datastatusfinal, CONTRATO.updated as contratoUpdated, " + 
 				" CONTRATO.dataquitacao, CONTRATO.datadigitacao, CONTRATO.datasolicitacaosaldo, CONTRATO.propostabanco, CONTRATO.contratobanco, CONTRATO.numeroportabilidade, " +
-				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta, CONTRATO.observacao, "+
+				" CONTRATO.valordivida, CONTRATO.valorliquido, CONTRATO.valorparcela, CONTRATO.valormeta,CONTRATO.valorcomissao, CONTRATO.observacao, "+
 				" CONTRATO.prazo, CONTRATO.isrepasse , CONTRATO.percentualrepasse, CONTRATO.desconto , CONTRATO.qtdparcelasaberto , CONTRATO.numerobeneficio, CONTRATO.isactive, "+
 				" BANCO.nome as banco_nome, BANCO_1.nome as bancoRecompra_nome , PRODUTO.nome as produto_nome, COEFICIENTE.valor, TABELA.tabela_id, TABELA.nome as tabela_nome, "+
 				" PARCEIRONEGOCIO.nome as parceiro_nome,PARCEIRONEGOCIO.cpf as parceiro_cpf, "+
@@ -2169,6 +2170,7 @@ public class ContratoDao extends Dao<Contrato> {
 				contrato.setValorDivida(rsContrato.getDouble("valordivida"));
 				contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
 				contrato.setValorMeta(rsContrato.getDouble("valormeta"));
+				contrato.setValorComissao(rsContrato.getDouble("valorcomissao"));
 				contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
 				contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 				contrato.setPrazo(rsContrato.getInt("prazo"));
@@ -2197,6 +2199,7 @@ public class ContratoDao extends Dao<Contrato> {
 				"		 ETAPA.etapa_id , " +
 				"		 COUNT(ETAPA.nome) as etapaCount, " +
 				"		 SUM(CONTRATO.valormeta) as metaCount, " +
+				"		 SUM(CONTRATO.valorcomissao) as comissaoCount, " +
 				"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
 				" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 				" FROM ((CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
@@ -2241,14 +2244,16 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoCount = rsContrato.getDouble("contratoCount");
 				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[5];
+				Object[] values = new Object[6];
 
 				values[0] = etapa_id;
 				values[1] = etapaCount;
 				values[2] = contratoCount;
 				values[3] = contLiquidoCount;
 				values[4] = metaCount;
+				values[5] = comissaoCount;
 
 				map.put(etapa_nome,values);
 
@@ -2270,6 +2275,7 @@ public class ContratoDao extends Dao<Contrato> {
 				"		 ETAPA.nome as etapa_nome," +
 				"		 COUNT(ETAPA.nome) as etapaCount, " +
 				"		 SUM(CONTRATO.valormeta) as metaCount, " +
+				"		 SUM(CONTRATO.valorcomissao) as comissaoCount, " +
 				"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
 				" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 				" FROM ((CONTRATO (NOLOCK) INNER JOIN ETAPA (NOLOCK) ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
@@ -2312,14 +2318,16 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoCount = rsContrato.getDouble("contratoCount");
 				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[5];
+				Object[] values = new Object[6];
 
 				values[0] = etapa_id;
 				values[1] = etapaCount;
 				values[2] = contratoCount;
 				values[3] = contLiquidoCount;
 				values[4] = metaCount;
+				values[5] = comissaoCount;
 
 				map.put(etapa_nome,values);
 
@@ -2341,7 +2349,8 @@ public class ContratoDao extends Dao<Contrato> {
 						 " USUARIO_SUPERVISOR.usuario_id, " +
 						 " USUARIO_SUPERVISOR.apelido, " +
 						 " COUNT(CONTRATO.contrato_id) as qtdContrato," +
-						 " SUM(CONTRATO.valormeta) as metaCount, " +  
+						 " SUM(CONTRATO.valormeta) as metaCount, " +
+						 " SUM(CONTRATO.valorcomissao) as comissaoCount, " +  
 						 " SUM(CONTRATO.valorcontrato) as contratoCount, " + 
 				 		 " SUM(CONTRATO.valorContratoLiquido) as contratoLiquidoCount, " +  
 				 		 " SUM(CONTRATO.valorLiquido) as liquidoCount " + 
@@ -2403,8 +2412,9 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoLiquidoCount = rsContrato.getDouble("contratoLiquidoCount");
 				Double liquidoCount = rsContrato.getDouble("liquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[6];
+				Object[] values = new Object[7];
 
 				values[0] = supervisor_id;
 				values[1] = qtdContrato;
@@ -2412,6 +2422,7 @@ public class ContratoDao extends Dao<Contrato> {
 				values[3] = contratoLiquidoCount;
 				values[4] = liquidoCount;
 				values[5] = metaCount;
+				values[6] = comissaoCount;
 
 				map.put(supervisor_apelido,values);
 
@@ -2435,6 +2446,7 @@ public class ContratoDao extends Dao<Contrato> {
 						 " USUARIO_SUPERVISOR.apelido, " +
 						 " COUNT(CONTRATO.contrato_id) as qtdContrato," +
 						 " SUM(CONTRATO.valormeta) as metaCount, " +  
+						 " SUM(CONTRATO.valorcomissao) as comissaoCount, " +  
 						 " SUM(CONTRATO.valorcontrato) as contratoCount, " + 
 				 		 " SUM(CONTRATO.valorContratoLiquido) as contratoLiquidoCount, " +  
 				 		 " SUM(CONTRATO.valorLiquido) as liquidoCount " + 
@@ -2490,8 +2502,9 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoLiquidoCount = rsContrato.getDouble("contratoLiquidoCount");
 				Double liquidoCount = rsContrato.getDouble("liquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[6];
+				Object[] values = new Object[7];
 
 				values[0] = supervisor_id;
 				values[1] = qtdContrato;
@@ -2499,6 +2512,7 @@ public class ContratoDao extends Dao<Contrato> {
 				values[3] = contratoLiquidoCount;
 				values[4] = liquidoCount;
 				values[5] = metaCount;
+				values[6] = comissaoCount;
 
 				map.put(supervisor_apelido,values);
 
@@ -2521,6 +2535,7 @@ public class ContratoDao extends Dao<Contrato> {
 						  " USUARIO.apelido, " +  
 						  " COUNT(CONTRATO.contrato_id) as qtdContrato, " + 
 						  " SUM(CONTRATO.valormeta) as metaCount, " +    
+						  " SUM(CONTRATO.valorcomissao) as comissaoCount, " +
 						  " SUM(CONTRATO.valorcontrato) as contratoCount, " +   
 						  " SUM(CONTRATO.valorContratoLiquido) as contratoLiquidoCount, " +    
 						  " SUM(CONTRATO.valorLiquido) as liquidoCount " +   
@@ -2591,8 +2606,9 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoLiquidoCount = rsContrato.getDouble("contratoLiquidoCount");
 				Double liquidoCount = rsContrato.getDouble("liquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[6];
+				Object[] values = new Object[7];
 
 				values[0] = usuario_id;
 				values[1] = qtdContrato;
@@ -2600,6 +2616,7 @@ public class ContratoDao extends Dao<Contrato> {
 				values[3] = contratoLiquidoCount;
 				values[4] = liquidoCount;
 				values[5] = metaCount;
+				values[6] = comissaoCount;
 
 				map.put(usuario_apelido,values);
 
@@ -2622,6 +2639,7 @@ public class ContratoDao extends Dao<Contrato> {
 					"		 ETAPA.etapa_id , " +
 					"		 COUNT(ETAPA.nome) as etapaCount, " +
 					"		 SUM(CONTRATO.valormeta) as metaCount, " +
+					"		 SUM(CONTRATO.valorcomissao) as comissaoCount, " +
 					"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
 					" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 					" FROM (( CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
@@ -2687,14 +2705,16 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoCount = rsContrato.getDouble("contratoCount");
 				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[5];
+				Object[] values = new Object[6];
 
 				values[0] = etapa_id;
 				values[1] = etapaCount;
 				values[2] = contratoCount;
 				values[3] = contLiquidoCount;
 				values[4] = metaCount;
+				values[5] = comissaoCount;
 
 				map.put(etapa_nome,values);
 
@@ -2715,6 +2735,7 @@ public class ContratoDao extends Dao<Contrato> {
 					"		 ETAPA.nome as etapa_nome," +
 					"		 COUNT(ETAPA.nome) as etapaCount, " +
 					"		 SUM(CONTRATO.valormeta) as metaCount, " +
+					"		 SUM(CONTRATO.valorcomissao) as comissaoCount, " +
 					"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
 					" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 					" FROM (( CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
@@ -2778,14 +2799,16 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoCount = rsContrato.getDouble("contratoCount");
 				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[5];
+				Object[] values = new Object[6];
 
 				values[0] = etapa_id;
 				values[1] = etapaCount;
 				values[2] = contratoCount;
 				values[3] = contLiquidoCount;
 				values[4] = metaCount;
+				values[5] = comissaoCount;
 
 				map.put(etapa_nome,values);
 
@@ -2808,6 +2831,7 @@ public class ContratoDao extends Dao<Contrato> {
 					"		 ETAPA.etapa_id , " +
 					"		 COUNT(ETAPA.nome) as etapaCount, " +
 					"		 SUM(CONTRATO.valormeta) as metaCount, " +
+					"		 SUM(CONTRATO.valorcomissao) as comissaoCount, " +
 					"		 SUM(CONTRATO.valorcontrato) as contratoCount," +
 					" 		 SUM(CONTRATO.valorContratoLiquido) as contLiquidoCount " +
 					" FROM (( CONTRATO INNER JOIN ETAPA ON CONTRATO.etapa_id = ETAPA.etapa_id) " +
@@ -2873,14 +2897,16 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoCount = rsContrato.getDouble("contratoCount");
 				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[5];
+				Object[] values = new Object[6];
 
 				values[0] = etapa_id;
 				values[1] = etapaCount;
 				values[2] = contratoCount;
 				values[3] = contLiquidoCount;
 				values[4] = metaCount;
+				values[5] = comissaoCount;
 
 				map.put(etapa_nome,values);
 
@@ -2964,14 +2990,16 @@ public class ContratoDao extends Dao<Contrato> {
 				Double contratoCount = rsContrato.getDouble("contratoCount");
 				Double contLiquidoCount = rsContrato.getDouble("contLiquidoCount");
 				Double metaCount = rsContrato.getDouble("metaCount");
+				Double comissaoCount = rsContrato.getDouble("comissaoCount");
 
-				Object[] values = new Object[5];
+				Object[] values = new Object[6];
 
 				values[0] = etapa_id;
 				values[1] = etapaCount;
 				values[2] = contratoCount;
 				values[3] = contLiquidoCount;
 				values[4] = metaCount;
+				values[5] = comissaoCount;
 
 				map.put(etapa_nome,values);
 
@@ -3149,6 +3177,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setDesconto(rsContrato.getDouble("desconto"));
 		contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
 		contrato.setValorMeta(rsContrato.getDouble("valormeta"));
+		contrato.setValorComissao(rsContrato.getDouble("valorcomissao"));
 		contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
 		contrato.setValorContratoLiquido(rsContrato.getDouble("valorContratoLiquido"));
@@ -3324,6 +3353,7 @@ public class ContratoDao extends Dao<Contrato> {
 		contrato.setValorDivida(rsContrato.getDouble("valordivida"));
 		contrato.setValorLiquido(rsContrato.getDouble("valorliquido"));
 		contrato.setValorMeta(rsContrato.getDouble("valormeta"));
+		contrato.setValorComissao(rsContrato.getDouble("valorcomissao"));
 		contrato.setValorParcela(rsContrato.getDouble("valorparcela"));
 		contrato.setValorContratoLiquido(rsContrato.getDouble("valorContratoLiquido"));
 		contrato.setValorSeguro(rsContrato.getDouble("valorseguro"));
