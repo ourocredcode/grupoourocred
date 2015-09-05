@@ -57,6 +57,13 @@ $(document).ready(function() {
 		});
 	});
 
+	$('#loading').ajaxStart(function() {
+		 $(this).show();
+		 }).ajaxStop(function() {
+		 $(this).hide();
+	});
+
+	/*
 	$("#auxCoeficiente").change(function() {
 
 		var auxCoeficiente = document.getElementById("auxCoeficiente");	
@@ -71,6 +78,8 @@ $(document).ready(function() {
 		}
 
 	});
+	*/
+
 });
 
 function calculaContrato() {
@@ -82,7 +91,6 @@ function calculaContrato() {
 	var valorMeta = document.getElementById("valorMeta");
 	var valorDivida = document.getElementById("valorDivida");
 	var valorSeguro = document.getElementById("valorSeguro");
-
 	var contratoId = document.getElementById("contratoId").value;
 
 	var contratoProduto = document.getElementById("contratoProduto");
@@ -90,8 +98,9 @@ function calculaContrato() {
 
 	var contratoBanco = document.getElementById("contratoBanco");
 	var contratoBancoNome = contratoBanco.options[contratoBanco.selectedIndex].text;
-	
+
 	var bancoComprado = document.getElementById("bancoComprado");
+	var bancoComprado_id = document.getElementById("bancoComprado").value;
 	var bancoCompradoNome = bancoComprado.options[bancoComprado.selectedIndex].text;
 
 	var desconto = document.getElementById("desconto");
@@ -100,14 +109,18 @@ function calculaContrato() {
 	var arrayCoeficiente = auxCoeficiente.value.split(',');
 	var coeficiente = document.getElementById("coeficiente");
 	coeficiente.value = arrayCoeficiente[2];
-
+	var coeficiente_id = arrayCoeficiente[2];
+	var tabela_id = arrayCoeficiente[3];
+	var banco_id = document.getElementById("contratoBanco").value;
+	var produto_id = document.getElementById("contratoProduto").value;
 	var tabelaNome = arrayCoeficiente[4];
 
 	var isRco = true;
 	var isRcoBGN = true;
 
 	var isProdRco = contratoProdutoNome == 'RECOMPRA INSS' || contratoProdutoNome == 'RECOMPRA GOVRJ' 
-	            || contratoProdutoNome == 'RECOMPRA GOVSP' || contratoProdutoNome == 'PORTABILIDADE/REFIN' || contratoProdutoNome == 'RECOMPRA SIAPE' ? true : false;
+	            || contratoProdutoNome == 'RECOMPRA GOVSP' || contratoProdutoNome == 'PORTABILIDADE/REFIN' 
+	            || contratoProdutoNome == 'RECOMPRA SIAPE' ? true : false;
 
 	//alert(isProdRco);
 
@@ -164,2007 +177,691 @@ function calculaContrato() {
 			valorLiquido.value = '';
 
 		}
-		
+
 		if(organizacao == 'OUROCRED RIBEIRAO') {
 
-			if( contratoProdutoNome != 'REFINANCIAMENTO' 
-					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
-					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
-					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
-					&& contratoProdutoNome != 'REFINANCIAMENTO SIAPE'
-					//&& contratoProdutoNome != 'RETENÇÃO' && contratoProdutoNome != 'RETENÇÃO PMSP' && contratoProdutoNome != 'RETENÇÃO GOVRJ'
-					){
-
-				switch(contratoBancoNome) {
-				
-				
+			switch(contratoBancoNome) {
+			
+				//REGRAS SOROCRED OUROCRED RIBEIRAO
 				case 'Sorocred':
-
-					if(contratoProdutoNome == 'CARTAO CREDITO'){
-
-						valorMeta.value = '0.0';
-						
-						break;
-						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}
+	
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+	
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
+	
+					}	
 					
+					break;
+	
+				//REGRAS Sabemi OUROCRED RIBEIRAO	
 				case 'Sabemi':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
-								var RCO = 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-
-									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									//valorMeta.value = metaValue.toFixed(2);
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-							
-							
-
-						}
-						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}		
+	
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+	
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
+	
+					}	
 					
+					break;	
+			
+				//REGRAS Banrisul OUROCRED RIBEIRAO
 				case 'Banrisul':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
-								var RCO = 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-
-									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									//valorMeta.value = metaValue.toFixed(2);
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-							
-							
-
-						}
-						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
+	
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+	
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
+	
 					}	
-				
+					
+					break;
+			
+				//REGRAS BMG OUROCRED RIBEIRAO
 				case 'BMG':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-
-									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									//valorMeta.value = metaValue.toFixed(2);
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-							
-							
-
-						}
+	
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
 						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}
-
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
+	
+					}	
+					
+					break;
+	
+				//REGRAS BGN OUROCRED RIBEIRAO	
 				case 'BGN':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
-								var RCO = 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-								
-									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									//valorMeta.value = metaValue.toFixed(2);
-									
-									metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-							
-							
-
-						}
+	
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
 						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}
-
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
+	
+					}	
+					
+					break;
+	
+				//REGRAS Safra OUROCRED RIBEIRAO
 				case 'Safra':
-					
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-								var RCO = 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto -  ( RCO / 2) ;
-
-								if(comissaoLiquido <= 0){
-
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-								
-									 if(isRco){
-
-										 if(tabelaNome == 'INSS 72 P'){
-
-											 if(valorContrato.value <= 2499.99){
-
-												valorMeta.value = 0.0;
-												break;
-
-											} else if (valorContrato.value >= 2500.00 && valorContrato.value <= 2999.99){
-
-												valorMeta.value = 0.0;
-												break;
-
-											} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3499.99){
-
-												var metaValue = (valorContrato.value * 0.25) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											} else if (valorContrato.value >= 3500.00 && valorContrato.value <= 3999.99){
-
-												var metaValue = (valorContrato.value * 0.50) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
-
-												var metaValue = ( valorContrato.value * 0.50 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											} else if (valorContrato.value >= 5000.00 && valorContrato.value <= 9999.99){
-
-												var metaValue = ( valorContrato.value * 0.65 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-												
-											} else if (valorContrato.value >= 10000.00 && valorContrato.value <= 14999.99){
-
-												var metaValue = ( valorContrato.value * 0.85 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;	
-
-											} else if (valorContrato.value >= 15000.00 ){
-
-												var metaValue = ( valorContrato.value * 0.85 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-											}
-
-										}  else if (tabelaNome == 'INSSC03'){
-
-											if(valorContrato.value <= 2999.99){
-
-												valorMeta.value = 0.0;
-												break;
-
-										  	}  else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3999.99){
-
-												var metaValue = (valorContrato.value * 0.15) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-												
-										  	} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99 ){
-
-												var metaValue = ( valorContrato.value * 0.20 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											} else if (valorContrato.value >= 5000.00 ){
-
-												var metaValue = ( valorContrato.value * 0.40 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-											}
-
-										} else if (tabelaNome == 'INSSC05'){
-
-											if(valorContrato.value <= 9999.99){
-
-												valorMeta.value = 0.0;
-												break;
-
-											} else if (valorContrato.value >= 10000.00 && valorContrato.value <= 14999.99){
-
-												var metaValue =  ( valorContrato.value * 0.15 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											} else if (valorContrato.value >= 15000.00 && valorContrato.value <= 19999.99){
-
-												var metaValue = ( valorContrato.value * 0.20 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											}  else if (valorContrato.value >= 20000.00 ){
-
-												var metaValue = ( valorContrato.value * 0.20 ) * (comissaoLiquido/comissaoBruto);
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-											}
-
-										} else {
-											
-											var metaValue = valorContrato.value * arrayCoeficiente[1];
-											valorMeta.value = metaValue.toFixed(2);
-											break;
-
-										}
+				
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+						
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
 	
-									} else {
-
-										var metaValue = valorContrato.value * arrayCoeficiente[1];
-										valorMeta.value = metaValue.toFixed(2);
-										break;
-										
-									}
-									
-								}
-								
-							}
-
-						}
-						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
 					}	
-				
-				
-				
-				
+					
+					break;
+			
+			
+			
+				// Regras Agiplan OUROCRED RIBEIRAO
 				case 'Agiplan':
-					
-						if(isProdRco){
-	
-							if(parcelasAberto.value != ''){
-	
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								
-								if(metaValue == 0){
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								} else {
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
-									var comissaoBruto = metaValue * 0.17;
-	
-									var comissaoLiquido = comissaoBruto - RCO;
-	
-									if(comissaoLiquido <= 0){
-										
-										if(contratoId != ''){
-	
-											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-	
-											valorMeta.value = '0.0';
-	
-											break;
-	
-										} else {
-	
-											alert('Contrato com valor abaixo do mínimo exigido.');
-	
-											valorParcela.value = '';
-											valorParcela.focus();
-											
-											break;
-	
-										}
-										
-									} else {
-									
-										//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-										//valorMeta.value = metaValue.toFixed(2);
-										
-										metaValue = valorContrato.value * arrayCoeficiente[1];
-										valorMeta.value = metaValue.toFixed(2);
-										
-										break;
-										
-									}
-									
-								}
-								
-								
-	
-							}
-							
-					} else {
+				
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
 						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
 	
-						break;
-						
 					}	
 					
+					break;
+			
+				// Regras Bonsucesso OUROCRED RIBEIRAO						
 				case 'Bonsucesso':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-								
-									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									//valorMeta.value = metaValue.toFixed(2);
-									
-									metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-							
-							
-
-						}
+					
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
 						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}
-
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
+	
+					}	
+					
+					break;
+				
+				
+				// Regras Bradesco OUROCRED RIBEIRAO		
 				case 'Bradesco':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-								
-									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									//valorMeta.value = metaValue.toFixed(2);
-									
-									metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-							
-							
-
-						}
+	
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
 						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}
-
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
+	
+					}	
 					
-					
+					break;
+	
+				
+				// Regras Panamericano OUROCRED RIBEIRAO	
 				case 'Panamericano':
+				
 					
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443 / 60) * parcelasAberto.value : 0;
-								var RCO = 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-								
-									//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									//valorMeta.value = metaValue.toFixed(2);
-									
-									metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-							
-							
-
-						}
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
 						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}		
-
-				default:
-					var metaValue = valorContrato.value * arrayCoeficiente[1];
-					valorMeta.value = metaValue.toFixed(2);
-
-				}
-
-			} else {
-
-				var metaValue = valorLiquido.value * arrayCoeficiente[1];
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
+	
+					}	
+					
+					break;
+					
+					
+	
+			default:
+				var metaValue = valorContrato.value * arrayCoeficiente[1];
 				valorMeta.value = metaValue.toFixed(2);
-
+	
 			}
 
 		}
 
 		if(organizacao == 'OUROCRED MATRIZ' || organizacao == 'OUROCRED RJ' || organizacao == 'USECRED' || organizacao == 'OUROCRED LOJA01') {
 
-			if( contratoProdutoNome != 'REFINANCIAMENTO' 
-					&& contratoProdutoNome != 'REFINANCIAMENTO PMSP' 
-					&& contratoProdutoNome != 'REFINANCIAMENTO GOVRJ' 
-					&& contratoProdutoNome != 'REFINANCIAMENTO GOVSP'
-					&& contratoProdutoNome != 'REFINANCIAMENTO SIAPE'
-					&& contratoProdutoNome != 'CARTAO CONSIGNADO'
-					//&& contratoProdutoNome != 'RETENÇÃO'  && contratoProdutoNome != 'RETENÇÃO PMSP' && contratoProdutoNome != 'RETENÇÃO GOVRJ' 
-					){
-
-				switch(contratoBancoNome) {
+			switch(contratoBancoNome) {
+			
+			//REGRAS Sorocred Matriz RJ USE LOJA01
+			case 'Sorocred':
 				
-				case 'Sorocred':
-
-					if(contratoProdutoNome == 'CARTAO CREDITO'){
-
-						valorMeta.value = '0.0';
-						
-						break;
-						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}
-					
-				case 'Sabemi':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-								var RCO = 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-								
-									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-
-						}
-						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}	
-				
-				case 'Banrisul':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-								var RCO = 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-								
-									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-
-						}
-						
-					} else {
-
-						if(contratoProdutoNome == 'SEGURO VIDA'){
-
-							if(tabelaNome == 'SV3M24'){
-								valorParcela.value = 121.46;
-								calculaValorContratoSimples();
-								break;
-							}
-
-							if(tabelaNome == 'SV3M36'){
-								valorParcela.value = 182.20;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV3M48'){
-								valorParcela.value = 242.93;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							
-							if(tabelaNome == 'SV3M54'){
-								valorParcela.value = 273.29;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							
-							if(tabelaNome == 'SV3M60'){
-								valorParcela.value = 303.65;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV3M66'){
-								valorParcela.value = 334.03;
-								calculaValorContratoSimples();
-								break;
-							}
-
-							if(tabelaNome == 'SV3M72'){
-								valorParcela.value = 364.39;
-								calculaValorContratoSimples();
-								break;
-							}
-
-							if(tabelaNome == 'SV3M78'){
-								valorParcela.value = 394.76;
-								calculaValorContratoSimples();
-								break;
-							}
-
-							if(tabelaNome == 'SV3M84'){
-								valorParcela.value = 425.12;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV3M90'){
-								valorParcela.value = 455.49;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV3M96'){
-								valorParcela.value = 485.86;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M36'){
-								valorParcela.value = 349.19;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M48'){
-								valorParcela.value = 404.88;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M54'){
-								valorParcela.value = 455.48;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M60'){
-								valorParcela.value = 506.10;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M66'){
-								valorParcela.value = 556.71;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M72'){
-								valorParcela.value = 607.33;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M78'){
-								valorParcela.value = 657.94;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M84'){
-								valorParcela.value = 708.54;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M90'){
-								valorParcela.value = 759.16;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV5M96'){
-								valorParcela.value = 809.77;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV6M24'){
-								valorParcela.value = 260.50;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M24'){
-								valorParcela.value = 303.66;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M36'){
-								valorParcela.value = 455.47;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M48'){
-								valorParcela.value = 607.32;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M54'){
-								valorParcela.value = 683.24;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M60'){
-								valorParcela.value = 759.15;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M66'){
-								valorParcela.value = 835.07;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M72'){
-								valorParcela.value = 910.98;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M78'){
-								valorParcela.value = 986.90;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M84'){
-								valorParcela.value = 1062.81;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M90'){
-								valorParcela.value = 1138.73;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV7M96'){
-								valorParcela.value = 1214.64;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M24'){
-								valorParcela.value = 404.87;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M36'){
-								valorParcela.value = 607.31;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M48'){
-								valorParcela.value = 809.76;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M54'){
-								valorParcela.value = 910.99;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M60'){
-								valorParcela.value = 1012.20;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M66'){
-								valorParcela.value = 1113.42;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M72'){
-								valorParcela.value = 1214.65;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M78'){
-								valorParcela.value = 1315.86;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M84'){
-								valorParcela.value = 1417.08;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M90'){
-								valorParcela.value = 1518.30;
-								calculaValorContratoSimples();
-								break;
-							}
-							
-							if(tabelaNome == 'SV10M96'){
-								valorParcela.value = 1619.52;
-								calculaValorContratoSimples();
-								break;
-							}
-
-						} else {
-							
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							valorMeta.value = metaValue.toFixed(2);
-
-							break;
-							
-						}
-
-					}	
-					
-					
-				case 'BMG':
-
-					if(isProdRco){
-
-						if(parcelasAberto.value != ''){
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							
-							if(metaValue == 0){
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								valorMeta.value = metaValue.toFixed(2);
-								
-								break;
-								
-							} else {
-								
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								//var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-								var RCO = 0;
-								var comissaoBruto = metaValue * 0.17;
-
-								var comissaoLiquido = comissaoBruto - RCO;
-
-								if(comissaoLiquido <= 0){
-									
-									if(contratoId != ''){
-
-										alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-										valorMeta.value = '0.0';
-
-										break;
-
-									} else {
-
-										alert('Contrato com valor abaixo do mínimo exigido.');
-
-										valorParcela.value = '';
-										valorParcela.focus();
-										
-										break;
-
-									}
-									
-								} else {
-								
-									metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								}
-								
-							}
-
-						}
-						
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-
-						break;
-						
-					}
-				
-
-					case 'BGN':
-
-						if(isProdRco){
-
-							if(parcelasAberto.value != ''){
-
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								
-								if(metaValue == 0){
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								} else {
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									var RCO = (isRco) ? calculaRCO() : 0;
-									var comissaoBruto = metaValue * 0.17;
-
-									var comissaoLiquido = comissaoBruto - RCO;
-
-									if(comissaoLiquido <= 0){
-										
-										if(contratoId != ''){
-
-											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-											valorMeta.value = '0.0';
-
-											break;
-
-										} else {
-
-											alert('Contrato com valor abaixo do mínimo exigido.');
-
-											valorParcela.value = '';
-											valorParcela.focus();
-											
-											break;
-
-										}
-										
-									} else {
-									
-										metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-										valorMeta.value = metaValue.toFixed(2);
-										
-										break;
-										
-									}
-									
-								}
-
-							}
-							
-						} else {
-							
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							valorMeta.value = metaValue.toFixed(2);
-
-							break;
-							
-						}
-
-						
-					case 'Safra':
-						
-						if(isProdRco){
-
-							if(parcelasAberto.value != ''){
-
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								
-								if(metaValue == 0){
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								} else {
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-									//var RCO = 0;
-									var comissaoBruto = metaValue * 0.17;
-
-									var comissaoLiquido = comissaoBruto -  ( RCO / 2) ;
-
-									if(comissaoLiquido <= 0){
-
-										if(contratoId != ''){
-
-											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-											valorMeta.value = '0.0';
-
-											break;
-
-										} else {
-
-											alert('Contrato com valor abaixo do mínimo exigido.');
-
-											valorParcela.value = '';
-											valorParcela.focus();
-											
-											break;
-
-										}
-										
-									} else {
-									
-										 if(isRco){
-
-											 if(tabelaNome == 'INSS 72'){
-
-												 if(valorContrato.value <= 2499.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 2500.00 && valorContrato.value <= 2999.99){
-
-													var metaValue = (valorContrato.value * 0.1) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3499.99){
-
-													var metaValue = (valorContrato.value * 0.4) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 3500.00 && valorContrato.value <= 3999.99){
-
-													var metaValue = (valorContrato.value * 0.65) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
-
-													var metaValue = ( valorContrato.value * 0.70 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 5000.00 && valorContrato.value <= 7499.99){
-
-													var metaValue = ( valorContrato.value * 0.75 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 7500.00 ){
-
-													var metaValue = ( valorContrato.value * 0.85 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-												}
-
-											}  else if (tabelaNome == 'FLEX 1.72'){
-
-												if(valorContrato.value <= 1999.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 2000.00 && valorContrato.value <= 2499.99){
-
-													var metaValue = ( valorContrato.value * 0.05 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 2500.00 && valorContrato.value <= 2999.99){
-
-													var metaValue = ( valorContrato.value * 0.07 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3499.99){
-
-													var metaValue = ( valorContrato.value * 0.25 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 3500.00 && valorContrato.value <= 3999.99){
-
-													var metaValue = ( valorContrato.value * 0.45 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
-
-													var metaValue = ( valorContrato.value * 0.50 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 5000.00 ){
-
-													var metaValue = ( valorContrato.value * 0.60 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-												}
-
-											} else if (tabelaNome == 'FLEX 2.72'){
-
-												if(valorContrato.value <= 2499.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 2500.00 && valorContrato.value <= 2999.99){
-
-													var metaValue =  ( valorContrato.value * 0.05 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3999.99){
-
-													var metaValue = ( valorContrato.value * 0.15 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
-
-													var metaValue = ( valorContrato.value * 0.40 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												}  else if (valorContrato.value >= 5000.00 ){
-
-													var metaValue = ( valorContrato.value * 0.45 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-												}
-
-											} else if (tabelaNome == 'FLEX 3.72'){
-
-												if(valorContrato.value <= 2999.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 3000.00 && valorContrato.value <= 3999.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 4000.00 && valorContrato.value <= 4999.99){
-
-													var metaValue = ( valorContrato.value * 0.1 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 5000.00 ){
-
-													var metaValue = ( valorContrato.value * 0.15 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-												}
-
-											} else if (tabelaNome == 'FLEX 4.72'){
-
-												if(valorContrato.value <= 4999.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 5000.00 && valorContrato.value <= 9999.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 10000.00 && valorContrato.value <= 14999.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 15000.00 && valorContrato.value <= 19999.99){
-
-													var metaValue = ( valorContrato.value * 0.10 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-
-												} else if (valorContrato.value >= 20000.00 ){
-
-													var metaValue = ( valorContrato.value * 0.15 ) * (comissaoLiquido/comissaoBruto);
-													valorMeta.value = metaValue.toFixed(2);
-													break;
-												}
-
-											} else if (tabelaNome == 'FLEX 5.72'){
-
-												if (valorContrato.value <= 19999.99){
-
-													valorMeta.value = 0.0;
-													break;
-
-												} else if (valorContrato.value >= 20000.00 ){
-
-													valorMeta.value = 0.0;
-													break;
-
-												}
-
-											} else {
-												
-												var metaValue = valorContrato.value * arrayCoeficiente[1];
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											}
-		
-										} else {
-
-											var metaValue = valorContrato.value * arrayCoeficiente[1];
-											valorMeta.value = metaValue.toFixed(2);
-											break;
-											
-										}
-										
-									}
-									
-								}
-
-							}
-							
-						} else {
-							
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							valorMeta.value = metaValue.toFixed(2);
-
-							break;
-							
-						}
-						
-					case 'Agiplan':
-						
-						if(isProdRco){
-	
-							if(parcelasAberto.value != ''){
-	
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								
-								if(metaValue == 0){
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								} else {
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									//var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-									var RCO = 0;
-									var comissaoBruto = metaValue * 0.17;
-	
-									var comissaoLiquido = comissaoBruto - RCO;
-	
-									if(comissaoLiquido <= 0){
-										
-										if(contratoId != ''){
-	
-											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-	
-											valorMeta.value = '0.0';
-	
-											break;
-	
-										} else {
-	
-											alert('Contrato com valor abaixo do mínimo exigido.');
-	
-											valorParcela.value = '';
-											valorParcela.focus();
-											
-											break;
-	
-										}
-										
-									} else {
-									
-										//metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-										//valorMeta.value = metaValue.toFixed(2);
-										
-										metaValue = valorContrato.value * arrayCoeficiente[1];
-										valorMeta.value = metaValue.toFixed(2);
-										
-										break;
-										
-									}
-									
-								}
-								
-								
-	
-							}
-							
-					} else {
-						
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-	
-						break;
-						
-					}	
-						
-					case 'Bonsucesso':
-
-						if(isProdRco){
-
-							if(parcelasAberto.value != ''){
-
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								
-								if(metaValue == 0){
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								} else {
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									//var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-									var RCO = 0;
-									var comissaoBruto = metaValue * 0.17;
-
-									var comissaoLiquido = comissaoBruto - RCO;
-
-									if(comissaoLiquido <= 0){
-										
-										if(contratoId != ''){
-
-											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-											valorMeta.value = '0.0';
-
-											break;
-
-										} else {
-
-											alert('Contrato com valor abaixo do mínimo exigido.');
-
-											valorParcela.value = '';
-											valorParcela.focus();
-											
-											break;
-
-										}
-										
-									} else {
-									
-										metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-										valorMeta.value = metaValue.toFixed(2);
-										
-										break;
-										
-									}
-									
-								}
-								
-								
-
-							}
-							
-						} else {
-							
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							valorMeta.value = metaValue.toFixed(2);
-
-							break;
-							
-						}
-
-					case 'Bradesco':
-
-						if(isProdRco){
-
-							if(parcelasAberto.value != ''){
-
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								
-								if(metaValue == 0){
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								} else {
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									//var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-									var RCO = 0;
-									var comissaoBruto = metaValue * 0.17;
-
-									var comissaoLiquido = comissaoBruto - RCO;
-
-									if(comissaoLiquido <= 0){
-										
-										if(contratoId != ''){
-
-											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-											valorMeta.value = '0.0';
-
-											break;
-
-										} else {
-
-											alert('Contrato com valor abaixo do mínimo exigido.');
-
-											valorParcela.value = '';
-											valorParcela.focus();
-											
-											break;
-
-										}
-										
-									} else {
-									
-										metaValue = metaValue * (comissaoLiquido/comissaoBruto);
-										valorMeta.value = metaValue.toFixed(2);
-										
-										break;
-										
-									}
-									
-								}
-								
-								
-
-							}
-							
-						} else {
-							
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							valorMeta.value = metaValue.toFixed(2);
-
-							break;
-							
-						}
-
-					case 'Panamericano':
-						
-						if(isProdRco){
-
-							if(parcelasAberto.value != ''){
-
-								var metaValue = valorContrato.value * arrayCoeficiente[1];
-								
-								if(metaValue == 0){
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									valorMeta.value = metaValue.toFixed(2);
-									
-									break;
-									
-								} else {
-									
-									var metaValue = valorContrato.value * arrayCoeficiente[1];
-									//var RCO = (isRco) ? (443/60) * parcelasAberto.value : 0;
-									var RCO = 0;
-									var comissaoBruto = metaValue * 0.17;
-
-									var comissaoLiquido = comissaoBruto - RCO;
-
-									if(comissaoLiquido <= 0){
-										
-										if(contratoId != ''){
-
-											alert('Contrato com valor abaixo do mínimo exigido. Valor Meta será zerado.');
-
-											valorMeta.value = '0.0';
-
-											break;
-
-										} else {
-
-											alert('Contrato com valor abaixo do mínimo exigido.');
-
-											valorParcela.value = '';
-											valorParcela.focus();
-											
-											break;
-
-										}
-										
-									} else {
-
-										if(isRco){
-											
-											if(valorContrato.value >= 0 && valorContrato.value <= 4999.99){
-
-												valorMeta.value = 0.0;
-												break;
-
-											} else if (valorContrato.value >= 5000 && valorContrato.value <= 8999.99){
-
-												var metaValue = ( valorContrato.value * arrayCoeficiente[1]) / 2;
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											} else if (valorContrato.value >= 9000){
-
-												var metaValue = valorContrato.value * arrayCoeficiente[1];
-												valorMeta.value = metaValue.toFixed(2);
-												break;
-
-											}
-											
-										} else {
-											
-											var metaValue = valorContrato.value * arrayCoeficiente[1];
-											valorMeta.value = metaValue.toFixed(2);
-											break;
-											
-										}
-	
-									}
-									
-								}
-
-							}
-							
-						} else {
-
-							var metaValue = valorContrato.value * arrayCoeficiente[1];
-							valorMeta.value = metaValue.toFixed(2);
-							break;
-
-						}		
-
-					default:
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
+				if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
 
 				}	
+				
+				break;
 
-			} else {
+			
+		
+			//REGRAS Sabemi Matriz RJ USE LOJA01
+			case 'Sabemi':
+	
+				if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
 
-				switch(contratoBancoNome) {
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
 
-					case 'Panamericano':
+				}	
+				
+				break;
 
-						if(contratoProdutoNome == 'CARTAO CONSIGNADO'){
+			//REGRAS Banrisul Matriz RJ USE LOJA01
+			case 'Banrisul':
 
-							valorMeta.value = '15.0';
-							break;
+				if(contratoProdutoNome == 'SEGURO VIDA'){
+					
+					if(tabelaNome == 'SV3M24'){
+						valorParcela.value = 121.46;
+						calculaValorContratoSimples();
+						break;
+					}
 
-						} else {
+					if(tabelaNome == 'SV3M36'){
+						valorParcela.value = 182.20;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV3M48'){
+						valorParcela.value = 242.93;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					
+					if(tabelaNome == 'SV3M54'){
+						valorParcela.value = 273.29;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					
+					if(tabelaNome == 'SV3M60'){
+						valorParcela.value = 303.65;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV3M66'){
+						valorParcela.value = 334.03;
+						calculaValorContratoSimples();
+						break;
+					}
 
-							var metaValue = valorLiquido.value * arrayCoeficiente[1];
-							valorMeta.value = metaValue.toFixed(2);
-							break;
+					if(tabelaNome == 'SV3M72'){
+						valorParcela.value = 364.39;
+						calculaValorContratoSimples();
+						break;
+					}
 
-						}
+					if(tabelaNome == 'SV3M78'){
+						valorParcela.value = 394.76;
+						calculaValorContratoSimples();
+						break;
+					}
+
+					if(tabelaNome == 'SV3M84'){
+						valorParcela.value = 425.12;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV3M90'){
+						valorParcela.value = 455.49;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV3M96'){
+						valorParcela.value = 485.86;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M36'){
+						valorParcela.value = 349.19;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M48'){
+						valorParcela.value = 404.88;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M54'){
+						valorParcela.value = 455.48;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M60'){
+						valorParcela.value = 506.10;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M66'){
+						valorParcela.value = 556.71;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M72'){
+						valorParcela.value = 607.33;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M78'){
+						valorParcela.value = 657.94;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M84'){
+						valorParcela.value = 708.54;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M90'){
+						valorParcela.value = 759.16;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV5M96'){
+						valorParcela.value = 809.77;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV6M24'){
+						valorParcela.value = 260.50;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M24'){
+						valorParcela.value = 303.66;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M36'){
+						valorParcela.value = 455.47;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M48'){
+						valorParcela.value = 607.32;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M54'){
+						valorParcela.value = 683.24;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M60'){
+						valorParcela.value = 759.15;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M66'){
+						valorParcela.value = 835.07;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M72'){
+						valorParcela.value = 910.98;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M78'){
+						valorParcela.value = 986.90;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M84'){
+						valorParcela.value = 1062.81;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M90'){
+						valorParcela.value = 1138.73;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV7M96'){
+						valorParcela.value = 1214.64;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M24'){
+						valorParcela.value = 404.87;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M36'){
+						valorParcela.value = 607.31;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M48'){
+						valorParcela.value = 809.76;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M54'){
+						valorParcela.value = 910.99;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M60'){
+						valorParcela.value = 1012.20;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M66'){
+						valorParcela.value = 1113.42;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M72'){
+						valorParcela.value = 1214.65;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M78'){
+						valorParcela.value = 1315.86;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M84'){
+						valorParcela.value = 1417.08;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M90'){
+						valorParcela.value = 1518.30;
+						calculaValorContratoSimples();
+						break;
+					}
+					
+					if(tabelaNome == 'SV10M96'){
+						valorParcela.value = 1619.52;
+						calculaValorContratoSimples();
+						break;
+					}
+
+				} else {
+					
+					if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
 						
-					case 'Bonsucesso':
+						$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+								{'banco_id':banco_id,
+								 'bancoComprado_id' : bancoComprado_id,
+						         'produto_id':produto_id,
+						         'tabela_id':tabela_id,
+						         'coeficiente_id' : coeficiente_id,
+						         'parcelasAberto' : parcelasAberto.value,
+						         'valorContrato' : valorContrato.value,
+						         'valorLiquido' : valorLiquido.value});
 
-						if(contratoProdutoNome == 'CARTAO CONSIGNADO'){
-
-							valorMeta.value = '15.0';							
-							break;
-
-						} else {
-
-							var metaValue = valorLiquido.value * arrayCoeficiente[1];
-							valorMeta.value = metaValue.toFixed(2);
-							break;
-
-						}	
-
-					case 'Sabemi':
-
-						var metaValue = valorContrato.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
-						break;	
-
-					default:
-
-						var metaValue = valorLiquido.value * arrayCoeficiente[1];
-						valorMeta.value = metaValue.toFixed(2);
+					}
 					
 					break;
-					
-				}		
-				 
-			}
+
+				}
+	
+			//REGRAS BMG Matriz RJ USE LOJA01
+			case 'BMG':
+
+				if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
+
+				}
+				
+				break;
+		
+			//REGRAS BGN Matriz RJ USE LOJA01
+			case 'BGN':
+
+				if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
+
+				}
+				
+				break;
+
+			//REGRAS Safra Matriz RJ USE LOJA01						
+			case 'Safra':
+				
+				if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined && valorContrato.value > 0.00){
+
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
+
+				}
+				
+				break;
+
+			//REGRAS Agiplan Matriz RJ USE LOJA01
+			case 'Agiplan':
+				
+				if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
+
+				}	
+				
+				break;
+
+
+			//REGRAS Bonsucesso Matriz RJ USE LOJA01						
+			case 'Bonsucesso':
+
+				if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
+
+				}
+				
+				break;
+
+			//REGRAS Bradesco Matriz RJ USE LOJA01						
+			case 'Bradesco':
+
+				if(tabela_id != undefined && banco_id!= undefined && produto_id != undefined && coeficiente_id != undefined){
+
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
+
+				}
+				
+				break;
+
+			//REGRAS Panamericano Matriz RJ USE LOJA01							
+			case 'Panamericano':
+
+				if(tabela_id != undefined && banco_id!= undefined 
+							&& produto_id != undefined && coeficiente_id != undefined){
+
+					$("#div-regras").load('<c:url value="/contrato/regras_tabela" />',
+							{'banco_id':banco_id,
+							 'bancoComprado_id' : bancoComprado_id,
+					         'produto_id':produto_id,
+					         'tabela_id':tabela_id,
+					         'coeficiente_id' : coeficiente_id,
+					         'parcelasAberto' : parcelasAberto.value,
+					         'valorContrato' : valorContrato.value,
+					         'valorLiquido' : valorLiquido.value});
+
+				}
+
+				break;
+
+			default:
+				var metaValue = valorContrato.value * arrayCoeficiente[1];
+				valorMeta.value = metaValue.toFixed(2);
+
+			}	
 			
 		}
 		
@@ -2205,17 +902,17 @@ function verificaProduto() {
 			observacao.value = "";
 
 			if(valorContrato.value != '')
-				calculaContrato();
+				calculaContrato();                                                       
 
 			break;
 			
 		case 'MARGEM LIMPA PMSP':
 			
-			habilita(valorParcela);
+			habilita(valorParcela);                                                                                                          
 			desabilita(bancoComprado);
 			desabilita(parcelasAberto);
 			desabilita(valorDivida);
-			desabilita(valorSeguro);
+			desabilita(valorSeguro)      ;
 			desabilita(valorContrato);
 			desabilita(valorLiquido);
 			desabilita(prazo);
@@ -3438,7 +2135,7 @@ window.onload = function() {
 					<div class="row-fluid">
 						<div class="span3">
 							<label for="valorContrato">Valor Contrato</label>
-							<input id="valorContrato" type="text" class="span10" value="${contrato.valorContrato }"  name="contrato.valorContrato" disabled="disabled" onblur="calculaContrato();" required/>	
+							<input id="valorContrato" type="text" class="span10" value="${contrato.valorContrato }"  name="contrato.valorContrato" disabled="disabled" required/>	
 						</div>
 						<div class="span3">
 							<label for="valorParcela">Valor Parcela</label>
@@ -3457,25 +2154,33 @@ window.onload = function() {
 						</div>
 					</div>
 					<div class="row-fluid">
-						<div class="span3">
-							<div id="div-prazo">
-								<label for="prazo">Prazo:</label>
-								<input id="prazo" class="span10"  type="text" value="${contrato.prazo }" name="contrato.prazo"  disabled="disabled" required />
-							</div>
-						</div>
+						
 						<div class="span3">
 							<label for="desconto">Desconto</label>
-							<input id="desconto" type="text" class="span10"  value="${contrato.desconto }" name="contrato.desconto" disabled="disabled" onblur="calculaContrato();" />	
+							<input id="desconto" type="text" class="span10"  value="${contrato.desconto }" name="contrato.desconto" disabled="disabled" />	
 						</div>
 						<div class="span3">
 							<label for="valorLiquido">Valor Liquido</label>
 							<input id="valorLiquido" type="text" class="span10" value="${contrato.valorLiquido }" name="contrato.valorLiquido" disabled="disabled" required />	
 						</div>
-						<div class="span3">
-							<label for="valorMeta">Valor Meta</label>
-							<input id="valorMeta" type="text" class="span10" value="${contrato.valorMeta }" name="contrato.valorMeta" <c:if test="${usuarioInfo.perfil.chave != 'Gestor' }">disabled="disabled"</c:if> />	
+					</div>
+					<div class="row-fluid">
+						<div id="div-regras">
+							<div class="span3">
+								<label for="prazo">Prazo:</label>
+								<input id="prazo" class="span10"  type="text" value="${contrato.prazo }" name="contrato.prazo"  disabled="disabled" required />
+							</div>
+							<div class="span3">
+								<label for="valorMeta">Valor Meta</label>
+								<input id="valorMeta" type="text" class="span10" value="${contrato.valorMeta }" name="contrato.valorMeta" <c:if test="${usuarioInfo.perfil.chave != 'Gestor' }">disabled="disabled"</c:if> />	
+							</div>
+							<div class="span3">
+								<label for="valorComissao">Valor Comissao</label>
+								<input id="valorComissao" type="text" class="span10" value="${contrato.valorComissao }" name="contrato.valorComissao" <c:if test="${usuarioInfo.perfil.chave != 'Gestor' }">disabled="disabled"</c:if> />	
+							</div>
 						</div>
 					</div>
+					
 					<div class="row-fluid">
 						<div>
 							<label for="observacao">Observacao</label>
@@ -3484,16 +2189,19 @@ window.onload = function() {
 							</textarea>	
 						</div>
 					</div>
-					
+
 					<div class="row-fluid">
 						<div class="span2" style="float: left;">
-							<input value="Salvar" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoForm');">
+							<input id="btnSalvar"value="Salvar" type="button" class="btn btn-primary" onclick="javascript:validaForm('#contratoForm');">
 						</div>
 						<div class="span2" style="float: left;">
 							<input value="Cancelar" type="button" class="btn" onclick="fechar();" />
 						</div>
 						<div class="span3" style="float: left;">
 							<input value="Histórico Coeficiente" type="button" class="btn" onclick="historicoCoeficiente();" />
+						</div>
+						<div class="span3"> 
+							<div id="loading" style="display:none;background:url('<c:url  value="/img/spin.gif" />') no-repeat center center;width:32px;height:32px;"></div>
 						</div>
 					</div>
 				</form>

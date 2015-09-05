@@ -1731,7 +1731,7 @@ window.onload = function() {
 			<div class="span12">
 				<div class="widget-box">
 					<div class="widget-title"><span class="icon">
-						<i class="icon-signal"></i></span><h5>Controle Boleto</h5>
+						<i class="icon-signal"></i></span><h5>Controle Boleto / Físico</h5>
 						<c:if test="${ ( usuarioInfo.perfil.chave == 'Consultor' ) && contrato.etapa.nome != 'Aguardando Apoio Comercial' }">
 							<div class="buttons" style="position: absolute;margin-left: 180px;"><a href="#" class="btn btn-mini" onclick="javascript:return boleto('${contrato.contrato_id}');"><i class="icon-refresh"></i> Alterar</a></div>
 						</c:if>

@@ -5,6 +5,7 @@ jQuery(function($){
 	
 	$("#valor").mask("9.99999999");
 	$("#percentualMeta").mask("9.999");
+	$("#percentualComissao").mask("9.999");
 
 	$('#coeficiente-li-a').click(function() {
 		window.location.href = '<c:url value="/coeficiente/cadastro" />';
@@ -198,7 +199,11 @@ function limpaForm() {
 									<label for="percentualMeta">Percentual Meta</label>
 									<input class="span10" type="text" id="percentualMeta" name="coeficiente.percentualMeta" placeholder="Percentual" required>
 								</div>
-								<div class="span3">
+								<div class="span2">
+									<label for="percentualComissao">Percentual Comissao</label>
+									<input class="span10" type="text" id="percentualComissao" name="coeficiente.percentualComissao" placeholder="Percentual Comissao" required>
+								</div>
+								<div class="span1">
 									<label for="isActive">Ativo</label>
 									<input id="isActive" name="coeficiente.isActive" type="checkbox" checked="checked" value="1" >
 								</div>
@@ -239,6 +244,7 @@ function limpaForm() {
 									<th>Tabela</th>
 									<th>Valor</th>
 									<th>Percentual</th>
+									<th>Comissao</th>
 									<th>Inclusão</th>
 									<th></th>
 								</tr>
@@ -252,6 +258,7 @@ function limpaForm() {
 										<td>${coeficiente.tabela.nome }</td>
 										<td>${coeficiente.valor }</td>
 										<td>${coeficiente.percentualMeta }</td>
+										<td>${coeficiente.percentualComissao }</td>
 										<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${coeficiente.created.time }" /></td>
 										<td style="text-align:center;"><a href="#" onClick="return exclui(this,'${coeficiente.coeficiente_id}');">X</a></td>
 									</tr>

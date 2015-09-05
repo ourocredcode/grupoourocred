@@ -43,6 +43,7 @@ $(document).ready(function() {
 			<th>Tabela</th>
 			<th>Valor</th>
 			<th>Percentual</th>
+			<th>Comissao</th>
 			<th>Inclusão</th>
 			<th></th>
 		</tr>
@@ -56,6 +57,7 @@ $(document).ready(function() {
 				<td>${coeficiente.tabela.nome }</td>
 				<td>${coeficiente.valor }</td>
 				<td>${coeficiente.percentualMeta }</td>
+				<td>${coeficiente.percentualComissao }</td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy"  type="time" value="${coeficiente.created.time }" /></td>
 				<td style="text-align:center;"><a href="#" onClick="return exclui(this,'${coeficiente.coeficiente_id}');">X</a></td>
 			</tr>

@@ -34,7 +34,7 @@
 				                }
 				            },
 			                 {
-			                     "aTargets": [ 2,3,4 ],
+			                     "aTargets": [ 2,3,4,5 ],
 			                     "bUseRendered": false,
 			                     "fnRender": function ( o ) {
 			                         return 'R$ ' + o.oSettings.fnFormatNumber( parseFloat( o.aData[ o.iDataColumn ] ).toFixed(2) ).replace(',','.').replace(',','.').replace('..',',').replace(',.',',') ;
@@ -176,6 +176,14 @@
 														Meta
 													</div>
 												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorComissao}" minFractionDigits="2" /></strong> Vl
+														Comissao
+													</div>
+												</li>
 											</ul>
 										</div>
 									</div>
@@ -239,6 +247,15 @@
 																value="${totalValorMeta / countContratos}"
 																minFractionDigits="2" maxFractionDigits="2" /></strong> Média Vl
 														Meta
+													</div>
+												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorComissao / countContratos}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média Vl
+														Comissao
 													</div>
 												</li>
 											</ul>
@@ -306,6 +323,15 @@
 														Meta
 													</div>
 												</li>
+												<li class="popover-users">
+
+													<div class="right" style="width: 135px;">
+														<strong><fmt:formatNumber type="NUMBER"
+																value="${totalValorComissao / countClientesByCpf}"
+																minFractionDigits="2" maxFractionDigits="2" /></strong> Média Vl
+														Comissão
+													</div>
+												</li>
 											</ul>
 										</div>
 									</div>
@@ -345,10 +371,11 @@
 							<thead>
 							  <tr>
 								<th>Status</th>
-								<th>Quantidade</th>
+								<th>Qtd</th>
 								<th>Contrato</th>
 								<th>C. Líquido</th>
 								<th>Meta</th>
+								<th>Comissao</th>
 							  </tr>
 							</thead>
 							<tbody>
@@ -369,6 +396,7 @@
 														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[4] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[5] }" type="currency" /></td>
 													</tr>
 											</c:when>
 											<c:when test="${map.key == 'Concluído' }">
@@ -383,6 +411,7 @@
 														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[4] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[5] }" type="currency" /></td>
 													</tr>
 											</c:when>
 											<c:when test="${map.key == 'Recusado' }">
@@ -397,6 +426,7 @@
 														<td><fmt:formatNumber value="${map.value[2] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[3] }" type="currency" /></td>
 														<td><fmt:formatNumber value="${map.value[4] }" type="currency" /></td>
+														<td><fmt:formatNumber value="${map.value[5] }" type="currency" /></td>
 													</tr>
 											</c:when>
 										</c:choose>
@@ -410,10 +440,11 @@
 							<thead>
 							  <tr>
 								<th>Status</th>
-								<th>Quantidade</th>
+								<th>Qtd</th>
 								<th>Contrato</th>
 								<th>C. Líquido</th>
 								<th>Meta</th>
+								<th>Comissao</th>
 							  </tr>
 							</thead>
 							<tbody>
@@ -443,6 +474,7 @@
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
 													<td>${map.value[4] }</td>
+													<td>${map.value[5] }</td>
 												</tr>
 										</c:when>
 										<c:otherwise>
@@ -461,6 +493,7 @@
 													<td>${map.value[2] }</td>
 													<td>${map.value[3] }</td>
 													<td>${map.value[4] }</td>
+													<td>${map.value[5] }</td>
 												</tr>
 										</c:otherwise>
 									</c:choose>
@@ -490,11 +523,12 @@
 								<thead>
 								  <tr>
 									<th>Consultor</th>
-									<th>Qtd.</th>
+									<th>Qtd</th>
 									<th>Valor Contrato</th>
 									<th>Valor C. Liquido</th>
 									<th>Valor Liquido
 									<th>Meta</th>
+									<th>Comissao</th>
 								  </tr>
 								</thead>
 								<tbody>
@@ -505,7 +539,8 @@
 											<td>${map.value[2] }</td>
 											<td>${map.value[3] }</td>
 											<td>${map.value[4] }</td>
-											<td>R$ <fmt:formatNumber type="NUMBER" value="${map.value[5]}" minFractionDigits="2" /></td>
+											<td>${map.value[5]}</td>
+											<td>R$ ${map.value[6]}</td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -533,11 +568,12 @@
 								<thead>
 								  <tr>
 									<th>Supervisor</th>
-									<th>Qtd.</th>
+									<th>Qtd</th>
 									<th>Valor Contrato</th>
 									<th>Valor C. Liquido</th>
 									<th>Valor Liquido
 									<th>Meta</th>
+									<th>Comissao</th>
 								  </tr>
 								</thead>
 								<tbody>
@@ -555,7 +591,8 @@
 											<td>${map.value[2] }</td>
 											<td>${map.value[3] }</td>
 											<td>${map.value[4] }</td>
-											<td>R$ <fmt:formatNumber type="NUMBER" value="${map.value[5]}" minFractionDigits="2" /></td>
+											<td>${map.value[5] }</td>
+											<td>R$ ${map.value[6]}</td>
 										</tr>
 									</c:forEach>
 								</tbody>

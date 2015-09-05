@@ -419,6 +419,7 @@
 						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
 						<ul class="cadastro">
 							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+							<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
 						</ul>
 					</li>
 					
@@ -497,6 +498,7 @@
 						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
 						<ul class="cadastro">
 							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+							<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
 						</ul>
 					</li>
 					
@@ -647,6 +649,7 @@
 						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
 						<ul class="cadastro">
 							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+							<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
 						</ul>
 					</li>
 					
@@ -724,6 +727,7 @@
 						<a href="#"><i class="icon icon-pencil"></i> <span>Administrativo</span></a>
 						<ul class="cadastro">
 							<li><a href="<c:url value="/coeficiente/cadastro"/>">Coeficiente</a></li>
+							<li><a href="<c:url value="/workflow/cadastro"/>">Workflow</a></li>
 						</ul>
 					</li>
 					
